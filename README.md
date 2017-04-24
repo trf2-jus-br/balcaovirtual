@@ -1,12 +1,12 @@
 # balcaovirtual
 
-Balcão Virtual é um site que permite o envio de petições intercorrentes.
+Balcão Virtual é um site que permite o envio de petições intercorrentes para sistemas processuais compatíveis com o Modelo Nacional de Interoperabilidade - MNI.
 
 ## Ambiente
 
 Para executar o Balcão Virtual, é necessário que algumas propriedades sejam definidas.
 
-O Balcão Virtual se comunica com um Webservice REST para obter informações dos sistemas processuais e também com Webservices SOAP em conformidade com o Modelo Nacional de Interoperabilidade - MNI, um para cada órgão conectado.
+O Balcão Virtual se comunica com um Webservice REST para obter informações dos sistemas processuais e também com Webservices SOAP em conformidade com o MNI, um para cada órgão conectado.
 
 ```xml
 <property name="balcaovirtual.ws.processual.url" value="http://host/ApoloWS/api"/>
