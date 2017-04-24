@@ -1,0 +1,147 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: SistemaProcessual
+  description: Micro-serviço para obter dados em sistemas processuais
+
+basePath: /sisproc/api/v1
+schemes: [http,https]
+consumes: [application/json]
+produces: [application/json]
+
+tags:
+  - name: proc
+    description: Dados de processos
+  - name: utils
+    description: Utilitários
+
+paths:
+  /autenticar:
+    post:
+      description: Autenticar usuário
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/login"
+        - $ref: "#/parameters/senha"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              nome:
+                $ref: "#/definitions/Nome"
+              cpf:
+                $ref: "#/definitions/CPF"
+              email:
+                $ref: "#/definitions/Email"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /peticao/intercorrente/tipos:
+    get:
+      description: Tipos de petição intercorrente
+      tags: [utils]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoPeticaoIntercorrente"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/validar/{numero}:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/numero"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              orgao:
+                $ref: "#/definitions/Orgao"
+              unidade:
+                $ref: "#/definitions/Unidade"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+parameters:
+  numero:
+    name: numero
+    in: path
+    description: Número do processo só algarismos
+    required: true
+    type: string
+  login:
+    name: login
+    in: formData
+    description: Login do usuário
+    required: true
+    type: string
+  senha:
+    name: senha
+    in: formData
+    description: Senha do usuário
+    required: true
+    type: string
+            
+definitions:
+  Nome:
+    type: string
+    description: Nome do usuário
+    example: Renato Crivano
+    
+  CPF:
+    description: CPF do usuário
+    type: string      
+    example: 11122233344
+    
+  Email:
+    description: Email do usuário
+    type: string
+    example: rcrivano@teste.com
+
+  TipoPeticaoIntercorrente:
+    description: Tipo de petição intercorrente
+    type: object
+    properties:
+      id:
+        type: string
+      descricao:
+        type: string
+      orgao:
+        type: string
+
+  Orgao:
+    description: Órgão do processo
+    type: string
+    example: JFRJ
+
+  Unidade:
+    description: Unidade do processo
+    type: string
+    example: 01JEF
+
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+    example:
+      error: Não foi possível realizar a operação

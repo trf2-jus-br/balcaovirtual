@@ -1,0 +1,41 @@
+{
+  "name": "dom-class",
+  "version": "0.1.4",
+  "description": "An extremely minimal DOM element class manipulator",
+  "keywords": [
+    "DOM",
+    "class"
+  ],
+  "license": {
+    "type": "MIT",
+    "url": "http://heyday.mit-license.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heyday/dom-class"
+  },
+  "bugs": "https://github.com/heyday/dom-class/issues",
+  "maintainers": [
+    {
+      "name": "Pieter Vanderwerff"
+    }
+  ],
+  "main": "class.js",
+  "ignore": [
+    "test/",
+    ".gitignore",
+    ".travis.yml",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "homepage": "https://github.com/heyday/dom-class",
+  "_release": "0.1.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.4",
+    "commit": "9f4253723fee5e54c70d0e518d0cc38f838b9074"
+  },
+  "_source": "https://github.com/heyday/dom-class.git",
+  "_target": "~0.1.0",
+  "_originalSource": "dom-class"
+}

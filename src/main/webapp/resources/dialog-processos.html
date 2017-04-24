@@ -1,0 +1,28 @@
+<div class="modal fade">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Múltiplos Processos</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form ng-keyup="$event.keyCode == 13 && clickclose()">
+					<label class="control-label" for="processos" style="width: 100%">Números
+						dos Processos (separar por vírgula ou quebra de linha)<textarea
+							class="form-control" style="width: 100%" id="processos"
+							ng-model="processos" placeholder="Números" rows="10" autofocus></textarea>
+					</label> <em ng-show="errormsg &amp;&amp; errormsg !== ''" for="processos"
+						class="invalid">{{errormsg}}</em>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" ng-click="cancel()" class="btn">Cancelar</button>
+				<button type="button" ng-click="close()" id="prosseguir"
+					class="btn btn-primary">Prosseguir</button>
+			</div>
+		</div>
+	</div>
+</div>

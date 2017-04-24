@@ -1,0 +1,113 @@
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+DIV.sobre p {
+	font-size: 120%; 
+}
+
+DIV.sobre ol li {
+	font-size: 120%; 
+	padding-bottom: 12pt;
+}
+
+
+
+TABLE.table-peticao TBODY TD {
+	vertical-align: middle;
+}
+
+.drop-box {
+	background: #F8F8F8;
+	border: 5px dashed #DDD;
+	width: 100#;
+	text-align: center;
+	padding: 1em;
+}
+
+.dragover {
+	border: 5px dashed blue;
+}
+
+body1 {
+	background-color: #eee !important;
+}
+
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+
+.form-signin .form-signin-heading, .form-signin .checkbox {
+	margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+	font-weight: normal;
+}
+
+.form-signin .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+	z-index: 2;
+}
+
+.form-signin input[type="email"] {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+H1 {
+	text-align: center;
+}
+
+.metas {
+	text-align: center;
+	width: 100%;
+}
+
+.transparent {
+	filter: alpha(opacity = 0);
+	opacity: 0.0;
+	-moz-opacity: 0.0;
+	-webkit-opacity: 0.0;
+}
+
+div.metas {
+	text-align: center;
+	display: inline-block;
+}
+
+div.metas table {
+	width: auto;
+	margin: 0 auto !important;
+}
+
+em.invalid {
+	display: block;
+	margin-top: 6px;
+	padding: 0 1px;
+	font-style: normal;
+	font-size: 12px;
+	line-height: 15px;
+	color: #ee9393;
+}

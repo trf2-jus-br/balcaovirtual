@@ -1,0 +1,217 @@
+﻿swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: Balcão Virtual
+  description: Micro-serviço para obter indicadores de gestão
+
+# host: assijus.jfrj.jus.br
+basePath: /balcaovirtual/api/v1
+schemes: [http,https]
+consumes: [application/json]
+produces: [application/json]
+
+tags:
+  - name: stats
+    description: Obter estatísticas
+
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  nome:
+    name: nome
+    in: formData
+    description: Nome do usuário
+    type: string
+    required: false
+  email:
+    name: email
+    in: formData
+    description: Email do usuário
+    type: string
+    required: false
+  mensagem:
+    name: mensagem
+    in: formData
+    description: Sugestão
+    type: string
+    required: true
+  username:
+    name: username
+    in: formData
+    description: Identificador do usuário
+    type: string
+    required: true
+  password:
+    name: password
+    in: formData
+    description: Senha do usuário
+    type: string
+    required: true
+  orgao:
+    name: orgao
+    in: formData
+    description: Órgão do processo
+    required: true
+    type: string
+  numero:
+    name: numero
+    in: path
+    description: Número do processo só algarismos
+    required: true
+    type: string
+  tipopeticao:
+    name: tipopeticao
+    in: formData
+    description: Código do tipo da petição
+    type: string
+    required: true
+  nivelsigilo:
+    name: nivelsigilo
+    in: formData
+    description: Código do nivel de sigilo
+    type: string
+    required: true
+  pdfs:
+    name: pdfs
+    in: formData
+    description: Referência para os PDFs que foram enviados previsamente para o servidor, separadas por vírgula
+    type: string
+    required: true
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /sugestao:
+    post:
+      parameters:
+        - $ref: "#/parameters/nome"
+        - $ref: "#/parameters/email"
+        - $ref: "#/parameters/mensagem"
+      description: Enviar sugestões
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /sessions/create:
+    post:
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/password"
+      description: Autenticar usuário
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              id_token:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/peticao/intercorrente/tipos:
+    get:
+      description: Tipos de petição intercorrente
+      tags: [utils]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /processo/{numero}/validar:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/numero"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              orgao:
+                $ref: "#/definitions/Orgao"
+              unidade:
+                $ref: "#/definitions/Unidade"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /processo/{numero}/peticionar:
+    post:
+      description: Enviar petições para um processo
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/tipopeticao"
+        - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/pdfs"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+
+################################################################################
+#                                     Definitions                              #
+################################################################################
+definitions:
+  ConfigTipoPeticaoIntercorrente:
+    description: Tipo de petição intercorrente
+    type: object
+    properties:
+      id:
+        type: string
+      descricao:
+        type: string
+      orgao:
+        type: string
+
+  Orgao:
+    description: Órgão do processo
+    type: string
+    example: JFRJ
+
+  Unidade:
+    description: Unidade do processo
+    type: string
+    example: 01JEF
+
+  Error:
+    type: object
+    properties:
+      error:
+        type: string

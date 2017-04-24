@@ -1,0 +1,266 @@
+<div class="container content pt-5">
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<div ng-repeat="(key, value) in errorDetails">
+				<div class="alert alert-danger fade in"
+					ng-show="!value.hasOwnProperty('hideAlert') && !(key == 'geral' && (errorDetails.geral.errormsg == errorMsgMissingCertificate || errorDetails.geral.errormsg == errorMsgMissingSigner))">
+					<p>
+						<strong>Problema - {{key}}:</strong>
+						{{composeErrorMessage(value)}}<span ng-click="presentError(key)">&nbsp;&#128269;</span>
+					</p>
+					<p>
+						Para tentar novamente, <a href="javascript:location.reload();"><u>recarregue</u></a>
+						esta página.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<div class="row" ng-hide="unidadeSelecionada">
+			<div class="col-md-12 mb-3">
+				<div class="card text-center">
+					<div class="card-block">
+						<h4 class="card-title" data-toggle="tooltip" data-placement="top"
+							data-html="true" title="">Atenção</h4>
+						<p>Escolha um órgão e uma unidade nas caixas de seleção acima
+							para que os indicadores possam ser apresentados.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-show="unidadeSelecionada">
+			<div class="col-md-12 mb-3 alert alert-warning" role="alert">
+				<div align="center">
+					<strong>Site em construção</strong>
+				</div>
+				<div>Os dados das metas ainda não foram validados. Informações
+					extraídas exclusivamente do sistema Apolo, não incluindo os
+					processos físicos (SIAPRO)</div>
+			</div>
+
+			<div class="col-md-12 mb-3">
+				<h1>{{tituloUnidadeSelecionada}}</h1>
+			</div>
+
+
+			<div class="col-md-4 mb-3">
+				<div class="card text-center">
+					<div class="card-block">
+						<h4 class="card-title" data-toggle="tooltip" data-placement="top"
+							data-html="true"
+							title="Quantidade de pendências atuais agrupada por tipo.">Pendências</h4>
+						<div google-chart chart="pendenciasChart"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mb-3">
+				<div class="card text-center">
+					<div class="card-block">
+						<h4 class="card-title" data-toggle="tooltip" data-placement="top"
+							data-html="true"
+							title="Quantidade de documentos produzidos ou assinados hoje agrupada por tipo.">
+							Produtividade</h4>
+						<div ng-class="{transparent: documentosChart.data[0][0] == ''}">
+							<div google-chart chart="documentosChart"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mb-3">
+				<div class="card text-center">
+					<div class="card-block">
+						<h4 class="card-title" data-toggle="tooltip" data-placement="top"
+							data-html="true"
+							title="Quantidade de processos ativos por tipo de suporte.">
+							Acervo</h4>
+						<div google-chart chart="acervoChart"></div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12 mb-3" ng-show="countGauges > 0">
+				<div class="card text-center">
+					<div class="card-block">
+						<table class="metas">
+							<tr>
+								<td id="meta1" ng-show="countGauges >= 1">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="meta2" ng-show="countGauges >= 2">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="meta3" ng-show="countGauges >= 3">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="meta4" ng-show="countGauges >= 4">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="meta5" ng-show="countGauges >= 5">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="meta6" ng-show="countGauges >= 6">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGauges}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12 mb-3" ng-show="countGaugesMetaEspecifica > 0">
+				<div class="card text-center">
+					<div class="card-block">
+						<table class="metas">
+							<tr>
+								<td id="metaespecifica1"
+									ng-show="countGaugesMetaEspecifica >= 1">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGaugesMetaEspecifica}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="metaespecifica2"
+									ng-show="countGaugesMetaEspecifica >= 2">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGaugesMetaEspecifica}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+								<td id="metaespecifica3"
+									ng-show="countGaugesMetaEspecifica >= 3">
+									<h4 class="card-title" data-toggle="tooltip"
+										data-placement="top" data-html="true" title=""></h4>
+									<div ng-class="{transparent: updatingGaugesMetaEspecifica}"
+										data-toggle="tooltip" data-placement="bottom" data-html="true"
+										title="">
+										<canvas width="160" height="100"></canvas>
+										<div>
+											<span class="meta-sinal"></span><span class="meta-valor">0</span><span>%</span>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- 
+				<div class="col-md-6 mb-3">
+					<div class="card text-center">
+						<div class="card-block">
+							<h4 class="card-title">
+								<a data-toggle="collapse" href="#collapseProcessos"
+									aria-expanded="false" aria-controls="collapseProcessos">Evolução
+									Mensal de Processos</a>
+							</h4>
+							<div class="card-text collapse" id="collapseProcessos">
+								Evolução nos últimos 12 meses dos principais indicadores
+								relativos aos processos judiciais.</div>
+							<div id="processos_div"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 mb-3">
+					<div class="card text-center">
+						<div class="card-block">
+							<h4 class="card-title">
+								<a data-toggle="collapse" href="#collapseProcessosDiario"
+									aria-expanded="false" aria-controls="collapseProcessosDiario">Evolução
+									Diária de Ocorrências</a>
+							</h4>
+							<div class="card-text collapse" id="collapseProcessosDiario">
+								Evolução nos últimos 7 dias dos principais ocorrências.</div>
+							<div id="processos_diario_div"></div>
+						</div>
+					</div>
+				</div>
+				 -->
+
+		<div class="row" ng-show="lastUpdateFormatted != null">
+			<div class="col-md-12">
+				<p>
+					{{lastUpdateFormatted}} <a class="refresh"
+						ng-click="forceRefresh()">&#9851;</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+

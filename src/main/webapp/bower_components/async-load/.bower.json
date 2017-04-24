@@ -1,0 +1,49 @@
+{
+  "name": "async-load",
+  "version": "0.1.2",
+  "main": [
+    "load.js"
+  ],
+  "description": "An extremely minimal asynchronous JavaScript loader",
+  "keywords": [
+    "async",
+    "loader",
+    "js",
+    "amd"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://heyday.mit-license.org/"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/heyday/async-load"
+    }
+  ],
+  "bugs": "https://github.com/heyday/async-load/issues",
+  "maintainers": [
+    {
+      "name": "Pieter Vanderwerff"
+    }
+  ],
+  "ignore": [
+    "test/",
+    ".gitignore",
+    ".travis.yml",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "homepage": "https://github.com/heyday/async-load",
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "10809ea1b637b11da08837e945e0900b9b482faa"
+  },
+  "_source": "https://github.com/heyday/async-load.git",
+  "_target": "~0.1.0",
+  "_originalSource": "async-load"
+}

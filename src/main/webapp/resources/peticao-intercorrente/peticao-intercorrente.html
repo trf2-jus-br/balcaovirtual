@@ -1,0 +1,110 @@
+<div class="container-fluid content pt-5" ng-app="fileUpload"
+	ng-controller="PeticaoIntercorrenteCtrl">
+
+	<div class="row pb-4" ng-show="editando">
+		<div class="col-md-12">
+			<div ngf-drop ngf-select ng-model="files" class="drop-box"
+				ngf-drag-over-class="'dragover'" ngf-multiple="true"
+				ngf-allow-dir="true" accept="application/pdf" ngf-max-size="4MB"
+				ngf-pattern="'application/pdf'">Arraste suas petições
+				intercorrentes em formato PDF e solte elas nesta área, ou clique
+				aqui para selecioná-las.</div>
+			<div ngf-no-file-drop>Arrastar e soltar aquivos não é possível
+				nesse navegador. Por favor, utilize o Google Chrome.</div>
+		</div>
+	</div>
+
+	<div class="row" ng-show="arquivos.length > 0">
+
+		<!-- 
+		<div class="col-md-12 mb-3"">
+			<div class="alert alert-warning" role="alert">
+				<div align="center">
+					<strong>Orientação:</strong> Por favor, verifique e ajuste os
+					números dos processos e os tipos das petições em toda a lista,
+					depois, clique no botão "Protocolar" no fim da página.
+				</div>
+			</div>
+		</div>
+		 -->
+
+
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<table class="table table-peticao">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Processo</th>
+						<th>Tipo</th>
+						<th>Segredo</th>
+						<th>Arquivo</th>
+						<th>Status</th>
+						<th style="text-align: center" ng-if="editando"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="f in arquivos" ng-class="{odd: f.odd}">
+						<td ng-show="!f.anexo" rowspan="{{f.rowspan}}"><div
+								ng-if="editando" class="input-group">
+								<input type="text" class="form-control"
+									placeholder="Número do Processo" ng-model="f.processo"
+									ng-change="alterarArquivo(f)"
+									ng-model-options="{debounce: 300}"
+									ng-disabled="f.bloq || f.protocolado">
+
+							</div> <span ng-if="!editando">{{f.processo}}</span></td>
+
+						<td ng-show="!f.anexo" rowspan="{{f.rowspan}}"><select
+							ng-if="editando" class="form-control mr-sm-2" ng-model="f.tipo"
+							ng-disabled="f.protocolado" ng-change="selecionarTipo(f, f.tipo)"
+							ng-options="(tipo.orgao+'-'+tipo.id) as tipo.descricao for tipo in tipos | filter: {orgao: (f.orgao||'nenhum')}">
+								<option disabled hidden selected value="">[Selecionar]</option>
+						</select><span ng-if="!editando">{{f.tipodescr}}</span></td>
+
+						<td ng-show="!f.anexo" rowspan="{{f.rowspan}}"><select
+							ng-if="editando" class="form-control mr-sm-2"
+							ng-model="f.segredo" ng-disabled="f.protocolado"
+							ng-change="selecionarSegredo(f, f.segredo)"
+							ng-options="segredo.codigo as segredo.nome for segredo in segredos">
+								<option disabled hidden selected value="">[Selecionar]</option>
+						</select><span ng-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span></td>
+
+						<td><a ng-click="view(doc)">{{f.nome}}</a></td>
+
+						<td class="status-td" rowspan="{{f.protocolado ? f.rowspan : 1}}"
+							ng-show="f.protocolado ? !f.anexo : true"><span
+							ng-show="f.perc &amp;&amp; f.perc < 100">{{f.perc}}%</span><span
+							ng-class="{protocolado: f.protocolado}"
+							ng-show="f.perc == 100 &amp;&amp; !f.errormsg">{{f.status}}</span><span
+							ng-show="f.perc == 100 &amp;&amp; f.errormsg"
+							ng-class="{red: true}">{{f.errormsg}}</span><span
+							ng-show="f.$error">{{f.$error}} {{f.$errorParam}}</span></td>
+
+						<td align="center" ng-if="editando"><button type="button"
+								ng-show="f.processo === undefined || f.processo === ''"
+								ng-click="multiplosProcessos(f)"
+								class="btn btn-sm btn-outline-primary">+</button>
+							<button type="button" ng-click="removerArquivo(f)"
+								class="btn btn-sm btn-outline-danger">X</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button" ng-click="limpar()" id="limpar"
+				ng-if="!editando" class="btn btn-secondary no-print">Enviar
+				Outras Petições</button>
+			<button type="button" ng-click="imprimir()" id="imprimir"
+				ng-if="!editando" class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
+			<button type="button" ng-click="peticionar()" id="prosseguir"
+				ng-if="editando || arquivosAProtocolar" ng-disabled="!isAllValid()"
+				class="btn btn-primary pull-right">
+				Protocolar&nbsp;&nbsp;<span class="badge badge-pill badge-warning">{{arquivosAProtocolar}}</span>
+			</button>
+		</div>
+	</div>
+
+	<div class="row" ng-show="false">
+		<div class="col-sm-12" style="padding-top: 1em;">arquivos:
+			'{{arquivos}}'</div>
+	</div>
+</div>
