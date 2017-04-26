@@ -2,6 +2,15 @@
 
 Balcão Virtual é um site que permite o envio de petições intercorrentes para sistemas processuais compatíveis com o Modelo Nacional de Interoperabilidade - MNI.
 
+## Arquitetura
+
+Completamente baseado em micro-serviços, o Balcão Virtual é composto dos seguintes componentes:
+- Site do Balcão Virtual: desenvolvido em AngularJS e Java.
+- Webservice REST para obter informações dos sistemas processuais: desenvolvido em C#.
+- Webservices SOAP no padrão MNI para envio de petições, um para cada órgão conectado.
+
+O Balcão Virtual utiliza
+
 ## Ambiente
 
 Para executar o Balcão Virtual, é necessário que algumas propriedades sejam definidas.
