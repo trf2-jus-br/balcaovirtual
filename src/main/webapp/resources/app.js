@@ -37,8 +37,9 @@
 //});
 
 var app = angular.module('app', [ 'sample.peticao-intercorrente',
-		'sample.login', 'sample.signup', 'angularModalService', 'ngAnimate',
-		'cgBusy', 'angular-jwt', 'angular-storage', 'ngFileUpload' ]);
+		'sample.consulta-processual', 'sample.login', 'sample.signup',
+		'angularModalService', 'ngAnimate', 'cgBusy', 'angular-jwt',
+		'angular-storage', 'ngFileUpload' ]);
 
 app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 		$httpProvider) {

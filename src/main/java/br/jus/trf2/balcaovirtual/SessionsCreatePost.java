@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
@@ -14,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
+import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerUtils;
@@ -32,6 +37,15 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		AutenticarPostRequest q = new AutenticarPostRequest();
 		q.login = req.username;
 		q.senha = req.password;
+
+		String usuariosRestritos = Utils.getUsuariosRestritos();
+		if (usuariosRestritos != null) {
+			String a[] = usuariosRestritos.split(",");
+
+			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
+				throw new PresentableException("Usuário não autorizado.");
+		}
+
 		Future<SwaggerAsyncResponse<AutenticarPostResponse>> future = SwaggerCall.callAsync("autenticar usuário", null,
 				"POST", Utils.getWsProcessualUrl() + "/login/autenticar", q, AutenticarPostResponse.class);
 		SwaggerAsyncResponse<AutenticarPostResponse> sar = future.get();

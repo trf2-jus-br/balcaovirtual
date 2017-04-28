@@ -56,4 +56,14 @@ public class Utils {
 		}
 
 	}
+
+	public static String getUsuariosRestritos() {
+		try {
+			return SwaggerUtils.getProperty("balcaovirtual.username.restriction", null);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+
+	}
+
 }

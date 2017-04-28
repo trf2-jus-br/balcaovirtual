@@ -1,0 +1,79 @@
+
+<!--=== Profile ===-->
+<div class="container content profile pt-5">
+	<div class="row">
+		<!-- Profile Content -->
+		<div class="card-deck col pb-3">
+			<div class="card card-inverse card-success card-consulta-processual">
+				<div class="card-block">
+					<p class="card-text">
+						<i class="icon icon-judicialgavel"></i> <small>PROCESSO</small><br />
+						<b>{{proc.dadosBasicos.numero}}</b>
+					</p>
+					<p class="card-text">
+						<small>ÓRGÃO JULGADOR</small><br /> <b style="color: #fff">{{proc.dadosBasicos.orgaoJulgador.nomeOrgao}}</b>
+					</p>
+
+					<p class="card-text">
+						<small>MAGISTRADO</small><br /> <b>{{proc.dadosBasicos.magistradoAtuante.join(',
+							')}}</b>
+					</p>
+
+				</div>
+			</div>
+			<div class="card card-inverse card-primary card-consulta-processual">
+				<div class="card-block">
+					<p class="card-text">
+						<i class="icon-users"></i> <small>ADVOGADO</small><br /> <b>{{proc.partesAtivas[0].advogado[0].nome}}</b>
+					</p>
+					<p class="card-text">
+						<small>AUTOR</small> <br /> <b>{{proc.partesAtivas[0].pessoa.nome}}</b>
+					</p>
+					<p class="card-text">
+						<small>RÉU</small> <br /> <b>{{proc.partesPassivas[0].pessoa.nome}}</b>
+					</p>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="card-deck col pb-3">
+			<div class="card card-consulta-processual-list">
+				<table class="table table-striped mb-0">
+					<thead>
+						<tr>
+							<th>Data/Hora</th>
+							<th>Movimento</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="movimento in proc.movimento | orderBy:'-'">
+							<td><span
+								ng-bind-html="formatDDMMYYYHHMM(movimento.dataHora)"></span></td>
+							<td>{{movimento.movimentoLocal.descricao}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card card-consulta-processual-list">
+				<table class="table table-striped mb-0">
+					<thead>
+						<tr>
+							<th>Data/Hora</th>
+							<th>Peça</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="documento in proc.documento | orderBy:'-'">
+							<td><span
+								ng-bind-html="formatDDMMYYYHHMM(documento.dataHora)"></span></td>
+							<td>{{documento.descricao}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

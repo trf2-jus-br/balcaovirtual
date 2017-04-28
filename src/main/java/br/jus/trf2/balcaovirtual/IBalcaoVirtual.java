@@ -77,8 +77,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
-		public String orgao;
 		public String numero;
+		public String orgao;
 		public String tipopeticao;
 		public String nivelsigilo;
 		public String pdfs;
@@ -91,6 +91,34 @@ public interface IBalcaoVirtual {
 	public interface IProcessoNumeroPeticionarPost extends ISwaggerMethod {
 		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
 				throws Exception;
+	}
+
+	public class ProcessoNumeroConsultarGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse {
+		public byte[] payload;
+		public String contenttype;
+	}
+
+	public interface IProcessoNumeroConsultarGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp)
+				throws Exception;
+	}
+
+	public class ArquivoTemporarioPdfGetRequest implements ISwaggerRequest {
+		public String pdf;
+	}
+
+	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse {
+		public byte[] payload;
+		public String contenttype;
+	}
+
+	public interface IArquivoTemporarioPdfGet extends ISwaggerMethod {
+		public void run(ArquivoTemporarioPdfGetRequest req, ArquivoTemporarioPdfGetResponse resp) throws Exception;
 	}
 
 }

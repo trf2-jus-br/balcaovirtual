@@ -9,3 +9,15 @@
 .odd {
 	background-color: rgba(0, 0, 0, .05);
 }
+
+.unbreakable {
+	white-space: nowrap;
+	word-break: keep-all;
+	hyphens: none;
+}
+
+@media print {
+	.table-peticao {
+		font-size: 10pt;
+	}
+}

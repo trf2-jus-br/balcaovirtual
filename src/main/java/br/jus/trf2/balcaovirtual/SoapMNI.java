@@ -16,9 +16,13 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
 import br.jus.cnj.intercomunicacao_2_2.TipoDocumento;
 import br.jus.cnj.intercomunicacao_2_2.TipoParametro;
+import br.jus.cnj.intercomunicacao_2_2.TipoProcessoJudicial;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 
@@ -26,6 +30,27 @@ public class SoapMNI {
 	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
+
+	public static String consultarProcesso(String idManif, String orgao, String numProc) throws Exception {
+		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
+		String dirFinal = Utils.getDirFinal();
+		URL url = new URL(Utils.getMniWsdlUrl(orgao));
+		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();
+		dadosBasicos.setCodigoLocalidade("1");
+		Holder<Boolean> sucesso = new Holder<>();
+		Holder<String> mensagem = new Holder<>();
+		Holder<TipoProcessoJudicial> processo = new Holder<>();
+		Holder<List<TipoParametro>> parametro = new Holder<>();
+
+		client.consultarProcesso(idManif, null, numProc, null, true,
+				true, true, null, sucesso, mensagem, processo);
+		if (!sucesso.value)
+			throw new Exception(mensagem.value);
+		
+		Gson gson = new Gson();
+		return gson.toJson(processo);	}
 
 	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,
 			int nvlSigilo, String nomePdfs) throws Exception {

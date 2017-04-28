@@ -55,17 +55,12 @@ appPI
 										method : 'GET'
 									}).then(
 									function(response) {
-										console.log("validou"
-												+ JSON.stringify(a));
 										a.status = response.data.unidade + '/'
 												+ response.data.orgao;
 										a.orgao = response.data.orgao;
 										a.validando = false;
 										a.valido = true;
-									},
-									function(error) {
-										console.log("deu erro"
-												+ JSON.stringify(a));
+									}, function(error) {
 										a.validando = false;
 										a.valido = false;
 										a.errormsg = error.data.errormsg;
@@ -130,7 +125,11 @@ appPI
 																processo : $scope
 																		.getProcesso($scope
 																				.somenteNumeros(arr[i])),
-																bloq : true
+																bloq : arq.bloq,
+																perc : arq.perc,
+																size : arq.size,
+																id : arq.id
+
 															};
 															$scope.arquivos
 																	.push(newArq);
@@ -140,11 +139,7 @@ appPI
 														for (var i = 0; i < $scope.arquivos.length; i++) {
 															var a = $scope.arquivos[i];
 															if (a.file === arq.file) {
-																a.status = "MULTIPLO";
-																console
-																		.log("vai validar"
-																				+ JSON
-																						.stringify(a));
+																delete a.status;
 																$scope
 																		.validarArquivo(a);
 															}
@@ -248,7 +243,7 @@ appPI
 								a.odd = !arq.odd;
 								arq = a;
 							}
-							if (a.protocolado !== true)
+							if (a.protocolado !== true && !a.anexo)
 								$scope.arquivosAProtocolar++;
 						}
 					}

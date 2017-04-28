@@ -1,0 +1,38 @@
+.red {
+	color: red;
+}
+
+.protocolado {
+	color: green;
+}
+
+.odd {
+	background-color: rgba(0, 0, 0, .05);
+}
+
+.card-consulta-processual DIV P B {
+	color: #fff;
+}
+
+.card-consulta-processual DIV P {
+	margin-bottom: 0.5rem;
+}
+
+.card-consulta-processual DIV P I {
+	line-height: 3rem;
+	height: 3rem;
+	color: #fff;
+	float: left;
+	font-size: 4rem;
+	margin: -0.5rem 0rem 0 -1rem;
+}
+
+.card-consulta-processual-list DIV I {
+	float: left;
+	font-size: 150%;
+	margin: -0.5rem 0rem -1rem -1rem;
+}
+
+.card-text-descr {
+	margin-bottom: 0;
+}

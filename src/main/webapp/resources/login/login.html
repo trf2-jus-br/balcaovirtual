@@ -3,7 +3,7 @@
 		<div class="col-md-12">
 
 			<div class="login jumbotron d-block mx-auto">
-				<h1>Autenticação</h1>
+				<h2 class="text-center pb-3">Autenticação</h2>
 				<p ng-show="errormsg" class="alert alert-danger" role="alert">{{errormsg}}</p>
 				<form role="form">
 					<div class="form-group">
@@ -16,8 +16,12 @@
 							class="form-control" id="password" ng-model="user.password"
 							placeholder="Password">
 					</div>
-					<button type="submit" class="btn btn-default d-block mx-auto"
-						ng-click="login()">Enviar</button>
+					<div class="row pt-3">
+						<div class="col">
+							<button type="submit" class="btn btn-primary d-block mx-auto"
+								ng-click="login()">Enviar</button>
+						</div>
+					</div>
 				</form>
 				<!-- <a ui-sref="signup()">Click here to Signup</a> -->
 			</div>

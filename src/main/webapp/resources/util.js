@@ -55,3 +55,20 @@ var formdata = function(obj) {
 
 	return s;
 }
+
+var somenteNumeros = function(s) {
+	return s.split('-').join('').split('.').join('');
+}
+
+const regexFormatarProcesso = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?/;
+
+var formatarProcesso = function(filename) {
+	var m = regexFormatarProcesso.exec(filename);
+	if (!m)
+		return;
+	var s = m[1] + '-' + m[2] + '.' + m[3] + '.' + m[4]
+			+ '.' + m[5] + '.' + m[6];
+	if (m[7])
+		s += m[7];
+	return s;
+}

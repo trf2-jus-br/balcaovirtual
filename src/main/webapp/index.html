@@ -18,18 +18,21 @@
 	href="bower_components/angular-busy/dist/angular-busy.min.css">
 <link rel="stylesheet" href="resources/app.css">
 
-<!-- font awesome from BootstrapCDN -->
 <link href="bower_components/bootstrap/dist/css/bootstrap.css"
 	rel="stylesheet">
 <link href="bower_components/font-awesome/css/font-awesome.css"
 	rel="stylesheet">
+
+<link rel="stylesheet" href="assets/fps-line-icons/css/fpslineicons.css">
+
 <link rel="stylesheet" type="text/css" href="resources/app.css">
+<link rel="stylesheet" type="text/css"
+	href="resources/consulta-processual/consulta-processual.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/peticao-intercorrente/peticao-intercorrente.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/signup/signup.css">
 <link rel="stylesheet" type="text/css" href="resources/login/login.css">
-
 </head>
 <body ng-app="app" ng-controller="routerCtrl">
 	<div class="wrapper">
@@ -55,6 +58,9 @@
 							<li class="nav-item"><a class="nav-link"
 								ui-sref="peticao-intercorrente" ui-sref-active="active">Petição
 									Intercorrente </a></li>
+							<!-- <li class="nav-item"><a class="nav-link"
+								ui-sref="consulta-processual({numero: '0000521-19.2013.4.02.5101'})"
+								ui-sref-active="active">Consulta Processual </a></li> -->
 							<li class="nav-item"><a class="nav-link" ui-sref="sugestoes"
 								ui-sref-active="active">Sugestões</a></li>
 							<li class="nav-item"><a class="nav-link" ui-sref="sobre"
@@ -86,6 +92,8 @@
 	<script type="text/javascript"
 		src="bower_components/angularjs/angular.js"></script>
 	<script type="text/javascript"
+		src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+	<script type="text/javascript"
 		src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script
 		src="bower_components/a0-angular-storage/dist/angular-storage.js"
@@ -96,9 +104,11 @@
 		type="text/javascript"> </script>
 
 
-	<script src="bower_components/angular-locale-pt-br/angular-locale_pt-br.js"></script>
+	<script
+		src="bower_components/angular-locale-pt-br/angular-locale_pt-br.js"></script>
 	<script src="bower_components/angular-busy/dist/angular-busy.min.js"></script>
-	<script src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
+	<script
+		src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
 
 	<!-- <script
 		src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
@@ -108,6 +118,8 @@
 
 	<script src="resources/util.js"></script>
 	<script src="resources/app.js"></script>
+	<script type="text/javascript"
+		src="resources/consulta-processual/consulta-processual.js"></script>
 	<script type="text/javascript"
 		src="resources/peticao-intercorrente/peticao-intercorrente.js"></script>
 	<script type="text/javascript" src="resources/login/login.js"></script>
