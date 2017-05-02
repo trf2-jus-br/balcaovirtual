@@ -20,6 +20,20 @@ public interface IBalcaoVirtual {
 	public class Unidade implements ISwaggerModel {
 	}
 
+	public class QuantidadePorData implements ISwaggerModel {
+		public String data;
+		public String quantidade;
+	}
+
+	public class PeticaoIntercorrenteResumo implements ISwaggerModel {
+		public String processo;
+		public String protocolo;
+		public String dataprotocolo;
+		public String classe;
+		public String unidade;
+		public String orgao;
+	}
+
 	public class Error implements ISwaggerModel {
 		public String error;
 	}
@@ -119,6 +133,31 @@ public interface IBalcaoVirtual {
 
 	public interface IArquivoTemporarioPdfGet extends ISwaggerMethod {
 		public void run(ArquivoTemporarioPdfGetRequest req, ArquivoTemporarioPdfGetResponse resp) throws Exception;
+	}
+
+	public class PeticaoIntercorrenteContarGetRequest implements ISwaggerRequest {
+	}
+
+	public class PeticaoIntercorrenteContarGetResponse implements ISwaggerResponse {
+		public List<QuantidadePorData> list;
+	}
+
+	public interface IPeticaoIntercorrenteContarGet extends ISwaggerMethod {
+		public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
+				throws Exception;
+	}
+
+	public class PeticaoIntercorrenteListarGetRequest implements ISwaggerRequest {
+		public String data;
+	}
+
+	public class PeticaoIntercorrenteListarGetResponse implements ISwaggerResponse {
+		public List<PeticaoIntercorrenteResumo> list;
+	}
+
+	public interface IPeticaoIntercorrenteListarGet extends ISwaggerMethod {
+		public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
+				throws Exception;
 	}
 
 }

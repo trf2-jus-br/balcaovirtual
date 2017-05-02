@@ -18,6 +18,7 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 			throws Exception {
 		ProcessoValidarNumeroGetRequest q = new ProcessoValidarNumeroGetRequest();
 		q.numero = req.numero;
+		
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
 		if (authorization.startsWith("Bearer "))
 			authorization = authorization.substring(7);

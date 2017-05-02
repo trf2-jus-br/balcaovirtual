@@ -23,6 +23,20 @@ public interface ISistemaProcessual {
 		public String orgao;
 	}
 
+	public class Contagem implements ISwaggerModel {
+		public String data;
+		public String quantidade;
+	}
+
+	public class PeticaoIntercorrente implements ISwaggerModel {
+		public String processo;
+		public String protocolo;
+		public String dataprotocolo;
+		public String classe;
+		public String unidade;
+		public String orgao;
+	}
+
 	public class Orgao implements ISwaggerModel {
 	}
 
@@ -71,6 +85,48 @@ public interface ISistemaProcessual {
 
 	public interface IProcessoValidarNumeroGet extends ISwaggerMethod {
 		public void run(ProcessoValidarNumeroGetRequest req, ProcessoValidarNumeroGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioWebUsernameGetRequest implements ISwaggerRequest {
+		public String username;
+	}
+
+	public class UsuarioWebUsernameGetResponse implements ISwaggerResponse {
+		public String nome;
+		public String cpf;
+		public String email;
+	}
+
+	public interface IUsuarioWebUsernameGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernameGetRequest req, UsuarioWebUsernameGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioWebUsernamePeticaoIntercorrenteContarGetRequest implements ISwaggerRequest {
+		public String username;
+		public String dias;
+	}
+
+	public class UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse implements ISwaggerResponse {
+		public List<Contagem> list;
+	}
+
+	public interface IUsuarioWebUsernamePeticaoIntercorrenteContarGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernamePeticaoIntercorrenteContarGetRequest req,
+				UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioWebUsernamePeticaoIntercorrenteListarGetRequest implements ISwaggerRequest {
+		public String username;
+		public String data;
+	}
+
+	public class UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse implements ISwaggerResponse {
+		public List<PeticaoIntercorrente> list;
+	}
+
+	public interface IUsuarioWebUsernamePeticaoIntercorrenteListarGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernamePeticaoIntercorrenteListarGetRequest req,
+				UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse resp) throws Exception;
 	}
 
 }

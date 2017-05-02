@@ -86,6 +86,12 @@ parameters:
     description: Referência para o PDF que foi enviado previamente para o servidor
     type: string
     required: true
+  data:
+    name: data
+    in: query
+    description: Data a ser consultada
+    required: true
+    type: string
 
 ################################################################################
 #                                           Paths                              #
@@ -237,6 +243,48 @@ paths:
           schema:
             $ref: "#/definitions/error"
 
+  /peticao-intercorrente/contar:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/QuantidadePorData"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /peticao-intercorrente/listar:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters: 
+        - $ref: "#/parameters/data"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/PeticaoIntercorrenteResumo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+
 
 ################################################################################
 #                                     Definitions                              #
@@ -262,6 +310,32 @@ definitions:
     description: Unidade do processo
     type: string
     example: 01JEF
+
+  QuantidadePorData:
+    description: Data e quantidade de itens
+    type: object
+    properties:
+      data:
+        type: string
+      quantidade:
+        type: string
+
+  PeticaoIntercorrenteResumo:
+    description: Petição intercorrente
+    type: object
+    properties:
+      processo:
+        type: string
+      protocolo:
+        type: string
+      dataprotocolo:
+        type: string
+      classe:
+        type: string
+      unidade:
+        type: string
+      orgao:
+        type: string
 
   Error:
     type: object

@@ -1,7 +1,7 @@
-<div class="container-fluid content pt-5" ng-app="fileUpload"
-	ng-controller="PeticaoIntercorrenteCtrl">
+<div class="container-fluid content pt-5">
 
-	<div class="row pb-4" ng-show="editando">
+	<div class="row pb-4"
+		ng-show="editando &amp;&amp; quantidadePorData == undefined">
 		<div class="col-md-12">
 			<div ngf-drop ngf-select ng-model="files" class="drop-box"
 				ngf-drag-over-class="'dragover'" ngf-multiple="true"
@@ -16,7 +16,8 @@
 		</div>
 	</div>
 
-	<div class="row" ng-show="arquivos.length > 0">
+	<div class="row"
+		ng-show="arquivos.length > 0 &amp;&amp; quantidadePorData == undefined">
 
 		<!-- 
 		<div class="col-md-12 mb-3"">
@@ -96,22 +97,97 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="row" ng-if="quantidadePorData === undefined">
 		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button" ng-click="carregarProtocoladosRecentemente()"
+				id="protocoladosRecentemente"
+				class="btn btn-secondary no-print mr-3">Consultar
+				Protocolos Recentes</button>
 			<button type="button" ng-click="limpar()" id="limpar"
 				ng-if="!editando" class="btn btn-secondary no-print">Enviar
 				Outras Petições</button>
 			<button type="button" ng-click="imprimir()" id="imprimir"
 				ng-if="!editando" class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
 			<button type="button" ng-click="peticionar()" id="prosseguir"
-				ng-if="editando || arquivosAProtocolar" ng-disabled="!isAllValid()"
+				ng-if="arquivos.length > 0 && (editando || arquivosAProtocolar)"
+				ng-disabled="!isAllValid()"
 				class="btn btn-primary pull-right no-print">
 				Protocolar&nbsp;&nbsp;<span class="badge badge-pill badge-warning">{{arquivosAProtocolar}}</span>
 			</button>
 		</div>
 	</div>
 
-	<div class="row" ng-show="false">
-		<div class="col-sm-12" style="padding-top: 1em;">arquivos:
-			'{{arquivos}}'</div>
+	<div class="row"
+		ng-show="quantidadePorData !== undefined &amp;&amp; resumoPorData === undefined">
+		<div class="col col-sm-12" ng-show="quantidadePorData.length > 0">
+			<div class="protocolos-header">Petições Intercorrentes
+				Protocoladas Recentemente</div>
+			<table class="table table-striped mb-0">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Data</th>
+						<th>Quantidade</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="p in quantidadePorData">
+						<td><span ng-bind-html="formatDDMMYYY(p.data)"></span></td>
+						<td><a href="#" ng-click="carregarResumo(p.data)">{{p.quantidade}}</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col col-sm-12" ng-show="quantidadePorData.length == 0">
+			<p class="alert alert-warning">
+				<strong>Atenção!</strong> Nenhuma petição intercorrente protocolada
+				nos últimos 7 dias.
+			</p>
+		</div>
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button" ng-click="voltarParaEdicao()"
+				ng-if="quantidadePorData !== undefined"
+				class="btn btn-success no-print">Voltar</button>
+		</div>
+	</div>
+	<div class="row" ng-show="resumoPorData.length > 0">
+		<div class="col col-sm-12">
+			<div class="protocolos-header">
+				Petições Intercorrentes Protocoladas em <span
+					ng-bind-html="formatDDMMYYY(dataDeProtocolo)"></span>
+			</div>
+			<div class="no-print pull-right pb-2">
+				Filtrar: <input type="text" ng-model="filtroProtocolo" />
+			</div>
+			<table class="table table-striped mb-0 table-protocolo">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Processo</th>
+						<th>Classe</th>
+						<th>Data/Hora</th>
+						<th>Protocolo</th>
+						<th>Órgão</th>
+						<th>Unidade</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="r in resumoPorData | filter: filtroProtocolo">
+						<td>{{r.processo}}</td>
+						<td>{{r.classe}}</td>
+						<td><span ng-bind-html="formatDDMMYYYHHMM(r.dataprotocolo)"></span></td>
+						<td>{{r.protocolo}}</td>
+						<td>{{r.orgao}}</td>
+						<td>{{r.unidade}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button" ng-click="voltarParaQuantidade()"
+				ng-if="resumoPorData !== undefined" class="btn btn-success no-print">Voltar</button>
+			<button type="button" ng-click="imprimir()" id="imprimir"
+				ng-if="resumoPorData.length > 0"
+				class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
+		</div>
 	</div>
 </div>

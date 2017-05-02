@@ -39,6 +39,40 @@ appPI
 							});
 					}
 
+					$scope.carregarResumo = function(data) {
+						$scope.dataDeProtocolo = data;
+						$scope.$parent.promise = $http(
+								{
+									url : 'api/v1/peticao-intercorrente/listar?data='
+											+ data,
+									method : 'GET'
+								}).then(function(response) {
+							$scope.resumoPorData = response.data.list;
+						}, function(error) {
+							alert(error.data.errormsg);
+						});
+					}
+
+					$scope.voltarParaQuantidade = function() {
+						delete $scope.dataDeProtocolo;
+						delete $scope.resumoPorData;
+					}
+
+					$scope.carregarProtocoladosRecentemente = function() {
+						$scope.$parent.promise = $http({
+							url : 'api/v1/peticao-intercorrente/contar',
+							method : 'GET'
+						}).then(function(response) {
+							$scope.quantidadePorData = response.data.list;
+						}, function(error) {
+							alert(error.data.errormsg);
+						});
+					}
+
+					$scope.voltarParaEdicao = function() {
+						delete $scope.quantidadePorData;
+					}
+
 					$scope.validarArquivo = function(arq) {
 						var a = arq;
 						if (a.processo) {
@@ -334,6 +368,20 @@ appPI
 								return false;
 						}
 						return true;
+					}
+
+					$scope.formatDDMMYYY = function(s) {
+						var r = s.substring(8, 10) + '/' + s.substring(5, 7)
+								+ '/' + s.substring(0, 4);
+						return r;
+					}
+
+					$scope.formatDDMMYYYHHMM = function(s) {
+						var r = s.substring(8, 10) + '/' + s.substring(5, 7)
+								+ '/' + s.substring(0, 4) + '&nbsp;'
+								+ s.substring(11, 13) + ':'
+								+ s.substring(14, 16);
+						return r;
 					}
 
 					$scope.jwt = store.get('jwt');

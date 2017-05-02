@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
@@ -26,17 +23,15 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.AutenticarPostRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.AutenticarPostResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRequest;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
 
 public class SessionsCreatePost implements ISessionsCreatePost {
 	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
 
 	@Override
 	public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception {
-		AutenticarPostRequest q = new AutenticarPostRequest();
-		q.login = req.username;
-		q.senha = req.password;
 
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
@@ -46,12 +41,18 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				throw new PresentableException("Usuário não autorizado.");
 		}
 
-		Future<SwaggerAsyncResponse<AutenticarPostResponse>> future = SwaggerCall.callAsync("autenticar usuário", null,
-				"POST", Utils.getWsProcessualUrl() + "/login/autenticar", q, AutenticarPostResponse.class);
-		SwaggerAsyncResponse<AutenticarPostResponse> sar = future.get();
+		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
+		q.username = req.username;
+
+		String authorization = "Basic " + SwaggerUtils.base64Encode((req.username + ":" + req.password).getBytes());
+		Future<SwaggerAsyncResponse<UsuarioWebUsernameGetResponse>> future = SwaggerCall.callAsync("autenticar usuário",
+				authorization, "GET", Utils.getWsProcessualUrl() + "/usuario-web/" + req.username, q,
+				UsuarioWebUsernameGetResponse.class);
+		SwaggerAsyncResponse<UsuarioWebUsernameGetResponse> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		AutenticarPostResponse r = (AutenticarPostResponse) sar.getResp();
+		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
+
 		String jwt = jwt(req.username, r.cpf, r.nome, r.email);
 		verify(jwt);
 		resp.id_token = jwt;
@@ -67,11 +68,18 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return map;
 	}
 
+	public static Map<String, Object> assertUsuarioAutorizado() throws Exception {
+		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
+		if (authorization.startsWith("Bearer "))
+			authorization = authorization.substring(7);
+		return verify(authorization);
+	}
+
 	private static String jwt(String username, String cpf, String name, String email) {
 		final String issuer = SwaggerUtils.getProperty("balcaovirtual.jwt.issuer", null);
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-		final long exp = iat + 24 * 60 * 60L; // token expires in 1 day
+		final long exp = iat + 18 * 60 * 60L; // token expires in 18 hours
 
 		final JWTSigner signer = new JWTSigner(getSecret());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();

@@ -81,6 +81,73 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /usuario-web/{username}:
+    get:
+      description: Obter dados de um usuário web, ou autenticar usando Basic Authentication
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              nome:
+                $ref: "#/definitions/Nome"
+              cpf:
+                $ref: "#/definitions/CPF"
+              email:
+                $ref: "#/definitions/Email"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /usuario-web/{username}/peticao-intercorrente/contar:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/dias"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Contagem"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /usuario-web/{username}/peticao-intercorrente/listar:
+    get:
+      description: Validar o número do processo
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/data"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/PeticaoIntercorrente"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
 parameters:
   numero:
     name: numero
@@ -98,6 +165,24 @@ parameters:
     name: senha
     in: formData
     description: Senha do usuário
+    required: true
+    type: string
+  username:
+    name: username
+    in: path
+    description: Login do usuário
+    required: true
+    type: string
+  dias:
+    name: dias
+    in: query
+    description: Quantidade de dias a serem consultados
+    required: true
+    type: string
+  data:
+    name: data
+    in: query
+    description: Data a ser consultada
     required: true
     type: string
             
@@ -124,6 +209,32 @@ definitions:
       id:
         type: string
       descricao:
+        type: string
+      orgao:
+        type: string
+
+  Contagem:
+    description: Data e quantidade de itens
+    type: object
+    properties:
+      data:
+        type: string
+      quantidade:
+        type: string
+
+  PeticaoIntercorrente:
+    description: Petição intercorrente
+    type: object
+    properties:
+      processo:
+        type: string
+      protocolo:
+        type: string
+      dataprotocolo:
+        type: string
+      classe:
+        type: string
+      unidade:
         type: string
       orgao:
         type: string
