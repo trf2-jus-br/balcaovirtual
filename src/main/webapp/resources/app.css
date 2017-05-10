@@ -1,70 +1,84 @@
+@media print {
+  body {
+    margin: 0;
+    padding: 0 !important;
+    min-width: 768px;
+  }
+  .container {
+    width: auto;
+    min-width: 750px;
+  }
+}
+
+.card-block LABEL {
+	text-transform: uppercase;
+	color: #777;
+	margin-bottom: 0px;
+	font-size: 80%;
+}
+
 .dropdown-submenu {
-    position: relative;
+	position: relative;
 }
 
 .dropdown-submenu>.dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -6px;
-    margin-left: -1px;
-    -webkit-border-radius: 0 6px 6px 6px;
-    -moz-border-radius: 0 6px 6px;
-    border-radius: 0 6px 6px 6px;
+	top: 0;
+	left: 100%;
+	margin-top: -6px;
+	margin-left: -1px;
+	-webkit-border-radius: 0 6px 6px 6px;
+	-moz-border-radius: 0 6px 6px;
+	border-radius: 0 6px 6px 6px;
 }
 
 .dropdown-submenu:hover>.dropdown-menu {
-    display: block;
+	display: block;
 }
 
 .dropdown-submenu>a:after {
-    display: block;
-    content: " ";
-    float: right;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-    border-width: 5px 0 5px 5px;
-    border-left-color: #ccc;
-    margin-top: 5px;
-    margin-right: -10px;
+	display: block;
+	content: " ";
+	float: right;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-left-color: #ccc;
+	margin-top: 5px;
+	margin-right: -10px;
 }
 
 .dropdown-submenu:hover>a:after {
-    border-left-color: #fff;
+	border-left-color: #fff;
 }
 
 .dropdown-submenu.pull-left {
-    float: none;
+	float: none;
 }
 
 .dropdown-submenu.pull-left>.dropdown-menu {
-    left: -100%;
-    margin-left: 10px;
-    -webkit-border-radius: 6px 0 6px 6px;
-    -moz-border-radius: 6px 0 6px 6px;
-    border-radius: 6px 0 6px 6px;
+	left: -100%;
+	margin-left: 10px;
+	-webkit-border-radius: 6px 0 6px 6px;
+	-moz-border-radius: 6px 0 6px 6px;
+	border-radius: 6px 0 6px 6px;
 }
 
-
-@media print
-{    
-    .no-print, .no-print *
-    {
-        display: none !important;
-    }
+@media print {
+	.no-print, .no-print * {
+		display: none !important;
+	}
 }
 
 DIV.sobre p {
-	font-size: 120%; 
+	font-size: 120%;
 }
 
 DIV.sobre ol li {
-	font-size: 120%; 
+	font-size: 120%;
 	padding-bottom: 12pt;
 }
-
-
 
 TABLE.table-peticao TBODY TD {
 	vertical-align: middle;

@@ -92,6 +92,24 @@ parameters:
     description: Data a ser consultada
     required: true
     type: string
+  id:
+    name: id
+    in: path
+    description: Número da id só algarismos
+    required: true
+    type: string
+  jwt:
+    name: jwt
+    in: path
+    description: JWT que referencia um artefato a ser baixado
+    required: true
+    type: string
+  orgaoquery:
+    name: orgao
+    in: query
+    description: Órgao
+    required: true
+    type: string
 
 ################################################################################
 #                                           Paths                              #
@@ -201,7 +219,7 @@ paths:
       tags: [utils]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/orgaoquery"
       responses:
         200:
           description: Successful response
@@ -219,6 +237,54 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
+  /processo/{numero}/peca/{id}/pdf:
+    get:
+      description: Obter o PDF de uma peça processual para visualização
+      tags: [view]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              jwt:
+                type: string
+                description: JWT com as informações para download do PDF
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /download/{jwt}:
+    get:
+      description: Faz o download de um artefato qualquer
+      tags: [view]
+      parameters:
+        - $ref: "#/parameters/jwt"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              payload:
+                type: string
+                format: byte
+                description: PDF codificado em base64
+              contenttype:
+                type: string
+                description: Constante em application/pdf
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+            
   /arquivo-temporario/{pdf}:
     get:
       description: Obter o PDF de um documento para visualização
@@ -241,7 +307,7 @@ paths:
         500:
           description: Error ocurred
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/definitions/Error"
 
   /peticao-intercorrente/contar:
     get:
@@ -284,6 +350,81 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /aviso/listar:
+    get:
+      description: Listar as intimações para o usuário logado
+      tags: [utils]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Aviso"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /classe/{id}:
+    get:
+      description: Obter dados de uma classe pela id
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              codigo:
+                $ref: "#/definitions/Codigo"
+              descricao:
+                $ref: "#/definitions/Descricao"
+              descricaocompleta:
+                $ref: "#/definitions/DescricaoCompleta"
+              ativo:
+                $ref: "#/definitions/Ativo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /assunto/{id}:
+    get:
+      description: Obter dados de um assunto pela id
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              codigo:
+                $ref: "#/definitions/Codigo"
+              descricao:
+                $ref: "#/definitions/Descricao"
+              descricaocompleta:
+                $ref: "#/definitions/DescricaoCompleta"
+              ativo:
+                $ref: "#/definitions/Ativo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
 
 
 ################################################################################
@@ -337,6 +478,54 @@ definitions:
       orgao:
         type: string
 
+  Aviso:
+    description: Aviso
+    type: object
+    properties:
+      idaviso:
+        type: string
+      dataaviso:
+        type: string
+      processo:
+        type: string
+      unidade:
+        type: string
+      unidadenome:
+        type: string
+      orgao:
+        type: string
+      localidade:
+        type: string
+
+  ListStatus:
+    type: object
+    properties:
+      system:
+        type: string
+        description: Identificador do sistema integrado
+      errormsg:
+        type: string
+        description: Mensagem de erro se houver
+      stacktrace:
+        type: string
+        description: Detalhamento do erro
+
+  Codigo:
+    type: string
+    description: Código
+    
+  Descricao:
+    type: string
+    description: Apenas o nível mais específico da descrição
+    
+  DescricaoCompleta:
+    type: string
+    description: Descrição incluindo todos os níveis superiores
+    
+  Ativo:
+    type: boolean
+    description: Ativo true ou false
+    
   Error:
     type: object
     properties:

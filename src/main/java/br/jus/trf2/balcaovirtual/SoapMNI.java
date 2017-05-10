@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.ws.Holder;
 
@@ -16,44 +17,127 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.crivano.swaggerservlet.SwaggerUtils;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
 import br.jus.cnj.intercomunicacao_2_2.TipoDocumento;
 import br.jus.cnj.intercomunicacao_2_2.TipoParametro;
 import br.jus.cnj.intercomunicacao_2_2.TipoProcessoJudicial;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
 
 public class SoapMNI {
 	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
 
+	private static class ConsultaProcessualExclStrat implements ExclusionStrategy {
+
+		public boolean shouldSkipClass(Class<?> arg0) {
+			return false;
+		}
+
+		public boolean shouldSkipField(FieldAttributes f) {
+
+			return f.getName().equals("endereco");
+		}
+
+	}
+
 	public static String consultarProcesso(String idManif, String orgao, String numProc) throws Exception {
-		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
-		String dirFinal = Utils.getDirFinal();
 		URL url = new URL(Utils.getMniWsdlUrl(orgao));
 		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
 		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
-		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();
-		dadosBasicos.setCodigoLocalidade("1");
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<TipoProcessoJudicial> processo = new Holder<>();
-		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.consultarProcesso(idManif, null, numProc, null, true,
-				true, true, null, sucesso, mensagem, processo);
+		client.consultarProcesso(idManif, null, numProc, null, true, true, true, null, sucesso, mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
-		
-		Gson gson = new Gson();
-		return gson.toJson(processo);	}
+
+		Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
+		return gson.toJson(processo);
+	}
+
+	public static byte[] obterPecaProcessual(String idManif, String orgao, String numProc, String documento)
+			throws Exception {
+		URL url = new URL(Utils.getMniWsdlUrl(orgao));
+		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		Holder<Boolean> sucesso = new Holder<>();
+		Holder<String> mensagem = new Holder<>();
+		Holder<TipoProcessoJudicial> processo = new Holder<>();
+		List<String> l = new ArrayList<>();
+		l.add(documento);
+
+		client.consultarProcesso(idManif, null, numProc, null, false, false, false, l, sucesso, mensagem, processo);
+		if (!sucesso.value)
+			throw new Exception(mensagem.value);
+		return processo.value.getDocumento().get(0).getConteudo();
+	}
+
+	public static void consultarAvisosPendentes(String idConsultante, List<Aviso> list, List<ListStatus> status)
+			throws Exception {
+
+		for (String orgao : Utils.getOrgaos().split(",")) {
+			String system = orgao.toLowerCase();
+			URL url = new URL(Utils.getMniWsdlUrl(system));
+			ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+			ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+			Holder<Boolean> sucesso = new Holder<>();
+			Holder<String> mensagem = new Holder<>();
+			Holder<List<TipoAvisoComunicacaoPendente>> aviso = new Holder<>();
+
+			ListStatus ls = new ListStatus();
+			ls.system = system;
+			status.add(ls);
+			try {
+				client.consultarAvisosPendentes(null, idConsultante, null, null, sucesso, mensagem, aviso);
+				if (!sucesso.value)
+					throw new Exception(mensagem.value);
+			} catch (Exception ex) {
+				log.error("Erro obtendo a lista de {}", system, ex);
+				ls.errormsg = SwaggerUtils.messageAsString(ex);
+				ls.stacktrace = SwaggerUtils.stackAsString(ex);
+			}
+
+			for (TipoAvisoComunicacaoPendente a : aviso.value) {
+				Aviso i = new Aviso();
+
+				i.processo = a.getProcesso().getNumero();
+				i.dataaviso = a.getDataDisponibilizacao();
+				i.idaviso = a.getIdAviso();
+				i.orgao = orgao;
+				i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
+				i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
+				i.localidade = a.getProcesso().getCodigoLocalidade();
+				list.add(i);
+			}
+		}
+	}
 
 	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,
 			int nvlSigilo, String nomePdfs) throws Exception {
+		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		String email = (String) jwt.get("email");
+		String nome = (String) jwt.get("name");
+		String usuario = (String) jwt.get("username");
+
+		String numProcFormated = numProc;
+		try {
+			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",
+					"$1-$2.$3.$4.$5.$6$7");
+		} catch (Exception ex) {
+		}
+
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();
 		URL url = new URL(Utils.getMniWsdlUrl(orgao));
@@ -89,7 +173,30 @@ public class SoapMNI {
 			throw new Exception(mensagem.value);
 
 		DateTime dt = DateTime.parse(dataOperacao.value, dtfMNI);
-		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR);
+
+		boolean sent = false;
+		if (email != null) {
+			try {
+				String conteudo = "Prezado(a) " + nome
+						+ ",\n\nAcusamos o recebimento da petição intercorrente conforme dados abaixo:"
+						+ "\n\nProcesso Número: " + numProcFormated + "\nProtocolo: " + protocoloRecebimento.value
+						+ "\nData/Hora do Protocolo: " + dt.toString(dtfBR)
+						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
+				Correio.enviar(email, "Balcão Virtual: Protocolo de Recebimento", conteudo,
+						numProcFormated + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
+						recibo.value);
+				sent = true;
+			} catch (Exception ex) {
+				log.error("Email não enviado", ex);
+			}
+		}
+
+		log.warn(
+				"*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: " + protocoloRecebimento.value
+						+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
+
+		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
+				+ (sent ? "" : " (email não enviado)");
 	}
 
 }

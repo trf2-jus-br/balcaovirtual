@@ -16,8 +16,6 @@
 <!-- Bootstrap -->
 <link rel="stylesheet"
 	href="bower_components/angular-busy/dist/angular-busy.min.css">
-<link rel="stylesheet" href="resources/app.css">
-
 <link href="bower_components/bootstrap/dist/css/bootstrap.css"
 	rel="stylesheet">
 <link href="bower_components/font-awesome/css/font-awesome.css"
@@ -30,9 +28,12 @@
 	href="resources/consulta-processual/consulta-processual.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/peticao-intercorrente/peticao-intercorrente.css">
+<link rel="stylesheet" type="text/css" href="resources/aviso/aviso.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/signup/signup.css">
 <link rel="stylesheet" type="text/css" href="resources/login/login.css">
+<link rel="stylesheet" type="text/css" href="resources/print.css"
+	media="all">
 </head>
 <body ng-app="app" ng-controller="routerCtrl">
 	<div class="wrapper">
@@ -49,16 +50,19 @@
 						aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<!-- <a class="navbar-brand" href="#"><img id="logo-header"
-						src="balcaovirtual-30px.png" alt="Logo" height="30" /></a> -->
-					<a class="navbar-brand" href="#">Balcão Virtual - TRF2</a>
-
+					<a class="navbar-brand pt-0 pb-0" href="#"><img
+						id="logo-header" src="balcao-virtual-30px.png" alt="Logo"
+						height="38" /></a>
+					<!-- <a class="navbar-brand" href="#">Balcão Virtual - TRF2</a>
+ -->
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav mr-auto">
+							<li class="nav-item"><a class="nav-link"
+								ui-sref="consulta-processual()" ui-sref-active="active">Consulta</a></li>
 
 							<li class="nav-item"><a class="nav-link"
 								ui-sref="peticao-intercorrente" ui-sref-active="active">Petição
-									Intercorrente </a></li>
+									Intercorrente</a></li>
 
 							<!-- 
 							<li class="nav-item dropdown"><a
@@ -81,11 +85,8 @@
 								</ul></li>
  							-->
 
-
-
-							<!-- <li class="nav-item"><a class="nav-link"
-								ui-sref="consulta-processual({numero: '0000521-19.2013.4.02.5101'})"
-								ui-sref-active="active">Consulta Processual </a></li> -->
+							<li class="nav-item"><a class="nav-link"
+								ui-sref="lista-avisos()" ui-sref-active="active">Intimação</a></li>
 							<li class="nav-item"><a class="nav-link" ui-sref="sugestoes"
 								ui-sref-active="active">Sugestões</a></li>
 							<li class="nav-item"><a class="nav-link" ui-sref="sobre"
@@ -147,6 +148,7 @@
 		src="resources/consulta-processual/consulta-processual.js"></script>
 	<script type="text/javascript"
 		src="resources/peticao-intercorrente/peticao-intercorrente.js"></script>
+	<script type="text/javascript" src="resources/aviso/aviso.js"></script>
 	<script type="text/javascript" src="resources/login/login.js"></script>
 	<script type="text/javascript" src="resources/signup/signup.js"></script>
 

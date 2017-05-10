@@ -1,18 +1,18 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.Scanner;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NameNotFoundException;
-import javax.sql.DataSource;
-
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
+
+	public static String getOrgaos() {
+		try {
+			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",
+					"Não foi possível localizar propriedade que configure a lista de órgãos.", false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+
+	}
 
 	public static String getMniWsdlUrl(String orgao) {
 		try {
@@ -64,6 +64,14 @@ public class Utils {
 			throw new RuntimeException("Erro de configuração", e);
 		}
 
+	}
+
+	public static String getJwtIssuer() {
+		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
+	}
+
+	public static String getJwtSecret() {
+		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
 	}
 
 }

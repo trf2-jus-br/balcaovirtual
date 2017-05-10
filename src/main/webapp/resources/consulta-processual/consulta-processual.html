@@ -1,24 +1,35 @@
 
 <!--=== Profile ===-->
-<div class="container content profile pt-5">
+<div class="container content profile">
+
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center mt-3 mb-3">Consulta Processual</h4>
+		</div>
+	</div>
+
+
 	<form>
-		<div class="login jumbotron d-block mx-auto" ng-hide="avancada">
-			<div>
-				<div class="row">
-					<div class="col">
-						<div class="form-group">
-							<label for="numero">Número do Processo</label> <input type="text"
-								class="form-control" id="numero" placeholder=""
-								ng-model="numero">
+		<div class="col col-md-6 offset-md-3" ng-hide="avancada">
+			<div class="jumbotron d-block mx-auto pt-5 pb-5">
+				<div>
+					<div class="row">
+						<div class="col">
+							<div class="form-group">
+								<label for="numero">Número do Processo</label> <input
+									ng-keypress="$event.keyCode == 13 &amp;&amp; mostrarProcesso(numero)"
+									type="text" class="form-control" id="numero" placeholder=""
+									ng-model="numero">
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row pt-3">
-					<div class="col">
-						<button type="submit" class="btn btn-default"
-							ng-click="avancada=true">Pesquisa Avançada...</button>
-						<a ui-sref="processo({numero: numero})"
-							class="btn btn-primary pull-right">Consultar</a>
+					<div class="row pt-3">
+						<div class="col">
+							<button ng-if="false" class="btn btn-secondary"
+								ng-click="avancada=true">Pesquisa Avançada...</button>
+							<button type="submit" ng-click="mostrarProcesso(numero)"
+								class="btn btn-primary pull-right">Consultar</button>
+						</div>
 					</div>
 				</div>
 			</div>

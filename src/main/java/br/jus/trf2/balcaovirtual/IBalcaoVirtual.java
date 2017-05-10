@@ -34,6 +34,34 @@ public interface IBalcaoVirtual {
 		public String orgao;
 	}
 
+	public class Aviso implements ISwaggerModel {
+		public String idaviso;
+		public String dataaviso;
+		public String processo;
+		public String unidade;
+		public String unidadenome;
+		public String orgao;
+		public String localidade;
+	}
+
+	public class ListStatus implements ISwaggerModel {
+		public String system;
+		public String errormsg;
+		public String stacktrace;
+	}
+
+	public class Codigo implements ISwaggerModel {
+	}
+
+	public class Descricao implements ISwaggerModel {
+	}
+
+	public class DescricaoCompleta implements ISwaggerModel {
+	}
+
+	public class Ativo implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String error;
 	}
@@ -122,6 +150,34 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
+	public class ProcessoNumeroPecaIdPdfGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String id;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroPecaIdPdfGetResponse implements ISwaggerResponse {
+		public String jwt;
+	}
+
+	public interface IProcessoNumeroPecaIdPdfGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp)
+				throws Exception;
+	}
+
+	public class DownloadJwtGetRequest implements ISwaggerRequest {
+		public String jwt;
+	}
+
+	public class DownloadJwtGetResponse implements ISwaggerResponse {
+		public byte[] payload;
+		public String contenttype;
+	}
+
+	public interface IDownloadJwtGet extends ISwaggerMethod {
+		public void run(DownloadJwtGetRequest req, DownloadJwtGetResponse resp) throws Exception;
+	}
+
 	public class ArquivoTemporarioPdfGetRequest implements ISwaggerRequest {
 		public String pdf;
 	}
@@ -158,6 +214,50 @@ public interface IBalcaoVirtual {
 	public interface IPeticaoIntercorrenteListarGet extends ISwaggerMethod {
 		public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
 				throws Exception;
+	}
+
+	public class AvisoListarGetRequest implements ISwaggerRequest {
+	}
+
+	public class AvisoListarGetResponse implements ISwaggerResponse {
+		public List<Aviso> list;
+		public List<ListStatus> status;
+	}
+
+	public interface IAvisoListarGet extends ISwaggerMethod {
+		public void run(AvisoListarGetRequest req, AvisoListarGetResponse resp) throws Exception;
+	}
+
+	public class ClasseIdGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class ClasseIdGetResponse implements ISwaggerResponse {
+		public String codigo;
+		public String descricao;
+		public String descricaocompleta;
+		public Boolean ativo;
+	}
+
+	public interface IClasseIdGet extends ISwaggerMethod {
+		public void run(ClasseIdGetRequest req, ClasseIdGetResponse resp) throws Exception;
+	}
+
+	public class AssuntoIdGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class AssuntoIdGetResponse implements ISwaggerResponse {
+		public String codigo;
+		public String descricao;
+		public String descricaocompleta;
+		public Boolean ativo;
+	}
+
+	public interface IAssuntoIdGet extends ISwaggerMethod {
+		public void run(AssuntoIdGetRequest req, AssuntoIdGetResponse resp) throws Exception;
 	}
 
 }

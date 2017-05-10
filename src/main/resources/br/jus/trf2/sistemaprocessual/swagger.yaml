@@ -148,6 +148,54 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /classe-cnj/{id}:
+    get:
+      description: Obter dados de uma classe pela id
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              codigo:
+                $ref: "#/definitions/Codigo"
+              descricao:
+                $ref: "#/definitions/Descricao"
+              ativo:
+                $ref: "#/definitions/Ativo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /assunto-cnj/{id}:
+    get:
+      description: Obter dados de um assunto pela id
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              codigo:
+                $ref: "#/definitions/Codigo"
+              descricao:
+                $ref: "#/definitions/Descricao"
+              ativo:
+                $ref: "#/definitions/Ativo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
 parameters:
   numero:
     name: numero
@@ -183,6 +231,18 @@ parameters:
     name: data
     in: query
     description: Data a ser consultada
+    required: true
+    type: string
+  id:
+    name: id
+    in: path
+    description: Número da id só algarismos
+    required: true
+    type: string
+  orgaoquery:
+    name: orgao
+    in: query
+    description: Órgao
     required: true
     type: string
             
@@ -249,6 +309,18 @@ definitions:
     type: string
     example: 01JEF
 
+  Codigo:
+    type: string
+    description: Código
+    
+  Descricao:
+    type: string
+    description: Descrição
+    
+  Ativo:
+    type: boolean
+    description: Ativo true ou false
+    
   Error:
     type: object
     properties:

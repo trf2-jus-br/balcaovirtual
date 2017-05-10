@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -36,6 +38,7 @@ import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,15 +49,23 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 public class Correio {
 	private static final Logger log = LoggerFactory.getLogger(Correio.class);
 
-	public static void enviar(final String destinatario, final String assunto, final String conteudo) throws Exception {
+	public static void enviar(String remetente, String[] destinatarios, String assunto, String conteudo)
+			throws Exception {
+		Correio.enviar(remetente, destinatarios, assunto, conteudo, null, null, null, null);
+	}
+
+	public static void enviar(final String destinatario, final String assunto, final String conteudo,
+			String nomeArquivo, String tipoArquivo, byte[] conteudoArquivo) throws Exception {
 		final String[] to = { destinatario };
 
 		Correio.enviar(SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.remetente",
-				"remetente de email não configurado.", false), to, assunto, conteudo, null);
+				"remetente de email não configurado.", false), to, assunto, conteudo, null, nomeArquivo, tipoArquivo,
+				conteudoArquivo);
 	}
 
 	public static void enviar(final String remetente, final String[] destinatarios, final String assunto,
-			final String conteudo, final String conteudoHTML) throws Exception {
+			final String conteudo, final String conteudoHTML, String nomeArquivo, String tipoArquivo,
+			byte[] conteudoArquivo) throws Exception {
 
 		List<String> listaServidoresEmail = new ArrayList<String>();
 		listaServidoresEmail.add(
@@ -66,7 +77,8 @@ public class Correio {
 		boolean servidorDisponivel = false;
 		for (String servidorEmail : listaServidoresEmail) {
 			try {
-				enviarParaServidor(servidorEmail, remetente, destinatarios, assunto, conteudo, conteudoHTML);
+				enviarParaServidor(servidorEmail, remetente, destinatarios, assunto, conteudo, conteudoHTML,
+						nomeArquivo, tipoArquivo, conteudoArquivo);
 				servidorDisponivel = true;
 				break;
 			} catch (Exception e) {
@@ -81,16 +93,19 @@ public class Correio {
 	}
 
 	private static void enviarParaServidor(final String servidorEmail, String remetente, final String[] destinatarios,
-			final String assunto, final String conteudo, final String conteudoHTML) throws Exception {
+			final String assunto, final String conteudo, final String conteudoHTML, String nomeArquivo,
+			String tipoArquivo, byte[] conteudoArquivo) throws Exception {
 		// Cria propriedades a serem usadas na sessão.
 		final Properties props = new Properties();
 		Set<String> destSet = new HashSet<String>();
 
 		// Define propriedades da sessão.
+		props.put("mail.host", servidorEmail);
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.host", servidorEmail);
-		props.put("mail.host", servidorEmail);
 		props.put("mail.mime.charset", "UTF-8");
+
+		// props.put("mail.smtp.starttls.enable", "true");
 
 		// Cria sessão. setDebug(true) é interessante pois
 		// mostra os passos do envio da mensagem e o
@@ -143,7 +158,7 @@ public class Correio {
 		msg.setFrom(new InternetAddress(remetente));
 		msg.setSubject(assunto);
 
-		if (conteudoHTML == null) {
+		if (conteudoHTML == null && conteudoArquivo == null) {
 			// msg.setText(conteudo);
 			msg.setSubject(assunto);
 			msg.setContent(conteudo, "text/plain;charset=UTF-8");
@@ -158,12 +173,22 @@ public class Correio {
 			mp.addBodyPart(mb1);
 
 			// Do the same with the HTML part
-			InternetHeaders ihs2 = new InternetHeaders();
-			ihs2.addHeader("Content-Type", "text/html; charset=UTF-8");
-			ihs2.addHeader("Content-Transfer-Encoding", "base64");
-			MimeBodyPart mb2 = new MimeBodyPart(ihs2,
-					SwaggerUtils.base64Encode(conteudoHTML.getBytes("utf-8")).getBytes());
-			mp.addBodyPart(mb2);
+			if (conteudoHTML != null) {
+				InternetHeaders ihs2 = new InternetHeaders();
+				ihs2.addHeader("Content-Type", "text/html; charset=UTF-8");
+				ihs2.addHeader("Content-Transfer-Encoding", "base64");
+				MimeBodyPart mb2 = new MimeBodyPart(ihs2,
+						SwaggerUtils.base64Encode(conteudoHTML.getBytes("utf-8")).getBytes());
+				mp.addBodyPart(mb2);
+			}
+
+			if (conteudoArquivo != null) {
+				DataSource dataSource = new ByteArrayDataSource(conteudoArquivo, tipoArquivo);
+				MimeBodyPart mb3 = new MimeBodyPart();
+				mb3.setDataHandler(new DataHandler(dataSource));
+				mb3.setFileName(nomeArquivo);
+				mp.addBodyPart(mb3);
+			}
 
 			// Set the content for the message and transmit
 			msg.setContent(mp);
@@ -183,11 +208,6 @@ public class Correio {
 		log.debug("Detalhes do e-mail enviado:" + "\nAssunto: " + assunto + "\nDe: " + remetente + "\nPara: "
 				+ Arrays.asList(destinatarios).toString() + "\nTexto: "
 				+ (conteudoHTML == null ? conteudo : conteudoHTML));
-	}
-
-	public static void enviar(String remetente, String[] destinatarios, String assunto, String conteudo)
-			throws Exception {
-		Correio.enviar(remetente, destinatarios, assunto, conteudo, null);
 	}
 
 }

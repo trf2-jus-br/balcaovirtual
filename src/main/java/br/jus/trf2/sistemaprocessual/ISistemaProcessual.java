@@ -43,6 +43,15 @@ public interface ISistemaProcessual {
 	public class Unidade implements ISwaggerModel {
 	}
 
+	public class Codigo implements ISwaggerModel {
+	}
+
+	public class Descricao implements ISwaggerModel {
+	}
+
+	public class Ativo implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String error;
 	}
@@ -127,6 +136,36 @@ public interface ISistemaProcessual {
 	public interface IUsuarioWebUsernamePeticaoIntercorrenteListarGet extends ISwaggerMethod {
 		public void run(UsuarioWebUsernamePeticaoIntercorrenteListarGetRequest req,
 				UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse resp) throws Exception;
+	}
+
+	public class ClasseCnjIdGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class ClasseCnjIdGetResponse implements ISwaggerResponse {
+		public String codigo;
+		public String descricao;
+		public Boolean ativo;
+	}
+
+	public interface IClasseCnjIdGet extends ISwaggerMethod {
+		public void run(ClasseCnjIdGetRequest req, ClasseCnjIdGetResponse resp) throws Exception;
+	}
+
+	public class AssuntoCnjIdGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class AssuntoCnjIdGetResponse implements ISwaggerResponse {
+		public String codigo;
+		public String descricao;
+		public Boolean ativo;
+	}
+
+	public interface IAssuntoCnjIdGet extends ISwaggerMethod {
+		public void run(AssuntoCnjIdGetRequest req, AssuntoCnjIdGetResponse resp) throws Exception;
 	}
 
 }

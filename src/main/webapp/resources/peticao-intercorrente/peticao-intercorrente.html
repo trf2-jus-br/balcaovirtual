@@ -1,9 +1,15 @@
-<div class="container-fluid content pt-5">
+<div class="container-fluid content">
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center mt-3 mb-3">Petição Intercorrente</h4>
+		</div>
+	</div>
 
 	<div class="row pb-4"
 		ng-show="editando &amp;&amp; quantidadePorData == undefined">
 		<div class="col-md-12">
-			<div ngf-drop ngf-select ng-model="files" class="drop-box"
+			<div ngf-drop ngf-select ng-model="files"
+				ngf-model-invalid="invalidFiles" class="drop-box"
 				ngf-drag-over-class="'dragover'" ngf-multiple="true"
 				ngf-allow-dir="true" accept="application/pdf" ngf-max-size="5MB"
 				ngf-pattern="'application/pdf'">
@@ -14,10 +20,22 @@
 			<div ngf-no-file-drop>Arrastar e soltar aquivos não é possível
 				nesse navegador. Por favor, utilize o Google Chrome.</div>
 		</div>
+		<div class="col-md-12 mt-3" ng-if="(invalidFiles||[]).length > 0">
+			<div class="alert alert-danger mb-0">
+				<strong>Arquivos inválidos!</strong> Não foi possível aceitar os
+				seguintes arquivos:
+				<ul class="mb-0">
+					<li ng-repeat="if in invalidFiles">{{if.name}}
+						({{if.$error.replace("maxSize", "tamanho é maior que
+						").replace("pattern", "só é permitido o tipo ")}}
+						{{if.$errorParam.replace("application/pdf", "PDF")}})</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 
 	<div class="row"
-		ng-show="arquivos.length > 0 &amp;&amp; quantidadePorData == undefined">
+		ng-if="arquivos.length > 0 &amp;&amp; quantidadePorData == undefined">
 
 		<!-- 
 		<div class="col-md-12 mb-3"">
@@ -54,8 +72,13 @@
 									ng-change="alterarArquivo(f)"
 									ng-model-options="{debounce: 300}"
 									ng-disabled="f.bloq || f.protocolado">
-
-							</div> <span class="unbreakable" ng-if="!editando">{{f.processo}}</span></td>
+								<button type="button"
+									ng-show="f.processo === undefined || f.processo === ''"
+									ng-click="multiplosProcessos(f)"
+									class="btn btn-sm btn-outline-primary ml-1"
+									title="Inserir este PDF em múltiplos processos">+</button>
+							</div> <span class="unbreakable" ng-if="!editando"><a
+								ui-sref="processo({numero: r.processo})" target="_blank">{{f.processo}}</a></span></td>
 
 						<td ng-show="!f.anexo" rowspan="{{f.rowspan}}"><select
 							style="min-width: 8em;" ng-if="editando"
@@ -86,40 +109,37 @@
 							ng-class="{red: true}">{{f.errormsg}}</span><span
 							ng-show="f.$error">{{f.$error}} {{f.$errorParam}}</span></td>
 
-						<td align="center" ng-if="editando"><button type="button"
-								ng-show="f.processo === undefined || f.processo === ''"
-								ng-click="multiplosProcessos(f)"
-								class="btn btn-sm btn-outline-primary">Múltiplos
-								Processos</button>&nbsp;
+						<td align="center" ng-if="editando">
 							<button type="button" ng-click="removerArquivo(f)"
-								class="btn btn-sm btn-outline-danger">X</button></td>
+								class="btn btn-sm btn-outline-danger">X</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="row" ng-if="quantidadePorData === undefined">
-		<div class="col-sm-12" style="padding-top: 1em;">
+		<div class="col-sm-12">
 			<button type="button" ng-click="carregarProtocoladosRecentemente()"
 				id="protocoladosRecentemente"
-				class="btn btn-secondary no-print mr-3">Consultar
-				Protocolos Recentes</button>
+				class="btn btn-secondary no-print mr-3 mt-3">Consultar
+				Protocolos</button>
 			<button type="button" ng-click="limpar()" id="limpar"
-				ng-if="!editando" class="btn btn-secondary no-print">Enviar
+				ng-if="!editando" class="btn btn-secondary no-print mt-3">Enviar
 				Outras Petições</button>
 			<button type="button" ng-click="imprimir()" id="imprimir"
-				ng-if="!editando" class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
+				ng-if="!editando" class="btn btn-info pull-right ml-3 no-print mt-3">Imprimir</button>
 			<button type="button" ng-click="peticionar()" id="prosseguir"
 				ng-if="arquivos.length > 0 && (editando || arquivosAProtocolar)"
 				ng-disabled="!isAllValid()"
-				class="btn btn-primary pull-right no-print">
+				class="btn btn-primary pull-right no-print mt-3">
 				Protocolar&nbsp;&nbsp;<span class="badge badge-pill badge-warning">{{arquivosAProtocolar}}</span>
 			</button>
 		</div>
 	</div>
 
 	<div class="row"
-		ng-show="quantidadePorData !== undefined &amp;&amp; resumoPorData === undefined">
+		ng-if="quantidadePorData !== undefined &amp;&amp; resumoPorData === undefined">
 		<div class="col col-sm-12" ng-show="quantidadePorData.length > 0">
 			<div class="protocolos-header">Petições Intercorrentes
 				Protocoladas Recentemente</div>
@@ -150,7 +170,7 @@
 				class="btn btn-success no-print">Voltar</button>
 		</div>
 	</div>
-	<div class="row" ng-show="resumoPorData.length > 0">
+	<div class="row" ng-if="resumoPorData.length > 0">
 		<div class="col col-sm-12">
 			<div class="protocolos-header">
 				Petições Intercorrentes Protocoladas em <span

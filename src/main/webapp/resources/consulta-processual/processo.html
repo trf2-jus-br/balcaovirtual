@@ -1,13 +1,23 @@
 
 <!--=== Profile ===-->
-<div class="container content profile pt-5">
-	<div class="row">
+<div class="container-fluid content profile pt-5">
+	<div class="row" ng-if="errormsg !== undefined">
+		<div class="col col-sm-12">
+			<p class="alert alert-danger">
+				<strong>Erro!</strong> {{errormsg}}
+			</p>
+		</div>
+	</div>
+
+
+	<div class="row hidden-print" ng-if="errormsg === undefined">
 		<!-- Profile Content -->
-		<div class="card-deck col pb-3">
-			<div class="card card-inverse card-success card-consulta-processual">
+		<div class="card-deck col">
+			<div
+				class="card card-inverse card-success card-consulta-processual mb-3">
 				<div class="card-block">
 					<p class="card-text">
-						<i class="icon icon-judicialgavel"></i> <small>PROCESSO</small><br />
+						<i class="icon icon-judicialgavel hidden-print"></i> <small>PROCESSO</small><br />
 						<b>{{proc.dadosBasicos.numero}}</b>
 					</p>
 					<p class="card-text">
@@ -21,59 +31,167 @@
 
 				</div>
 			</div>
-			<div class="card card-inverse card-primary card-consulta-processual">
+			<div
+				class="card card-inverse card-primary card-consulta-processual mb-3">
 				<div class="card-block">
 					<p class="card-text">
-						<i class="icon-users"></i> <small>ADVOGADO</small><br /> <b>{{proc.partesAtivas[0].advogado[0].nome}}</b>
+						<i class="icon icon-users hidden-print"></i> <small>ADVOGADO</small><br />
+						<b>{{proc.fixed.partesAtivas[0].advogado[0].nome}}</b>
 					</p>
 					<p class="card-text">
-						<small>AUTOR</small> <br /> <b>{{proc.partesAtivas[0].pessoa.nome}}</b>
+						<small>AUTOR</small> <br /> <b>{{proc.fixed.partesAtivas[0].pessoa.nome}}</b>
 					</p>
 					<p class="card-text">
-						<small>RÉU</small> <br /> <b>{{proc.partesPassivas[0].pessoa.nome}}</b>
+						<small>RÉU</small> <br /> <b>{{proc.fixed.partesPassivas[0].pessoa.nome}}</b>
 					</p>
 				</div>
+			</div>
 
+			<div
+				class="card card-inverse card-warning card-consulta-processual mb-3">
+				<div class="card-block">
+					<p class="card-text">
+						<i class="icon icon-monitor hidden-print"></i> <small>VALOR
+							DA CAUSA</small><br /> <b>{{proc.fixed.valorCausa}}</b>
+					</p>
+					<p class="card-text">
+						<small>CLASSE</small> <br /> <b>{{proc.fixed.classeProcessualDescricao}}</b>
+					</p>
+					<p class="card-text">
+						<small>ASSUNTO PRINCIPAL</small> <br /> <b>{{proc.fixed.assuntoPrincipalDescricao}}</b>
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="card-deck col pb-3">
-			<div class="card card-consulta-processual-list">
-				<table class="table table-striped mb-0">
-					<thead>
-						<tr>
-							<th>Data/Hora</th>
-							<th>Movimento</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="movimento in proc.movimento | orderBy:'-'">
-							<td><span
-								ng-bind-html="formatDDMMYYYHHMM(movimento.dataHora)"></span></td>
-							<td>{{movimento.movimentoLocal.descricao}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="card card-consulta-processual-list">
-				<table class="table table-striped mb-0">
-					<thead>
-						<tr>
-							<th>Data/Hora</th>
-							<th>Peça</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="documento in proc.documento | orderBy:'-'">
-							<td><span
-								ng-bind-html="formatDDMMYYYHHMM(documento.dataHora)"></span></td>
-							<td>{{documento.descricao}}</td>
-						</tr>
-					</tbody>
-				</table>
+		<div class="col col-sm-12">
+			<div class="card mb-3">
+				<div class="card-header">Processo:
+					{{proc.dadosBasicos.numero}}</div>
+				<div class="card-block pb-0">
+					<div class="row">
+						<div class="col col-sm-3">
+							<label>Data/Hora de Protocolo</label>
+							<p></p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Órgão Julgador</label>
+							<p>{{proc.dadosBasicos.orgaoJulgador.nomeOrgao}}</p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Magistrado</label>
+							<p>{{proc.dadosBasicos.magistradoAtuante.join(', ')}}</p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Valor da Causa</label>
+							<p>{{proc.fixed.valorCausa}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col col-sm-3">
+							<label>Classe Processual</label>
+							<p>{{proc.fixed.classeProcessualDescricao}}</p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Assunto Principal</label>
+							<p>{{proc.fixed.assuntoPrincipalDescricao}}</p>
+						</div>
+					</div>
+					<div class="row" ng-if="proc.dadosBasicos.assunto.length > 1">
+						<div class="col col-sm-3">
+							<label>Outros Assuntos</label>
+							<p ng-repeat="ass in proc.dadosBasicos.assunto"
+								ng-if="$index > 0">{{ass.descricao}}</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col col-sm-12">
+			<div class="card mb-3">
+				<div class="card-header">Partes</div>
+				<div class="card-block pb-0"
+					ng-repeat="polo in proc.dadosBasicos.polo">
+					<h6 class="card-subtitle mb-2 text-muted">Pólo {{polo.polo}}</h6>
+					<div class="row" ng-repeat="parte in polo.parte">
+						<div class="col col-sm-6">
+							<label>Nome</label>
+							<p>{{parte.pessoa.nome}}</p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Tipo</label>
+							<p>{{parte.pessoa.tipoPessoa}}</p>
+						</div>
+						<div class="col col-sm-3">
+							<label>Assistência Judiciária</label>
+							<p>{{parte.assistenciaJudiciaria ? "Sim" : "Não"}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-sm-12">
+			<div class="card mb-3">
+				<div class="card-header">Dados Complementares</div>
+				<div class="card-block">
+					<p class="card-text">Processos Administrativos</p>
+					<p class="card-text">CDAs</p>
+					<p class="card-text">Processos de Origem</p>
+					<p class="card-text">Número de Carta Precatória</p>
+					<p class="card-text">Assuntos</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="proc.fixed.ultimoTextoMovimento">
+		<div class="card-deck col pb-3">
+			<div class="card">
+				<div class="card-header">Última Decisão</div>
+				<div class="card-block">
+					<p class="card-text" ng-bind-html="proc.fixed.ultimoTextoMovimento"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="errormsg === undefined">
+		<div class="col col-sm-12">
+			<table class="table mb-0">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Data/Hora</th>
+						<th>Movimento</th>
+						<th>Peça</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="movdoc in proc.fixed.movdoc"
+						ng-class="{odd: movdoc.odd}">
+						<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"><span
+							ng-bind-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span></td>
+						<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}">{{movdoc.mov.movimentoLocal.descricao}}</td>
+						<td><a href="" target="_blank"
+							ng-click="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col col-sm-12">
+			<hr class="mt-5 mb-1" />
+			<p class="text-center">As informações aqui contidas não produzem
+				efeitos legais. Somente a publicação no D.O. tem validade para
+				contagem de prazos.</p>
+		</div>
+	</div>
+
 </div>

@@ -24,7 +24,8 @@ public class SugestaoPost implements ISugestaoPost {
 		Correio.enviar(
 				SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.destinatario",
 						"Não foi especificado o destinatário do email de sugestões.", false),
-				SwaggerUtils.getProperty("balcaovirtual.smtp.assunto", "Balcão Virtual: Sugestão"), sb.toString());
+				SwaggerUtils.getProperty("balcaovirtual.smtp.assunto", "Balcão Virtual: Sugestão"), sb.toString(), null,
+				null, null);
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.AutenticarPostResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
 
@@ -38,7 +37,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			String a[] = usuariosRestritos.split(",");
 
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
-				throw new PresentableException("Usuário não autorizado.");
+				throw new PresentableException("Usuário não autorizado."); 
 		}
 
 		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
@@ -62,7 +61,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			IllegalStateException, SignatureException, IOException, JWTVerifyException {
 		if (jwt.startsWith("Bearer "))
 			jwt = jwt.substring(7);
-		final JWTVerifier verifier = new JWTVerifier(getSecret());
+		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
 		Map<String, Object> map;
 		map = verifier.verify(jwt);
 		return map;
@@ -75,13 +74,21 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return verify(authorization);
 	}
 
+	public static String assertAuthorization() throws Exception {
+		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
+		if (authorization.startsWith("Bearer "))
+			authorization = authorization.substring(7);
+		verify(authorization);
+		return authorization;
+	}
+
 	private static String jwt(String username, String cpf, String name, String email) {
-		final String issuer = SwaggerUtils.getProperty("balcaovirtual.jwt.issuer", null);
+		final String issuer = Utils.getJwtIssuer();
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		final long exp = iat + 18 * 60 * 60L; // token expires in 18 hours
 
-		final JWTSigner signer = new JWTSigner(getSecret());
+		final JWTSigner signer = new JWTSigner(Utils.getJwtSecret());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
 		if (issuer != null)
 			claims.put("iss", issuer);
@@ -95,10 +102,6 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 
 		final String jwt = signer.sign(claims);
 		return jwt;
-	}
-
-	private static String getSecret() {
-		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
 	}
 
 	@Override

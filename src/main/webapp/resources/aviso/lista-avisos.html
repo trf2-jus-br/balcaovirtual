@@ -1,0 +1,52 @@
+<div class="container-fluid content">
+
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center mt-3 mb-3">Intimações Pendentes</h4>
+		</div>
+	</div>
+
+
+	<div class="col col-sm-12" ng-show="avisos.length == 0">
+		<p class="alert alert-warning">
+			<strong>Atenção!</strong> Nenhuma intimação pendente.
+		</p>
+	</div>
+	<div class="row align-items-end" ng-show="avisos.length > 0">
+		<div class="col">
+			<div class="no-print pull-right pb-1">
+				Filtrar: <input type="text" ng-model="filtro"
+					ng-model-options="{ debounce: 400 }" />
+			</div>
+		</div>
+		<div class="col col-sm-12">
+			<table class="table table-striped mb-0 table-protocolo">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Data/Hora</th>
+						<th>Processo</th>
+						<th>Órgão</th>
+						<th>Unidade</th>
+						<th>Localidade</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="r in avisos | filter: filtro">
+						<td><span ng-bind-html="formatDDMMYYYYHHMM(r.dataaviso)"></span></td>
+						<td><a ui-sref="processo({numero: r.processo})">{{r.processo}}</a></td>
+						<td>{{r.orgao}}</td>
+						<td title="{{r.unidadenome}}">{{r.unidade}}</td>
+						<td>{{r.localidade}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button" ng-click="voltarParaQuantidade()"
+				ng-if="resumoPorData !== undefined" class="btn btn-success no-print">Voltar</button>
+			<button type="button" ng-click="imprimir()" id="imprimir"
+				ng-if="resumoPorData.length > 0"
+				class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
+		</div>
+	</div>
+</div>

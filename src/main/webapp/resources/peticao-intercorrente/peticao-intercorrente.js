@@ -7,7 +7,7 @@ appPI
 					.state(
 							'peticao-intercorrente',
 							{
-								url : '/',
+								url : '/peticao-intercorrente',
 								controller : 'PeticaoIntercorrenteCtrl',
 								templateUrl : 'resources/peticao-intercorrente/peticao-intercorrente.html',
 								data : {
@@ -250,8 +250,8 @@ appPI
 								return 1;
 							if (a.processo != b.processo)
 								return a.processo < b.processo ? -1 : 1;
-							if (a.bloq != b.bloq)
-								return a.bloq ? -1 : 1;
+							// if (a.bloq != b.bloq)
+							// return a.bloq ? -1 : 1;
 							if (a.nome != b.nome)
 								return a.nome.replace(".pdf", "") < b.nome
 										.replace(".pdf", "") ? -1 : 1;
@@ -371,12 +371,16 @@ appPI
 					}
 
 					$scope.formatDDMMYYY = function(s) {
+						if (!s)
+							return;
 						var r = s.substring(8, 10) + '/' + s.substring(5, 7)
 								+ '/' + s.substring(0, 4);
 						return r;
 					}
 
 					$scope.formatDDMMYYYHHMM = function(s) {
+						if (!s)
+							return;
 						var r = s.substring(8, 10) + '/' + s.substring(5, 7)
 								+ '/' + s.substring(0, 4) + '&nbsp;'
 								+ s.substring(11, 13) + ':'

@@ -15,14 +15,14 @@ angular.module('sample.login', [ 'ui.router', 'angular-storage' ]).config(
 			$scope.user = {};
 
 			$scope.login = function() {
-				$http({
+				$scope.$parent.promise = $http({
 					url : 'api/v1/sessions/create',
 					method : 'POST',
 					data : $scope.user
 				}).then(function(response) {
 					store.set('jwt', response.data.id_token);
 					$rootScope.updateLogged();
-					$state.go('peticao-intercorrente');
+					$state.go('consulta-processual');
 				}, function(error) {
 					$scope.errormsg = error.data.errormsg;
 				});
