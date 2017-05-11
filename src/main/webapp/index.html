@@ -32,15 +32,13 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/signup/signup.css">
 <link rel="stylesheet" type="text/css" href="resources/login/login.css">
-<link rel="stylesheet" type="text/css" href="resources/print.css"
-	media="all">
 </head>
 <body ng-app="app" ng-controller="routerCtrl">
 	<div class="wrapper">
 		<!--=== Header ===-->
 		<div
 			cg-busy="{promise:promise,message:'Aguarde...',templateUrl:'resources/busy.html'}">
-			<div class="header">
+			<div class="header hidden-print">
 				<!-- Navbar -->
 				<nav
 					class="navbar navbar-toggleable-md bg-faded navbar-inverse bg-primary ">

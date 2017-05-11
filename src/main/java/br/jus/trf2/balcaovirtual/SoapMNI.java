@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +23,11 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 
 import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
@@ -51,6 +57,22 @@ public class SoapMNI {
 
 	}
 
+	private static class OutroParametroSerializer implements JsonSerializer<List<TipoParametro>> {
+		@Override
+		public JsonElement serialize(List<TipoParametro> src, Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject object = new JsonObject();
+
+			for (TipoParametro p : src) {
+				if (object.has(p.getNome()))
+					object.addProperty(p.getNome(), object.get(p.getNome()).getAsString() + ", " + p.getValor());
+				else
+					object.addProperty(p.getNome(), p.getValor());
+			}
+
+			return object;
+		}
+	}
+
 	public static String consultarProcesso(String idManif, String orgao, String numProc) throws Exception {
 		URL url = new URL(Utils.getMniWsdlUrl(orgao));
 		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
@@ -63,7 +85,10 @@ public class SoapMNI {
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
-		Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
+		Type collectionType = new TypeToken<List<TipoParametro>>() {
+		}.getType();
+		Gson gson = new GsonBuilder().registerTypeAdapter(collectionType, new OutroParametroSerializer())
+				.setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
 		return gson.toJson(processo);
 	}
 
@@ -118,6 +143,9 @@ public class SoapMNI {
 				i.orgao = orgao;
 				i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
 				i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
+				for (TipoParametro p : a.getProcesso().getOutroParametro())
+					if (p.getNome().equals("tipoOrgaoJulgador"))
+						i.unidadetipo = p.getValor();
 				i.localidade = a.getProcesso().getCodigoLocalidade();
 				list.add(i);
 			}

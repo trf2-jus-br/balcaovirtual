@@ -40,6 +40,9 @@ appCP
 						jwtHelper, Upload, $timeout, ModalService,
 						$stateParams, $window) {
 					$scope.numero = $stateParams.numero;
+					$scope.ultimoTexto = false;
+					$scope.partes = false;
+					$scope.dadosComplementares = false;
 
 					$scope.init = function() {
 						var numero = somenteNumeros($scope.numero);
@@ -143,17 +146,15 @@ appCP
 								p.fixed.partesPassivas = p.dadosBasicos.polo[i].parte;
 						}
 
-						if (p.dadosBasicos.outroParametro)
-							for (var i = 0; i < p.dadosBasicos.outroParametro.length; i++) {
-								if (p.dadosBasicos.outroParametro[i].nome == 'ultimoTextoMovimento')
-									p.fixed.ultimoTextoMovimento = p.dadosBasicos.outroParametro[i].valor
-											.replace(/^\s\s*/, '').replace(
-													/\s\s*$/, '').replace(
-													/\n\s+\n/g, '\n\n')
-											.replace(/\n/g, '<br/>');
-								if (p.dadosBasicos.outroParametro[i].nome == 'nomeMagistrado')
-									p.fixed.nomeMagistrado = p.dadosBasicos.outroParametro[i].valor;
-							}
+						if (!p.dadosBasicos.outroParametro)
+							p.dadosBasicos.outroParametro = {};
+						if (p.dadosBasicos.outroParametro.ultimoTextoMovimento)
+							p.fixed.ultimoTextoMovimento = p.dadosBasicos.outroParametro.ultimoTextoMovimento
+									.replace(/^\s\s*/, '')
+									.replace(/\s\s*$/, '').replace(/\n\s+\n/g,
+											'<div class="break"></div>')
+									.replace(/\n/g, '<br/>');
+						p.fixed.nomeMagistrado = p.dadosBasicos.outroParametro.nomeMagistrado;
 
 						if (p.documento)
 							for (var i = 0; i < p.documento.length; i++) {
@@ -215,22 +216,28 @@ appCP
 									}
 								}
 							}
-							// p.fixed.movdoc = p.fixed.movdoc
-							// .sort(function(a, b) {
-							// if (a.dataHora < b.dataHora)
-							// return 1;
-							// if (a.dataHora > b.dataHora)
-							// return -1;
-							// return 0;
-							// })
 						}
 
 						if (typeof p.dadosBasicos.valorCausa === 'number')
 							p.fixed.valorCausa = "R$ "
 									+ p.dadosBasicos.valorCausa.formatMoney(2,
 											',', '.');
+						p.fixed.dataAjuizamento = $scope
+								.formatDDMMYYYHHMM(p.dadosBasicos.dataAjuizamento);
 
 						console.log(p);
+					}
+
+					$scope.mostrarUltimoTexto = function() {
+						$scope.ultimoTexto = true;
+					}
+
+					$scope.mostrarPartes = function() {
+						$scope.partes = true;
+					}
+
+					$scope.mostrarDadosComplementares = function() {
+						$scope.dadosComplementares = true;
 					}
 
 					$scope.mostrarPeca = function(idDocumento) {
@@ -269,6 +276,10 @@ appCP
 										"$1" + t)
 								+ (c ? d + Math.abs(n - i).toFixed(c).slice(2)
 										: "");
+					}
+
+					$scope.imprimir = function() {
+						window.print();
 					}
 
 					$scope.formatProcesso = formatarProcesso;

@@ -492,6 +492,8 @@ definitions:
         type: string
       unidadenome:
         type: string
+      unidadetipo:
+        type: string
       orgao:
         type: string
       localidade:

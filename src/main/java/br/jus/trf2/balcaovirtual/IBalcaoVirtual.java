@@ -42,6 +42,7 @@ public interface IBalcaoVirtual {
 		public String unidadenome;
 		public String orgao;
 		public String localidade;
+		public String unidadetipo;
 	}
 
 	public class ListStatus implements ISwaggerModel {

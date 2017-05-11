@@ -1,6 +1,6 @@
 
 <!--=== Profile ===-->
-<div class="container-fluid content profile pt-5">
+<div class="container content profile pt-5">
 	<div class="row" ng-if="errormsg !== undefined">
 		<div class="col col-sm-12">
 			<p class="alert alert-danger">
@@ -16,9 +16,18 @@
 			<div
 				class="card card-inverse card-success card-consulta-processual mb-3">
 				<div class="card-block">
+					<i class="icon icon-judicialgavel hidden-print"
+						style="float: right"></i>
 					<p class="card-text">
-						<i class="icon icon-judicialgavel hidden-print"></i> <small>PROCESSO</small><br />
-						<b>{{proc.dadosBasicos.numero}}</b>
+						<small>PROCESSO<span
+							ng-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
+								DIGITAL</span><span
+							ng-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
+								FÍSICO</span></small><br /> <b>{{proc.dadosBasicos.numero}}</b>
+					</p>
+					<p class="card-text">
+						<small>DATA DE AJUIZAMENTO</small><br /> <b
+							ng-bind-html="proc.fixed.dataAjuizamento"></b>
 					</p>
 					<p class="card-text">
 						<small>ÓRGÃO JULGADOR</small><br /> <b style="color: #fff">{{proc.dadosBasicos.orgaoJulgador.nomeOrgao}}</b>
@@ -28,53 +37,74 @@
 						<small>MAGISTRADO</small><br /> <b>{{proc.dadosBasicos.magistradoAtuante.join(',
 							')}}</b>
 					</p>
-
+					<a ng-if="!ultimoTexto" class="card-link pull-right" href=""
+						ng-click="mostrarUltimoTexto()">Ver último texto...</a>
 				</div>
 			</div>
 			<div
 				class="card card-inverse card-primary card-consulta-processual mb-3">
-				<div class="card-block">
-					<p class="card-text">
-						<i class="icon icon-users hidden-print"></i> <small>ADVOGADO</small><br />
-						<b>{{proc.fixed.partesAtivas[0].advogado[0].nome}}</b>
-					</p>
+				<div class="card-block" ng-click="mostrarPartes()">
+					<i class="icon icon-users hidden-print"></i>
 					<p class="card-text">
 						<small>AUTOR</small> <br /> <b>{{proc.fixed.partesAtivas[0].pessoa.nome}}</b>
+						<b ng-if="proc.fixed.partesAtivas.length>1">&nbsp;<a href="">+{{proc.fixed.partesAtivas.length-1}}</a>
+						</b>
+					</p>
+					<p class="card-text" ng-if="proc.fixed.partesAtivas[0].advogado[0]">
+						<small>ADVOGADO DO AUTOR</small><br /> <b>{{proc.fixed.partesAtivas[0].advogado[0].nome}}</b><b
+							ng-if="proc.fixed.partesAtivas[0].advogado.length>1">&nbsp;<a
+							href="" ng-click="mostrarPartes()">+{{proc.fixed.partesAtivas[0].advogado.length-1}}</a></b>
 					</p>
 					<p class="card-text">
-						<small>RÉU</small> <br /> <b>{{proc.fixed.partesPassivas[0].pessoa.nome}}</b>
+						<small>RÉU</small> <br /> <b>{{proc.fixed.partesPassivas[0].pessoa.nome}}</b><b
+							ng-if="proc.fixed.partesPassivas.length>1">&nbsp;<a href=""
+							ng-click="mostrarPartes()">+{{proc.fixed.partesPassivas.length-1}}</a></b>
 					</p>
+					<p class="card-text"
+						ng-if="proc.fixed.partesPassivas[0].advogado[0]">
+						<i class="icon icon-users hidden-print"></i> <small>ADVOGADO
+							DO REU</small><br /> <b>{{proc.fixed.partesPassivas[0].advogado[0].nome}}</b><b
+							ng-if="proc.fixed.partesPassivas[0].advogado.length>1">&nbsp;<a
+							href="" ng-click="mostrarPartes()">+{{proc.fixed.partesPassivas[0].advogado.length-1}}</a></b>
+					</p>
+					<a ng-if="!partes" class="card-link pull-right" href=""
+						ng-click="mostrarPartes()">Ver partes...</a>
 				</div>
 			</div>
 
 			<div
 				class="card card-inverse card-warning card-consulta-processual mb-3">
-				<div class="card-block">
+				<div class="card-block" ng-click="mostrarDadosComplementares()">
+					<i class="icon icon-monitor hidden-print"></i>
 					<p class="card-text">
-						<i class="icon icon-monitor hidden-print"></i> <small>VALOR
-							DA CAUSA</small><br /> <b>{{proc.fixed.valorCausa}}</b>
+						<small>VALOR DA CAUSA</small><br /> <b>{{proc.fixed.valorCausa}}</b>
 					</p>
 					<p class="card-text">
 						<small>CLASSE</small> <br /> <b>{{proc.fixed.classeProcessualDescricao}}</b>
 					</p>
-					<p class="card-text">
+					<p class="card-text" ng-if="proc.fixed.assuntoPrincipalDescricao">
 						<small>ASSUNTO PRINCIPAL</small> <br /> <b>{{proc.fixed.assuntoPrincipalDescricao}}</b>
 					</p>
+					<a ng-if="!dadosComplementares" class="card-link pull-right"
+						href="" ng-click="mostrarDadosComplementares()">Ver mais...</a>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row visible-print-block">
 		<div class="col col-sm-12">
-			<div class="card mb-3">
-				<div class="card-header">Processo:
-					{{proc.dadosBasicos.numero}}</div>
+			<div class="card mb-3 card-outline-success">
+				<div class="card-header">
+					Processo<span
+						ng-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
+						Digital</span>: {{proc.dadosBasicos.numero}}
+				</div>
 				<div class="card-block pb-0">
 					<div class="row">
 						<div class="col col-sm-3">
-							<label>Data/Hora de Protocolo</label>
-							<p></p>
+							<label>Data/Hora de Ajuizamento</label>
+							<p ng-bind-html="proc.fixed.dataAjuizamento"></p>
 						</div>
 						<div class="col col-sm-3">
 							<label>Órgão Julgador</label>
@@ -94,7 +124,8 @@
 							<label>Classe Processual</label>
 							<p>{{proc.fixed.classeProcessualDescricao}}</p>
 						</div>
-						<div class="col col-sm-3">
+						<div class="col col-sm-3"
+							ng-if="proc.fixed.assuntoPrincipalDescricao">
 							<label>Assunto Principal</label>
 							<p>{{proc.fixed.assuntoPrincipalDescricao}}</p>
 						</div>
@@ -110,13 +141,28 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+
+	<div class="row"
+		ng-if="ultimoTexto &amp;&amp; proc.fixed.ultimoTextoMovimento">
+		<div class="card-deck col pb-3">
+			<div class="card card-outline-info">
+				<div class="card-header">Último Texto de Movimento</div>
+				<div class="card-block">
+					<p class="card-text" ng-bind-html="proc.fixed.ultimoTextoMovimento"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div ng-class="{row: true, 'visible-print-block': !partes}">
 		<div class="col col-sm-12">
-			<div class="card mb-3">
+			<div class="card mb-3 card-outline-primary">
 				<div class="card-header">Partes</div>
 				<div class="card-block pb-0"
 					ng-repeat="polo in proc.dadosBasicos.polo">
-					<h6 class="card-subtitle mb-2 text-muted">Pólo {{polo.polo}}</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Pólo {{(polo.polo ==
+						'AT') ? 'Ativo' : 'Passivo'}}</h6>
 					<div class="row" ng-repeat="parte in polo.parte">
 						<div class="col col-sm-6">
 							<label>Nome</label>
@@ -135,27 +181,59 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div
+		ng-class="{row: true, 'visible-print-block': !dadosComplementares}">
 		<div class="col col-sm-12">
-			<div class="card mb-3">
+			<div class="card mb-3 card-outline-warning">
 				<div class="card-header">Dados Complementares</div>
-				<div class="card-block">
-					<p class="card-text">Processos Administrativos</p>
-					<p class="card-text">CDAs</p>
-					<p class="card-text">Processos de Origem</p>
-					<p class="card-text">Número de Carta Precatória</p>
-					<p class="card-text">Assuntos</p>
-				</div>
-			</div>
-		</div>
-	</div>
+				<div class="card-block pb-0">
+					<div class="row">
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outroParametro.numProcAdm">
+							<label>Processos Administrativos</label>
+							<p ng-bind-html="proc.dadosBasicos.outroParametro.numProcAdm"></p>
+						</div>
 
-	<div class="row" ng-if="proc.fixed.ultimoTextoMovimento">
-		<div class="card-deck col pb-3">
-			<div class="card">
-				<div class="card-header">Última Decisão</div>
-				<div class="card-block">
-					<p class="card-text" ng-bind-html="proc.fixed.ultimoTextoMovimento"></p>
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outroParametro.numCDA">
+							<label>CDA's</label>
+							<p ng-bind-html="proc.dadosBasicos.outroParametro.numCDA"></p>
+						</div>
+
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outrosnumeros[0]">
+							<label>Número Antigo</label>
+							<p ng-bind-html="proc.dadosBasicos.outrosnumeros[0]"></p>
+						</div>
+
+						<div class="col col-sm-6"
+							ng-if="proc.dadosBasicos.outroParametro.peticaoPendenteJuntada">
+							<label>Petições Pendentes de Juntada</label>
+							<p
+								ng-bind-html="proc.dadosBasicos.outroParametro.peticaoPendenteJuntada"></p>
+						</div>
+
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outroParametro.processoVinculado">
+							<label>Processos Vinculados</label>
+							<p
+								ng-bind-html="proc.dadosBasicos.outroParametro.processoVinculado"></p>
+						</div>
+
+						<!-- 
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outroParametro.numProcAdm">
+							<label>Processos de Origem</label>
+							<p ng-bind-html="proc.dadosBasicos.outroParametro.numProcAdm"></p>
+						</div>
+
+						<div class="col col-sm-3"
+							ng-if="proc.dadosBasicos.outroParametro.numProcAdm">
+							<label>Número de Carta Precatória</label>
+							<p ng-bind-html="proc.dadosBasicos.outroParametro.numProcAdm"></p>
+						</div>
+ -->
+					</div>
 				</div>
 			</div>
 		</div>
@@ -182,6 +260,13 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col col-sm-12">
+			<button type="button" ng-click="imprimir()" id="imprimir"
+				class="btn btn-info pull-right no-print mt-3">Imprimir</button>
 		</div>
 	</div>
 

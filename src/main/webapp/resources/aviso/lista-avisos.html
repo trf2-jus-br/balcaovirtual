@@ -4,22 +4,42 @@
 		<div class="col-md-12">
 			<h4 class="text-center mt-3 mb-3">Intimações Pendentes</h4>
 		</div>
+		<div class="col col-sm-12" ng-show="avisos.length == 0">
+			<p class="alert alert-warning">
+				<strong>Atenção!</strong> Nenhuma intimação pendente.
+			</p>
+		</div>
 	</div>
 
-
-	<div class="col col-sm-12" ng-show="avisos.length == 0">
-		<p class="alert alert-warning">
-			<strong>Atenção!</strong> Nenhuma intimação pendente.
-		</p>
-	</div>
-	<div class="row align-items-end" ng-show="avisos.length > 0">
-		<div class="col">
-			<div class="no-print pull-right pb-1">
-				Filtrar: <input type="text" ng-model="filtro"
-					ng-model-options="{ debounce: 400 }" />
+	<div class="row" ng-show="avisos.length > 0">
+		<div class="col col-md-3 filtro-outline" ng-if="outlineAtivo">
+			<div class="card card-outline-info mb-3">
+				<div class="card-header">Filtro Avançado</div>
+				<div class="card-block">
+					<ul class="pl-0">
+						<li ng-repeat="l1 in outline"><input type="checkbox"
+							ng-model="l1.ativo" ng-change="toogle(l1)"> {{l1.nome}}
+							<ul>
+								<li ng-repeat="l2 in l1.item"><input type="checkbox"
+									ng-model="l2.ativo" ng-change="toogle(l2)"> {{l2.nome}}
+									<ul>
+										<li ng-repeat="l3 in l2.item"><input type="checkbox"
+											ng-model="l3.ativo" ng-change="toogle(l3)">
+											{{l3.nome}}</li>
+									</ul></li></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<div class="col col-sm-12">
+
+		<div
+			ng-class="{'col': true, 'col-md-9': outlineAtivo, 'col-md-12': !outlineAtivo}">
+			<div class="no-print pull-right pb-1">
+				Filtrar: <input type="text" ng-model="filtro"
+					ng-model-options="{ debounce: 200 }" />
+				<button type="button" ng-click="mostrarOutline()"
+					ng-class="{'btn btn-sm': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">+</button>
+			</div>
 			<table class="table table-striped mb-0 table-protocolo">
 				<thead class="thead-inverse">
 					<tr>
@@ -27,15 +47,18 @@
 						<th>Processo</th>
 						<th>Órgão</th>
 						<th>Unidade</th>
+						<th>Tipo</th>
 						<th>Localidade</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="r in avisos | filter: filtro">
+					<tr
+						ng-repeat="r in avisos | filter: filtroOutline() | filter: filtro">
 						<td><span ng-bind-html="formatDDMMYYYYHHMM(r.dataaviso)"></span></td>
 						<td><a ui-sref="processo({numero: r.processo})">{{r.processo}}</a></td>
 						<td>{{r.orgao}}</td>
 						<td title="{{r.unidadenome}}">{{r.unidade}}</td>
+						<td>{{r.unidadetipo}}</td>
 						<td>{{r.localidade}}</td>
 					</tr>
 				</tbody>
