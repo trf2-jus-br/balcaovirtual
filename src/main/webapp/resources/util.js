@@ -87,6 +87,12 @@ Number.prototype.formatMoney = function (c, d, t) {
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
+if (typeof Array.isArray === 'undefined') {
+	  Array.isArray = function(obj) {
+	    return Object.prototype.toString.call(obj) === '[object Array]';
+	  }
+	};
+
 var formdata = function(obj) {
 	var s = "";
 	var f = function(prefix, jsonObj) {
@@ -120,10 +126,10 @@ var formdata = function(obj) {
 }
 
 var somenteNumeros = function(s) {
-	return s.split('-').join('').split('.').join('');
+	return s.split('-').join('').split('.').join('').split('/').join('');
 }
 
-const regexFormatarProcesso = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?/;
+const regexFormatarProcesso = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?(\d{2})?/;
 
 var formatarProcesso = function(filename) {
 	var m = regexFormatarProcesso.exec(filename);
@@ -132,6 +138,18 @@ var formatarProcesso = function(filename) {
 	var s = m[1] + '-' + m[2] + '.' + m[3] + '.' + m[4]
 			+ '.' + m[5] + '.' + m[6];
 	if (m[7])
-		s += m[7];
+		s += '/' + m[7];
 	return s;
 }
+
+var arrayToString = function(a) {
+	if (!Array.isArray(a))
+		return a;
+	var str = a.join(', ');
+	var n = str.lastIndexOf(', ');
+	if (n >= 0) {
+	    str = str.substring(0, n) + " e " + str.substring(n+2);
+	}
+	return str;
+}
+

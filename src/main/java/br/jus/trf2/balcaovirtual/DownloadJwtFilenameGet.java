@@ -14,15 +14,15 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtGetResponse;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtGet;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
 
-public class DownloadJwtGet implements IDownloadJwtGet {
-	private static final Logger log = LoggerFactory.getLogger(DownloadJwtGet.class);
+public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
+	private static final Logger log = LoggerFactory.getLogger(DownloadJwtFilenameGet.class);
 
 	@Override
-	public void run(DownloadJwtGetRequest req, DownloadJwtGetResponse resp) throws Exception {
+	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
 		String numProc = (String) map.get("proc");
 		String numDoc = (String) map.get("doc");

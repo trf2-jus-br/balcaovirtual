@@ -37,6 +37,9 @@ public interface ISistemaProcessual {
 		public String orgao;
 	}
 
+	public class Numero implements ISwaggerModel {
+	}
+
 	public class Orgao implements ISwaggerModel {
 	}
 
@@ -88,6 +91,7 @@ public interface ISistemaProcessual {
 	}
 
 	public class ProcessoValidarNumeroGetResponse implements ISwaggerResponse {
+		public String numero;
 		public String orgao;
 		public String unidade;
 	}

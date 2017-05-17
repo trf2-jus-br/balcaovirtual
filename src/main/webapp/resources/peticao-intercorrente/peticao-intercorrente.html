@@ -153,7 +153,7 @@
 				<tbody>
 					<tr ng-repeat="p in quantidadePorData">
 						<td><span ng-bind-html="formatDDMMYYY(p.data)"></span></td>
-						<td><a href="#" ng-click="carregarResumo(p.data)">{{p.quantidade}}</a></td>
+						<td><a href="" ng-click="carregarResumo(p.data)">{{p.quantidade}}</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -192,7 +192,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="r in resumoPorData | filter: filtroProtocolo">
-						<td>{{r.processo}}</td>
+						<td><a ui-sref="processo({numero: somenteNumeros(r.processo)})">{{r.processo}}</a></td>
 						<td>{{r.classe}}</td>
 						<td><span ng-bind-html="formatDDMMYYYHHMM(r.dataprotocolo)"></span></td>
 						<td>{{r.protocolo}}</td>

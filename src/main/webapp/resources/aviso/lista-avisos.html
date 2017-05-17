@@ -2,7 +2,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="text-center mt-3 mb-3">Intimações Pendentes</h4>
+			<h4 class="text-center mt-3 mb-3">Intimações/Citações Pendentes</h4>
 		</div>
 		<div class="col col-sm-12" ng-show="avisos.length == 0">
 			<p class="alert alert-warning">
@@ -40,14 +40,15 @@
 				<button type="button" ng-click="mostrarOutline()"
 					ng-class="{'btn btn-sm': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">+</button>
 			</div>
-			<table class="table table-striped mb-0 table-protocolo">
+			<table class="table table-sm table-striped mb-0 table-protocolo">
 				<thead class="thead-inverse">
 					<tr>
 						<th>Data/Hora</th>
+						<th>Tipo</th>
 						<th>Processo</th>
 						<th>Órgão</th>
 						<th>Unidade</th>
-						<th>Tipo</th>
+						<th>Tipo da Unidade</th>
 						<th>Localidade</th>
 					</tr>
 				</thead>
@@ -55,7 +56,9 @@
 					<tr
 						ng-repeat="r in avisos | filter: filtroOutline() | filter: filtro">
 						<td><span ng-bind-html="formatDDMMYYYYHHMM(r.dataaviso)"></span></td>
-						<td><a ui-sref="processo({numero: r.processo})">{{r.processo}}</a></td>
+						<td>{{r.tipo}}</td>
+						<td><a
+							ui-sref="processo({numero: r.processo})">{{r.processoFormatado}}</a></td>
 						<td>{{r.orgao}}</td>
 						<td title="{{r.unidadenome}}">{{r.unidade}}</td>
 						<td>{{r.unidadetipo}}</td>

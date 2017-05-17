@@ -49,7 +49,9 @@
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<a class="navbar-brand pt-0 pb-0" href="#"><img
-						id="logo-header" src="balcao-virtual-30px.png" alt="Logo"
+						id="logo-header" src="balcao-virtual-38px.png"
+						alt="Logo Balcão Virtual" height="38" /><img class="ml-2"
+						id="logo-header2" src="trf2-38px-2.png" alt="Logo TRF2"
 						height="38" /></a>
 					<!-- <a class="navbar-brand" href="#">Balcão Virtual - TRF2</a>
  -->
@@ -84,27 +86,31 @@
  							-->
 
 							<li class="nav-item"><a class="nav-link"
-								ui-sref="lista-avisos()" ui-sref-active="active">Intimação</a></li>
+								ui-sref="lista-avisos()" ui-sref-active="active">Intimação/Citação</a></li>
 							<li class="nav-item"><a class="nav-link" ui-sref="sugestoes"
 								ui-sref-active="active">Sugestões</a></li>
 							<li class="nav-item"><a class="nav-link" ui-sref="sobre"
 								ui-sref-active="active">Sobre</a></li>
 						</ul>
-						<ul class="navbar-nav navbar-right">
-							<li class="nav-item" ng-show="logged"><a class="nav-link"
-								ui-sref="logout" ui-sref-active="active">Logout</a></li>
+						<ul class="navbar-nav navbar-right" ng-if="jwt">
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="http://example.com"
+								id="navbarDropdownMenuLink" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"><span
+									ng-bind="jwt.username"></span> </a>
+								<div class="dropdown-menu"
+									aria-labelledby="navbarDropdownMenuLink">
+									<a class="dropdown-item" ui-sref="logout">Logout</a>
+								</div></li>
 						</ul>
 					</div>
 				</nav>
 				<!-- End Navbar -->
 			</div>
 			<!--=== End Header ===-->
+
+			<div ui-view></div>
 		</div>
-
-		<div ui-view></div>
-
-		<!--=== Content Part ===-->
-		<div ng-view></div>
 	</div>
 
 	<script type="text/javascript"

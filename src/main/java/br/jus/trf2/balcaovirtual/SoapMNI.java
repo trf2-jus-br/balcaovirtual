@@ -23,6 +23,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -63,10 +64,20 @@ public class SoapMNI {
 			JsonObject object = new JsonObject();
 
 			for (TipoParametro p : src) {
-				if (object.has(p.getNome()))
-					object.addProperty(p.getNome(), object.get(p.getNome()).getAsString() + ", " + p.getValor());
-				else
-					object.addProperty(p.getNome(), p.getValor());
+				String nome = p.getNome();
+				String valor = p.getValor();
+
+				if (object.has(nome)) {
+					if (object.get(nome).isJsonArray()) {
+						object.getAsJsonArray(nome).add(valor);
+					} else {
+						JsonArray a = new JsonArray();
+						a.add(object.get(nome).getAsString());
+						a.add(valor);
+						object.add(nome, a);
+					}
+				} else
+					object.addProperty(nome, valor);
 			}
 
 			return object;
@@ -136,7 +147,14 @@ public class SoapMNI {
 
 			for (TipoAvisoComunicacaoPendente a : aviso.value) {
 				Aviso i = new Aviso();
-
+				switch (a.getTipoComunicacao()) {
+				case "INT":
+					i.tipo = "Intimação";
+					break;
+				case "CIT":
+					i.tipo = "Citação";
+					break;
+				}
 				i.processo = a.getProcesso().getNumero();
 				i.dataaviso = a.getDataDisponibilizacao();
 				i.idaviso = a.getIdAviso();

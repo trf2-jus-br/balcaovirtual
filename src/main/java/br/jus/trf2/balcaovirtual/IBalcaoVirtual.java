@@ -14,6 +14,9 @@ public interface IBalcaoVirtual {
 		public String orgao;
 	}
 
+	public class Numero implements ISwaggerModel {
+	}
+
 	public class Orgao implements ISwaggerModel {
 	}
 
@@ -37,12 +40,13 @@ public interface IBalcaoVirtual {
 	public class Aviso implements ISwaggerModel {
 		public String idaviso;
 		public String dataaviso;
+		public String tipo;
 		public String processo;
 		public String unidade;
 		public String unidadenome;
+		public String unidadetipo;
 		public String orgao;
 		public String localidade;
-		public String unidadetipo;
 	}
 
 	public class ListStatus implements ISwaggerModel {
@@ -111,6 +115,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class ProcessoNumeroValidarGetResponse implements ISwaggerResponse {
+		public String numero;
 		public String orgao;
 		public String unidade;
 	}
@@ -166,17 +171,18 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
-	public class DownloadJwtGetRequest implements ISwaggerRequest {
+	public class DownloadJwtFilenameGetRequest implements ISwaggerRequest {
 		public String jwt;
+		public String filename;
 	}
 
-	public class DownloadJwtGetResponse implements ISwaggerResponse {
+	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse {
 		public byte[] payload;
 		public String contenttype;
 	}
 
-	public interface IDownloadJwtGet extends ISwaggerMethod {
-		public void run(DownloadJwtGetRequest req, DownloadJwtGetResponse resp) throws Exception;
+	public interface IDownloadJwtFilenameGet extends ISwaggerMethod {
+		public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception;
 	}
 
 	public class ArquivoTemporarioPdfGetRequest implements ISwaggerRequest {

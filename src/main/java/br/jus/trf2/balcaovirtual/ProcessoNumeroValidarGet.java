@@ -23,20 +23,20 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		q.numero = req.numero;
 		Future<SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse>> future = SwaggerCall.callAsync(
 				"validar número de processo", null, "GET",
-				Utils.getWsProcessualUrl() + "/processo/validar/" + req.numero, q,
+				Utils.getWsProcessualUrl() + "/processo/validar/" + req.numero, null,
 				ProcessoValidarNumeroGetResponse.class);
 		SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
 		ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) sar.getResp();
-//		if ("TRF - 2a Região".equals(r.orgao))
-//			r.orgao = "TRF2";
-//		if ("Seção Judiciária do RJ".equals(r.orgao))
-//			r.orgao = "JFRJ";
-//		if ("Seção Judiciária do ES".equals(r.orgao))
-//			r.orgao = "JFES";
-		
-		
+		// if ("TRF - 2a Região".equals(r.orgao))
+		// r.orgao = "TRF2";
+		// if ("Seção Judiciária do RJ".equals(r.orgao))
+		// r.orgao = "JFRJ";
+		// if ("Seção Judiciária do ES".equals(r.orgao))
+		// r.orgao = "JFES";
+
+		resp.numero = r.numero;
 		resp.orgao = r.orgao;
 		resp.unidade = r.unidade;
 	}

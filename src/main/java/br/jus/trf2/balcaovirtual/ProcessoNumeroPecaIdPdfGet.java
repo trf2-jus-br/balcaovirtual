@@ -21,7 +21,7 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 	@Override
 	public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception {
 		Map<String, Object> map = SessionsCreatePost.assertUsuarioAutorizado();
-		resp.jwt = DownloadJwtGet.jwt((String) map.get("username"), req.orgao, req.numero, req.id);
+		resp.jwt = DownloadJwtFilenameGet.jwt((String) map.get("username"), req.orgao, req.numero, req.id);
 	}
 
 	@Override

@@ -76,6 +76,7 @@ appPI
 					$scope.validarArquivo = function(arq) {
 						var a = arq;
 						if (a.processo) {
+							var processo = $scope.somenteNumeros(a.processo);
 							a.status = "Validando...";
 							delete a.errovalidacao;
 							a.validando = true;
@@ -87,18 +88,21 @@ appPI
 														.somenteNumeros(a.processo)
 												+ "/validar",
 										method : 'GET'
-									}).then(
-									function(response) {
-										a.status = response.data.unidade + '/'
-												+ response.data.orgao;
-										a.orgao = response.data.orgao;
-										a.validando = false;
-										a.valido = true;
-									}, function(error) {
-										a.validando = false;
-										a.valido = false;
-										a.errormsg = error.data.errormsg;
-									});
+									}).then(function(response) {
+								var d = response.data;
+								a.status = d.unidade + '/' + d.orgao;
+								a.orgao = d.orgao;
+								a.validando = false;
+								a.valido = true;
+								if (d.numero != processo) {
+									a.processo = d.numero;
+									$scope.organizarArquivos();
+								}
+							}, function(error) {
+								a.validando = false;
+								a.valido = false;
+								a.errormsg = error.data.errormsg;
+							});
 						}
 					}
 
@@ -236,7 +240,7 @@ appPI
 					$scope.selecionarSegredo = function(arq, segredo) {
 						for (var i = 0; i < $scope.arquivos.length; i++) {
 							var a = $scope.arquivos[i];
-							if (a !== arq && !a.segredo)
+							if (a !== arq && a.segredo === undefined)
 								a.segredo = segredo;
 						}
 					}

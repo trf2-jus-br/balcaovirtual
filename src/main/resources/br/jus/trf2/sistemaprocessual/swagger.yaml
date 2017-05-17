@@ -72,6 +72,8 @@ paths:
           schema:
             type: object
             properties:
+              numero:
+                $ref: "#/definitions/Numero"
               orgao:
                 $ref: "#/definitions/Orgao"
               unidade:
@@ -298,6 +300,11 @@ definitions:
         type: string
       orgao:
         type: string
+
+  Numero:
+    description: Número do processo
+    type: string
+    example: 00002294020154020000
 
   Orgao:
     description: Órgão do processo

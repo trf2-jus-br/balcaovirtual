@@ -20,18 +20,35 @@ appCP.config(function($stateProvider) {
 	});
 });
 
-appCP.controller('ConsultaProcessualCtrl', function ConsultaProcessualCtrl(
-		$scope, $http, store, jwtHelper, Upload, $timeout, ModalService,
-		$stateParams, $state) {
-	$scope.avancada = false;
+appCP
+		.controller(
+				'ConsultaProcessualCtrl',
+				function ConsultaProcessualCtrl($scope, $http, store,
+						jwtHelper, Upload, $timeout, ModalService,
+						$stateParams, $state) {
+					$scope.avancada = false;
 
-	$scope.mostrarProcesso = function(numero) {
-		$state.go('processo', {
-			numero : numero
-		});
-	}
+					$scope.mostrarProcesso = function(numero) {
+						var numero = somenteNumeros($scope.numero);
+						$scope.$parent.promise = $http({
+							url : 'api/v1/processo/' + numero + "/validar",
+							method : 'GET'
+						})
+								.then(
+										function(response) {
+											$state.go('processo', {
+												numero : response.data.numero
+											});
+										},
+										function(error) {
+											$scope.errormsg = "Não foi possível obter informações sobre o processo '"
+													+ $scope.numero
+													+ "'. ("
+													+ error.data.errormsg + ")";
+										})
+					}
 
-});
+				});
 
 appCP
 		.controller(
@@ -63,11 +80,17 @@ appCP
 													})
 													.then(
 															function(response) {
-																$scope.proc = response.data.value;
-																$scope
-																		.fixProc();
-																$scope
-																		.getDescriptions();
+																try {
+																	$scope.proc = response.data.value;
+																	$scope
+																			.fixProc();
+																	$scope
+																			.getDescriptions();
+
+																} catch (e) {
+																	console
+																			.error(e);
+																}
 															},
 															function(error) {
 																alert(error.data.errormsg);
@@ -108,29 +131,31 @@ appCP
 								&& Number(db.assunto[0].codigoNacional) > 0) {
 							for (var i = 0; i < db.assunto.length; i++) {
 								var ass = db.assunto[i];
-								$scope.$parent.promise
-										.push($http(
-												{
-													url : 'api/v1/assunto/'
-															+ ass.codigoNacional
-															+ '?orgao='
-															+ $scope.orgao,
-													method : 'GET'
-												})
-												.then(
-														function(response) {
-															ass.descricao = response.data.descricao;
-															ass.descricaoCompleta = response.data.descricaocompleta;
-															if (ass.principal) {
-																$scope.proc.fixed.assuntoPrincipalDescricao = response.data.descricao;
-																$scope.proc.fixed.assuntoPrincipalDescricaoCompleta = response.data.descricaocompleta;
-															}
-														},
-														function(error) {
-															alert(error.data.errormsg);
-														}));
+								$scope.getAssuntoDescription(ass);
+
 							}
 						}
+					}
+					$scope.getAssuntoDescription = function(ass) {
+						$scope.$parent.promise
+								.push($http(
+										{
+											url : 'api/v1/assunto/'
+													+ ass.codigoNacional
+													+ '?orgao=' + $scope.orgao,
+											method : 'GET'
+										})
+										.then(
+												function(response) {
+													ass.descricao = response.data.descricao;
+													ass.descricaoCompleta = response.data.descricaocompleta;
+													if (ass.principal) {
+														$scope.proc.fixed.assuntoPrincipalDescricao = response.data.descricao;
+														$scope.proc.fixed.assuntoPrincipalDescricaoCompleta = response.data.descricaocompleta;
+													}
+												}, function(error) {
+													alert(error.data.errormsg);
+												}));
 					}
 
 					$scope.fixProc = function() {
@@ -149,14 +174,19 @@ appCP
 						if (!p.dadosBasicos.outroParametro)
 							p.dadosBasicos.outroParametro = {};
 						if (p.dadosBasicos.outroParametro.ultimoTextoMovimento)
-							p.fixed.ultimoTextoMovimento = p.dadosBasicos.outroParametro.ultimoTextoMovimento
-									.replace(/^\s\s*/, '')
-									.replace(/\s\s*$/, '').replace(/\n\s+\n/g,
-											'<div class="break"></div>')
-									.replace(/\n/g, '<br/>');
+							p.fixed.ultimoTextoMovimento = $scope
+									.formatTexto(p.dadosBasicos.outroParametro.ultimoTextoMovimento);
 						p.fixed.nomeMagistrado = p.dadosBasicos.outroParametro.nomeMagistrado;
 
-						if (p.documento)
+						if (p.documento) {
+							var fDecisao = true;
+							for (var i = p.documento.length - 1; i >= 0; i--) {
+								var doc = p.documento[i];
+								if (doc.outroParametro.textoMovimento) {
+									doc.exibirTexto = fDecisao;
+									fDecisao = false;
+								}
+							}
 							for (var i = 0; i < p.documento.length; i++) {
 								var f = false;
 								var doc = p.documento[i];
@@ -183,15 +213,23 @@ appCP
 									documento : [ doc ]
 								});
 							}
+						}
 
 						if (p.movimento) {
-							p.movimento = p.movimento.sort(function(a, b) {
-								if (a.dataHora < b.dataHora)
-									return 1;
-								if (a.dataHora > b.dataHora)
-									return -1;
-								return 0;
-							})
+							p.movimento = p.movimento
+									.sort(function(a, b) {
+										if (a.dataHora < b.dataHora)
+											return 1;
+										if (a.dataHora > b.dataHora)
+											return -1;
+										if (a.documento && b.documento) {
+											if (Number(a.documento[0].idDocumento) < Number(b.documento[0].idDocumento))
+												return 1;
+											if (Number(a.documento[0].idDocumento) > Number(b.documento[0].idDocumento))
+												return -1;
+										}
+										return 0;
+									})
 
 							var odd = false;
 							p.fixed.movdoc = [];
@@ -225,7 +263,50 @@ appCP
 						p.fixed.dataAjuizamento = $scope
 								.formatDDMMYYYHHMM(p.dadosBasicos.dataAjuizamento);
 
+						var op = p.dadosBasicos.outroParametro;
+						if (op.processoVinculado) {
+							op.processoVinculado = $scope
+									.colocarLink(arrayToString(op.processoVinculado));
+						}
+						if (op.processoOriginario) {
+							op.processoOriginario = $scope
+									.colocarLink(op.processoOriginario);
+						}
+						if (op.peticaoPendenteJuntada)
+							op.peticaoPendenteJuntada = arrayToString(op.peticaoPendenteJuntada);
+
+						if (op.numProcAdm)
+							op.numProcAdm = arrayToString(op.numProcAdm);
+						if (op.numCDA) {
+							if (typeof op.numCDA === 'string')
+								op.numCDA = [ op.numCDA ];
+							p.fixed.numCDAs = arrayToString(op.numCDA);
+						}
+						if (op.tipoAtuacaoParte) {
+							var map = {};
+							for (var i = 0; i < op.tipoAtuacaoParte.length; i++) {
+								var str = op.tipoAtuacaoParte[i];
+								var n = str.lastIndexOf(':');
+								if (n >= 0)
+									map[str.substring(0, n)] = str
+											.substring(n + 1);
+							}
+							for (var i = 0; i < p.dadosBasicos.polo.length; i++) {
+								for (var j = 0; j < p.dadosBasicos.polo[i].parte.length; j++) {
+									p.dadosBasicos.polo[i].parte[j].tipoAtuacao = map[p.dadosBasicos.polo[i].parte[j].pessoa.nome];
+								}
+							}
+						}
 						console.log(p);
+					}
+
+					$scope.colocarLink = function(s) {
+						var a = s.split(', ');
+						for (var i = 0; i < a.length; i++) {
+							a[i] = '<a href="#!/processo/' + a[i] + '">'
+									+ $scope.formatProcesso(a[i]) + '</a>';
+						}
+						return a.join(', ');
 					}
 
 					$scope.mostrarUltimoTexto = function() {
@@ -247,15 +328,20 @@ appCP
 											+ '/peca/' + idDocumento
 											+ '/pdf?orgao=' + $scope.orgao,
 									method : 'GET'
-								}).then(function(response) {
-							var jwt = response.data.jwt;
-							$window.open('api/v1/download/' + jwt);
-						}, function(error) {
-							alert(error.data.errormsg);
-						});
+								}).then(
+								function(response) {
+									var jwt = response.data.jwt;
+									$window.open('api/v1/download/' + jwt + '/'
+											+ $scope.numero + '-peca-'
+											+ idDocumento + '.pdf');
+								}, function(error) {
+									alert(error.data.errormsg);
+								});
 					}
 
 					$scope.formatDDMMYYYHHMM = function(s) {
+						if (s === undefined)
+							return;
 						var r = s.substring(6, 8) + '/' + s.substring(4, 6)
 								+ '/' + s.substring(0, 4) + ' '
 								+ s.substring(8, 10) + ':'
@@ -276,6 +362,12 @@ appCP
 										"$1" + t)
 								+ (c ? d + Math.abs(n - i).toFixed(c).slice(2)
 										: "");
+					}
+					$scope.formatTexto = function(s) {
+						return s.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+								.replace(/\n\s+\n/g,
+										'<div class="break"></div>').replace(
+										/\n/g, '<br/>')
 					}
 
 					$scope.imprimir = function() {

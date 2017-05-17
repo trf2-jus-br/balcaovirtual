@@ -1,3 +1,31 @@
+h1::first-letter {
+	margin-top: 0;
+}
+
+h2::first-letter {
+	margin-top: 0;
+}
+
+h3::first-letter {
+	margin-top: 0;
+}
+
+h4::first-letter {
+	margin-top: 0;
+}
+
+h5::first-letter {
+	margin-top: 0;
+}
+
+h6::first-letter {
+	margin-top: 0;
+}
+
+.text-success-dark {
+	color: #5cb85c;
+}
+
 @media print {
 	body {
 		font-size: 70%;
@@ -10,9 +38,11 @@
 		min-width: 750px;
 	}
 }
+
 .break {
 	margin-bottom: 0.6rem;
 }
+
 .card-block LABEL {
 	text-transform: uppercase;
 	color: #777;
@@ -20,7 +50,7 @@
 	font-size: 80%;
 }
 
-.card-block A {
+.card-inverse .card-block A {
 	color: #fff;
 }
 

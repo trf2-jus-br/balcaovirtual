@@ -83,8 +83,13 @@ app.run(function($rootScope, $state, store, jwtHelper) {
 			});
 	$rootScope.updateLogged = function() {
 		var logged = true;
-		if (!store.get('jwt') || jwtHelper.isTokenExpired(store.get('jwt'))) {
+		var jwt = store.get('jwt');
+		if (!jwt || jwtHelper.isTokenExpired(store.get('jwt'))) {
 			logged = false;
+			delete $rootScope.jwt;
+		} else {
+			var tokenPayload = jwtHelper.decodeToken(jwt);
+			$rootScope.jwt = tokenPayload;
 		}
 		$rootScope.logged = logged;
 	}

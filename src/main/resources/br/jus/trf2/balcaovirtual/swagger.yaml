@@ -104,6 +104,12 @@ parameters:
     description: JWT que referencia um artefato a ser baixado
     required: true
     type: string
+  filename:
+    name: filename
+    in: path
+    description: Nome do arquivo de um artefato a ser baixado
+    required: true
+    type: string
   orgaoquery:
     name: orgao
     in: query
@@ -183,6 +189,8 @@ paths:
           schema:
             type: object
             properties:
+              numero:
+                $ref: "#/definitions/Numero"
               orgao:
                 $ref: "#/definitions/Orgao"
               unidade:
@@ -260,12 +268,13 @@ paths:
           schema:
             $ref: "#/definitions/Error"
             
-  /download/{jwt}:
+  /download/{jwt}/{filename}:
     get:
       description: Faz o download de um artefato qualquer
       tags: [view]
       parameters:
         - $ref: "#/parameters/jwt"
+        - $ref: "#/parameters/filename"
       responses:
         200:
           description: Successful response
@@ -442,6 +451,11 @@ definitions:
       orgao:
         type: string
 
+  Numero:
+    description: Número do processo
+    type: string
+    example: 00002294020154020000
+
   Orgao:
     description: Órgão do processo
     type: string
@@ -485,6 +499,8 @@ definitions:
       idaviso:
         type: string
       dataaviso:
+        type: string
+      tipo:
         type: string
       processo:
         type: string
