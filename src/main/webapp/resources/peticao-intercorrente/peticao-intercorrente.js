@@ -538,6 +538,7 @@ appPI.controller('PeticionarController', function($scope, $element, $timeout,
 				$scope.arquivos[i].status = response.data.status;
 				$scope.arquivos[i].protocolado = true;
 			}
+			logEvento('peticionamento', 'enviar', 'petição intercorrente');
 			$scope.i = indice;
 			prox();
 		}, function(error) {

@@ -149,6 +149,7 @@ appPI
 												$scope
 														.montarOutline($scope.avisos);
 											}
+											logEvento('aviso', 'listar avisos');
 										},
 										function(error) {
 											// $scope.avisos = {
@@ -237,6 +238,7 @@ appPI
 							aviso.checked = false;
 							aviso.disabled = true;
 							$scope.aviso = aviso;
+							logEvento('aviso', 'confirmar', 'singular');
 						}, function(error) {
 							// var d = {
 							// "idaviso" : "17020213331702021339",
@@ -398,6 +400,7 @@ appPI.controller('ConfirmarAvisosController', function($scope, $element,
 			aviso.confirmado = true;
 			aviso.checked = false;
 			aviso.disabled = true;
+			logEvento('aviso', 'confirmar', 'em lote');
 			$scope.i = indice;
 			prox();
 		}, function(error) {

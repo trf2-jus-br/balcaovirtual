@@ -441,4 +441,6 @@ appCP
 					$scope.formatProcesso = formatarProcesso;
 
 					$scope.init();
+					
+					logEvento('consulta-processual', 'visualizar processo');
 				});

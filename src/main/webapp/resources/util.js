@@ -170,3 +170,10 @@ var arrayToString = function(a) {
 	return str;
 }
 
+var logEvento = function(categoria, acao, rotulo, valor) {
+	try {
+		ga('send', 'event', categoria, acao, rotulo, valor);
+	} catch (ex) {
+		
+	}
+}
