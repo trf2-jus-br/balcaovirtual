@@ -9,6 +9,9 @@ import javax.servlet.ServletException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 
+import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
+import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
+
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
 
@@ -24,7 +27,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			String testsite;
 
 			HttpGetDependency(String service, String testsite, boolean partial, long msMin, long msMax) {
-				super("webservice", service, partial, msMin, msMax);
+				super("rest webservice", service, partial, msMin, msMax);
 				this.testsite = testsite;
 			}
 
@@ -42,12 +45,26 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			}
 		}
 
-		addDependency(new HttpGetDependency("apolows", Utils.getWsProcessualUrl() + "/classe-cnj/81?orgao=TRF2", false, 0, 10000));
+		addDependency(new HttpGetDependency("apolows", Utils.getWsProcessualUrl() + "/classe-cnj/81?orgao=TRF2", false,
+				0, 10000));
 
 		String[] systems = Utils.getOrgaos().split(",");
 		for (final String system : systems) {
-			addDependency(
-					new HttpGetDependency("mni-" + system.toLowerCase(), Utils.getMniWsdlUrl(system), false, 0, 10000));
+			addDependency(new TestableDependency("soap webservice", "mni-" + system.toLowerCase(), false, 0, 10000) {
+
+				@Override
+				public String getUrl() {
+					return Utils.getMniWsdlUrl(system);
+				}
+
+				@Override
+				public boolean test() throws Exception {
+					URL url = new URL(Utils.getMniWsdlUrl(system));
+					ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+					ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+					return true;
+				}
+			});
 		}
 	}
 
