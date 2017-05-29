@@ -83,6 +83,30 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /processo/{numero}/pdf:
+    get:
+      description: Obter o PDF completo pelo número do processo
+      tags: [utils]
+      produces: [application/pdf]
+      parameters:
+        - $ref: "#/parameters/numero"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: application/pdf
+            Content-Disposition:
+              type: string
+              description: attachment; filename=processo.pdf
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /usuario-web/{username}:
     get:
       description: Obter dados de um usuário web, ou autenticar usando Basic Authentication

@@ -1,9 +1,16 @@
-<div class="container-fluid content">
+<div class="container-fluid content" ng-if="!aviso">
 
 	<div class="row">
 		<div class="col-md-12">
 			<h4 class="text-center mt-3 mb-3">Intimações/Citações Pendentes</h4>
 		</div>
+
+		<div class="col col-sm-12" ng-if="errormsg !== undefined">
+			<p class="alert alert-danger">
+				<strong>Erro!</strong> {{errormsg}}
+			</p>
+		</div>
+
 		<div class="col col-sm-12" ng-show="avisos.length == 0">
 			<p class="alert alert-warning">
 				<strong>Atenção!</strong> Nenhuma intimação pendente.
@@ -11,10 +18,41 @@
 		</div>
 	</div>
 
+	<div class="row mb-3" ng-show="avisos.length > 0">
+		<div class="col-sm-2">
+			<button type="button" ng-click="mostrarOutline()"
+				ng-class="{'btn': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}"
+				style="width: 100%" data-style="expand-left">Filtro
+				Hierárquico</button>
+		</div>
+		<div class="col-sm-2">
+			<div class="input-group">
+				<div class="input-group-addon">&#128269;</div>
+				<input type="text" class="form-control" placeholder="Filtrar"
+					ng-model="gui.filtro" ng-model-options="{ debounce: 200 }">
+			</div>
+		</div>
+		<div class="col-sm-2 offset-sm-2">
+			<button type="button" ng-click="carregarConfirmadosRecentemente()"
+				class="btn btn-secondary" style="width: 100%"
+				data-style="expand-left">Consultar Confirmados</button>
+		</div>
+		<div class="col-sm-2">
+			<button type="button" ng-click="exportarXML()"
+				class="btn btn-secondary" style="width: 100%"
+				data-style="expand-left">Exportar XML</button>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-primary" style="width: 100%"
+				data-style="expand-left" ng-click="confirmarEmLote()">
+				Confirmar&nbsp;&nbsp;<span class="badge badge-pill badge-warning">{{contarChecked()}}</span>
+			</button>
+		</div>
+	</div>
 	<div class="row" ng-show="avisos.length > 0">
-		<div class="col col-md-3 filtro-outline" ng-if="outlineAtivo">
+		<div class="col col-md-4 filtro-outline" ng-if="outlineAtivo">
 			<div class="card card-outline-info mb-3">
-				<div class="card-header">Filtro Avançado</div>
+				<div class="card-header">Filtro Hierárquico</div>
 				<div class="card-block">
 					<ul class="pl-0">
 						<li ng-repeat="l1 in outline"><input type="checkbox"
@@ -33,46 +71,58 @@
 		</div>
 
 		<div
-			ng-class="{'col': true, 'col-md-9': outlineAtivo, 'col-md-12': !outlineAtivo}">
-			<div class="no-print pull-right pb-1">
-				Filtrar: <input type="text" ng-model="filtro"
-					ng-model-options="{ debounce: 200 }" />
-				<button type="button" ng-click="mostrarOutline()"
-					ng-class="{'btn btn-sm': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">+</button>
-			</div>
+			ng-class="{'col': true, 'col-md-8': outlineAtivo, 'col-md-12': !outlineAtivo}">
 			<table class="table table-sm table-striped mb-0 table-protocolo">
 				<thead class="thead-inverse">
 					<tr>
-						<th>Data/Hora</th>
+						<th style="text-align: center"><input type="checkbox"
+							id="progress_checkall" name="progress_checkall"
+							ng-model="gui.todos" ng-change="marcarTodos()" /></th>
+
+						<th>Data do Cadastro</th>
 						<th>Tipo</th>
 						<th>Processo</th>
 						<th>Órgão</th>
 						<th>Unidade</th>
 						<th>Tipo da Unidade</th>
 						<th>Localidade</th>
+						<th>Status</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr
-						ng-repeat="r in avisos | filter: filtroOutline() | filter: filtro">
-						<td><span ng-bind-html="formatDDMMYYYYHHMM(r.dataaviso)"></span></td>
+						ng-repeat="r in avisos | filter: gui.filtroOutline() | filter: gui.filtro">
+						<td style="text-align: center"><input type="checkbox"
+							value="true" ng-model="r.checked" ng-disabled="r.disabled"
+							class="chk-assinar" /></td>
+						<td><span ng-bind-html="r.dataavisoFormatada"></span></td>
 						<td>{{r.tipo}}</td>
-						<td><a
-							ui-sref="processo({numero: r.processo})">{{r.processoFormatado}}</a></td>
+						<td><a ui-sref="processo({numero: r.processo})">{{r.processoFormatado}}</a></td>
 						<td>{{r.orgao}}</td>
-						<td title="{{r.unidadenome}}">{{r.unidade}}</td>
+						<td title="{{::r.unidadenome}}">{{r.unidade}}</td>
 						<td>{{r.unidadetipo}}</td>
 						<td>{{r.localidade}}</td>
+						<td class="status-td"><span ng-show="r.errormsg" class="red"
+							ng-bind="r.errormsg"></span></td>
+						<td align="right">
+							<button type="button" ng-if="!r.confirmado"
+								ng-click="confirmarAviso(r)"
+								class="btn btn-sm btn-primary no-print">Confirmar</button>
+							<button type="button" ng-if="r.confirmado"
+								ng-click="exibirAviso(r)"
+								class="btn btn-sm btn-success no-print">Ver</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="col-sm-12" style="padding-top: 1em;">
-			<button type="button" ng-click="voltarParaQuantidade()"
-				ng-if="resumoPorData !== undefined" class="btn btn-success no-print">Voltar</button>
 			<button type="button" ng-click="imprimir()" id="imprimir"
 				ng-if="resumoPorData.length > 0"
 				class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
 		</div>
 	</div>
 </div>
+
+<ng-include src="'resources/aviso/aviso.html'"></ng-include>

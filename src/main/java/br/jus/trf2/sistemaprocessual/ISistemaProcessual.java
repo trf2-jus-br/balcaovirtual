@@ -1,11 +1,13 @@
 package br.jus.trf2.sistemaprocessual;
 
+import java.io.OutputStream;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
 import com.crivano.swaggerservlet.ISwaggerModel;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.ISwaggerResponseFile;
 
 public interface ISistemaProcessual {
 	public class Nome implements ISwaggerModel {
@@ -98,6 +100,21 @@ public interface ISistemaProcessual {
 
 	public interface IProcessoValidarNumeroGet extends ISwaggerMethod {
 		public void run(ProcessoValidarNumeroGetRequest req, ProcessoValidarNumeroGetResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroPdfGetRequest implements ISwaggerRequest {
+		public String numero;
+	}
+
+	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/pdf";
+		public String contentdisposition = "attachment; filename=processo.pdf";
+		public Long contentlength;
+		public OutputStream outputstream;
+	}
+
+	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroPdfGetRequest req, ProcessoNumeroPdfGetResponse resp) throws Exception;
 	}
 
 	public class UsuarioWebUsernameGetRequest implements ISwaggerRequest {

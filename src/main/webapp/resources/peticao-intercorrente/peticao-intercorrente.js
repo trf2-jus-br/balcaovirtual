@@ -94,10 +94,6 @@ appPI
 								a.orgao = d.orgao;
 								a.validando = false;
 								a.valido = true;
-								if (d.numero != processo) {
-									a.processo = d.numero;
-									$scope.organizarArquivos();
-								}
 							}, function(error) {
 								a.validando = false;
 								a.valido = false;

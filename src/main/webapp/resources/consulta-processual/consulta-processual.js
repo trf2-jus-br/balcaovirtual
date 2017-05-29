@@ -1,6 +1,7 @@
-var appCP = angular.module('sample.consulta-processual', [ 'ui.router',
-		'angular-storage', 'angular-jwt', 'ngFileUpload',
-		'angularModalService', 'ngSanitize' ]);
+var appCP = angular
+		.module('sample.consulta-processual', [ 'ui.router', 'angular-storage',
+				'angular-jwt', 'angularModalService', 'ngSanitize' ]);
+
 appCP.config(function($stateProvider) {
 	$stateProvider.state('consulta-processual', {
 		url : '/consulta-processual',
@@ -29,9 +30,9 @@ appCP
 					$scope.avancada = false;
 
 					$scope.mostrarProcesso = function(numero) {
-						var numero = somenteNumeros($scope.numero);
+						var n = somenteNumeros(numero);
 						$scope.$parent.promise = $http({
-							url : 'api/v1/processo/' + numero + "/validar",
+							url : 'api/v1/processo/' + n + "/validar",
 							method : 'GET'
 						})
 								.then(
@@ -57,9 +58,15 @@ appCP
 						jwtHelper, Upload, $timeout, ModalService,
 						$stateParams, $window) {
 					$scope.numero = $stateParams.numero;
-					$scope.ultimoTexto = false;
 					$scope.partes = false;
 					$scope.dadosComplementares = false;
+					$scope.tipoRepresentante = {
+						A : 'Advogado',
+						E : 'Escritório de Advocacia',
+						M : 'Ministério Público',
+						D : 'Defensor Público',
+						P : 'Advogado Público'
+					}
 
 					$scope.init = function() {
 						var numero = somenteNumeros($scope.numero);
@@ -93,7 +100,7 @@ appCP
 																}
 															},
 															function(error) {
-																alert(error.data.errormsg);
+																$scope.errormsg = error.data.errormsg;
 															});
 										},
 										function(error) {
@@ -121,8 +128,9 @@ appCP
 												function(response) {
 													$scope.proc.fixed.classeProcessualDescricao = response.data.descricao;
 													$scope.proc.fixed.classeProcessualDescricaoCompleta = response.data.descricaocompleta;
-												}, function(error) {
-													alert(error.data.errormsg);
+												},
+												function(error) {
+													$scope.errormsg = error.data.errormsg;
 												}));
 
 						// Carregar assuntos (partimos do princípio que sempre
@@ -153,8 +161,9 @@ appCP
 														$scope.proc.fixed.assuntoPrincipalDescricao = response.data.descricao;
 														$scope.proc.fixed.assuntoPrincipalDescricaoCompleta = response.data.descricaocompleta;
 													}
-												}, function(error) {
-													alert(error.data.errormsg);
+												},
+												function(error) {
+													$scope.errormsg = error.data.errormsg;
 												}));
 					}
 
@@ -173,20 +182,9 @@ appCP
 
 						if (!p.dadosBasicos.outroParametro)
 							p.dadosBasicos.outroParametro = {};
-						if (p.dadosBasicos.outroParametro.ultimoTextoMovimento)
-							p.fixed.ultimoTextoMovimento = $scope
-									.formatTexto(p.dadosBasicos.outroParametro.ultimoTextoMovimento);
 						p.fixed.nomeMagistrado = p.dadosBasicos.outroParametro.nomeMagistrado;
 
 						if (p.documento) {
-							var fDecisao = true;
-							for (var i = p.documento.length - 1; i >= 0; i--) {
-								var doc = p.documento[i];
-								if (doc.outroParametro.textoMovimento) {
-									doc.exibirTexto = fDecisao;
-									fDecisao = false;
-								}
-							}
 							for (var i = 0; i < p.documento.length; i++) {
 								var f = false;
 								var doc = p.documento[i];
@@ -199,7 +197,7 @@ appCP
 														.includes(doc.idDocumento)) {
 											if (!mov.documento)
 												mov.documento = [];
-											mov.documento.push(doc);
+											mov.documento.unshift(doc);
 											f = true;
 											break;
 										}
@@ -216,88 +214,137 @@ appCP
 						}
 
 						if (p.movimento) {
-							p.movimento = p.movimento
-									.sort(function(a, b) {
-										if (a.dataHora < b.dataHora)
-											return 1;
-										if (a.dataHora > b.dataHora)
-											return -1;
-										if (a.documento && b.documento) {
-											if (Number(a.documento[0].idDocumento) < Number(b.documento[0].idDocumento))
-												return 1;
-											if (Number(a.documento[0].idDocumento) > Number(b.documento[0].idDocumento))
-												return -1;
-										}
-										return 0;
-									})
+							p.movimento = p.movimento.sort(function(a, b) {
+								if (a.dataHora < b.dataHora)
+									return 1;
+								if (a.dataHora > b.dataHora)
+									return -1;
+								return 0;
+							})
 
-							var odd = false;
 							p.fixed.movdoc = [];
 							for (var j = 0; j < p.movimento.length; j++) {
 								var mov = p.movimento[j];
-								odd = !odd;
 								p.fixed.movdoc.push({
 									teste : true,
 									dataHora : mov.dataHora,
 									mov : mov,
 									doc : (mov.documento || [ {} ])[0],
-									rowspan : (mov.documento || [ {} ]).length,
-									odd : odd
+									rowspan : (mov.documento || [ {} ]).length
 								});
 								if (mov.documento && mov.documento.length > 0) {
 									for (var i = 1; i < mov.documento.length; i++) {
 										p.fixed.movdoc.push({
 											dataHora : mov.dataHora,
-											doc : mov.documento[i],
-											odd : odd
+											doc : mov.documento[i]
 										});
 									}
 								}
 							}
-						}
 
-						if (typeof p.dadosBasicos.valorCausa === 'number')
-							p.fixed.valorCausa = "R$ "
-									+ p.dadosBasicos.valorCausa.formatMoney(2,
-											',', '.');
-						p.fixed.dataAjuizamento = $scope
-								.formatDDMMYYYHHMM(p.dadosBasicos.dataAjuizamento);
-
-						var op = p.dadosBasicos.outroParametro;
-						if (op.processoVinculado) {
-							op.processoVinculado = $scope
-									.colocarLink(arrayToString(op.processoVinculado));
-						}
-						if (op.processoOriginario) {
-							op.processoOriginario = $scope
-									.colocarLink(op.processoOriginario);
-						}
-						if (op.peticaoPendenteJuntada)
-							op.peticaoPendenteJuntada = arrayToString(op.peticaoPendenteJuntada);
-
-						if (op.numProcAdm)
-							op.numProcAdm = arrayToString(op.numProcAdm);
-						if (op.numCDA) {
-							if (typeof op.numCDA === 'string')
-								op.numCDA = [ op.numCDA ];
-							p.fixed.numCDAs = arrayToString(op.numCDA);
-						}
-						if (op.tipoAtuacaoParte) {
-							var map = {};
-							for (var i = 0; i < op.tipoAtuacaoParte.length; i++) {
-								var str = op.tipoAtuacaoParte[i];
-								var n = str.lastIndexOf(':');
-								if (n >= 0)
-									map[str.substring(0, n)] = str
-											.substring(n + 1);
+							// Ativar a visualização da primeira decisão
+							if (p.fixed.movdoc) {
+								var fDecisao = true;
+								var lastMovDoc = null;
+								for (var i = 0; i < p.fixed.movdoc.length; i++) {
+									var movdoc = p.fixed.movdoc[i];
+									if (movdoc.mov)
+										lastMovDoc = movdoc;
+									if (movdoc.doc) {
+										var doc = movdoc.doc;
+										if (doc.outroParametro
+												&& doc.outroParametro.textoMovimento) {
+											if (fDecisao) {
+												$scope.mostrarTexto(doc, true);
+												fDecisao = false;
+											} else
+												doc.exibirTexto = false;
+										}
+									}
+								}
 							}
-							for (var i = 0; i < p.dadosBasicos.polo.length; i++) {
-								for (var j = 0; j < p.dadosBasicos.polo[i].parte.length; j++) {
-									p.dadosBasicos.polo[i].parte[j].tipoAtuacao = map[p.dadosBasicos.polo[i].parte[j].pessoa.nome];
+
+							$scope.fixMovDoc(p.fixed.movdoc);
+
+							if (typeof p.dadosBasicos.valorCausa === 'number')
+								p.fixed.valorCausa = "R$ "
+										+ p.dadosBasicos.valorCausa
+												.formatMoney(2, ',', '.');
+							p.fixed.dataAjuizamento = $scope
+									.formatDDMMYYYHHMM(p.dadosBasicos.dataAjuizamento);
+
+							var op = p.dadosBasicos.outroParametro;
+							if (op.processoVinculado) {
+								op.processoVinculado = $scope
+										.colocarLink(arrayToString(op.processoVinculado));
+							}
+							if (op.processoOriginario) {
+								op.processoOriginario = $scope
+										.colocarLink(op.processoOriginario);
+							}
+							if (op.peticaoPendenteJuntada)
+								op.peticaoPendenteJuntada = arrayToString(op.peticaoPendenteJuntada);
+
+							if (op.numProcAdm)
+								op.numProcAdm = arrayToString(op.numProcAdm);
+							if (op.numCDA) {
+								if (typeof op.numCDA === 'string')
+									op.numCDA = [ op.numCDA ];
+								p.fixed.numCDAs = arrayToString(op.numCDA);
+							}
+							if (op.tipoAtuacaoParte) {
+								var map = {};
+								for (var i = 0; i < op.tipoAtuacaoParte.length; i++) {
+									var str = op.tipoAtuacaoParte[i];
+									var n = str.lastIndexOf(':');
+									if (n >= 0)
+										map[str.substring(0, n)] = str
+												.substring(n + 1);
+								}
+								for (var i = 0; i < p.dadosBasicos.polo.length; i++) {
+									for (var j = 0; j < p.dadosBasicos.polo[i].parte.length; j++) {
+										p.dadosBasicos.polo[i].parte[j].tipoAtuacao = map[p.dadosBasicos.polo[i].parte[j].pessoa.nome];
+									}
+								}
+							}
+							console.log(p);
+						}
+					}
+
+					// Corrige ordenação de peças avulsas
+					$scope.fixMovDoc = function(a) {
+						var lastIdDocumento;
+						for (var i = 0; i < a.length; i++) {
+							var movdoc = a[i];
+
+							// verifica se a peça está fora de ordem
+							if (movdoc.doc.idDocumento) {
+								if (!lastIdDocumento === undefined)
+									lastIdDocumento = Number(movdoc.doc.idDocumento);
+								else if (Number(movdoc.doc.idDocumento) > lastIdDocumento) {
+									// localizar o primeiro que já é menor do
+									// que o que está fora de posição
+									for (var j = 0; j < i; j++) {
+										var md = a[j];
+										if (md.doc.idDocumento
+												&& Number(md.doc.idDocumento) < Number(movdoc.doc.idDocumento)) {
+											a.move(i, j);
+											break;
+										}
+									}
+								} else {
+									lastIdDocumento = Number(movdoc.doc.idDocumento);
 								}
 							}
 						}
-						console.log(p);
+
+						// Marcar pares e impares
+						var odd = false;
+						for (var i = 0; i < a.length; i++) {
+							if (a[i].mov)
+								odd = !odd;
+							a[i].odd = odd;
+						}
 					}
 
 					$scope.colocarLink = function(s) {
@@ -307,10 +354,6 @@ appCP
 									+ $scope.formatProcesso(a[i]) + '</a>';
 						}
 						return a.join(', ');
-					}
-
-					$scope.mostrarUltimoTexto = function() {
-						$scope.ultimoTexto = true;
 					}
 
 					$scope.mostrarPartes = function() {
@@ -339,6 +382,25 @@ appCP
 								});
 					}
 
+					$scope.mostrarTexto = function(doc, f) {
+						for (var i = 0; i < $scope.proc.fixed.movdoc.length; i++) {
+							var movdoc = $scope.proc.fixed.movdoc[i];
+							if (doc == movdoc.doc) {
+								for (var j = i; j >= 0; j--) {
+									if ($scope.proc.fixed.movdoc[j].mov)
+										break;
+								}
+								if ($scope.proc.fixed.movdoc[j].rowspan
+										&& (j < $scope.proc.fixed.movdoc.length - 1)
+										&& ($scope.proc.fixed.movdoc[j + 1].rowspan === undefined)) {
+									$scope.proc.fixed.movdoc[j].rowspan += f ? 1
+											: -1;
+								}
+								doc.exibirTexto = f;
+							}
+						}
+					}
+
 					$scope.formatDDMMYYYHHMM = function(s) {
 						if (s === undefined)
 							return;
@@ -364,6 +426,8 @@ appCP
 										: "");
 					}
 					$scope.formatTexto = function(s) {
+						if (s === undefined)
+							return s;
 						return s.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 								.replace(/\n\s+\n/g,
 										'<div class="break"></div>').replace(

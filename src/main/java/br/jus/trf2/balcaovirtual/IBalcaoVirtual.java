@@ -47,6 +47,7 @@ public interface IBalcaoVirtual {
 		public String unidadetipo;
 		public String orgao;
 		public String localidade;
+		public String teor;
 	}
 
 	public class ListStatus implements ISwaggerModel {
@@ -168,6 +169,27 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroPecaIdPdfGet extends ISwaggerMethod {
 		public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String id;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroAvisoIdReceberPostResponse implements ISwaggerResponse {
+		public String idaviso;
+		public String dataaviso;
+		public String tipo;
+		public String processo;
+		public String orgao;
+		public String teor;
+		public String datarecebimento;
+	}
+
+	public interface IProcessoNumeroAvisoIdReceberPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp)
 				throws Exception;
 	}
 

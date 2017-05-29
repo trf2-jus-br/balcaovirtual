@@ -267,7 +267,40 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-            
+
+  /processo/{numero}/aviso/{id}/receber:
+    post:
+      description: Confirmar o recebimento de um aviso e obter o teor da comunicação
+      tags: [view]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              idaviso:
+                type: string
+              dataaviso:
+                type: string
+              tipo:
+                type: string
+              processo:
+                type: string
+              orgao:
+                type: string
+              teor:
+                type: string
+              datarecebimento:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /download/{jwt}/{filename}:
     get:
       description: Faz o download de um artefato qualquer
@@ -513,6 +546,8 @@ definitions:
       orgao:
         type: string
       localidade:
+        type: string
+      teor:
         type: string
 
   ListStatus:

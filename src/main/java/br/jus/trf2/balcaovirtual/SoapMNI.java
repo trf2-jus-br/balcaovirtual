@@ -32,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 
 import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
+import br.jus.cnj.intercomunicacao_2_2.TipoComunicacaoProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoDocumento;
 import br.jus.cnj.intercomunicacao_2_2.TipoParametro;
 import br.jus.cnj.intercomunicacao_2_2.TipoProcessoJudicial;
@@ -39,6 +40,7 @@ import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
 
 public class SoapMNI {
 	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
@@ -168,6 +170,41 @@ public class SoapMNI {
 				list.add(i);
 			}
 		}
+	}
+
+	public static void consultarTeorComunicacao(String idConsultante, String numProc, String idAviso, String orgao,
+			ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
+		String system = orgao.toLowerCase();
+		URL url = new URL(Utils.getMniWsdlUrl(system));
+		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		Holder<Boolean> sucesso = new Holder<>();
+		Holder<String> mensagem = new Holder<>();
+		Holder<List<TipoComunicacaoProcessual>> comunicacao = new Holder<>();
+
+		client.consultarTeorComunicacao(idConsultante, idAviso, numProc, null, sucesso, mensagem, comunicacao);
+		if (!sucesso.value)
+
+			throw new Exception(mensagem.value);
+
+		if (comunicacao.value.size() != 1)
+			throw new Exception("Número de comunicações deve ser exatamente igual a 1");
+
+		TipoComunicacaoProcessual c = comunicacao.value.get(0);
+		if (c.getTipoComunicacao() != null)
+			switch (c.getTipoComunicacao()) {
+			case "INT":
+				resp.tipo = "Intimação";
+				break;
+			case "CIT":
+				resp.tipo = "Citação";
+				break;
+			}
+		resp.processo = numProc;
+		resp.dataaviso = c.getDataReferencia();
+		resp.idaviso = idAviso;
+		resp.orgao = orgao;
+		resp.teor = c.getTeor();
 	}
 
 	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,

@@ -76,6 +76,17 @@ if (!Array.prototype.includes) {
   });
 }
 
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
+};
+
 Number.prototype.formatMoney = function (c, d, t) {
     var n = this,
         c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -140,6 +151,12 @@ var formatarProcesso = function(filename) {
 	if (m[7])
 		s += '/' + m[7];
 	return s;
+}
+
+var formatarTexto = function(s) {
+	return s.replace(/^\s\s*/, '').replace(/\s\s*$/, '').replace(
+			/\n\s+\n/g, '<div class="break"></div>')
+			.replace(/\n/g, '<br/>')
 }
 
 var arrayToString = function(a) {

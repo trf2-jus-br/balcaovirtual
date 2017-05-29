@@ -96,47 +96,18 @@ app.run(function($rootScope, $state, store, jwtHelper) {
 	$rootScope.updateLogged();
 });
 
-app
-		.controller(
-				'routerCtrl',
-				function($rootScope, $scope, $http, $window, $q, $location,
-						$timeout) {
-					$scope.promise = [];
+app.controller('routerCtrl', function($rootScope, $scope, $http, $window, $q,
+		$location, $timeout) {
+	$scope.promise = [];
 
-					$scope.urlBaseAPI = "./api/v1";
+	$scope.urlBaseAPI = "./api/v1";
 
-					$scope.isActive = function(viewLocation) {
-						return viewLocation === $location.path();
-					};
+	$scope.init = function() {
+		$scope.promise = [];
+	}
 
-					$scope.parseLocation = function(location) {
-						var pairs = location.substring(1).split("&");
-						var obj = {};
-						var pair;
-						var i;
-
-						for (i in pairs) {
-							if (pairs[i] === "")
-								continue;
-
-							var idx = pairs[i].indexOf("=");
-							obj[decodeURIComponent(pairs[i].substring(0, idx))] = decodeURIComponent(pairs[i]
-									.substring(idx + 1));
-						}
-
-						return obj;
-					};
-
-					$scope.init = function() {
-						$scope.promise = [];
-					}
-
-					$timeout($scope.init, 10);
-
-					$scope.querystring = $scope
-							.parseLocation($window.location.search);
-
-				});
+	$timeout($scope.init, 10);
+});
 
 // Sugestoes
 app.controller('ctrlSugerir', function($scope, $http, $templateCache,

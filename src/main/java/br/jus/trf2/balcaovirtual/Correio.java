@@ -56,7 +56,7 @@ public class Correio {
 
 	public static void enviar(final String destinatario, final String assunto, final String conteudo,
 			String nomeArquivo, String tipoArquivo, byte[] conteudoArquivo) throws Exception {
-		final String[] to = { destinatario, "crivano@jfrj.jus.br" };
+		final String[] to = { destinatario };
 
 		Correio.enviar(SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.remetente",
 				"remetente de email não configurado.", false), to, assunto, conteudo, null, nomeArquivo, tipoArquivo,
