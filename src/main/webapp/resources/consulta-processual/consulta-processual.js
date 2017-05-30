@@ -382,6 +382,22 @@ appCP
 								});
 					}
 
+					$scope.mostrarCompleto = function() {
+						$scope.$parent.promise = $http(
+								{
+									url : 'api/v1/processo/' + $scope.numero
+											+ '/pdf?orgao=' + $scope.orgao,
+									method : 'GET'
+								}).then(
+								function(response) {
+									var jwt = response.data.jwt;
+									$window.open('api/v1/download/' + jwt + '/'
+											+ $scope.numero + '.pdf');
+								}, function(error) {
+									alert(error.data.errormsg);
+								});
+					}
+
 					$scope.mostrarTexto = function(doc, f) {
 						for (var i = 0; i < $scope.proc.fixed.movdoc.length; i++) {
 							var movdoc = $scope.proc.fixed.movdoc[i];
@@ -441,6 +457,6 @@ appCP
 					$scope.formatProcesso = formatarProcesso;
 
 					$scope.init();
-					
+
 					logEvento('consulta-processual', 'visualizar processo');
 				});

@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -16,8 +17,10 @@ public class ArquivoTemporarioPdfGet implements IArquivoTemporarioPdfGet {
 
 	@Override
 	public void run(ArquivoTemporarioPdfGetRequest req, ArquivoTemporarioPdfGetResponse resp) throws Exception {
-		resp.payload = Files.readAllBytes(Paths.get(Utils.getDirFinal() + "/" + req.pdf + ".pdf"));
-		resp.contenttype = "application/pdf";
+		byte[] ab = Files.readAllBytes(Paths.get(Utils.getDirFinal() + "/" + req.pdf + ".pdf"));
+		resp.contentlength = (long) ab.length;
+		resp.contentdisposition = "inline;filename=" + req.pdf + ".pdf";
+		resp.inputstream = new ByteArrayInputStream(ab);
 	}
 
 	@Override

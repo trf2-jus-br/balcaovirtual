@@ -85,7 +85,7 @@ paths:
 
   /processo/{numero}/pdf:
     get:
-      description: Obter o PDF completo pelo número do processo
+      description: Obter o PDF completo pelo número do processo 
       tags: [utils]
       produces: [application/pdf]
       parameters:

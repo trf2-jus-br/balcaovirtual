@@ -1,11 +1,14 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
 import com.crivano.swaggerservlet.ISwaggerModel;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.ISwaggerResponseFile;
+import com.crivano.swaggerservlet.ISwaggerResponsePayload;
 
 public interface IBalcaoVirtual {
 	public class ConfigTipoPeticaoIntercorrente implements ISwaggerModel {
@@ -147,7 +150,7 @@ public interface IBalcaoVirtual {
 		public String orgao;
 	}
 
-	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse {
+	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponsePayload {
 		public byte[] payload;
 		public String contenttype;
 	}
@@ -170,6 +173,19 @@ public interface IBalcaoVirtual {
 	public interface IProcessoNumeroPecaIdPdfGet extends ISwaggerMethod {
 		public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp)
 				throws Exception;
+	}
+
+	public class ProcessoNumeroPdfGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse {
+		public String jwt;
+	}
+
+	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroPdfGetRequest req, ProcessoNumeroPdfGetResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {
@@ -198,9 +214,44 @@ public interface IBalcaoVirtual {
 		public String filename;
 	}
 
-	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse {
-		public byte[] payload;
-		public String contenttype;
+	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/pdf";
+		public String contentdisposition = "attachment";
+
+		public Long contentlength;
+		public InputStream inputstream;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
 	}
 
 	public interface IDownloadJwtFilenameGet extends ISwaggerMethod {
@@ -211,9 +262,44 @@ public interface IBalcaoVirtual {
 		public String pdf;
 	}
 
-	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse {
-		public byte[] payload;
-		public String contenttype;
+	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/pdf";
+		public String contentdisposition = "attachment";
+
+		public Long contentlength;
+		public InputStream inputstream;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
 	}
 
 	public interface IArquivoTemporarioPdfGet extends ISwaggerMethod {

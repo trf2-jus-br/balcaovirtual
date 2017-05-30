@@ -1,6 +1,6 @@
 package br.jus.trf2.sistemaprocessual;
 
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
@@ -109,8 +109,41 @@ public interface ISistemaProcessual {
 	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment; filename=processo.pdf";
+
 		public Long contentlength;
-		public OutputStream outputstream;
+		public InputStream inputstream;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
 	}
 
 	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
