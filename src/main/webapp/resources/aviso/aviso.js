@@ -16,7 +16,7 @@ appPI
 		.controller(
 				'ListarAvisosCtrl',
 				function ConsultarAvisosCtrl($scope, $http, $filter, store,
-						jwtHelper, $timeout, ModalService) {
+						jwtHelper, $timeout, $state, ModalService) {
 					$scope.outlineAtivo = false;
 					$scope.gui = {
 						todos : true,
@@ -320,6 +320,19 @@ appPI
 							modal.element.modal();
 							modal.close.then(function(result) {
 							});
+						});
+					}
+
+					$scope.listarProcessos = function() {
+						var avisos = $scope.filtradosEMarcados();
+						var processos = [];
+						for (var i = 0; i < avisos.length; i++) {
+							processos.push({
+								numero : avisos[i].processo
+							})
+						}
+						$state.go('lista-processos', {
+							processos : processos
 						});
 					}
 

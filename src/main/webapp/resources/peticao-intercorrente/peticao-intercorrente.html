@@ -76,7 +76,7 @@
 									ng-show="f.processo === undefined || f.processo === ''"
 									ng-click="multiplosProcessos(f)"
 									class="btn btn-sm btn-outline-primary ml-1"
-									title="Inserir este PDF em múltiplos processos">+</button>
+									title="Inserir este PDF em múltiplos processos">&#x2795;</button>
 							</div> <span class="unbreakable" ng-if="!editando"><a
 								ui-sref="processo({numero: r.processo})" target="_blank">{{f.processo}}</a></span></td>
 
@@ -103,7 +103,7 @@
 						<td class="status-td" rowspan="{{f.protocolado ? f.rowspan : 1}}"
 							ng-show="f.protocolado ? !f.anexo : true"><span
 							ng-show="f.perc &amp;&amp; f.perc < 100">{{f.perc}}%</span><span
-							ng-class="{protocolado: f.protocolado}"
+							ng-class="{green: f.protocolado}"
 							ng-show="f.perc == 100 &amp;&amp; !f.errormsg">{{f.status}}</span><span
 							ng-show="f.perc == 100 &amp;&amp; f.errormsg"
 							ng-class="{red: true}">{{f.errormsg}}</span><span
@@ -111,7 +111,7 @@
 
 						<td align="center" ng-if="editando">
 							<button type="button" ng-click="removerArquivo(f)"
-								class="btn btn-sm btn-outline-danger">X</button>
+								class="btn btn-sm btn-outline-danger">&#x274C;</button>
 						</td>
 					</tr>
 				</tbody>
@@ -192,7 +192,8 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="r in resumoPorData | filter: filtroProtocolo">
-						<td><a ui-sref="processo({numero: somenteNumeros(r.processo)})">{{r.processo}}</a></td>
+						<td><a
+							ui-sref="processo({numero: somenteNumeros(r.processo)})">{{r.processo}}</a></td>
 						<td>{{r.classe}}</td>
 						<td><span ng-bind-html="formatDDMMYYYHHMM(r.dataprotocolo)"></span></td>
 						<td>{{r.protocolo}}</td>

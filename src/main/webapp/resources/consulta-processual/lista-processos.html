@@ -1,0 +1,74 @@
+<div class="container content">
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center mt-3 mb-3">Lista de Processos</h4>
+		</div>
+
+		<div class="col col-sm-12" ng-show="processos.length == 0">
+			<p class="alert alert-warning">
+				<strong>Atenção!</strong> Nenhum processo na lista.
+			</p>
+		</div>
+	</div>
+
+	<div class="row" ng-if="processos.length > 0">
+
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<table class="table table-striped table-sm">
+				<thead class="thead-inverse">
+					<tr>
+						<th style="text-align: center"><input type="checkbox"
+							id="progress_checkall" name="progress_checkall"
+							ng-model="gui.todos" ng-change="marcarTodos()" /></th>
+						<th>Processo</th>
+						<th>Órgão</th>
+						<th>Unidade</th>
+						<th>Status</th>
+						<th style="text-align: center"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="p in processos track by $index">
+						<td style="text-align: center"><input type="checkbox"
+							value="true" ng-model="p.checked" ng-disabled="p.disabled"
+							class="chk-assinar" /></td>
+						<td><span class="unbreakable"><a
+								ui-sref="processo({numero: p.numero})" target="_blank">{{p.numero}}</a></span></td>
+						<td>{{p.orgao}}</td>
+						<td>{{p.unidade}}</td>
+
+						<td class="status-td"><span ng-show="p.state == 'ready'">Preparado</span><span
+							ng-show="p.state == 'set'">Solicitado</span><span
+							ng-show="p.state == 'go'">Iniciado</span><span
+							ng-show="p.state == 'in_progress'">{{p.perc}}%</span><span
+							class="green" ng-show="p.state == 'complete'">Baixado</span><span
+							ng-show="p.errormsg" ng-class="{red: true}">Erro
+								{{p.errormsg}}</span></td>
+
+						<td align="right">
+							<button type="button" ng-click="remover(p)"
+								class="btn btn-sm btn-outline-danger">&#x274C;</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-sm-12" style="padding-top: 1em;">
+			<button type="button"
+				ng-show="f.processo === undefined || f.processo === ''"
+				ng-click="multiplosProcessos()" class="btn btn-primary ml-1"
+				title="Inserir múltiplos processos">Inserir Processos</button>
+			<button type="button" ng-click="baixarEmLote()"
+				class="btn btn-primary ml-1"
+				title="Inserir este PDF em múltiplos processos">
+				Baixar Completo&nbsp;&nbsp;<span
+					class="badge badge-pill badge-warning">{{contarChecked()}}</span>
+			</button>
+		</div>
+	</div>
+</div>

@@ -212,6 +212,7 @@ public interface IBalcaoVirtual {
 	public class DownloadJwtFilenameGetRequest implements ISwaggerRequest {
 		public String jwt;
 		public String filename;
+		public String disposition;
 	}
 
 	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {

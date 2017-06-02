@@ -110,6 +110,12 @@ parameters:
     description: Nome do arquivo de um artefato a ser baixado
     required: true
     type: string
+  disposition:
+    name: disposition
+    in: query
+    description: Informar attachment se desejar receber como um download
+    required: false
+    type: string
   orgaoquery:
     name: orgao
     in: query
@@ -329,6 +335,7 @@ paths:
       parameters:
         - $ref: "#/parameters/jwt"
         - $ref: "#/parameters/filename"
+        - $ref: "#/parameters/disposition"
       responses:
         200:
           description: Successful response

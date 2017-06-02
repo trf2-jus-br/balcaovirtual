@@ -1,6 +1,6 @@
-var appPI = angular.module('sample.peticao-intercorrente',
-		[ 'ui.router', 'angular-storage', 'angular-jwt', 'ngFileUpload',
-				'angularModalService' ]);
+var appPI = angular.module('sample.peticao-intercorrente', [
+		'sample.consulta-processual', 'ui.router', 'angular-storage',
+		'angular-jwt', 'ngFileUpload', 'angularModalService' ]);
 appPI
 		.config(function($stateProvider) {
 			$stateProvider
@@ -134,7 +134,7 @@ appPI
 								.showModal(
 										{
 											templateUrl : "resources/dialog-processos.html",
-											controller : "ProcessosController",
+											controller : "MultiplosProcessosController",
 											inputs : {
 												title : "Múltiplos Processos",
 												errormsg : ""
@@ -393,62 +393,6 @@ appPI
 							&& jwtHelper.decodeToken($scope.jwt);
 					$scope.init();
 				});
-
-appPI.controller('ProcessosController', function($scope, $element, $timeout,
-		title, errormsg, close) {
-	var reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?$/;
-	var reSep = /(?:\s+|\s*(?:,|;)\s*)/;
-
-	$scope.pin = null;
-	$scope.title = title;
-	$scope.errormsg = errormsg;
-
-	$scope.clickclose = function() {
-		if (($scope.processos || "") == "") {
-			$scope.errormsg = "Números de processos devem ser informados.";
-			return;
-		}
-		$scope.close();
-		// Manually hide the modal.
-		$element.modal('hide');
-	};
-
-	// This close function doesn't need to use jQuery or bootstrap, because
-	// the button has the 'data-dismiss' attribute.
-	$scope.close = function() {
-		if (($scope.processos || "") == "") {
-			$scope.errormsg = "Números de processos devem ser informados.";
-			return;
-		}
-		var arr = $scope.processos.split(reSep);
-		for (var i = 0; i < arr.length; i++) {
-			var m = reProc.exec(arr[i]);
-			if (!m) {
-				$scope.errormsg = "Número de processo inválido: '" + arr[i]
-						+ "'";
-				return;
-			}
-		}
-		// Manually hide the modal.
-		$element.modal('hide');
-		close({
-			processos : $scope.processos,
-			arrProcessos : arr
-		}, 500); // close, but give 500ms for bootstrap to animate
-	};
-
-	// This cancel function must use the bootstrap, 'modal' function because
-	// the doesn't have the 'data-dismiss' attribute.
-	$scope.cancel = function() {
-
-		// Manually hide the modal.
-		$element.modal('hide');
-
-		// Now call close, returning control to the caller.
-		close({}, 500); // close, but give 500ms for bootstrap to animate
-	};
-
-});
 
 appPI.controller('PeticionarController', function($scope, $element, $timeout,
 		$http, title, errormsg, arquivos, close) {

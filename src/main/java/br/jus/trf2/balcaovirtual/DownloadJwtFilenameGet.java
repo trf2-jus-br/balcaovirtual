@@ -23,7 +23,6 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
 
 public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	private static final Logger log = LoggerFactory.getLogger(DownloadJwtFilenameGet.class);
@@ -35,12 +34,13 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		String numDoc = (String) map.get("doc");
 		String orgao = (String) map.get("orgao");
 		String type = (String) map.get("typ");
+		String disposition = "attachment".equals(req.disposition) ? "attachment" : "inline";
 		if (!"download".equals(type))
 			throw new Exception("Tipo de token JWT inválido");
 		if (numDoc != null) {
 			// Peça Processual
 			byte[] ab = SoapMNI.obterPecaProcessual(req.jwt, orgao, numProc, numDoc);
-			resp.contentdisposition = "inline;filename=" + numProc + "-peca-" + numDoc + ".pdf";
+			resp.contentdisposition = disposition + ";filename=" + numProc + "-peca-" + numDoc + ".pdf";
 			resp.contentlength = (long) ab.length;
 			resp.inputstream = new ByteArrayInputStream(ab);
 		} else {
@@ -54,7 +54,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			if (sar.getException() != null)
 				throw sar.getException();
 			ProcessoNumeroPdfGetResponse r = (ProcessoNumeroPdfGetResponse) sar.getResp();
-			resp.contentdisposition = "inline;filename=" + numProc + "-completo.pdf";
+			resp.contentdisposition = disposition + ";filename=" + numProc + "-completo.pdf";
 			resp.contentlength = r.contentlength;
 			resp.contenttype = r.contenttype;
 			resp.inputstream = r.inputstream;

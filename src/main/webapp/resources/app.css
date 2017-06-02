@@ -1,3 +1,15 @@
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+.odd {
+	background-color: rgba(0, 0, 0, .05);
+}
+
 h1::first-letter {
 	margin-top: 0;
 }

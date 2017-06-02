@@ -1,19 +1,7 @@
-.red {
-	color: red;
-}
-
-.protocolado {
-	color: green;
-}
-
-.odd {
-	background-color: rgba(0, 0, 0, .05);
-}
-
 .protocolos-header {
 	font-size: 150%;
 	padding-bottom: 0.5rem;
-} 
+}
 
 .unbreakable {
 	white-space: nowrap;
