@@ -318,7 +318,7 @@ appCP
 									}
 								}
 							}
-							console.log(p);
+							// console.log(p);
 						}
 					}
 
@@ -388,6 +388,8 @@ appCP
 									$window.open('api/v1/download/' + jwt + '/'
 											+ $scope.numero + '-peca-'
 											+ idDocumento + '.pdf');
+									logEvento('consulta-processual',
+											'mostrar pdf peça');
 								}, function(error) {
 									alert(error.data.errormsg);
 								});
@@ -404,6 +406,9 @@ appCP
 									var jwt = response.data.jwt;
 									$window.open('api/v1/download/' + jwt + '/'
 											+ $scope.numero + '.pdf');
+									logEvento('consulta-processual',
+											'mostrar pdf completo',
+											'individual');
 								}, function(error) {
 									alert(error.data.errormsg);
 								});
@@ -469,7 +474,7 @@ appCP
 
 					$scope.init();
 
-					logEvento('consulta-processual', 'visualizar processo');
+					logEvento('consulta-processual', 'consultar processo');
 				});
 
 appCP
@@ -494,12 +499,13 @@ appCP
 					$scope.init = function() {
 						delete $scope.errormsg;
 						$scope.$parent.promise = [];
-						for (var i = 0; i < $scope.processos.length; i++)
+						for (var i = 0; i < $scope.processos.length; i++) {
+							if (!$scope.processos[i].disabled)
+								$scope.processos[i].checked = true;
 							if (!$scope.processos[i].validado) {
-								$scope.processos[i].checked = false;
-								$scope.processos[i].disabled = true;
 								$scope.validarProcesso($scope.processos[i]);
 							}
+						}
 					}
 
 					$scope.validarProcesso = function(processo) {
@@ -511,13 +517,14 @@ appCP
 								})
 										.then(
 												function(response) {
+													processo.numero = formatarProcesso(processo.numero);
 													processo.orgao = response.data.orgao;
 													processo.unidade = response.data.unidade;
-													processo.checked = true;
-													processo.disabled = false;
 													processo.validado = true;
 												},
 												function(error) {
+													processo.checked = false;
+													processo.disabled = true;
 													processo.errormsg = "Não foi possível obter informações sobre o processo. ("
 															+ error.data.errormsg
 															+ ")";
@@ -551,36 +558,39 @@ appCP
 						return $scope.filtradosEMarcados().length;
 					}
 
-					$scope.obterJwt = function(processo) {
+					$scope.baixarEmLote = function() {
+						var processos = $scope.filtradosEMarcados();
+						if (processos.length > 0) {
+							delete $scope.errormsg;
+							$scope.obterJwt(processos, 0);
+						}
+					}
+
+					$scope.obterJwt = function(processos, i) {
+						delete processos[i].jwt;
+						delete processos[i].state;
+						delete processos[i].perc;
 						$http(
 								{
 									url : 'api/v1/processo/'
-											+ somenteNumeros(processo.numero)
-											+ '/pdf?orgao=' + processo.orgao,
+											+ somenteNumeros(processos[i].numero)
+											+ '/pdf?orgao='
+											+ processos[i].orgao,
 									method : 'GET'
 								}).then(function(response) {
-							var jwt = response.data.jwt;
-							processo.jwt = jwt;
-							processo.state = "ready";
-							if ($scope.aguardandoJwt) {
-								$scope.aguardandoJwt = false;
-								$scope.continuarBaixando();
-							}
+							if (i + 1 < processos.length)
+								$timeout(function() {
+									$scope.obterJwt(processos, i + 1)
+								});
+							else
+								$timeout($scope.continuarBaixando);
+							processos[i].jwt = response.data.jwt;
+							processos[i].state = "ready";
 						}, function(error) {
-							processo.errormsg = error.data.errormsg;
+							if (i + 1 < processos.length)
+								$scope.obterJwt(processos, i + 1);
+							processos[i].errormsg = error.data.errormsg;
 						});
-					}
-
-					$scope.baixarEmLote = function() {
-						delete $scope.errormsg;
-						$scope.aguardandoJwt = true;
-						var processos = $scope.filtradosEMarcados();
-						for (var i = 0; i < processos.length; i++) {
-							delete processos[i].jwt;
-							delete processos[i].state;
-							delete processos[i].perc;
-							$scope.obterJwt(processos[i]);
-						}
 					}
 
 					$scope.baixando = function() {
@@ -613,7 +623,7 @@ appCP
 													500);
 											if (response.success) {
 												var updates = response.data;
-												console.log(updates);
+												// console.log(updates);
 												for ( var id in updates) {
 													if (!updates
 															.hasOwnProperty(id))
@@ -640,6 +650,8 @@ appCP
 						if (update.state
 								&& update.state.current != 'in_progress')
 							delete processo.perc;
+						if (update.state && update.state.current == 'complete')
+							processo.checked = false;
 					}
 
 					$scope.baixarProximo = function() {
@@ -673,8 +685,8 @@ appCP
 									processo.downloadId = response.data.id;
 									$scope.map[processo.downloadId] = processo;
 								});
-						logEvento('consulta-processual', 'baixar pdf completo',
-								'em lote');
+						logEvento('consulta-processual',
+								'mostrar pdf completo', 'em lote');
 					}
 
 					$scope.multiplosProcessos = function(arq) {
@@ -730,7 +742,6 @@ appCP
 
 appCP.controller('BaixarProcessosController', function($scope, $element,
 		$timeout, $http, $window, title, errormsg, processos, close) {
-	$scope.downloadExtensionId = "fdiondfkoplpepcdeacbfjnjimkehlna";
 	$scope.title = title;
 	$scope.errormsg = errormsg;
 	$scope.processos = processos;
@@ -792,35 +803,10 @@ appCP.controller('BaixarProcessosController', function($scope, $element,
 				}).then(
 				function(response) {
 					var jwt = response.data.jwt;
-					if (true) {
-						var base = location.href;
-						base = base.substring(0, base.indexOf("#!/"));
-
-						// Make a simple request:
-						chrome.runtime.sendMessage($scope.downloadExtensionId,
-								{
-									command : "download",
-									url : absoluteUrl(base, 'api/v1/download/'
-											+ jwt + '/' + processo.numero
-											+ '.pdf?disposition=attachment'),
-									filename : processo.numero.pdf
-								}, function(response) {
-									try {
-										if (response.success) {
-											deferred.resolve(response)
-										} else {
-											deferred.reject(response);
-										}
-									} catch (err) {
-										deferred.reject(response);
-									}
-								});
-					} else {
-						$window.open('api/v1/download/' + jwt + '/'
-								+ processo.numero
-								+ '.pdf?disposition=attachment', '_self');
-					}
-					logEvento('consulta-processual', 'baixar pdf completo',
+					$window.open('api/v1/download/' + jwt + '/'
+							+ processo.numero + '.pdf?disposition=attachment',
+							'_self');
+					logEvento('consulta-processual', 'mostrar pdf completo',
 							'em lote');
 					$scope.i = indice;
 					prox();
@@ -868,6 +854,7 @@ appCP.controller('MultiplosProcessosController', function($scope, $element,
 						+ "'";
 				return;
 			}
+			arr[i] = formatarProcesso(arr[i]);
 		}
 		// Manually hide the modal.
 		$element.modal('hide');

@@ -17,8 +17,6 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 	@Override
 	public void run(ProcessoNumeroPdfGetRequest req, ProcessoNumeroPdfGetResponse resp) throws Exception {
 		Map<String, Object> map = SessionsCreatePost.assertUsuarioAutorizado();
-		if (!"giovanni.souza".equals(map.get("username")))
-			throw new PresentableException("Operação temporariamente desabilitada.");
 		resp.jwt = DownloadJwtFilenameGet.jwt((String) map.get("username"), req.orgao, req.numero, null);
 	}
 

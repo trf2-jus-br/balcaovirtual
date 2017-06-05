@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
 import org.joda.time.DateTime;
@@ -90,9 +91,14 @@ public class SoapMNI {
 		URL url = new URL(Utils.getMniWsdlUrl(orgao));
 		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
 		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<TipoProcessoJudicial> processo = new Holder<>();
+
+		Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
+		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
+		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 
 		client.consultarProcesso(idManif, null, numProc, null, true, true, true, null, sucesso, mensagem, processo);
 		if (!sucesso.value)

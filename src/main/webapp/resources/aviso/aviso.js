@@ -325,10 +325,17 @@ appPI
 
 					$scope.listarProcessos = function() {
 						var avisos = $scope.filtradosEMarcados();
+						var map = {};
 						var processos = [];
 						for (var i = 0; i < avisos.length; i++) {
+							if (map.hasOwnProperty(avisos[i].processo))
+								continue;
+							map[avisos[i].processo] = true;
 							processos.push({
-								numero : avisos[i].processo
+								numero : formatarProcesso(avisos[i].processo),
+								orgao : avisos[i].orgao,
+								unidade : avisos[i].unidade,
+								validado : true
 							})
 						}
 						$state.go('lista-processos', {

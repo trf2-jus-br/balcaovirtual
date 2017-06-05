@@ -13,7 +13,7 @@
 
 	<div class="row" ng-if="processos.length > 0">
 
-		<div class="col-sm-12" style="padding-top: 1em;">
+		<div class="col-sm-12">
 			<table class="table table-striped table-sm">
 				<thead class="thead-inverse">
 					<tr>
@@ -40,7 +40,8 @@
 						<td class="status-td"><span ng-show="p.state == 'ready'">Preparado</span><span
 							ng-show="p.state == 'set'">Solicitado</span><span
 							ng-show="p.state == 'go'">Iniciado</span><span
-							ng-show="p.state == 'in_progress'">{{p.perc}}%</span><span
+							ng-show="p.state == 'in_progress' &amp;&amp; p.perc === undefined">Aguardando...</span><span
+							ng-show="p.state == 'in_progress' &amp;&amp; p.perc !== undefined">{{p.perc}}%</span><span
 							class="green" ng-show="p.state == 'complete'">Baixado</span><span
 							ng-show="p.errormsg" ng-class="{red: true}">Erro
 								{{p.errormsg}}</span></td>

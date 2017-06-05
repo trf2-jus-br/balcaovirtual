@@ -18,11 +18,10 @@
 		</div>
 	</div>
 
-	<div class="row mb-3" ng-show="avisos.length > 0">
+	<div class="row mb-3 hidden-print" ng-show="avisos.length > 0">
 		<div class="col-sm-2">
 			<button type="button" ng-click="mostrarOutline()"
-				ng-class="{'btn': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}"
-				style="width: 100%" data-style="expand-left">Filtro
+				ng-class="{'btn btn-block': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">Filtro
 				Hierárquico</button>
 		</div>
 		<div class="col-sm-2">
@@ -32,19 +31,23 @@
 					ng-model="gui.filtro" ng-model-options="{ debounce: 200 }">
 			</div>
 		</div>
-		<div class="col-sm-2 offset-sm-2">
-			<button type="button" ng-click="carregarConfirmadosRecentemente()"
-				class="btn btn-secondary" style="width: 100%"
-				data-style="expand-left">Consultar Confirmados</button>
+		<div class="offset-sm-4 col-sm-2">
+			<div class="btn-group btn-block" role="group">
+				<button id="btnGroupDrop1" type="button"
+					class="btn btn-secondary dropdown-toggle btn-block"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
+				<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+					<a class="dropdown-item"
+						ng-click="carregarConfirmadosRecentemente()">Consultar
+						Confirmados</a> <a class="dropdown-item" ng-click="exportarXML()">Exportar
+						XML</a> <a class="dropdown-item" ng-click="listarProcessos()">Listar
+						Processos Marcados</a>
+				</div>
+			</div>
 		</div>
 		<div class="col-sm-2">
-			<button type="button" ng-click="exportarXML()"
-				class="btn btn-secondary" style="width: 100%"
-				data-style="expand-left">Exportar XML</button>
-		</div>
-		<div class="col-sm-2">
-			<button class="btn btn-primary" style="width: 100%"
-				data-style="expand-left" ng-click="confirmarEmLote()">
+			<button class="btn btn-primary btn-block" data-style="expand-left"
+				ng-click="confirmarEmLote()">
 				Confirmar&nbsp;&nbsp;<span class="badge badge-pill badge-warning">{{contarChecked()}}</span>
 			</button>
 		</div>
@@ -75,8 +78,8 @@
 			<table class="table table-sm table-striped mb-0 table-protocolo">
 				<thead class="thead-inverse">
 					<tr>
-						<th style="text-align: center"><input type="checkbox"
-							id="progress_checkall" name="progress_checkall"
+						<th class="hidden-print" style="text-align: center"><input
+							type="checkbox" id="progress_checkall" name="progress_checkall"
 							ng-model="gui.todos" ng-change="marcarTodos()" /></th>
 
 						<th>Data do Cadastro</th>
@@ -93,9 +96,9 @@
 				<tbody>
 					<tr
 						ng-repeat="r in avisos | filter: gui.filtroOutline() | filter: gui.filtro">
-						<td style="text-align: center"><input type="checkbox"
-							value="true" ng-model="r.checked" ng-disabled="r.disabled"
-							class="chk-assinar" /></td>
+						<td class="hidden-print" style="text-align: center"><input
+							type="checkbox" value="true" ng-model="r.checked"
+							ng-disabled="r.disabled" class="chk-assinar" /></td>
 						<td><span ng-bind-html="r.dataavisoFormatada"></span></td>
 						<td>{{r.tipo}}</td>
 						<td><a ui-sref="processo({numero: r.processo})">{{r.processoFormatado}}</a></td>
@@ -117,14 +120,10 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="col-sm-12" style="padding-top: 1em;">
-			<button type="button" ng-click="listarProcessos()"
-				class="btn btn-primary ml-1">
-				Listar Processos&nbsp;&nbsp;<span
-					class="badge badge-pill badge-warning">{{contarChecked()}}</span>
-				<button type="button" ng-click="imprimir()" id="imprimir"
-					ng-if="resumoPorData.length > 0"
-					class="btn btn-info pull-right ml-3 no-print">Imprimir</button>
+		<div class="col-sm-12 hidden-print" style="padding-top: 1em;">
+			<button type="button" ng-click="imprimir()" id="imprimir"
+				ng-if="resumoPorData.length > 0"
+				class="btn btn-info pull-right ml-3">Imprimir</button>
 		</div>
 	</div>
 </div>
