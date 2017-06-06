@@ -4,6 +4,19 @@
 			<h4 class="text-center mt-3 mb-3">Lista de Processos</h4>
 		</div>
 
+		<div class="col col-sm-12"
+			ng-show="versionTRF2DownloadChromeExtension == '0'">
+			<p class="alert alert-danger">
+				<strong>Atenção!</strong> Não foi possível detectar a extensão do
+				Chrome que é utilizada para realizar downloads em lote. Ela pode ser
+				instalada acessando a página da <a
+					href="https://chrome.google.com/webstore/detail/trf2-download-manager/komegelldppbjndifhabfpjpddjaocfa"><u>Chrome
+						Web Store</u></a>. Também verifique na Lista de Extensões (Menu/Mais
+				ferramentas/Extensões) se 'TRF2 Download Manager' está presente e
+				ativa.
+			</p>
+		</div>
+
 		<div class="col col-sm-12" ng-show="processos.length == 0">
 			<p class="alert alert-warning">
 				<strong>Atenção!</strong> Nenhum processo na lista.

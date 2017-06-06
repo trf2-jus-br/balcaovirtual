@@ -482,7 +482,13 @@ appCP
 				'ListaProcessosCtrl',
 				function ListaProcessosCtrl($scope, $http, $filter, store,
 						jwtHelper, $timeout, $stateParams, ModalService) {
-					$scope.downloadExtensionId = "fdiondfkoplpepcdeacbfjnjimkehlna";
+					$scope.downloadExtensionId = "komegelldppbjndifhabfpjpddjaocfa";
+					$timeout(
+							function() {
+								$scope.versionTRF2DownloadChromeExtension = document
+										.getElementById("trf2-download-chrome-extension-active").value;
+							}, 100);
+
 					$scope.map = {};
 
 					$scope.outlineAtivo = false;
