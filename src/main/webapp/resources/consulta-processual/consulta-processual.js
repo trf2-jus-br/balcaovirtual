@@ -439,6 +439,12 @@ appCP
 						$scope.timeline = updateTimeline($scope.proc);
 					}
 
+					$scope.contador = function(c) {
+						if (!c || c == 1)
+							return '';
+						return c;
+					}
+
 					$scope.formatDDMMYYYHHMM = function(s) {
 						if (s === undefined)
 							return;

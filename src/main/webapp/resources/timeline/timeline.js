@@ -21,9 +21,7 @@ var updateTimeline = function(processo) {
 		},
 		distribuicao : {},
 		primeirodespacho : {},
-		reu : {},
-		autor : {},
-		orgaoexterno : {},
+		remessacarga : {},
 		perito : {},
 		audiencia : {},
 		conclusao : {},
@@ -38,7 +36,7 @@ var updateTimeline = function(processo) {
 	var movs = processo.movimento;
 	var prev;
 	for (var i = movs.length - 1; i >= 0; i--) {
-		var e;
+		var e = undefined;
 		var m = movs[i];
 		if (!m.movimentoLocal)
 			continue;
@@ -51,17 +49,21 @@ var updateTimeline = function(processo) {
 			} else
 				e = timeline.conclusao;
 		}
-		if (contains(m, "Intimação"))
-			e = timeline.reu;
+		if (contains(m, "Remessa, Carga")) {
+			e = timeline.remessacarga;
+		}
 		if (e) {
 			e.passou = true;
 			if (e.contador)
 				e.contador += 1;
 			else
 				e.contador = 1;
-			if (prev)
+			if (prev) {
 				prev.esta = false;
+				delete prev.complemento;
+			}
 			e.esta = true;
+			e.complemento = m.complemento;
 			prev = e;
 		}
 	}

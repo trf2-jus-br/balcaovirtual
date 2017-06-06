@@ -16,6 +16,12 @@
 	font: 80% verdana, sans-serif;
 }
 
+.textocomplemento {
+	fill: #ddd;
+	font-weight: bold;
+	font: 80% verdana, sans-serif;
+}
+
 .textointerno {
 	fill: #ddd;
 	font-weight: bold;
@@ -28,6 +34,10 @@
 
 .esta CIRCLE {
 	stroke: #f0ad4e !important;
+}
+
+.esta TEXT.textocomplemento {
+	fill: #f0ad4e;
 }
 
 .passou RECT {
