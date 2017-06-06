@@ -10,7 +10,6 @@
 	</div>
 
 	<div ng-if="!errormsg">
-
 		<div class="row xvisible-print-block mt-3 mb-3">
 			<div class="col-md-12">
 				<h4 class="text-center mb-0">
@@ -22,6 +21,8 @@
 				</h4>
 			</div>
 		</div>
+
+		<ng-include src="'resources/timeline/timeline.html'"></ng-include>
 
 		<!-- QUADROS COLORIDOS -->
 		<div class="row hidden-print mt-3" ng-if="errormsg === undefined">

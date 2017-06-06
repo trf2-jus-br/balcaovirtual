@@ -104,6 +104,8 @@ appCP
 																			.fixProc();
 																	$scope
 																			.getDescriptions();
+																	$scope
+																			.updateTimeline();
 
 																} catch (e) {
 																	console
@@ -431,6 +433,10 @@ appCP
 								doc.exibirTexto = f;
 							}
 						}
+					}
+
+					$scope.updateTimeline = function() {
+						$scope.timeline = updateTimeline($scope.proc);
 					}
 
 					$scope.formatDDMMYYYHHMM = function(s) {
