@@ -17,6 +17,7 @@ import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -37,7 +38,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			String a[] = usuariosRestritos.split(",");
 
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
-				throw new PresentableException("Usuário não autorizado."); 
+				throw new PresentableException("Usuário não autorizado.");
 		}
 
 		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
@@ -57,13 +58,17 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		resp.id_token = jwt;
 	}
 
-	public static Map<String, Object> verify(String jwt) throws InvalidKeyException, NoSuchAlgorithmException,
-			IllegalStateException, SignatureException, IOException, JWTVerifyException {
+	public static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
 		if (jwt.startsWith("Bearer "))
 			jwt = jwt.substring(7);
 		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
 		Map<String, Object> map;
-		map = verifier.verify(jwt);
+		try {
+			map = verifier.verify(jwt);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
+				| IOException | JWTVerifyException e) {
+			throw new SwaggerAuthorizationException(e);
+		}
 		return map;
 	}
 
@@ -74,7 +79,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return verify(authorization);
 	}
 
-	public static String assertAuthorization() throws Exception {
+	public static String assertAuthorization() throws SwaggerAuthorizationException {
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
 		if (authorization.startsWith("Bearer "))
 			authorization = authorization.substring(7);

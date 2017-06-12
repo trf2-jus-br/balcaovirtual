@@ -44,7 +44,7 @@ var app = angular.module('app', [ 'sample.peticao-intercorrente',
 app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 		$httpProvider) {
 
-	$urlRouterProvider.otherwise('/consulta-processual');
+	$urlRouterProvider.otherwise('/login');
 
 	jwtInterceptorProvider.tokenGetter = function(store) {
 		return store.get('jwt');
@@ -52,35 +52,82 @@ app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 
 	$httpProvider.interceptors.push('jwtInterceptor');
 
+	$httpProvider.interceptors.push(function($timeout, $q, $injector) {
+		var loginModal, $http, $state;
+
+		// this trick must be done so that we don't receive
+		// `Uncaught Error: [$injector:cdep] Circular dependency found`
+		$timeout(function() {
+			loginModal = $injector.get('loginModal');
+			$http = $injector.get('$http');
+			$state = $injector.get('$state');
+		});
+
+		return {
+			responseError : function(rejection) {
+				if (rejection.status !== 401) {
+					return rejection;
+				}
+
+				var deferred = $q.defer();
+
+				loginModal().then(function() {
+					deferred.resolve($http(rejection.config));
+				}, function() {
+					//$state.go('login');
+					deferred.reject(rejection);
+				});
+
+				return deferred.promise;
+			}
+		};
+	});
+
 	var sugestoesState = {
 		controller : 'ctrlSugerir',
 		name : 'sugestoes',
 		url : '/sugestoes',
-		templateUrl : 'resources/sugestoes.html'
+		templateUrl : 'resources/sugestoes.html',
+		data : {
+			requiresLogin : false
+		}
 	}
 
 	var sobreState = {
 		controller : 'ctrlSobre',
 		name : 'sobre',
 		url : '/sobre',
-		templateUrl : 'resources/sobre.html'
+		templateUrl : 'resources/sobre.html',
+		data : {
+			requiresLogin : false
+		}
 	}
 
 	$stateProvider.state(sugestoesState);
 	$stateProvider.state(sobreState);
 });
 
-app.run(function($rootScope, $state, $timeout, store, jwtHelper) {
-	$rootScope.$on('$stateChangeStart',
-			function(e, to) {
-				if (to.data && to.data.requiresLogin) {
-					if (!store.get('jwt')
-							|| jwtHelper.isTokenExpired(store.get('jwt'))) {
-						e.preventDefault();
-						$state.go('login');
-					}
-				}
-			});
+app.run(function($rootScope, $state, $timeout, store, jwtHelper, $injector,
+		ModalService, loginModal) {
+	$rootScope.$on('$stateChangeStart', function(e, toState, toParams) {
+
+		var logged = store.get('jwt')
+				&& !jwtHelper.isTokenExpired(store.get('jwt'));
+		if (toState.data && toState.data.requiresLogin) {
+			if (!logged) {
+				e.preventDefault();
+				loginModal().then(function() {
+					$state.go(toState.name, toParams);
+				}, function(error) {
+					$state.go('sobre');
+				});
+			}
+		} else if (logged && toState.name == 'login') {
+			e.preventDefault();
+			$state.go('consulta-processual');
+		}
+	});
+
 	$rootScope.updateLogged = function() {
 		var logged = true;
 		var jwt = store.get('jwt');

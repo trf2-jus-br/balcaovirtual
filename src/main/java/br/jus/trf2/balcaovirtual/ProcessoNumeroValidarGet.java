@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
