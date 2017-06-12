@@ -114,6 +114,14 @@ app.controller('routerCtrl', function($rootScope, $scope, $http, $window, $q,
 	$scope.urlBaseAPI = "./api/v1";
 	$scope.init = function() {
 		$scope.promise = [];
+
+		$http({
+			url : $scope.urlBaseAPI + '/test?skip=all',
+		}).then(function(response) {
+			$rootScope.test = response.data;
+		}, function(error) {
+			$scope.message("Erro", error.data.errormsg);
+		});
 	}
 
 	$timeout($scope.init, 10);

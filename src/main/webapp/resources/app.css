@@ -1,3 +1,38 @@
+/**
+ * Demo Styles
+ */
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+body {
+	position: relative;
+	margin: 0;
+	padding-bottom: 6rem;
+	min-height: 100%;
+}
+
+DIV.foot {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+DIV.foot SPAN {
+	font-size: 80%;
+	color: #ccc;
+	border-top: 1px solid #ccc;
+	float: right;
+	margin-right: 0.5em;
+	margin-bottom: 0.3em;
+}
+
 .red {
 	color: red;
 }
