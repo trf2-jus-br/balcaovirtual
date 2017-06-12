@@ -18,6 +18,7 @@ appPI
 				function ConsultarAvisosCtrl($scope, $http, $filter, store,
 						jwtHelper, $timeout, $state, ModalService) {
 					$scope.outlineAtivo = false;
+					$scope.orderByField = 'dataaviso';
 					$scope.gui = {
 						todos : true,
 						filtro : "",

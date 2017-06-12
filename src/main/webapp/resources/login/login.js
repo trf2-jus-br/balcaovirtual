@@ -11,9 +11,7 @@ angular.module('sample.login', [ 'ui.router', 'angular-storage' ]).config(
 			});
 		}).controller('LoginCtrl',
 		function LoginController($rootScope, $scope, $http, store, $state) {
-
 			$scope.user = {};
-
 			$scope.login = function() {
 				$scope.$parent.promise = $http({
 					url : 'api/v1/sessions/create',

@@ -45,7 +45,7 @@
 								ng-click="mostrarPartes()">+{{proc.fixed.partesPassivas.length-1}}</a></b>
 						</p>
 						<a ng-if="!partes" class="card-link pull-right" href=""
-							ng-click="mostrarPartes()">Ver partes...</a>
+							ng-click="mostrarPartes(1)">Ver partes...</a>
 					</div>
 				</div>
 
@@ -109,7 +109,7 @@
 					<div class="card-header">
 						Partes
 						<button type="button" class="close hidden-print"
-							ng-click="partes = false">
+							ng-click="mostrarPartes(0)">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>

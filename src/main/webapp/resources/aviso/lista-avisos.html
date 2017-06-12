@@ -82,26 +82,62 @@
 							type="checkbox" id="progress_checkall" name="progress_checkall"
 							ng-model="gui.todos" ng-change="marcarTodos()" /></th>
 
-						<th>Data do Cadastro</th>
-						<th>Tipo</th>
-						<th>Processo</th>
-						<th>Órgão</th>
-						<th>Unidade</th>
-						<th>Tipo da Unidade</th>
-						<th>Localidade</th>
+						<th><a
+							ng-click="orderByField='dataaviso'; reverseSort = !reverseSort">
+								Data do Cadastro <span ng-show="orderByField == 'dataaviso'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='tipo'; reverseSort = !reverseSort">
+								Tipo <span ng-show="orderByField == 'tipo'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='processoFormatado'; reverseSort = !reverseSort">
+								Processo <span ng-show="orderByField == 'processoFormatado'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='orgao'; reverseSort = !reverseSort">
+								Órgão <span ng-show="orderByField == 'orgao'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='unidade'; reverseSort = !reverseSort">
+								Unidade <span ng-show="orderByField == 'unidade'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='unidadetipo'; reverseSort = !reverseSort">
+								Tipo da Unidade <span ng-show="orderByField == 'unidadetipo'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
+						<th><a
+							ng-click="orderByField='localidade'; reverseSort = !reverseSort">
+								Localidade <span ng-show="orderByField == 'localidade'"><span
+									ng-show="!reverseSort">&#8679;</span><span
+									ng-show="reverseSort">&#8681;</span></span>
+						</a></th>
 						<th>Status</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr
-						ng-repeat="r in avisos | filter: gui.filtroOutline() | filter: gui.filtro">
+						ng-repeat="r in avisos | filter: gui.filtroOutline() | filter: gui.filtro | orderBy:orderByField:reverseSort">
 						<td class="hidden-print" style="text-align: center"><input
 							type="checkbox" value="true" ng-model="r.checked"
 							ng-disabled="r.disabled" class="chk-assinar" /></td>
 						<td><span ng-bind-html="r.dataavisoFormatada"></span></td>
 						<td>{{r.tipo}}</td>
-						<td><a ui-sref="processo({numero: r.processo})">{{r.processoFormatado}}</a></td>
+						<td><a ui-sref="processo({numero: r.processo})"
+							target="_blank">{{r.processoFormatado}}</a></td>
 						<td>{{r.orgao}}</td>
 						<td title="{{::r.unidadenome}}">{{r.unidade}}</td>
 						<td>{{r.unidadetipo}}</td>

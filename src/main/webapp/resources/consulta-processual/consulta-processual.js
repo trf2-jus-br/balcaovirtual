@@ -238,6 +238,16 @@ appCP
 							p.fixed.movdoc = [];
 							for (var j = 0; j < p.movimento.length; j++) {
 								var mov = p.movimento[j];
+								if (mov.complemento && mov.movimentoLocal
+										&& mov.movimentoLocal.descricao)
+									for (var k = 0; k < mov.complemento.length; k++)
+										if (mov.movimentoLocal.descricao != mov.complemento[k])
+											if (mov.complemento[k]
+													.indexOf(mov.movimentoLocal.descricao) == 0)
+												mov.movimentoLocal.descricao = mov.complemento[k];
+											else
+												mov.movimentoLocal.descricao += ' - '
+														+ mov.complemento[k];
 								p.fixed.movdoc.push({
 									teste : true,
 									dataHora : mov.dataHora,
@@ -369,8 +379,9 @@ appCP
 						return a.join(', ');
 					}
 
-					$scope.mostrarPartes = function() {
-						$scope.partes = true;
+					$scope.mostrarPartes = function(f) {
+						if (f !== undefined)
+							$scope.partes = f;
 					}
 
 					$scope.mostrarDadosComplementares = function() {

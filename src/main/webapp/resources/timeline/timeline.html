@@ -1,7 +1,133 @@
 <div class="row" style="margin-top: -1em; margin-bottom: -1em;">
-	<div class="col col-md-12">
-		<svg width="100%" height="100%" viewBox="0 0 800 300">
+	<div class="col offset-md-1 col-md-10">
+		<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+			viewBox="0 0 800 300">
+			<g transform="translate(50, 0)">
+				<!-- Parte superior -->
+				<g id="remessacarga" transform="translate(162, 75)"
+				ng-class="{'passou': timeline.remessacarga.passou, 'esta' : timeline.remessacarga.esta}">
+					<text x="-25" y="-10" class="textocomplemento" text-anchor="end"
+				alignment-baseline="middle">{{timeline.remessacarga.complemento[0]}}</text>
+					<text x="-25" y="+10" class="textocomplemento" text-anchor="end"
+				alignment-baseline="middle">{{timeline.remessacarga.complemento[1]}}</text>
+				
+					<rect transform=rotate(60) " x="20" y="-5" width="65" height="10"
+				class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.remessacarga.contador)}}</text>
+					<text y="-40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Intimação/Cit.</text>
+				</g>
+
+				<g id="audiencia" transform="translate(262, 75)"
+				ng-class="{'passou': timeline.audiencia.passou, 'esta' : timeline.audiencia.esta}">
+					<rect transform=rotate(60) " x="20" y="-5" width="65" height="10"
+				class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.audiencia.contador)}}</text>
+			
+					<text y="-40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Audiência</text>
+				</g>
+
+				<g id="suspensao" transform="translate(438, 75)"
+				ng-class="{'passou': timeline.suspensao.passou, 'esta' : timeline.suspensao.esta}">
+					<rect transform=rotate(120) " x="20" y="-5" width="65" height="10"
+				class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.suspensao.contador)}}</text>
+			
+					<text y="-40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Suspensão</text>
+				</g>
+
+				<g id="apelacao" transform="translate(538, 75)"
+				ng-class="{'passou': timeline.apelacao.passou, 'esta' : timeline.apelacao.esta}">
+					<rect transform=rotate(120) " x="20" y="-5" width="65" height="10"
+				class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.apelacao.contador)}}</text>
+			
+					<text y="-40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Apelação</text>
+				</g>
+			
+				<!-- Parte inferior -->
+				<g id="perito" transform="translate(212, 225)"
+				ng-class="{'passou': timeline.perito.passou, 'esta' : timeline.perito.esta}">
+					<rect transform=rotate(-60) " x="20" y="-5" width="65" height="10"
+				class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.perito.contador)}}</text>
+			
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Perito</text>
+				</g>
+				
+				
+				<!-- Segunda metade -->
+				<g id="arquivamento" transform="translate(650, 150)"
+				ng-class="{'passou': timeline.arquivamento.passou, 'esta' : timeline.arquivamento.esta}">
+					<rect x="-80" y="-5" width="60" height="10" class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.arquivamento.contador)}}</text>
+			
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Arquivamento</text>
+				</g>
+
+				<g id="baixa" transform="translate(550, 150)"
+				ng-class="{'passou': timeline.baixa.passou, 'esta' : timeline.baixa.esta}">
+					<rect x="-80" y="-5" width="60" height="10" class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.baixa.contador)}}</text>
+			
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Baixa</text>
+				</g>
+				
+				<g id="sentenca" transform="translate(450, 150)"
+				ng-class="{'passou': timeline.sentenca.passou, 'esta' : timeline.sentenca.esta}">
+					<rect x="-80" y="-5" width="60" height="10" class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.sentenca.contador)}}</text>
+			
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Sentença</text>
+				</g>
+				
+				<g id="conclusao" transform="translate(350, 150)"
+				ng-class="{'passou': timeline.conclusao.passou, 'esta' : timeline.conclusao.esta}">
+					<rect x="-180" y="-5" width="160" height="10" class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.conclusao.contador)}}</text>
+			
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Conclusão</text>
+				</g>
+			
+
 				<!-- Primeira metade -->
+			
+				<g id="distribuicao" transform="translate(150, 150)"
+				ng-class="{'passou': timeline.distribuicao.passou, 'esta' : timeline.distribuicao.esta}">
+					<rect x="-80" y="-5" width="60" height="10" class="linha" />
+					<circle r="20" class="bola" />
+					<text class="textointerno" text-anchor="middle"
+				alignment-baseline="central">{{contador(timeline.distribuicao.contador)}}</text>
+					<text y="40" class="texto" text-anchor="middle"
+				alignment-baseline="middle">Ditribuição</text>
+				</g>
+
 				<g id="autuacao" transform="translate(50, 150)"
 				ng-class="{'passou': timeline.autuacao.passou, 'esta' : timeline.autuacao.esta}">
 					<circle r="20" class="bola" />
@@ -10,134 +136,25 @@
 					<text y="40" class="texto" text-anchor="middle"
 				alignment-baseline="middle">Autuação</text>
 				</g>
-				<g id="distribuicao" transform="translate(150, 150)"
-				ng-class="{'passou': timeline.distribuicao.passou, 'esta' : timeline.distribuicao.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.distribuicao.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Ditribuição</text>
-					<rect x="-75" y="-5" width="50" height="10" class="linha" />
-				</g>
-				<g id="primeirodespacho" transform="translate(250, 150)"
-				ng-class="{'passou': timeline.primeirodespacho.passou, 'esta' : timeline.primeirodespacho.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.primeirodespacho.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">1&ordm;
-						Despacho
-					</text>
-					<rect x="-75" y="-5" width="50" height="10" class="linha" />
-				</g>
-			
-				<!-- Parte superior -->
-				<g id="remessacarga" transform="translate(262, 75)"
-				ng-class="{'passou': timeline.remessacarga.passou, 'esta' : timeline.remessacarga.esta}">
-					<text x="-25" y="-10" class="textocomplemento" text-anchor="end"
-				alignment-baseline="middle">{{timeline.remessacarga.complemento[0]}}</text>
-					<text x="-25" y="+10" class="textocomplemento" text-anchor="end"
-				alignment-baseline="middle">{{timeline.remessacarga.complemento[1]}}</text>
-				
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.remessacarga.contador)}}</text>
-			
-					<text y="-40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Int./Citação</text>
-					<rect transform=rotate(60) " x="25" y="-5" width="60" height="10"
-				class="linha" />
-				</g>
-				<g id="audiencia" transform="translate(362, 75)"
-				ng-class="{'passou': timeline.audiencia.passou, 'esta' : timeline.audiencia.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.audiencia.contador)}}</text>
-			
-					<text y="-40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Audiência</text>
-					<rect transform=rotate(60) " x="25" y="-5" width="60" height="10"
-				class="linha" />
-				</g>
-				<g id="suspensao" transform="translate(638, 75)"
-				ng-class="{'passou': timeline.suspensao.passou, 'esta' : timeline.suspensao.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.suspensao.contador)}}</text>
-			
-					<text y="-40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Suspensão</text>
-					<rect transform=rotate(120) " x="25" y="-5" width="60" height="10"
-				class="linha" />
-				</g>
-				<g id="apelacao" transform="translate(738, 75)"
-				ng-class="{'passou': timeline.apelacao.passou, 'esta' : timeline.apelacao.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.apelacao.contador)}}</text>
-			
-					<text y="-40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Apelação</text>
-					<rect transform=rotate(120) " x="25" y="-5" width="60" height="10"
-				class="linha" />
-				</g>
-			
-				<!-- Parte inferior -->
-				<g id="perito" transform="translate(312, 225)"
-				ng-class="{'passou': timeline.perito.passou, 'esta' : timeline.perito.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.perito.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Perito</text>
-					<rect transform=rotate(-60) " x="25" y="-5" width="60" height="10"
-				class="linha" />
-				</g>
-			
-				<!-- Segunda metade -->
-				<g id="conclusao" transform="translate(450, 150)"
-				ng-class="{'passou': timeline.conclusao.passou, 'esta' : timeline.conclusao.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.conclusao.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Conclusão</text>
-					<rect x="-175" y="-5" width="150" height="10" class="linha" />
-				</g>
-				<g id="sentenca" transform="translate(550, 150)"
-				ng-class="{'passou': timeline.sentenca.passou, 'esta' : timeline.sentenca.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.sentenca.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Sentença</text>
-					<rect x="-75" y="-5" width="50" height="10" class="linha" />
-				</g>
-				<g id="baixa" transform="translate(650, 150)"
-				ng-class="{'passou': timeline.baixa.passou, 'esta' : timeline.baixa.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.baixa.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Baixa</text>
-					<rect x="-75" y="-5" width="50" height="10" class="linha" />
-				</g>
-				<g id="arquivamento" transform="translate(750, 150)"
-				ng-class="{'passou': timeline.arquivamento.passou, 'esta' : timeline.arquivamento.esta}">
-					<circle r="20" class="bola" />
-					<text class="textointerno" text-anchor="middle"
-				alignment-baseline="central">{{contador(timeline.arquivamento.contador)}}</text>
-			
-					<text y="40" class="texto" text-anchor="middle"
-				alignment-baseline="middle">Arquivamento</text>
-					<rect x="-75" y="-5" width="50" height="10" class="linha" />
-				</g>
+			</g>
 			</svg>
+	</div>
+	<div class="col" ng-hide="hiddenAlert.timeline">
+		<p class="alert alert-warning alert-dismissible fade show"
+			role="alert">
+			<button type="button" ng-click="hideAlert('timeline')" class="close"
+				data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong>Timeline Processual</strong> é um diagrama que resume as
+			ocorrências observadas em um processo judicial. Situações que ainda
+			não ocorreram permanecem em cinza. Eventos detectados no histórico de
+			movimentos são apresentados como círculos pretos e o caminho até eles
+			é marcado de azul. Quando um mesmo evento ocorre mais de uma vez, o
+			número total de ocorrências é apresentado dentro do respectivo
+			círculo. O último evento detectado é marcado com um círculo laranja e
+			ao seu lado podem ser apresentados alguns detalhes referentes,
+			apenas, a esta última ocorrência.
+		</p>
 	</div>
 </div>

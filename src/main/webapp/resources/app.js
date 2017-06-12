@@ -70,7 +70,7 @@ app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 	$stateProvider.state(sobreState);
 });
 
-app.run(function($rootScope, $state, store, jwtHelper) {
+app.run(function($rootScope, $state, $timeout, store, jwtHelper) {
 	$rootScope.$on('$stateChangeStart',
 			function(e, to) {
 				if (to.data && to.data.requiresLogin) {
@@ -94,14 +94,24 @@ app.run(function($rootScope, $state, store, jwtHelper) {
 		$rootScope.logged = logged;
 	}
 	$rootScope.updateLogged();
+
+	$rootScope.hiddenAlert = {
+		timeline : store.get('alert-timeline') == 'hide'
+	}
+
+	$rootScope.hideAlert = function(id) {
+		store.set('alert-' + id, 'hide');
+		$timeout(function() {
+			$rootScope.hiddenAlert[id] = true;
+		}, 1000);
+	}
 });
 
 app.controller('routerCtrl', function($rootScope, $scope, $http, $window, $q,
-		$location, $timeout) {
+		$location, $timeout, store) {
 	$scope.promise = [];
 
 	$scope.urlBaseAPI = "./api/v1";
-
 	$scope.init = function() {
 		$scope.promise = [];
 	}

@@ -46,6 +46,8 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPost
 public class SoapMNI {
 	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+	private static final DateTimeFormatter dtfAPOLO = DateTimeFormat.forPattern("yyyyMMddHHmm");
+	private static final DateTimeFormatter dtfFILE = DateTimeFormat.forPattern("yyyy-MM-dd-HH-mm");
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
 
 	private static class ConsultaProcessualExclStrat implements ExclusionStrategy {
@@ -180,6 +182,18 @@ public class SoapMNI {
 
 	public static void consultarTeorComunicacao(String idConsultante, String numProc, String idAviso, String orgao,
 			ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
+		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		String email = (String) jwt.get("email");
+		String nome = (String) jwt.get("name");
+		String usuario = (String) jwt.get("username");
+
+		String numProcFormated = numProc;
+		try {
+			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",
+					"$1-$2.$3.$4.$5.$6$7");
+		} catch (Exception ex) {
+		}
+
 		String system = orgao.toLowerCase();
 		URL url = new URL(Utils.getMniWsdlUrl(system));
 		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
@@ -188,9 +202,8 @@ public class SoapMNI {
 		Holder<String> mensagem = new Holder<>();
 		Holder<List<TipoComunicacaoProcessual>> comunicacao = new Holder<>();
 
-		client.consultarTeorComunicacao(idConsultante, idAviso, numProc, null, sucesso, mensagem, comunicacao);
+		client.consultarTeorComunicacao(idConsultante, idAviso, null, null, sucesso, mensagem, comunicacao);
 		if (!sucesso.value)
-
 			throw new Exception(mensagem.value);
 
 		if (comunicacao.value.size() != 1)
@@ -205,12 +218,46 @@ public class SoapMNI {
 			case "CIT":
 				resp.tipo = "Citação";
 				break;
+			default:
+				resp.tipo = "Aviso";
 			}
 		resp.processo = numProc;
 		resp.dataaviso = c.getDataReferencia();
 		resp.idaviso = idAviso;
 		resp.orgao = orgao;
 		resp.teor = c.getTeor();
+
+		byte[] pdf = null;
+		if (c.getDocumento() != null && c.getDocumento().size() > 0)
+			pdf = c.getDocumento().get(0).getConteudo();
+
+		DateTime dt = DateTime.parse(c.getDataReferencia(), dtfAPOLO);
+
+		boolean sent = false;
+		boolean sigilo = c.getNivelSigilo() != null ? c.getNivelSigilo() != 0 : true;
+		if (email != null) {
+			email = "renato.crivano@gmail.com";
+			try {
+				String assunto = "Balcão Virtual: Confirmação de " + resp.tipo;
+				String conteudo = "Prezado(a) " + nome + ",\n\nAcusamos a confirmação de " + resp.tipo.toLowerCase()
+						+ " conforme dados abaixo:" + "\n\nProcesso Número: " + numProcFormated.replace("/", "")
+						+ "\nData/Hora de Término do Prazo: " + dt.toString(dtfBR) + "\nSigilo: "
+						+ (sigilo ? "Sim" : "Não") + "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
+				String nomeArquivo = numProcFormated + "-" + Utils.removeAcento(resp.tipo).toLowerCase() + "-"
+						+ dt.toString(dtfFILE) + ".pdf";
+				if (sigilo)
+					Correio.enviar(email, assunto, conteudo, null, null, null);
+				else
+					Correio.enviar(email, assunto, conteudo, nomeArquivo, "application/pdf", pdf);
+				sent = true;
+			} catch (Exception ex) {
+				log.error("Email não enviado", ex);
+			}
+		}
+
+		log.warn("*** Processo: " + numProcFormated + " Aviso confirmado: " + resp.idaviso + " Por: " + usuario
+				+ " Email: " + email + (sent ? "" : " (email não enviado)"));
+
 	}
 
 	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,

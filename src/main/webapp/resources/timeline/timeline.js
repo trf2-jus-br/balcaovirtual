@@ -11,7 +11,7 @@ angular.module('sample.timeline', [ 'ui.router', 'angular-storage' ]).config(
 		});
 
 var updateTimeline = function(processo) {
-	var contains = function(m, descr) {
+	var startsWith = function(m, descr) {
 		return m.movimentoLocal.descricao.indexOf(descr) == 0;
 	}
 
@@ -32,7 +32,6 @@ var updateTimeline = function(processo) {
 		arquivamento : {},
 	};
 
-	var primeirodespacho = false;
 	var movs = processo.movimento;
 	var prev;
 	for (var i = movs.length - 1; i >= 0; i--) {
@@ -40,18 +39,22 @@ var updateTimeline = function(processo) {
 		var m = movs[i];
 		if (!m.movimentoLocal)
 			continue;
-		if (contains(m, "Distribuição"))
+		if (startsWith(m, "Distribuição") || startsWith(m, 'ART 286 (antigo 253) Distribuição por Dependência') || startsWith(m, 'Redistribuição'))
 			e = timeline.distribuicao;
-		if (contains(m, "Conclusão")) {
-			if (!primeirodespacho) {
-				e = timeline.primeirodespacho;
-				primeirodespacho = true;
-			} else
+		if (startsWith(m, "Conclusão")) {
+			if (m.complemento[0] == 'Despacho' || m.complemento[0] == 'Decisão') {
 				e = timeline.conclusao;
+			} else if (m.complemento[0] == 'Sentença')
+				e = timeline.sentenca;
 		}
-		if (contains(m, "Remessa, Carga")) {
+		if (startsWith(m, "Remessa, Carga"))
 			e = timeline.remessacarga;
-		}
+		if (startsWith(m, "Suspensão"))
+			e = timeline.suspensao;
+		if (startsWith(m, "Audiência"))
+			e = timeline.audiencia;
+		if (startsWith(m, "Baixa"))
+			e = timeline.baixa;
 		if (e) {
 			e.passou = true;
 			if (e.contador)
