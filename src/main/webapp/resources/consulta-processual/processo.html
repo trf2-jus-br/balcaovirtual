@@ -192,8 +192,8 @@
 			</div>
 		</div>
 
-		<div
-			ng-class="{row: true, 'visible-print-block': !dadosComplementares}">
+		<div ng-show="dadosComplementares"
+			ng-class="{row: true, 'xvisible-print-block': !dadosComplementares}">
 			<div class="col col-sm-12">
 				<div class="card mb-3 card-outline-warning">
 					<div class="card-header">
@@ -248,16 +248,18 @@
 								<p
 									ng-bind-html="proc.dadosBasicos.outroParametro.processoVinculado"></p>
 							</div>
-
+						</div>
+						<div class="row">
 							<div class="col col-sm-12">
 								<label>Classe Processual</label>
 								<p>{{proc.fixed.classeProcessualDescricaoCompleta}}</p>
 							</div>
+						</div>
+						<div class="row">
 							<div class="col col-sm-12">
 								<label>Assuntos</label>
 								<p ng-repeat="ass in proc.dadosBasicos.assunto">{{ass.descricaoCompleta}}</p>
 							</div>
-
 						</div>
 					</div>
 				</div>

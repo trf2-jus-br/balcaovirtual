@@ -39,10 +39,18 @@
 var app = angular.module('app', [ 'sample.peticao-intercorrente',
 		'sample.aviso', 'sample.consulta-processual', 'sample.login',
 		'sample.signup', 'angularModalService', 'ngAnimate', 'cgBusy',
-		'angular-jwt', 'angular-storage', 'ngFileUpload' ]);
+		'angular-jwt', 'angular-storage', 'ngFileUpload', 'ui.router.title' ]);
 
-app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
-		$httpProvider) {
+app.config(function($titleProvider, $stateProvider, $urlRouterProvider,
+		jwtInterceptorProvider, $httpProvider) {
+
+	$titleProvider.documentTitle(function($rootScope) {
+		if ($rootScope.$title && $rootScope.$title.indexOf
+				&& $rootScope.$title.indexOf("Processo ") == 0)
+			return $rootScope.$title;
+		return $rootScope.$title ? $rootScope.$title + " - Balcão Virtual"
+				: "Balcão Virtual";
+	});
 
 	$urlRouterProvider.otherwise('/login');
 
@@ -74,7 +82,7 @@ app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 				loginModal().then(function() {
 					deferred.resolve($http(rejection.config));
 				}, function() {
-					//$state.go('login');
+					// $state.go('login');
 					deferred.reject(rejection);
 				});
 
@@ -90,6 +98,11 @@ app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 		templateUrl : 'resources/sugestoes.html',
 		data : {
 			requiresLogin : false
+		},
+		resolve : {
+			$title : function() {
+				return 'Sugestões';
+			}
 		}
 	}
 
@@ -100,6 +113,11 @@ app.config(function($stateProvider, $urlRouterProvider, jwtInterceptorProvider,
 		templateUrl : 'resources/sobre.html',
 		data : {
 			requiresLogin : false
+		},
+		resolve : {
+			$title : function() {
+				return 'Sobre';
+			}
 		}
 	}
 

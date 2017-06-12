@@ -245,10 +245,11 @@ public class SoapMNI {
 						+ (sigilo ? "Sim" : "Não") + "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
 				String nomeArquivo = numProcFormated + "-" + Utils.removeAcento(resp.tipo).toLowerCase() + "-"
 						+ dt.toString(dtfFILE) + ".pdf";
-				if (sigilo)
-					Correio.enviar(email, assunto, conteudo, null, null, null);
-				else
-					Correio.enviar(email, assunto, conteudo, nomeArquivo, "application/pdf", pdf);
+				// if (sigilo)
+				Correio.enviar(email, assunto, conteudo, null, null, null);
+				// else
+				// Correio.enviar(email, assunto, conteudo, nomeArquivo,
+				// "application/pdf", pdf);
 				sent = true;
 			} catch (Exception ex) {
 				log.error("Email não enviado", ex);

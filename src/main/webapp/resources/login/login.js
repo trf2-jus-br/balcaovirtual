@@ -5,11 +5,21 @@ appLogin.config(function($stateProvider) {
 	$stateProvider.state('login', {
 		url : '/login',
 		controller : 'LoginCtrl',
-		templateUrl : 'resources/login/login.html'
+		templateUrl : 'resources/login/login.html',
+		resolve : {
+			$title : function() {
+				return 'Login';
+			}
+		}
 	});
 	$stateProvider.state('logout', {
 		url : '/logout',
-		controller : 'LogoutCtrl'
+		controller : 'LogoutCtrl',
+		resolve : {
+			$title : function() {
+				return 'Logout';
+			}
+		}
 	});
 });
 

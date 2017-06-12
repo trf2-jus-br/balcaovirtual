@@ -12,6 +12,11 @@ appPI
 								templateUrl : 'resources/peticao-intercorrente/peticao-intercorrente.html',
 								data : {
 									requiresLogin : true
+								},
+								resolve : {
+									$title : function() {
+										return 'Petições Intercorrentes';
+									}
 								}
 							});
 		});

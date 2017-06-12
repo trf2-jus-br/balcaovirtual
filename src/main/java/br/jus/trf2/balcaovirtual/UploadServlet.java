@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
 import com.auth0.jwt.JWTVerifyException;
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class UploadServlet extends HttpServlet {
@@ -35,8 +36,7 @@ public class UploadServlet extends HttpServlet {
 
 		try {
 			SessionsCreatePost.verify(request.getHeader("Authorization"));
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
-				| JWTVerifyException e) {
+		} catch (SwaggerAuthorizationException e) {
 			throw new ServletException("Falha de autenticação", e);
 		}
 		// Check that we have a file upload request

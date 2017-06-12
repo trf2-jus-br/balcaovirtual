@@ -9,6 +9,11 @@ appCP.config(function($stateProvider) {
 		templateUrl : 'resources/consulta-processual/consulta-processual.html',
 		data : {
 			requiresLogin : true
+		},
+		resolve : {
+			$title : function() {
+				return 'Consulta Processual';
+			}
 		}
 	});
 	$stateProvider.state('processo', {
@@ -17,6 +22,11 @@ appCP.config(function($stateProvider) {
 		templateUrl : 'resources/consulta-processual/processo.html',
 		data : {
 			requiresLogin : true
+		},
+		resolve : {
+			$title : function($stateParams) {
+				return 'Processo ' + formatarProcesso($stateParams.numero);
+			}
 		}
 	});
 	$stateProvider.state('lista-processos', {
@@ -28,6 +38,11 @@ appCP.config(function($stateProvider) {
 		},
 		data : {
 			requiresLogin : true
+		},
+		resolve : {
+			$title : function() {
+				return 'Lista de Processos';
+			}
 		}
 	});
 });
