@@ -1,6 +1,17 @@
 /**
  * Demo Styles
  */
+.highlight {
+	background-color: #FFFF00 !important;
+}
+
+.highlightable {
+	transition-property: background-color;
+	transition-duration: 1s;
+	transition-timing-function: easy-out;
+	transition-delay: 0s;
+}
+
 html {
 	height: 100%;
 	box-sizing: border-box;

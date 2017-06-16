@@ -46,7 +46,7 @@ appLogin.controller('LogoutCtrl', function LoginController($rootScope, $scope,
 		$http, store, $state) {
 	store.remove('jwt');
 	$rootScope.updateLogged();
-	$state.go('sobre');
+	$state.go('login');
 });
 
 appLogin.service('loginModal', function($q, $rootScope, ModalService) {

@@ -36,6 +36,7 @@
 
 .esta CIRCLE {
 	stroke: #f0ad4e !important;
+	/* fill: rgba(240, 173, 78, 20) !important; */
 }
 
 .esta TEXT.textocomplemento {

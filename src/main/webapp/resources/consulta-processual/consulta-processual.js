@@ -81,8 +81,8 @@ appCP
 		.controller(
 				'ProcessoCtrl',
 				function ConsultaProcessualCtrl($scope, $http, store,
-						jwtHelper, Upload, $timeout, ModalService,
-						$stateParams, $window) {
+						jwtHelper, Upload, $timeout, ModalService, $location,
+						$anchorScroll, $stateParams, $window) {
 					$scope.numero = $stateParams.numero;
 					$scope.partes = false;
 					$scope.dadosComplementares = false;
@@ -399,8 +399,9 @@ appCP
 							$scope.partes = f;
 					}
 
-					$scope.mostrarDadosComplementares = function() {
-						$scope.dadosComplementares = true;
+					$scope.mostrarDadosComplementares = function(f) {
+						if (f !== undefined)
+							$scope.dadosComplementares = f;
 					}
 
 					$scope.mostrarPeca = function(idDocumento) {
@@ -459,6 +460,16 @@ appCP
 								doc.exibirTexto = f;
 							}
 						}
+					}
+
+					$scope.mostrarMovimentacao = function(dataHora) {
+						var id = 'mov' + dataHora;
+						$location.hash(id);
+						$anchorScroll();
+						angular.element('#' + id).addClass("highlight");
+						$timeout(function() {
+							angular.element('#' + id).removeClass("highlight");
+						}, 3000);
 					}
 
 					$scope.updateTimeline = function() {

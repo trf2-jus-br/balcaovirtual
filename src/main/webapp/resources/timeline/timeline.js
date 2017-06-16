@@ -39,7 +39,10 @@ var updateTimeline = function(processo) {
 		var m = movs[i];
 		if (!m.movimentoLocal)
 			continue;
-		if (startsWith(m, "Distribuição") || startsWith(m, 'ART 286 (antigo 253) Distribuição por Dependência') || startsWith(m, 'Redistribuição'))
+		if (startsWith(m, "Distribuição")
+				|| startsWith(m,
+						'ART 286 (antigo 253) Distribuição por Dependência')
+				|| startsWith(m, 'Redistribuição'))
 			e = timeline.distribuicao;
 		if (startsWith(m, "Conclusão")) {
 			if (m.complemento[0] == 'Despacho' || m.complemento[0] == 'Decisão') {
@@ -66,7 +69,14 @@ var updateTimeline = function(processo) {
 				delete prev.complemento;
 			}
 			e.esta = true;
-			e.complemento = m.complemento;
+			e.dataHora = m.dataHora;
+			if (m.complemento) {
+				e.complemento = [];
+				if (m.complemento && m.complemento.length > 0)
+					e.complemento[0] = m.complemento[0].trunc(30, true);
+				if (m.complemento && m.complemento.length > 1)
+					e.complemento[1] = m.complemento[1].trunc(30, true);
+			}
 			prev = e;
 		}
 	}

@@ -30,7 +30,7 @@
 			<div class="card-deck col">
 				<div
 					class="card card-inverse card-primary card-consulta-processual mb-3">
-					<div class="card-block" ng-click="mostrarPartes()">
+					<div class="card-block">
 						<i class="icon icon-users hidden-print"></i>
 						<p class="card-text">
 							<small>{{proc.fixed.partesAtivas[0].tipoAtuacao}}</small> <br />
@@ -42,7 +42,7 @@
 							<small>{{proc.fixed.partesPassivas[0].tipoAtuacao}}</small> <br />
 							<b>{{proc.fixed.partesPassivas[0].pessoa.nome}}</b><b
 								ng-if="proc.fixed.partesPassivas.length>1">&nbsp;<a href=""
-								ng-click="mostrarPartes()">+{{proc.fixed.partesPassivas.length-1}}</a></b>
+								ng-click="mostrarPartes(1)">+{{proc.fixed.partesPassivas.length-1}}</a></b>
 						</p>
 						<a ng-if="!partes" class="card-link pull-right" href=""
 							ng-click="mostrarPartes(1)">Ver partes...</a>
@@ -79,7 +79,7 @@
 
 				<div
 					class="card card-inverse card-warning card-consulta-processual mb-3">
-					<div class="card-block" ng-click="mostrarDadosComplementares()">
+					<div class="card-block">
 						<i class="icon icon-monitor hidden-print"></i>
 						<p class="card-text">
 							<small>VALOR DA CAUSA</small><br /> <b>{{proc.fixed.valorCausa}}</b>
@@ -97,7 +97,7 @@
 								href="">+{{proc.dadosBasicos.outroParametro.numCDA.length-1}}</a></b>
 						</p>
 						<a ng-if="!dadosComplementares" class="card-link pull-right"
-							href="" ng-click="mostrarDadosComplementares()">Ver mais...</a>
+							href="" ng-click="mostrarDadosComplementares(1)">Ver mais...</a>
 					</div>
 				</div>
 			</div>
@@ -199,7 +199,7 @@
 					<div class="card-header">
 						Dados Complementares
 						<button type="button" class="close hidden-print"
-							ng-click="dadosComplementares = false">
+							ng-click="mostrarDadosComplementares(0)">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -280,7 +280,8 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat-start="movdoc in proc.fixed.movdoc"
-							ng-class="{odd: movdoc.odd}">
+							ng-class="{odd: movdoc.odd, highlightable: true}"
+							id="mov{{movdoc.mov.dataHora}}">
 							<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"><span
 								ng-bind-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span></td>
 							<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"

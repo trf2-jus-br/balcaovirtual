@@ -73,11 +73,12 @@ app.config(function($titleProvider, $stateProvider, $urlRouterProvider,
 
 		return {
 			responseError : function(rejection) {
-				if (rejection.status !== 401) {
-					return rejection;
-				}
-
 				var deferred = $q.defer();
+
+				if (rejection.status !== 401) {
+					deferred.reject(rejection);
+					return deferred.promise;
+				}
 
 				loginModal().then(function() {
 					deferred.resolve($http(rejection.config));
