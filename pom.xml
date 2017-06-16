@@ -5,7 +5,7 @@
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaovirtual</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>Balcão Virtual Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 

@@ -25,6 +25,7 @@
 }
 
 .textointerno {
+	pointer-events: none;
 	fill: #ccc;
 	font-weight: bold;
 	/* font: 100% verdana, sans-serif; */

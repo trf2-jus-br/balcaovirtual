@@ -10,9 +10,13 @@ angular.module('sample.timeline', [ 'ui.router', 'angular-storage' ]).config(
 
 		});
 
-var updateTimeline = function(processo) {
+var updateTimeline = function(orgao, processo) {
 	var startsWith = function(m, descr) {
 		return m.movimentoLocal.descricao.indexOf(descr) == 0;
+	}
+
+	var contains = function(m, a) {
+		return a.indexOf(m.movimentoLocal.codigoMovimento) !== -1;
 	}
 
 	var timeline = {
@@ -21,16 +25,26 @@ var updateTimeline = function(processo) {
 		},
 		distribuicao : {},
 		primeirodespacho : {},
-		remessacarga : {},
-		perito : {},
+		intimacao : {},
+		remessa : {},
+		devolucao : {},
+		juntada : {},
 		audiencia : {},
 		conclusao : {},
-		sentenca : {},
+		sentenca : {
+			texto : orgao == 'TRF2' ? 'Inteiro Teor' : 'Sentença'
+		},
 		suspensao : {},
-		apelacao : {},
+		apelacao : {
+			texto : orgao == 'TRF2' ? undefined : 'TRF2'
+		},
 		baixa : {},
 		arquivamento : {},
 	};
+
+	var map = {
+
+	}
 
 	var movs = processo.movimento;
 	var prev;
@@ -39,24 +53,35 @@ var updateTimeline = function(processo) {
 		var m = movs[i];
 		if (!m.movimentoLocal)
 			continue;
-		if (startsWith(m, "Distribuição")
-				|| startsWith(m,
-						'ART 286 (antigo 253) Distribuição por Dependência')
-				|| startsWith(m, 'Redistribuição'))
+		if (contains(m, [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 60, 61, 62, 63, 80,
+				81, 83 ]))
 			e = timeline.distribuicao;
-		if (startsWith(m, "Conclusão")) {
+		if (contains(m, [ 11, 76 ])) {
 			if (m.complemento[0] == 'Despacho' || m.complemento[0] == 'Decisão') {
 				e = timeline.conclusao;
 			} else if (m.complemento[0] == 'Sentença')
 				e = timeline.sentenca;
 		}
-		if (startsWith(m, "Remessa, Carga"))
-			e = timeline.remessacarga;
-		if (startsWith(m, "Suspensão"))
+		if (contains(m, [ 78 ])) // Inteiro Teor
+			e = timeline.sentenca;
+		if (contains(m, [ 12 ]))
+			e = timeline.intimacao;
+		if (contains(m, [ 14 ])) {
+			if (m.complemento && m.complemento[0] == 'TRF - 2ª Região')
+				e = timeline.apelacao;
+			else
+				e = timeline.remessa;
+		}
+
+		if (contains(m, [ 15 ]))
+			e = timeline.devolucao;
+		if (contains(m, [ 27 ]))
+			e = timeline.juntada;
+		if (contains(m, [ 101 ]))
 			e = timeline.suspensao;
-		if (startsWith(m, "Audiência"))
+		if (contains(m, [ 19 ]))
 			e = timeline.audiencia;
-		if (startsWith(m, "Baixa"))
+		if (contains(m, [ 26 ]))
 			e = timeline.baixa;
 		if (e) {
 			e.passou = true;
@@ -66,7 +91,7 @@ var updateTimeline = function(processo) {
 				e.contador = 1;
 			if (prev) {
 				prev.esta = false;
-				delete prev.complemento;
+				// delete prev.complemento;
 			}
 			e.esta = true;
 			e.dataHora = m.dataHora;
@@ -76,9 +101,19 @@ var updateTimeline = function(processo) {
 					e.complemento[0] = m.complemento[0].trunc(30, true);
 				if (m.complemento && m.complemento.length > 1)
 					e.complemento[1] = m.complemento[1].trunc(30, true);
+				if (m.complemento && m.complemento.length > 1
+						&& e.complemento[1] == "Registro no Sistema")
+					delete e.complemento[1];
 			}
 			prev = e;
 		}
+		if (e === timeline.conclusao || e === timeline.sentenca
+				|| e === timeline.apelacao || e === timeline.baixa)
+			for ( var k in timeline)
+				if (timeline.hasOwnProperty(k))
+					delete timeline[k].complemento;
+		// if (e === timeline.remessa)
+		// break;
 	}
 	console.log(timeline);
 	return timeline;

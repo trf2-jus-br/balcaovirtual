@@ -473,7 +473,8 @@ appCP
 					}
 
 					$scope.updateTimeline = function() {
-						$scope.timeline = updateTimeline($scope.proc);
+						$scope.timeline = updateTimeline($scope.orgao,
+								$scope.proc);
 					}
 
 					$scope.contador = function(c) {
