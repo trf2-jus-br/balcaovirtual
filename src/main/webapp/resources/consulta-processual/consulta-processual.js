@@ -264,17 +264,18 @@ appCP
 												mov.movimentoLocal.descricao += ' - '
 														+ mov.complemento[k];
 								p.fixed.movdoc.push({
-									teste : true,
 									dataHora : mov.dataHora,
 									mov : mov,
 									doc : (mov.documento || [ {} ])[0],
-									rowspan : (mov.documento || [ {} ]).length
+									rowspan : 1
 								});
 								if (mov.documento && mov.documento.length > 0) {
 									for (var i = 1; i < mov.documento.length; i++) {
 										p.fixed.movdoc.push({
 											dataHora : mov.dataHora,
-											doc : mov.documento[i]
+											mov : mov,
+											doc : mov.documento[i],
+											rowspan : 1
 										});
 									}
 								}
@@ -373,6 +374,22 @@ appCP
 								} else {
 									lastIdDocumento = Number(movdoc.doc.idDocumento);
 								}
+							}
+						}
+
+						// Quando existem duas ou mais linhas referentes ao
+						// mesmo movimento, omitir o movimento e aumentar o
+						// rowspan da primeira linha.
+						for (var i = 0; i < a.length - 1; i++) {
+							if (!a[i].mov)
+								continue;
+							for (var k = i + 1; k < a.length; k++) {
+								if (a[i].mov === a[k].mov) {
+									a[i].rowspan++;
+									delete a[k].mov;
+									delete a[k].rowspan;
+								} else
+									break;
 							}
 						}
 
