@@ -1,5 +1,6 @@
-<div class="row" style="margin-top: -1em; margin-bottom: -1em;">
-	<div class="col offset-md-1 col-md-10">
+<div class="row" style="margin-top: -1em; margin-bottom: -1em;"
+	ng-if="deviceDetector.raw.browser.chrome">
+	<div class="col col-sm-12 offset-md-1 col-md-10">
 		<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
 			viewBox="0 0 800 300">
 			<g transform="translate(50, 0)">
@@ -174,7 +175,7 @@
 			</g>
 			</svg>
 	</div>
-	<div class="col" ng-hide="hiddenAlert.timeline">
+	<div class="col col-sm-12" ng-hide="hiddenAlert.timeline">
 		<p class="alert alert-warning alert-dismissible fade show"
 			role="alert">
 			<button type="button" ng-click="hideAlert('timeline')" class="close"
@@ -193,3 +194,19 @@
 		</p>
 	</div>
 </div>
+
+<div class="row" ng-if="!deviceDetector.raw.browser.chrome">
+	<div class="col col-sm-12" ng-hide="hiddenAlert.timelineIncompatible">
+		<p class="alert alert-danger alert-dismissible fade show" role="alert">
+			<button type="button" ng-click="hideAlert('timelineIncompatible')"
+				class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			Seu navegador ({{deviceDetector.browser}}) não é compatível com a <strong>Timeline
+				Processual</strong>, por favor, utilize uma versão recente do Google Chrome.
+		</p>
+	</div>
+</div>
+
+
+

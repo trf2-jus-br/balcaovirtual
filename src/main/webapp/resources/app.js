@@ -39,7 +39,8 @@
 var app = angular.module('app', [ 'sample.peticao-intercorrente',
 		'sample.aviso', 'sample.consulta-processual', 'sample.login',
 		'sample.signup', 'angularModalService', 'ngAnimate', 'cgBusy',
-		'angular-jwt', 'angular-storage', 'ngFileUpload', 'ui.router.title' ]);
+		'angular-jwt', 'angular-storage', 'ngFileUpload', 'ui.router.title',
+		'ng.deviceDetector' ]);
 
 app.config(function($titleProvider, $stateProvider, $urlRouterProvider,
 		jwtInterceptorProvider, $httpProvider) {
@@ -126,8 +127,8 @@ app.config(function($titleProvider, $stateProvider, $urlRouterProvider,
 	$stateProvider.state(sobreState);
 });
 
-app.run(function($rootScope, $state, $timeout, store, jwtHelper, $injector,
-		ModalService, loginModal) {
+app.run(function($rootScope, $state, $timeout, $window, store, jwtHelper,
+		$injector, ModalService, loginModal, deviceDetector) {
 	$rootScope.$on('$stateChangeStart', function(e, toState, toParams) {
 
 		var logged = store.get('jwt')
@@ -171,6 +172,8 @@ app.run(function($rootScope, $state, $timeout, store, jwtHelper, $injector,
 			$rootScope.hiddenAlert[id] = true;
 		}, 1000);
 	}
+
+	$rootScope.deviceDetector = deviceDetector;
 });
 
 app.controller('routerCtrl', function($rootScope, $scope, $http, $window, $q,

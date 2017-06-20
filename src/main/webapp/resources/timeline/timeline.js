@@ -112,9 +112,6 @@ var updateTimeline = function(orgao, processo) {
 			for ( var k in timeline)
 				if (timeline.hasOwnProperty(k))
 					delete timeline[k].complemento;
-		// if (e === timeline.remessa)
-		// break;
 	}
-	console.log(timeline);
 	return timeline;
 }

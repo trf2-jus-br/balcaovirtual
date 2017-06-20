@@ -231,7 +231,7 @@ public class SoapMNI {
 		if (c.getDocumento() != null && c.getDocumento().size() > 0)
 			pdf = c.getDocumento().get(0).getConteudo();
 
-		DateTime dt = DateTime.parse(c.getDataReferencia(), dtfAPOLO);
+		DateTime dt = DateTime.parse(c.getDataReferencia(), dtfMNI);
 
 		boolean sent = false;
 		boolean sigilo = c.getNivelSigilo() != null ? c.getNivelSigilo() != 0 : true;
