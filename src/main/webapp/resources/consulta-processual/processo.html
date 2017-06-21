@@ -266,6 +266,25 @@
 			</div>
 		</div>
 
+		<div class="row" ng-hide="hiddenAlert.filtrarMovimentos"
+			id="filtrarMovimentos">
+			<div class="col col-sm-12">
+				<p class="alert alert-info alert-dismissible fade show" role="alert">
+					<button type="button"
+						ng-click="hiddenAlert.filtrarMovimentos = true; gui.filtro = undefined; hideAlert('filtrarMovimentos')"
+						class="close" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<span class="input-group" style="width: 30%"> <span
+						class="input-group-addon">&#128269;</span> <input type="text"
+						id="filtrarMovimentosInput" class="form-control"
+						placeholder="Filtrar Movimentos" ng-model="gui.filtro"
+						ng-model-options="{ debounce: 200 }">
+					</span>
+				</p>
+			</div>
+		</div>
+
 		<div class="row" ng-if="errormsg === undefined">
 			<div class="col col-sm-12">
 				<table class="table table-sm mb-0">
@@ -279,7 +298,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat-start="movdoc in proc.fixed.movdoc"
+						<tr
+							ng-repeat-start="movdoc in proc.fixed.movdoc | filter: gui.filtro"
 							ng-class="{odd: movdoc.odd, highlightable: true}"
 							id="mov{{movdoc.mov.dataHora}}">
 							<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"><span
@@ -314,6 +334,9 @@
 
 		<div class="row">
 			<div class="col col-sm-12">
+				<button type="button" ng-show="hiddenAlert.filtrarMovimentos"
+					ng-click="filtrarMovimentos()"
+					class="btn btn-secondary no-print mt-3">Filtrar Movimentos</button>
 				<button type="button" ng-click="imprimir()" id="imprimir"
 					class="btn btn-info pull-right no-print mt-3">Imprimir</button>
 				<button type="button" ng-click="mostrarCompleto()" id="download"

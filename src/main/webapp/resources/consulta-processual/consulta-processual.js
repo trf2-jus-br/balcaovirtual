@@ -83,6 +83,9 @@ appCP
 				function ConsultaProcessualCtrl($scope, $http, store,
 						jwtHelper, Upload, $timeout, ModalService, $location,
 						$anchorScroll, $stateParams, $window) {
+					$scope.gui = {
+						filtro : undefined
+					};
 					$scope.numero = $stateParams.numero;
 					$scope.partes = false;
 					$scope.dadosComplementares = false;
@@ -487,6 +490,17 @@ appCP
 						$timeout(function() {
 							angular.element('#' + id).removeClass("highlight");
 						}, 3000);
+					}
+
+					$scope.filtrarMovimentos = function(texto) {
+						$scope.showAlert('filtrarMovimentos');
+						if (texto)
+							$scope.gui.filtro = texto;
+						$timeout(function() {
+							$location.hash('filtrarMovimentos');
+							$anchorScroll();
+							angular.element('#filtrarMovimentosInput').focus();
+						}, 100);
 					}
 
 					$scope.updateTimeline = function() {

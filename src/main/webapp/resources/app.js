@@ -1,41 +1,3 @@
-//var sample = angular.module('sample', [ 'sample.home', 'sample.login',
-//		'sample.signup', 'angular-jwt', 'angular-storage' ]);
-//
-//sample.config(function myAppConfig($urlRouterProvider, jwtInterceptorProvider,
-//		$httpProvider) {
-//	$urlRouterProvider.otherwise('/');
-//
-//	jwtInterceptorProvider.tokenGetter = function(store) {
-//		return store.get('jwt');
-//	}
-//
-//	$httpProvider.interceptors.push('jwtInterceptor');
-//});
-//
-//sample.run(function($rootScope, $state, store, jwtHelper) {
-//	$rootScope.$on('$stateChangeStart',
-//			function(e, to) {
-//				if (to.data && to.data.requiresLogin) {
-//					if (!store.get('jwt')
-//							|| jwtHelper.isTokenExpired(store.get('jwt'))) {
-//						e.preventDefault();
-//						$state.go('login');
-//					}
-//				}
-//			});
-//});
-
-//sample.controller('AppCtrl', function AppCtrl($scope, $location) {
-//	$scope.$on('$routeChangeSuccess',
-//			function(e, nextRoute) {
-//				if (nextRoute.$$route
-//						&& angular.isDefined(nextRoute.$$route.pageTitle)) {
-//					$scope.pageTitle = nextRoute.$$route.pageTitle
-//							+ ' | Balcão Virtual';
-//				}
-//			});
-//});
-
 var app = angular.module('app', [ 'sample.peticao-intercorrente',
 		'sample.aviso', 'sample.consulta-processual', 'sample.login',
 		'sample.signup', 'angularModalService', 'ngAnimate', 'cgBusy',
@@ -163,6 +125,8 @@ app.run(function($rootScope, $state, $timeout, $window, store, jwtHelper,
 	$rootScope.updateLogged();
 
 	$rootScope.hiddenAlert = {
+		filtrarMovimentos : store.get('alert-filtrarMovimentos') == null
+				|| store.get('alert-filtrarMovimentos') == 'hide',
 		timeline : store.get('alert-timeline') == 'hide'
 	}
 
@@ -171,6 +135,11 @@ app.run(function($rootScope, $state, $timeout, $window, store, jwtHelper,
 		$timeout(function() {
 			$rootScope.hiddenAlert[id] = true;
 		}, 1000);
+	}
+
+	$rootScope.showAlert = function(id) {
+		store.set('alert-' + id, 'show');
+		$rootScope.hiddenAlert[id] = false;
 	}
 
 	$rootScope.deviceDetector = deviceDetector;
