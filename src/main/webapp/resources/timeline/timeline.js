@@ -38,6 +38,7 @@ var updateTimeline = function(orgao, processo) {
 		apelacao : {
 			texto : orgao == 'TRF2' ? undefined : 'TRF2'
 		},
+		devolucaoapelacao : {},
 		baixa : {},
 		arquivamento : {},
 	};
@@ -48,6 +49,7 @@ var updateTimeline = function(orgao, processo) {
 
 	var movs = processo.movimento;
 	var prev;
+	var fApelacao = false;
 	for (var i = movs.length - 1; i >= 0; i--) {
 		var e = undefined;
 		var m = movs[i];
@@ -67,14 +69,19 @@ var updateTimeline = function(orgao, processo) {
 		if (contains(m, [ 12 ]))
 			e = timeline.intimacao;
 		if (contains(m, [ 14 ])) {
-			if (m.complemento && m.complemento[0] == 'TRF - 2ª Região')
+			if (m.complemento && m.complemento[0] == 'TRF - 2ª Região') {
 				e = timeline.apelacao;
-			else
+				fApelacao = true;
+			} else
 				e = timeline.remessa;
 		}
-
-		if (contains(m, [ 15 ]))
-			e = timeline.devolucao;
+		if (contains(m, [ 15 ])) {
+			if (fApelacao) {
+				e = timeline.devolucaoapelacao;
+				fApelacao = false;
+			} else
+				e = timeline.devolucao;
+		}
 		if (contains(m, [ 27 ]))
 			e = timeline.juntada;
 		if (contains(m, [ 101 ]))
@@ -112,6 +119,8 @@ var updateTimeline = function(orgao, processo) {
 			for ( var k in timeline)
 				if (timeline.hasOwnProperty(k))
 					delete timeline[k].complemento;
+		// if (e === timeline.devolucaoapelacao)
+		// break;
 	}
 	return timeline;
 }

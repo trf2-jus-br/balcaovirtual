@@ -40,6 +40,15 @@
 	/* fill: rgba(240, 173, 78, 20) !important; */
 }
 
+.esta LINE {
+	stroke: #f0ad4e !important;
+	stroke-width: 3;
+}
+
+MARKER {
+	fill: #f0ad4e !important;
+}
+
 .esta TEXT.textocomplemento {
 	fill: #f0ad4e;
 }
