@@ -96,6 +96,10 @@ public interface ISistemaProcessual {
 		public String numero;
 		public String orgao;
 		public String unidade;
+		public Boolean segredodejustica;
+		public Boolean segredodejusticadesistema;
+		public Boolean segredodejusticaabsoluto;
+		public Boolean eletronico;
 	}
 
 	public interface IProcessoValidarNumeroGet extends ISwaggerMethod {

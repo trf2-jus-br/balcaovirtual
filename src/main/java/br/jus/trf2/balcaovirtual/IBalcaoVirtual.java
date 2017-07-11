@@ -122,6 +122,10 @@ public interface IBalcaoVirtual {
 		public String numero;
 		public String orgao;
 		public String unidade;
+		public Boolean segredodejustica;
+		public Boolean segredodejusticadesistema;
+		public Boolean segredodejusticaabsoluto;
+		public Boolean digital;
 	}
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {

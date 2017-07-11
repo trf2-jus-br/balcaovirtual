@@ -201,6 +201,14 @@ paths:
                 $ref: "#/definitions/Orgao"
               unidade:
                 $ref: "#/definitions/Unidade"
+              segredodejustica:
+                $ref: "#/definitions/SegredoDeJustica"
+              segredodejusticadesistema:
+                $ref: "#/definitions/SegredoDeJusticaDeSistema"
+              segredodejusticaabsoluto:
+                $ref: "#/definitions/SegredoDeJusticaAbsoluto"
+              digital:
+                $ref: "#/definitions/Digital"
         500:
           description: Error ocurred
           schema:
@@ -525,6 +533,26 @@ definitions:
     type: string
     example: 01JEF
 
+  SegredoDeJustica:
+    description: Segredo de Justiça
+    type: boolean
+    example: false
+    
+  SegredoDeJusticaDeSistema:
+    description: Segredo de Justiça de Sistema
+    type: boolean
+    example: false
+    
+  SegredoDeJusticaAbsoluto:
+    description: Segredo de Justiça Absoluto
+    type: boolean
+    example: false
+    
+  Digital:
+    description: Processo Digital
+    type: boolean
+    example: false
+    
   QuantidadePorData:
     description: Data e quantidade de itens
     type: object

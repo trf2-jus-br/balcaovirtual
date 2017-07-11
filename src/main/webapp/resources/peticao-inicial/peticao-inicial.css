@@ -1,0 +1,19 @@
+.protocolos-header {
+	font-size: 150%;
+	padding-bottom: 0.5rem;
+}
+
+.unbreakable {
+	white-space: nowrap;
+	word-break: keep-all;
+	hyphens: none;
+}
+
+@media print {
+	.table-peticao {
+		font-size: 10pt;
+	}
+	.table-protocolo {
+		font-size: 8pt;
+	}
+}

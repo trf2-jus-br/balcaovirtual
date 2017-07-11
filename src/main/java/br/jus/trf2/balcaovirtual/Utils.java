@@ -67,7 +67,7 @@ public class Utils {
 	}
 
 	public static String getJwtIssuer() {
-		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
+		return "balcaovirtual.trf2.jus.br";
 	}
 
 	public static String getJwtSecret() {

@@ -35,7 +35,8 @@
 						<p class="card-text">
 							<small>{{proc.fixed.partesAtivas[0].tipoAtuacao}}</small> <br />
 							<b>{{proc.fixed.partesAtivas[0].pessoa.nome}}</b> <b
-								ng-if="proc.fixed.partesAtivas.length>1">&nbsp;<a href="">+{{proc.fixed.partesAtivas.length-1}}</a>
+								ng-if="proc.fixed.partesAtivas.length>1">&nbsp;<a href=""
+								ng-click="mostrarPartes(1)">+{{proc.fixed.partesAtivas.length-1}}</a>
 							</b>
 						</p>
 						<p class="card-text">
@@ -81,7 +82,7 @@
 					class="card card-inverse card-warning card-consulta-processual mb-3">
 					<div class="card-block">
 						<i class="icon icon-monitor hidden-print"></i>
-						<p class="card-text">
+						<p class="card-text" ng-if="proc.fixed.valorCausa">
 							<small>VALOR DA CAUSA</small><br /> <b>{{proc.fixed.valorCausa}}</b>
 						</p>
 						<p class="card-text">
@@ -275,7 +276,7 @@
 						class="close" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<span class="input-group" style="width: 30%"> <span
+					<span class="input-group" style="width: 50%"> <span
 						class="input-group-addon">&#128269;</span> <input type="text"
 						id="filtrarMovimentosInput" class="form-control"
 						placeholder="Filtrar Movimentos" ng-model="gui.filtro"
@@ -298,13 +299,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr
-							ng-repeat-start="movdoc in proc.fixed.movdoc | filter: gui.filtro"
+						<tr ng-repeat-start="movdoc in filtrados"
 							ng-class="{odd: movdoc.odd, highlightable: true}"
 							id="mov{{movdoc.mov.dataHora}}">
-							<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"><span
+							<td ng-if="movdoc.rowspan && !movdoc.hidemov"
+								rowspan="{{movdoc.rowspan}}"><span
 								ng-bind-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span></td>
-							<td ng-if="movdoc.rowspan" rowspan="{{movdoc.rowspan}}"
+							<td ng-if="movdoc.rowspan && !movdoc.hidemov"
+								rowspan="{{movdoc.rowspan}}"
 								ng-class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal.descricao}}</td>
 							<td><a href="" target="_blank"
 								ng-click="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>

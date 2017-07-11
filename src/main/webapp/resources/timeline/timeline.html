@@ -23,7 +23,7 @@
 					<rect transform=rotate(60) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.intimacao.dataHora)" />
+					ng-click="filtrarMovimentos('#intimacao'); mostrarMovimentacao(timeline.intimacao.dataHora)" />
 			</a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.intimacao.contador)}}</text>
@@ -36,7 +36,7 @@
 					<rect transform=rotate(60) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.juntada.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#juntada'); mostrarMovimentacao(timeline.juntada.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.juntada.contador)}}</text>
 			
@@ -49,7 +49,7 @@
 					<rect transform=rotate(60) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.audiencia.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#audiencia'); mostrarMovimentacao(timeline.audiencia.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.audiencia.contador)}}</text>
 			
@@ -62,7 +62,7 @@
 					<rect transform=rotate(120) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.suspensao.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#suspensao'); mostrarMovimentacao(timeline.suspensao.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.suspensao.contador)}}</text>
 			
@@ -76,7 +76,7 @@
 					<rect transform="rotate(120)" x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.apelacao.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#apelacao'); mostrarMovimentacao(timeline.apelacao.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.apelacao.contador)}}</text>
 			
@@ -99,7 +99,7 @@
 					<rect transform=rotate(-60) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.devolucao.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#devolucao'); mostrarMovimentacao(timeline.devolucao.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.devolucao.contador)}}</text>
 			
@@ -118,7 +118,7 @@
 					<rect transform=rotate(-60) " x="20" y="-5" width="65" height="10"
 				class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.remessa.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#remessa'); mostrarMovimentacao(timeline.remessa.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.remessa.contador)}}</text>
 			
@@ -132,7 +132,7 @@
 				ng-class="{'passou': timeline.baixa.passou, 'esta' : timeline.baixa.esta}">
 					<rect x="-80" y="-5" width="60" height="10" class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.baixa.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#baixa'); mostrarMovimentacao(timeline.baixa.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.baixa.contador)}}</text>
 			
@@ -144,7 +144,7 @@
 				ng-class="{'passou': timeline.sentenca.passou, 'esta' : timeline.sentenca.esta}">
 					<rect x="-80" y="-5" width="60" height="10" class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.sentenca.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#sentenca'); mostrarMovimentacao(timeline.sentenca.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.sentenca.contador)}}</text>
 			
@@ -156,7 +156,7 @@
 				ng-class="{'passou': timeline.conclusao.passou, 'esta' : timeline.conclusao.esta}">
 					<rect x="-280" y="-5" width="260" height="10" class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.conclusao.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#conclusao'); mostrarMovimentacao(timeline.conclusao.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.conclusao.contador)}}</text>
 			
@@ -171,7 +171,7 @@
 				ng-class="{'passou': timeline.distribuicao.passou, 'esta' : timeline.distribuicao.esta}">
 					<rect x="-80" y="-5" width="60" height="10" class="linha" />
 					<a href=""><circle r="20" class="bola"
-					ng-click="mostrarMovimentacao(timeline.distribuicao.dataHora)" /></a>
+					ng-click="filtrarMovimentos('#distribuicao'); mostrarMovimentacao(timeline.distribuicao.dataHora)" /></a>
 					<text class="textointerno" text-anchor="middle"
 				alignment-baseline="central">{{contador(timeline.distribuicao.contador)}}</text>
 					<text y="40" class="texto" text-anchor="middle"

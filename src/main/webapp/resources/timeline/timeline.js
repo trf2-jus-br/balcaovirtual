@@ -91,6 +91,9 @@ var updateTimeline = function(orgao, processo) {
 		if (contains(m, [ 26 ]))
 			e = timeline.baixa;
 		if (e) {
+			for ( var key in timeline)
+				if (timeline.hasOwnProperty(key) && e === timeline[key])
+					m.tipo = '#' + key;
 			e.passou = true;
 			if (e.contador)
 				e.contador += 1;

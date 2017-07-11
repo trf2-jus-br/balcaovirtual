@@ -1,6 +1,8 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
@@ -91,7 +93,12 @@ public class UploadServlet extends HttpServlet {
 					o.put("id", fileId);
 				}
 			}
-			out.println(o.toString(3));
+
+			corsHeaders(response);
+
+			response.setContentType("application/json; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(o.toString(3));
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
@@ -101,5 +108,20 @@ public class UploadServlet extends HttpServlet {
 			throws ServletException, java.io.IOException {
 
 		throw new ServletException("GET method used with " + getClass().getName() + ": POST method required.");
+	}
+
+	@Override
+	public void doOptions(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		corsHeaders(response);
+		response.setStatus(200);
+		response.getWriter().write("OK");
+		response.getWriter().close();
+	}
+
+	public static void corsHeaders(HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+		response.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,Cache-Control,X-Requested-With");
 	}
 }

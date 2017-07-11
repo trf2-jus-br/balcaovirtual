@@ -1,7 +1,8 @@
-var app = angular.module('app', [ 'sample.peticao-intercorrente',
-		'sample.aviso', 'sample.consulta-processual', 'sample.login',
-		'sample.signup', 'angularModalService', 'ngAnimate', 'cgBusy',
-		'angular-jwt', 'angular-storage', 'ngFileUpload', 'ui.router.title',
+var app = angular.module('app', [ 'sample.peticao-inicial',
+		'sample.peticao-intercorrente', 'sample.aviso',
+		'sample.consulta-processual', 'sample.login', 'sample.signup',
+		'angularModalService', 'ngAnimate', 'cgBusy', 'angular-jwt',
+		'angular-storage', 'ngFileUpload', 'ui.router.title',
 		'ng.deviceDetector' ]);
 
 app.config(function($titleProvider, $stateProvider, $urlRouterProvider,

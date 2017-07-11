@@ -82,7 +82,7 @@ appCP
 				'ProcessoCtrl',
 				function ConsultaProcessualCtrl($scope, $http, store,
 						jwtHelper, Upload, $timeout, ModalService, $location,
-						$anchorScroll, $stateParams, $window) {
+						$anchorScroll, $stateParams, $window, $filter) {
 					$scope.gui = {
 						filtro : undefined
 					};
@@ -118,12 +118,27 @@ appCP
 															function(response) {
 																try {
 																	$scope.proc = response.data.value;
-																	$scope
-																			.fixProc();
-																	$scope
-																			.getDescriptions();
+																	if ($scope.proc.movimento) {
+																		$scope.proc.movimento = $scope.proc.movimento
+																				.sort(function(
+																						a,
+																						b) {
+																					if (a.dataHora < b.dataHora)
+																						return 1;
+																					if (a.dataHora > b.dataHora)
+																						return -1;
+																					return 0;
+																				})
+																	}
 																	$scope
 																			.updateTimeline();
+																	$scope
+																			.fixProc();
+																	$scope.filtrados = $scope.proc.fixed.movdoc;
+																	$scope
+																			.fixFiltrados();
+																	$scope
+																			.getDescriptions();
 
 																} catch (e) {
 																	console
@@ -245,13 +260,13 @@ appCP
 						}
 
 						if (p.movimento) {
-							p.movimento = p.movimento.sort(function(a, b) {
-								if (a.dataHora < b.dataHora)
-									return 1;
-								if (a.dataHora > b.dataHora)
-									return -1;
-								return 0;
-							})
+							// p.movimento = p.movimento.sort(function(a, b) {
+							// if (a.dataHora < b.dataHora)
+							// return 1;
+							// if (a.dataHora > b.dataHora)
+							// return -1;
+							// return 0;
+							// })
 
 							p.fixed.movdoc = [];
 							for (var j = 0; j < p.movimento.length; j++) {
@@ -308,7 +323,8 @@ appCP
 
 							$scope.fixMovDoc(p.fixed.movdoc);
 
-							if (typeof p.dadosBasicos.valorCausa === 'number')
+							if (typeof p.dadosBasicos.valorCausa === 'number'
+									&& p.dadosBasicos.valorCausa > 0)
 								p.fixed.valorCausa = "R$ "
 										+ p.dadosBasicos.valorCausa
 												.formatMoney(2, ',', '.');
@@ -379,27 +395,39 @@ appCP
 								}
 							}
 						}
+					}
 
+					$scope.fixFiltrados = function() {
+						console.log("fix-filtrados");
+						var a = $scope.filtrados;
 						// Quando existem duas ou mais linhas referentes ao
 						// mesmo movimento, omitir o movimento e aumentar o
 						// rowspan da primeira linha.
+						for (var i = 0; i < a.length - 1; i++)
+							if (a[i].mov) {
+								a[i].hidemov = false;
+								a[i].rowspan = 1;
+							}
 						for (var i = 0; i < a.length - 1; i++) {
-							if (!a[i].mov)
+							if (!a[i].mov || a[i].hidemov)
 								continue;
 							for (var k = i + 1; k < a.length; k++) {
 								if (a[i].mov === a[k].mov) {
+									console.log("removido" + k);
 									a[i].rowspan++;
-									delete a[k].mov;
-									delete a[k].rowspan;
-								} else
+									a[k].rowspan = 0;
+									a[k].hidemov = true;
+								} else {
+									i = k - 1;
 									break;
+								}
 							}
 						}
 
 						// Marcar pares e impares
 						var odd = false;
 						for (var i = 0; i < a.length; i++) {
-							if (a[i].mov)
+							if (a[i].mov && !a[i].hidemov)
 								odd = !odd;
 							a[i].odd = odd;
 						}
@@ -445,6 +473,8 @@ appCP
 					}
 
 					$scope.mostrarCompleto = function() {
+						console.log(JSON.stringify($scope.proc));
+						return;
 						$scope.$parent.promise = $http(
 								{
 									url : 'api/v1/processo/' + $scope.numero
@@ -483,6 +513,7 @@ appCP
 					}
 
 					$scope.mostrarMovimentacao = function(dataHora) {
+						return;
 						var id = 'mov' + dataHora;
 						$location.hash(id);
 						$anchorScroll();
@@ -492,10 +523,60 @@ appCP
 						}, 3000);
 					}
 
+					$scope.$watch('gui.filtro', function() {
+						$scope.aplicarFiltroDeMovimentos();
+					});
+
+					$scope.$watch('proc.fixed.movdoc', function() {
+						$scope.aplicarFiltroDeMovimentos();
+					});
+
+					$scope.aplicarFiltroDeMovimentos = function() {
+						console.log("filtrando...");
+						try {
+							var a = $scope.proc.fixed.movdoc;
+							var f = $scope.gui.filtro;
+							$scope.filtrados = a;
+							if (!f || f == '') {
+								$scope.fixFiltrados();
+								return;
+							}
+							if (f.substring(0, 1) == '#') {
+								var ff = f.split(' ');
+								var r = [];
+								for (var i = 0; i < a.length; i++) {
+									if (a[i].mov && a[i].mov.tipo)
+										for (var k = 0; k < ff.length; k++)
+											if (a[i].mov.tipo == ff[k]) {
+												r.push(a[i]);
+												break;
+											}
+								}
+								$scope.filtrados = r;
+								$scope.fixFiltrados();
+							} else {
+								$scope.filtrados = $filter('filter')(
+										$scope.proc.fixed.movdoc || [],
+										$scope.gui.filtro);
+								$scope.fixFiltrados();
+
+							}
+						} catch (ex) {
+							$scope.filtrados = [];
+						}
+					};
+
 					$scope.filtrarMovimentos = function(texto) {
 						$scope.showAlert('filtrarMovimentos');
+						var f = $scope.gui.filtro;
 						if (texto)
-							$scope.gui.filtro = texto;
+							if (texto.length > 0
+									&& texto.substring(0, 1) == '#' && f
+									&& f.length > 0 && f.substring(0, 1) == '#') {
+								$scope.gui.filtro = f + ' ' + texto;
+								return;
+							}
+						$scope.gui.filtro = texto;
 						$timeout(function() {
 							$location.hash('filtrarMovimentos');
 							$anchorScroll();

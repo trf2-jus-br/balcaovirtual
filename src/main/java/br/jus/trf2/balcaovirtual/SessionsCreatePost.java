@@ -15,7 +15,7 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
-import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
@@ -36,9 +36,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
 			String a[] = usuariosRestritos.split(",");
-
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
-				throw new PresentableException("Usuário não autorizado.");
+				throw new PresentableUnloggedException("Usuário não autorizado.");
 		}
 
 		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
@@ -50,7 +49,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				UsuarioWebUsernameGetResponse.class);
 		SwaggerAsyncResponse<UsuarioWebUsernameGetResponse> sar = future.get();
 		if (sar.getException() != null)
-			throw sar.getException();
+			throw new PresentableUnloggedException(sar.getException().getLocalizedMessage(), sar.getException());
 		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
 
 		String jwt = jwt(req.username, r.cpf, r.nome, r.email);

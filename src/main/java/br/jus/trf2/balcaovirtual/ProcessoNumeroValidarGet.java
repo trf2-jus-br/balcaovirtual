@@ -40,6 +40,10 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		resp.numero = r.numero;
 		resp.orgao = r.orgao;
 		resp.unidade = r.unidade;
+		resp.segredodejustica = r.segredodejustica;
+		resp.segredodejusticadesistema = r.segredodejusticadesistema;
+		resp.segredodejusticaabsoluto = r.segredodejusticaabsoluto;
+		resp.digital = r.eletronico;
 	}
 
 	@Override
