@@ -26,6 +26,18 @@ public interface IBalcaoVirtual {
 	public class Unidade implements ISwaggerModel {
 	}
 
+	public class SegredoDeJustica implements ISwaggerModel {
+	}
+
+	public class SegredoDeJusticaDeSistema implements ISwaggerModel {
+	}
+
+	public class SegredoDeJusticaAbsoluto implements ISwaggerModel {
+	}
+
+	public class Digital implements ISwaggerModel {
+	}
+
 	public class QuantidadePorData implements ISwaggerModel {
 		public String data;
 		public String quantidade;
@@ -53,6 +65,19 @@ public interface IBalcaoVirtual {
 		public String teor;
 	}
 
+	public class Marca implements ISwaggerModel {
+		public String idmarca;
+		public String idpeca;
+		public String texto;
+		public String paginicial;
+		public String pagfinal;
+		public String cor;
+	}
+
+	public class Marcador implements ISwaggerModel {
+		public String texto;
+	}
+
 	public class ListStatus implements ISwaggerModel {
 		public String system;
 		public String errormsg;
@@ -72,7 +97,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class Error implements ISwaggerModel {
-		public String error;
+		public String errormsg;
 	}
 
 	public class SugestaoPostRequest implements ISwaggerRequest {
@@ -210,6 +235,64 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroAvisoIdReceberPost extends ISwaggerMethod {
 		public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp)
+				throws Exception;
+	}
+
+	public class ClasseIdMarcadoresGetRequest implements ISwaggerRequest {
+		public String id;
+	}
+
+	public class ClasseIdMarcadoresGetResponse implements ISwaggerResponse {
+		public List<Marcador> list;
+	}
+
+	public interface IClasseIdMarcadoresGet extends ISwaggerMethod {
+		public void run(ClasseIdMarcadoresGetRequest req, ClasseIdMarcadoresGetResponse resp) throws Exception;
+	}
+
+	public class MarcaIdDeleteRequest implements ISwaggerRequest {
+		public String id;
+	}
+
+	public class MarcaIdDeleteResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IMarcaIdDelete extends ISwaggerMethod {
+		public void run(MarcaIdDeleteRequest req, MarcaIdDeleteResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroMarcasGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroMarcasGetResponse implements ISwaggerResponse {
+		public List<Marca> list;
+	}
+
+	public interface IProcessoNumeroMarcasGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroMarcasGetRequest req, ProcessoNumeroMarcasGetResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroPecaIdMarcaPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String id;
+		public String idclasse;
+		public String orgao;
+		public String idmarca;
+		public String texto;
+		public String cor;
+		public String paginicial;
+		public String pagfinal;
+	}
+
+	public class ProcessoNumeroPecaIdMarcaPostResponse implements ISwaggerResponse {
+		public Marca marca;
+	}
+
+	public interface IProcessoNumeroPecaIdMarcaPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
 				throws Exception;
 	}
 

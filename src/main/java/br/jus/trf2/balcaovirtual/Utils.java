@@ -1,5 +1,15 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.sql.DataSource;
+
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
@@ -98,6 +108,38 @@ public class Utils {
 		temp = temp.replaceAll("[ûúùü]", "u");
 		temp = temp.replaceAll("[ç]", "c");
 		return temp;
+	}
+
+	public static Connection getConnection() throws Exception {
+		try {
+			Context initContext = new InitialContext();
+			Context envContext = (Context) initContext.lookup("java:");
+			String dsName = SwaggerUtils.getProperty("balcaovirtual.datasource.name",
+					"java:/jboss/datasources/BalcaoVirtualDS");
+			DataSource ds = (DataSource) envContext.lookup(dsName);
+			Connection connection = ds.getConnection();
+			if (connection == null)
+				throw new Exception("Can't open connection to MySQL.");
+			return connection;
+		} catch (NameNotFoundException nnfe) {
+			Connection connection = null;
+
+			Class.forName("com.mysql.jdbc.Driver");
+
+			String dbURL = SwaggerUtils.getProperty("balcaovirtual.datasource.url", null);
+			String username = SwaggerUtils.getProperty("balcaovirtual.datasource.username", null);
+			String password = SwaggerUtils.getProperty("balcaovirtual.datasource.password", null);
+			connection = DriverManager.getConnection(dbURL, username, password);
+			if (connection == null)
+				throw new Exception("Can't open connection to MySQL.");
+			return connection;
+		}
+	}
+
+	public static String getSQL(String filename) {
+		String text = new Scanner(Utils.class.getResourceAsStream(filename + ".sql"), "UTF-8").useDelimiter("\\A")
+				.next();
+		return text;
 	}
 
 }

@@ -122,6 +122,42 @@ parameters:
     description: Órgao
     required: true
     type: string
+  idclasse:
+    name: idclasse
+    in: formData
+    description: Id da classe no CNJ
+    type: string
+    required: true
+  idmarca:
+    name: idmarca
+    in: formData
+    description: Id da marca
+    type: string
+    required: false
+  texto:
+    name: texto
+    in: formData
+    description: Texto da marca
+    type: string
+    required: true
+  cor:
+    name: cor
+    in: formData
+    description: Cor da marca
+    type: string
+    required: true
+  paginicial:
+    name: paginicial
+    in: formData
+    description: Página inicial da marca
+    type: string
+    required: false
+  pagfinal:
+    name: pagfinal
+    in: formData
+    description: Página final da marca
+    type: string
+    required: false
 
 ################################################################################
 #                                           Paths                              #
@@ -129,6 +165,7 @@ parameters:
 paths:
   /sugestao:
     post:
+      consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/nome"
         - $ref: "#/parameters/email"
@@ -148,6 +185,7 @@ paths:
             $ref: "#/definitions/Error"
   /sessions/create:
     post:
+      consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/username"
         - $ref: "#/parameters/password"
@@ -217,6 +255,7 @@ paths:
     post:
       description: Enviar petições para um processo
       tags: [utils]
+      consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/orgao"
@@ -331,6 +370,93 @@ paths:
                 type: string
               datarecebimento:
                 type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /classe/{id}/marcadores:
+    get:
+      description: Obter lista de marcadores de uma classe processual
+      tags: [marca]
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Marcador"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /marca/{id}:
+    delete:
+      description: Remover marca
+      tags: [marca]
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/{numero}/marcas:
+    get:
+      description: Obter marcas de um processo
+      tags: [marca]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Marca"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/{numero}/peca/{id}/marca:
+    post:
+      description: Acrescentar uma marca
+      tags: [marca]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/idclasse"
+        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/idmarca"
+        - $ref: "#/parameters/texto"
+        - $ref: "#/parameters/cor"
+        - $ref: "#/parameters/paginicial"
+        - $ref: "#/parameters/pagfinal"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              marca:
+                $ref: "#/definitions/Marca"
         500:
           description: Error ocurred
           schema:
@@ -604,6 +730,30 @@ definitions:
       teor:
         type: string
 
+  Marca:
+    description: Marca
+    type: object
+    properties:
+      idmarca:
+        type: string
+      idpeca:
+        type: string
+      texto:
+        type: string
+      paginicial:
+        type: string
+      pagfinal:
+        type: string
+      cor:
+        type: string
+
+  Marcador:
+    description: Marcador
+    type: object
+    properties:
+      texto:
+        type: string
+
   ListStatus:
     type: object
     properties:
@@ -636,5 +786,5 @@ definitions:
   Error:
     type: object
     properties:
-      error:
+      errormsg:
         type: string
