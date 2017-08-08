@@ -49,8 +49,8 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 				m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
 				m.cor = rset.getString("esti_tp_cor");
 				m.idpeca = rset.getString("marc_id_peca");
-				m.paginicial = rset.getString("marc_pag_inicial");
-				m.pagfinal = rset.getString("marc_pag_final");
+				m.paginicial = rset.getString("marc_nr_pag_inicial");
+				m.pagfinal = rset.getString("marc_nr_pag_final");
 				resp.list.add(m);
 			}
 		} finally {

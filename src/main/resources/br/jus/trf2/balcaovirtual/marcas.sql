@@ -2,8 +2,8 @@ select
 	m.marc_id,
     m.marc_id_peca,
     m.marc_tx,
-    m.marc_pag_inicial,
-    m.marc_pag_final,
+    m.marc_nr_pag_inicial,
+    m.marc_nr_pag_final,
 	e.esti_tp_cor, 
 	tmi.timi_nm
 from 

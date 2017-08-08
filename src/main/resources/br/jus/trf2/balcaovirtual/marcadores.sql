@@ -6,4 +6,4 @@ from
 where 
 	cncl_id = ?
 order by 
-	timi_ordem;
+	timi_nr_ordem;
