@@ -19,6 +19,17 @@ public interface ISistemaProcessual {
 	public class Email implements ISwaggerModel {
 	}
 
+	public class Usuario implements ISwaggerModel {
+		public String orgao;
+		public String codusu;
+		public String codusuweb;
+		public String codunidade;
+		public String nome;
+		public String cpf;
+		public String email;
+		public String perfil;
+	}
+
 	public class TipoPeticaoIntercorrente implements ISwaggerModel {
 		public String id;
 		public String descricao;
@@ -46,6 +57,18 @@ public interface ISistemaProcessual {
 	}
 
 	public class Unidade implements ISwaggerModel {
+	}
+
+	public class SegredoDeJustica implements ISwaggerModel {
+	}
+
+	public class SegredoDeJusticaDeSistema implements ISwaggerModel {
+	}
+
+	public class SegredoDeJusticaAbsoluto implements ISwaggerModel {
+	}
+
+	public class Eletronico implements ISwaggerModel {
 	}
 
 	public class Codigo implements ISwaggerModel {
@@ -162,6 +185,7 @@ public interface ISistemaProcessual {
 		public String nome;
 		public String cpf;
 		public String email;
+		public List<Usuario> usuarios;
 	}
 
 	public interface IUsuarioWebUsernameGet extends ISwaggerMethod {

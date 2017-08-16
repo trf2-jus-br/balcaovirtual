@@ -7,6 +7,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.crivano.swaggerservlet.SwaggerServlet;
+import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
@@ -66,6 +67,28 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				}
 			});
 		}
+
+		if (Utils.getMarcasAtivas()) {
+			addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
+				@Override
+				public String getUrl() {
+					return SwaggerUtils.getProperty("balcaovirtual.datasource.name", "balcaovirtualds");
+				}
+
+				@Override
+				public boolean test() throws Exception {
+					Utils.getConnection().close();
+					return true;
+				}
+
+				@Override
+				public boolean isPartial() {
+					// TODO Auto-generated method stub
+					return false;
+				}
+			});
+		}
+
 	}
 
 	@Override

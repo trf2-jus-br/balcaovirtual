@@ -24,6 +24,7 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
 
@@ -52,7 +53,18 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			throw new PresentableUnloggedException(sar.getException().getLocalizedMessage(), sar.getException());
 		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
 
-		String jwt = jwt(req.username, r.cpf, r.nome, r.email);
+		String usuarios = null;
+		if (r.usuarios != null && r.usuarios.size() > 0) {
+			for (ISistemaProcessual.Usuario u : r.usuarios) {
+				if (usuarios == null)
+					usuarios = "";
+				else
+					usuarios += ";";
+				usuarios += u.orgao.toLowerCase() + "," + u.codusu + "," + u.codunidade;
+			}
+		}
+
+		String jwt = jwt(null, req.username, r.cpf, r.nome, r.email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
 	}
@@ -71,6 +83,47 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return map;
 	}
 
+	public static class UsuarioDetalhe {
+		Long id;
+		Long unidade;
+	}
+
+	public static class Usuario {
+		String origem;
+		String email;
+		String nome;
+		String usuario;
+		Map<String, UsuarioDetalhe> usuarios;
+
+		boolean isInterno() {
+			return origem != null && origem.startsWith("int");
+		}
+	}
+
+	public static Usuario assertUsuario() throws Exception {
+		Map<String, Object> jwt = assertUsuarioAutorizado();
+		Usuario u = new Usuario();
+
+		u.origem = (String) jwt.get("origemLogin");
+		u.email = (String) jwt.get("email");
+		u.nome = (String) jwt.get("name");
+		u.usuario = (String) jwt.get("username");
+		String users = (String) jwt.get("users");
+		if (users != null && users.length() > 0) {
+			u.usuarios = new HashMap<>();
+			for (String s : users.split(";")) {
+				String[] ss = s.split(",");
+				UsuarioDetalhe ud = new UsuarioDetalhe();
+				if (!"null".equals(ss[1]))
+					ud.id = Long.valueOf(ss[1]);
+				if (!"null".equals(ss[2]))
+					ud.unidade = Long.valueOf(ss[2]);
+				u.usuarios.put(ss[0], ud);
+			}
+		}
+		return u;
+	}
+
 	public static Map<String, Object> assertUsuarioAutorizado() throws Exception {
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
 		if (authorization.startsWith("Bearer "))
@@ -86,7 +139,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return authorization;
 	}
 
-	private static String jwt(String username, String cpf, String name, String email) {
+	private static String jwt(String origin, String username, String cpf, String name, String email, String users) {
 		final String issuer = Utils.getJwtIssuer();
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
@@ -99,10 +152,13 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		claims.put("exp", exp);
 		claims.put("iat", iat);
 
+		if (origin != null)
+			claims.put("origemLogin", origin);
 		claims.put("username", username);
 		claims.put("cpf", cpf);
 		claims.put("name", name);
 		claims.put("email", email);
+		claims.put("users", users);
 
 		final String jwt = signer.sign(claims);
 		return jwt;

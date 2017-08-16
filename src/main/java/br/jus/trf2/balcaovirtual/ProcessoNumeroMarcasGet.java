@@ -6,16 +6,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.crivano.swaggerservlet.PresentableUnloggedException;
+
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroMarcasGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetResponse;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
 
 public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 	private static class MarcaTabela extends Marca {
@@ -28,7 +30,12 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 
 	@Override
 	public void run(ProcessoNumeroMarcasGetRequest req, ProcessoNumeroMarcasGetResponse resp) throws Exception {
-		Map<String, Object> map = SessionsCreatePost.assertUsuarioAutorizado();
+		if (!Utils.getMarcasAtivas())
+			throw new PresentableUnloggedException("disabled");
+
+		Usuario u = SessionsCreatePost.assertUsuario();
+		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+
 		resp.list = new ArrayList<>();
 
 		Connection conn = null;
@@ -39,15 +46,21 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 			pstmt = conn.prepareStatement(Utils.getSQL("marcas"));
 			pstmt.setString(1, req.numero);
 			pstmt.setString(2, req.orgao);
+			pstmt.setBoolean(3, u.isInterno());
+			pstmt.setLong(4, ud.id);
+			if (ud.unidade != null)
+				pstmt.setLong(5, ud.unidade);
+			else
+				pstmt.setString(5, null);
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
 				Marca m = new Marca();
 				m.idmarca = rset.getString("marc_id");
-				String complemento = rset.getString("marc_tx");
+				String complemento = rset.getString("marc_tx_conteudo");
 				String marcador = rset.getString("timi_nm");
 				m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
-				m.cor = rset.getString("esti_tp_cor");
+				m.idestilo = rset.getString("esti_id");
 				m.idpeca = rset.getString("marc_id_peca");
 				m.paginicial = rset.getString("marc_nr_pag_inicial");
 				m.pagfinal = rset.getString("marc_nr_pag_final");

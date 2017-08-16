@@ -67,11 +67,11 @@ public interface IBalcaoVirtual {
 
 	public class Marca implements ISwaggerModel {
 		public String idmarca;
+		public String idestilo;
 		public String idpeca;
 		public String texto;
 		public String paginicial;
 		public String pagfinal;
-		public String cor;
 	}
 
 	public class Marcador implements ISwaggerModel {
@@ -282,7 +282,7 @@ public interface IBalcaoVirtual {
 		public String orgao;
 		public String idmarca;
 		public String texto;
-		public String cor;
+		public String idestilo;
 		public String paginicial;
 		public String pagfinal;
 	}

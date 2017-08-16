@@ -9,6 +9,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.crivano.swaggerservlet.PresentableUnloggedException;
+
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IClasseIdMarcadoresGet;
@@ -20,6 +22,9 @@ public class ClasseIdMarcadoresGet implements IClasseIdMarcadoresGet {
 	@Override
 	public void run(ClasseIdMarcadoresGetRequest req, ClasseIdMarcadoresGetResponse resp) throws Exception {
 		resp.list = new ArrayList<>();
+
+		if (!Utils.getMarcasAtivas())
+			throw new PresentableUnloggedException("disabled");
 
 		// Get documents from Oracle
 		Connection conn = null;

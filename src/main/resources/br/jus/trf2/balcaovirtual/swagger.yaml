@@ -140,10 +140,10 @@ parameters:
     description: Texto da marca
     type: string
     required: true
-  cor:
-    name: cor
+  idestilo:
+    name: idestilo
     in: formData
-    description: Cor da marca
+    description: Estilo da marca
     type: string
     required: true
   paginicial:
@@ -447,7 +447,7 @@ paths:
         - $ref: "#/parameters/orgaoquery"
         - $ref: "#/parameters/idmarca"
         - $ref: "#/parameters/texto"
-        - $ref: "#/parameters/cor"
+        - $ref: "#/parameters/idestilo"
         - $ref: "#/parameters/paginicial"
         - $ref: "#/parameters/pagfinal"
       responses:
@@ -744,7 +744,7 @@ definitions:
         type: string
       pagfinal:
         type: string
-      cor:
+      idestilo:
         type: string
 
   Marcador:

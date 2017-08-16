@@ -133,6 +133,11 @@ paths:
                 $ref: "#/definitions/CPF"
               email:
                 $ref: "#/definitions/Email"
+              usuarios:
+                type: array
+                items:
+                  $ref: "#/definitions/Usuario"
+                
         500:
           description: Error ocurred
           schema:
@@ -295,6 +300,27 @@ definitions:
     description: Email do usuário
     type: string
     example: rcrivano@teste.com
+    
+  Usuario:
+    description: Tipo de usuário
+    type: object
+    properties:
+      orgao:
+        type: string
+      codusu:
+        type: string
+      codusuweb:
+        type: string
+      codunidade:
+        type: string
+      nome:
+        type: string
+      cpf:
+        type: string
+      email:
+        type: string
+      perfil:
+        type: string
 
   TipoPeticaoIntercorrente:
     description: Tipo de petição intercorrente

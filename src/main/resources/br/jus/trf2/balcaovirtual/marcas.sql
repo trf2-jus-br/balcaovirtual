@@ -1,10 +1,10 @@
 select 
 	m.marc_id,
     m.marc_id_peca,
-    m.marc_tx,
+    m.marc_tx_conteudo,
     m.marc_nr_pag_inicial,
     m.marc_nr_pag_final,
-	e.esti_tp_cor, 
+	e.esti_id, 
 	tmi.timi_nm
 from 
 	processo p, 
@@ -16,4 +16,7 @@ where
 	and p.orga_id = o.orga_id 
 	and m.esti_id = e.esti_id 
 	and p.proc_cd = ?
-	and o.orga_sg = ?;
+	and o.orga_sg = ?
+	and e.esti_lg_interno = m.marc_lg_interno
+	and m.marc_lg_interno = ?
+	and (m.marc_ie_usu = ? or (not e.esti_lg_pessoal and m.marc_ie_unidade = ?));

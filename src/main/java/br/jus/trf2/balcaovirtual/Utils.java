@@ -14,6 +14,10 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
 
+	public static boolean getMarcasAtivas() {
+		return Boolean.parseBoolean(SwaggerUtils.getProperty("balcaovirtual.marcas", "false"));
+	}
+
 	public static String getOrgaos() {
 		try {
 			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",
