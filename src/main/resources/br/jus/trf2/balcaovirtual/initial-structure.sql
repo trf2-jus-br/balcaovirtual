@@ -38,11 +38,11 @@ DROP TABLE IF EXISTS `estilo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `estilo` (
   `ESTI_ID` int(11) NOT NULL COMMENT 'Identificador do estilo',
-  `ESTI_NM` varchar(45) DEFAULT NULL,
+  `ESTI_NM` varchar(45) DEFAULT NULL COMMENT 'Nome do estilo',
   `ESTI_TP_COR` varchar(20) NOT NULL COMMENT 'Cor característica do estilo',
-  `ESTI_LG_INTERNO` tinyint(4) DEFAULT '0',
-  `ESTI_LG_PESSOAL` tinyint(4) DEFAULT '0',
-  `ESTI_NR_ORDEM` int(11) DEFAULT NULL,
+  `ESTI_LG_INTERNO` tinyint(4) DEFAULT '0' COMMENT 'Estilo para usuário interno ou externo',
+  `ESTI_LG_PESSOAL` tinyint(4) DEFAULT '0' COMMENT 'Estilo pessoal ou do grupo/unidade',
+  `ESTI_NR_ORDEM` int(11) DEFAULT NULL COMMENT 'Número utilizado para ordenar os estilos por prioridade',
   PRIMARY KEY (`ESTI_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -64,8 +64,8 @@ CREATE TABLE `marca` (
   `MARC_NR_PAG_INICIAL` decimal(4,0) DEFAULT NULL COMMENT 'Número da página inicial, em relação ao processo como um todo e não à peça em questão. Quando se desejar marcar a peça inteira, esse campo de ser nulo.',
   `MARC_NR_PAG_FINAL` decimal(4,0) DEFAULT NULL COMMENT 'Número da página final, em relação ao processo como um todo e não à peça em questão. Quando se desejar marcar a peça inteira, esse campo de ser nulo.',
   `MARC_DF_ALTERACAO` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp da criação/última alteração da marca',
-  `MARC_LG_INTERNO` tinyint(4) DEFAULT '0' COMMENT 'Nome do usuário',
-  `MARC_NM_USU` varchar(200) NOT NULL,
+  `MARC_LG_INTERNO` tinyint(4) DEFAULT '0' COMMENT 'Indica se o usuário é interno ou externo',
+  `MARC_NM_USU` varchar(200) NOT NULL COMMENT 'Nome do usuário',
   `MARC_IE_USU` int(11) NOT NULL COMMENT 'Identificador externo do usuário',
   `MARC_IE_UNIDADE` int(11) DEFAULT NULL COMMENT 'Identificador externo da unidade ou grupo',
   PRIMARY KEY (`MARC_ID`),
@@ -271,4 +271,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-17 13:02:04
+-- Dump completed on 2017-08-17 13:19:31

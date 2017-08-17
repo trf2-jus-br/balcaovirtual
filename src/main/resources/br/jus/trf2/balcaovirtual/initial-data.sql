@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `estilo` WRITE;
 /*!40000 ALTER TABLE `estilo` DISABLE KEYS */;
-INSERT INTO `estilo` VALUES (1,'Interno - Pessoal','blue',1,1,1),(2,'Interno - Unidade','yellow',1,0,2),(3,'Externo - Pessoal','pink',0,1,3),(4,'Externo - Grupo','green',0,0,4);
+INSERT INTO `estilo` VALUES (1,'Pessoal - Interno','blue',1,1,1),(2,'Unidade - Interno','yellow',1,0,2),(3,'Pessoal - Externo','pink',0,1,3),(4,'Grupo - Externo','green',0,0,4);
 /*!40000 ALTER TABLE `estilo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,4 +84,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-17 13:02:04
+-- Dump completed on 2017-08-17 13:19:31
