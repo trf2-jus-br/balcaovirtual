@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroMarcasGet;
@@ -34,6 +35,8 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 			throw new PresentableUnloggedException("disabled");
 
 		Usuario u = SessionsCreatePost.assertUsuario();
+		if (u.usuarios == null)
+			throw new PresentableException("Usuário não possui identificador e unidade");
 		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
 
 		resp.list = new ArrayList<>();
@@ -64,6 +67,8 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 				m.idpeca = rset.getString("marc_id_peca");
 				m.paginicial = rset.getString("marc_nr_pag_inicial");
 				m.pagfinal = rset.getString("marc_nr_pag_final");
+				m.nomeusuario = rset.getString("marc_nm_usu");
+				m.dataalteracao = rset.getTimestamp("marc_df_alteracao");
 				resp.list.add(m);
 			}
 		} finally {

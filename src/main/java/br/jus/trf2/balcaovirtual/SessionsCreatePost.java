@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
@@ -30,6 +32,7 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRes
 
 public class SessionsCreatePost implements ISessionsCreatePost {
 	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
+	private String origem = null;
 
 	@Override
 	public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception {
@@ -41,17 +44,18 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				throw new PresentableUnloggedException("Usuário não autorizado.");
 		}
 
-		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
-		q.username = req.username;
-
-		String authorization = "Basic " + SwaggerUtils.base64Encode((req.username + ":" + req.password).getBytes());
-		Future<SwaggerAsyncResponse<UsuarioWebUsernameGetResponse>> future = SwaggerCall.callAsync("autenticar usuário",
-				authorization, "GET", Utils.getWsProcessualUrl() + "/usuario-web/" + req.username, q,
-				UsuarioWebUsernameGetResponse.class);
-		SwaggerAsyncResponse<UsuarioWebUsernameGetResponse> sar = future.get();
-		if (sar.getException() != null)
-			throw new PresentableUnloggedException(sar.getException().getLocalizedMessage(), sar.getException());
-		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
+		String origem = "int";
+		UsuarioWebUsernameGetResponse r;
+		try {
+			r = wsAutenticar(origem, req.username, req.password);
+		} catch (Exception ex) {
+			origem = null;
+			try {
+				r = wsAutenticar(origem, req.username, req.password);
+			} catch (Exception ex2) {
+				throw ex;
+			}
+		}
 
 		String usuarios = null;
 		if (r.usuarios != null && r.usuarios.size() > 0) {
@@ -60,13 +64,33 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					usuarios = "";
 				else
 					usuarios += ";";
-				usuarios += u.orgao.toLowerCase() + "," + u.codusu + "," + u.codunidade;
+				usuarios += u.orgao.toLowerCase() + "," + u.codusu + "," + (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null");
 			}
 		}
 
-		String jwt = jwt(null, req.username, r.cpf, r.nome, r.email, usuarios);
+		String jwt = jwt(origem, req.username, r.cpf, r.nome, r.email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
+	}
+
+	private UsuarioWebUsernameGetResponse wsAutenticar(String origin, String username, String password)
+			throws Exception, InterruptedException, ExecutionException, PresentableUnloggedException {
+		String url = "usuario-web";
+		if (origin != null && origin.startsWith("int"))
+			url = "usuario";
+
+		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
+		q.username = username;
+
+		String authorization = "Basic " + SwaggerUtils.base64Encode((username + ":" + password).getBytes());
+		Future<SwaggerAsyncResponse<UsuarioWebUsernameGetResponse>> future = SwaggerCall.callAsync("autenticar usuário",
+				authorization, "GET", Utils.getWsProcessualUrl() + "/" + url + "/" + username, q,
+				UsuarioWebUsernameGetResponse.class);
+		SwaggerAsyncResponse<UsuarioWebUsernameGetResponse> sar = future.get();
+		if (sar.getException() != null)
+			throw new PresentableUnloggedException(sar.getException().getLocalizedMessage(), sar.getException());
+		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
+		return r;
 	}
 
 	public static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
@@ -104,7 +128,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		Map<String, Object> jwt = assertUsuarioAutorizado();
 		Usuario u = new Usuario();
 
-		u.origem = (String) jwt.get("origemLogin");
+		u.origem = (String) jwt.get("origin");
 		u.email = (String) jwt.get("email");
 		u.nome = (String) jwt.get("name");
 		u.usuario = (String) jwt.get("username");
@@ -120,7 +144,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					ud.unidade = Long.valueOf(ss[2]);
 				u.usuarios.put(ss[0], ud);
 			}
-		}
+		} 
 		return u;
 	}
 
@@ -153,7 +177,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		claims.put("iat", iat);
 
 		if (origin != null)
-			claims.put("origemLogin", origin);
+			claims.put("origin", origin);
 		claims.put("username", username);
 		claims.put("cpf", cpf);
 		claims.put("name", name);

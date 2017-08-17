@@ -182,6 +182,7 @@ public interface ISistemaProcessual {
 	}
 
 	public class UsuarioWebUsernameGetResponse implements ISwaggerResponse {
+		public String origem;
 		public String nome;
 		public String cpf;
 		public String email;

@@ -1,6 +1,7 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
@@ -67,11 +68,13 @@ public interface IBalcaoVirtual {
 
 	public class Marca implements ISwaggerModel {
 		public String idmarca;
-		public String idestilo;
 		public String idpeca;
 		public String texto;
 		public String paginicial;
 		public String pagfinal;
+		public String idestilo;
+		public String nomeusuario;
+		public Date dataalteracao;
 	}
 
 	public class Marcador implements ISwaggerModel {

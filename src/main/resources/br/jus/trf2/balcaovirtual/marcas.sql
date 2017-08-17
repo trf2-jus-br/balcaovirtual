@@ -5,7 +5,9 @@ select
     m.marc_nr_pag_inicial,
     m.marc_nr_pag_final,
 	e.esti_id, 
-	tmi.timi_nm
+	tmi.timi_nm,
+	m.marc_df_alteracao,
+	m.marc_nm_usu
 from 
 	processo p, 
 	orgao o, 

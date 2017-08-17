@@ -746,7 +746,12 @@ definitions:
         type: string
       idestilo:
         type: string
-
+      nomeusuario:
+        type: string
+      dataalteracao:
+        type: string
+        format: date-time
+        
   Marcador:
     description: Marcador
     type: object
