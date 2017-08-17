@@ -76,7 +76,7 @@ CREATE TABLE `marca` (
   CONSTRAINT `FK_MARC_ESTI_ID` FOREIGN KEY (`ESTI_ID`) REFERENCES `estilo` (`ESTI_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_MARC_PROC_ID` FOREIGN KEY (`PROC_ID`) REFERENCES `processo` (`PROC_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_MARC_TIMI_ID` FOREIGN KEY (`TIMI_ID`) REFERENCES `tipo_marca_item` (`TIMI_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +163,7 @@ CREATE TABLE `tx_tipo_marca_cnj_classe` (
 --
 -- Dumping routines for database 'balcao_virtual'
 --
-/*!50003 DROP PROCEDURE IF EXISTS `gravar_marca` */;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_gravar_marca` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -173,7 +173,7 @@ CREATE TABLE `tx_tipo_marca_cnj_classe` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `gravar_marca`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_gravar_marca`(
 	in i_numero varchar(22),
 	in i_orgao varchar(20),
 	in i_idclasse int,
@@ -271,4 +271,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-17 13:19:31
+-- Dump completed on 2017-08-17 18:06:59
