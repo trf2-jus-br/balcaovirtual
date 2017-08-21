@@ -8,6 +8,7 @@ import AvisoLista from '@/components/AvisoLista'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
+import ProcessoBL from '../bl/processo.js'
 
 Vue.use(Router)
 
@@ -26,7 +27,18 @@ export default new Router({
     {
       path: '/processo/:numero',
       name: 'Processo',
-      component: Processo
+      component: Processo,
+      meta: {
+        title: route => {
+          return (
+            'Processo ' +
+            ProcessoBL.formatarProcesso(
+              ProcessoBL.somenteNumeros(route.params.numero)
+            ) +
+            '..'
+          )
+        }
+      }
     },
     {
       path: '/processo-lista',

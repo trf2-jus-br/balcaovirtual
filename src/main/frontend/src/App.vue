@@ -71,6 +71,15 @@ import MessageBox from './components/MessageBox'
 export default {
   name: 'app',
   mounted () {
+    this.$router.beforeEach((to, from, next) => {
+      next()
+      if (to.meta && to.meta.title) {
+        document.title = to.meta.title(to)
+      } else {
+        document.title = 'Balcão Virtual - ' + to.name
+      }
+    })
+
     Bus.$on('block', () => {
       console.log('block')
       if (this.blockCounter === 0) {

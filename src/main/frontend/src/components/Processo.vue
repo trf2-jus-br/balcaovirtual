@@ -80,7 +80,7 @@
                   <p class="card-text">
                     <small>MAGISTRADO</small>
                     <br>
-                    <b>{{proc.dadosBasicos.magistradoAtuante.join(',')}}</b>
+                    <b>{{proc.dadosBasicos.outroParametro.nomeMagistrado}}</b>
                   </p>
                 </div>
               </div>
@@ -182,7 +182,7 @@
                     </div>
                     <div class="col col-sm-3">
                       <label>Magistrado</label>
-                      <p>{{proc.dadosBasicos.magistradoAtuante.join(', ')}}</p>
+                      <p>{{proc.dadosBasicos.outroParametro.nomeMagistrado}}</p>
                     </div>
                     <div class="col col-sm-3">
                       <label>Valor da Causa</label>

@@ -31,7 +31,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 		try {
 			conn = Utils.getConnection();
 
-			cstmt = conn.prepareCall("{ call gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
+			cstmt = conn.prepareCall("{ call sp_gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
 
 			cstmt.setString(1, req.numero);
 			cstmt.setString(2, req.orgao);
