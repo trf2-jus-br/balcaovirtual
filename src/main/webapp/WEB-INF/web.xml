@@ -6,14 +6,23 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
 	<filter>
-		<filter-name>CacheControlFilter</filter-name>
-		<filter-class>br.jus.trf2.balcaovirtual.CacheControlFilter</filter-class>
+		<filter-name>CacheControlFilterNoCache</filter-name>
+		<filter-class>br.jus.trf2.balcaovirtual.CacheControlFilterNoCache</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
+		<filter-name>CacheControlFilterNoCache</filter-name>
 		<url-pattern>/</url-pattern>
 		<url-pattern>/index.html</url-pattern>
-		<url-pattern>/resources/*</url-pattern>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CacheControlFilterCache</filter-name>
+		<filter-class>br.jus.trf2.balcaovirtual.CacheControlFilterCache</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CacheControlFilterCache</filter-name>
+		<url-pattern>/static/*</url-pattern>
 	</filter-mapping>
 
 	<servlet>
