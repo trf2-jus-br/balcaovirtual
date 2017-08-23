@@ -42,6 +42,7 @@ import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Servic
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class SoapMNI {
 	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
@@ -133,8 +134,12 @@ public class SoapMNI {
 	public static void consultarAvisosPendentes(String idConsultante, List<Aviso> list, List<ListStatus> status)
 			throws Exception {
 
+		Usuario u = SessionsCreatePost.assertUsuario();
+
 		for (String orgao : Utils.getOrgaos().split(",")) {
 			String system = orgao.toLowerCase();
+			if (!u.usuarios.containsKey(system))
+				continue;
 			URL url = new URL(Utils.getMniWsdlUrl(system));
 			ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
 			ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
