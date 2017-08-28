@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.PresentableUnloggedException;
+import com.crivano.swaggerservlet.SwaggerException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdMarcaPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
@@ -25,6 +27,10 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 			throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+
+		if (ud == null)
+			throw new PresentableUnloggedException("Usuário '" + u.usuario
+					+ "' não pode fazer marcações porque não foi autenticado no órgão '" + req.orgao + "'.");
 
 		Connection conn = null;
 		CallableStatement cstmt = null;

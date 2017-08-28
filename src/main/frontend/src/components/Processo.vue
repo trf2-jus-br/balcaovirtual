@@ -9,7 +9,15 @@
           </p>
         </div>
       </div>
-  
+
+      <div class="row pt-5" v-if="warningmsg">
+        <div class="col col-sm-12">
+          <p class="alert alert-warning">
+            <strong>Atenção!</strong> {{warningmsg}}
+          </p>
+        </div>
+      </div>
+
       <div v-if="!errormsg &amp;&amp; proc &amp;&amp; proc.dadosBasicos">
         <div class="row xvisible-print-block mt-3 mb-3">
           <div class="col-md-12">
@@ -22,9 +30,9 @@
             </h4>
           </div>
         </div>
-  
+
         <timeline :timeline="timeline"></timeline>
-  
+
         <div v-if="proc &amp;&amp; proc.dadosBasicos">
           <!-- QUADROS COLORIDOS -->
           <div class="row hidden-print mt-3" v-if="errormsg === undefined">
@@ -32,7 +40,7 @@
             <div class="card-deck col">
               <div class="card card-inverse card-primary card-consulta-processual mb-3">
                 <div class="card-block">
-                  <i class="icon icon-users hidden-print"></i>
+                  <img id="logo-header" class="float-right" src="../assets/users.png" height="64"></img>
                   <p class="card-text">
                     <small>{{fixed.partesAtivas[0].tipoAtuacao}}</small>
                     <br />
@@ -52,10 +60,10 @@
                   <a v-if="!partes" class="card-link float-right" @click="mostrarPartes(1)">Ver partes...</a>
                 </div>
               </div>
-  
+
               <div class="card card-inverse card-success card-consulta-processual mb-3">
                 <div class="card-block">
-                  <i class="icon icon-judicialgavel hidden-print" style="float: right"></i>
+                  <img id="logo-header" class="float-right" src="../assets/judicia.png" height="64"></img>
                   <p class="card-text" v-if="false">
                     <small>PROCESSO
                       <span v-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
@@ -76,7 +84,7 @@
                     <br>
                     <b style="color: #fff">{{proc.dadosBasicos.orgaoJulgador.nomeOrgao}}</b>
                   </p>
-  
+
                   <p class="card-text">
                     <small>MAGISTRADO</small>
                     <br>
@@ -84,10 +92,10 @@
                   </p>
                 </div>
               </div>
-  
+
               <div class="card card-inverse card-warning card-consulta-processual mb-3">
                 <div class="card-block">
-                  <i class="icon icon-monitor hidden-print"></i>
+                  <img id="logo-header" class="float-right" src="../assets/monitor.png" height="64"></img>
                   <p class="card-text" v-if="fixed.valorCausa">
                     <small>VALOR DA CAUSA</small>
                     <br>
@@ -116,7 +124,7 @@
               </div>
             </div>
           </div>
-  
+
           <div v-bind:class="{row: true, 'visible-print-block': !partes}">
             <div class="col col-sm-12">
               <div class="card mb-3 card-outline-primary">
@@ -164,7 +172,7 @@
               </div>
             </div>
           </div>
-  
+
           <!-- QUADRO SUBSTITUTO PARA A IMPRESSAO -->
           <div class="row visible-print-block">
             <div class="col col-sm-12">
@@ -203,7 +211,7 @@
               </div>
             </div>
           </div>
-  
+
           <div v-if="dadosComplementares" v-bind:class="{row: true, 'xvisible-print-block': !dadosComplementares}">
             <div class="col col-sm-12">
               <div class="card mb-3 card-outline-warning">
@@ -219,32 +227,32 @@
                       <label>Data de Protocolo</label>
                       <p v-html="proc.dadosBasicos.outroParametro.dataProtocolo"></p>
                     </div>
-  
+
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.numProcAdm">
                       <label>Processos Administrativos</label>
                       <p v-html="proc.dadosBasicos.outroParametro.numProcAdm"></p>
                     </div>
-  
+
                     <div class="col col-sm-3" v-if="fixed.numCDAs">
                       <label>CDA's</label>
                       <p v-html="fixed.numCDAs"></p>
                     </div>
-  
+
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outrosnumeros[0]">
                       <label>Número Antigo</label>
                       <p v-html="proc.dadosBasicos.outrosnumeros[0]"></p>
                     </div>
-  
+
                     <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.peticaoPendenteJuntada">
                       <label>Petições Pendentes de Juntada</label>
                       <p v-html="proc.dadosBasicos.outroParametro.peticaoPendenteJuntada"></p>
                     </div>
-  
+
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.processoOriginario">
                       <label>Processo Originário</label>
                       <p v-html="proc.dadosBasicos.outroParametro.processoOriginario"></p>
                     </div>
-  
+
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.processoVinculado">
                       <label>Processos Vinculados</label>
                       <p v-html="proc.dadosBasicos.outroParametro.processoVinculado"></p>
@@ -266,7 +274,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row" v-if="$parent.settings.filtrarMovimentos" id="filtrarMovimentos">
             <div class="col col-sm-12">
               <p class="alert alert-info alert-dismissible fade show" role="alert">
@@ -295,7 +303,7 @@
               </p>
             </div>
           </div>
-  
+
           <div class="row" v-if="errormsg === undefined">
             <div class="col col-sm-12">
               <table class="table table-sm mb-0">
@@ -319,10 +327,10 @@
                         <td>
                           <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
                           <a href="" v-if="movdoc.doc.exibirTexto == false" class="text-success" @click.prevent="mostrarTexto(movdoc.doc, true)">
-                            <i class="inline-icon icon icon-search1 hidden-print"></i>
+                            <img class="icone-em-linha hidden-print" src="../assets/search1.png" style="height: 1em;"></img>
                           </a>
                           <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
-                            <i class="inline-icon icon icon-pencil hidden-print"></i>
+                            <img class="icone-em-linha hidden-print" src="../assets/pencil.png" style="height: 1em;"></img>
                           </a>
                           <br v-if="movdoc.marca &amp;&amp; movdoc.marca.length > 0">
                           <template v-for="m in movdoc.marca">
@@ -356,7 +364,7 @@
               </table>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col col-sm-12">
               <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary no-print mt-3">Filtrar Movimentos
@@ -368,7 +376,7 @@
               </button>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col col-sm-12">
               <hr class="mt-5 mb-1" />
@@ -381,7 +389,7 @@
         </div>
       </div>
     </div>
-  
+
     <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
   </div>
 </template>
@@ -457,6 +465,7 @@ export default {
         P: 'Advogado Público'
       },
       errormsg: undefined,
+      warningmsg: undefined,
       partes: false,
       dadosComplementares: false,
       proc: undefined,
@@ -523,7 +532,7 @@ export default {
         this.$set(this.fixed, 'classeProcessualDescricao', response.data.descricao)
         this.$set(this.fixed, 'classeProcessualDescricaoCompleta', response.data.descricaocompleta)
       }, error => {
-        this.errormsg = error.data.errormsg
+        this.warningmsg = error.data.errormsg
       })
 
       // Carregar assuntos (partimos do princípio que sempre
@@ -677,10 +686,18 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.inline-icon {
-  color: #000;
-  font-weight: bold;
+.icone-em-linha {
+  display: inline;
+  vertical-align: middle;
+  opacity: 0.5;
+  margin-top: -0.2em;
 }
+
+.icone-em-linha:hover {
+  opacity: 1;
+}
+
+
 
 .marca-ref:hover,
 .marca-ref:link,
@@ -715,10 +732,6 @@ export default {
 
 .marca-pink {
   background-color: #faf;
-}
-
-.inline-icon:hover {
-  color: #000;
 }
 
 .red {

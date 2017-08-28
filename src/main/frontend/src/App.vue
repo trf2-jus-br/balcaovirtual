@@ -19,6 +19,9 @@
                   <router-link class="nav-link" active-class="active" :to="{name:'Consulta Simples'}" tag="a" exact>Consulta</router-link>
                 </li>
                 <li class="nav-item" v-if="!jwt.origin">
+                  <router-link class="nav-link" active-class="active" :to="{name:'Petição Inicial'}" tag="a">Petição Inicial</router-link>
+                </li>
+                <li class="nav-item" v-if="!jwt.origin">
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Intercorrente'}" tag="a">Petição Intercorrente</router-link>
                 </li>
                 <li class="nav-item" v-if="!jwt.origin">

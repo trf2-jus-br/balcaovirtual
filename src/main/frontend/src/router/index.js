@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import ConsultaSimples from '@/components/ConsultaSimples'
 import Processo from '@/components/Processo'
 import ProcessoLista from '@/components/ProcessoLista'
+import PeticaoInicial from '@/components/PeticaoInicial'
 import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
 import AvisoLista from '@/components/AvisoLista'
 import Login from '@/components/Login'
@@ -44,6 +45,11 @@ export default new Router({
       path: '/processo-lista',
       name: 'Lista de Processos',
       component: ProcessoLista
+    },
+    {
+      path: '/peticao-inicial',
+      name: 'Petição Inicial',
+      component: PeticaoInicial
     },
     {
       path: '/peticao-intercorrente',

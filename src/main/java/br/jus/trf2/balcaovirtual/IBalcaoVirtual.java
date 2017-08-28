@@ -18,6 +18,61 @@ public interface IBalcaoVirtual {
 		public String orgao;
 	}
 
+	public class Entidade implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class Localidade implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class TipoAtuacaoAdvogado implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class TipoAtuacaoDefensor implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class TipoAtuacaoProcurador implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class TipoAtuacaoAutor implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class TipoAtuacaoReu implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class Especialidade implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class Classe implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class OrgaoInfo implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
+	public class Local implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
 	public class Numero implements ISwaggerModel {
 	}
 
@@ -139,6 +194,75 @@ public interface IBalcaoVirtual {
 
 	public interface IConfigPeticaoIntercorrenteTiposGet extends ISwaggerMethod {
 		public void run(ConfigPeticaoIntercorrenteTiposGetRequest req, ConfigPeticaoIntercorrenteTiposGetResponse resp)
+				throws Exception;
+	}
+
+	public class ConfigPeticaoInicialDadosBasicosGetRequest implements ISwaggerRequest {
+		public String orgao;
+	}
+
+	public class ConfigPeticaoInicialDadosBasicosGetResponse implements ISwaggerResponse {
+		public List<Entidade> listentidade;
+		public List<TipoAtuacaoAdvogado> listtipoatuacaoadvogado;
+		public List<TipoAtuacaoDefensor> listtipoatuacaodefensor;
+		public List<TipoAtuacaoProcurador> listtipoatuacaoprocurador;
+		public List<TipoAtuacaoAutor> listtipoatuacaoautor;
+		public List<TipoAtuacaoReu> listtipoatuacaoreu;
+	}
+
+	public interface IConfigPeticaoInicialDadosBasicosGet extends ISwaggerMethod {
+		public void run(ConfigPeticaoInicialDadosBasicosGetRequest req,
+				ConfigPeticaoInicialDadosBasicosGetResponse resp) throws Exception;
+	}
+
+	public class ConfigOrgaosGetRequest implements ISwaggerRequest {
+	}
+
+	public class ConfigOrgaosGetResponse implements ISwaggerResponse {
+		public List<OrgaoInfo> list;
+	}
+
+	public interface IConfigOrgaosGet extends ISwaggerMethod {
+		public void run(ConfigOrgaosGetRequest req, ConfigOrgaosGetResponse resp) throws Exception;
+	}
+
+	public class ConfigLocaisGetRequest implements ISwaggerRequest {
+		public String orgao;
+	}
+
+	public class ConfigLocaisGetResponse implements ISwaggerResponse {
+		public List<Local> list;
+	}
+
+	public interface IConfigLocaisGet extends ISwaggerMethod {
+		public void run(ConfigLocaisGetRequest req, ConfigLocaisGetResponse resp) throws Exception;
+	}
+
+	public class ConfigLocalIdEspecialidadesGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class ConfigLocalIdEspecialidadesGetResponse implements ISwaggerResponse {
+		public List<Especialidade> list;
+	}
+
+	public interface IConfigLocalIdEspecialidadesGet extends ISwaggerMethod {
+		public void run(ConfigLocalIdEspecialidadesGetRequest req, ConfigLocalIdEspecialidadesGetResponse resp)
+				throws Exception;
+	}
+
+	public class ConfigEspecialidadeIdClassesGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class ConfigEspecialidadeIdClassesGetResponse implements ISwaggerResponse {
+		public List<Classe> list;
+	}
+
+	public interface IConfigEspecialidadeIdClassesGet extends ISwaggerMethod {
+		public void run(ConfigEspecialidadeIdClassesGetRequest req, ConfigEspecialidadeIdClassesGetResponse resp)
 				throws Exception;
 	}
 

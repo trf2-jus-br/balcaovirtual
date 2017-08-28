@@ -13,6 +13,7 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdPdfGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetResponse;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
 
@@ -21,8 +22,8 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 
 	@Override
 	public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception {
-		Map<String, Object> map = SessionsCreatePost.assertUsuarioAutorizado();
-		resp.jwt = DownloadJwtFilenameGet.jwt((String) map.get("username"), req.orgao, req.numero, req.id);
+		Usuario u = SessionsCreatePost.assertUsuario();
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, req.orgao, req.numero, req.id);
 	}
 
 	@Override

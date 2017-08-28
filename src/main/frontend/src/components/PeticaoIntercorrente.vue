@@ -208,7 +208,7 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
-      this.$http.get('config/peticao/intercorrente/tipos', { block: true }).then(response => {
+      this.$http.get('config/peticao-intercorrente/tipos', { block: true }).then(response => {
         for (var i = 0; i < response.data.list.length; i++) this.tipos.push(response.data.list[i])
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)

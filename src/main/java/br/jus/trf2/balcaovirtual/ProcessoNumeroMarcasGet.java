@@ -41,6 +41,9 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 
 		resp.list = new ArrayList<>();
 
+		if (ud == null)
+			throw new PresentableUnloggedException("disabled");
+
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;

@@ -98,6 +98,12 @@ parameters:
     description: Número da id só algarismos
     required: true
     type: string
+  id2:
+    name: id2
+    in: path
+    description: Número da id só algarismos
+    required: true
+    type: string
   jwt:
     name: jwt
     in: path
@@ -202,10 +208,10 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/peticao/intercorrente/tipos:
+  /config/peticao-intercorrente/tipos:
     get:
       description: Tipos de petição intercorrente
-      tags: [utils]
+      tags: [config]
       parameters: []
       responses:
         200:
@@ -217,6 +223,127 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/peticao-inicial/dados-basicos:
+    get:
+      description: Diversos parâmetros para petição inicial
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              listentidade:
+                type: array
+                items:
+                  $ref: "#/definitions/Entidade"
+              listtipoatuacaoadvogado:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoAtuacaoAdvogado"
+              listtipoatuacaodefensor:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoAtuacaoDefensor"
+              listtipoatuacaoprocurador:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoAtuacaoProcurador"
+              listtipoatuacaoautor:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoAtuacaoAutor"
+              listtipoatuacaoreu:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoAtuacaoReu"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/orgaos:
+    get:
+      description: Diversos parâmetros para petição inicial
+      tags: [config]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/OrgaoInfo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/locais:
+    get:
+      description: Diversos parâmetros para petição inicial
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Local"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/local/{id}/especialidades:
+    get:
+      description: Diversos parâmetros para petição inicial
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Especialidade"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /config/especialidade/{id}/classes:
+    get:
+      description: Diversos parâmetros para petição inicial
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Classe"
         500:
           description: Error ocurred
           schema:
@@ -642,6 +769,105 @@ definitions:
       descricao:
         type: string
       orgao:
+        type: string
+
+  Entidade:
+    description: Entidade
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  Localidade:
+    description: Localidade
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  TipoAtuacaoAdvogado:
+    description: Tipo de atuação do advogado
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  TipoAtuacaoDefensor:
+    description: Tipo de atuação do defensor
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  TipoAtuacaoProcurador:
+    description: Tipo de atuação do procurador
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  TipoAtuacaoAutor:
+    description: Tipo de atuação do autor
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  TipoAtuacaoReu:
+    description: Tipo de atuação do réu
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  Especialidade:
+    description: Especialidade
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  Classe:
+    description: Classe
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  OrgaoInfo:
+    description: Classe
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
+  Local:
+    description: Classe
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
         type: string
 
   Numero:

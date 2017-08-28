@@ -74,7 +74,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		return map;
 	}
 
-	public static String jwt(String username, String orgao, String processo, String documento) {
+	public static String jwt(String origin, String username, String orgao, String processo, String documento) {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h
@@ -87,6 +87,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		claims.put("exp", exp);
 		claims.put("iat", iat);
 
+		if (origin != null)
+			claims.put("origin", origin);
 		claims.put("username", username);
 		claims.put("orgao", orgao);
 		claims.put("proc", processo);
