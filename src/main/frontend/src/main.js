@@ -1,12 +1,12 @@
 // The Vue build version to load with the `import` command (runtime-only or
 // standalone) has been set in webpack.base.conf with an alias.
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import '../static/fps-line-icons/css/fpslineicons.css'
 
 import 'babel-polyfill'
-import 'jquery'
-import 'tether'
+// import 'jquery'
+// import 'tether'
 import 'bootstrap'
 
 import Vue from 'vue'

@@ -5,21 +5,21 @@
         <div class="col-md-12">
           <h4 class="text-center mt-3 mb-3">Intimações/Citações Pendentes</h4>
         </div>
-  
+
         <div class="col col-sm-12" v-if="errormsg">
           <p class="alert alert-danger">
             <strong>Erro!</strong> {{errormsg}}
           </p>
         </div>
-  
+
         <div class="col col-sm-12" v-show="avisos.length == 0">
           <p class="alert alert-warning">
             <strong>Atenção!</strong> Nenhuma intimação pendente.
           </p>
         </div>
       </div>
-  
-      <div class="row mb-3 hidden-print" v-show="avisos.length > 0">
+
+      <div class="row mb-3 d-print-none" v-show="avisos.length > 0">
         <div class="col-sm-2">
           <button type="button" @click="mostrarOutline()" :class="{'btn btn-block': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">Filtro Hierárquico
           </button>
@@ -30,16 +30,16 @@
             <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
           </div>
         </div>
-        <div class="offset-sm-4 col-sm-2">
+        <div class="col-sm-2 ml-sm-auto">
           <div class="btn-group btn-block" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <!--
-                                            <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
-                                            </a>
-                                            <a class="dropdown-item" @click="exportarXML()">Exportar XML
-                                            </a>
-                                            -->
+                                              <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
+                                              </a>
+                                              <a class="dropdown-item" @click="exportarXML()">Exportar XML
+                                              </a>
+                                              -->
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
             </div>
           </div>
@@ -51,12 +51,12 @@
           </button>
         </div>
       </div>
-  
+
       <div class="row" v-show="avisos.length > 0">
         <div class="col col-md-4 filtro-outline" v-if="outlineAtivo">
           <div class="card card-outline-info mb-3">
             <div class="card-header">Filtro Hierárquico</div>
-            <div class="card-block">
+            <div class="card-body">
               <ul class="pl-0">
                 <li v-if="outline" v-for="l1 in outline">
                   <input type="checkbox" v-model="l1.ativo" @change="toogle(l1)"> {{l1.nome}}
@@ -75,15 +75,15 @@
             </div>
           </div>
         </div>
-  
+
         <div :class="{'col': true, 'col-md-8': outlineAtivo, 'col-md-12': !outlineAtivo}">
-          <table class="table table-sm table-striped mb-0 table-protocolo">
+          <table class="table table-sm table-striped mb-0 table-protocolo table-responsive">
             <thead class="thead-inverse">
               <tr>
-                <th class="hidden-print" style="text-align: center">
+                <th class="d-print-none" style="text-align: center">
                   <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
                 </th>
-  
+
                 <th>
                   <a @click="sort('dataaviso')">
                     Data do Cadastro
@@ -153,7 +153,7 @@
             </thead>
             <tbody>
               <tr v-for="r in filtrados">
-                <td class="hidden-print" style="text-align: center">
+                <td class="d-print-none" style="text-align: center">
                   <input type="checkbox" value="true" v-model="r.checked" :disabled="r.disabled" class="chk-assinar"></input>
                 </td>
                 <td>
@@ -171,19 +171,19 @@
                   <span v-if="r.errormsg" class="red" v-html="r.errormsg"></span>
                 </td>
                 <td align="right">
-                  <button type="button" v-if="!r.confirmado" @click="confirmarAviso(r, false)" class="btn btn-sm btn-primary no-print">Confirmar</button>
-                  <button type="button" v-if="r.confirmado" @click="exibirAviso(r)" class="btn btn-sm btn-success no-print">Ver</button>
+                  <button type="button" v-if="!r.confirmado" @click="confirmarAviso(r, false)" class="btn btn-sm btn-primary d-print-none">Confirmar</button>
+                  <button type="button" v-if="r.confirmado" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">Ver</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="col-sm-12 hidden-print" style="padding-top: 1em;">
+        <div class="col-sm-12 d-print-none" style="padding-top: 1em;">
           <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info float-right ml-3">Imprimir</button>
         </div>
       </div>
     </div>
-  
+
     <aviso-detalhe v-if="aviso" :aviso="aviso" @voltar="aviso = undefined"></aviso-detalhe>
   </div>
 </template>

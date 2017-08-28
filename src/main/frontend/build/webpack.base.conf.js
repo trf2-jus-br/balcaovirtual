@@ -15,9 +15,10 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath:
+      process.env.NODE_ENV === 'production'
+        ? config.build.assetsPublicPath
+        : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -45,7 +46,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [resolve('src'), resolve('test'), resolve('node_modules/bootstrap-vue')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -67,8 +68,13 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
+      $: 'jquery',
       jQuery: 'jquery',
-      Tether: 'tether'
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default'],
+      // In case you imported plugins individually, you must also require them here:
+      Util: 'exports-loader?Util!bootstrap/js/dist/util',
+      Dropdown: 'exports-loader?Dropdown!bootstrap/js/dist/dropdown'
     })
   ]
 }

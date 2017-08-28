@@ -1,7 +1,7 @@
 <template>
   <div class="container content pt-5">
-    <div class="row">
-      <div class="col col-md-6 offset-md-3">
+    <div class="row justify-content-center">
+      <div class="col col-sm-12 col-md-6">
         <div class="jumbotron d-block mx-auto">
           <h2 class="text-center pb-3">Autenticação</h2>
           <p v-if="errormsg" class="alert alert-danger" role="alert">{{errormsg}}</p>

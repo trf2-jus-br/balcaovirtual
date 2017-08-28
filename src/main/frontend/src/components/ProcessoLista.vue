@@ -22,7 +22,7 @@
   
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm">
+        <table class="table table-striped table-sm table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th style="text-align: center">

@@ -3,7 +3,7 @@
     <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
       <b-form>
         <div class="row">
-          <div class="col col-sm-8" :class="{ 'form-group': true, 'has-danger': errors.has('texto') }">
+          <div class="col col-md-8" :class="{ 'form-group': true, 'has-danger': errors.has('texto') }">
             <label class="control-label" for="texto" style="width: 100%">Marcador</label>
             <b-form-input type="text" list="lst_userIdTypes" name="texto" id="texto" v-model="texto" class="form-control" style="width: 100%" autofocus v-on:keyup.enter="$refs.processoPecaDetalhes.hide(true)" v-validate.initial="'required'"></b-form-input>
             <datalist id="lst_userIdTypes">
@@ -11,7 +11,7 @@
             </datalist>
             <span v-if="false" v-show="errors.has('texto')" class="help is-danger">{{ errors.first('texto') }}</span>
           </div>
-          <div class="col col-sm-4">
+          <div class="col col-md-4">
             <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>
             <b-form-select v-model="estilo" :options="estilosfiltrados" class="mb-3">
             </b-form-select>

@@ -19,7 +19,7 @@
       </div>
 
       <div v-if="!errormsg &amp;&amp; proc &amp;&amp; proc.dadosBasicos">
-        <div class="row xvisible-print-block mt-3 mb-3">
+        <div class="row xd-print-block mt-3 mb-3">
           <div class="col-md-12">
             <h4 class="text-center mb-0">
               Processo
@@ -33,13 +33,13 @@
 
         <timeline :timeline="timeline"></timeline>
 
-        <div v-if="proc &amp;&amp; proc.dadosBasicos">
+        <template v-if="proc &amp;&amp; proc.dadosBasicos">
           <!-- QUADROS COLORIDOS -->
-          <div class="row hidden-print mt-3" v-if="errormsg === undefined">
+          <div class="d-print-none mt-3" v-if="errormsg === undefined">
             <!-- Profile Content -->
-            <div class="card-deck col">
-              <div class="card card-inverse card-primary card-consulta-processual mb-3">
-                <div class="card-block">
+            <div class="card-deck">
+              <div class="card text-white bg-primary card-consulta-processual mb-3">
+                <div class="card-body">
                   <img id="logo-header" class="float-right" src="../assets/users.png" height="64"></img>
                   <p class="card-text">
                     <small>{{fixed.partesAtivas[0].tipoAtuacao}}</small>
@@ -57,12 +57,12 @@
                       <a href="" @click="mostrarPartes(1)">+{{fixed.partesPassivas.length-1}}</a>
                     </b>
                   </p>
-                  <a v-if="!partes" class="card-link float-right" @click="mostrarPartes(1)">Ver partes...</a>
+                  <a v-if="!partes" class="card-link float-right" href="" @click.prevent="mostrarPartes(1)">Ver partes...</a>
                 </div>
               </div>
 
-              <div class="card card-inverse card-success card-consulta-processual mb-3">
-                <div class="card-block">
+              <div class="card text-white bg-success card-consulta-processual mb-3">
+                <div class="card-body">
                   <img id="logo-header" class="float-right" src="../assets/judicia.png" height="64"></img>
                   <p class="card-text" v-if="false">
                     <small>PROCESSO
@@ -93,8 +93,8 @@
                 </div>
               </div>
 
-              <div class="card card-inverse card-warning card-consulta-processual mb-3">
-                <div class="card-block">
+              <div class="card text-white bg-warning card-consulta-processual mb-3">
+                <div class="card-body">
                   <img id="logo-header" class="float-right" src="../assets/monitor.png" height="64"></img>
                   <p class="card-text" v-if="fixed.valorCausa">
                     <small>VALOR DA CAUSA</small>
@@ -125,16 +125,16 @@
             </div>
           </div>
 
-          <div v-bind:class="{row: true, 'visible-print-block': !partes}">
+          <div v-bind:class="{row: true, 'd-print-block': !partes}">
             <div class="col col-sm-12">
               <div class="card mb-3 card-outline-primary">
                 <div class="card-header">
                   Partes
-                  <button type="button" class="close hidden-print" @click="mostrarPartes(0)">
+                  <button type="button" class="close d-print-none" @click="mostrarPartes(0)">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="card-block pb-0" v-for="polo in proc.dadosBasicos.polo">
+                <div class="card-body pb-0" v-for="polo in proc.dadosBasicos.polo">
                   <h6 class="card-subtitle mb-2 text-muted">
                     <u>Pólo {{(polo.polo == 'AT') ? 'Ativo' : 'Passivo'}}</u>
                   </h6>
@@ -174,11 +174,11 @@
           </div>
 
           <!-- QUADRO SUBSTITUTO PARA A IMPRESSAO -->
-          <div class="row visible-print-block">
+          <div class="row d-print-block">
             <div class="col col-sm-12">
               <div class="card mb-3 card-outline-success">
                 <div class="card-header">Dados Principais</div>
-                <div class="card-block pb-0">
+                <div class="card-body pb-0">
                   <div class="row">
                     <div class="col col-sm-3">
                       <label>Data/Hora de Distribuição</label>
@@ -212,16 +212,16 @@
             </div>
           </div>
 
-          <div v-if="dadosComplementares" v-bind:class="{row: true, 'xvisible-print-block': !dadosComplementares}">
+          <div v-if="dadosComplementares" v-bind:class="{row: true, 'xd-print-block': !dadosComplementares}">
             <div class="col col-sm-12">
               <div class="card mb-3 card-outline-warning">
                 <div class="card-header">
                   Dados Complementares
-                  <button type="button" class="close hidden-print" @click="mostrarDadosComplementares(0)">
+                  <button type="button" class="close d-print-none" @click="mostrarDadosComplementares(0)">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="card-block pb-0">
+                <div class="card-body pb-0">
                   <div class="row">
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.dataConsulta">
                       <label>Data de Protocolo</label>
@@ -306,7 +306,7 @@
 
           <div class="row" v-if="errormsg === undefined">
             <div class="col col-sm-12">
-              <table class="table table-sm mb-0">
+              <table class="table table-sm mb-0 table-responsive">
                 <thead class="thead-inverse">
                   <tr>
                     <th>Data/Hora</th>
@@ -327,10 +327,10 @@
                         <td>
                           <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
                           <a href="" v-if="movdoc.doc.exibirTexto == false" class="text-success" @click.prevent="mostrarTexto(movdoc.doc, true)">
-                            <img class="icone-em-linha hidden-print" src="../assets/search1.png" style="height: 1em;"></img>
+                            <img class="icone-em-linha d-print-none" src="../assets/search1.png" style="height: 1em;"></img>
                           </a>
                           <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
-                            <img class="icone-em-linha hidden-print" src="../assets/pencil.png" style="height: 1em;"></img>
+                            <img class="icone-em-linha d-print-none" src="../assets/pencil.png" style="height: 1em;"></img>
                           </a>
                           <br v-if="movdoc.marca &amp;&amp; movdoc.marca.length > 0">
                           <template v-for="m in movdoc.marca">
@@ -352,7 +352,7 @@
                     <tr v-if="movdoc.doc.exibirTexto" v-bind:class="{odd: movdoc.odd}">
                       <td colspan="5">
                         <p class="alert alert-success mb-0 alert-dismissible fade show" role="alert">
-                          <button type="button" class="close hidden-print" @click="mostrarTexto(movdoc.doc, false)">
+                          <button type="button" class="close d-print-none" @click="mostrarTexto(movdoc.doc, false)">
                             <span aria-hidden="true">&times;</span>
                           </button>
                           <span v-html="movdoc.doc.outroParametro.textoMovimento"></span>
@@ -365,15 +365,21 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col col-sm-12">
-              <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary no-print mt-3">Filtrar Movimentos
+          <div class="row no-gutters">
+            <div class="col col-auto mr-1">
+              <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none mt-3">Filtrar Movimentos
               </button>
-              <button type="button" v-if="marcasativas &amp;&amp; (filtro !== '#marca')" @click="filtrarMovimentos('#marca')" class="btn btn-secondary no-print mt-3">Filtrar Marcas
+            </div>
+            <div class="col col-auto mr-1">
+              <button type="button" v-if="marcasativas &amp;&amp; (filtro !== '#marca')" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none mt-3">Filtrar Marcas
               </button>
-              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info float-right no-print mt-3">Imprimir</button>
-              <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info float-right no-print mt-3 mr-3">PDF Completo
+            </div>
+            <div class="col col-auto ml-auto">
+              <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none mt-3">PDF Completo
               </button>
+            </div>
+            <div class="col col-auto ml-1">
+              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none mt-3">Imprimir</button>
             </div>
           </div>
 
@@ -386,7 +392,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
 

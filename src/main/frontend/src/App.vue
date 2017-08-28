@@ -3,16 +3,18 @@
     <div class="wrapper">
       <div :class="{dimmed: loading}">
         <!--=== Header ===-->
-        <div class="header hidden-print">
+        <div class="header d-print-none">
           <!-- Navbar -->
-          <nav class="navbar navbar-toggleable-md bg-faded navbar-inverse bg-primary ">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
+          <nav class="navbar navbar navbar-expand-lg navbar-light navbar-dark bg-dark">
             <a class="navbar-brand pt-0 pb-0" href="#">
               <img id="logo-header" src="./assets/balcao-virtual-38px.png" alt="Logo Balcão Virtual" height="38"></img>
               <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38"></img>
             </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -308,14 +310,14 @@ h6::first-letter {
   margin-bottom: 0.6rem;
 }
 
-.card-block LABEL {
+.card-body LABEL {
   text-transform: uppercase;
   color: #777;
   margin-bottom: 0px;
   font-size: 80%;
 }
 
-.card-inverse .card-block A {
+.text-white .card-body A {
   color: #fff;
 }
 
@@ -365,13 +367,6 @@ h6::first-letter {
   -webkit-border-radius: 6px 0 6px 6px;
   -moz-border-radius: 6px 0 6px 6px;
   border-radius: 6px 0 6px 6px;
-}
-
-@media print {
-  .no-print,
-  .no-print * {
-    display: none !important;
-  }
 }
 
 DIV.sobre p {

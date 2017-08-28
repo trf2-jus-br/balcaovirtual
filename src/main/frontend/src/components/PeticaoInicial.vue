@@ -44,7 +44,7 @@
 
     <div class="row" v-if="arquivos.length > 0">
       <div class="col-sm-12">
-        <table class="table table-peticao">
+        <table class="table table-peticao table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th>Tipo</th>
@@ -168,16 +168,16 @@
     </div>
 
     <div class="row mt-3">
-      <div class="col-sm-6">
+      <div class="col col-auto">
         <h5 class="mt-3 mb-2">Partes</h5>
       </div>
-      <div class="col-sm-6" style="height: 100%">
-        <button type="button" @click="adicionarParte()" class="btn btn-info btn-sm mt-2 float-right">Adicionar Parte</button>
+      <div class="col col-auto ml-auto">
+        <button type="button" @click="adicionarParte()" class="btn btn-info btn-sm mt-2">Adicionar Parte</button>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-peticao">
+        <table class="table table-peticao table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th>Polo</th>
@@ -217,7 +217,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <button type="button" @click="peticionar()" id="prosseguir" :disabled="!isAllValid() &amp;&amp; arquivos.length == 0" class="btn btn-primary float-right no-print mt-3">Protocolar</button>
+        <button type="button" @click="peticionar()" id="prosseguir" :disabled="!isAllValid() &amp;&amp; arquivos.length == 0" class="btn btn-primary float-right d-print-none mt-3">Protocolar</button>
       </div>
     </div>
   </div>
@@ -313,7 +313,7 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
-      this.$http.get('config/peticao/intercorrente/tipos', { block: true }).then(response => {
+      this.$http.get('config/peticao-intercorrente/tipos', { block: true }).then(response => {
         for (var i = 0; i < response.data.list.length; i++) this.tipos.push(response.data.list[i])
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)

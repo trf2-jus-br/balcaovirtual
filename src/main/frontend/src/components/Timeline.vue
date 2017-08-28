@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="row" style="margin-top: -1em; margin-bottom: -1em;" ng-if="deviceDetector.raw.browser.chrome">
-      <div class="col col-sm-12 offset-md-1 col-md-10">
+    <div class="row justify-content-center" style="margin-top: -1em; margin-bottom: -1em;" ng-if="deviceDetector.raw.browser.chrome">
+      <div class="col col-sm-12 col-md-10">
         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 300">
           <defs>
             <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">

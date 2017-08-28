@@ -35,7 +35,7 @@
 
     <div class="row" v-if="arquivos.length > 0 &amp;&amp; !mostrarQuantidadePorData">
       <div class="col-sm-12" style="padding-top: 1em;">
-        <table class="table table-peticao">
+        <table class="table table-peticao table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th>Processo</th>
@@ -99,11 +99,11 @@
 
     <div class="row" v-if="!mostrarQuantidadePorData">
       <div class="col-sm-12">
-        <button type="button" @click="carregarProtocoladosRecentemente()" id="protocoladosRecentemente" class="btn btn-secondary no-print mr-3 mt-3">Consultar Protocolos
+        <button type="button" @click="carregarProtocoladosRecentemente()" id="protocoladosRecentemente" class="btn btn-secondary d-print-none mr-3 mt-3">Consultar Protocolos
         </button>
-        <button type="button" @click="limpar()" id="limpar" v-if="!editando" class="btn btn-secondary no-print mt-3">Enviar Outras Petições</button>
-        <button type="button" @click="imprimir()" id="imprimir" v-if="!editando" class="btn btn-info float-right ml-3 no-print mt-3">Imprimir</button>
-        <button type="button" @click="peticionar()" id="prosseguir" v-if="arquivos.length > 0 && (editando || arquivosAProtocolar)" :disabled="!isAllValid()" class="btn btn-primary float-right no-print mt-3">
+        <button type="button" @click="limpar()" id="limpar" v-if="!editando" class="btn btn-secondary d-print-none mt-3">Enviar Outras Petições</button>
+        <button type="button" @click="imprimir()" id="imprimir" v-if="!editando" class="btn btn-info float-right ml-3 d-print-none mt-3">Imprimir</button>
+        <button type="button" @click="peticionar()" id="prosseguir" v-if="arquivos.length > 0 && (editando || arquivosAProtocolar)" :disabled="!isAllValid()" class="btn btn-primary float-right d-print-none mt-3">
           Protocolar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{arquivosAProtocolar}}</span>
         </button>
@@ -112,13 +112,13 @@
 
     <!-- QUANTIDADE POR DATA -->
     <div class="row" v-if="mostrarQuantidadePorData &amp;&amp; dataDeProtocolo === undefined">
-      <div class="col col-sm-12" v-if="quantidadePorData.length > 0">
+      <div class="col col-12" v-if="quantidadePorData.length > 0">
         <div class="protocolos-header">Petição(ões) Intercorrente(s) Protocolada(s) Recentemente</div>
-        <table class="table table-striped mb-0">
+        <table class="table table-striped mb-0 table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th>Data</th>
-              <th>Quantidade</th>
+              <th style="text-align: right;">Quantidade</th>
             </tr>
           </thead>
           <tbody>
@@ -126,7 +126,7 @@
               <td>
                 <span v-html="p.dataFormatada"></span>
               </td>
-              <td>
+              <td style="text-align: right;">
                 <a href="" @click.prevent="carregarResumo(p.data)">{{p.quantidade}}</a>
               </td>
             </tr>
@@ -139,7 +139,7 @@
         </p>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button type="button" @click="voltarParaEdicao()" v-if="quantidadePorData !== undefined" class="btn btn-success no-print">Voltar</button>
+        <button type="button" @click="voltarParaEdicao()" v-if="quantidadePorData !== undefined" class="btn btn-success d-print-none">Voltar</button>
       </div>
     </div>
 
@@ -150,11 +150,11 @@
           Petições Intercorrentes Protocoladas em
           <span v-html="dataDeProtocolo"></span>
         </div>
-        <div class="no-print float-right pb-2">
+        <div class="d-print-none float-right pb-2">
           Filtrar:
           <input type="text" v-model="filtroProtocolo"></input>
         </div>
-        <table class="table table-striped mb-0 table-protocolo">
+        <table class="table table-striped mb-0 table-protocolo table-responsive">
           <thead class="thead-inverse">
             <tr>
               <th>Processo</th>
@@ -182,8 +182,8 @@
         </table>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button type="button" @click="voltarParaQuantidade()" v-if="dataDeProtocolo !== undefined" class="btn btn-success no-print">Voltar</button>
-        <button type="button" @click="imprimir()" id="imprimir" v-if="resumoPorData.length > 0" class="btn btn-info float-right ml-3 no-print">Imprimir</button>
+        <button type="button" @click="voltarParaQuantidade()" v-if="dataDeProtocolo !== undefined" class="btn btn-success d-print-none">Voltar</button>
+        <button type="button" @click="imprimir()" id="imprimir" v-if="resumoPorData.length > 0" class="btn btn-info float-right ml-3 d-print-none">Imprimir</button>
       </div>
     </div>
     <processo-multiplos ref="processosMultiplos" @ok="multiplosProcessos"></processo-multiplos>
