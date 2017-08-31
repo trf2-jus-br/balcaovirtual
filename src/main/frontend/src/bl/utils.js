@@ -70,7 +70,12 @@ export default {
       s +
       (j ? i.substr(0, j) + t : '') +
       i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) +
-      (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '')
+      (c
+        ? d +
+          Math.abs(n - i)
+            .toFixed(c)
+            .slice(2)
+        : '')
     )
   },
   logEvento: function (categoria, acao, rotulo, valor) {
@@ -124,6 +129,20 @@ export default {
     for (var k in source) {
       if (!source.hasOwnProperty(k)) continue
       obj[k] = source[k]
+    }
+  },
+
+  errormsg: function (error, component) {
+    component.errormsg = error.data.errormsg
+    if (
+      component.errormsg === undefined &&
+      error.statusText &&
+      error.statusText !== ''
+    ) {
+      component.errormsg = error.statusText
+    }
+    if (component.errormsg === undefined) {
+      component.errormsg = 'Erro desconhecido!'
     }
   }
 }

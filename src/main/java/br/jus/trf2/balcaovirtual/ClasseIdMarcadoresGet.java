@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IClasseIdMarcadoresGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class ClasseIdMarcadoresGet implements IClasseIdMarcadoresGet {
 	private static final Logger log = LoggerFactory.getLogger(ClasseIdMarcadoresGet.class);
@@ -25,6 +25,10 @@ public class ClasseIdMarcadoresGet implements IClasseIdMarcadoresGet {
 
 		if (!Utils.getMarcasAtivas())
 			throw new PresentableUnloggedException("disabled");
+
+		Usuario u = SessionsCreatePost.assertUsuario();
+		if (!"int".equals(u.origem))
+			return;
 
 		// Get documents from Oracle
 		Connection conn = null;

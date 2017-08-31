@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 public class CacheControlFilterCache implements Filter {
-	static long expires = java.util.concurrent.TimeUnit.DAYS.toSeconds(2);
+	static long expires = java.util.concurrent.TimeUnit.DAYS.toSeconds(30);
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {

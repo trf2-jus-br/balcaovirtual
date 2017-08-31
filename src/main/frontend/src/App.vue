@@ -5,7 +5,7 @@
         <!--=== Header ===-->
         <div class="header d-print-none">
           <!-- Navbar -->
-          <nav class="navbar navbar navbar-expand-lg navbar-light navbar-dark bg-dark">
+          <nav class="navbar navbar navbar-expand-lg navbar-light navbar-dark bg-primary">
             <a class="navbar-brand pt-0 pb-0" href="#">
               <img id="logo-header" src="./assets/balcao-virtual-38px.png" alt="Logo Balcão Virtual" height="38"></img>
               <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38"></img>
@@ -20,7 +20,7 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Consulta Simples'}" tag="a" exact>Consulta</router-link>
                 </li>
-                <li class="nav-item" v-if="!jwt.origin">
+                <li class="nav-item" v-if="!jwt.origin &amp;&amp; false">
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Inicial'}" tag="a">Petição Inicial</router-link>
                 </li>
                 <li class="nav-item" v-if="!jwt.origin">

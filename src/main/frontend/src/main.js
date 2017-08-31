@@ -17,7 +17,18 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 import { Bus } from './bl/bus.js'
+import ValidacaoBL from './bl/validacao.js'
 import vSelect from 'vue-select'
+
+VeeValidate.Validator.extend('cpf', {
+  getMessage: field => 'CPF ' + field + ' inválido.',
+  validate: ValidacaoBL.validarCPF
+})
+
+VeeValidate.Validator.extend('cnpj', {
+  getMessage: field => 'CNPJ ' + field + ' inválido.',
+  validate: ValidacaoBL.validarCNPJ
+})
 
 Vue.use(VueResource)
 Vue.use(VueClip)

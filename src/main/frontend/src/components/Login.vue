@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import UtilsBL from '../bl/utils.js'
+
 export default {
   name: 'login',
   data () {
@@ -40,9 +42,7 @@ export default {
     login: function () {
       this.$http.post('sessions/create', this.user, { block: true }).then(response => {
         this.$parent.$emit('updateLogged', response.data.id_token)
-      }, error => {
-        this.errormsg = error.data.errormsg
-      })
+      }, error => UtilsBL.errormsg(error, this))
     }
   }
 }

@@ -59,7 +59,7 @@
             <tr v-for="f in arquivos" :class="{odd: f.odd}">
               <td>
                 <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
-                  <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.descricao}}</option>
+                  <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
                   <option disabled hidden selected value=""> [Selecionar]</option>
                 </select>
                 <span v-if="!editando">{{f.tipodescr}}</span>
@@ -75,8 +75,8 @@
 
               <td>
                 <div class="input-group">
-                  <input v-if="editando" type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.descricao" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
-                  <span v-if="!editando">{{f.descricao}}</span>
+                  <input v-if="editando" type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
+                  <span v-if="!editando">{{f.nome}}</span>
                 </div>
               </td>
 
@@ -112,36 +112,30 @@
       <div class="row">
         <div class="form-group col-md-2">
           <label for="orgao">Órgão</label>
-          <select id="orgao" class="form-control" v-model="orgao">
-            <option v-for="l in orgaos" :value="l.id">{{l.descricao}}</option>
-            <option disabled hidden selected value="">[Selecionar]</option>
+          <select id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)">
+            <option disabled selected hidden :value="undefined">[Selecionar]</option>
+            <option v-for="l in orgaos" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-3">
           <label for="localidade">Localidade</label>
-          <select id="localidade" class="form-control" v-model="localidade">
-            <option v-for="l in localidades" :value="l.id">{{l.descricao}}</option>
-            <option disabled hidden selected value="">[Selecionar]</option>
+          <select id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)">
+            <option disabled selected hidden :value="undefined">[Selecionar]</option>
+            <option v-for="l in localidades" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-2">
           <label for="especialidade">Especialidade</label>
-          <select class="form-control" id="especialidade">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+          <select id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)">
+            <option disabled selected hidden :value="undefined">[Selecionar]</option>
+            <option v-for="l in especialidades" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-3">
           <label for="classe">Classe</label>
-          <select class="form-control" id="classe">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+          <select id="classe" class="form-control" v-model="classe">
+            <option disabled selected hidden :value="undefined">[Selecionar]</option>
+            <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
 
@@ -182,42 +176,49 @@
             <tr>
               <th>Polo</th>
               <th>Tipo</th>
-              <th>Nome</th>
               <th>Documento</th>
+              <th>Nome</th>
               <th style="text-align: center"></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="p in partes">
+            <tr v-for="(p, index) in partes">
               <td>
                 <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
                   <option disabled hidden selected value="">[Selecionar]</option>
-                  <option v-for="polo in polos" :value="polo.id">{{polo.descricao}}</option>
+                  <option v-for="polo in polos" :value="polo.id">{{polo.nome}}</option>
                 </select>
               </td>
               <td>
                 <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
                   <option disabled hidden selected value="">[Selecionar]</option>
-                  <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.descricao}}</option>
+                  <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.nome}}</option>
                 </select>
               </td>
 
-              <td><input type="text" class="form-control mr-sm-2" v-model="p.nome" placeholder="Nome Completo" /></td>
+              <td :colspan="p.tipopessoa == '3' ? 2 : 1">
+                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" />
+                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" />
+                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" />
+                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required'" />
+              </td>
 
-              <td><input type="text" class="form-control mr-sm-2" v-model="p.documento" placeholder="CPF" /></td>
+              <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
 
-              <td align="center" v-if="editando">
-                <button type="button" @click="removerParte(p)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
+              <td align="center " v-if="editando ">
+                <button type="button " @click="removerParte(p) " class="btn btn-sm btn-outline-danger">&#x274C;</button>
               </td>
             </tr>
           </tbody>
         </table>
+        <p>{{errors}}</p>
+        <p>{{errors.has('documento[' + 0 +']')}}</p>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-sm-12">
-        <button type="button" @click="peticionar()" id="prosseguir" :disabled="!isAllValid() &amp;&amp; arquivos.length == 0" class="btn btn-primary float-right d-print-none mt-3">Protocolar</button>
+    <div class="row ">
+      <div class="col-sm-12 ">
+        <button type="button " @click="peticionar()" id="prosseguir" :disabled="(!isAllValid() &amp;&amp; arquivos.length==0) || errors.any()" class="btn btn-primary float-right d-print-none mt-3 ">Protocolar</button>
       </div>
     </div>
   </div>
@@ -228,96 +229,55 @@ import AuthBL from '../bl/auth.js'
 import ProcessoBL from '../bl/processo.js'
 import UtilsBL from '../bl/utils.js'
 import { Bus } from '../bl/bus.js'
+import AwesomeMask from 'awesome-mask'
 
 const polos = [{
   id: 1,
-  descricao: 'Ativo'
+  nome: 'Ativo'
 }, {
   id: 2,
-  descricao: 'Passivo'
+  nome: 'Passivo'
 }]
 
-const partes = [{ polo: 1 }, { polo: 2 }]
+const partes = [{ polo: 1, tipopessoa: '1' }, { polo: 2, tipopessoa: '2' }]
 
 const tipospeca = [{
   id: 1,
-  descricao: 'Teor da Petição'
+  nome: 'Teor da Petição'
 }, {
   id: 2,
-  descricao: 'CPF/CNPJ da Parte'
+  nome: 'CPF/CNPJ da Parte'
 }, {
   id: 3,
-  descricao: 'Comprovante de Residência'
+  nome: 'Comprovante de Residência'
 }, {
   id: 4,
-  descricao: 'Outros Documentos'
+  nome: 'Outros Documentos'
 }, {
   id: 5,
-  descricao: 'Outros Documentos Sigilosos'
+  nome: 'Outros Documentos Sigilosos'
 }]
 
 const tipospessoa = [{
-  id: 1,
-  descricao: 'Pessoa Física'
+  id: '1',
+  nome: 'Pessoa Física'
 }, {
-  id: 2,
-  descricao: 'Pessoa Jurídica'
+  id: '2',
+  nome: 'Pessoa Jurídica'
 }, {
-  id: 3,
-  descricao: 'Entidade'
+  id: '3',
+  nome: 'Entidade'
 }, {
-  id: 4,
-  descricao: 'Advogado'
+  id: '4',
+  nome: 'Advogado'
 }]
-
-const orgaos = [{
-  id: 1,
-  descricao: 'TRF2'
-}, {
-  id: 2,
-  descricao: 'JFRJ'
-}, {
-  id: 3,
-  descricao: 'JFES'
-}]
-
-const localidades = [
-  {
-    id: 11,
-    descricao: 'ANGRA DOS REIS'
-  },
-  {
-    id: 19,
-    descricao: 'BARRA DO PIRAÍ'
-  },
-  {
-    id: 21,
-    descricao: 'CAMPO GRANDE'
-  },
-  {
-    id: 3,
-    descricao: 'CAMPOS DOS GOYTACAZES'
-  },
-  {
-    id: 18,
-    descricao: 'DUQUE DE CAXIAS'
-  },
-  {
-    id: 7,
-    descricao: 'ITABORAÍ'
-  }
-]
 
 export default {
   name: 'peticao-inicial',
 
   mounted () {
     this.$nextTick(() => {
-      this.$http.get('config/peticao-intercorrente/tipos', { block: true }).then(response => {
-        for (var i = 0; i < response.data.list.length; i++) this.tipos.push(response.data.list[i])
-      }, error => {
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
+      this.carregarOrgaos()
     })
   },
 
@@ -332,8 +292,15 @@ export default {
       tipospeca: tipospeca,
       tipospessoa: tipospessoa,
 
-      orgaos: orgaos,
-      localidades: localidades,
+      orgao: undefined,
+      localidade: undefined,
+      especialidade: undefined,
+      classe: undefined,
+
+      orgaos: [],
+      localidades: [],
+      especialidades: [],
+      classes: [],
 
       editando: true,
       tipos: [],
@@ -380,9 +347,50 @@ export default {
 
   methods: {
     //
+    // Selects
+    //
+    carregar: function (url, items, item) {
+      this.$http.get(url, { block: true }).then(response => {
+        this[items].length = 0
+        this[item] = undefined
+        for (var i = 0; i < response.data.list.length; i++) this[items].push(response.data.list[i])
+        // if (!this[item]) this[item] = response.data.list[0].id
+      }, error => {
+        Bus.$emit('message', 'Erro', error.data.errormsg)
+      })
+    },
+
+    carregarOrgaos: function () {
+      this.carregar('config/orgaos', 'orgaos', 'orgao')
+    },
+
+    selecionarOrgao: function () {
+      this.carregarLocalidades()
+    },
+
+    carregarLocalidades: function () {
+      this.carregar('config/locais?orgao=' + this.orgao, 'localidades', 'localidade')
+    },
+
+    selecionarLocalidade: function () {
+      this.carregarEspecialidades()
+    },
+
+    carregarEspecialidades: function () {
+      this.carregar('config/local/' + this.localidade + '/especialidades?orgao=' + this.orgao, 'especialidades', 'especialidade')
+    },
+
+    selecionarEspecialidade: function () {
+      this.carregarClasses()
+    },
+
+    carregarClasses: function () {
+      this.carregar('config/especialidade/' + this.especialidade + '/classes?orgao=' + this.orgao, 'classes', 'classe')
+    },
+
+    //
     // Arquivos
     //
-
     addedFileProxy: function (file) {
       this.arquivos.push({
         file: file,
@@ -499,7 +507,7 @@ export default {
     //
 
     adicionarParte: function () {
-      this.partes.push({})
+      this.partes.push({ polo: 2, tipopessoa: 1 })
     },
 
     removerParte: function (parte) {
@@ -507,15 +515,28 @@ export default {
     },
 
     selecionarPolo: function (parte, polo) {
+      this.ordenarPartes()
     },
 
     selecionarTipoPessoa: function (parte, tipoPessoa) {
+      this.ordenarPartes()
+    },
+
+    ordenarPartes: function () {
+      this.partes.sort((a, b) => {
+        if (a.polo && !b.polo) return -1
+        if (!a.polo && b.polo) return 1
+        if (a.polo !== b.polo) return a.polo < b.polo ? -1 : 1
+        if (a.tipopessoa && !b.tipopessoa) return -1
+        if (!a.tipopessoa && b.tipopessoa) return 1
+        if (a.tipopessoa !== b.tipopessoa) return a.tipopessoa < b.tipopessoa ? -1 : 1
+        return 0
+      })
     },
 
     //
     // Peticionar
     //
-
     enviarPeticao: function (item) {
       this.$http.post('processo/peticionar', {
         orgao: item.arq.orgao,
@@ -571,6 +592,10 @@ export default {
     imprimir: function () {
       window.print()
     }
+  },
+
+  directives: {
+    'mask': AwesomeMask
   }
 }
 </script>

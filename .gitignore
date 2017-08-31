@@ -16,3 +16,7 @@ hs_err_pid*
 .classpath
 .tern-project
 .settings
+
+#compiled frontend
+/src/main/webapp/index.html
+/src/main/webapp/static/

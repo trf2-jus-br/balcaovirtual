@@ -3,9 +3,9 @@
     <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
       <b-form>
         <div class="row">
-          <div class="col col-md-8" :class="{ 'form-group': true, 'has-danger': errors.has('texto') }">
+          <div class="col col-md-8 form-group">
             <label class="control-label" for="texto" style="width: 100%">Marcador</label>
-            <b-form-input type="text" list="lst_userIdTypes" name="texto" id="texto" v-model="texto" class="form-control" style="width: 100%" autofocus v-on:keyup.enter="$refs.processoPecaDetalhes.hide(true)" v-validate.initial="'required'"></b-form-input>
+            <b-form-input type="text" list="lst_userIdTypes" name="texto" id="texto" v-model="texto" class="form-control" :class="{'is-invalid': errors.has('texto') }" style="width: 100%" autofocus v-on:keyup.enter="$refs.processoPecaDetalhes.hide(true)" v-validate.initial="'required'"></b-form-input>
             <datalist id="lst_userIdTypes">
               <option v-for="m in marcadores">{{m}}</option>
             </datalist>
@@ -19,14 +19,14 @@
         </div>
         <input class="mt-3 mb-3" type="checkbox" v-model="intervalo"> Intervalo de Páginas </input>
         <div class="row" v-show="intervalo">
-          <div class="col" :class="{ 'form-group': true, 'has-danger': errors.has('paginicial') }">
+          <div class="col form-group">
             <label class="control-label" for="paginicial" style="width: 100%">Página Inicial</label>
-            <b-form-input type="text" name="paginicial" id="paginicial" v-model="paginicial" class="form-control" style="width: 100%" v-validate.initial="'between:' + pagmin + ',' + pagmax + '|required'"></b-form-input>
+            <b-form-input type="text" name="paginicial" id="paginicial" v-model="paginicial" class="form-control" :class="{'is-invalid': errors.has('paginicial') }" :placeholder="pagmin" style="width: 100%" v-validate.initial="'between:' + pagmin + ',' + pagmax + '|required'"></b-form-input>
             <span v-if="false" v-show="errors.has('paginicial')" class="help is-danger">{{ errors.first('paginicial') }}</span>
           </div>
-          <div class="col" :class="{ 'form-group': true, 'has-danger': errors.has('pagfinal') }">
+          <div class="col form-group">
             <label class="control-label" for="pagfinal" style="width: 100%">Página Inicial</label>
-            <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'"></b-form-input>
+            <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" :class="{'is-invalid': errors.has('pagfinal') }" :placeholder="pagmax" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'"></b-form-input>
             <span v-if="false" v-show="errors.has('pagfinal')" class="help is-danger">{{ errors.first('pagfinal') }}</span>
           </div>
         </div>
