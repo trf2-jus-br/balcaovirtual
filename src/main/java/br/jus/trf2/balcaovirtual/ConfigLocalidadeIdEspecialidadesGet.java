@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalIdEspecialidadesGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalIdEspecialidadesGetResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetRequest;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Especialidade;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalIdEspecialidadesGet;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadeIdEspecialidadesGet;
 
-public class ConfigLocalIdEspecialidadesGet implements IConfigLocalIdEspecialidadesGet {
-	private static final Logger log = LoggerFactory.getLogger(ConfigLocalIdEspecialidadesGet.class);
+public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdEspecialidadesGet {
+	private static final Logger log = LoggerFactory.getLogger(ConfigLocalidadeIdEspecialidadesGet.class);
 
 	@Override
-	public void run(ConfigLocalIdEspecialidadesGetRequest req, ConfigLocalIdEspecialidadesGetResponse resp)
+	public void run(ConfigLocalidadeIdEspecialidadesGetRequest req, ConfigLocalidadeIdEspecialidadesGetResponse resp)
 			throws Exception {
 		SessionsCreatePost.assertUsuarioAutorizado();
 

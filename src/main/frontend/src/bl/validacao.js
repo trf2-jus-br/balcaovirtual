@@ -54,49 +54,37 @@ export default {
       return false
     }
 
-    var add, rev, i
-    add = 0
-    for (i = 0; i < 12; i++) add += parseInt(cnpj.charAt(i)) * (13 - i)
-    rev = 11 - add % 11
-    if (rev === 10 || rev === 11) rev = 0
-    if (rev !== parseInt(cnpj.charAt(13))) return false
-    add = 0
-    for (i = 0; i < 13; i++) add += parseInt(cnpj.charAt(i)) * (14 - i)
-    rev = 11 - add % 11
-    if (rev === 10 || rev === 11) rev = 0
-    if (rev !== parseInt(cnpj.charAt(14))) return false
-    return true
-
     // var a = 1
     // if (a === 1) return true
 
     // Valida DV
-    // var soma, pos, i, resultado, tamanho, numeros, digitos
+    var soma, pos, i, resultado, tamanho, numeros, digitos
 
-    // Valida DVs
-    // tamanho = cnpj.length - 2
-    // numeros = cnpj.substring(0, tamanho)
-    // digitos = cnpj.substring(tamanho)
-    // soma = 0
-    // pos = tamanho - 7
-    // for (i = tamanho; i >= 1; i--) {
-    //   soma += numeros.charAt(tamanho - i) * pos--
-    //   if (pos < 2) pos = 9
-    // }
-    // resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-    // if (resultado !== digitos.charAt(0)) return false
+    tamanho = cnpj.length - 2
+    numeros = cnpj.substring(0, tamanho)
+    digitos = cnpj.substring(tamanho)
+    soma = 0
+    pos = tamanho - 7
+    for (i = tamanho; i >= 1; i--) {
+      soma += numeros.charAt(tamanho - i) * pos--
+      if (pos < 2) pos = 9
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
+    console.log(resultado, digitos.charAt(0))
+    if (resultado + '' !== digitos.charAt(0)) return false
 
-    // tamanho = tamanho + 1
-    // numeros = cnpj.substring(0, tamanho)
-    // soma = 0
-    // pos = tamanho - 7
-    // for (i = tamanho; i >= 1; i--) {
-    //   soma += numeros.charAt(tamanho - i) * pos--
-    //   if (pos < 2) pos = 9
-    // }
-    // resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-    // if (resultado !== digitos.charAt(1)) return false
+    tamanho = tamanho + 1
+    numeros = cnpj.substring(0, tamanho)
+    soma = 0
+    pos = tamanho - 7
+    for (i = tamanho; i >= 1; i--) {
+      soma += numeros.charAt(tamanho - i) * pos--
+      if (pos < 2) pos = 9
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
+    console.log(resultado)
+    if (resultado + '' !== digitos.charAt(1)) return false
 
-    // return true
+    return true
   }
 }

@@ -21,12 +21,12 @@
         <div class="row" v-show="intervalo">
           <div class="col form-group">
             <label class="control-label" for="paginicial" style="width: 100%">Página Inicial</label>
-            <b-form-input type="text" name="paginicial" id="paginicial" v-model="paginicial" class="form-control" :class="{'is-invalid': errors.has('paginicial') }" :placeholder="pagmin" style="width: 100%" v-validate.initial="'between:' + pagmin + ',' + pagmax + '|required'"></b-form-input>
+            <b-form-input type="text" name="paginicial" id="paginicial" v-model="paginicial" class="form-control" :class="{'is-invalid': errors.has('paginicial') }" :placeholder="pagmin" style="width: 100%" v-validate.initial="'between:' + pagmin + ',' + pagmax + '|required'" @change="validar()"></b-form-input>
             <span v-if="false" v-show="errors.has('paginicial')" class="help is-danger">{{ errors.first('paginicial') }}</span>
           </div>
           <div class="col form-group">
             <label class="control-label" for="pagfinal" style="width: 100%">Página Inicial</label>
-            <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" :class="{'is-invalid': errors.has('pagfinal') }" :placeholder="pagmax" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'"></b-form-input>
+            <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" :class="{'is-invalid': errors.has('pagfinal') }" :placeholder="pagmax" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'" @change="validar()"></b-form-input>
             <span v-if="false" v-show="errors.has('pagfinal')" class="help is-danger">{{ errors.first('pagfinal') }}</span>
           </div>
         </div>
@@ -134,13 +134,25 @@ export default {
       this.$refs.processoPecaDetalhes.hide(false)
     },
 
+    validar: function () {
+      this.$nextTick(() => this.$validator.validateAll())
+    },
+
     save: function (e) {
       console.log(e)
+
       // Close on Esc
       if (e.isOK === undefined) e.cancel()
 
       // Close on cancel
       if (!e.isOK) return
+
+      this.$validator.validateAll().then((result) => {
+        if (!result) {
+          e.cancel()
+          return
+        }
+      })
 
       if ((this.texto || '') === '') {
         this.errormsg = 'Texto do marcador deve ser informado.'

@@ -68,11 +68,6 @@ public interface IBalcaoVirtual {
 		public String nome;
 	}
 
-	public class Local implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
 	public class Numero implements ISwaggerModel {
 	}
 
@@ -226,30 +221,30 @@ public interface IBalcaoVirtual {
 		public void run(ConfigOrgaosGetRequest req, ConfigOrgaosGetResponse resp) throws Exception;
 	}
 
-	public class ConfigLocaisGetRequest implements ISwaggerRequest {
+	public class ConfigLocalidadesGetRequest implements ISwaggerRequest {
 		public String orgao;
 	}
 
-	public class ConfigLocaisGetResponse implements ISwaggerResponse {
-		public List<Local> list;
+	public class ConfigLocalidadesGetResponse implements ISwaggerResponse {
+		public List<Localidade> list;
 	}
 
-	public interface IConfigLocaisGet extends ISwaggerMethod {
-		public void run(ConfigLocaisGetRequest req, ConfigLocaisGetResponse resp) throws Exception;
+	public interface IConfigLocalidadesGet extends ISwaggerMethod {
+		public void run(ConfigLocalidadesGetRequest req, ConfigLocalidadesGetResponse resp) throws Exception;
 	}
 
-	public class ConfigLocalIdEspecialidadesGetRequest implements ISwaggerRequest {
+	public class ConfigLocalidadeIdEspecialidadesGetRequest implements ISwaggerRequest {
 		public String id;
 		public String orgao;
 	}
 
-	public class ConfigLocalIdEspecialidadesGetResponse implements ISwaggerResponse {
+	public class ConfigLocalidadeIdEspecialidadesGetResponse implements ISwaggerResponse {
 		public List<Especialidade> list;
 	}
 
-	public interface IConfigLocalIdEspecialidadesGet extends ISwaggerMethod {
-		public void run(ConfigLocalIdEspecialidadesGetRequest req, ConfigLocalIdEspecialidadesGetResponse resp)
-				throws Exception;
+	public interface IConfigLocalidadeIdEspecialidadesGet extends ISwaggerMethod {
+		public void run(ConfigLocalidadeIdEspecialidadesGetRequest req,
+				ConfigLocalidadeIdEspecialidadesGetResponse resp) throws Exception;
 	}
 
 	public class ConfigEspecialidadeIdClassesGetRequest implements ISwaggerRequest {
@@ -299,6 +294,24 @@ public interface IBalcaoVirtual {
 	public interface IProcessoNumeroPeticionarPost extends ISwaggerMethod {
 		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
 				throws Exception;
+	}
+
+	public class ProcessoAutuarPostRequest implements ISwaggerRequest {
+		public String orgao;
+		public String localidade;
+		public String especialidade;
+		public String classe;
+		public String nivelsigilo;
+		public String partes;
+		public String pdfs;
+	}
+
+	public class ProcessoAutuarPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IProcessoAutuarPost extends ISwaggerMethod {
+		public void run(ProcessoAutuarPostRequest req, ProcessoAutuarPostResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroConsultarGetRequest implements ISwaggerRequest {

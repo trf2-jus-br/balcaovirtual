@@ -36,7 +36,7 @@ public class ConfigEspecialidadeIdClassesGet implements IConfigEspecialidadeIdCl
 		} else {
 			{
 				Classe o = new Classe();
-				o.id = "3000";
+				o.id = "99";
 				o.nome = "EXECUÇÃO FISCAL";
 				resp.list.add(o);
 			}

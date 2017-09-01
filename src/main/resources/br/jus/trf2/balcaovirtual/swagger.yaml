@@ -164,6 +164,30 @@ parameters:
     description: Página final da marca
     type: string
     required: false
+  localidade:
+    name: localidade
+    in: formData
+    description: Localidade
+    type: string
+    required: true
+  especialidade:
+    name: especialidade
+    in: formData
+    description: Especialidade
+    type: string
+    required: true
+  classe:
+    name: classe
+    in: formData
+    description: Classe do CNJ
+    type: string
+    required: true
+  partes:
+    name: partes
+    in: formData
+    description: Partes codificadas em JSON
+    type: string
+    required: true
 
 ################################################################################
 #                                           Paths                              #
@@ -286,7 +310,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/locais:
+  /config/localidades:
     get:
       description: Diversos parâmetros para petição inicial
       tags: [config]
@@ -301,12 +325,12 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/Local"
+                  $ref: "#/definitions/Localidade"
         500:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/local/{id}/especialidades:
+  /config/localidade/{id}/especialidades:
     get:
       description: Diversos parâmetros para petição inicial
       tags: [config]
@@ -388,6 +412,31 @@ paths:
         - $ref: "#/parameters/orgao"
         - $ref: "#/parameters/tipopeticao"
         - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/pdfs"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /processo/autuar:
+    post:
+      description: Enviar petição inicial
+      tags: [utils]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/localidade"
+        - $ref: "#/parameters/especialidade"
+        - $ref: "#/parameters/classe"
+        - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/partes"
         - $ref: "#/parameters/pdfs"
       responses:
         200:
@@ -853,15 +902,6 @@ definitions:
         type: string
 
   OrgaoInfo:
-    description: Classe
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  Local:
     description: Classe
     type: object
     properties:

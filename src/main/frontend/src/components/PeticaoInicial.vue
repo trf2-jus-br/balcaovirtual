@@ -48,7 +48,6 @@
           <thead class="thead-inverse">
             <tr>
               <th>Tipo</th>
-              <th>Segredo</th>
               <th>Descrição</th>
               <th>Arquivo</th>
               <th>Status</th>
@@ -56,21 +55,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="f in arquivos" :class="{odd: f.odd}">
+            <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
               <td>
-                <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
+                <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
                   <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
                   <option disabled hidden selected value=""> [Selecionar]</option>
                 </select>
                 <span v-if="!editando">{{f.tipodescr}}</span>
-              </td>
-
-              <td>
-                <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.segredo" :disabled="f.protocolado" @change="selecionarSegredo(f, f.segredo)">
-                  <option v-for="segredo in segredos" :value="segredo.codigo">{{segredo.nome}}</option>
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                </select>
-                <span v-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span>
               </td>
 
               <td>
@@ -112,38 +103,38 @@
       <div class="row">
         <div class="form-group col-md-2">
           <label for="orgao">Órgão</label>
-          <select id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)">
+          <select id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)" name="orgao" :class="{ 'is-invalid': errors.has('orgao') }" v-validate.initial="'required'">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
             <option v-for="l in orgaos" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-3">
           <label for="localidade">Localidade</label>
-          <select id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)">
+          <select id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)" name="localidade" :class="{ 'is-invalid': errors.has('localidade') }" v-validate.initial="'required'">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
             <option v-for="l in localidades" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-2">
           <label for="especialidade">Especialidade</label>
-          <select id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)">
+          <select id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)" name="especialidade" :class="{ 'is-invalid': errors.has('especialidade') }" v-validate.initial="'required'">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
             <option v-for="l in especialidades" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
         <div class="form-group col-md-3">
           <label for="classe">Classe</label>
-          <select id="classe" class="form-control" v-model="classe">
+          <select id="classe" class="form-control" v-model="classe" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
             <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
           </select>
         </div>
 
         <div class="form-group col-md-2">
-          <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00">
+          <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
         </div>
         <div class="form-check col-md-3">
-          <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Segredo de Justiça
+          <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
           </label>
         </div>
         <div class="form-check col-md-3">
@@ -218,7 +209,7 @@
 
     <div class="row ">
       <div class="col-sm-12 ">
-        <button type="button " @click="peticionar()" id="prosseguir" :disabled="(!isAllValid() &amp;&amp; arquivos.length==0) || errors.any()" class="btn btn-primary float-right d-print-none mt-3 ">Protocolar</button>
+        <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none mt-3 ">Protocolar</button>
       </div>
     </div>
   </div>
@@ -296,6 +287,7 @@ export default {
       localidade: undefined,
       especialidade: undefined,
       classe: undefined,
+      nivelsigilo: false,
 
       orgaos: [],
       localidades: [],
@@ -312,13 +304,6 @@ export default {
       arquivos: [],
       arquivosAProtocolar: undefined,
       arquivoCorrente: undefined,
-      segredos: [{
-        codigo: 0,
-        nome: 'Não'
-      }, {
-        codigo: 1,
-        nome: 'Sim'
-      }],
       vueclipOptions: {
         url: this.$http.options.root + '/../upload',
         headers: {
@@ -369,7 +354,7 @@ export default {
     },
 
     carregarLocalidades: function () {
-      this.carregar('config/locais?orgao=' + this.orgao, 'localidades', 'localidade')
+      this.carregar('config/localidades?orgao=' + this.orgao, 'localidades', 'localidade')
     },
 
     selecionarLocalidade: function () {
@@ -377,7 +362,7 @@ export default {
     },
 
     carregarEspecialidades: function () {
-      this.carregar('config/local/' + this.localidade + '/especialidades?orgao=' + this.orgao, 'especialidades', 'especialidade')
+      this.carregar('config/localidade/' + this.localidade + '/especialidades?orgao=' + this.orgao, 'especialidades', 'especialidade')
     },
 
     selecionarEspecialidade: function () {
@@ -495,9 +480,7 @@ export default {
     isAllValid: function () {
       for (var j = 0; j < this.arquivos.length; j++) {
         if (this.arquivos[j].file.status !== 'success') return false
-        if (!this.arquivos[j].processo) return false
         if (!this.arquivos[j].tipo) return false
-        if (this.arquivos[j].segredo === undefined) return false
       }
       return true
     },
@@ -508,6 +491,7 @@ export default {
 
     adicionarParte: function () {
       this.partes.push({ polo: 2, tipopessoa: 1 })
+      this.validar()
     },
 
     removerParte: function (parte) {
@@ -516,10 +500,16 @@ export default {
 
     selecionarPolo: function (parte, polo) {
       this.ordenarPartes()
+      this.validar()
     },
 
     selecionarTipoPessoa: function (parte, tipoPessoa) {
       this.ordenarPartes()
+      this.validar()
+    },
+
+    validar: function () {
+      this.$nextTick(() => this.$validator.validateAll())
     },
 
     ordenarPartes: function () {
@@ -537,51 +527,27 @@ export default {
     //
     // Peticionar
     //
-    enviarPeticao: function (item) {
-      this.$http.post('processo/peticionar', {
-        orgao: item.arq.orgao,
-        tipopeticao: item.arq.tipo,
-        nivelsigilo: item.arq.segredo,
-        pdfs: item.pdfs
-      }, { block: true }).then(response => {
-        for (var i = item.index; i <= item.indexFinal; i++) {
-          this.arquivos[i].status = response.data.status
-          this.arquivos[i].protocolado = true
-        }
-        UtilsBL.logEvento('peticionamento', 'enviar', 'petição inicial')
-      }, error => {
-        for (var i = item.index; i <= item.indexFinal; i++) {
-          this.arquivos[i].errormsg = error.data.errormsg
-        }
-      })
-    },
-
-    // Falta criar callback de retorno
     peticionar: function () {
+      this.$validator.validateAll().then((result) => { if (!result) return })
       this.editando = false
-      var lote = []
-
-      for (var i = 0; i < this.arquivos.length; i++) {
-        var arq = this.arquivos[i]
-        if (arq.protocolado) continue
-        arq.errormsg = undefined
-        arq.protocolado = undefined
-        var r = {
-          arq: arq,
-          index: i,
-          indexFinal: i,
-          pdfs: arq.id
-        }
-        lote.push(r)
-        while (i < this.arquivos.length - 1) {
-          if (!this.arquivos[i + 1].anexo) break
-          i++
-          r.indexFinal = i
-          r.pdfs += ',' + this.arquivos[i].id
-        }
+      var pdfs, i
+      for (i = 0; i < this.arquivos.length; i++) {
+        if (pdfs) pdfs += ','
+        else pdfs = ''
+        pdfs += this.arquivos[i].id
       }
-      var func = this.enviarPeticao
-      Bus.$emit('prgStart', 'Protocolando Petições Intercorrentes', lote.length, function (i) { func(lote[i]) }, this.organizarArquivos)
+      this.$http.post('processo/autuar', {
+        orgao: this.orgao,
+        localidade: this.localidade,
+        especialidade: this.especialidade,
+        classe: this.classe,
+        nivelsigilo: this.nivelsigilo ? 1 : 0,
+        partes: JSON.stringify(this.partes),
+        pdfs: pdfs
+      }, { block: true }).then(response => {
+        this.errormsg = response.data.status
+        UtilsBL.logEvento('peticionamento', 'enviar', 'petição inicial')
+      }, error => UtilsBL.errormsg(error, this))
     },
 
     limpar: function () {

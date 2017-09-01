@@ -31,12 +31,18 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import br.jus.cnj.intercomunicacao_2_2.ModalidadePoloProcessual;
+import br.jus.cnj.intercomunicacao_2_2.ModalidadeRelacionamentoProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
 import br.jus.cnj.intercomunicacao_2_2.TipoComunicacaoProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoDocumento;
 import br.jus.cnj.intercomunicacao_2_2.TipoParametro;
+import br.jus.cnj.intercomunicacao_2_2.TipoParte;
+import br.jus.cnj.intercomunicacao_2_2.TipoPessoa;
+import br.jus.cnj.intercomunicacao_2_2.TipoPoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoProcessoJudicial;
+import br.jus.cnj.intercomunicacao_2_2.TipoQualificacaoPessoa;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
@@ -336,6 +342,125 @@ public class SoapMNI {
 		log.warn(
 				"*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: " + protocoloRecebimento.value
 						+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
+
+		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
+				+ (sent ? "" : " (email não enviado)");
+	}
+
+	public static class Parte {
+		int polo; // 1=Ativo, 2=Passivo
+		int tipopessoa; // 1=PF, 2=PJ, 3=Entidade, 4=Advogado
+		String documento;
+		String nome;
+	}
+
+	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
+			int classe, int nvlSigilo, List<Parte> partes, String nomePdfs, String tpDocPdfs) throws Exception {
+		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		String email = (String) jwt.get("email");
+		String nome = (String) jwt.get("name");
+		String usuario = (String) jwt.get("username");
+
+		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
+		String dirFinal = Utils.getDirFinal();
+		URL url = new URL(Utils.getMniWsdlUrl(orgao));
+		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		List<TipoDocumento> l = new ArrayList<>();
+		// String tpDocs[] = tpDocPdfs.split(",");
+		// int i = 0;
+		for (String nomePdf : nomePdfs.split(",")) {
+			TipoDocumento doc = new TipoDocumento();
+			doc.setMimetype("application/pdf");
+			doc.setDataHora(dataEnvio);
+			doc.setNivelSigilo(nvlSigilo);
+			// doc.setTipoDocumento(tpDocs[i]);
+			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
+			byte[] data = Files.readAllBytes(path);
+			doc.setConteudo(data);
+			l.add(doc);
+			// i++;
+		}
+
+		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();
+		for (Parte parte : partes) {
+			ModalidadePoloProcessual m = parte.polo == 1 ? ModalidadePoloProcessual.AT : ModalidadePoloProcessual.PA;
+			TipoPoloProcessual tpp = null;
+			for (TipoPoloProcessual itpp : dadosBasicos.getPolo()) {
+				if (itpp.getPolo().equals(m)) {
+					tpp = itpp;
+					break;
+				}
+			}
+			if (tpp == null) {
+				tpp = new TipoPoloProcessual();
+				tpp.setPolo(m);
+				dadosBasicos.getPolo().add(tpp);
+			}
+
+			TipoQualificacaoPessoa tqp = null;
+			switch (parte.tipopessoa) {
+			case 1:
+				tqp = TipoQualificacaoPessoa.FISICA;
+				break;
+			case 2:
+				tqp = TipoQualificacaoPessoa.JURIDICA;
+				break;
+			case 3:
+				tqp = TipoQualificacaoPessoa.AUTORIDADE;
+				break;
+			case 4:
+				tqp = TipoQualificacaoPessoa.ORGAOREPRESENTACAO;
+				break;
+			}
+
+			TipoParte tp = new TipoParte();
+			tp.setRelacionamentoProcessual(ModalidadeRelacionamentoProcessual.RP);
+			TipoPessoa pess = new TipoPessoa();
+			pess.setNome(parte.nome);
+			pess.setNumeroDocumentoPrincipal(Utils.removePontuacao(parte.documento));
+			pess.setTipoPessoa(tqp);
+			tp.setPessoa(pess);
+			tpp.getParte().add(tp);
+		}
+
+		dadosBasicos.setCodigoLocalidade(localidade);
+		dadosBasicos.setClasseProcessual(classe);
+		Holder<Boolean> sucesso = new Holder<>();
+		Holder<String> mensagem = new Holder<>();
+		Holder<String> protocoloRecebimento = new Holder<>();
+		Holder<String> dataOperacao = new Holder<>();
+		Holder<byte[]> recibo = new Holder<>();
+		Holder<List<TipoParametro>> parametro = new Holder<>();
+
+		client.entregarManifestacaoProcessual(idManif, null, null, dadosBasicos, l, dataEnvio,
+				new ArrayList<TipoParametro>(), sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo,
+				parametro);
+		if (!sucesso.value)
+			throw new Exception(mensagem.value);
+
+		DateTime dt = DateTime.parse(dataOperacao.value, dtfMNI);
+
+		boolean sent = false;
+		String numProcFormated = "?";
+		if (email != null) {
+			try {
+				String conteudo = "Prezado(a) " + nome
+						+ ",\n\nAcusamos o recebimento da petição inicial conforme dados abaixo:"
+						+ "\n\nProcesso Autuado Número: " + numProcFormated + "\nProtocolo: "
+						+ protocoloRecebimento.value + "\nData/Hora do Protocolo: " + dt.toString(dtfBR)
+						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
+				Correio.enviar(email, "Balcão Virtual: Protocolo de Recebimento", conteudo,
+						numProcFormated + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
+						recibo.value);
+				sent = true;
+			} catch (Exception ex) {
+				log.error("Email não enviado", ex);
+			}
+		}
+
+		log.warn("*** Processo: " + numProcFormated + " Petição Inicial protocolada: " + protocoloRecebimento.value
+				+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
 
 		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
 				+ (sent ? "" : " (email não enviado)");

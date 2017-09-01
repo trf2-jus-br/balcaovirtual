@@ -114,6 +114,12 @@ public class Utils {
 		return temp;
 	}
 
+	public static String removePontuacao(String s) {
+		if (s == null)
+			return null;
+		return s.replaceAll("\\-\\.\\/", "");
+	}
+
 	public static Connection getConnection() throws Exception {
 		try {
 			Context initContext = new InitialContext();
