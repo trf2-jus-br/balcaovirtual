@@ -25,7 +25,7 @@
             <span v-if="false" v-show="errors.has('paginicial')" class="help is-danger">{{ errors.first('paginicial') }}</span>
           </div>
           <div class="col form-group">
-            <label class="control-label" for="pagfinal" style="width: 100%">Página Inicial</label>
+            <label class="control-label" for="pagfinal" style="width: 100%">Página Final</label>
             <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" :class="{'is-invalid': errors.has('pagfinal') }" :placeholder="pagmax" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'" @change="validar()"></b-form-input>
             <span v-if="false" v-show="errors.has('pagfinal')" class="help is-danger">{{ errors.first('pagfinal') }}</span>
           </div>
