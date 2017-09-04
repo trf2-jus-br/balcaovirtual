@@ -113,7 +113,6 @@ export default {
     },
 
     barStyle () {
-      console.log('progress: ', this.ended ? this.max : this.min + this.progress * (this.max - this.min) / 100)
       return {
         position: 'fixed',
         top: '0',
@@ -182,8 +181,6 @@ export default {
 
       this.min = min
       this.max = max
-
-      console.log(min, max)
 
       this.ended = false
       this.isPaused = false
