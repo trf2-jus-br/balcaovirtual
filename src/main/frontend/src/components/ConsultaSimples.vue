@@ -150,7 +150,7 @@ export default {
   methods: {
     mostrarProcesso: function (numero) {
       var n = ProcessoBL.somenteNumeros(this.numero)
-      this.$http.get('processo/' + n + '/validar', { block: true }).then(
+      this.$http.get('processo/' + n + '/validar', { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
         },

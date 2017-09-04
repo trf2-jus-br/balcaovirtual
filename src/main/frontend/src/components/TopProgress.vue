@@ -45,7 +45,9 @@ export default {
       opacity: 1,
       status: null,
       isPaused: false,
-      ended: false
+      ended: false,
+      min: 0,
+      max: 100
     }
   },
 
@@ -111,12 +113,13 @@ export default {
     },
 
     barStyle () {
+      console.log('progress: ', this.ended ? this.max : this.min + this.progress * (this.max - this.min) / 100)
       return {
         position: 'fixed',
         top: '0',
         left: '0',
         right: '0',
-        width: `${this.ended ? 100 : this.progress}%`,
+        width: `${this.ended ? this.max : this.min + this.progress * (this.max - this.min) / 100}%`,
         height: `${this.height}px`,
         backgroundColor: this.progressColor,
         transition: `all ${this.speed}ms ${this.easing}`,
@@ -173,7 +176,16 @@ export default {
       }
     },
 
-    start () {
+    start (min, max) {
+      if (!min) min = 0
+      if (!max) max = 100
+
+      this.min = min
+      this.max = max
+
+      console.log(min, max)
+
+      this.ended = false
       this.isPaused = false
       this.progress = 0
 

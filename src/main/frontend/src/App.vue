@@ -86,13 +86,13 @@ export default {
       }
     })
 
-    Bus.$on('block', () => {
+    Bus.$on('block', (min, max) => {
       console.log('block')
       if (this.blockCounter === 0) {
         this.$nextTick(function () {
           if (this.blockCounter > 0) {
             console.log('blocked')
-            this.$refs.topProgress.start()
+            this.$refs.topProgress.start(min, max)
           }
         }, 200)
         this.loading = true

@@ -47,7 +47,7 @@ new Vue({
   el: '#app',
   mounted () {
     Vue.http.interceptors.push(function (request, next) {
-      if (request.block) Bus.$emit('block')
+      if (request.block) Bus.$emit('block', request.blockmin, request.blockmax)
 
       // continue to next interceptor
       next(function (response) {

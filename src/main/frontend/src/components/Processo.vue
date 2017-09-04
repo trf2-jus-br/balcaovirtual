@@ -419,7 +419,7 @@ export default {
 
     // Validar o número do processo
     this.$nextTick(function () {
-      Bus.$emit('block')
+      Bus.$emit('block', 20)
       this.$http.get('processo/' + this.numero + '/validar').then(response => {
         this.orgao = response.data.orgao
         this.$http.get('processo/' + this.numero + '/consultar?orgao=' + this.orgao).then(
