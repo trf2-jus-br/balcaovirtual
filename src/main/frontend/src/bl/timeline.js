@@ -1,5 +1,7 @@
 import UtilsBL from './utils.js'
 
+const DIA_EM_MINUTOS = 60 * 24
+
 export default {
   emptyTimeline: function () {
     return JSON.parse(
@@ -29,7 +31,7 @@ export default {
     )
   },
 
-  updateTimeline: function (orgao, processo) {
+  updateTimeline: function (orgao, processo, calcularTempos) {
     var contains = function (m, a) {
       return a.indexOf(m.movimentoLocal.codigoMovimento) !== -1
     }
@@ -42,6 +44,7 @@ export default {
     timeline.apelacao.texto = orgao === 'TRF2' ? undefined : 'TRF2'
 
     var e
+    var hora, ultHora
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i]
       e = undefined
@@ -79,6 +82,16 @@ export default {
       if (contains(m, [19])) e = timeline.audiencia
       if (contains(m, [26])) e = timeline.baixa
       if (e) {
+        if (calcularTempos) {
+          if (!e.tempo) e.tempo = 0
+          hora = UtilsBL.convertString2DateYYYYMMDDHHMM(m.dataHora)
+          if (ultHora) {
+            var dif = (hora - ultHora) / 1000 / 60
+            e.tempo += dif
+          }
+          ultHora = hora
+        }
+
         for (var key in timeline) {
           if (timeline.hasOwnProperty(key) && e === timeline[key]) {
             m.tipo = '#' + key
@@ -124,6 +137,28 @@ export default {
       }
 
       // if (e === timeline.devolucaoapelacao) break;
+    }
+
+    // Calcula tempo médio e cores
+    if (calcularTempos) {
+      var ti, tempoAcumulado, perc
+      tempoAcumulado = 0
+      for (k in timeline) {
+        if (!timeline.hasOwnProperty(k)) continue
+        if (!timeline[k].contador) continue
+        timeline[k].tempoMedio = timeline[k].tempo / timeline[k].contador
+        tempoAcumulado += timeline[k].tempoMedio
+      }
+      for (k in timeline) {
+        if (!timeline.hasOwnProperty(k)) continue
+        ti = timeline[k]
+        if (!ti.contador) continue
+        perc = ti.tempoMedio / tempoAcumulado
+        ti.transito = 'verde'
+        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) { ti.transito = 'laranja' }
+        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) { ti.transito = 'vermelho' }
+        if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
+      }
     }
     return timeline
   }

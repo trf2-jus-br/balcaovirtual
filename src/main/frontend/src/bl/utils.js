@@ -23,6 +23,22 @@ export default {
     return r
   },
 
+  convertString2DateYYYYMMDDHHMM: function (s) {
+    if (s === undefined) return
+
+    var r =
+      s.substring(0, 4) +
+      '-' +
+      s.substring(4, 6) +
+      '-' +
+      s.substring(6, 8) +
+      'T' +
+      s.substring(8, 10) +
+      ':' +
+      s.substring(10, 12)
+    return new Date(r)
+  },
+
   formatJSDDMMYYYYHHMM: function (s) {
     if (!s) return
     var r =

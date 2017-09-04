@@ -440,7 +440,8 @@ export default {
                   return 0
                 })
               }
-              this.timeline = TimelineBL.updateTimeline(this.orgao, this.proc)
+              var interno = !!this.$parent.jwt.origin
+              this.timeline = TimelineBL.updateTimeline(this.orgao, this.proc, interno)
               this.fixed = ProcessoBL.fixProc(this.proc)
               this.getDescriptions()
               this.getMarcadores()
