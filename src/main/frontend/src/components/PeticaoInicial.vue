@@ -202,8 +202,6 @@
             </tr>
           </tbody>
         </table>
-        <p>{{errors}}</p>
-        <p>{{errors.has('documento[' + 0 +']')}}</p>
       </div>
     </div>
 

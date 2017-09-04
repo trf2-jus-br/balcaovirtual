@@ -68,6 +68,7 @@
 
 <script>
 import AuthBL from './bl/auth.js'
+import UtilsBL from './bl/utils.js'
 import topProgress from './components/TopProgress'
 import { Bus } from './bl/bus.js'
 import ProgressModal from './components/ProgressModal'
@@ -158,7 +159,7 @@ export default {
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {
         this.test = response.data
-      }, error => { this.errormsg = error.data.errormsg })
+      }, error => UtilsBL.errormsg(error, this))
     })
   },
   data () {

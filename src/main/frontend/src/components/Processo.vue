@@ -325,21 +325,25 @@
                       <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
                       <template v-if="movdoc.doc">
                         <td>
-                          <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
-                          <a href="" v-if="movdoc.doc.exibirTexto == false" class="text-success" @click.prevent="mostrarTexto(movdoc.doc, true)">
-                            <img class="icone-em-linha d-print-none" src="../assets/search1.png" style="height: 1em;"></img>
-                          </a>
-                          <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
-                            <img class="icone-em-linha d-print-none" src="../assets/pencil.png" style="height: 1em;"></img>
-                          </a>
-                          <br v-if="movdoc.marca &amp;&amp; movdoc.marca.length > 0">
-                          <template v-for="m in movdoc.marca">
-                            <a href="" class="marca-ref" @click.prevent="exibirProcessoPecaDetalhes(movdoc, m)">
-                              <span class="marca" :class="{'marca-yellow' : m.idestilo == 2, 'marca-green': m.idestilo == 4, 'marca-pink': m.idestilo == 3, 'marca-blue': m.idestilo == 1}">{{m.texto}}
-                                <span class="inquebravel" v-if="m.paginicial" v-html="'p.&nbsp' + m.paginicial + (m.paginicial !== m.pagfinal ? '&#8209;' + m.pagfinal : '') ">
-                                </span>
-                              </span>
+                          <p class="mb-0">
+                            <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
+                            <a href="" v-if="movdoc.doc.exibirTexto == false" class="text-success" @click.prevent="mostrarTexto(movdoc.doc, true)">
+                              <img class="icone-em-linha d-print-none" src="../assets/search1.png" style="height: 1em;"></img>
                             </a>
+                            <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
+                              <img class="icone-em-linha d-print-none" src="../assets/pencil.png" style="height: 1em;"></img>
+                            </a>
+                          </p>
+                          <br v-if="false &amp;&amp; movdoc.marca &amp;&amp; movdoc.marca.length > 0">
+                          <template v-for="m in movdoc.marca">
+                            <p class="mt-1 mb-0" style="line-height: 1.4">
+                              <a href="" class="marca-ref" @click.prevent="exibirProcessoPecaDetalhes(movdoc, m)">
+                                <span class="marca" :class="{'marca-yellow' : m.idestilo == 2, 'marca-green': m.idestilo == 4, 'marca-pink': m.idestilo == 3, 'marca-blue': m.idestilo == 1}">{{m.texto}}
+                                  <span class="inquebravel" v-if="m.paginicial" v-html="'p.&nbsp' + m.paginicial + (m.paginicial !== m.pagfinal ? '&#8209;' + m.pagfinal : '') ">
+                                  </span>
+                                </span>
+                              </a>
+                            </p>
                           </template>
                         </td>
                         <td style="text-align: right">{{movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaInicial : ''}}</td>
@@ -447,7 +451,7 @@ export default {
           },
           error => {
             Bus.$emit('release')
-            this.errormsg = error.data.errormsg
+            UtilsBL.errormsg(error, this)
           })
       }, error => {
         Bus.$emit('release')
@@ -500,7 +504,7 @@ export default {
           this.marcasativas = false
           return
         }
-        this.errormsg = error.data.errormsg
+        UtilsBL.errormsg(error, this)
       })
     },
     getMarcas: function () {
@@ -527,7 +531,7 @@ export default {
           this.marcasativas = false
           return
         }
-        this.errormsg = error.data.errormsg
+        UtilsBL.errormsg(error, this)
       })
     },
     getDescriptions: function () {
@@ -560,9 +564,7 @@ export default {
             this.$set(this.fixed, 'assuntoPrincipalDescricaoCompleta', response.data.descricaocompleta)
           }
         },
-        error => {
-          this.errormsg = error.data.errormsg
-        })
+        error => UtilsBL.errormsg(error, this))
     },
     mostrarTexto: function (doc, f) {
       ProcessoBL.mostrarTexto(this.fixed.movdoc, doc, f)

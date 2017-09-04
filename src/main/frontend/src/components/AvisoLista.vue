@@ -229,9 +229,7 @@ export default {
           this.montarOutline(this.avisos)
         }
         UtilsBL.logEvento('aviso', 'listar avisos')
-      }, error => {
-        this.errormsg = error.data.errormsg
-      })
+      }, error => UtilsBL.errormsg(error, this))
     })
   },
   data () {
