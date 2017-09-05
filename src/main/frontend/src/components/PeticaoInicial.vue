@@ -393,7 +393,7 @@ export default {
     },
 
     carregarClasses: function () {
-      this.carregar('config/especialidade/' + this.especialidade + '/classes?orgao=' + this.orgao, 'classes', 'classe')
+      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classes?orgao=' + this.orgao, 'classes', 'classe')
     },
 
     //
@@ -564,8 +564,8 @@ export default {
         localidade: this.localidade,
         especialidade: this.especialidade,
         classe: this.classe,
-        cdas: this.cda,
-        pas: this.pa,
+        cdas: this.ef ? this.cda : undefined,
+        pas: this.ef ? this.pa : undefined,
         nivelsigilo: this.nivelsigilo ? 1 : 0,
         partes: JSON.stringify(this.partes),
         pdfs: pdfs

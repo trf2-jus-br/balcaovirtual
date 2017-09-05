@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
+import com.crivano.swaggerservlet.property.PublicProperty;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
@@ -23,6 +24,9 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		super.setAPI(IBalcaoVirtual.class);
 
 		super.setActionPackage("br.jus.trf2.balcaovirtual");
+
+		super.addProperty(new PublicProperty("balcaovirtual.marcas"));
+		super.addProperty(new PublicProperty("balcaovirtual.env"));
 
 		class HttpGetDependency extends TestableDependency {
 			String testsite;
@@ -90,6 +94,11 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			});
 		}
 
+	}
+
+	@Override
+	public int errorCode(Exception e) {
+		return e.getMessage() == null || !e.getMessage().endsWith("(Alerta)") ? 500 : 400;
 	}
 
 	@Override

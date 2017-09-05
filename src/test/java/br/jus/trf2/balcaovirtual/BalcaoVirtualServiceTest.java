@@ -6,6 +6,7 @@ import br.jus.trf2.balcaovirtual.BalcaoVirtualServlet;
 
 public class BalcaoVirtualServiceTest extends SwaggerTestSupport {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getAPI() {
 		return BalcaoVirtualServlet.class;
