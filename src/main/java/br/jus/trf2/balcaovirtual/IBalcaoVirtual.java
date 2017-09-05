@@ -28,31 +28,6 @@ public interface IBalcaoVirtual {
 		public String nome;
 	}
 
-	public class TipoAtuacaoAdvogado implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
-	public class TipoAtuacaoDefensor implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
-	public class TipoAtuacaoProcurador implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
-	public class TipoAtuacaoAutor implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
-	public class TipoAtuacaoReu implements ISwaggerModel {
-		public String id;
-		public String nome;
-	}
-
 	public class Especialidade implements ISwaggerModel {
 		public String id;
 		public String nome;
@@ -192,22 +167,16 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
-	public class ConfigPeticaoInicialDadosBasicosGetRequest implements ISwaggerRequest {
+	public class ConfigEntidadesGetRequest implements ISwaggerRequest {
 		public String orgao;
 	}
 
-	public class ConfigPeticaoInicialDadosBasicosGetResponse implements ISwaggerResponse {
-		public List<Entidade> listentidade;
-		public List<TipoAtuacaoAdvogado> listtipoatuacaoadvogado;
-		public List<TipoAtuacaoDefensor> listtipoatuacaodefensor;
-		public List<TipoAtuacaoProcurador> listtipoatuacaoprocurador;
-		public List<TipoAtuacaoAutor> listtipoatuacaoautor;
-		public List<TipoAtuacaoReu> listtipoatuacaoreu;
+	public class ConfigEntidadesGetResponse implements ISwaggerResponse {
+		public List<Entidade> list;
 	}
 
-	public interface IConfigPeticaoInicialDadosBasicosGet extends ISwaggerMethod {
-		public void run(ConfigPeticaoInicialDadosBasicosGetRequest req,
-				ConfigPeticaoInicialDadosBasicosGetResponse resp) throws Exception;
+	public interface IConfigEntidadesGet extends ISwaggerMethod {
+		public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception;
 	}
 
 	public class ConfigOrgaosGetRequest implements ISwaggerRequest {
@@ -247,18 +216,19 @@ public interface IBalcaoVirtual {
 				ConfigLocalidadeIdEspecialidadesGetResponse resp) throws Exception;
 	}
 
-	public class ConfigEspecialidadeIdClassesGetRequest implements ISwaggerRequest {
+	public class ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest implements ISwaggerRequest {
 		public String id;
+		public String id2;
 		public String orgao;
 	}
 
-	public class ConfigEspecialidadeIdClassesGetResponse implements ISwaggerResponse {
+	public class ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse implements ISwaggerResponse {
 		public List<Classe> list;
 	}
 
-	public interface IConfigEspecialidadeIdClassesGet extends ISwaggerMethod {
-		public void run(ConfigEspecialidadeIdClassesGetRequest req, ConfigEspecialidadeIdClassesGetResponse resp)
-				throws Exception;
+	public interface IConfigLocalidadeIdEspecialidadeId2ClassesGet extends ISwaggerMethod {
+		public void run(ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest req,
+				ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroValidarGetRequest implements ISwaggerRequest {
@@ -277,41 +247,6 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {
 		public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception;
-	}
-
-	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
-		public String numero;
-		public String orgao;
-		public String tipopeticao;
-		public String nivelsigilo;
-		public String pdfs;
-	}
-
-	public class ProcessoNumeroPeticionarPostResponse implements ISwaggerResponse {
-		public String status;
-	}
-
-	public interface IProcessoNumeroPeticionarPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
-				throws Exception;
-	}
-
-	public class ProcessoAutuarPostRequest implements ISwaggerRequest {
-		public String orgao;
-		public String localidade;
-		public String especialidade;
-		public String classe;
-		public String nivelsigilo;
-		public String partes;
-		public String pdfs;
-	}
-
-	public class ProcessoAutuarPostResponse implements ISwaggerResponse {
-		public String status;
-	}
-
-	public interface IProcessoAutuarPost extends ISwaggerMethod {
-		public void run(ProcessoAutuarPostRequest req, ProcessoAutuarPostResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroConsultarGetRequest implements ISwaggerRequest {
@@ -355,6 +290,44 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
 		public void run(ProcessoNumeroPdfGetRequest req, ProcessoNumeroPdfGetResponse resp) throws Exception;
+	}
+
+	public class PeticaoInicialProtocolarPostRequest implements ISwaggerRequest {
+		public String orgao;
+		public String localidade;
+		public String especialidade;
+		public String classe;
+		public String cdas;
+		public String pas;
+		public String nivelsigilo;
+		public String partes;
+		public String pdfs;
+	}
+
+	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IPeticaoInicialProtocolarPost extends ISwaggerMethod {
+		public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String tipopeticao;
+		public String nivelsigilo;
+		public String pdfs;
+	}
+
+	public class ProcessoNumeroPeticionarPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IProcessoNumeroPeticionarPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {

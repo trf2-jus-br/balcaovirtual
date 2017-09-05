@@ -12,8 +12,18 @@ consumes: [application/json]
 produces: [application/json]
 
 tags:
-  - name: stats
-    description: Obter estatísticas
+  - name: consulta
+    description: Consulta Processual
+  - name: peticionamento
+    description: Peticionamento Inicial e Intercorrente
+  - name: aviso
+    description: Intimações/Citações
+  - name: marca
+    description: MArcadores Processuais
+  - name: config
+    description: Configurações
+  - name: utils
+    description: Utilitários
 
 
 ################################################################################
@@ -182,6 +192,18 @@ parameters:
     description: Classe do CNJ
     type: string
     required: true
+  cdas:
+    name: cdas
+    in: formData
+    description: CDA(s)
+    type: string
+    required: false
+  pas:
+    name: pas
+    in: formData
+    description: PA(s)
+    type: string
+    required: false
   partes:
     name: partes
     in: formData
@@ -196,6 +218,7 @@ paths:
   /sugestao:
     post:
       consumes: ["application/x-www-form-urlencoded"]
+      tags: [utils]
       parameters:
         - $ref: "#/parameters/nome"
         - $ref: "#/parameters/email"
@@ -216,6 +239,7 @@ paths:
   /sessions/create:
     post:
       consumes: ["application/x-www-form-urlencoded"]
+      tags: [utils]
       parameters:
         - $ref: "#/parameters/username"
         - $ref: "#/parameters/password"
@@ -251,7 +275,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/peticao-inicial/dados-basicos:
+  /config/entidades:
     get:
       description: Diversos parâmetros para petição inicial
       tags: [config]
@@ -263,30 +287,10 @@ paths:
           schema:
             type: object
             properties:
-              listentidade:
+              list:
                 type: array
                 items:
                   $ref: "#/definitions/Entidade"
-              listtipoatuacaoadvogado:
-                type: array
-                items:
-                  $ref: "#/definitions/TipoAtuacaoAdvogado"
-              listtipoatuacaodefensor:
-                type: array
-                items:
-                  $ref: "#/definitions/TipoAtuacaoDefensor"
-              listtipoatuacaoprocurador:
-                type: array
-                items:
-                  $ref: "#/definitions/TipoAtuacaoProcurador"
-              listtipoatuacaoautor:
-                type: array
-                items:
-                  $ref: "#/definitions/TipoAtuacaoAutor"
-              listtipoatuacaoreu:
-                type: array
-                items:
-                  $ref: "#/definitions/TipoAtuacaoReu"
         500:
           description: Error ocurred
           schema:
@@ -351,12 +355,13 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/especialidade/{id}/classes:
+  /config/localidade/{id}/especialidade/{id2}/classes:
     get:
-      description: Diversos parâmetros para petição inicial
+      description: Classes de determinada localidade
       tags: [config]
       parameters:
         - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
         - $ref: "#/parameters/orgaoquery"
       responses:
         200:
@@ -375,7 +380,7 @@ paths:
   /processo/{numero}/validar:
     get:
       description: Validar o número do processo
-      tags: [utils]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
       responses:
@@ -402,58 +407,10 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /processo/{numero}/peticionar:
-    post:
-      description: Enviar petições para um processo
-      tags: [utils]
-      consumes: ["application/x-www-form-urlencoded"]
-      parameters:
-        - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgao"
-        - $ref: "#/parameters/tipopeticao"
-        - $ref: "#/parameters/nivelsigilo"
-        - $ref: "#/parameters/pdfs"
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        500:
-          description: Error ocurred
-          schema:
-            $ref: "#/definitions/Error"
-  /processo/autuar:
-    post:
-      description: Enviar petição inicial
-      tags: [utils]
-      consumes: ["application/x-www-form-urlencoded"]
-      parameters:
-        - $ref: "#/parameters/orgao"
-        - $ref: "#/parameters/localidade"
-        - $ref: "#/parameters/especialidade"
-        - $ref: "#/parameters/classe"
-        - $ref: "#/parameters/nivelsigilo"
-        - $ref: "#/parameters/partes"
-        - $ref: "#/parameters/pdfs"
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        500:
-          description: Error ocurred
-          schema:
-            $ref: "#/definitions/Error"
   /processo/{numero}/consultar:
     get:
       description: Enviar petições para um processo
-      tags: [utils]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/orgaoquery"
@@ -478,7 +435,7 @@ paths:
   /processo/{numero}/peca/{id}/pdf:
     get:
       description: Obter o PDF de uma peça processual para visualização
-      tags: [view]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
@@ -500,7 +457,7 @@ paths:
   /processo/{numero}/pdf:
     get:
       description: Obter o PDF completo de um processo para visualização
-      tags: [view]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/orgaoquery"
@@ -518,10 +475,61 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /peticao-inicial/protocolar:
+    post:
+      description: Protocolar petição inicial
+      tags: [peticionamento]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/localidade"
+        - $ref: "#/parameters/especialidade"
+        - $ref: "#/parameters/classe"
+        - $ref: "#/parameters/cdas"
+        - $ref: "#/parameters/pas"
+        - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/partes"
+        - $ref: "#/parameters/pdfs"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /processo/{numero}/peticionar:
+    post:
+      description: Enviar petições para um processo
+      tags: [peticionamento]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/tipopeticao"
+        - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/pdfs"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /processo/{numero}/aviso/{id}/receber:
     post:
       description: Confirmar o recebimento de um aviso e obter o teor da comunicação
-      tags: [view]
+      tags: [aviso]
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
@@ -641,7 +649,7 @@ paths:
   /download/{jwt}/{filename}:
     get:
       description: Faz o download de um artefato qualquer
-      tags: [view]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/jwt"
         - $ref: "#/parameters/filename"
@@ -667,7 +675,7 @@ paths:
   /arquivo-temporario/{pdf}:
     get:
       description: Obter o PDF de um documento para visualização
-      tags: [view]
+      tags: [peticionamento]
       parameters:
         - $ref: "#/parameters/pdf"
       responses:
@@ -690,7 +698,7 @@ paths:
   /peticao-intercorrente/contar:
     get:
       description: Validar o número do processo
-      tags: [utils]
+      tags: [peticionamento]
       parameters: []
       responses:
         200:
@@ -710,7 +718,7 @@ paths:
   /peticao-intercorrente/listar:
     get:
       description: Validar o número do processo
-      tags: [utils]
+      tags: [peticionamento]
       parameters: 
         - $ref: "#/parameters/data"
       responses:
@@ -731,7 +739,7 @@ paths:
   /aviso/listar:
     get:
       description: Listar as intimações para o usuário logado
-      tags: [utils]
+      tags: [aviso]
       parameters: []
       responses:
         200:
@@ -755,7 +763,7 @@ paths:
   /classe/{id}:
     get:
       description: Obter dados de uma classe pela id
-      tags: [utils]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/orgaoquery"
@@ -781,7 +789,7 @@ paths:
   /assunto/{id}:
     get:
       description: Obter dados de um assunto pela id
-      tags: [utils]
+      tags: [consulta]
       parameters:
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/orgaoquery"
@@ -831,51 +839,6 @@ definitions:
 
   Localidade:
     description: Localidade
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  TipoAtuacaoAdvogado:
-    description: Tipo de atuação do advogado
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  TipoAtuacaoDefensor:
-    description: Tipo de atuação do defensor
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  TipoAtuacaoProcurador:
-    description: Tipo de atuação do procurador
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  TipoAtuacaoAutor:
-    description: Tipo de atuação do autor
-    type: object
-    properties:
-      id:
-        type: string
-      nome:
-        type: string
-
-  TipoAtuacaoReu:
-    description: Tipo de atuação do réu
     type: object
     properties:
       id:

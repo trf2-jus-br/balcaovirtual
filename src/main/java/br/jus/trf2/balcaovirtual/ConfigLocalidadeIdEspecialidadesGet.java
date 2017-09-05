@@ -2,16 +2,12 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Especialidade;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadeIdEspecialidadesGet;
 
 public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdEspecialidadesGet {
-	private static final Logger log = LoggerFactory.getLogger(ConfigLocalidadeIdEspecialidadesGet.class);
 
 	@Override
 	public void run(ConfigLocalidadeIdEspecialidadesGetRequest req, ConfigLocalidadeIdEspecialidadesGetResponse resp)
@@ -19,7 +15,7 @@ public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdE
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		resp.list = new ArrayList<>();
-		if (req.id.equals("11")) {
+		if (req.id.equals("1")) {
 			{
 				Especialidade o = new Especialidade();
 				o.id = "1";

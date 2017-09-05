@@ -2,10 +2,6 @@ package br.jus.trf2.balcaovirtual;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -20,10 +16,9 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
-import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
-import com.crivano.swaggerservlet.SwaggerUtils;
 
+@SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 
 	private boolean isMultipart;
@@ -69,9 +64,11 @@ public class UploadServlet extends HttpServlet {
 
 		try {
 			// Parse the request to get file items.
+			@SuppressWarnings("rawtypes")
 			List fileItems = upload.parseRequest(request);
 
 			// Process the uploaded file items
+			@SuppressWarnings("rawtypes")
 			Iterator i = fileItems.iterator();
 
 			JSONObject o = new JSONObject();
@@ -79,10 +76,7 @@ public class UploadServlet extends HttpServlet {
 				FileItem fi = (FileItem) i.next();
 				if (!fi.isFormField()) {
 					// Get the uploaded file parameters
-					String fieldName = fi.getFieldName();
 					String fileName = fi.getName();
-					String contentType = fi.getContentType();
-					boolean isInMemory = fi.isInMemory();
 					long sizeInBytes = fi.getSize();
 					String fileId = UUID.randomUUID().toString();
 					// Write the file

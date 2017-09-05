@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
@@ -21,11 +18,9 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetResponse;
 
 public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
-	private static final Logger log = LoggerFactory.getLogger(DownloadJwtFilenameGet.class);
 
 	@Override
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
@@ -45,7 +40,6 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			resp.inputstream = new ByteArrayInputStream(ab);
 		} else {
 			// Processo completo
-			ProcessoNumeroPdfGetRequest q = new ProcessoNumeroPdfGetRequest();
 			Future<SwaggerAsyncResponse<ProcessoNumeroPdfGetResponse>> future = SwaggerCall.callAsync(
 					"obter PDF completo de processo", "Bearer " + req.jwt, "GET",
 					Utils.getWsProcessualUrl() + "/processo/" + numProc + "/pdf", null,

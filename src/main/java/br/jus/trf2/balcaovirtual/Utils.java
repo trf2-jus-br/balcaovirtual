@@ -1,8 +1,9 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.util.Scanner;
 
 import javax.naming.Context;
@@ -117,7 +118,7 @@ public class Utils {
 	public static String removePontuacao(String s) {
 		if (s == null)
 			return null;
-		return s.replaceAll("\\-\\.\\/", "");
+		return s.replace("-", "").replace(".", "").replace("/", "");
 	}
 
 	public static Connection getConnection() throws Exception {
@@ -146,10 +147,12 @@ public class Utils {
 		}
 	}
 
-	public static String getSQL(String filename) {
-		String text = new Scanner(Utils.class.getResourceAsStream(filename + ".sql"), "UTF-8").useDelimiter("\\A")
-				.next();
-		return text;
+	public static String getSQL(String filename) throws IOException {
+		try (InputStream is = Utils.class.getResourceAsStream(filename + ".sql");
+				Scanner sc = new Scanner(is, "UTF-8")) {
+			String text = sc.useDelimiter("\\A").next();
+			return text;
+		}
 	}
 
 }

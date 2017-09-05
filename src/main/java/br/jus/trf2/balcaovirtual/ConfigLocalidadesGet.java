@@ -2,16 +2,12 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadesGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadesGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Localidade;
 
 public class ConfigLocalidadesGet implements IConfigLocalidadesGet {
-	private static final Logger log = LoggerFactory.getLogger(ConfigLocalidadesGet.class);
 
 	@Override
 	public void run(ConfigLocalidadesGetRequest req, ConfigLocalidadesGetResponse resp) throws Exception {
@@ -21,8 +17,8 @@ public class ConfigLocalidadesGet implements IConfigLocalidadesGet {
 		if (req.orgao.equals("jfrj")) {
 			{
 				Localidade o = new Localidade();
-				o.id = "11";
-				o.nome = "ANGRA DOS REIS";
+				o.id = "1";
+				o.nome = "RIO DE JANEIRO";
 				resp.list.add(o);
 			}
 			{

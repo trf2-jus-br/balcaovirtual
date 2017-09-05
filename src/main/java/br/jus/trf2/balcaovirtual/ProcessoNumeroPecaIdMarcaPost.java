@@ -3,14 +3,9 @@ package br.jus.trf2.balcaovirtual;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Types;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
-import com.crivano.swaggerservlet.SwaggerException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdMarcaPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
@@ -20,7 +15,6 @@ import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
 
 public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarcaPost {
-	private static final Logger log = LoggerFactory.getLogger(ProcessoNumeroPecaIdMarcaPost.class);
 
 	@Override
 	public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)

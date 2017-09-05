@@ -3,9 +3,6 @@ package br.jus.trf2.balcaovirtual;
 import java.util.ArrayList;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
@@ -17,7 +14,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PeticaoIntercorrenteTipo
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.TipoPeticaoIntercorrente;
 
 public class ConfigPeticaoIntercorrenteTiposGet implements IConfigPeticaoIntercorrenteTiposGet {
-	private static final Logger log = LoggerFactory.getLogger(ConfigPeticaoIntercorrenteTiposGet.class);
 
 	@Override
 	public void run(ConfigPeticaoIntercorrenteTiposGetRequest req, ConfigPeticaoIntercorrenteTiposGetResponse resp)

@@ -1,8 +1,5 @@
 package br.jus.trf2.balcaovirtual;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISugestaoPost;
@@ -10,7 +7,6 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SugestaoPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SugestaoPostResponse;
 
 public class SugestaoPost implements ISugestaoPost {
-	private static final Logger log = LoggerFactory.getLogger(SugestaoPost.class);
 
 	@Override
 	public void run(SugestaoPostRequest req, SugestaoPostResponse resp) throws Exception {

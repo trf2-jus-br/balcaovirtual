@@ -2,9 +2,6 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigOrgaosGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigOrgaosGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigOrgaosGet;
@@ -12,7 +9,6 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.OrgaoInfo;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class ConfigOrgaosGet implements IConfigOrgaosGet {
-	private static final Logger log = LoggerFactory.getLogger(ConfigOrgaosGet.class);
 
 	@Override
 	public void run(ConfigOrgaosGetRequest req, ConfigOrgaosGetResponse resp) throws Exception {

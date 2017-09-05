@@ -133,10 +133,24 @@
         <div class="form-group col-md-2">
           <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
         </div>
+
+        <div class="form-group col-md-6" v-if="ef">
+          <label for="cda">CDA</label>
+          <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" v-validate.initial="'required'" />
+          <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
+        </div>
+
+        <div class="form-group col-md-6" v-if="ef">
+          <label for="pa">Processo Administrativo</label>
+          <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" v-validate.initial="'required'" />
+          <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
+        </div>
+
         <div class="form-check col-md-3">
           <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
           </label>
         </div>
+
         <div class="form-check col-md-3">
           <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Justiça Gratuita
           </label>
@@ -325,6 +339,11 @@ export default {
       var a = this.resumoPorData
       a = UtilsBL.filtrarPorSubstring(a, this.filtroProtocolo)
       return a
+    },
+
+    ef: function () {
+      // Substituir pelo uso de um parâmetro de retorno referente à classe escolhida
+      return this.classe === '1116' || this.classe === '99'
     }
   },
 
@@ -348,6 +367,9 @@ export default {
     },
 
     selecionarOrgao: function () {
+      this.localidade = undefined
+      this.especialidade = undefined
+      this.classe = undefined
       this.carregarLocalidades()
     },
 
@@ -356,6 +378,8 @@ export default {
     },
 
     selecionarLocalidade: function () {
+      this.especialidade = undefined
+      this.classe = undefined
       this.carregarEspecialidades()
     },
 
@@ -364,6 +388,7 @@ export default {
     },
 
     selecionarEspecialidade: function () {
+      this.classe = undefined
       this.carregarClasses()
     },
 
@@ -534,11 +559,13 @@ export default {
         else pdfs = ''
         pdfs += this.arquivos[i].id
       }
-      this.$http.post('processo/autuar', {
+      this.$http.post('peticao-inicial/protocolar', {
         orgao: this.orgao,
         localidade: this.localidade,
         especialidade: this.especialidade,
         classe: this.classe,
+        cdas: this.cda,
+        pas: this.pa,
         nivelsigilo: this.nivelsigilo ? 1 : 0,
         partes: JSON.stringify(this.partes),
         pdfs: pdfs

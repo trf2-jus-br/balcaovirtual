@@ -2,9 +2,6 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
@@ -14,7 +11,6 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IClasseIdGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ClasseCnjIdGetResponse;
 
 public class ClasseIdGet implements IClasseIdGet {
-	private static final Logger log = LoggerFactory.getLogger(ClasseIdGet.class);
 
 	@Override
 	public void run(ClasseIdGetRequest req, ClasseIdGetResponse resp) throws Exception {

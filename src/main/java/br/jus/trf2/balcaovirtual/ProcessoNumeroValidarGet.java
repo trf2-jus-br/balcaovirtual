@@ -2,11 +2,7 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
-import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
@@ -16,7 +12,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGet
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
 
 public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
-	private static final Logger log = LoggerFactory.getLogger(ProcessoNumeroValidarGet.class);
 
 	@Override
 	public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception {

@@ -134,6 +134,7 @@ public class SMTPTransport extends Transport {
 	private SMTPOutputStream dataStream;
 
 	// Map of SMTP service extensions supported by server, if EHLO used.
+	@SuppressWarnings("rawtypes")
 	private Hashtable extMap;
 
 	private boolean quitWait = false; // true if we should wait
@@ -155,6 +156,7 @@ public class SMTPTransport extends Transport {
 	private int lastReturnCode; // last SMTP return code
 
 	/** Headers that should not be included when sending */
+	@SuppressWarnings("unused")
 	private static final String[] ignoreList = { "Bcc", "Content-Length" };
 
 	private static final byte[] CRLF = { (byte) '\r', (byte) '\n' };
@@ -172,8 +174,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Constructor used by this class and by SMTPSSLTransport subclass.
 	 */
-	protected SMTPTransport(Session session, URLName urlname, String name,
-			int defaultPort, boolean isSSL) {
+	protected SMTPTransport(Session session, URLName urlname, String name, int defaultPort, boolean isSSL) {
 		super(session, urlname);
 		if (urlname != null)
 			name = urlname.getProtocol();
@@ -211,11 +212,9 @@ public class SMTPTransport extends Transport {
 		try {
 			// get our hostname and cache it for future use
 			if (localHostName == null || localHostName.length() <= 0)
-				localHostName = session.getProperty("mail." + name
-						+ ".localhost");
+				localHostName = session.getProperty("mail." + name + ".localhost");
 			if (localHostName == null || localHostName.length() <= 0)
-				localHostName = session.getProperty("mail." + name
-						+ ".localaddress");
+				localHostName = session.getProperty("mail." + name + ".localaddress");
 			if (localHostName == null || localHostName.length() <= 0) {
 				InetAddress localHost = InetAddress.getLocalHost();
 				localHostName = localHost.getHostName();
@@ -417,8 +416,7 @@ public class SMTPTransport extends Transport {
 	 * @exception MessagingException
 	 *                for non-authentication failures
 	 */
-	protected boolean protocolConnect(String host, int port, String user,
-			String passwd) throws MessagingException {
+	protected boolean protocolConnect(String host, int port, String user, String passwd) throws MessagingException {
 		// setting mail.smtp.ehlo to false disables attempts to use EHLO
 		String ehloStr = session.getProperty("mail." + name + ".ehlo");
 		boolean useEhlo = ehloStr == null || !ehloStr.equalsIgnoreCase("false");
@@ -427,8 +425,7 @@ public class SMTPTransport extends Transport {
 		boolean useAuth = authStr != null && authStr.equalsIgnoreCase("true");
 		DigestMD5 md5;
 		if (debug)
-			out.println("DEBUG SMTP: useEhlo " + useEhlo + ", useAuth "
-					+ useAuth);
+			out.println("DEBUG SMTP: useEhlo " + useEhlo + ", useAuth " + useAuth);
 
 		/*
 		 * If mail.smtp.auth is set, make sure we have a valid username and
@@ -480,13 +477,11 @@ public class SMTPTransport extends Transport {
 				&& (supportsExtension("AUTH") || supportsExtension("AUTH=LOGIN"))) {
 			if (debug) {
 				out.println("DEBUG SMTP: Attempt to authenticate");
-				if (!supportsAuthentication("LOGIN")
-						&& supportsExtension("AUTH=LOGIN"))
+				if (!supportsAuthentication("LOGIN") && supportsExtension("AUTH=LOGIN"))
 					out.println("DEBUG SMTP: use AUTH=LOGIN hack");
 			}
 			// if authentication fails, close connection and return false
-			if (supportsAuthentication("LOGIN")
-					|| supportsExtension("AUTH=LOGIN")) {
+			if (supportsAuthentication("LOGIN") || supportsExtension("AUTH=LOGIN")) {
 				// XXX - could use "initial response" capability
 				int resp = simpleCommand("AUTH LOGIN");
 
@@ -515,7 +510,7 @@ public class SMTPTransport extends Transport {
 							// obtain b64 encoded bytes
 							b64os.write(ASCIIUtility.getBytes(user));
 							b64os.flush(); // complete the encoding
-	
+
 							// send username
 							resp = simpleCommand(bos.toByteArray());
 							bos.reset(); // reset buffer
@@ -524,7 +519,7 @@ public class SMTPTransport extends Transport {
 							// obtain b64 encoded bytes
 							b64os.write(ASCIIUtility.getBytes(passwd));
 							b64os.flush(); // complete the encoding
-	
+
 							// send passwd
 							resp = simpleCommand(bos.toByteArray());
 							bos.reset(); // reset buffer
@@ -541,8 +536,7 @@ public class SMTPTransport extends Transport {
 				// XXX - could use "initial response" capability
 				int resp = simpleCommand("AUTH PLAIN");
 				try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-						OutputStream b64os = new BASE64EncoderStream(bos,
-								Integer.MAX_VALUE)) {
+						OutputStream b64os = new BASE64EncoderStream(bos, Integer.MAX_VALUE)) {
 					if (resp == 334) {
 						// send "<NUL>user<NUL>passwd"
 						// XXX - we don't send an authorization identity
@@ -562,13 +556,11 @@ public class SMTPTransport extends Transport {
 						return false;
 					}
 				}
-			} else if (supportsAuthentication("DIGEST-MD5")
-					&& (md5 = getMD5()) != null) {
+			} else if (supportsAuthentication("DIGEST-MD5") && (md5 = getMD5()) != null) {
 				int resp = simpleCommand("AUTH DIGEST-MD5");
 				try {
 					if (resp == 334) {
-						byte[] b = md5.authClient(host, user, passwd,
-								getSASLRealm(), lastServerResponse);
+						byte[] b = md5.authClient(host, user, passwd, getSASLRealm(), lastServerResponse);
 						resp = simpleCommand(b);
 						if (resp == 334) { // client authenticated by server
 							if (!md5.authServer(lastServerResponse)) {
@@ -651,8 +643,7 @@ public class SMTPTransport extends Transport {
 		}
 		for (int i = 0; i < addresses.length; i++) {
 			if (!(addresses[i] instanceof InternetAddress)) {
-				throw new MessagingException(addresses[i]
-						+ " is not an InternetAddress");
+				throw new MessagingException(addresses[i] + " is not an InternetAddress");
 			}
 		}
 
@@ -665,8 +656,7 @@ public class SMTPTransport extends Transport {
 		if (message instanceof SMTPMessage)
 			use8bit = ((SMTPMessage) message).getAllow8bitMIME();
 		if (!use8bit) {
-			String ebStr = session.getProperty("mail." + name
-					+ ".allow8bitmime");
+			String ebStr = session.getProperty("mail." + name + ".allow8bitmime");
 			use8bit = ebStr != null && ebStr.equalsIgnoreCase("true");
 		}
 		if (debug)
@@ -686,31 +676,27 @@ public class SMTPTransport extends Transport {
 		try {
 			mailFrom();
 			rcptTo();
-//Nato:			this.message.writeTo(data(), ignoreList);
+			// Nato: this.message.writeTo(data(), ignoreList);
 			this.message.writeTo(data());
 			finishData();
 			if (sendPartiallyFailed) {
 				// throw the exception,
 				// fire TransportEvent.MESSAGE_PARTIALLY_DELIVERED event
 				if (debug)
-					out.println("DEBUG SMTP: Sending partially failed "
-							+ "because of invalid destination addresses");
-				notifyTransportListeners(
-						TransportEvent.MESSAGE_PARTIALLY_DELIVERED,
-						validSentAddr, validUnsentAddr, invalidAddr,
-						this.message);
+					out.println("DEBUG SMTP: Sending partially failed " + "because of invalid destination addresses");
+				notifyTransportListeners(TransportEvent.MESSAGE_PARTIALLY_DELIVERED, validSentAddr, validUnsentAddr,
+						invalidAddr, this.message);
 
-				throw new SMTPSendFailedException(".", lastReturnCode,
-						lastServerResponse, exception, validSentAddr,
+				throw new SMTPSendFailedException(".", lastReturnCode, lastServerResponse, exception, validSentAddr,
 						validUnsentAddr, invalidAddr);
 			}
-			notifyTransportListeners(TransportEvent.MESSAGE_DELIVERED,
-					validSentAddr, validUnsentAddr, invalidAddr, this.message);
+			notifyTransportListeners(TransportEvent.MESSAGE_DELIVERED, validSentAddr, validUnsentAddr, invalidAddr,
+					this.message);
 		} catch (MessagingException mex) {
 			if (debug)
 				mex.printStackTrace(out);
-			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED,
-					validSentAddr, validUnsentAddr, invalidAddr, this.message);
+			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED, validSentAddr, validUnsentAddr, invalidAddr,
+					this.message);
 
 			throw mex;
 		} catch (IOException ex) {
@@ -722,11 +708,10 @@ public class SMTPTransport extends Transport {
 				closeConnection();
 			} catch (MessagingException mex) { /* ignore it */
 			}
-			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED,
-					validSentAddr, validUnsentAddr, invalidAddr, this.message);
+			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED, validSentAddr, validUnsentAddr, invalidAddr,
+					this.message);
 
-			throw new MessagingException("IOException while sending message",
-					ex);
+			throw new MessagingException("IOException while sending message", ex);
 		} finally {
 			// no reason to keep this data around
 			validSentAddr = validUnsentAddr = invalidAddr = null;
@@ -820,6 +805,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Expand any group addresses.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void expandGroups() {
 		Vector groups = null;
 		for (int i = 0; i < addresses.length; i++) {
@@ -866,16 +852,14 @@ public class SMTPTransport extends Transport {
 	 * 
 	 * @return true if any changes were made
 	 * 
-	 * XXX - This is really quite a hack.
+	 *         XXX - This is really quite a hack.
 	 */
 	private boolean convertTo8Bit(MimePart part) {
 		boolean changed = false;
 		try {
 			if (part.isMimeType("text/*")) {
 				String enc = part.getEncoding();
-				if (enc != null
-						&& (enc.equalsIgnoreCase("quoted-printable") || enc
-								.equalsIgnoreCase("base64"))) {
+				if (enc != null && (enc.equalsIgnoreCase("quoted-printable") || enc.equalsIgnoreCase("base64"))) {
 					InputStream is = part.getInputStream();
 					if (is8Bit(is)) {
 						/*
@@ -887,8 +871,7 @@ public class SMTPTransport extends Transport {
 						 * If the message was not created using an InputStream,
 						 * the following should have no effect.
 						 */
-						part.setContent(part.getContent(), part
-								.getContentType());
+						part.setContent(part.getContent(), part.getContentType());
 						part.setHeader("Content-Transfer-Encoding", "8bit");
 						changed = true;
 					}
@@ -978,8 +961,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Issue the <code>EHLO</code> command. Collect the returned list of
-	 * service extensions.
+	 * Issue the <code>EHLO</code> command. Collect the returned list of service
+	 * extensions.
 	 * 
 	 * @param domain
 	 *            our domain
@@ -987,6 +970,7 @@ public class SMTPTransport extends Transport {
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected boolean ehlo(String domain) throws MessagingException {
 		String cmd;
 		if (domain != null)
@@ -997,8 +981,7 @@ public class SMTPTransport extends Transport {
 		int resp = readServerResponse();
 		if (resp == 250) {
 			// extract the supported service extensions
-			BufferedReader rd = new BufferedReader(new StringReader(
-					lastServerResponse));
+			BufferedReader rd = new BufferedReader(new StringReader(lastServerResponse));
 			String line;
 			extMap = new Hashtable();
 			try {
@@ -1018,8 +1001,7 @@ public class SMTPTransport extends Transport {
 						line = line.substring(0, i);
 					}
 					if (debug)
-						out.println("DEBUG SMTP: Found extension \"" + line
-								+ "\", arg \"" + arg + "\"");
+						out.println("DEBUG SMTP: Found extension \"" + line + "\", arg \"" + arg + "\"");
 					extMap.put(line.toUpperCase(Locale.ENGLISH), arg);
 				}
 			} catch (IOException ex) {
@@ -1037,7 +1019,8 @@ public class SMTPTransport extends Transport {
 	 * <li>SMTPMessage.getEnvelopeFrom()</li>
 	 * <li>mail.smtp.from property</li>
 	 * <li>From: header in the message</li>
-	 * <li>System username using the InternetAddress.getLocalAddress() method</li>
+	 * <li>System username using the InternetAddress.getLocalAddress()
+	 * method</li>
 	 * </ol>
 	 * 
 	 * @since JavaMail 1.4.1
@@ -1051,8 +1034,7 @@ public class SMTPTransport extends Transport {
 		if (from == null || from.length() <= 0) {
 			Address[] fa;
 			Address me;
-			if (message != null && (fa = message.getFrom()) != null
-					&& fa.length > 0)
+			if (message != null && (fa = message.getFrom()) != null && fa.length > 0)
 				me = fa[0];
 			else
 				me = InternetAddress.getLocalAddress(session);
@@ -1060,8 +1042,7 @@ public class SMTPTransport extends Transport {
 			if (me != null)
 				from = ((InternetAddress) me).getAddress();
 			else
-				throw new MessagingException(
-						"can't determine local email address");
+				throw new MessagingException("can't determine local email address");
 		}
 
 		String cmd = "MAIL FROM:" + normalizeAddress(from);
@@ -1069,8 +1050,8 @@ public class SMTPTransport extends Transport {
 		// request delivery status notification?
 		if (supportsExtension("DSN")) {
 			String ret = null;
-//Nato:			if (message instanceof SMTPMessage)
-//Nato:				ret = ((SMTPMessage) message).getDSNRet();
+			// Nato: if (message instanceof SMTPMessage)
+			// Nato: ret = ((SMTPMessage) message).getDSNRet();
 			if (ret == null)
 				ret = session.getProperty("mail." + name + ".dsn.ret");
 			// XXX - check for legal syntax?
@@ -1096,8 +1077,7 @@ public class SMTPTransport extends Transport {
 					cmd += " AUTH=" + s;
 				} catch (IllegalArgumentException ex) {
 					if (debug)
-						out.println("DEBUG SMTP: ignoring invalid submitter: "
-								+ submitter + ", Exception: " + ex);
+						out.println("DEBUG SMTP: ignoring invalid submitter: " + submitter + ", Exception: " + ex);
 				}
 			}
 		}
@@ -1119,8 +1099,8 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Sends each address to the SMTP host using the <code>RCPT TO:</code>
 	 * command and copies the address either into the validSentAddr or
-	 * invalidAddr arrays. Sets the <code>sendFailed</code> flag to true if
-	 * any addresses failed.
+	 * invalidAddr arrays. Sets the <code>sendFailed</code> flag to true if any
+	 * addresses failed.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1134,6 +1114,7 @@ public class SMTPTransport extends Transport {
 	 * 550, 501, 503, 551, 553 valid addr: 552 (quota), 450, 451, 452 (quota),
 	 * 421 (srvr abort)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void rcptTo() throws MessagingException {
 		Vector valid = new Vector();
 		Vector validUnsent = new Vector();
@@ -1156,8 +1137,8 @@ public class SMTPTransport extends Transport {
 		boolean dsn = false;
 		String notify = null;
 		if (supportsExtension("DSN")) {
-//Nato:			if (message instanceof SMTPMessage)
-//Nato:				notify = ((SMTPMessage) message).getDSNNotify();
+			// Nato: if (message instanceof SMTPMessage)
+			// Nato: notify = ((SMTPMessage) message).getDSNNotify();
 			if (notify == null)
 				notify = session.getProperty("mail." + name + ".dsn.notify");
 			// XXX - check for legal syntax?
@@ -1188,8 +1169,7 @@ public class SMTPTransport extends Transport {
 				// details of the return code
 
 				// create and chain the exception
-				sfex = new SMTPAddressSucceededException(ia, cmd, retCode,
-						lastServerResponse);
+				sfex = new SMTPAddressSucceededException(ia, cmd, retCode, lastServerResponse);
 				if (mex == null)
 					mex = sfex;
 				else
@@ -1206,8 +1186,7 @@ public class SMTPTransport extends Transport {
 					sendFailed = true;
 				invalid.addElement(ia);
 				// create and chain the exception
-				sfex = new SMTPAddressFailedException(ia, cmd, retCode,
-						lastServerResponse);
+				sfex = new SMTPAddressFailedException(ia, cmd, retCode, lastServerResponse);
 				if (mex == null)
 					mex = sfex;
 				else
@@ -1223,8 +1202,7 @@ public class SMTPTransport extends Transport {
 					sendFailed = true;
 				validUnsent.addElement(ia);
 				// create and chain the exception
-				sfex = new SMTPAddressFailedException(ia, cmd, retCode,
-						lastServerResponse);
+				sfex = new SMTPAddressFailedException(ia, cmd, retCode, lastServerResponse);
 				if (mex == null)
 					mex = sfex;
 				else
@@ -1242,8 +1220,8 @@ public class SMTPTransport extends Transport {
 				} else {
 					// completely unexpected response, just give up
 					if (debug)
-						out.println("DEBUG SMTP: got response code " + retCode
-								+ ", with response: " + lastServerResponse);
+						out.println(
+								"DEBUG SMTP: got response code " + retCode + ", with response: " + lastServerResponse);
 					String _lsr = lastServerResponse; // else rset will nuke
 														// it
 					int _lrc = lastReturnCode;
@@ -1256,8 +1234,7 @@ public class SMTPTransport extends Transport {
 				if (!sendPartial)
 					sendFailed = true;
 				// create and chain the exception
-				sfex = new SMTPAddressFailedException(ia, cmd, retCode,
-						lastServerResponse);
+				sfex = new SMTPAddressFailedException(ia, cmd, retCode, lastServerResponse);
 				if (mex == null)
 					mex = sfex;
 				else
@@ -1284,8 +1261,7 @@ public class SMTPTransport extends Transport {
 				validUnsentAddr[i++] = (Address) valid.elementAt(j);
 			for (int j = 0; j < validUnsent.size(); j++)
 				validUnsentAddr[i++] = (Address) validUnsent.elementAt(j);
-		} else if (reportSuccess
-				|| (sendPartial && (invalid.size() > 0 || validUnsent.size() > 0))) {
+		} else if (reportSuccess || (sendPartial && (invalid.size() > 0 || validUnsent.size() > 0))) {
 			// we'll go on to send the message, but after sending we'll
 			// throw an exception with this exception nested
 			sendPartiallyFailed = true;
@@ -1331,10 +1307,9 @@ public class SMTPTransport extends Transport {
 		// throw the exception, fire TransportEvent.MESSAGE_NOT_DELIVERED event
 		if (sendFailed) {
 			if (debug)
-				out.println("DEBUG SMTP: Sending failed "
-						+ "because of invalid destination addresses");
-			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED,
-					validSentAddr, validUnsentAddr, invalidAddr, this.message);
+				out.println("DEBUG SMTP: Sending failed " + "because of invalid destination addresses");
+			notifyTransportListeners(TransportEvent.MESSAGE_NOT_DELIVERED, validSentAddr, validUnsentAddr, invalidAddr,
+					this.message);
 
 			// reset the connection so more sends are allowed
 			String lsr = lastServerResponse; // save, for get
@@ -1356,8 +1331,7 @@ public class SMTPTransport extends Transport {
 				lastReturnCode = lrc;
 			}
 
-			throw new SendFailedException("Invalid Addresses", mex,
-					validSentAddr, validUnsentAddr, invalidAddr);
+			throw new SendFailedException("Invalid Addresses", mex, validSentAddr, validUnsentAddr, invalidAddr);
 		}
 	}
 
@@ -1386,8 +1360,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Issue the <code>STARTTLS</code> command and switch the socket to TLS
-	 * mode if it succeeds.
+	 * Issue the <code>STARTTLS</code> command and switch the socket to TLS mode
+	 * if it succeeds.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1395,13 +1369,11 @@ public class SMTPTransport extends Transport {
 		issueCommand("STARTTLS", 220);
 		// it worked, now switch the socket into TLS mode
 		try {
-			serverSocket = SocketFetcher.startTLS(serverSocket, session
-					.getProperties(), "mail." + name);
+			serverSocket = SocketFetcher.startTLS(serverSocket, session.getProperties(), "mail." + name);
 			initStreams();
 		} catch (IOException ioex) {
 			closeConnection();
-			throw new MessagingException("Could not convert socket to TLS",
-					ioex);
+			throw new MessagingException("Could not convert socket to TLS", ioex);
 		}
 	}
 
@@ -1413,14 +1385,12 @@ public class SMTPTransport extends Transport {
 	private void openServer(String server, int port) throws MessagingException {
 
 		if (debug)
-			out.println("DEBUG SMTP: trying to connect to host \"" + server
-					+ "\", port " + port + ", isSSL " + isSSL);
+			out.println("DEBUG SMTP: trying to connect to host \"" + server + "\", port " + port + ", isSSL " + isSSL);
 
 		try {
 			Properties props = session.getProperties();
 
-			serverSocket = SocketFetcher.getSocket(server, port, props, "mail."
-					+ name, isSSL);
+			serverSocket = SocketFetcher.getSocket(server, port, props, "mail." + name, isSSL);
 
 			// socket factory may've chosen a different port,
 			// update it for the debug messages that follow
@@ -1436,21 +1406,18 @@ public class SMTPTransport extends Transport {
 				serverInput = null;
 				lineInputStream = null;
 				if (debug)
-					out.println("DEBUG SMTP: could not connect to host \""
-							+ server + "\", port: " + port + ", response: " + r
-							+ "\n");
-				throw new MessagingException("Could not connect to SMTP host: "
-						+ server + ", port: " + port + ", response: " + r);
+					out.println("DEBUG SMTP: could not connect to host \"" + server + "\", port: " + port
+							+ ", response: " + r + "\n");
+				throw new MessagingException(
+						"Could not connect to SMTP host: " + server + ", port: " + port + ", response: " + r);
 			} else {
 				if (debug)
-					out.println("DEBUG SMTP: connected to host \"" + server
-							+ "\", port: " + port + "\n");
+					out.println("DEBUG SMTP: connected to host \"" + server + "\", port: " + port + "\n");
 			}
 		} catch (UnknownHostException uhex) {
 			throw new MessagingException("Unknown SMTP host: " + server, uhex);
 		} catch (IOException ioe) {
-			throw new MessagingException("Could not connect to SMTP host: "
-					+ server + ", port: " + port, ioe);
+			throw new MessagingException("Could not connect to SMTP host: " + server + ", port: " + port, ioe);
 		}
 	}
 
@@ -1465,8 +1432,7 @@ public class SMTPTransport extends Transport {
 			port = serverSocket.getPort();
 			server = serverSocket.getInetAddress().getHostName();
 			if (debug)
-				out.println("DEBUG SMTP: starting protocol to host \"" + server
-						+ "\", port " + port);
+				out.println("DEBUG SMTP: starting protocol to host \"" + server + "\", port " + port);
 
 			initStreams();
 
@@ -1478,21 +1444,16 @@ public class SMTPTransport extends Transport {
 				serverInput = null;
 				lineInputStream = null;
 				if (debug)
-					out.println("DEBUG SMTP: got bad greeting from host \""
-							+ server + "\", port: " + port + ", response: " + r
-							+ "\n");
+					out.println("DEBUG SMTP: got bad greeting from host \"" + server + "\", port: " + port
+							+ ", response: " + r + "\n");
 				throw new MessagingException(
-						"Got bad greeting from SMTP host: " + server
-								+ ", port: " + port + ", response: " + r);
+						"Got bad greeting from SMTP host: " + server + ", port: " + port + ", response: " + r);
 			} else {
 				if (debug)
-					out.println("DEBUG SMTP: protocol started to host \""
-							+ server + "\", port: " + port + "\n");
+					out.println("DEBUG SMTP: protocol started to host \"" + server + "\", port: " + port + "\n");
 			}
 		} catch (IOException ioe) {
-			throw new MessagingException(
-					"Could not start protocol to SMTP host: " + server
-							+ ", port: " + port, ioe);
+			throw new MessagingException("Could not start protocol to SMTP host: " + server + ", port: " + port, ioe);
 		}
 	}
 
@@ -1504,13 +1465,11 @@ public class SMTPTransport extends Transport {
 		String s = props.getProperty("mail.debug.quote");
 		boolean quote = s != null && s.equalsIgnoreCase("true");
 
-		TraceInputStream traceInput = new TraceInputStream(serverSocket
-				.getInputStream(), out);
+		TraceInputStream traceInput = new TraceInputStream(serverSocket.getInputStream(), out);
 		traceInput.setTrace(debug);
 		traceInput.setQuote(quote);
 
-		TraceOutputStream traceOutput = new TraceOutputStream(serverSocket
-				.getOutputStream(), out);
+		TraceOutputStream traceOutput = new TraceOutputStream(serverSocket.getOutputStream(), out);
 		traceOutput.setTrace(debug);
 		traceOutput.setQuote(quote);
 
@@ -1530,8 +1489,7 @@ public class SMTPTransport extends Transport {
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
-	public synchronized void issueCommand(String cmd, int expect)
-			throws MessagingException {
+	public synchronized void issueCommand(String cmd, int expect) throws MessagingException {
 		sendCommand(cmd);
 
 		// if server responded with an unexpected return code,
@@ -1543,8 +1501,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Issue a command that's part of sending a message.
 	 */
-	private void issueSendCommand(String cmd, int expect)
-			throws MessagingException {
+	private void issueSendCommand(String cmd, int expect) throws MessagingException {
 		sendCommand(cmd);
 
 		// if server responded with an unexpected return code,
@@ -1563,16 +1520,15 @@ public class SMTPTransport extends Transport {
 			validSentAddr = null;
 			validUnsentAddr = valid;
 			if (debug)
-				out.println("DEBUG SMTP: got response code " + ret
-						+ ", with response: " + lastServerResponse);
+				out.println("DEBUG SMTP: got response code " + ret + ", with response: " + lastServerResponse);
 			String _lsr = lastServerResponse; // else rset will nuke it
 			int _lrc = lastReturnCode;
 			if (serverSocket != null) // hasn't already been closed
 				issueCommand("RSET", 250);
 			lastServerResponse = _lsr; // restore, for get
 			lastReturnCode = _lrc;
-			throw new SMTPSendFailedException(cmd, ret, lastServerResponse,
-					exception, validSentAddr, validUnsentAddr, invalidAddr);
+			throw new SMTPSendFailedException(cmd, ret, lastServerResponse, exception, validSentAddr, validUnsentAddr,
+					invalidAddr);
 		}
 	}
 
@@ -1624,8 +1580,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Reads server reponse returning the <code>returnCode</code> as the
-	 * number. Returns -1 on failure. Sets <code>lastServerResponse</code> and
+	 * Reads server reponse returning the <code>returnCode</code> as the number.
+	 * Returns -1 on failure. Sets <code>lastServerResponse</code> and
 	 * <code>lastReturnCode</code>.
 	 * 
 	 * @return server response code
@@ -1739,8 +1695,8 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Return true if the SMTP server supports the specified service extension.
 	 * Extensions are reported as results of the EHLO command when connecting to
-	 * the server. See <A HREF="http://www.ietf.org/rfc/rfc1869.txt">RFC 1869</A>
-	 * and other RFCs that define specific extensions.
+	 * the server. See <A HREF="http://www.ietf.org/rfc/rfc1869.txt">RFC
+	 * 1869</A> and other RFCs that define specific extensions.
 	 * 
 	 * @param ext
 	 *            the service extension name
@@ -1749,8 +1705,7 @@ public class SMTPTransport extends Transport {
 	 * @since JavaMail 1.3.2
 	 */
 	public boolean supportsExtension(String ext) {
-		return extMap != null
-				&& extMap.get(ext.toUpperCase(Locale.ENGLISH)) != null;
+		return extMap != null && extMap.get(ext.toUpperCase(Locale.ENGLISH)) != null;
 	}
 
 	/**
@@ -1764,8 +1719,7 @@ public class SMTPTransport extends Transport {
 	 * @since JavaMail 1.3.2
 	 */
 	public String getExtensionParameter(String ext) {
-		return extMap == null ? null : (String) extMap.get(ext
-				.toUpperCase(Locale.ENGLISH));
+		return extMap == null ? null : (String) extMap.get(ext.toUpperCase(Locale.ENGLISH));
 	}
 
 	/**
@@ -1795,8 +1749,7 @@ public class SMTPTransport extends Transport {
 		return false;
 	}
 
-	private static char[] hexchar = { '0', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	private static char[] hexchar = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	/**
 	 * Convert a string to RFC 1891 xtext format.
@@ -1825,8 +1778,7 @@ public class SMTPTransport extends Transport {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (c >= 128) // not ASCII
-				throw new IllegalArgumentException(
-						"Non-ASCII character in SMTP submitter: " + s);
+				throw new IllegalArgumentException("Non-ASCII character in SMTP submitter: " + s);
 			if (c < '!' || c > '~' || c == '+' || c == '=') {
 				if (sb == null) {
 					sb = new StringBuffer(s.length() + 4);

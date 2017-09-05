@@ -5,10 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
@@ -26,7 +22,6 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 		public String orgao;
 	}
 
-	private static final Logger log = LoggerFactory.getLogger(ProcessoNumeroMarcasGet.class);
 	private static final List<MarcaTabela> list = new ArrayList<>();
 
 	@Override

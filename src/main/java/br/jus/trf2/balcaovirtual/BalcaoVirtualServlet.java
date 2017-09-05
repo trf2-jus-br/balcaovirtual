@@ -62,6 +62,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				public boolean test() throws Exception {
 					URL url = new URL(Utils.getMniWsdlUrl(system));
 					ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
+					@SuppressWarnings("unused")
 					ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
 					return true;
 				}

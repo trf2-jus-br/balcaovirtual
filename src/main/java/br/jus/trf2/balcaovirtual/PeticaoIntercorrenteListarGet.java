@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
@@ -18,7 +15,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PeticaoIntercorrente;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse;
 
 public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteListarGet {
-	private static final Logger log = LoggerFactory.getLogger(PeticaoIntercorrenteListarGet.class);
 
 	@Override
 	public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)

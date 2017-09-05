@@ -9,14 +9,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
-import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
@@ -31,15 +27,11 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetReq
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
 
 public class SessionsCreatePost implements ISessionsCreatePost {
-	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
-	private String origem = null;
-
 	@Override
 	public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception {
 
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
-			String a[] = usuariosRestritos.split(",");
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
 				throw new PresentableUnloggedException("Usuário não autorizado.");
 		}

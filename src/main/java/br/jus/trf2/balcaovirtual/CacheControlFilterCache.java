@@ -1,7 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

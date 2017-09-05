@@ -16,8 +16,6 @@ import javax.xml.ws.Holder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
@@ -51,11 +49,10 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPost
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class SoapMNI {
-	private static final Logger log = LoggerFactory.getLogger(SoapMNI.class);
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
-	private static final DateTimeFormatter dtfAPOLO = DateTimeFormat.forPattern("yyyyMMddHHmm");
-	private static final DateTimeFormatter dtfFILE = DateTimeFormat.forPattern("yyyy-MM-dd-HH-mm");
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
+	// private static final DateTimeFormatter dtfFILE =
+	// DateTimeFormat.forPattern("yyyy-MM-dd-HH-mm");
 
 	private static class ConsultaProcessualExclStrat implements ExclusionStrategy {
 
@@ -161,7 +158,7 @@ public class SoapMNI {
 				if (!sucesso.value)
 					throw new Exception(mensagem.value);
 			} catch (Exception ex) {
-				log.error("Erro obtendo a lista de {}", system, ex);
+				SwaggerUtils.log(SoapMNI.class).error("Erro obtendo a lista de {}", system, ex);
 				ls.errormsg = SwaggerUtils.messageAsString(ex);
 				ls.stacktrace = SwaggerUtils.stackAsString(ex);
 			}
@@ -238,9 +235,9 @@ public class SoapMNI {
 		resp.orgao = orgao;
 		resp.teor = c.getTeor();
 
-		byte[] pdf = null;
-		if (c.getDocumento() != null && c.getDocumento().size() > 0)
-			pdf = c.getDocumento().get(0).getConteudo();
+		// byte[] pdf = null;
+		// if (c.getDocumento() != null && c.getDocumento().size() > 0)
+		// pdf = c.getDocumento().get(0).getConteudo();
 
 		DateTime dt = DateTime.parse(c.getDataReferencia(), dtfMNI);
 
@@ -254,8 +251,9 @@ public class SoapMNI {
 						+ " conforme dados abaixo:" + "\n\nProcesso Número: " + numProcFormated.replace("/", "")
 						+ "\nData/Hora de Término do Prazo: " + dt.toString(dtfBR) + "\nSigilo: "
 						+ (sigilo ? "Sim" : "Não") + "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
-				String nomeArquivo = numProcFormated + "-" + Utils.removeAcento(resp.tipo).toLowerCase() + "-"
-						+ dt.toString(dtfFILE) + ".pdf";
+				// String nomeArquivo = numProcFormated + "-" +
+				// Utils.removeAcento(resp.tipo).toLowerCase() + "-"
+				// + dt.toString(dtfFILE) + ".pdf";
 				// if (sigilo)
 				Correio.enviar(email, assunto, conteudo, null, null, null);
 				// else
@@ -263,12 +261,12 @@ public class SoapMNI {
 				// "application/pdf", pdf);
 				sent = true;
 			} catch (Exception ex) {
-				log.error("Email não enviado", ex);
+				SwaggerUtils.log(SoapMNI.class).error("Email não enviado", ex);
 			}
 		}
 
-		log.warn("*** Processo: " + numProcFormated + " Aviso confirmado: " + resp.idaviso + " Por: " + usuario
-				+ " Email: " + email + (sent ? "" : " (email não enviado)"));
+		SwaggerUtils.log(SoapMNI.class).warn("*** Processo: " + numProcFormated + " Aviso confirmado: " + resp.idaviso
+				+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
 
 	}
 
@@ -335,13 +333,14 @@ public class SoapMNI {
 						recibo.value);
 				sent = true;
 			} catch (Exception ex) {
-				log.error("Email não enviado", ex);
+				SwaggerUtils.log(SoapMNI.class).error("Email não enviado", ex);
 			}
 		}
 
-		log.warn(
-				"*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: " + protocoloRecebimento.value
-						+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
+		SwaggerUtils.log(SoapMNI.class)
+				.warn("*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: "
+						+ protocoloRecebimento.value + " Por: " + usuario + " Email: " + email
+						+ (sent ? "" : " (email não enviado)"));
 
 		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
 				+ (sent ? "" : " (email não enviado)");
@@ -355,7 +354,8 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
-			int classe, int nvlSigilo, List<Parte> partes, String nomePdfs, String tpDocPdfs) throws Exception {
+			int classe, String cdas, String pas, int nvlSigilo, List<Parte> partes, String nomePdfs, String tpDocPdfs)
+			throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -426,6 +426,30 @@ public class SoapMNI {
 
 		dadosBasicos.setCodigoLocalidade(localidade);
 		dadosBasicos.setClasseProcessual(classe);
+		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
+
+		if (cdas != null) {
+			for (String s : cdas.split(",")) {
+				String ss = Utils.removePontuacao(s).trim();
+				if (ss.length() == 0)
+					continue;
+				TipoParametro cda = new TipoParametro();
+				cda.setNome("NUMEROCDA");
+				cda.setValor(ss);
+			}
+		}
+
+		if (pas != null) {
+			for (String s : pas.split(",")) {
+				String ss = Utils.removePontuacao(s).trim();
+				if (ss.length() == 0)
+					continue;
+				TipoParametro pa = new TipoParametro();
+				pa.setNome("NUMEROPROCESSOADMINISTRATIVO");
+				pa.setValor(ss);
+			}
+		}
+
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<String> protocoloRecebimento = new Holder<>();
@@ -433,9 +457,8 @@ public class SoapMNI {
 		Holder<byte[]> recibo = new Holder<>();
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.entregarManifestacaoProcessual(idManif, null, null, dadosBasicos, l, dataEnvio,
-				new ArrayList<TipoParametro>(), sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo,
-				parametro);
+		client.entregarManifestacaoProcessual(idManif, null, null, dadosBasicos, l, dataEnvio, parametros, sucesso,
+				mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
@@ -455,12 +478,13 @@ public class SoapMNI {
 						recibo.value);
 				sent = true;
 			} catch (Exception ex) {
-				log.error("Email não enviado", ex);
+				SwaggerUtils.log(SoapMNI.class).error("Email não enviado", ex);
 			}
 		}
 
-		log.warn("*** Processo: " + numProcFormated + " Petição Inicial protocolada: " + protocoloRecebimento.value
-				+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
+		SwaggerUtils.log(SoapMNI.class)
+				.warn("*** Processo: " + numProcFormated + " Petição Inicial protocolada: " + protocoloRecebimento.value
+						+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
 
 		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
 				+ (sent ? "" : " (email não enviado)");
