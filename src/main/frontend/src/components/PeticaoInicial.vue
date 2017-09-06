@@ -243,8 +243,10 @@
 
                 <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
 
-                <td align="center " v-if="editando ">
-                  <button type="button " @click="removerParte(p) " class="btn btn-sm btn-outline-danger">&#x274C;</button>
+                <td align="right" v-if="editando ">
+                  <a href="" @click.prevent="removerParte(p)">
+                    <span class="fa fa-remove icone-em-linha"></span>
+                  </a>
                 </td>
               </tr>
             </tbody>

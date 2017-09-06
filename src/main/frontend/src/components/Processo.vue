@@ -327,11 +327,11 @@
                         <td>
                           <p class="mb-0">
                             <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
-                            <a href="" v-if="movdoc.doc.exibirTexto == false" class="text-success" @click.prevent="mostrarTexto(movdoc.doc, true)">
-                              <img class="icone-em-linha d-print-none" src="../assets/search1.png" style="height: 1em;"></img>
-                            </a>
                             <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
-                              <img class="icone-em-linha d-print-none" src="../assets/pencil.png" style="height: 1em;"></img>
+                              <span class="fa fa-pencil icone-em-linha"></span>
+                            </a>
+                            <a href="" v-if="movdoc.doc.exibirTexto == false" @click.prevent="mostrarTexto(movdoc.doc, true)">
+                              <span class="fa fa-search icone-em-linha"></span>
                             </a>
                           </p>
                           <br v-if="false &amp;&amp; movdoc.marca &amp;&amp; movdoc.marca.length > 0">
@@ -695,19 +695,6 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.icone-em-linha {
-  display: inline;
-  vertical-align: middle;
-  opacity: 0.5;
-  margin-top: -0.2em;
-}
-
-.icone-em-linha:hover {
-  opacity: 1;
-}
-
-
-
 .marca-ref:hover,
 .marca-ref:link,
 .marca-ref:visited,

@@ -91,6 +91,12 @@ public interface IBalcaoVirtual {
 		public String teor;
 	}
 
+	public class Processo implements ISwaggerModel {
+		public String numero;
+		public Date recente;
+		public Boolean favorito;
+	}
+
 	public class Marca implements ISwaggerModel {
 		public String idmarca;
 		public String idpeca;
@@ -406,6 +412,33 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroPecaIdMarcaPost extends ISwaggerMethod {
 		public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoNumeroSinalizarPostRequest implements ISwaggerRequest {
+		public String numero;
+		public Date recente;
+		public Boolean favorito;
+	}
+
+	public class ProcessoNumeroSinalizarPostResponse implements ISwaggerResponse {
+		public Processo processo;
+	}
+
+	public interface IProcessoNumeroSinalizarPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoListarSinalizadosGetRequest implements ISwaggerRequest {
+	}
+
+	public class ProcessoListarSinalizadosGetResponse implements ISwaggerResponse {
+		public List<Processo> list;
+	}
+
+	public interface IProcessoListarSinalizadosGet extends ISwaggerMethod {
+		public void run(ProcessoListarSinalizadosGetRequest req, ProcessoListarSinalizadosGetResponse resp)
 				throws Exception;
 	}
 

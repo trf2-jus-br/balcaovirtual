@@ -210,6 +210,19 @@ parameters:
     description: Partes codificadas em JSON
     type: string
     required: true
+  recente:
+    name: recente
+    in: formData
+    description: Processo visualizado recentemente pelo usuário
+    type: string
+    format: date-time
+    required: false
+  favorito:
+    name: favorito
+    in: formData
+    description: Processo favorito do usuário
+    type: boolean
+    required: false
 
 ################################################################################
 #                                           Paths                              #
@@ -646,6 +659,48 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /processo/{numero}/sinalizar:
+    post:
+      description: Acrescentar uma marca
+      tags: [marca]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/recente"
+        - $ref: "#/parameters/favorito"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              processo:
+                $ref: "#/definitions/Processo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/listar-sinalizados:
+    get:
+      description: Listar os processos favoritos ou recentes do usuário logado
+      tags: [sinais]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Processo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+
   /download/{jwt}/{filename}:
     get:
       description: Faz o download de um artefato qualquer
@@ -958,6 +1013,18 @@ definitions:
         type: string
       teor:
         type: string
+
+  Processo:
+    description: Processo
+    type: object
+    properties:
+      numero:
+        type: string
+      recente:
+        type: string
+        format: date-time
+      favorito:
+        type: boolean
 
   Marca:
     description: Marca

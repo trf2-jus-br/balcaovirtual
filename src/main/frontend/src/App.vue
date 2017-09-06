@@ -5,7 +5,7 @@
         <!--=== Header ===-->
         <div class="header d-print-none">
           <!-- Navbar -->
-          <nav class="navbar navbar navbar-expand-lg navbar-light" :class="{'navbar-dark bg-dark': test.properties['balcaovirtual.env'] === 'homolo', 'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod'}">
+          <nav class="navbar navbar navbar-expand-lg navbar-light" :class="{'navbar-dark bg-success': test.properties['balcaovirtual.env'] === 'desenv', 'navbar-dark bg-secondary': test.properties['balcaovirtual.env'] === 'homolo', 'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod'}">
             <a class="navbar-brand pt-0 pb-0" href="#">
               <img id="logo-header" src="./assets/balcao-virtual-38px.png" alt="Logo Balcão Virtual" height="38"></img>
               <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38"></img>
@@ -166,7 +166,7 @@ export default {
     return {
       blockCounter: 0,
       loading: false,
-      test: {},
+      test: { properties: {} },
       errormsg: undefined,
       settings: JSON.parse(localStorage.getItem('settings')) ||
       { timeline: undefined, timelineIncompatible: undefined, filtrarMovimentos: undefined },
@@ -193,6 +193,15 @@ export default {
 </script>
 
 <style>
+.icone-em-linha {
+  color: black;
+  opacity: 0.5;
+}
+
+.icone-em-linha:hover {
+  opacity: 1;
+}
+
 .dimmed {
   position: relative;
 }

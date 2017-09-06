@@ -12,14 +12,57 @@
           </a>. Também verifique na Lista de Extensões (Menu/Mais ferramentas/Extensões) se 'TRF2 Download Manager' está presente e ativa.
         </p>
       </div>
-  
-      <div class="col col-sm-12" v-if="filtrados.length == 0">
+
+    </div>
+
+    <div class="row mb-3 d-print-none">
+      <div class="col-sm-auto">
+        <div class="btn-group">
+          <label class="btn" :class="{'active btn-primary': pasta === 'encontrado',  'btn-outline-primary': pasta !== 'encontrado'}">
+            <input v-show="false" type="radio" v-model="pasta" value="encontrado" autocomplete="off">
+            <span class="fa fa-inbox"></span> Encontrados
+          </label>
+          <label class="btn btn-outline-primary" :class="{'active btn-primary': pasta === 'recente', 'btn-outline-primary': pasta !== 'recente'}">
+            <input v-show="false" type="radio" v-model="pasta" value="recente" autocomplete="off">
+            <span class="fa fa-history"></span> Recentes
+          </label>
+          <label class="btn btn-outline-primary" :class="{'active btn-primary': pasta === 'favorito', 'btn-outline-primary': pasta !== 'favorito'}">
+            <input v-show="false" type="radio" v-model="pasta" value="favorito" autocomplete="off">
+            <span class="fa fa-star"></span> Favoritos
+          </label>
+        </div>
+      </div>
+
+      <div class="col-sm-auto mr-sm-auto">
+        <div class="input-group">
+          <div class="input-group-addon">&#128269;</div>
+          <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
+        </div>
+      </div>
+      <div class="col-sm-auto">
+        <div class="btn-group btn-block" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
+          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <a class="dropdown-item" @click="exibirProcessosMultiplos">Inserir Múltiplos Processos</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-auto">
+        <button type="button" @click="baixarEmLote()" class="btn btn-primary ml-1" title="Inserir este PDF em múltiplos processos ">
+          Baixar Completo&nbsp;&nbsp
+          <span class="badge badge-pill badge-warning ">{{filtradosMarcadosDigitaisEAcessiveis.length}}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row" v-if="filtrados.length == 0">
+      <div class="col col-sm-12">
         <p class="alert alert-warning">
           <strong>Atenção!</strong> Nenhum processo na lista.
         </p>
       </div>
     </div>
-  
+
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
         <table class="table table-striped table-sm table-responsive">
@@ -61,9 +104,19 @@
                 <span v-if="p.errormsg" :class="{red: true} ">Erro {{p.errormsg}}
                 </span>
               </td>
-  
+
               <td align="right ">
-                <button type="button" @click="remover(p)" class="btn btn-sm btn-outline-danger ">&#x274C;</button>
+                <template v-if="pasta !== 'favorito'">
+                  <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
+                    <span class="fa fa-star-o icone-em-linha"></span>
+                  </a>
+                  <a v-if="p.favorito" href="" @click.prevent="sinalizar(p, {favorito: false})">
+                    <span class="fa fa-star icone-em-linha"></span>
+                  </a>
+                </template>
+                <a href="" @click.prevent="remover(p)">
+                  <span class="fa fa-remove icone-em-linha"></span>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -72,11 +125,6 @@
     </div>
     <div class="row ">
       <div class="col-sm-12" style="padding-top: 1em; ">
-        <button type="button" @click="exibirProcessosMultiplos" class="btn btn-primary ml-1" title="Inserir múltiplos processos ">Inserir Processos</button>
-        <button type="button" @click="baixarEmLote()" class="btn btn-primary ml-1" title="Inserir este PDF em múltiplos processos ">
-          Baixar Completo&nbsp;&nbsp
-          <span class="badge badge-pill badge-warning ">{{filtradosMarcadosDigitaisEAcessiveis.length}}</span>
-        </button>
       </div>
     </div>
     <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista "></processo-multiplos>
@@ -101,18 +149,47 @@ export default {
     setTimeout(() => {
       this.versionTRF2DownloadChromeExtension = document.getElementById('trf2-download-chrome-extension-active').value
     }, 500)
+
     this.errormsg = undefined
-    if (this.$route.params && this.$route.params.processos) {
-      for (i = 0; i < this.$route.params.processos.length; i++) {
-        var p = this.fixProcesso(this.$route.params.processos[i])
-        this.processos.push(p)
+
+    setTimeout(() => {
+      if (this.$route.params && this.$route.params.processos) {
+        this.pasta = 'encontrado'
+        for (i = 0; i < this.$route.params.processos.length; i++) {
+          var p = this.fixProcesso(this.$route.params.processos[i])
+          p.encontrado = true
+          this.processos.push(p)
+        }
       }
-      this.validarEmLote()
-    }
+      this.$http.get('processo/listar-sinalizados', { block: true }).then(
+        response => {
+          var list = response.data.list
+          for (var i = 0; i < list.length; i++) {
+            var s = list[i]
+            var p
+            for (var j = 0; j < this.processos.length; j++) {
+              if (s.numero === this.processos[j].numero) {
+                p = this.processos[j]
+                break
+              }
+            }
+            if (p) {
+              this.processos[j].recente = s.recente
+              this.processos[j].favorito = s.favorito
+            } else {
+              this.processos.push(this.fixProcesso(s))
+            }
+          }
+          this.validarEmLote()
+        },
+        error => UtilsBL.errormsg(error, this))
+    })
   },
 
   data () {
     return {
+      pasta: undefined,
+      filtro: undefined,
       todos: true,
       processos: [],
       versionTRF2DownloadChromeExtension: undefined,
@@ -126,9 +203,8 @@ export default {
     filtrados: function () {
       console.log('recalculando filtrados...', this.modified)
       var a = this.processos
-      // var outmap = this.outlineMap
-      // a = a.filter(item => outmap[item.filtro].ativo)
-      // a = UtilsBL.filtrarPorSubstring(a, this.filtro)
+      a = UtilsBL.filtrarPorSubstring(a, this.filtro)
+      a = a.filter(o => !!o[this.pasta])
       return a
     },
 
@@ -160,7 +236,10 @@ export default {
         disabled: false,
         state: undefined,
         errormsg: undefined,
-        perc: undefined
+        perc: undefined,
+        encontrado: undefined,
+        favorito: undefined,
+        recente: undefined
       })
       if (p.numero !== undefined) p.numero = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(p.numero))
       if (p.digital !== undefined) p.digitalFormatado = p.digital ? 'Digital' : 'Físico'
@@ -314,7 +393,30 @@ export default {
         var doc = docs[i]
         doc.checked = this.todos
       }
+    },
+
+    sinalizar: function (p, sinais, lote) {
+      this.errormsg = undefined
+      p.favorito = true
+      if (sinais.favorito !== undefined) p.favorito = sinais.favorito
+      if (lote) Bus.$emit('prgCaption', 'Sinalizando ' + p.numero)
+
+      this.$http.post('processo/' + p.numero + '/sinalizar?orgao=' + p.orgao, sinais, { block: !lote }).then(response => {
+        var d = response.data
+        p.favorito = d.favorito
+        UtilsBL.logEvento('processo', 'sinalizar')
+        if (lote) Bus.$emit('prgNext')
+      }, error => {
+        p.errormsg = error.data.errormsg
+        if (lote) Bus.$emit('prgNext')
+      })
     }
+
+    // confirmarEmLote: function () {
+    //   var a = this.filtradosEMarcados
+    //   Bus.$emit('prgStart', 'Confirmando Intimações/Citações', a.length, (i) => this.confirmarAviso(a[i], true))
+    // }
+
   }
 }
 </script>

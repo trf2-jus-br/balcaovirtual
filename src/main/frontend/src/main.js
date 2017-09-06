@@ -3,6 +3,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import '../static/fps-line-icons/css/fpslineicons.css'
+// import 'typicons.font/src/font/typicons.css'
+import 'font-awesome/css/font-awesome.min.css'
 
 import 'babel-polyfill'
 // import 'jquery'
