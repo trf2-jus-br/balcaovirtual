@@ -15,7 +15,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		resp.list = new ArrayList<>();
-		if (req.id.equals("1")) {
+		if (req.id2.equals("1")) {
 			{
 				Classe o = new Classe();
 				o.id = "240";

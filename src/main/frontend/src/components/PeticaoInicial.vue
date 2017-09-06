@@ -6,224 +6,258 @@
       </div>
     </div>
 
-    <div class="row pb-4" v-show="arquivos.length == 0">
-      <div class="col-md-12">
-        <vue-clip :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
-          <template slot="clip-uploader-action">
-            <div>
-              <div class="dz-message drop-box">
-                Arraste os arquivos que compoem a petição inicial e solte eles nesta área, ou clique aqui para selecioná-los.<br />Use o nome dos PDFs para ordenar as peças, por exemplo: 01-Termo.pdf, 02-Identidade.pdf, etc.
-                <br />Cada PDF está limitado a 5MB.
-              </div>
-            </div>
-          </template>
-
-          <template slot="clip-uploader-body" scope="props">
-            <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
-              <div class="alert alert-danger mb-0">
-                <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:
-                <ul class="mb-0">
-                  <li v-for="ifile in props.files" v-if="ifile.errorMessage">{{ifile.name}} ({{ifile.errorMessage}})</li>
-                </ul>
-              </div>
-            </div>
-          </template>
-        </vue-clip>
+    <div class="row" v-if="errormsg">
+      <div class="col col-sm-12">
+        <p class="alert alert-danger">
+          <strong>Erro!</strong> {{errormsg}}
+        </p>
       </div>
     </div>
 
-    <div class="row" v-if="arquivos.length > 0">
-      <div class="col-sm-6">
-        <h5 class="mt-3 mb-2">Arquivos</h5>
-      </div>
-      <div class="col-sm-6" style="height: 100%">
-        <button type="button" @click="adicionarArquivo()" class="btn btn-info btn-sm mt-2 float-right">Adicionar Arquivo
-        </button>
+    <div class="row" v-if="warningmsg">
+      <div class="col col-sm-12">
+        <p class="alert alert-warning">
+          <strong>Atenção!</strong> {{warningmsg}}
+        </p>
       </div>
     </div>
 
-    <div class="row" v-if="arquivos.length > 0">
-      <div class="col-sm-12">
-        <table class="table table-peticao table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Tipo</th>
-              <th>Descrição</th>
-              <th>Arquivo</th>
-              <th>Status</th>
-              <th style="text-align: center" v-if="editando"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
-              <td>
-                <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
-                  <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
-                  <option disabled hidden selected value=""> [Selecionar]</option>
-                </select>
-                <span v-if="!editando">{{f.tipodescr}}</span>
-              </td>
-
-              <td>
-                <div class="input-group">
-                  <input v-if="editando" type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
-                  <span v-if="!editando">{{f.nome}}</span>
-                </div>
-              </td>
-
-              <td>
-                <a @click="view(doc)">
-                  <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
-                  </a>
-                </a>
-              </td>
-
-              <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
-                <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
-                <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
-                <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
-                <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
-              </td>
-
-              <td align="center" v-if="editando">
-                <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <h5 class="mt-3 mb-2">Dados Básicos</h5>
-      </div>
-    </div>
-    <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: #f7f7f9">
+    <template v-if="successmsg">
       <div class="row">
-        <div class="form-group col-md-2">
-          <label for="orgao">Órgão</label>
-          <select id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)" name="orgao" :class="{ 'is-invalid': errors.has('orgao') }" v-validate.initial="'required'">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="l in orgaos" :value="l.id">{{l.nome}}</option>
-          </select>
-        </div>
-        <div class="form-group col-md-3">
-          <label for="localidade">Localidade</label>
-          <select id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)" name="localidade" :class="{ 'is-invalid': errors.has('localidade') }" v-validate.initial="'required'">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="l in localidades" :value="l.id">{{l.nome}}</option>
-          </select>
-        </div>
-        <div class="form-group col-md-2">
-          <label for="especialidade">Especialidade</label>
-          <select id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)" name="especialidade" :class="{ 'is-invalid': errors.has('especialidade') }" v-validate.initial="'required'">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="l in especialidades" :value="l.id">{{l.nome}}</option>
-          </select>
-        </div>
-        <div class="form-group col-md-3">
-          <label for="classe">Classe</label>
-          <select id="classe" class="form-control" v-model="classe" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
-          </select>
-        </div>
-
-        <div class="form-group col-md-2">
-          <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
-        </div>
-
-        <div class="form-group col-md-6" v-if="ef">
-          <label for="cda">CDA</label>
-          <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" v-validate.initial="'required'" />
-          <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
-        </div>
-
-        <div class="form-group col-md-6" v-if="ef">
-          <label for="pa">Processo Administrativo</label>
-          <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" v-validate.initial="'required'" />
-          <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
-        </div>
-
-        <div class="form-check col-md-3">
-          <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
-          </label>
-        </div>
-
-        <div class="form-check col-md-3">
-          <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Justiça Gratuita
-          </label>
-        </div>
-        <div class="form-check col-md-3">
-          <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Tutela Liminar/Antecipada
-          </label>
-        </div>
-        <div class="form-check col-md-3">
-          <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Prioridade de Idoso
-          </label>
+        <div class="col col-sm-12">
+          <p class="alert alert-success">
+            <strong>Pronto!</strong> {{successmsg}}
+          </p>
         </div>
       </div>
-    </div>
 
-    <div class="row mt-3">
-      <div class="col col-auto">
-        <h5 class="mt-3 mb-2">Partes</h5>
+      <div class="row ">
+        <div class="col-sm-12 ">
+          <button type="button " @click="limpar()" id="voltar" class="btn btn-secondary float-right d-print-none mt-3 ">Enviar Outra Petição</button>
+        </div>
       </div>
-      <div class="col col-auto ml-auto">
-        <button type="button" @click="adicionarParte()" class="btn btn-info btn-sm mt-2">Adicionar Parte</button>
+    </template>
+
+    <template v-if="!successmsg">
+      <div class="row pb-4" v-show="arquivos.length == 0">
+        <div class="col-md-12">
+          <vue-clip :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
+            <template slot="clip-uploader-action">
+              <div>
+                <div class="dz-message drop-box">
+                  Arraste os arquivos que compoem a petição inicial e solte eles nesta área, ou clique aqui para selecioná-los.<br />Use o nome dos PDFs para ordenar as peças, por exemplo: 01-Termo.pdf, 02-Identidade.pdf, etc.
+                  <br />Cada PDF está limitado a 5MB.
+                </div>
+              </div>
+            </template>
+
+            <template slot="clip-uploader-body" scope="props">
+              <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
+                <div class="alert alert-danger mb-0">
+                  <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:
+                  <ul class="mb-0">
+                    <li v-for="ifile in props.files" v-if="ifile.errorMessage">{{ifile.name}} ({{ifile.errorMessage}})</li>
+                  </ul>
+                </div>
+              </div>
+            </template>
+          </vue-clip>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
-        <table class="table table-peticao table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Polo</th>
-              <th>Tipo</th>
-              <th>Documento</th>
-              <th>Nome</th>
-              <th style="text-align: center"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(p, index) in partes">
-              <td>
-                <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                  <option v-for="polo in polos" :value="polo.id">{{polo.nome}}</option>
-                </select>
-              </td>
-              <td>
-                <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                  <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.nome}}</option>
-                </select>
-              </td>
 
-              <td :colspan="p.tipopessoa == '3' ? 2 : 1">
-                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" />
-                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" />
-                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" />
-                <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required'" />
-              </td>
-
-              <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
-
-              <td align="center " v-if="editando ">
-                <button type="button " @click="removerParte(p) " class="btn btn-sm btn-outline-danger">&#x274C;</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="row" v-if="arquivos.length > 0">
+        <div class="col-sm-6">
+          <h5 class="mt-3 mb-2">Arquivos</h5>
+        </div>
+        <div class="col-sm-6" style="height: 100%">
+          <button type="button" @click="adicionarArquivo()" class="btn btn-info btn-sm mt-2 float-right">Adicionar Arquivo
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="row ">
-      <div class="col-sm-12 ">
-        <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none mt-3 ">Protocolar</button>
+      <div class="row" v-if="arquivos.length > 0">
+        <div class="col-sm-12">
+          <table class="table table-peticao table-responsive">
+            <thead class="thead-inverse">
+              <tr>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>Arquivo</th>
+                <th>Status</th>
+                <th style="text-align: center" v-if="editando"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
+                <td>
+                  <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
+                    <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
+                    <option disabled hidden selected value=""> [Selecionar]</option>
+                  </select>
+                  <span v-if="!editando">{{f.tipodescr}}</span>
+                </td>
+
+                <td>
+                  <div class="input-group">
+                    <input v-if="editando" type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
+                    <span v-if="!editando">{{f.nome}}</span>
+                  </div>
+                </td>
+
+                <td>
+                  <a @click="view(doc)">
+                    <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                    </a>
+                  </a>
+                </td>
+
+                <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
+                  <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
+                  <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
+                  <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
+                  <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
+                </td>
+
+                <td align="center" v-if="editando">
+                  <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="mt-3 mb-2">Dados Básicos</h5>
+        </div>
+      </div>
+      <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: #f7f7f9">
+        <div class="row">
+          <div class="form-group col-md-2">
+            <label for="orgao">Órgão</label>
+            <select id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)" name="orgao" :class="{ 'is-invalid': errors.has('orgao') }" v-validate.initial="'required'">
+              <option disabled selected hidden :value="undefined">[Selecionar]</option>
+              <option v-for="l in orgaos" :value="l.id">{{l.nome}}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="localidade">Localidade</label>
+            <select id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)" name="localidade" :class="{ 'is-invalid': errors.has('localidade') }" v-validate.initial="'required'">
+              <option disabled selected hidden :value="undefined">[Selecionar]</option>
+              <option v-for="l in localidades" :value="l.id">{{l.nome}}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="especialidade">Especialidade</label>
+            <select id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)" name="especialidade" :class="{ 'is-invalid': errors.has('especialidade') }" v-validate.initial="'required'">
+              <option disabled selected hidden :value="undefined">[Selecionar]</option>
+              <option v-for="l in especialidades" :value="l.id">{{l.nome}}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="classe">Classe</label>
+            <select id="classe" class="form-control" v-model="classe" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
+              <option disabled selected hidden :value="undefined">[Selecionar]</option>
+              <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-2">
+            <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
+          </div>
+
+          <div class="form-group col-md-6" v-if="ef">
+            <label for="cda">CDA</label>
+            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" v-validate.initial="'required'" />
+            <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
+          </div>
+
+          <div class="form-group col-md-6" v-if="ef">
+            <label for="pa">Processo Administrativo</label>
+            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" v-validate.initial="'required'" />
+            <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
+          </div>
+
+          <div class="form-check col-md-3">
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
+            </label>
+          </div>
+
+          <div class="form-check col-md-3">
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Justiça Gratuita
+            </label>
+          </div>
+          <div class="form-check col-md-3">
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Tutela Liminar/Antecipada
+            </label>
+          </div>
+          <div class="form-check col-md-3">
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Prioridade de Idoso
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col col-auto">
+          <h5 class="mt-3 mb-2">Partes</h5>
+        </div>
+        <div class="col col-auto ml-auto">
+          <button type="button" @click="adicionarParte()" class="btn btn-info btn-sm mt-2">Adicionar Parte</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table table-peticao table-responsive">
+            <thead class="thead-inverse">
+              <tr>
+                <th>Polo</th>
+                <th>Tipo</th>
+                <th>Documento</th>
+                <th>Nome</th>
+                <th style="text-align: center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(p, index) in partes">
+                <td>
+                  <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
+                    <option disabled hidden selected value="">[Selecionar]</option>
+                    <option v-for="polo in polos" :value="polo.id">{{polo.nome}}</option>
+                  </select>
+                </td>
+                <td>
+                  <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
+                    <option disabled hidden selected value="">[Selecionar]</option>
+                    <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.nome}}</option>
+                  </select>
+                </td>
+
+                <td :colspan="p.tipopessoa == '3' ? 2 : 1">
+                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" />
+                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" />
+                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" />
+                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required'" />
+                </td>
+
+                <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
+
+                <td align="center " v-if="editando ">
+                  <button type="button " @click="removerParte(p) " class="btn btn-sm btn-outline-danger">&#x274C;</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row ">
+        <div class="col-sm-12 ">
+          <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none mt-3 ">Protocolar</button>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -299,6 +333,7 @@ export default {
       localidade: undefined,
       especialidade: undefined,
       classe: undefined,
+      valor: undefined,
       nivelsigilo: false,
 
       orgaos: [],
@@ -316,6 +351,9 @@ export default {
       arquivos: [],
       arquivosAProtocolar: undefined,
       arquivoCorrente: undefined,
+      errormsg: undefined,
+      warningmsg: undefined,
+      successmsg: undefined,
       vueclipOptions: {
         url: this.$http.options.root + '/../upload',
         headers: {
@@ -570,14 +608,18 @@ export default {
         partes: JSON.stringify(this.partes),
         pdfs: pdfs
       }, { block: true }).then(response => {
-        this.errormsg = response.data.status
+        this.successmsg = response.data.status
         UtilsBL.logEvento('peticionamento', 'enviar', 'petição inicial')
       }, error => UtilsBL.errormsg(error, this))
     },
 
     limpar: function () {
+      this.successmsg = undefined
       this.editando = true
       this.arquivos.length = 0
+      this.valor = undefined
+      this.cda = undefined
+      this.pa = undefined
     },
 
     imprimir: function () {
