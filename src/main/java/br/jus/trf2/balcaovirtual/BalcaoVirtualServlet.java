@@ -13,6 +13,7 @@ import com.crivano.swaggerservlet.property.PublicProperty;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
@@ -104,6 +105,16 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 	@Override
 	public String getService() {
 		return "balcaovirtual";
+	}
+
+	@Override
+	public String getUser() {
+		try {
+			Usuario u = SessionsCreatePost.assertUsuario();
+			return u.usuario;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }
