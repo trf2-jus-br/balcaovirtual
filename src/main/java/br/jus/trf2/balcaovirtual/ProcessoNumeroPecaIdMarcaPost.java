@@ -31,7 +31,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 		try {
 			conn = Utils.getConnection();
 
-			cstmt = conn.prepareCall("{ call sp_gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
+			cstmt = conn.prepareCall("{ call sp_gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
 
 			cstmt.setString(1, req.numero);
 			cstmt.setString(2, req.orgao);
@@ -43,38 +43,39 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 			cstmt.setString(8, req.paginicial);
 			cstmt.setString(9, req.pagfinal);
 			cstmt.setBoolean(10, u.isInterno());
-			cstmt.setString(11, u.nome);
+			cstmt.setString(11, u.usuario);
+			cstmt.setString(12, u.nome);
 
-			cstmt.setLong(12, ud.id);
+			cstmt.setLong(13, ud.id);
 			if (ud.unidade != null)
-				cstmt.setLong(13, ud.unidade);
+				cstmt.setLong(14, ud.unidade);
 			else
-				cstmt.setString(13, null);
+				cstmt.setString(14, null);
 
 			// nova idmarca
-			cstmt.registerOutParameter(14, Types.VARCHAR);
-
-			// timi_nm
 			cstmt.registerOutParameter(15, Types.VARCHAR);
 
-			// complemento
+			// timi_nm
 			cstmt.registerOutParameter(16, Types.VARCHAR);
 
-			// Error
+			// complemento
 			cstmt.registerOutParameter(17, Types.VARCHAR);
+
+			// Error
+			cstmt.registerOutParameter(18, Types.VARCHAR);
 
 			cstmt.execute();
 
-			if (cstmt.getString(17) != null)
-				throw new PresentableException(cstmt.getString(17));
+			if (cstmt.getString(18) != null)
+				throw new PresentableException(cstmt.getString(18));
 
 			// Produce response
 			Marca m = new Marca();
-			m.idmarca = cstmt.getString(14);
+			m.idmarca = cstmt.getString(15);
 			m.idpeca = req.id;
 
-			String complemento = cstmt.getString(16);
-			String marcador = cstmt.getString(15);
+			String complemento = cstmt.getString(17);
+			String marcador = cstmt.getString(16);
 			m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
 			m.idestilo = req.idestilo;
 			m.paginicial = req.paginicial;

@@ -446,6 +446,11 @@ export default {
               this.getDescriptions()
               this.getMarcadores()
               this.getMarcas()
+
+              this.$http.post('processo/' + this.numero + '/sinalizar', { recente: true }).then(response => {
+              }, error => {
+                this.warningmsg = error.data.errormsg
+              })
             } catch (e) {
               console.error(e)
             }

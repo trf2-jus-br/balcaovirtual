@@ -417,7 +417,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroSinalizarPostRequest implements ISwaggerRequest {
 		public String numero;
-		public Date recente;
+		public Boolean recente;
 		public Boolean favorito;
 	}
 

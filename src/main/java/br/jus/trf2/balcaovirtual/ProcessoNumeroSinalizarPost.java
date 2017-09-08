@@ -2,8 +2,12 @@ package br.jus.trf2.balcaovirtual;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Types;
+
+import com.crivano.swaggerservlet.PresentableException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroSinalizarPost;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
@@ -19,55 +23,40 @@ public class ProcessoNumeroSinalizarPost implements IProcessoNumeroSinalizarPost
 		try {
 			conn = Utils.getConnection();
 
-//			cstmt = conn.prepareCall("{ call sp_gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
-//
-//			cstmt.setString(1, req.numero);
-//			cstmt.setString(2, req.orgao);
-//			cstmt.setString(3, req.idclasse);
-//			cstmt.setString(4, req.id);
-//			cstmt.setString(5, req.idmarca);
-//			cstmt.setString(6, req.texto);
-//			cstmt.setString(7, req.idestilo);
-//			cstmt.setString(8, req.paginicial);
-//			cstmt.setString(9, req.pagfinal);
-//			cstmt.setBoolean(10, u.isInterno());
-//			cstmt.setString(11, u.nome);
-//
-//			cstmt.setLong(12, ud.id);
-//			if (ud.unidade != null)
-//				cstmt.setLong(13, ud.unidade);
-//			else
-//				cstmt.setString(13, null);
-//
-//			// nova idmarca
-//			cstmt.registerOutParameter(14, Types.VARCHAR);
-//
-//			// timi_nm
-//			cstmt.registerOutParameter(15, Types.VARCHAR);
-//
-//			// complemento
-//			cstmt.registerOutParameter(16, Types.VARCHAR);
-//
-//			// Error
-//			cstmt.registerOutParameter(17, Types.VARCHAR);
-//
-//			cstmt.execute();
-//
-//			if (cstmt.getString(17) != null)
-//				throw new PresentableException(cstmt.getString(17));
-//
-//			// Produce response
-//			Marca m = new Marca();
-//			m.idmarca = cstmt.getString(14);
-//			m.idpeca = req.id;
-//
-//			String complemento = cstmt.getString(16);
-//			String marcador = cstmt.getString(15);
-//			m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
-//			m.idestilo = req.idestilo;
-//			m.paginicial = req.paginicial;
-//			m.pagfinal = req.pagfinal;
-//			resp.marca = m;
+			cstmt = conn.prepareCall("{ call sp_gravar_sinal(?,?,?,?,?,?,?,?) }");
+
+			cstmt.setString(1, req.numero);
+			if (req.favorito != null)
+				cstmt.setBoolean(2, req.favorito);
+			else
+				cstmt.setString(2, null);
+			if (req.recente != null)
+				cstmt.setBoolean(3, req.recente);
+			else
+				cstmt.setString(3, null);
+			cstmt.setBoolean(4, u.isInterno());
+			cstmt.setString(5, u.usuario);
+
+			// favorito
+			cstmt.registerOutParameter(6, Types.BOOLEAN);
+
+			// recente
+			cstmt.registerOutParameter(7, Types.TIMESTAMP);
+
+			// Error
+			cstmt.registerOutParameter(8, Types.VARCHAR);
+
+			cstmt.execute();
+
+			if (cstmt.getString(8) != null)
+				throw new PresentableException(cstmt.getString(8));
+
+			// Produce response
+			Processo p = new Processo();
+			p.favorito = cstmt.getBoolean(6);
+			p.recente = cstmt.getTimestamp(7);
+			p.numero = req.numero;
+			resp.processo = p;
 		} finally {
 			if (cstmt != null)
 				cstmt.close();

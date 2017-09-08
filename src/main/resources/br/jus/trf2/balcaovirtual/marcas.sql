@@ -22,7 +22,7 @@ where
 	and e.esti_lg_interno = m.marc_lg_interno
 	and m.marc_lg_interno = ?
 	and (
-			(e.esti_lg_pessoal and m.marc_ie_usu = ? and m.marc_ie_usu is not null) 
+			(m.marc_ie_usu = ? and m.marc_ie_usu is not null) 
 		or 
 			(not e.esti_lg_pessoal and m.marc_ie_unidade = ? and m.marc_ie_unidade is not null)
 	);

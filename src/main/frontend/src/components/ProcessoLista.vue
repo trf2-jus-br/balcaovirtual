@@ -106,17 +106,17 @@
               </td>
 
               <td align="right ">
+                <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
+                  <span class="fa fa-star-o icone-em-linha"></span>
+                </a>
+                <a v-if="p.favorito" href="" @click.prevent="sinalizar(p, {favorito: false})">
+                  <span class="fa fa-star icone-em-linha"></span>
+                </a>
                 <template v-if="pasta !== 'favorito'">
-                  <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
-                    <span class="fa fa-star-o icone-em-linha"></span>
-                  </a>
-                  <a v-if="p.favorito" href="" @click.prevent="sinalizar(p, {favorito: false})">
-                    <span class="fa fa-star icone-em-linha"></span>
+                  <a href="" @click.prevent="remover(p)">
+                    <span class="fa fa-remove icone-em-linha"></span>
                   </a>
                 </template>
-                <a href="" @click.prevent="remover(p)">
-                  <span class="fa fa-remove icone-em-linha"></span>
-                </a>
               </td>
             </tr>
           </tbody>
@@ -367,8 +367,19 @@ export default {
     },
 
     remover: function (p) {
-      for (var i = 0; i < this.processos.length; i++) {
-        if (p === this.processos[i]) this.processos.splice(i, 1)
+      if (this.pasta === 'encontrado') {
+        p.encontrado = undefined
+        this.removerProcessoDesnecessario(p)
+      }
+      if (this.pasta === 'recente') this.sinalizar(p, { recente: false })
+      if (this.pasta === 'favorito') this.sinalizar(p, { favorito: false })
+    },
+
+    removerProcessoDesnecessario: function (p) {
+      if (!p.encontrado && !p.recente && !p.favorito) {
+        for (var i = 0; i < this.processos.length; i++) {
+          if (p === this.processos[i]) this.processos.splice(i, 1)
+        }
       }
     },
 
@@ -378,9 +389,11 @@ export default {
 
     acrescentarProcessosNaLista: function (arr) {
       if (!arr || arr.length === 0) return
+      this.pasta = 'encontrado'
       for (var i = 0; i < arr.length; i++) {
         var p = this.fixProcesso({
-          numero: arr[i]
+          numero: arr[i],
+          encontrado: true
         })
         this.processos.push(p)
       }
@@ -397,13 +410,14 @@ export default {
 
     sinalizar: function (p, sinais, lote) {
       this.errormsg = undefined
-      p.favorito = true
       if (sinais.favorito !== undefined) p.favorito = sinais.favorito
       if (lote) Bus.$emit('prgCaption', 'Sinalizando ' + p.numero)
 
-      this.$http.post('processo/' + p.numero + '/sinalizar?orgao=' + p.orgao, sinais, { block: !lote }).then(response => {
+      this.$http.post('processo/' + ProcessoBL.somenteNumeros(p.numero) + '/sinalizar', sinais, { block: !lote }).then(response => {
         var d = response.data
-        p.favorito = d.favorito
+        p.favorito = d.processo.favorito
+        p.recente = d.processo.recente
+        this.removerProcessoDesnecessario(p)
         UtilsBL.logEvento('processo', 'sinalizar')
         if (lote) Bus.$emit('prgNext')
       }, error => {
@@ -414,7 +428,7 @@ export default {
 
     // confirmarEmLote: function () {
     //   var a = this.filtradosEMarcados
-    //   Bus.$emit('prgStart', 'Confirmando Intimações/Citações', a.length, (i) => this.confirmarAviso(a[i], true))
+    //   Bus.$emit('prgStart', 'Confirmando Intimações/Citações', a.length, (i) => this.confirmarAviso(a[i], ))
     // }
 
   }

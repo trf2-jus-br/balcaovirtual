@@ -214,8 +214,7 @@ parameters:
     name: recente
     in: formData
     description: Processo visualizado recentemente pelo usuário
-    type: string
-    format: date-time
+    type: boolean
     required: false
   favorito:
     name: favorito
