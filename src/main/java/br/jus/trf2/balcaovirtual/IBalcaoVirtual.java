@@ -430,16 +430,27 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
-	public class ProcessoListarSinalizadosGetRequest implements ISwaggerRequest {
+	public class ProcessoNumeroSinaisGetRequest implements ISwaggerRequest {
+		public String numero;
 	}
 
-	public class ProcessoListarSinalizadosGetResponse implements ISwaggerResponse {
+	public class ProcessoNumeroSinaisGetResponse implements ISwaggerResponse {
+		public Processo processo;
+	}
+
+	public interface IProcessoNumeroSinaisGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroSinaisGetRequest req, ProcessoNumeroSinaisGetResponse resp) throws Exception;
+	}
+
+	public class ProcessoListarSinaisGetRequest implements ISwaggerRequest {
+	}
+
+	public class ProcessoListarSinaisGetResponse implements ISwaggerResponse {
 		public List<Processo> list;
 	}
 
-	public interface IProcessoListarSinalizadosGet extends ISwaggerMethod {
-		public void run(ProcessoListarSinalizadosGetRequest req, ProcessoListarSinalizadosGetResponse resp)
-				throws Exception;
+	public interface IProcessoListarSinaisGet extends ISwaggerMethod {
+		public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception;
 	}
 
 	public class DownloadJwtFilenameGetRequest implements ISwaggerRequest {

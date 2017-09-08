@@ -661,7 +661,7 @@ paths:
   /processo/{numero}/sinalizar:
     post:
       description: Acrescentar uma marca
-      tags: [marca]
+      tags: [sinal]
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
@@ -679,10 +679,28 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /processo/listar-sinalizados:
+  /processo/{numero}/sinais:
+    get:
+      description: Acrescentar uma marca
+      tags: [sinal]
+      parameters:
+        - $ref: "#/parameters/numero"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              processo:
+                $ref: "#/definitions/Processo"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/listar-sinais:
     get:
       description: Listar os processos favoritos ou recentes do usuário logado
-      tags: [sinais]
+      tags: [sinal]
       parameters: []
       responses:
         200:

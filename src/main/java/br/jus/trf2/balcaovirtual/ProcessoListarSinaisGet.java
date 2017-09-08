@@ -5,16 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoListarSinalizadosGet;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoListarSinaisGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinalizadosGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinalizadosGetResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetRequest;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetResponse;
 
-public class ProcessoListarSinalizadosGet implements IProcessoListarSinalizadosGet {
+public class ProcessoListarSinaisGet implements IProcessoListarSinaisGet {
 
 	@Override
-	public void run(ProcessoListarSinalizadosGetRequest req, ProcessoListarSinalizadosGetResponse resp)
-			throws Exception {
+	public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception {
 		br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario u = SessionsCreatePost.assertUsuario();
 		resp.list = new ArrayList<>();
 
@@ -23,7 +22,7 @@ public class ProcessoListarSinalizadosGet implements IProcessoListarSinalizadosG
 		ResultSet rset = null;
 		try {
 			conn = Utils.getConnection();
-			pstmt = conn.prepareStatement(Utils.getSQL("sinalizados"));
+			pstmt = conn.prepareStatement(Utils.getSQL("listar-sinais"));
 			pstmt.setString(1, u.usuario);
 			pstmt.setBoolean(2, u.isInterno());
 			rset = pstmt.executeQuery();
@@ -43,17 +42,11 @@ public class ProcessoListarSinalizadosGet implements IProcessoListarSinalizadosG
 			if (conn != null)
 				conn.close();
 		}
-
-		// resp.list = new ArrayList<>();
-		// Processo p = new Processo();
-		// p.numero = "00002294020154020000";
-		// p.favorito = "true";
-		// resp.list.add(p);
 	}
 
 	@Override
 	public String getContext() {
-		return "obter processos sinalizados";
+		return "obter sinais de processos";
 	}
 
 }

@@ -161,8 +161,9 @@ export default {
           this.processos.push(p)
         }
       }
-      this.$http.get('processo/listar-sinalizados', { block: true }).then(
+      this.$http.get('processo/listar-sinais', { block: true }).then(
         response => {
+          var favorito, recente
           var list = response.data.list
           for (var i = 0; i < list.length; i++) {
             var s = list[i]
@@ -179,6 +180,13 @@ export default {
             } else {
               this.processos.push(this.fixProcesso(s))
             }
+            if (s.favorito) favorito = true
+            if (s.recente) recente = true
+          }
+          if (this.pasta === undefined) {
+            if (favorito) this.pasta = 'favorito'
+            else if (recente) this.pasta = 'recente'
+            else this.pasta = 'encontrado'
           }
           this.validarEmLote()
         },

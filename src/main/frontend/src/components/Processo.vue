@@ -27,6 +27,13 @@
                 Digital</span>
               <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
                 Físico</span>: {{proc.dadosBasicos.numero}}
+              <a v-if="this.favorito !== undefined && !this.favorito" href="" @click.prevent="favoritar(true)">
+                <span class="fa fa-star-o icone-em-linha" title="Acrescentar à lista de processos favoritos"></span>
+              </a>
+              <a v-if="this.favorito !== undefined && this.favorito" href="" @click.prevent="favoritar(false)">
+                <span class="fa fa-star icone-em-linha" title="Remover da lista de processos favoritos"></span>
+              </a>
+
             </h4>
           </div>
         </div>
@@ -451,6 +458,12 @@ export default {
               }, error => {
                 this.warningmsg = error.data.errormsg
               })
+
+              this.$http.get('processo/' + this.numero + '/sinais').then(response => {
+                this.favorito = !!response.data.processo.favorito
+              }, error => {
+                this.warningmsg = error.data.errormsg
+              })
             } catch (e) {
               console.error(e)
             }
@@ -467,6 +480,7 @@ export default {
   },
   data () {
     return {
+      favorito: undefined,
       timeline: TimelineBL.emptyTimeline(),
       fixed: undefined,
       modified: undefined,
@@ -688,7 +702,18 @@ export default {
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
       })
+    },
+
+    favoritar: function (favorito) {
+      this.errormsg = undefined
+      this.$http.post('processo/' + this.numero + '/sinalizar', { favorito: favorito }, { block: true }).then(response => {
+        var d = response.data
+        this.favorito = d.processo.favorito
+      }, error => {
+        this.warningmsg = error.data.errormsg
+      })
     }
+
   },
 
   components: {

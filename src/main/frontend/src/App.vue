@@ -20,6 +20,9 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Consulta Simples'}" tag="a" exact>Consulta</router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" active-class="active" :to="{name:'Lista de Processos'}" tag="a" exact>Processos</router-link>
+                </li>
                 <li class="nav-item" v-if="!jwt.origin &amp;&amp; false">
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Inicial'}" tag="a">Petição Inicial</router-link>
                 </li>
@@ -195,7 +198,7 @@ export default {
 <style>
 .icone-em-linha {
   color: black;
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .icone-em-linha:hover {
