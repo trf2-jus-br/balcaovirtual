@@ -209,7 +209,6 @@ export default {
 
   computed: {
     filtrados: function () {
-      console.log('recalculando filtrados...', this.modified)
       var a = this.processos
       a = UtilsBL.filtrarPorSubstring(a, this.filtro)
       a = a.filter(o => !!o[this.pasta])
@@ -360,12 +359,20 @@ export default {
 
     baixar: function (processo) {
       var url = this.$http.options.root + '/download/' + processo.jwt + '/' + processo.numero + '.pdf?disposition=attachment'
+      if (url.substring(0, 4) !== 'http') {
+        var host = window.location.protocol + '//' + window.location.hostname +
+          (window.location.port && window.location.port !== '' ? ':' + window.location.port : '')
+        url = host + url
+      }
       chrome.runtime.sendMessage(this.downloadExtensionId, {
         command: 'download',
         url: url,
         filename: processo.numero + '.pdf'
       }, response => {
-        if (!response.success) processo.erromsg = response.data.erromsg
+        if (!response.success) {
+          processo.erromsg = response.data.erromsg
+          console.log('error downloading: ', response.data.erromsg)
+        }
 
         processo.state = 'go'
         processo.downloadId = response.data.id
