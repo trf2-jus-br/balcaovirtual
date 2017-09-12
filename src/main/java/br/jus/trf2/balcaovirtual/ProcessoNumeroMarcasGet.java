@@ -6,15 +6,19 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroMarcasGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 	private static class MarcaTabela extends Marca {
@@ -39,43 +43,62 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 		if (ud == null)
 			throw new PresentableUnloggedException("disabled");
 
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		try {
-			conn = Utils.getConnection();
-			pstmt = conn.prepareStatement(Utils.getSQL("marcas"));
-			pstmt.setString(1, req.numero);
-			pstmt.setString(2, req.orgao);
-			pstmt.setBoolean(3, u.isInterno());
-			pstmt.setLong(4, ud.id);
-			if (ud.unidade != null)
-				pstmt.setLong(5, ud.unidade);
-			else
-				pstmt.setString(5, null);
-			rset = pstmt.executeQuery();
-
-			while (rset.next()) {
-				Marca m = new Marca();
-				m.idmarca = rset.getString("marc_id");
-				String complemento = rset.getString("marc_tx_conteudo");
-				String marcador = rset.getString("timi_nm");
-				m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
-				m.idestilo = rset.getString("esti_id");
-				m.idpeca = rset.getString("marc_id_peca");
-				m.paginicial = rset.getString("marc_nr_pag_inicial");
-				m.pagfinal = rset.getString("marc_nr_pag_final");
-				m.nomeusuario = rset.getString("marc_nm_usu");
-				m.dataalteracao = rset.getTimestamp("marc_df_alteracao");
-				resp.list.add(m);
+		if (true) {
+			EntityManager em = PersistenceManager.INSTANCE.getEntityManager();
+			try {
+				// List<TipoMarcaItem> l =
+				// em.createQuery(Utils.getSQL("jpa-marcas"))
+				// .setParameter("classe",
+				// Integer.valueOf(req.id)).getResultList();
+				//
+				// for (TipoMarcaItem i : l) {
+				// Marcador m = new Marcador();
+				// m.texto = i.getTimiNm();
+				// resp.list.add(m);
+				// }
+			} finally {
+				em.close();
 			}
-		} finally {
-			if (rset != null)
-				rset.close();
-			if (pstmt != null)
-				pstmt.close();
-			if (conn != null)
-				conn.close();
+		} else {
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			try {
+				conn = Utils.getConnection();
+				pstmt = conn.prepareStatement(Utils.getSQL("marcas"));
+				pstmt.setString(1, req.numero);
+				pstmt.setString(2, req.orgao);
+				pstmt.setBoolean(3, u.isInterno());
+				pstmt.setLong(4, ud.id);
+				if (ud.unidade != null)
+					pstmt.setLong(5, ud.unidade);
+				else
+					pstmt.setString(5, null);
+				rset = pstmt.executeQuery();
+
+				while (rset.next()) {
+					Marca m = new Marca();
+					m.idmarca = rset.getString("marc_id");
+					String complemento = rset.getString("marc_tx_conteudo");
+					String marcador = rset.getString("timi_nm");
+					m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "")
+							: complemento;
+					m.idestilo = rset.getString("esti_id");
+					m.idpeca = rset.getString("marc_id_peca");
+					m.paginicial = rset.getString("marc_nr_pag_inicial");
+					m.pagfinal = rset.getString("marc_nr_pag_final");
+					m.nomeusuario = rset.getString("marc_nm_usu");
+					m.dataalteracao = rset.getTimestamp("marc_df_alteracao");
+					resp.list.add(m);
+				}
+			} finally {
+				if (rset != null)
+					rset.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			}
 		}
 
 		for (MarcaTabela mt : list) {
