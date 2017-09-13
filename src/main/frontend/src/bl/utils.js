@@ -160,5 +160,16 @@ export default {
     if (component.errormsg === undefined) {
       component.errormsg = 'Erro desconhecido!'
     }
+  },
+
+  quietBatch: function (arr, callbackNext, callbackEnd, index) {
+    if (index === undefined) index = 0
+    if (index >= arr.length) {
+      if (callbackEnd) callbackEnd(arr)
+      return
+    }
+    callbackNext(arr[index], () => {
+      this.quietBatch(arr, callbackNext, callbackEnd, index + 1)
+    })
   }
 }

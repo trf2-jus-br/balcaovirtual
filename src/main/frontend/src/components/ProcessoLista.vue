@@ -188,7 +188,7 @@ export default {
             else if (recente) this.pasta = 'recente'
             else this.pasta = 'inbox'
           }
-          this.validarEmLote()
+          this.validarEmLoteSilenciosamente()
         },
         error => UtilsBL.errormsg(error, this))
     })
@@ -266,6 +266,27 @@ export default {
         return !item.validado
       })
       Bus.$emit('prgStart', 'Validando Processos', a.length, (i) => this.validarProcesso(a[i], true))
+    },
+
+    validarEmLoteSilenciosamente: function () {
+      var a = this.processos.filter(function (item) {
+        return !item.validado
+      })
+      UtilsBL.quietBatch(a, (processo, cont) => {
+        this.$http.get('processo/' + processo.numero + '/validar').then(
+          (response) => {
+            UtilsBL.overrideProperties(processo, response.data)
+            processo.validado = true
+            this.fixProcesso(processo)
+            cont()
+          },
+          (error) => {
+            processo.checked = false
+            processo.disabled = true
+            processo.errormsg = 'Não foi possível obter informações sobre o processo. (' + error.data.errormsg + ')'
+            cont()
+          })
+      })
     },
 
     validarProcesso: function (processo, lote) {
@@ -420,7 +441,7 @@ export default {
         })
         this.processos.push(p)
       }
-      this.validarEmLote()
+      this.validarEmLoteSilenciosamente()
     },
 
     marcarTodos: function () {
