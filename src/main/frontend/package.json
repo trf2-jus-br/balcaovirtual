@@ -21,6 +21,8 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.4",
+    "lodash.startcase": "^4.4.0",
     "popper.js": "^1.11.0",
     "typicons.font": "^2.0.9",
     "vee-validate": "^2.0.0-rc.6",

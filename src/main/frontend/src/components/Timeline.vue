@@ -126,7 +126,7 @@
                 <circle r="20" class="bola" @click.prevent="filtrarMovimentos( '#distribuicao')" />
               </a>
               <text class="textointerno" text-anchor="middle" alignment-baseline="central">{{contador(timeline.distribuicao.contador)}}</text>
-              <text y="40" class="texto" text-anchor="middle" alignment-baseline="middle">Ditribuição</text>
+              <text y="40" class="texto" text-anchor="middle" alignment-baseline="middle">Distribuição</text>
             </g>
 
             <g id="autuacao" transform="translate(50, 150)" :class="classes.autuacao">

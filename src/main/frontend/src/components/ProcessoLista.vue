@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <h4 class="text-center mt-3 mb-3">Lista de Processos</h4>
       </div>
-      <div class="col col-sm-12" v-if="versionTRF2DownloadChromeExtension === '0'">
+      <div class="col col-sm-12" v-if="tentouBaixar">
         <p class="alert alert-danger">
           <strong>Atenção!</strong> Não foi possível detectar a extensão do Chrome que é utilizada para realizar downloads em lote. Ela pode ser instalada acessando a página da
           <a href="https://chrome.google.com/webstore/detail/trf2-download-manager/komegelldppbjndifhabfpjpddjaocfa">
@@ -18,9 +18,9 @@
     <div class="row mb-3 d-print-none">
       <div class="col-sm-auto">
         <div class="btn-group">
-          <label class="btn" :class="{'active btn-primary': pasta === 'encontrado',  'btn-outline-primary': pasta !== 'encontrado'}">
-            <input v-show="false" type="radio" v-model="pasta" value="encontrado" autocomplete="off">
-            <span class="fa fa-inbox"></span> Encontrados
+          <label class="btn" :class="{'active btn-primary': pasta === 'inbox',  'btn-outline-primary': pasta !== 'inbox'}">
+            <input v-show="false" type="radio" v-model="pasta" value="inbox" autocomplete="off">
+            <span class="fa fa-inbox"></span> Caixa de Entrada
           </label>
           <label class="btn btn-outline-primary" :class="{'active btn-primary': pasta === 'recente', 'btn-outline-primary': pasta !== 'recente'}">
             <input v-show="false" type="radio" v-model="pasta" value="recente" autocomplete="off">
@@ -48,9 +48,9 @@
         </div>
       </div>
       <div class="col-sm-auto">
-        <button type="button" @click="baixarEmLote()" class="btn btn-primary ml-1" title="Inserir este PDF em múltiplos processos ">
+        <button type="button" @click="baixarEmLote()" class="btn btn-primary ml-1" title="Inserir este PDF em múltiplos processos">
           Baixar Completo&nbsp;&nbsp
-          <span class="badge badge-pill badge-warning ">{{filtradosMarcadosDigitaisEAcessiveis.length}}</span>
+          <span class="badge badge-pill badge-warning">{{filtradosMarcadosDigitaisEAcessiveis.length}}</span>
         </button>
       </div>
     </div>
@@ -86,26 +86,26 @@
                 <input type="checkbox" v-model="p.checked" :disabled="p.disabled"></input>
               </td>
               <td>
-                <span class=" unbreakable ">
-                  <router-link :to="{name: 'Processo', params: {numero: p.numero}}" target="_blank ">{{p.numero}}</router-link>
+                <span class=" unbreakable">
+                  <router-link :to="{name: 'Processo', params: {numero: p.numero}}" target="_blank">{{p.numeroFormatado}}</router-link>
                 </span>
               </td>
               <td>{{p.orgao}}</td>
               <td>{{p.unidade}}</td>
               <td>{{p.digitalFormatado}}</td>
               <td>{{p.segredoFormatado}}</td>
-              <td class="status-td ">
-                <span v-if="p.state=='ready' ">Preparado</span>
-                <span v-if="p.state=='set' ">Solicitado</span>
-                <span v-if="p.state=='go' ">Iniciado</span>
-                <span v-if="p.state=='in_progress' &amp;&amp; p.perc===undefined ">Aguardando...</span>
-                <span v-if="p.state=='in_progress' &amp;&amp; p.perc !==undefined ">{{p.perc}}%</span>
-                <span class="green" v-if="p.state=='complete' ">Baixado</span>
-                <span v-if="p.errormsg" :class="{red: true} ">Erro {{p.errormsg}}
+              <td class="status-td">
+                <span v-if="p.state=='ready'">Preparado</span>
+                <span v-if="p.state=='set'">Solicitado</span>
+                <span v-if="p.state=='go'">Iniciado</span>
+                <span v-if="p.state=='in_progress' &amp;&amp; p.perc===undefined">Aguardando...</span>
+                <span v-if="p.state=='in_progress' &amp;&amp; p.perc !==undefined">{{p.perc}}%</span>
+                <span class="green" v-if="p.state=='complete'">Baixado</span>
+                <span v-if="p.errormsg" :class="{red: true}">Erro {{p.errormsg}}
                 </span>
               </td>
 
-              <td align="right ">
+              <td align="right">
                 <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
                   <span class="fa fa-star-o icone-em-linha"></span>
                 </a>
@@ -123,11 +123,11 @@
         </table>
       </div>
     </div>
-    <div class="row ">
-      <div class="col-sm-12" style="padding-top: 1em; ">
+    <div class="row">
+      <div class="col-sm-12" style="padding-top: 1em;">
       </div>
     </div>
-    <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista "></processo-multiplos>
+    <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista"></processo-multiplos>
   </div>
 </template>
 
@@ -154,10 +154,10 @@ export default {
 
     setTimeout(() => {
       if (this.$route.params && this.$route.params.processos) {
-        this.pasta = 'encontrado'
+        this.pasta = 'inbox'
         for (i = 0; i < this.$route.params.processos.length; i++) {
           var p = this.fixProcesso(this.$route.params.processos[i])
-          p.encontrado = true
+          p.inbox = true
           this.processos.push(p)
         }
       }
@@ -186,7 +186,7 @@ export default {
           if (this.pasta === undefined) {
             if (favorito) this.pasta = 'favorito'
             else if (recente) this.pasta = 'recente'
-            else this.pasta = 'encontrado'
+            else this.pasta = 'inbox'
           }
           this.validarEmLote()
         },
@@ -203,7 +203,8 @@ export default {
       versionTRF2DownloadChromeExtension: undefined,
       downloadExtensionId: 'komegelldppbjndifhabfpjpddjaocfa',
       map: {},
-      exibirProcessoMultiplos: false
+      exibirProcessoMultiplos: false,
+      tentouBaixar: false
     }
   },
 
@@ -230,6 +231,7 @@ export default {
     fixProcesso: function (p) {
       UtilsBL.applyDefauts(p, {
         numero: undefined,
+        numeroFormatado: undefined,
         orgao: undefined,
         unidade: undefined,
         segredodejustica: undefined,
@@ -244,11 +246,14 @@ export default {
         state: undefined,
         errormsg: undefined,
         perc: undefined,
-        encontrado: undefined,
+        inbox: undefined,
         favorito: undefined,
         recente: undefined
       })
-      if (p.numero !== undefined) p.numero = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(p.numero))
+      if (p.numero !== undefined) {
+        p.numero = ProcessoBL.somenteNumeros(p.numero)
+        p.numeroFormatado = ProcessoBL.formatarProcesso(p.numero)
+      }
       if (p.digital !== undefined) p.digitalFormatado = p.digital ? 'Digital' : 'Físico'
       if (p.segredodejustica !== undefined) {
         p.segredoFormatado = p.segredodejusticaabsoluto ? 'Absoluto' : p.segredodejusticadesistema ? 'Sistema' : p.segredodejustica ? 'Segredo' : 'Público'
@@ -264,9 +269,8 @@ export default {
     },
 
     validarProcesso: function (processo, lote) {
-      if (lote) Bus.$emit('prgCaption', 'Validando ' + processo.numero)
-      var n = ProcessoBL.somenteNumeros(processo.numero)
-      this.$http.get('processo/' + n + '/validar', { block: !lote }).then(
+      if (lote) Bus.$emit('prgCaption', 'Validando ' + processo.numeroFormatado)
+      this.$http.get('processo/' + processo.numero + '/validar', { block: !lote }).then(
         (response) => {
           UtilsBL.overrideProperties(processo, response.data)
           processo.validado = true
@@ -282,6 +286,10 @@ export default {
     },
 
     baixarEmLote: function () {
+      if (this.versionTRF2DownloadChromeExtension === '0') {
+        this.tentouBaixar = true
+        return
+      }
       var processos = this.filtradosMarcadosDigitaisEAcessiveis
       if (processos.length > 0) {
         this.errormsg = undefined
@@ -293,7 +301,7 @@ export default {
       processos[i].jwt = undefined
       processos[i].state = undefined
       processos[i].perc = undefined
-      this.$http.get('processo/' + ProcessoBL.somenteNumeros(processos[i].numero) + '/pdf?orgao=' + processos[i].orgao).then(response => {
+      this.$http.get('processo/' + processos[i].numero + '/pdf?orgao=' + processos[i].orgao).then(response => {
         if (i + 1 < processos.length) this.$nextTick(() => this.obterJwt(processos, i + 1))
         else this.$nextTick(this.continuarBaixando)
         processos[i].jwt = response.data.jwt
@@ -358,7 +366,7 @@ export default {
     },
 
     baixar: function (processo) {
-      var url = this.$http.options.root + '/download/' + processo.jwt + '/' + processo.numero + '.pdf?disposition=attachment'
+      var url = this.$http.options.root + '/download/' + processo.jwt + '/' + processo.numeroFormatado + '.pdf?disposition=attachment'
       if (url.substring(0, 4) !== 'http') {
         var host = window.location.protocol + '//' + window.location.hostname +
           (window.location.port && window.location.port !== '' ? ':' + window.location.port : '')
@@ -367,7 +375,7 @@ export default {
       chrome.runtime.sendMessage(this.downloadExtensionId, {
         command: 'download',
         url: url,
-        filename: processo.numero + '.pdf'
+        filename: processo.numeroFormatado + '.pdf'
       }, response => {
         if (!response.success) {
           processo.erromsg = response.data.erromsg
@@ -382,8 +390,8 @@ export default {
     },
 
     remover: function (p) {
-      if (this.pasta === 'encontrado') {
-        p.encontrado = undefined
+      if (this.pasta === 'inbox') {
+        p.inbox = undefined
         this.removerProcessoDesnecessario(p)
       }
       if (this.pasta === 'recente') this.sinalizar(p, { recente: false })
@@ -391,7 +399,7 @@ export default {
     },
 
     removerProcessoDesnecessario: function (p) {
-      if (!p.encontrado && !p.recente && !p.favorito) {
+      if (!p.inbox && !p.recente && !p.favorito) {
         for (var i = 0; i < this.processos.length; i++) {
           if (p === this.processos[i]) this.processos.splice(i, 1)
         }
@@ -404,11 +412,11 @@ export default {
 
     acrescentarProcessosNaLista: function (arr) {
       if (!arr || arr.length === 0) return
-      this.pasta = 'encontrado'
+      this.pasta = 'inbox'
       for (var i = 0; i < arr.length; i++) {
         var p = this.fixProcesso({
           numero: arr[i],
-          encontrado: true
+          inbox: true
         })
         this.processos.push(p)
       }
@@ -426,9 +434,9 @@ export default {
     sinalizar: function (p, sinais, lote) {
       this.errormsg = undefined
       if (sinais.favorito !== undefined) p.favorito = sinais.favorito
-      if (lote) Bus.$emit('prgCaption', 'Sinalizando ' + p.numero)
+      if (lote) Bus.$emit('prgCaption', 'Sinalizando ' + p.numeroFormatado)
 
-      this.$http.post('processo/' + ProcessoBL.somenteNumeros(p.numero) + '/sinalizar', sinais, { block: !lote }).then(response => {
+      this.$http.post('processo/' + p.numero + '/sinalizar', sinais, { block: !lote }).then(response => {
         var d = response.data
         p.favorito = d.processo.favorito
         p.recente = d.processo.recente

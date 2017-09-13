@@ -285,12 +285,13 @@ export default {
     }
   },
   colocarLink: function (s) {
+    if (s) s = s.replace(' e ', ', ')
     var a = s.split(', ')
     for (var i = 0; i < a.length; i++) {
       a[i] =
-        '<a href="#!/processo/' +
+        '<a href="#/processo/' +
         a[i] +
-        '">' +
+        '" target="_blank">' +
         this.formatarProcesso(a[i]) +
         '</a>'
     }
@@ -307,7 +308,13 @@ export default {
       .replace(/\n/g, '<br/>')
   },
   somenteNumeros: function (s) {
-    return s.split('-').join('').split('.').join('').split('/').join('')
+    return s
+      .split('-')
+      .join('')
+      .split('.')
+      .join('')
+      .split('/')
+      .join('')
   },
   regexFormatarProcesso: /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?(\d{2})?/,
   formatarProcesso: function (filename) {
