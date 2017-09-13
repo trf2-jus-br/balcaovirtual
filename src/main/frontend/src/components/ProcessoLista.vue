@@ -125,6 +125,10 @@
     </div>
     <div class="row">
       <div class="col-sm-12" style="padding-top: 1em;">
+        <button v-if="pasta === 'recente'" type="button " @click="sinalizarEmLoteSilenciosamente({recente: false})" id="prosseguir" :disabled="sinalizandoEmLote" class="btn btn-primary float-right d-print-none mt-3 ">
+          Remover da Lista&nbsp;&nbsp
+          <span class="badge badge-pill badge-warning">{{filtradosEMarcados.length}}</span>
+        </button>
       </div>
     </div>
     <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista"></processo-multiplos>
@@ -204,7 +208,8 @@ export default {
       downloadExtensionId: 'komegelldppbjndifhabfpjpddjaocfa',
       map: {},
       exibirProcessoMultiplos: false,
-      tentouBaixar: false
+      tentouBaixar: false,
+      sinalizandoEmLote: false
     }
   },
 
@@ -468,6 +473,26 @@ export default {
         p.errormsg = error.data.errormsg
         if (lote) Bus.$emit('prgNext')
       })
+    },
+
+    sinalizarEmLoteSilenciosamente: function (sinais) {
+      var a = this.filtradosEMarcados.filter(function (item) {
+        return true
+      })
+      this.sinalizandoEmLote = true
+      UtilsBL.quietBatch(a, (p, cont) => {
+        this.$http.post('processo/' + p.numero + '/sinalizar', sinais).then(response => {
+          var d = response.data
+          p.favorito = d.processo.favorito
+          p.recente = d.processo.recente
+          this.removerProcessoDesnecessario(p)
+          UtilsBL.logEvento('processo', 'sinalizar')
+          cont()
+        }, error => {
+          p.errormsg = error.data.errormsg
+          cont()
+        })
+      }, () => { this.sinalizandoEmLote = false })
     }
 
     // confirmarEmLote: function () {
