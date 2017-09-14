@@ -56,7 +56,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					usuarios = "";
 				else
 					usuarios += ";";
-				usuarios += u.orgao.toLowerCase() + "," + u.codusu + "," + (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null");
+				usuarios += u.orgao.toLowerCase() + "," + u.codusu + ","
+						+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null");
 			}
 		}
 
@@ -85,9 +86,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		return r;
 	}
 
-	public static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
-		if (jwt.startsWith("Bearer "))
-			jwt = jwt.substring(7);
+	private static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
 		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
 		Map<String, Object> map;
 		try {
@@ -136,21 +135,26 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					ud.unidade = Long.valueOf(ss[2]);
 				u.usuarios.put(ss[0], ud);
 			}
-		} 
+		}
 		return u;
 	}
 
 	public static Map<String, Object> assertUsuarioAutorizado() throws Exception {
-		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
-		if (authorization.startsWith("Bearer "))
-			authorization = authorization.substring(7);
+		String authorization = getAuthorizationHeader();
 		return verify(authorization);
 	}
 
-	public static String assertAuthorization() throws SwaggerAuthorizationException {
+	private static String getAuthorizationHeader() throws SwaggerAuthorizationException {
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
+		if (authorization == null)
+			throw new SwaggerAuthorizationException("Authorization header is missing");
 		if (authorization.startsWith("Bearer "))
 			authorization = authorization.substring(7);
+		return authorization;
+	}
+
+	public static String assertAuthorization() throws SwaggerAuthorizationException {
+		String authorization = getAuthorizationHeader();
 		verify(authorization);
 		return authorization;
 	}

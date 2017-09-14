@@ -32,7 +32,7 @@ public class UploadServlet extends HttpServlet {
 		String dirTemp = Utils.getDirTemp();
 
 		try {
-			SessionsCreatePost.verify(request.getHeader("Authorization"));
+			SessionsCreatePost.assertAuthorization();
 		} catch (SwaggerAuthorizationException e) {
 			throw new ServletException("Falha de autenticação", e);
 		}
