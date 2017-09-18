@@ -25,9 +25,10 @@ public class ProcessoNumeroSinaisGet implements IProcessoNumeroSinaisGet {
 			pstmt.setBoolean(3, u.isInterno());
 			rset = pstmt.executeQuery();
 
+			resp.processo = new Processo();
+			resp.processo.numero = req.numero;
+
 			while (rset.next()) {
-				resp.processo = new Processo();
-				resp.processo.numero = rset.getString("sina_cd_proc");
 				resp.processo.favorito = rset.getBoolean("sina_lg_favorito");
 				resp.processo.recente = rset.getTimestamp("sina_df_recente");
 				break;
