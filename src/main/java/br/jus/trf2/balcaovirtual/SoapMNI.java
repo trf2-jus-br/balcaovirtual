@@ -179,9 +179,26 @@ public class SoapMNI {
 				i.orgao = orgao;
 				i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
 				i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
-				for (TipoParametro p : a.getProcesso().getOutroParametro())
+				if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
+						&& a.getProcesso().getAssunto().get(0) != null
+						&& a.getProcesso().getAssunto().get(0).getCodigoNacional() != null)
+					i.assunto = a.getProcesso().getAssunto().get(0).getCodigoNacional().toString();
+				for (TipoParametro p : a.getProcesso().getOutroParametro()) {
 					if (p.getNome().equals("tipoOrgaoJulgador"))
 						i.unidadetipo = p.getValor();
+					if (p.getNome().equals("dtLimitIntimAut"))
+						i.datalimiteintimacaoautomatica = p.getValor();
+					if (p.getNome().equals("eventoIntimacao"))
+						i.eventointimacao = p.getValor();
+					if (p.getNome().equals("numeroPrazo"))
+						i.numeroprazo = p.getValor();
+					if (p.getNome().equals("tipoPrazo"))
+						i.tipoprazo = p.getValor();
+					if (p.getNome().equals("multiplicadorPrazo"))
+						i.multiplicadorprazo = p.getValor();
+					if (p.getNome().equals("motivoIntimacao"))
+						i.motivointimacao = p.getValor();
+				}
 				i.localidade = a.getProcesso().getCodigoLocalidade();
 				list.add(i);
 			}
