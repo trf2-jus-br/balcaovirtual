@@ -35,11 +35,11 @@
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <!--
-                                              <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
-                                              </a>
-                                              <a class="dropdown-item" @click="exportarXML()">Exportar XML
-                                              </a>
-                                              -->
+                                                                <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
+                                                                </a>
+                                                                <a class="dropdown-item" @click="exportarXML()">Exportar XML
+                                                                </a>
+                                                                -->
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
             </div>
           </div>
@@ -93,6 +93,16 @@
                     </span>
                   </a>
                 </th>
+                <th>Prazo</th>
+                <th>
+                  <a @click="sort('datalimiteintimacaoautomatica')">
+                    Data Limite Int. Aut.
+                    <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
+                      <span v-show="!reverseSort">&#8679;</span>
+                      <span v-show="reverseSort">&#8681;</span>
+                    </span>
+                  </a>
+                </th>
                 <th>
                   <a @click="sort('tipo')">
                     Tipo
@@ -103,9 +113,36 @@
                   </a>
                 </th>
                 <th>
+                  <a @click="sort('eventointimacao')">
+                    Evento
+                    <span v-show="orderByField == 'eventointimacao'">
+                      <span v-show="!reverseSort">&#8679;</span>
+                      <span v-show="reverseSort">&#8681;</span>
+                    </span>
+                  </a>
+                </th>
+                <th>
+                  <a @click="sort('motivointimacao')">
+                    Motivo
+                    <span v-show="orderByField == 'motivointimacao'">
+                      <span v-show="!reverseSort">&#8679;</span>
+                      <span v-show="reverseSort">&#8681;</span>
+                    </span>
+                  </a>
+                </th>
+                <th>
                   <a @click="sort('processoFormatado')">
                     Processo
                     <span v-show="orderByField == 'processoFormatado'">
+                      <span v-show="!reverseSort">&#8679;</span>
+                      <span v-show="reverseSort">&#8681;</span>
+                    </span>
+                  </a>
+                </th>
+                <th>
+                  <a @click="sort('assuntoNome')">
+                    Assunto
+                    <span v-show="orderByField == 'assuntoNome'">
                       <span v-show="!reverseSort">&#8679;</span>
                       <span v-show="reverseSort">&#8681;</span>
                     </span>
@@ -129,7 +166,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="false">
                   <a @click="sort('unidadetipo')">
                     Tipo da Unidade
                     <span v-show="orderByField == 'unidadetipo'">
@@ -138,7 +175,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="false">
                   <a @click="sort('localidade')">
                     Localidade
                     <span v-show="orderByField == 'localidade'">
@@ -159,14 +196,21 @@
                 <td>
                   <span v-html="r.dataavisoFormatada"></span>
                 </td>
+                <td>{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
+                <td>
+                  <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
+                </td>
                 <td>{{r.tipo}}</td>
+                <td>{{r.eventointimacao}}</td>
+                <td>{{r.motivointimacao}}</td>
                 <td>
                   <router-link :to="{name: 'Processo', params: {numero: r.processo}}" target="_blank">{{r.processoFormatado}}</router-link>
                 </td>
+                <td>{{r.assuntoNome}}</td>
                 <td>{{r.orgao}}</td>
                 <td :title="r.unidadenome">{{r.unidade}}</td>
-                <td>{{r.unidadetipo}}</td>
-                <td>{{r.localidade}}</td>
+                <td v-if="false">{{r.unidadetipo}}</td>
+                <td v-if="false">{{r.localidade}}</td>
                 <td class="status-td">
                   <span v-if="r.errormsg" class="red" v-html="r.errormsg"></span>
                 </td>
@@ -191,6 +235,7 @@
 <script>
 import UtilsBL from '../bl/utils.js'
 import ProcessoBL from '../bl/processo.js'
+import CnjAssuntoBL from '../bl/cnj-assunto.js'
 import { Bus } from '../bl/bus.js'
 import AvisoDetalhe from './AvisoDetalhe'
 
@@ -223,6 +268,8 @@ export default {
             aviso.disabled = false
             aviso.processoFormatado = ProcessoBL.formatarProcesso(aviso.processo)
             aviso.dataavisoFormatada = UtilsBL.formatDDMMYYYYHHMM(aviso.dataaviso)
+            aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
+            aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
             this.avisos.push(aviso)
           }
 
@@ -262,7 +309,10 @@ export default {
 
       a.sort((x, y) => {
         if (x[this.orderByField] !== y[this.orderByField]) {
-          var r = x[this.orderByField] < y[this.orderByField] ? -1 : 1
+          var r = 0
+          if (x[this.orderByField] === undefined && y[this.orderByField] !== undefined) r = -1
+          else if (x[this.orderByField] !== undefined && y[this.orderByField] === undefined) r = 1
+          else r = x[this.orderByField] < y[this.orderByField] ? -1 : 1
           if (!this.reverseSort) r = -r
           return r
         }

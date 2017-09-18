@@ -89,6 +89,13 @@ public interface IBalcaoVirtual {
 		public String orgao;
 		public String localidade;
 		public String teor;
+		public String eventointimacao;
+		public String motivointimacao;
+		public String numeroprazo;
+		public String tipoprazo;
+		public String multiplicadorprazo;
+		public String datalimiteintimacaoautomatica;
+		public String assunto;
 	}
 
 	public class Processo implements ISwaggerModel {

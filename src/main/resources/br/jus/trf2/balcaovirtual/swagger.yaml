@@ -1030,6 +1030,20 @@ definitions:
         type: string
       teor:
         type: string
+      eventointimacao:
+        type: string
+      motivointimacao:
+        type: string
+      numeroprazo:
+        type: string
+      tipoprazo:
+        type: string
+      multiplicadorprazo:
+        type: string
+      datalimiteintimacaoautomatica:
+        type: string
+      assunto:
+        type: string
 
   Processo:
     description: Processo
