@@ -17,10 +17,77 @@ tags:
     description: Utilitários
 
 paths:
+  /localidade:
+    get:
+      description: Localidades de órgão
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/IdNome"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /localidade/{id}/especialidade:
+    get:
+      description: Especialidades da localidade
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/IdNome"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /localidade/{id}/especialidade/{id2}/classe:
+    get:
+      description: Especialidades da localidade
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/IdNome"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /autenticar:
     post:
       description: Autenticar usuário
       tags: [utils]
+      consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/login"
         - $ref: "#/parameters/senha"
@@ -278,6 +345,12 @@ parameters:
     description: Número da id só algarismos
     required: true
     type: string
+  id2:
+    name: id2
+    in: path
+    description: Número da id só algarismos
+    required: true
+    type: string
   orgaoquery:
     name: orgao
     in: query
@@ -331,6 +404,15 @@ definitions:
       descricao:
         type: string
       orgao:
+        type: string
+
+  IdNome:
+    description: Id e nome
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
         type: string
 
   Contagem:

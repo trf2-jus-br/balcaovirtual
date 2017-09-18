@@ -36,6 +36,11 @@ public interface ISistemaProcessual {
 		public String orgao;
 	}
 
+	public class IdNome implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
 	public class Contagem implements ISwaggerModel {
 		public String data;
 		public String quantidade;
@@ -82,6 +87,47 @@ public interface ISistemaProcessual {
 
 	public class Error implements ISwaggerModel {
 		public String error;
+	}
+
+	public class LocalidadeGetRequest implements ISwaggerRequest {
+		public String orgao;
+	}
+
+	public class LocalidadeGetResponse implements ISwaggerResponse {
+		public List<IdNome> list;
+	}
+
+	public interface ILocalidadeGet extends ISwaggerMethod {
+		public void run(LocalidadeGetRequest req, LocalidadeGetResponse resp) throws Exception;
+	}
+
+	public class LocalidadeIdEspecialidadeGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class LocalidadeIdEspecialidadeGetResponse implements ISwaggerResponse {
+		public List<IdNome> list;
+	}
+
+	public interface ILocalidadeIdEspecialidadeGet extends ISwaggerMethod {
+		public void run(LocalidadeIdEspecialidadeGetRequest req, LocalidadeIdEspecialidadeGetResponse resp)
+				throws Exception;
+	}
+
+	public class LocalidadeIdEspecialidadeId2ClasseGetRequest implements ISwaggerRequest {
+		public String id;
+		public String id2;
+		public String orgao;
+	}
+
+	public class LocalidadeIdEspecialidadeId2ClasseGetResponse implements ISwaggerResponse {
+		public List<IdNome> list;
+	}
+
+	public interface ILocalidadeIdEspecialidadeId2ClasseGet extends ISwaggerMethod {
+		public void run(LocalidadeIdEspecialidadeId2ClasseGetRequest req,
+				LocalidadeIdEspecialidadeId2ClasseGetResponse resp) throws Exception;
 	}
 
 	public class AutenticarPostRequest implements ISwaggerRequest {
@@ -182,7 +228,6 @@ public interface ISistemaProcessual {
 	}
 
 	public class UsuarioWebUsernameGetResponse implements ISwaggerResponse {
-		public String origem;
 		public String nome;
 		public String cpf;
 		public String email;
