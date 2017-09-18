@@ -417,6 +417,8 @@ import ProcessoBL from '../bl/processo.js'
 import UtilsBL from '../bl/utils.js'
 import Timeline from './timeline'
 import ProcessoPecaDetalhes from './ProcessoPecaDetalhes'
+import CnjClasseBL from '../bl/cnj-classe.js'
+import CnjAssuntoBL from '../bl/cnj-assunto.js'
 import { Bus } from '../bl/bus.js'
 
 export default {
@@ -455,11 +457,6 @@ export default {
               this.getMarcas()
 
               this.$http.post('processo/' + this.numero + '/sinalizar', { recente: true }).then(response => {
-              }, error => {
-                this.warningmsg = error.data.errormsg
-              })
-
-              this.$http.get('processo/' + this.numero + '/sinais').then(response => {
                 this.favorito = !!response.data.processo.favorito
               }, error => {
                 this.warningmsg = error.data.errormsg
@@ -558,33 +555,22 @@ export default {
       var db = this.proc.dadosBasicos
 
       // Carregar a classe
-      this.$http.get('classe/' + db.classeProcessual + '?orgao=' + this.orgao).then(response => {
-        this.$set(this.fixed, 'classeProcessualDescricao', response.data.descricao)
-        this.$set(this.fixed, 'classeProcessualDescricaoCompleta', response.data.descricaocompleta)
-      }, error => {
-        this.warningmsg = error.data.errormsg
-      })
+      this.$set(this.fixed, 'classeProcessualDescricao', CnjClasseBL.nome(db.classeProcessual))
+      this.$set(this.fixed, 'classeProcessualDescricaoCompleta', CnjClasseBL.nomeCompleto(db.classeProcessual))
 
       // Carregar assuntos (partimos do princípio que sempre
       // há um assunto principal e que sempre é o primeiro)
       if (db.assunto && db.assunto.length > 0 && Number(db.assunto[0].codigoNacional) > 0) {
         for (var i = 0; i < db.assunto.length; i++) {
           var ass = db.assunto[i]
-          this.getAssuntoDescription(ass)
+          ass.descricao = CnjAssuntoBL.nome(ass.codigoNacional)
+          ass.descricaoCompleta = CnjAssuntoBL.nomeCompleto(ass.codigoNacional)
+          if (ass.principal) {
+            this.$set(this.fixed, 'assuntoPrincipalDescricao', ass.descricao)
+            this.$set(this.fixed, 'assuntoPrincipalDescricaoCompleta', ass.descricaoCompleta)
+          }
         }
       }
-    },
-    getAssuntoDescription: function (ass) {
-      this.$http.get('assunto/' + ass.codigoNacional + '?orgao=' + this.orgao).then(
-        response => {
-          ass.descricao = response.data.descricao
-          ass.descricaoCompleta = response.data.descricaocompleta
-          if (ass.principal) {
-            this.$set(this.fixed, 'assuntoPrincipalDescricao', response.data.descricao)
-            this.$set(this.fixed, 'assuntoPrincipalDescricaoCompleta', response.data.descricaocompleta)
-          }
-        },
-        error => UtilsBL.errormsg(error, this))
     },
     mostrarTexto: function (doc, f) {
       ProcessoBL.mostrarTexto(this.fixed.movdoc, doc, f)

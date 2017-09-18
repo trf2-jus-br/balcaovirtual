@@ -1,10 +1,27 @@
 // Descrição das classes do CNJ a partir do identificador
 //
 export default {
+  pai: function (id) {
+    var a = this.classes[id]
+    if (!a) return
+    return a.split('|')[1]
+  },
   nome: function (id) {
     var a = this.classes[id]
     if (!a) return
     return a.split('|')[0]
+  },
+  nomeCompleto: function (id) {
+    var s
+    while (true) {
+      var nome = this.nome(id)
+      if (!nome) return
+      var pai = this.pai(id)
+      if (s) s = nome + ' - ' + s
+      else s = nome
+      if (pai === '') return s
+      id = pai
+    }
   },
   classes: {
     '2': 'PROCESSO CÍVEL E DO TRABALHO|',
