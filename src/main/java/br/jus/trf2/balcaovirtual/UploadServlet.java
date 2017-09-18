@@ -31,11 +31,6 @@ public class UploadServlet extends HttpServlet {
 		String dirFinal = Utils.getDirFinal();
 		String dirTemp = Utils.getDirTemp();
 
-		try {
-			SessionsCreatePost.assertAuthorization();
-		} catch (SwaggerAuthorizationException e) {
-			throw new ServletException("Falha de autenticação", e);
-		}
 		// Check that we have a file upload request
 		isMultipart = ServletFileUpload.isMultipartContent(request);
 		response.setContentType("text/html");
