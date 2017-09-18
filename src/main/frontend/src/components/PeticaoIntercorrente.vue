@@ -442,7 +442,8 @@ export default {
           bloq: arq.bloq,
           perc: arq.perc,
           size: arq.size,
-          id: arq.id
+          id: arq.id,
+          status: undefined
         }
         this.arquivos.push(newArq)
       }
