@@ -6,6 +6,7 @@ import java.net.URLConnection;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import com.crivano.swaggerservlet.SwaggerException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
@@ -99,7 +100,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 	@Override
 	public int errorCode(Exception e) {
-		return e.getMessage() == null || !e.getMessage().endsWith("(Alerta)") ? 500 : 400;
+		return e.getMessage() == null || !e.getMessage().endsWith("(Alerta)") ? super.errorCode(e) : 400;
 	}
 
 	@Override

@@ -39,7 +39,7 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto">
+      <div class="col-sm-auto" v-if="false">
         <div class="btn-group btn-block" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
           <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -125,6 +125,9 @@
     </div>
     <div class="row">
       <div class="col-sm-12" style="padding-top: 1em;">
+        <button v-if="pasta === 'inbox'" type="button " @click="exibirProcessosMultiplos" class="btn btn-primary float-right d-print-none mt-3 ">
+          Inserir Múltiplos Processos
+        </button>
         <button v-if="pasta === 'recente'" type="button " @click="sinalizarEmLoteSilenciosamente({recente: false})" id="prosseguir" :disabled="sinalizandoEmLote" class="btn btn-primary float-right d-print-none mt-3 ">
           Remover da Lista&nbsp;&nbsp
           <span class="badge badge-pill badge-warning">{{filtradosEMarcados.length}}</span>
@@ -440,6 +443,7 @@ export default {
       if (!arr || arr.length === 0) return
       this.pasta = 'inbox'
       for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === '') continue
         var p = this.fixProcesso({
           numero: arr[i],
           inbox: true

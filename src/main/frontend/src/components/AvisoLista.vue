@@ -12,14 +12,14 @@
           </p>
         </div>
 
-        <div class="col col-sm-12" v-show="avisos.length == 0">
+        <div class="col col-sm-12" v-show="avisos !== undefined &amp;&amp; avisos.length == 0">
           <p class="alert alert-warning">
             <strong>Atenção!</strong> Nenhuma intimação pendente.
           </p>
         </div>
       </div>
 
-      <div class="row mb-3 d-print-none" v-show="avisos.length > 0">
+      <div class="row mb-3 d-print-none" v-show="avisos &amp;&amp; avisos.length > 0">
         <div class="col-sm-2">
           <button type="button" @click="mostrarOutline()" :class="{'btn btn-block': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">Filtro Hierárquico
           </button>
@@ -35,11 +35,11 @@
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <!--
-                                                                <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
-                                                                </a>
-                                                                <a class="dropdown-item" @click="exportarXML()">Exportar XML
-                                                                </a>
-                                                                -->
+                                                                    <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
+                                                                    </a>
+                                                                    <a class="dropdown-item" @click="exportarXML()">Exportar XML
+                                                                    </a>
+                                                                    -->
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
             </div>
           </div>
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <div class="row" v-show="avisos.length > 0">
+      <div class="row" v-show="avisos &amp;&amp; avisos.length > 0">
         <div class="col col-md-4 filtro-outline" v-if="outlineAtivo">
           <div class="card card-outline-info mb-3">
             <div class="card-header">Filtro Hierárquico</div>
@@ -261,6 +261,7 @@ export default {
         }
 
         if (response.data.list) {
+          this.$set(this, 'avisos', [])
           for (i = 0; i < response.data.list.length; i++) {
             var aviso = response.data.list[i]
             aviso.errormsg = undefined
@@ -284,7 +285,7 @@ export default {
       outlineMap: {},
       orderByField: 'dataaviso',
       reverseSort: false,
-      avisos: [],
+      avisos: undefined,
       todos: true,
       outlineAtivo: false,
       filtro: undefined,
@@ -302,6 +303,7 @@ export default {
   computed: {
     filtrados: function () {
       console.log('recalculando filtrados...', this.modified)
+      if (this.avisos === undefined) return []
       var a = this.avisos
       var outmap = this.outlineMap
       a = a.filter(item => outmap[item.filtro].ativo)
