@@ -25,7 +25,8 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 		List<SoapMNI.Parte> partes = gson.fromJson(req.partes, type);
 
 		String mensagem = SoapMNI.enviarPeticaoInicial(authorization, req.orgao, req.localidade, req.especialidade,
-				Integer.parseInt(req.classe), req.cdas, req.pas, Integer.parseInt(req.nivelsigilo), partes, req.pdfs, req.pdfs);
+				Integer.parseInt(req.classe), req.cdas, req.pas, Integer.parseInt(req.nivelsigilo), partes, req.pdfs,
+				req.classificacoes);
 		resp.status = mensagem;
 	}
 

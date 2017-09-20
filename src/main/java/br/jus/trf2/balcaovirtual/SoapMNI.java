@@ -385,7 +385,8 @@ public class SoapMNI {
 		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
 		List<TipoDocumento> l = new ArrayList<>();
 		// String tpDocs[] = tpDocPdfs.split(",");
-		// int i = 0;
+		int i = 0;
+		String classificacoes[] = tpDocPdfs.split(",");
 		for (String nomePdf : nomePdfs.split(",")) {
 			TipoDocumento doc = new TipoDocumento();
 			doc.setMimetype("application/pdf");
@@ -395,8 +396,12 @@ public class SoapMNI {
 			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 			byte[] data = Files.readAllBytes(path);
 			doc.setConteudo(data);
+			TipoParametro classificacao = new TipoParametro();
+			classificacao.setNome("classificacao");
+			classificacao.setValor(classificacoes[i]);
+			doc.getOutroParametro().add(classificacao);
 			l.add(doc);
-			// i++;
+			i++;
 		}
 
 		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();

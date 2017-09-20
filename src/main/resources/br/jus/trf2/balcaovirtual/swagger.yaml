@@ -90,6 +90,12 @@ parameters:
     description: Referência para os PDFs que foram enviados previamente para o servidor, separadas por vírgula
     type: string
     required: true
+  classificacoes:
+    name: classificacoes
+    in: formData
+    description: Classificações dos PDFs que foram enviados previamente para o servidor, separadas por vírgula
+    type: string
+    required: true
   pdf:
     name: pdf
     in: path
@@ -502,6 +508,7 @@ paths:
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/partes"
         - $ref: "#/parameters/pdfs"
+        - $ref: "#/parameters/classificacoes"
       responses:
         200:
           description: Successful response

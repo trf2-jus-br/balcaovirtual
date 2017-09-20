@@ -41,7 +41,7 @@
     <template v-if="!successmsg">
       <div class="row pb-4" v-show="arquivos.length == 0">
         <div class="col-md-12">
-          <vue-clip :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
+          <vue-clip ref="clip" :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
             <template slot="clip-uploader-action">
               <div>
                 <div class="dz-message drop-box">
@@ -267,6 +267,7 @@
 import AuthBL from '../bl/auth.js'
 import ProcessoBL from '../bl/processo.js'
 import UtilsBL from '../bl/utils.js'
+// import CnjClasseBL from '../bl/cnj-classe.js'
 import { Bus } from '../bl/bus.js'
 import AwesomeMask from 'awesome-mask'
 
@@ -285,7 +286,7 @@ const tipospeca = [{
   nome: 'Teor da Petição'
 }, {
   id: 2,
-  nome: 'CPF/CNPJ da Parte'
+  nome: 'Cópia de CPF/CNPJ'
 }, {
   id: 3,
   nome: 'Comprovante de Residência'
@@ -295,6 +296,9 @@ const tipospeca = [{
 }, {
   id: 5,
   nome: 'Outros Documentos Sigilosos'
+}, {
+  id: 11,
+  nome: 'Inquérito/Procedimento Criminal'
 }]
 
 const tipospessoa = [{
@@ -336,6 +340,10 @@ export default {
       especialidade: undefined,
       classe: undefined,
       valor: undefined,
+
+      cda: undefined,
+      pa: undefined,
+
       nivelsigilo: false,
 
       orgaos: [],
@@ -383,7 +391,7 @@ export default {
 
     ef: function () {
       // Substituir pelo uso de um parâmetro de retorno referente à classe escolhida
-      return this.classe === '1116' || this.classe === '99'
+      return this.classe === '1116' || this.classe === '203' || this.classe === '99'
     }
   },
 
@@ -396,6 +404,13 @@ export default {
         this[items].length = 0
         this[item] = undefined
         for (var i = 0; i < response.data.list.length; i++) this[items].push(response.data.list[i])
+        // if (items === 'classes') {
+        // for (i = 0; i < this.classes.length; i++) this.classes[i].nome = CnjClasseBL.nomeCompleto(this.classes[i].id)
+        // }
+        this[items].sort(function (a, b) {
+          if (a.nome !== b.nome) return a.nome < b.nome ? -1 : 1
+          return 0
+        })
         // if (!this[item]) this[item] = response.data.list[0].id
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
@@ -408,8 +423,11 @@ export default {
 
     selecionarOrgao: function () {
       this.localidade = undefined
+      this.localidades.length = 0
       this.especialidade = undefined
+      this.especialidades.length = 0
       this.classe = undefined
+      this.classes.length = 0
       this.carregarLocalidades()
     },
 
@@ -419,7 +437,9 @@ export default {
 
     selecionarLocalidade: function () {
       this.especialidade = undefined
+      this.especialidades.length = 0
       this.classe = undefined
+      this.classes.length = 0
       this.carregarEspecialidades()
     },
 
@@ -429,6 +449,7 @@ export default {
 
     selecionarEspecialidade: function () {
       this.classe = undefined
+      this.classes.length = 0
       this.carregarClasses()
     },
 
@@ -496,6 +517,11 @@ export default {
     alterarArquivo: function (arq) {
       this.validarArquivo(arq)
       this.organizarArquivos()
+    },
+
+    adicionarArquivo: function () {
+      console.log(this.$refs.clip.$el)
+      this.$refs.clip.$el.firstChild.click()
     },
 
     removerArquivo: function (arq) {
@@ -591,13 +617,18 @@ export default {
     // Peticionar
     //
     peticionar: function () {
+      this.errormsg = undefined
       this.$validator.validateAll().then((result) => { if (!result) return })
       this.editando = false
-      var pdfs, i
+      var pdfs, classificacoes, i
       for (i = 0; i < this.arquivos.length; i++) {
         if (pdfs) pdfs += ','
         else pdfs = ''
         pdfs += this.arquivos[i].id
+
+        if (classificacoes) classificacoes += ','
+        else classificacoes = ''
+        classificacoes += this.arquivos[i].tipo
       }
       this.$http.post('peticao-inicial/protocolar', {
         orgao: this.orgao,
@@ -608,7 +639,8 @@ export default {
         pas: this.ef ? this.pa : undefined,
         nivelsigilo: this.nivelsigilo ? 1 : 0,
         partes: JSON.stringify(this.partes),
-        pdfs: pdfs
+        pdfs: pdfs,
+        classificacoes: classificacoes
       }, { block: true }).then(response => {
         this.successmsg = response.data.status
         UtilsBL.logEvento('peticionamento', 'enviar', 'petição inicial')
