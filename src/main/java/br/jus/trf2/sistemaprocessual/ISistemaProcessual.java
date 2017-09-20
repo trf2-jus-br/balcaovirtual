@@ -41,6 +41,18 @@ public interface ISistemaProcessual {
 		public String nome;
 	}
 
+	public class IdNomeClasseCNJ implements ISwaggerModel {
+		public String id;
+		public String nome;
+		public ClasseCNJ classecnj;
+	}
+
+	public class ClasseCNJ implements ISwaggerModel {
+		public Double codigo;
+		public String descricao;
+		public Boolean ativo;
+	}
+
 	public class Contagem implements ISwaggerModel {
 		public String data;
 		public String quantidade;
@@ -122,7 +134,7 @@ public interface ISistemaProcessual {
 	}
 
 	public class LocalidadeIdEspecialidadeId2ClasseGetResponse implements ISwaggerResponse {
-		public List<IdNome> list;
+		public List<IdNomeClasseCNJ> list;
 	}
 
 	public interface ILocalidadeIdEspecialidadeId2ClasseGet extends ISwaggerMethod {

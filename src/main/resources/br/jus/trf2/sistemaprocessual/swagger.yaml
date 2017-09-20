@@ -77,7 +77,7 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/IdNome"
+                  $ref: "#/definitions/IdNomeClasseCNJ"
         500:
           description: Error ocurred
           schema:
@@ -414,6 +414,28 @@ definitions:
         type: string
       nome:
         type: string
+
+  IdNomeClasseCNJ:
+    description: Id e nome
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+      classecnj:
+        $ref: "#/definitions/ClasseCNJ"
+
+  ClasseCNJ:
+    description: Classe do CNJ
+    type: object
+    properties:
+      codigo:
+        type: number
+      descricao:
+        type: string
+      ativo:
+        type: boolean
 
   Contagem:
     description: Data e quantidade de itens

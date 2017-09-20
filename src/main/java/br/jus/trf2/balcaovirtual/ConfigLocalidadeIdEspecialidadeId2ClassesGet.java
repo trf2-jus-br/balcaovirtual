@@ -10,7 +10,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Classe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadeIdEspecialidadeId2ClassesGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IdNome;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IdNomeClasseCNJ;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeIdEspecialidadeId2ClasseGetResponse;
 
 public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLocalidadeIdEspecialidadeId2ClassesGet {
@@ -30,10 +30,12 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 		LocalidadeIdEspecialidadeId2ClasseGetResponse r = (LocalidadeIdEspecialidadeId2ClasseGetResponse) sar.getResp();
 
 		resp.list = new ArrayList<>();
-		for (IdNome idNome : r.list) {
+		for (IdNomeClasseCNJ idNome : r.list) {
+			if (idNome.classecnj == null || idNome.classecnj.codigo == null || idNome.classecnj.descricao == null)
+				continue;
 			Classe o = new Classe();
-			o.id = idNome.id;
-			o.nome = idNome.nome;
+			o.id = Integer.toString(idNome.classecnj.codigo.intValue());
+			o.nome = idNome.classecnj.descricao;//.split(" - ")[0];
 			resp.list.add(o);
 		}
 	}

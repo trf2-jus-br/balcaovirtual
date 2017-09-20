@@ -315,6 +315,7 @@ public interface IBalcaoVirtual {
 		public String nivelsigilo;
 		public String partes;
 		public String pdfs;
+		public String classificacoes;
 	}
 
 	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {
