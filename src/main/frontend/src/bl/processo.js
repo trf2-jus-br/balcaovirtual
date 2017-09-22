@@ -1,4 +1,5 @@
 import UtilsBL from './utils.js'
+import CnjClasseBL from './cnj-classe.js'
 
 export default {
   fixProc: function (p) {
@@ -132,10 +133,44 @@ export default {
 
       var op = p.dadosBasicos.outroParametro
       if (op.processoVinculado) {
-        op.processoVinculado = this.colocarLink(
-          this.arrayToString(op.processoVinculado)
+        fixed.processoVinculado = this.arrayOfStringsToObjects(
+          op.processoVinculado,
+          ['numero', 'cnjClasse', 'descrClasse', 'digital']
         )
+        for (i = 0; i < fixed.processoVinculado.length; i++) {
+          fixed.processoVinculado[i].link = this.colocarLink(
+            fixed.processoVinculado[i].numero
+          )
+          fixed.processoVinculado[i].nomeClasse = CnjClasseBL.nome(
+            fixed.processoVinculado[i].cnjClasse
+          )
+          fixed.processoVinculado[i].suporte =
+            fixed.processoVinculado[i].digital === 'E'
+              ? 'Digital'
+              : fixed.processoVinculado[i].digital === 'F' ? 'Físico' : '?'
+        }
       }
+      if (op.recursoTrf) {
+        fixed.recursoTrf = this.arrayOfStringsToObjects(op.recursoTrf, [
+          'numero',
+          'cnjClasse',
+          'descrClasse',
+          'digital'
+        ])
+        for (i = 0; i < fixed.recursoTrf.length; i++) {
+          fixed.recursoTrf[i].link = this.colocarLink(
+            fixed.recursoTrf[i].numero
+          )
+          fixed.recursoTrf[i].nomeClasse = CnjClasseBL.nome(
+            fixed.recursoTrf[i].cnjClasse
+          )
+          fixed.recursoTrf[i].suporte =
+            fixed.recursoTrf[i].digital === 'E'
+              ? 'Digital'
+              : fixed.recursoTrf[i].digital === 'F' ? 'Físico' : '?'
+        }
+      }
+      console.log(fixed.processoVinculado)
       if (op.processoOriginario) {
         op.processoOriginario = this.colocarLink(op.processoOriginario)
       }
@@ -333,5 +368,19 @@ export default {
       str = str.substring(0, n) + ' e ' + str.substring(n + 2)
     }
     return str
+  },
+  arrayOfStringsToObjects: function (a, props) {
+    if (a === undefined) return
+    if (!Array.isArray(a)) a = [a]
+    var r = []
+    for (var i = 0; i < a.length; i++) {
+      var aa = a[i].split('|')
+      var o = {}
+      for (var j = 0; j < aa.length; j++) {
+        o[props[j]] = aa[j]
+      }
+      r.push(o)
+    }
+    return r
   }
 }

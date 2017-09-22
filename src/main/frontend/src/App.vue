@@ -171,8 +171,14 @@ export default {
       loading: false,
       test: { properties: {} },
       errormsg: undefined,
-      settings: JSON.parse(localStorage.getItem('settings')) ||
-      { timeline: undefined, timelineIncompatible: undefined, filtrarMovimentos: undefined },
+      settings: JSON.parse(localStorage.getItem('settings')) || {
+        timeline: undefined,
+        timelineIncompatible: undefined,
+        filtrarMovimentos: undefined,
+        mostrarPartes: undefined,
+        mostrarDadosComplementares: undefined,
+        mostrarProcessosRelacionados: undefined
+      },
       token: undefined,
       jwt: {}
     }

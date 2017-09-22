@@ -53,7 +53,7 @@
                     <br />
                     <b>{{fixed.partesAtivas[0].pessoa.nome}}</b>
                     <b v-if="fixed.partesAtivas.length>1">&nbsp;
-                      <a href="" @click="mostrarPartes(1)">+{{fixed.partesAtivas.length-1}}</a>
+                      <a href="" @click.prevent="mostrarPartes(true)">+{{fixed.partesAtivas.length-1}}</a>
                     </b>
                   </p>
                   <p class="card-text">
@@ -61,10 +61,10 @@
                     <br />
                     <b>{{fixed.partesPassivas[0].pessoa.nome}}</b>
                     <b v-if="fixed.partesPassivas.length>1">&nbsp;
-                      <a href="" @click="mostrarPartes(1)">+{{fixed.partesPassivas.length-1}}</a>
+                      <a href="" @click.prevent="mostrarPartes(true)">+{{fixed.partesPassivas.length-1}}</a>
                     </b>
                   </p>
-                  <a v-if="!partes" class="card-link float-right" href="" @click.prevent="mostrarPartes(1)">Ver partes...</a>
+                  <a v-if="!$parent.settings.mostrarPartes" @click.prevent="mostrarPartes(true)" class="card-link float-right" href="">Ver partes...</a>
                 </div>
               </div>
 
@@ -97,6 +97,7 @@
                     <br>
                     <b>{{proc.dadosBasicos.outroParametro.nomeMagistrado}}</b>
                   </p>
+                  <a v-if="!$parent.settings.mostrarProcessosRelacionados" class="card-link float-right" href="" @click.prevent="mostrarProcessosRelacionados(true)">Ver processos relacionados...</a>
                 </div>
               </div>
 
@@ -126,18 +127,19 @@
                       <a href="">+{{proc.dadosBasicos.outroParametro.numCDA.length-1}}</a>
                     </b>
                   </p>
-                  <a v-if="!dadosComplementares" class="card-link float-right" href="" @click.prevent="mostrarDadosComplementares(1)">Ver mais...</a>
+                  <a v-if="!$parent.settings.mostrarDadosComplementares" class="card-link float-right" href="" @click.prevent="mostrarDadosComplementares(true)">Ver mais...</a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-bind:class="{row: true, 'd-print-block': !partes}">
+          <!-- PARTES -->
+          <div v-bind:class="{row: true, 'd-print-block': !$parent.settings.mostrarPartes}">
             <div class="col col-sm-12">
-              <div class="card mb-3 card-outline-primary">
+              <div class="card mb-3 border-primary">
                 <div class="card-header">
                   Partes
-                  <button type="button" class="close d-print-none" @click="mostrarPartes(0)">
+                  <button type="button" class="close d-print-none" @click="mostrarPartes(false)">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -180,10 +182,57 @@
             </div>
           </div>
 
+          <!-- QUADRO COLORIDO DE PROCESSOS VINCULADOS -->
+          <div v-if="$parent.settings.mostrarProcessosRelacionados &amp;&amp; (fixed.processoVinculado || fixed.recursoTrf)" class="mt-1 d-print-none">
+            <!-- Profile Content -->
+            <div class="card-deck">
+              <div class="card border-success card-consulta-processual mb-3" v-if="fixed.processoVinculado">
+                <div class="card-header">
+                  Processos Vinculados
+                  <button type="button" class="close d-print-none" @click="mostrarProcessosRelacionados(false)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-body" style="padding: 0">
+                  <p class="card-text mb-0">
+                    <table class="table table-sm mb-0">
+                      <tbody>
+                        <tr v-for="pv in fixed.processoVinculado">
+                          <td style="padding-left: 20px">
+                            <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </p>
+                </div>
+              </div>
+              <div class="card border-success card-consulta-processual mb-3" v-if="fixed.recursoTrf">
+                <div class="card-header">
+                  Agravos
+                  <button type="button" class="close d-print-none" @click="mostrarProcessosRelacionados(false)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-body" style="padding: 0">
+                  <p class="card-text mb-0">
+                    <table class="table table-sm mb-0">
+                      <tbody>
+                        <tr v-for="pv in fixed.recursoTrf">
+                          <td style="padding-left: 20px">
+                            <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- QUADRO SUBSTITUTO PARA A IMPRESSAO -->
           <div class="row d-print-block">
             <div class="col col-sm-12">
-              <div class="card mb-3 card-outline-success">
+              <div class="card mb-3 border-success">
                 <div class="card-header">Dados Principais</div>
                 <div class="card-body pb-0">
                   <div class="row">
@@ -214,17 +263,41 @@
                       <p>{{fixed.assuntoPrincipalDescricao}}</p>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.processoVinculado">
+                      <label>Processos Vinculados</label>
+                      <table class="table table-sm mb-1 table-striped">
+                        <tbody>
+                          <tr v-for="pv in fixed.processoVinculado">
+                            <td style="padding-left:0;padding-right:0;">
+                              <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.recursoTrf">
+                      <label>Agravos</label>
+                      <table class="table table-sm mb-1 table-striped">
+                        <tbody>
+                          <tr v-for="pv in fixed.recursoTrf">
+                            <td style="padding-left:0;padding-right:0;">
+                              <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-if="dadosComplementares" v-bind:class="{row: true, 'xd-print-block': !dadosComplementares}">
+          <div v-if="$parent.settings.mostrarDadosComplementares" v-bind:class="{row: true}">
             <div class="col col-sm-12">
-              <div class="card mb-3 card-outline-warning">
+              <div class="card mb-3 border-warning">
                 <div class="card-header">
                   Dados Complementares
-                  <button type="button" class="close d-print-none" @click="mostrarDadosComplementares(0)">
+                  <button type="button" class="close d-print-none" @click="mostrarDadosComplementares(false)">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -258,11 +331,6 @@
                     <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.processoOriginario">
                       <label>Processo Originário</label>
                       <p v-html="proc.dadosBasicos.outroParametro.processoOriginario"></p>
-                    </div>
-
-                    <div class="col col-sm-3" v-if="proc.dadosBasicos.outroParametro.processoVinculado">
-                      <label>Processos Vinculados</label>
-                      <p v-html="proc.dadosBasicos.outroParametro.processoVinculado"></p>
                     </div>
                   </div>
                   <div class="row">
@@ -576,11 +644,11 @@ export default {
       ProcessoBL.mostrarTexto(this.fixed.movdoc, doc, f)
       this.modified = new Date()
     },
-    mostrarPartes: function (f) {
-      if (f !== undefined) this.partes = f
+    mostrarDadosComplementares: function (ativo) {
+      this.$parent.$emit('setting', 'mostrarDadosComplementares', ativo)
     },
-    mostrarDadosComplementares: function (f) {
-      if (f !== undefined) this.dadosComplementares = f
+    mostrarProcessosRelacionados: function (ativo) {
+      this.$parent.$emit('setting', 'mostrarProcessosRelacionados', ativo)
     },
     mostrarPeca: function (idDocumento) {
       this.$http.get('processo/' + this.numero + '/peca/' + idDocumento + '/pdf?orgao=' + this.orgao).then(response => {
@@ -611,6 +679,9 @@ export default {
       }
       this.filtro = texto
       this.$nextTick(() => this.$refs.filtro.focus())
+    },
+    mostrarPartes: function (ativo) {
+      this.$parent.$emit('setting', 'mostrarPartes', ativo)
     },
     imprimir: function () {
       window.print()
