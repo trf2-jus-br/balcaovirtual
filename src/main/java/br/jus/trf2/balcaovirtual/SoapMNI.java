@@ -163,44 +163,46 @@ public class SoapMNI {
 				ls.stacktrace = SwaggerUtils.stackAsString(ex);
 			}
 
-			for (TipoAvisoComunicacaoPendente a : aviso.value) {
-				Aviso i = new Aviso();
-				switch (a.getTipoComunicacao()) {
-				case "INT":
-					i.tipo = "Intimação";
-					break;
-				case "CIT":
-					i.tipo = "Citação";
-					break;
+			if (aviso != null) {
+				for (TipoAvisoComunicacaoPendente a : aviso.value) {
+					Aviso i = new Aviso();
+					switch (a.getTipoComunicacao()) {
+					case "INT":
+						i.tipo = "Intimação";
+						break;
+					case "CIT":
+						i.tipo = "Citação";
+						break;
+					}
+					i.processo = a.getProcesso().getNumero();
+					i.dataaviso = a.getDataDisponibilizacao();
+					i.idaviso = a.getIdAviso();
+					i.orgao = orgao;
+					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
+					i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
+					if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
+							&& a.getProcesso().getAssunto().get(0) != null
+							&& a.getProcesso().getAssunto().get(0).getCodigoNacional() != null)
+						i.assunto = a.getProcesso().getAssunto().get(0).getCodigoNacional().toString();
+					for (TipoParametro p : a.getProcesso().getOutroParametro()) {
+						if (p.getNome().equals("tipoOrgaoJulgador"))
+							i.unidadetipo = p.getValor();
+						if (p.getNome().equals("dtLimitIntimAut"))
+							i.datalimiteintimacaoautomatica = p.getValor();
+						if (p.getNome().equals("eventoIntimacao"))
+							i.eventointimacao = p.getValor();
+						if (p.getNome().equals("numeroPrazo"))
+							i.numeroprazo = p.getValor();
+						if (p.getNome().equals("tipoPrazo"))
+							i.tipoprazo = p.getValor();
+						if (p.getNome().equals("multiplicadorPrazo"))
+							i.multiplicadorprazo = p.getValor();
+						if (p.getNome().equals("motivoIntimacao"))
+							i.motivointimacao = p.getValor();
+					}
+					i.localidade = a.getProcesso().getCodigoLocalidade();
+					list.add(i);
 				}
-				i.processo = a.getProcesso().getNumero();
-				i.dataaviso = a.getDataDisponibilizacao();
-				i.idaviso = a.getIdAviso();
-				i.orgao = orgao;
-				i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
-				i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
-				if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
-						&& a.getProcesso().getAssunto().get(0) != null
-						&& a.getProcesso().getAssunto().get(0).getCodigoNacional() != null)
-					i.assunto = a.getProcesso().getAssunto().get(0).getCodigoNacional().toString();
-				for (TipoParametro p : a.getProcesso().getOutroParametro()) {
-					if (p.getNome().equals("tipoOrgaoJulgador"))
-						i.unidadetipo = p.getValor();
-					if (p.getNome().equals("dtLimitIntimAut"))
-						i.datalimiteintimacaoautomatica = p.getValor();
-					if (p.getNome().equals("eventoIntimacao"))
-						i.eventointimacao = p.getValor();
-					if (p.getNome().equals("numeroPrazo"))
-						i.numeroprazo = p.getValor();
-					if (p.getNome().equals("tipoPrazo"))
-						i.tipoprazo = p.getValor();
-					if (p.getNome().equals("multiplicadorPrazo"))
-						i.multiplicadorprazo = p.getValor();
-					if (p.getNome().equals("motivoIntimacao"))
-						i.motivointimacao = p.getValor();
-				}
-				i.localidade = a.getProcesso().getCodigoLocalidade();
-				list.add(i);
 			}
 		}
 	}
