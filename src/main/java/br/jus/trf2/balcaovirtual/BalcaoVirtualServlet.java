@@ -6,11 +6,12 @@ import java.net.URLConnection;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import com.crivano.swaggerservlet.SwaggerException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
+import com.crivano.swaggerservlet.property.PrivateProperty;
 import com.crivano.swaggerservlet.property.PublicProperty;
+import com.crivano.swaggerservlet.property.RestrictedProperty;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
@@ -29,6 +30,33 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		super.addProperty(new PublicProperty("balcaovirtual.marcas"));
 		super.addProperty(new PublicProperty("balcaovirtual.env"));
+
+		super.addProperty(new RestrictedProperty("balcaovirtual.datasource.url"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.datasource.username"));
+		super.addProperty(new PrivateProperty("balcaovirtual.datasource.password"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
+
+		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
+
+		for (String s : SwaggerUtils.getProperty("balcaovirtual.orgaos", "").split(",")) {
+			super.addProperty(new RestrictedProperty("balcaovirtual.mni." + s.toLowerCase() + ".url"));
+		}
+
+		super.addProperty(new PrivateProperty("balcaovirtual.jwt.secret"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.final"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.temp"));
+
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.remetente"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.host"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.host.alt"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.auth"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.auth.usuario"));
+		super.addProperty(new PrivateProperty("balcaovirtual.smtp.auth.senha"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.porta"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.destinatario"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.assunto"));
+
+		super.setAuthorizationToProperties(SwaggerUtils.getProperty("balcaovirtual.properties.secret", null));
 
 		class HttpGetDependency extends TestableDependency {
 			String testsite;
