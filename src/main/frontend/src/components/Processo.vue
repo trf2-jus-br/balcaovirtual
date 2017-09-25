@@ -124,7 +124,7 @@
                     <br>
                     <b>{{proc.dadosBasicos.outroParametro.numCDA[0]}}</b>
                     <b v-if="proc.dadosBasicos.outroParametro.numCDA.length>1">&nbsp;
-                      <a href="">+{{proc.dadosBasicos.outroParametro.numCDA.length-1}}</a>
+                      <a href="" @click.prevent="mostrarDadosComplementares(true)">+{{proc.dadosBasicos.outroParametro.numCDA.length-1}}</a>
                     </b>
                   </p>
                   <a v-if="!$parent.settings.mostrarDadosComplementares" class="card-link float-right" href="" @click.prevent="mostrarDadosComplementares(true)">Ver mais...</a>
