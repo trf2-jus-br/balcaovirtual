@@ -208,7 +208,7 @@
               </div>
               <div class="card border-success card-consulta-processual mb-3" v-if="fixed.recursoTrf">
                 <div class="card-header">
-                  Agravos
+                  Recursos
                   <button type="button" class="close d-print-none" @click="mostrarProcessosRelacionados(false)">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -276,7 +276,7 @@
                       </table>
                     </div>
                     <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.recursoTrf">
-                      <label>Agravos</label>
+                      <label>Recursos</label>
                       <table class="table table-sm mb-1 table-striped">
                         <tbody>
                           <tr v-for="pv in fixed.recursoTrf">
