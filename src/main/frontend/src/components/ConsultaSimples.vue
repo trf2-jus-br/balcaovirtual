@@ -25,7 +25,7 @@
               <div class="row pt-3">
                 <div class="col">
                   <button v-if="false" class="btn btn-secondary" @click="avancada=true">Pesquisa Avançada...</button>
-                  <button @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">Consultar</button>
+                  <button :disabled="numero === undefined || numero.trim() === ''" @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">Consultar</button>
                 </div>
               </div>
             </div>
@@ -150,6 +150,7 @@ export default {
   methods: {
     mostrarProcesso: function (numero) {
       var n = ProcessoBL.somenteNumeros(this.numero)
+      if (n === '') return
       this.$http.get('processo/' + n + '/validar', { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
