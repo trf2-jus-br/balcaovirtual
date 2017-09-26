@@ -183,7 +183,7 @@
           </div>
 
           <!-- QUADRO COLORIDO DE PROCESSOS VINCULADOS -->
-          <div v-if="$parent.settings.mostrarProcessosRelacionados &amp;&amp; (fixed.processoVinculado || fixed.recursoTrf)" class="mt-1 d-print-none">
+          <div v-if="$parent.settings.mostrarProcessosRelacionados &amp;&amp; (fixed.processoVinculado || fixed.recurso)" class="mt-1 d-print-none">
             <!-- Profile Content -->
             <div class="card-deck">
               <div class="card border-success card-consulta-processual mb-3" v-if="fixed.processoVinculado">
@@ -206,7 +206,7 @@
                   </p>
                 </div>
               </div>
-              <div class="card border-success card-consulta-processual mb-3" v-if="fixed.recursoTrf">
+              <div class="card border-success card-consulta-processual mb-3" v-if="fixed.recurso">
                 <div class="card-header">
                   Recursos
                   <button type="button" class="close d-print-none" @click="mostrarProcessosRelacionados(false)">
@@ -217,7 +217,7 @@
                   <p class="card-text mb-0">
                     <table class="table table-sm mb-0">
                       <tbody>
-                        <tr v-for="pv in fixed.recursoTrf">
+                        <tr v-for="pv in fixed.recurso">
                           <td style="padding-left: 20px">
                             <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
                         </tr>
@@ -275,11 +275,11 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.recursoTrf">
+                    <div class="col col-sm-6" v-if="proc.dadosBasicos.outroParametro.recurso">
                       <label>Recursos</label>
                       <table class="table table-sm mb-1 table-striped">
                         <tbody>
-                          <tr v-for="pv in fixed.recursoTrf">
+                          <tr v-for="pv in fixed.recurso">
                             <td style="padding-left:0;padding-right:0;">
                               <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
                           </tr>

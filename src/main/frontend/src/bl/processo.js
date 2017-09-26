@@ -150,24 +150,24 @@ export default {
               : fixed.processoVinculado[i].digital === 'F' ? 'Físico' : '?'
         }
       }
-      if (op.recursoTrf) {
-        fixed.recursoTrf = this.arrayOfStringsToObjects(op.recursoTrf, [
+      if (op.recurso) {
+        fixed.recurso = this.arrayOfStringsToObjects(op.recurso, [
           'numero',
           'cnjClasse',
           'descrClasse',
           'digital'
         ])
-        for (i = 0; i < fixed.recursoTrf.length; i++) {
-          fixed.recursoTrf[i].link = this.colocarLink(
-            fixed.recursoTrf[i].numero
+        for (i = 0; i < fixed.recurso.length; i++) {
+          fixed.recurso[i].link = this.colocarLink(
+            fixed.recurso[i].numero
           )
-          fixed.recursoTrf[i].nomeClasse = CnjClasseBL.nome(
-            fixed.recursoTrf[i].cnjClasse
+          fixed.recurso[i].nomeClasse = CnjClasseBL.nome(
+            fixed.recurso[i].cnjClasse
           )
-          fixed.recursoTrf[i].suporte =
-            fixed.recursoTrf[i].digital === 'E'
+          fixed.recurso[i].suporte =
+            fixed.recurso[i].digital === 'E'
               ? 'Digital'
-              : fixed.recursoTrf[i].digital === 'F' ? 'Físico' : '?'
+              : fixed.recurso[i].digital === 'F' ? 'Físico' : '?'
         }
       }
       console.log(fixed.processoVinculado)
