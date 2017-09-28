@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaovirtual</artifactId>
+	<version>1.0.2</version>
 	<packaging>war</packaging>
 	<name>Balcão Virtual Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -12,7 +13,7 @@
 		<dependency>
 			<groupId>com.crivano</groupId>
 			<artifactId>swaggerservlet</artifactId>
-			<version>1.4.0</version>
+			<version>1.4.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
@@ -98,5 +99,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<version>1.0.1</version>
 </project>
