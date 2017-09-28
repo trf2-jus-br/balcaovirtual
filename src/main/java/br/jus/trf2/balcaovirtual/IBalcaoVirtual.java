@@ -64,6 +64,21 @@ public interface IBalcaoVirtual {
 	public class Digital implements ISwaggerModel {
 	}
 
+	public class LocalNaUnidade implements ISwaggerModel {
+	}
+
+	public class Sentenciado implements ISwaggerModel {
+	}
+
+	public class UsuarioAutorizado implements ISwaggerModel {
+	}
+
+	public class Baixado implements ISwaggerModel {
+	}
+
+	public class CDAs implements ISwaggerModel {
+	}
+
 	public class QuantidadePorData implements ISwaggerModel {
 		public String data;
 		public String quantidade;
@@ -252,10 +267,15 @@ public interface IBalcaoVirtual {
 		public String numero;
 		public String orgao;
 		public String unidade;
+		public String localnaunidade;
 		public Boolean segredodejustica;
 		public Boolean segredodejusticadesistema;
 		public Boolean segredodejusticaabsoluto;
+		public Boolean usuarioautorizado;
 		public Boolean digital;
+		public Boolean sentenciado;
+		public Boolean baixado;
+		public String cdas;
 	}
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {

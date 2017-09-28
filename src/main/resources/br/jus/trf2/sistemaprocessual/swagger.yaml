@@ -145,6 +145,10 @@ paths:
                 $ref: "#/definitions/Orgao"
               unidade:
                 $ref: "#/definitions/Unidade"
+              localNaUnidade:
+                $ref: "#/definitions/LocalNaUnidade"
+              usuarioautorizado:
+                $ref: "#/definitions/UsuarioAutorizado"
               segredodejustica:
                 $ref: "#/definitions/SegredoDeJustica"
               segredodejusticadesistema:
@@ -153,6 +157,12 @@ paths:
                 $ref: "#/definitions/SegredoDeJusticaAbsoluto"
               eletronico:
                 $ref: "#/definitions/Eletronico"
+              sentenciado:
+                $ref: "#/definitions/Sentenciado"
+              baixado:
+                $ref: "#/definitions/Baixado"
+              cdas:
+                $ref: "#/definitions/CDAs"
         500:
           description: Error ocurred
           schema:
@@ -509,6 +519,26 @@ definitions:
   Ativo:
     type: boolean
     description: Ativo true ou false
+    
+  LocalNaUnidade:
+    description: Local na Unidade
+    type: string
+    
+  Sentenciado:
+    description: Processo já recebeu sentença?
+    type: boolean
+    
+  UsuarioAutorizado:
+    description: Usuário tem acesso ao processo ou está restrito por segredo de justiça
+    type: boolean
+    
+  Baixado:
+    description: Processo já baixado?
+    type: boolean
+    
+  CDAs:
+    description: Número de CDAs separado por vírgula
+    type: string
     
   Error:
     type: object

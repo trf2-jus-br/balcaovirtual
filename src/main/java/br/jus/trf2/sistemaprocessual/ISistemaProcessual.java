@@ -97,6 +97,21 @@ public interface ISistemaProcessual {
 	public class Ativo implements ISwaggerModel {
 	}
 
+	public class LocalNaUnidade implements ISwaggerModel {
+	}
+
+	public class Sentenciado implements ISwaggerModel {
+	}
+
+	public class UsuarioAutorizado implements ISwaggerModel {
+	}
+
+	public class Baixado implements ISwaggerModel {
+	}
+
+	public class CDAs implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String error;
 	}
@@ -177,10 +192,15 @@ public interface ISistemaProcessual {
 		public String numero;
 		public String orgao;
 		public String unidade;
+		public String localNaUnidade;
+		public Boolean usuarioautorizado;
 		public Boolean segredodejustica;
 		public Boolean segredodejusticadesistema;
 		public Boolean segredodejusticaabsoluto;
 		public Boolean eletronico;
+		public Boolean sentenciado;
+		public Boolean baixado;
+		public String cdas;
 	}
 
 	public interface IProcessoValidarNumeroGet extends ISwaggerMethod {

@@ -75,7 +75,7 @@
               <th>Órgão</th>
               <th>Unidade</th>
               <th>Suporte</th>
-              <th>Segredo</th>
+              <th>Acesso</th>
               <th>Status</th>
               <th style="text-align: center"></th>
             </tr>
@@ -93,7 +93,7 @@
               <td>{{p.orgao}}</td>
               <td>{{p.unidade}}</td>
               <td>{{p.digitalFormatado}}</td>
-              <td>{{p.segredoFormatado}}</td>
+              <td>{{p.acesso}}</td>
               <td class="status-td">
                 <span v-if="p.state=='ready'">Preparado</span>
                 <span v-if="p.state=='set'">Solicitado</span>
@@ -231,7 +231,7 @@ export default {
     },
     filtradosMarcadosDigitaisEAcessiveis: function () {
       return this.filtradosEMarcados.filter(function (item) {
-        return item.digital === true && item.segredodejustica === false
+        return item.digital === true && item.usuarioautorizado === true
       })
     }
   },
@@ -242,10 +242,11 @@ export default {
         numeroFormatado: undefined,
         orgao: undefined,
         unidade: undefined,
+        usuarioautorizado: undefined,
         segredodejustica: undefined,
         segredodejusticadesistema: undefined,
         segredodejusticaabsoluto: undefined,
-        segredoFormatado: undefined,
+        acesso: undefined,
         digital: undefined,
         digitalFormatado: undefined,
         validade: undefined,
@@ -262,18 +263,14 @@ export default {
         p.numero = ProcessoBL.somenteNumeros(p.numero)
         p.numeroFormatado = ProcessoBL.formatarProcesso(p.numero)
       }
-      if (p.digital !== undefined) p.digitalFormatado = p.digital ? 'Digital' : 'Físico'
-      if (p.segredodejustica !== undefined) {
-        p.segredoFormatado = p.segredodejusticaabsoluto ? 'Absoluto' : p.segredodejusticadesistema ? 'Sistema' : p.segredodejustica ? 'Segredo' : 'Público'
+      if (p.validado) {
+        if (p.digital !== undefined) p.digitalFormatado = p.digital ? 'Digital' : 'Físico'
+        if ((p.segredodejusticaabsoluto || p.segredodejusticadesistema) && p.usuarioautorizado) p.acesso = 'Autorizado'
+        else if (p.segredodejusticaabsoluto) p.acesso = 'Segredo Absoluto'
+        else if (p.segredodejusticadesistema) p.acesso = 'Segredo de Sistema'
+        else p.acesso = 'Público'
       }
       return p
-    },
-
-    validarEmLote: function () {
-      var a = this.processos.filter(function (item) {
-        return !item.validado
-      })
-      Bus.$emit('prgStart', 'Validando Processos', a.length, (i) => this.validarProcesso(a[i], true))
     },
 
     validarEmLoteSilenciosamente: function () {
@@ -291,27 +288,10 @@ export default {
           (error) => {
             processo.checked = false
             processo.disabled = true
-            processo.errormsg = 'Não foi possível obter informações sobre o processo. (' + error.data.errormsg + ')'
+            processo.errormsg = error.data.errormsg
             cont()
           })
       })
-    },
-
-    validarProcesso: function (processo, lote) {
-      if (lote) Bus.$emit('prgCaption', 'Validando ' + processo.numeroFormatado)
-      this.$http.get('processo/' + processo.numero + '/validar', { block: !lote }).then(
-        (response) => {
-          UtilsBL.overrideProperties(processo, response.data)
-          processo.validado = true
-          this.fixProcesso(processo)
-          if (lote) Bus.$emit('prgNext')
-        },
-        (error) => {
-          processo.checked = false
-          processo.disabled = true
-          processo.errormsg = 'Não foi possível obter informações sobre o processo. (' + error.data.errormsg + ')'
-          if (lote) Bus.$emit('prgNext')
-        })
     },
 
     baixarEmLote: function () {

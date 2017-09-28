@@ -153,6 +153,10 @@ export default {
       if (n === '') return
       this.$http.get('processo/' + n + '/validar', { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
+          if (!response.data.usuarioautorizado) {
+            this.errormsg = 'Processo em segredo de justiça. (' + response.data.unidade + ')'
+            return
+          }
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
         },
         error => {
