@@ -171,6 +171,7 @@ export default {
         timeline: undefined,
         timelineIncompatible: undefined,
         filtrarMovimentos: undefined,
+        mostrarNotas: undefined,
         mostrarPartes: undefined,
         mostrarDadosComplementares: undefined,
         mostrarProcessosRelacionados: undefined

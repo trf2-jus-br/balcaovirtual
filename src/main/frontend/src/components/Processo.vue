@@ -34,16 +34,61 @@
                 <span class="fa fa-star icone-em-linha" title="Remover da lista de processos favoritos"></span>
               </a>
 
+              <template v-if="marcasativas">
+                <a href="" v-if="$parent.settings.mostrarNotas &amp;&amp; (notaPessoal || notaUnidade)" @click.prevent="mostrarNotas(false)">
+                  <span class="fa fa-sticky-note icone-em-linha" title="Esconder anotações"></span>
+                </a>
+                <a href="" v-else-if="$parent.settings.mostrarNotas" @click.prevent="mostrarNotas(false)">
+                  <span class="fa fa-sticky-note-o icone-em-linha" title="Acrescentar anotações"></span>
+                </a>
+                <a href="" v-else-if="notaPessoal || notaUnidade" @click.prevent="mostrarNotas(true)">
+                  <span class="fa fa-sticky-note icone-em-linha" title="Exibir anotações"></span>
+                </a>
+                <a href="" v-else @click.prevent="mostrarNotas(true)">
+                  <span class="fa fa-sticky-note-o icone-em-linha" title="Acrescentar anotações"></span>
+                </a>
+              </template>
+
             </h4>
           </div>
         </div>
+
+        <template>
+          <!-- NOTAS -->
+          <div class="d-print-none mt-3" v-show="proc &amp;&amp; $parent.settings.mostrarNotas">
+            <div class="card-deck">
+              <div class="card card-consulta-processual mb-3" style="background-color: #f8ff99">
+                <div class="card-header">
+                  <strong>Notas da Unidade</strong>
+                  <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <textarea ref="notaUnidade" v-model="notaUnidade" @keyup="notasAlteradas()"></textarea>
+                </div>
+              </div>
+
+              <div class="card card-consulta-processual mb-3" style="background-color: #99ebff">
+                <div class="card-header">
+                  <strong>Notas Pessoais</strong>
+                  <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <textarea ref="notaPessoal" v-model="notaPessoal" @keyup="notasAlteradas()"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
 
         <timeline :timeline="timeline"></timeline>
 
         <template v-if="proc &amp;&amp; proc.dadosBasicos">
           <!-- QUADROS COLORIDOS -->
           <div class="d-print-none mt-3" v-if="errormsg === undefined">
-            <!-- Profile Content -->
             <div class="card-deck">
               <div class="card text-white bg-primary card-consulta-processual mb-3">
                 <div class="card-body">
@@ -569,7 +614,9 @@ export default {
       dadosComplementares: false,
       proc: undefined,
       marcadores: [],
-      marcasativas: true
+      marcasativas: true,
+      notaUnidade: undefined,
+      notaPessoal: undefined
     }
   },
   computed: {
@@ -773,8 +820,26 @@ export default {
       }, error => {
         this.warningmsg = error.data.errormsg
       })
-    }
+    },
 
+    mostrarNotas: function (show) {
+      this.$parent.$emit('setting', 'mostrarNotas', show)
+
+      this.$nextTick(() => {
+        this.$refs.notaUnidade.focus()
+        this.notasAlteradas()
+      })
+    },
+
+    notasAlteradas: function () {
+      if (this.notaUnidade !== undefined && this.notaUnidade.trim() === '') this.notaUnidade = undefined
+      if (this.notaPessoal !== undefined && this.notaPessoal.trim() === '') this.notaPessoal = undefined
+      this.$refs.notaUnidade.style.height = '5px'
+      this.$refs.notaPessoal.style.height = '5px'
+      var h = Math.max(this.$refs.notaUnidade.scrollHeight, this.$refs.notaPessoal.scrollHeight)
+      this.$refs.notaUnidade.style.height = h + 'px'
+      this.$refs.notaPessoal.style.height = h + 'px'
+    }
   },
 
   components: {
@@ -852,5 +917,14 @@ export default {
 
 .card-text-descr {
   margin-bottom: 0;
+}
+
+textarea {
+  border: none;
+  background: none;
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  min-height: 50px;
 }
 </style>
