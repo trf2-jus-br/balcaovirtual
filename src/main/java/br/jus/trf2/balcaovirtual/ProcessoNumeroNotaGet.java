@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetResponse;
@@ -18,13 +16,6 @@ import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
 
 public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
-	private static class MarcaTabela extends Marca {
-		public String numero;
-		public String orgao;
-	}
-
-	private static final List<MarcaTabela> list = new ArrayList<>();
-
 	@Override
 	public void run(ProcessoNumeroNotaGetRequest req, ProcessoNumeroNotaGetResponse resp) throws Exception {
 		if (!Utils.getMarcasAtivas())

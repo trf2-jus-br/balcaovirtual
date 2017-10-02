@@ -2,16 +2,16 @@ package br.jus.trf2.balcaovirtual;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaPostResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdDelete;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdDeleteRequest;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdDeleteResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
 
-public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
+public class ProcessoNumeroNotaIdDelete implements IProcessoNumeroNotaIdDelete {
 
 	@Override
-	public void run(ProcessoNumeroNotaPostRequest req, ProcessoNumeroNotaPostResponse resp) throws Exception {
+	public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
 
@@ -22,7 +22,7 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 
 	@Override
 	public String getContext() {
-		return "criar nota";
+		return "excluir nota";
 	}
 
 }

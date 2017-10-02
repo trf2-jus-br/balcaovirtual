@@ -76,13 +76,12 @@ export default {
       if (nota.texto === nota.textoAnterior) return
 
       if (nota.texto) {
-        if (nota.id) putNota(nota)
-        else postNota(nota)
+        if (nota.id) this.putNota(nota)
+        else this.postNota(nota)
       } else {
-        if (nota.id) deleteNota(nota)
+        if (nota.id) this.deleteNota(nota)
       }
     },
-
 
     notasAlteradas: function () {
       this.notaAlterada(this.notaUnidade)
@@ -97,7 +96,30 @@ export default {
     },
 
     postNota: function (nota) {
-      this.$http.post('processo/' + this.processo + '/nota?orgao=' + this.orgao, {}).then(
+      this.$http.post('processo/' + this.processo + '/nota?orgao=' + this.orgao, {
+        texto: nota.texto,
+        pessoal: nota.pessoal
+      }).then(
+        response => {
+          this.atualizar(response.data.nota)
+        },
+        error => UtilsBL.errormsg(error, this.nota))
+    },
+
+    putNota: function (nota) {
+      this.$http.put('processo/' + this.processo + '/nota/' + nota.id + '?orgao=' + this.orgao, {
+        texto: nota.texto,
+        pessoal: nota.pessoal,
+        dataatualizacao: nota.dataatualizacao
+      }).then(
+        response => {
+          this.atualizar(response.data.nota)
+        },
+        error => UtilsBL.errormsg(error, this.nota))
+    },
+
+    deleteNota: function (nota) {
+      this.$http.delete('processo/' + this.processo + '/nota/' + nota.id + '?orgao=' + this.orgao, {}).then(
         response => {
           this.atualizar(response.data.nota)
         },
