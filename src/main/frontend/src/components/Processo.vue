@@ -35,13 +35,13 @@
               </a>
 
               <template v-if="marcasativas">
-                <a href="" v-if="$parent.settings.mostrarNotas &amp;&amp; (notaPessoal || notaUnidade)" @click.prevent="mostrarNotas(false)">
+                <a href="" v-if="$parent.settings.mostrarNotas &amp;&amp; notas" @click.prevent="mostrarNotas(false)">
                   <span class="fa fa-sticky-note icone-em-linha" title="Esconder anotações"></span>
                 </a>
                 <a href="" v-else-if="$parent.settings.mostrarNotas" @click.prevent="mostrarNotas(false)">
                   <span class="fa fa-sticky-note-o icone-em-linha" title="Acrescentar anotações"></span>
                 </a>
-                <a href="" v-else-if="notaPessoal || notaUnidade" @click.prevent="mostrarNotas(true)">
+                <a href="" v-else-if="notas" @click.prevent="mostrarNotas(true)">
                   <span class="fa fa-sticky-note icone-em-linha" title="Exibir anotações"></span>
                 </a>
                 <a href="" v-else @click.prevent="mostrarNotas(true)">
@@ -53,36 +53,7 @@
           </div>
         </div>
 
-        <template>
-          <!-- NOTAS -->
-          <div class="d-print-none mt-3" v-show="proc &amp;&amp; $parent.settings.mostrarNotas">
-            <div class="card-deck">
-              <div class="card card-consulta-processual mb-3" style="background-color: #f8ff99">
-                <div class="card-header">
-                  <strong>Notas da Unidade</strong>
-                  <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="card-body">
-                  <textarea ref="notaUnidade" v-model="notaUnidade" @keyup="notasAlteradas()"></textarea>
-                </div>
-              </div>
-
-              <div class="card card-consulta-processual mb-3" style="background-color: #99ebff">
-                <div class="card-header">
-                  <strong>Notas Pessoais</strong>
-                  <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="card-body">
-                  <textarea ref="notaPessoal" v-model="notaPessoal" @keyup="notasAlteradas()"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
+        <processo-notas :processo="numero" :orgao="orgao" @ativar="notas = true" @desativar="notas = false"></processo-notas>
 
         <timeline :timeline="timeline"></timeline>
 
@@ -534,6 +505,7 @@ import ProcessoBL from '../bl/processo.js'
 import UtilsBL from '../bl/utils.js'
 import Timeline from './timeline'
 import ProcessoPecaDetalhes from './ProcessoPecaDetalhes'
+import ProcessoNotas from './ProcessoNotas'
 import CnjClasseBL from '../bl/cnj-classe.js'
 import CnjAssuntoBL from '../bl/cnj-assunto.js'
 import { Bus } from '../bl/bus.js'
@@ -615,8 +587,7 @@ export default {
       proc: undefined,
       marcadores: [],
       marcasativas: true,
-      notaUnidade: undefined,
-      notaPessoal: undefined
+      notas: false
     }
   },
   computed: {
@@ -844,7 +815,8 @@ export default {
 
   components: {
     timeline: Timeline,
-    'processo-peca-detalhes': ProcessoPecaDetalhes
+    'processo-peca-detalhes': ProcessoPecaDetalhes,
+    'processo-notas': ProcessoNotas
   }
 }
 </script>

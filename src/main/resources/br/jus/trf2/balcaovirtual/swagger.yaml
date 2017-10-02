@@ -3,9 +3,8 @@
 info:
   version: "1.0.0"
   title: Balcao Virtual
-  description: Micro-serviço para obter indicadores de gestão
+  description: Micro-serviço para interligar com sistemas processuais e seu repositório de dados
 
-# host: assijus.jfrj.jus.br
 basePath: /balcaovirtual/api/v1
 schemes: [http,https]
 consumes: [application/json]
@@ -19,7 +18,11 @@ tags:
   - name: aviso
     description: Intimações/Citações
   - name: marca
-    description: MArcadores Processuais
+    description: Marcadores Processuais
+  - name: nota
+    description: Anotações Processuais
+  - name: sinal
+    description: Sinalizações Processuais
   - name: config
     description: Configurações
   - name: utils
@@ -180,6 +183,12 @@ parameters:
     description: Página final da marca
     type: string
     required: false
+  pessoal:
+    name: pessoal
+    in: formData
+    description: Nota é pessoal
+    type: boolean
+    required: true
   localidade:
     name: localidade
     in: formData
@@ -228,6 +237,13 @@ parameters:
     description: Processo favorito do usuário
     type: boolean
     required: false
+  dataalteracao:
+    name: dataalteracao
+    in: formData
+    description: Data da última alteração do registro para evitar sobreescrever alterações alheias
+    type: string
+    format: date-time
+    
 
 ################################################################################
 #                                           Paths                              #
@@ -676,6 +692,88 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /processo/{numero}/nota:
+    get:
+      description: Obter notas de um processo
+      tags: [nota]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Nota"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: Acrescentar ou alterar uma nota
+      tags: [nota]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/texto"
+        - $ref: "#/parameters/pessoal"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              nota:
+                $ref: "#/definitions/Nota"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/{numero}/nota/{id}:
+    put:
+      description: Alterar uma nota
+      tags: [nota]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/texto"
+        - $ref: "#/parameters/dataalteracao"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              nota:
+                $ref: "#/definitions/Nota"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      description: Remover marca
+      tags: [nota]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /processo/{numero}/sinalizar:
     post:
       description: Acrescentar uma marca
@@ -1111,6 +1209,22 @@ definitions:
         type: string
       idestilo:
         type: string
+      nomeusuario:
+        type: string
+      dataalteracao:
+        type: string
+        format: date-time
+        
+  Nota:
+    description: Nota
+    type: object
+    properties:
+      idnota:
+        type: string
+      texto:
+        type: string
+      pessoal:
+        type: boolean
       nomeusuario:
         type: string
       dataalteracao:

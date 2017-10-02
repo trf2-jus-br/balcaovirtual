@@ -130,6 +130,14 @@ public interface IBalcaoVirtual {
 		public Date dataalteracao;
 	}
 
+	public class Nota implements ISwaggerModel {
+		public String idnota;
+		public String texto;
+		public Boolean pessoal;
+		public String nomeusuario;
+		public Date dataalteracao;
+	}
+
 	public class Marcador implements ISwaggerModel {
 		public String texto;
 	}
@@ -440,6 +448,64 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoNumeroPecaIdMarcaPost extends ISwaggerMethod {
 		public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoNumeroNotaGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+	}
+
+	public class ProcessoNumeroNotaGetResponse implements ISwaggerResponse {
+		public List<Nota> list;
+	}
+
+	public interface IProcessoNumeroNotaGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroNotaGetRequest req, ProcessoNumeroNotaGetResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroNotaPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String texto;
+		public Boolean pessoal;
+	}
+
+	public class ProcessoNumeroNotaPostResponse implements ISwaggerResponse {
+		public Nota nota;
+	}
+
+	public interface IProcessoNumeroNotaPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroNotaPostRequest req, ProcessoNumeroNotaPostResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroNotaIdPutRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String texto;
+		public Date dataalteracao;
+	}
+
+	public class ProcessoNumeroNotaIdPutResponse implements ISwaggerResponse {
+		public Nota nota;
+	}
+
+	public interface IProcessoNumeroNotaIdPut extends ISwaggerMethod {
+		public void run(ProcessoNumeroNotaIdPutRequest req, ProcessoNumeroNotaIdPutResponse resp) throws Exception;
+	}
+
+	public class ProcessoNumeroNotaIdDeleteRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String id;
+	}
+
+	public class ProcessoNumeroNotaIdDeleteResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IProcessoNumeroNotaIdDelete extends ISwaggerMethod {
+		public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp)
 				throws Exception;
 	}
 
