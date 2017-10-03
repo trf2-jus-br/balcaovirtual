@@ -153,11 +153,15 @@
                         <label>{{parte.tipoAtuacao}}</label>
                         <p>{{parte.pessoa.nome}}</p>
                       </div>
-                      <div class="col col-sm-3">
+                      <div class="col" :class="{'col-sm-3': $parent.jwt.origin !== 'int', 'col-sm-2': $parent.jwt.origin === 'int'}">
                         <label>Tipo</label>
                         <p>{{parte.pessoa.tipoPessoa}}</p>
                       </div>
-                      <div class="col col-sm-3">
+                      <div v-if="$parent.jwt.origin === 'int'" class="col col-sm-2">
+                        <label>Documento</label>
+                        <p>{{parte.documento}}</p>
+                      </div>
+                      <div class="col" :class="{'col-sm-3': $parent.jwt.origin !== 'int', 'col-sm-2': $parent.jwt.origin === 'int'}">
                         <label>Assistência Judiciária</label>
                         <p>{{parte.assistenciaJudiciaria ? "Sim" : "Não"}}</p>
                       </div>
@@ -501,8 +505,6 @@ export default {
         this.orgao = response.data.orgao
         this.$http.get('processo/' + this.numero + '/consultar?orgao=' + this.orgao).then(
           response => {
-            console.log('carregou')
-
             Bus.$emit('release')
             try {
               this.proc = response.data.value

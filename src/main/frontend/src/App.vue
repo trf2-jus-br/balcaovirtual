@@ -90,11 +90,9 @@ export default {
     })
 
     Bus.$on('block', (min, max) => {
-      console.log('block')
       if (this.blockCounter === 0) {
         this.$nextTick(function () {
           if (this.blockCounter > 0) {
-            console.log('blocked')
             this.$refs.topProgress.start(min, max)
           }
         }, 200)
@@ -104,13 +102,11 @@ export default {
     })
 
     Bus.$on('release', () => {
-      console.log('release')
       this.blockCounter--
       if (this.blockCounter === 0) {
         this.loading = false
         this.$nextTick(function () {
           if (this.blockCounter === 0) {
-            console.log('released')
             this.$refs.topProgress.done()
           }
         }, 200)

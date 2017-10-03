@@ -158,9 +158,7 @@ export default {
           'digital'
         ])
         for (i = 0; i < fixed.recurso.length; i++) {
-          fixed.recurso[i].link = this.colocarLink(
-            fixed.recurso[i].numero
-          )
+          fixed.recurso[i].link = this.colocarLink(fixed.recurso[i].numero)
           fixed.recurso[i].nomeClasse = CnjClasseBL.nome(
             fixed.recurso[i].cnjClasse
           )
@@ -170,7 +168,6 @@ export default {
               : fixed.recurso[i].digital === 'F' ? 'Físico' : '?'
         }
       }
-      console.log(fixed.processoVinculado)
       if (op.processoOriginario) {
         op.processoOriginario = this.colocarLink(op.processoOriginario)
       }
@@ -185,17 +182,20 @@ export default {
         if (typeof op.numCDA === 'string') op.numCDA = [op.numCDA]
         fixed.numCDAs = this.arrayToString(op.numCDA)
       }
-      if (op.tipoAtuacaoParte) {
+      if (op.informacoesParte) {
         var map = {}
-        for (i = 0; i < op.tipoAtuacaoParte.length; i++) {
-          var str = op.tipoAtuacaoParte[i]
-          var n = str.lastIndexOf(':')
-          if (n >= 0) map[str.substring(0, n)] = str.substring(n + 1)
-        }
+        var inf = this.arrayOfStringsToObjects(op.informacoesParte, [
+          'nome',
+          'tipoAtuacao',
+          'documento'
+        ])
+        for (i = 0; i < inf.length; i++) map[inf[i].nome] = inf[i]
         for (i = 0; i < p.dadosBasicos.polo.length; i++) {
           for (j = 0; j < p.dadosBasicos.polo[i].parte.length; j++) {
             p.dadosBasicos.polo[i].parte[j].tipoAtuacao =
-              map[p.dadosBasicos.polo[i].parte[j].pessoa.nome]
+              map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].tipoAtuacao
+            p.dadosBasicos.polo[i].parte[j].documento =
+              map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].documento
           }
         }
       }
