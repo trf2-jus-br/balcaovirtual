@@ -10,10 +10,13 @@ CREATE TABLE `balcao_virtual`.`nota` (
   `NOTA_IE_USU` INT NOT NULL COMMENT 'Identificador externo do usuário',
   `NOTA_IE_UNIDADE` INT NULL COMMENT 'Identificador externo da unidade ou grupo',
   PRIMARY KEY (`NOTA_ID`),
-  INDEX `FK_NOTA_PROC_ID_idx` (`PROC_ID` ASC),
+  INDEX `FK_NOTA_PROC_ID` (`PROC_ID` ASC),
   CONSTRAINT `FK_NOTA_PROC_ID`
     FOREIGN KEY (`PROC_ID`)
     REFERENCES `balcao_virtual`.`processo` (`PROC_ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 COMMENT = 'Armazena notas relativas ao processo, as notas podem ser pessoais ou da unidade/grupo';
+
+ALTER TABLE `balcao_virtual`.`nota` 
+ADD UNIQUE INDEX `UK_PROC_PESSOAL` (`PROC_ID` ASC, `NOTA_LG_PESSOAL` ASC);

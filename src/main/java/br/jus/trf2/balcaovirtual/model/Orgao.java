@@ -4,26 +4,26 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the orgao database table.
  * 
  */
 @Entity
-@NamedQuery(name="Orgao.findAll", query="SELECT o FROM Orgao o")
+@NamedQueries({ @NamedQuery(name = "Orgao.findAll", query = "SELECT o FROM Orgao o"),
+		@NamedQuery(name = "Orgao.findSigla", query = "SELECT o FROM Orgao o WHERE orgaSg = :sigla") })
 public class Orgao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ORGA_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ORGA_ID")
 	private int orgaId;
 
-	@Column(name="ORGA_SG")
+	@Column(name = "ORGA_SG")
 	private String orgaSg;
 
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="orgao")
+	// bi-directional many-to-one association to Processo
+	@OneToMany(mappedBy = "orgao")
 	private List<Processo> processos;
 
 	public Orgao() {

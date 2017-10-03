@@ -10,6 +10,7 @@
 		<class>br.jus.trf2.balcaovirtual.model.CnjClasse</class>
 		<class>br.jus.trf2.balcaovirtual.model.Estilo</class>
 		<class>br.jus.trf2.balcaovirtual.model.Marca</class>
+		<class>br.jus.trf2.balcaovirtual.model.Nota</class>
 		<class>br.jus.trf2.balcaovirtual.model.Orgao</class>
 		<class>br.jus.trf2.balcaovirtual.model.Processo</class>
 		<class>br.jus.trf2.balcaovirtual.model.Sinal</class>

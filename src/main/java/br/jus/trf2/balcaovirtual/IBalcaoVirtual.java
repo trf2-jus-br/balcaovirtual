@@ -481,6 +481,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroNotaIdPutRequest implements ISwaggerRequest {
 		public String numero;
+		public String id;
 		public String orgao;
 		public String texto;
 		public Date dataalteracao;

@@ -13,21 +13,12 @@ import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroMarcasGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
-import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
-	private static class MarcaTabela extends Marca {
-		public String numero;
-		public String orgao;
-	}
-
-	private static final List<MarcaTabela> list = new ArrayList<>();
-
 	@Override
 	public void run(ProcessoNumeroMarcasGetRequest req, ProcessoNumeroMarcasGetResponse resp) throws Exception {
 		if (!Utils.getMarcasAtivas())
@@ -46,16 +37,29 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 		if (true) {
 			EntityManager em = PersistenceManager.INSTANCE.getEntityManager();
 			try {
-				// List<TipoMarcaItem> l =
-				// em.createQuery(Utils.getSQL("jpa-marcas"))
-				// .setParameter("classe",
-				// Integer.valueOf(req.id)).getResultList();
-				//
-				// for (TipoMarcaItem i : l) {
-				// Marcador m = new Marcador();
-				// m.texto = i.getTimiNm();
-				// resp.list.add(m);
-				// }
+				List<Object[]> l = (List<Object[]>) em.createQuery(Utils.getSQL("jpa-marcas"))
+						.setParameter("processo", req.numero).setParameter("orgao", req.orgao)
+						.setParameter("interno", Byte.parseByte(u.isInterno() ? "1" : "0"))
+						.setParameter("usuario", ud.id.intValue())
+						.setParameter("unidade", ud.unidade != null ? ud.unidade.intValue() : null).getResultList();
+
+				for (Object[] i : l) {
+					br.jus.trf2.balcaovirtual.model.Marca m = (br.jus.trf2.balcaovirtual.model.Marca) i[0];
+					String t = (String) i[1];
+
+					Marca r = new Marca();
+					r.dataalteracao = m.getMarcDfAlteracao();
+					r.idestilo = Integer.toString(m.getEstilo().getEstiId());
+					r.idmarca = Integer.toString(m.getMarcId());
+					r.idpeca = Integer.toString(m.getMarcIdPeca());
+					r.nomeusuario = m.getMarcNmUsu();
+					r.paginicial = m.getMarcNrPagInicial() != null ? m.getMarcNrPagInicial().toString() : null;
+					r.pagfinal = m.getMarcNrPagFinal() != null ? m.getMarcNrPagFinal().toString() : null;
+					r.texto = m.getMarcTxConteudo();
+					r.texto = t != null ? t + (m.getMarcTxConteudo() != null ? " - " + m.getMarcTxConteudo() : "")
+							: m.getMarcTxConteudo();
+					resp.list.add(r);
+				}
 			} finally {
 				em.close();
 			}
@@ -99,11 +103,6 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 				if (conn != null)
 					conn.close();
 			}
-		}
-
-		for (MarcaTabela mt : list) {
-			if (!req.numero.equals(mt.numero) || !req.orgao.equals(mt.orgao))
-				continue;
 		}
 	}
 

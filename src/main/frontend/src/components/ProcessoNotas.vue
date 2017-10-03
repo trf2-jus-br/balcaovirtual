@@ -7,9 +7,10 @@
           <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
             <span aria-hidden="true">&times;</span>
           </button>
+          <div class="alert alert-danger" role="alert" v-if="notaUnidade.errormsg">{{notaUnidade.errormsg}}</div>
         </div>
         <div class="card-body">
-          <textarea ref="notaUnidade" v-model="notaUnidade.text" @keyup="notasAlteradas()"></textarea>
+          <textarea ref="notaUnidade" v-model="notaUnidade.texto" @keyup="notasAlteradas()"></textarea>
         </div>
       </div>
 
@@ -19,6 +20,7 @@
           <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
             <span aria-hidden="true">&times;</span>
           </button>
+          <div class="alert alert-danger" role="alert" v-if="notaPessoal.errormsg">{{notaPessoal.errormsg}}</div>
         </div>
         <div class="card-body">
           <textarea ref="notaPessoal" v-model="notaPessoal.texto" @keyup="notasAlteradas()"></textarea>
@@ -41,9 +43,7 @@ export default {
           this.atualizar(response.data.list[i])
         }
       },
-      error => {
-        UtilsBL.errormsg(error, this)
-      })
+      error => UtilsBL.errormsg(error, this))
   },
   data () {
     return {
@@ -103,7 +103,7 @@ export default {
         response => {
           this.atualizar(response.data.nota)
         },
-        error => UtilsBL.errormsg(error, this.nota))
+        error => UtilsBL.errormsg(error, nota))
     },
 
     putNota: function (nota) {
@@ -115,15 +115,15 @@ export default {
         response => {
           this.atualizar(response.data.nota)
         },
-        error => UtilsBL.errormsg(error, this.nota))
+        error => UtilsBL.errormsg(error, nota))
     },
 
     deleteNota: function (nota) {
       this.$http.delete('processo/' + this.processo + '/nota/' + nota.id + '?orgao=' + this.orgao, {}).then(
         response => {
-          this.atualizar(response.data.nota)
+          this.atualizar({ pessoal: nota.pessoal })
         },
-        error => UtilsBL.errormsg(error, this.nota))
+        error => UtilsBL.errormsg(error, nota))
     }
   }
 }

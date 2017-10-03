@@ -1,68 +1,75 @@
 package br.jus.trf2.balcaovirtual.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
 /**
  * The persistent class for the marca database table.
  * 
  */
 @Entity
-@NamedQuery(name="Marca.findAll", query="SELECT m FROM Marca m")
+@NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m")
 public class Marca implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="MARC_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MARC_ID")
 	private int marcId;
 
-	@Column(name="MARC_CD_USU")
+	@Column(name = "MARC_CD_USU")
 	private String marcCdUsu;
 
-	@Column(name="MARC_DF_ALTERACAO")
+	@Column(name = "MARC_DF_ALTERACAO")
 	private Timestamp marcDfAlteracao;
 
-	@Column(name="MARC_ID_PECA")
+	@Column(name = "MARC_ID_PECA")
 	private int marcIdPeca;
 
-	@Column(name="MARC_IE_UNIDADE")
-	private int marcIeUnidade;
+	@Column(name = "MARC_IE_UNIDADE")
+	private Integer marcIeUnidade;
 
-	@Column(name="MARC_IE_USU")
+	@Column(name = "MARC_IE_USU")
 	private int marcIeUsu;
 
-	@Column(name="MARC_LG_INTERNO")
+	@Column(name = "MARC_LG_INTERNO")
 	private byte marcLgInterno;
 
-	@Column(name="MARC_NM_USU")
+	@Column(name = "MARC_NM_USU")
 	private String marcNmUsu;
 
-	@Column(name="MARC_NR_PAG_FINAL")
+	@Column(name = "MARC_NR_PAG_FINAL")
 	private BigDecimal marcNrPagFinal;
 
-	@Column(name="MARC_NR_PAG_INICIAL")
+	@Column(name = "MARC_NR_PAG_INICIAL")
 	private BigDecimal marcNrPagInicial;
 
-	@Column(name="MARC_TX_CONTEUDO")
+	@Column(name = "MARC_TX_CONTEUDO")
 	private String marcTxConteudo;
 
-	//bi-directional many-to-one association to Estilo
+	// bi-directional many-to-one association to Estilo
 	@ManyToOne
-	@JoinColumn(name="ESTI_ID")
+	@JoinColumn(name = "ESTI_ID")
 	private Estilo estilo;
 
-	//bi-directional many-to-one association to Processo
+	// bi-directional many-to-one association to Processo
 	@ManyToOne
-	@JoinColumn(name="PROC_ID")
+	@JoinColumn(name = "PROC_ID")
 	private Processo processo;
 
-	//bi-directional many-to-one association to TipoMarcaItem
+	// bi-directional many-to-one association to TipoMarcaItem
 	@ManyToOne
-	@JoinColumn(name="TIMI_ID")
+	@JoinColumn(name = "TIMI_ID")
 	private TipoMarcaItem tipoMarcaItem;
 
 	public Marca() {
@@ -100,7 +107,7 @@ public class Marca implements Serializable {
 		this.marcIdPeca = marcIdPeca;
 	}
 
-	public int getMarcIeUnidade() {
+	public Integer getMarcIeUnidade() {
 		return this.marcIeUnidade;
 	}
 

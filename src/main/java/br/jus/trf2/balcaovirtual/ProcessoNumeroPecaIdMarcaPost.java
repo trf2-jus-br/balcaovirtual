@@ -25,6 +25,10 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
 					+ "' não pode fazer marcações porque não foi autenticado no órgão '" + req.orgao + "'.");
+		
+	  	// verifica se o texto representa um tipo_marca_item
+	    // select tmi from TipoMarcaItem tmi TxTipoMarcaCnjClasse tx tx.cnclId = :idclasse and :texto like CONCAT(timiNm, '%')
+
 
 		Connection conn = null;
 		CallableStatement cstmt = null;
