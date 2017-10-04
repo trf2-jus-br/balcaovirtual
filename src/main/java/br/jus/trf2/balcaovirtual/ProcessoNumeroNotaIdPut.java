@@ -1,5 +1,7 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.util.Date;
+
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdPut;
@@ -22,10 +24,14 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.orgao + "'.");
 
 		try (Dao dao = new Dao()) {
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			dao.beginTransaction();
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
-			Processo p = dao.obtemProcesso(req.numero, req.orgao);
 			if (p != nota.getProcesso())
 				throw new Exception("identificadores de processo inválidos");
+			if (nota.getNotaDfAlteracao().getTime() != req.dataalteracao.getTime())
+				throw new PresentableUnloggedException(
+						"Esta nota foi alterada por outro usuário, suas alterações não serão gravadas. Por favor, recarregue e aplique novamente suas alterações.");
 			nota.setNotaId(Long.valueOf(req.id));
 			nota.setNotaTxConteudo(req.texto);
 
@@ -34,6 +40,7 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 			nota.setNotaNmUsu(u.nome);
 			nota.setNotaIeUnidade(ud.unidade);
 			nota.setNotaIeUsu(ud.id);
+			nota.setNotaDfAlteracao(dao.obtemData());
 			dao.persist(nota);
 
 			resp.nota = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota();
@@ -42,6 +49,9 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 			resp.nota.texto = nota.getNotaTxConteudo();
 			resp.nota.dataalteracao = nota.getNotaDfAlteracao();
 			resp.nota.nomeusuario = nota.getNotaNmUsu();
+		} catch (Exception e) {
+			Dao.rollbackCurrentTransaction();
+			throw e;
 		}
 	}
 

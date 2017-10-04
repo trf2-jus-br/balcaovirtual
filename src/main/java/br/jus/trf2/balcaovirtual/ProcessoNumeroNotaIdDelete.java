@@ -23,10 +23,16 @@ public class ProcessoNumeroNotaIdDelete implements IProcessoNumeroNotaIdDelete {
 
 		try (Dao dao = new Dao()) {
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
-			Processo p = dao.obtemProcesso(req.numero, req.orgao);
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, false);
+			if (p == null)
+				throw new Exception("processo não encontrado");
 			if (p != nota.getProcesso())
 				throw new Exception("identificadores de processo inválidos");
+			dao.beginTransaction();
 			dao.remove(nota);
+		} catch (Exception e) {
+			Dao.rollbackCurrentTransaction();
+			throw e;
 		}
 	}
 

@@ -1,37 +1,15 @@
 <template>
   <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas">
     <div class="card-deck">
-      <div class="card card-consulta-processual mb-3" style="background-color: #f8ff99">
-        <div class="card-header">
-          <strong>Notas da Unidade</strong>
-          <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <div class="alert alert-danger" role="alert" v-if="notaUnidade.errormsg">{{notaUnidade.errormsg}}</div>
-        </div>
-        <div class="card-body">
-          <textarea ref="notaUnidade" v-model="notaUnidade.texto" @keyup="notasAlteradas()"></textarea>
-        </div>
-      </div>
-
-      <div class="card card-consulta-processual mb-3" style="background-color: #99ebff">
-        <div class="card-header">
-          <strong>Notas Pessoais</strong>
-          <button type="button" class="close d-print-none" @click="mostrarNotas(false)">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <div class="alert alert-danger" role="alert" v-if="notaPessoal.errormsg">{{notaPessoal.errormsg}}</div>
-        </div>
-        <div class="card-body">
-          <textarea ref="notaPessoal" v-model="notaPessoal.texto" @keyup="notasAlteradas()"></textarea>
-        </div>
-      </div>
+      <processo-nota :processo="processo" :orgao="orgao" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="notaUnidade.pessoal" :id="notaUnidade.idnota" :texto="notaUnidade.texto" :dataalteracao="notaUnidade.dataalteracao" @salva="notaSalva"></processo-nota>
+      <processo-nota :processo="processo" :orgao="orgao" titulo="Notas Pessoais" style="background-color: #f8ff99" :pessoal="notaPessoal.pessoal" :id="notaPessoal.idnota" :texto="notaPessoal.texto" :dataalteracao="notaPessoal.dataalteracao" @salva="notaSalva"></processo-nota>
     </div>
   </div>
 </template>
 
 <script>
 import UtilsBL from '../bl/utils.js'
+import ProcessoNota from './ProcessoNota'
 
 export default {
   name: 'processo-notas',
@@ -40,18 +18,26 @@ export default {
     this.$http.get('processo/' + this.processo + '/nota?orgao=' + this.orgao).then(
       response => {
         for (var i = 0; i < response.data.list.length; i++) {
-          this.atualizar(response.data.list[i])
+          var n = response.data.list[i].pessoal ? this.notaPessoal : this.notaUnidade
+          UtilsBL.overrideProperties(n, response.data.list[i])
+          console.log('carreguei: ', n)
         }
       },
       error => UtilsBL.errormsg(error, this))
   },
   data () {
     return {
-      notaUnidade: { id: undefined, texto: undefined, textoAnterior: undefined, dataatualizacao: undefined, errormsg: undefined, pessoal: false },
-      notaPessoal: { id: undefined, texto: undefined, textoAnterior: undefined, dataatualizacao: undefined, errormsg: undefined, pessoal: true }
+      notaUnidade: { idnota: undefined, texto: undefined, textoAnterior: undefined, dataalteracao: undefined, errormsg: undefined, pessoal: false },
+      notaPessoal: { idnota: undefined, texto: undefined, textoAnterior: undefined, dataalteracao: undefined, errormsg: undefined, pessoal: true }
     }
   },
   methods: {
+    notaSalva: function (nota) {
+      console.log('salvei:', nota)
+      var n = nota.pessoal ? this.notaPessoal : this.notaUnidade
+      UtilsBL.overrideProperties(n, nota)
+    },
+
     mostrarNotas: function (show) {
       this.$parent.$parent.$emit('setting', 'mostrarNotas', show)
 
@@ -61,70 +47,18 @@ export default {
       })
     },
 
-    atualizar: function (nota) {
-      var n = nota.pessoal ? this.notaPessoal : this.notaUnidade
-      var alterado = n.dataatualizacao === nota.dataatualizacao
-      n.id = nota.idnota
-      n.texto = nota.texto
-      n.textoAnterior = nota.texto
-      n.dataatualizacao = nota.dataatualizacao
-      if (alterado) this.notasAlteradas()
-    },
-
-    notaAlterada: function (nota) {
-      if (nota.texto !== undefined && nota.texto.trim() === '') nota.texto = undefined
-      if (nota.texto === nota.textoAnterior) return
-
-      if (nota.texto) {
-        if (nota.id) this.putNota(nota)
-        else this.postNota(nota)
-      } else {
-        if (nota.id) this.deleteNota(nota)
-      }
-    },
-
     notasAlteradas: function () {
-      this.notaAlterada(this.notaUnidade)
-      this.notaAlterada(this.notaPessoal)
-
       this.$emit(this.notaUnidade.texto || this.notaPessoal.texto ? 'ativar' : 'desativar')
       this.$refs.notaUnidade.style.height = '5px'
       this.$refs.notaPessoal.style.height = '5px'
       var h = Math.max(this.$refs.notaUnidade.scrollHeight, this.$refs.notaPessoal.scrollHeight)
       this.$refs.notaUnidade.style.height = h + 'px'
       this.$refs.notaPessoal.style.height = h + 'px'
-    },
-
-    postNota: function (nota) {
-      this.$http.post('processo/' + this.processo + '/nota?orgao=' + this.orgao, {
-        texto: nota.texto,
-        pessoal: nota.pessoal
-      }).then(
-        response => {
-          this.atualizar(response.data.nota)
-        },
-        error => UtilsBL.errormsg(error, nota))
-    },
-
-    putNota: function (nota) {
-      this.$http.put('processo/' + this.processo + '/nota/' + nota.id + '?orgao=' + this.orgao, {
-        texto: nota.texto,
-        pessoal: nota.pessoal,
-        dataatualizacao: nota.dataatualizacao
-      }).then(
-        response => {
-          this.atualizar(response.data.nota)
-        },
-        error => UtilsBL.errormsg(error, nota))
-    },
-
-    deleteNota: function (nota) {
-      this.$http.delete('processo/' + this.processo + '/nota/' + nota.id + '?orgao=' + this.orgao, {}).then(
-        response => {
-          this.atualizar({ pessoal: nota.pessoal })
-        },
-        error => UtilsBL.errormsg(error, nota))
     }
+  },
+
+  components: {
+    'processo-nota': ProcessoNota
   }
 }
 </script>

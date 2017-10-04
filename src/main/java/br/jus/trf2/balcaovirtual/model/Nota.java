@@ -1,7 +1,7 @@
 package br.jus.trf2.balcaovirtual.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
@@ -17,7 +18,13 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n")
+@NamedQueries({
+		// findAll
+		@NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n"),
+
+		// findProcesso
+		@NamedQuery(name = "Nota.findProcesso", query = "SELECT n FROM Nota n WHERE n.processo = :processo and ((n.notaLgPessoal = 1 and n.notaIeUsu = :ieusuario and n.notaIeUsu is not null) or (n.notaLgPessoal = 0 and n.notaIeUnidade = :ieunidade and n.notaIeUnidade is not null))") })
+
 public class Nota implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +40,7 @@ public class Nota implements Serializable {
 	private boolean notaLgPessoal;
 
 	@Column(name = "NOTA_DF_ALTERACAO")
-	private Timestamp notaDfAlteracao;
+	private Date notaDfAlteracao;
 
 	@Column(name = "NOTA_CD_USU")
 	private String notaCdUsu;
@@ -82,12 +89,12 @@ public class Nota implements Serializable {
 		this.notaLgPessoal = notaLgPessoal;
 	}
 
-	public Timestamp getNotaDfAlteracao() {
+	public Date getNotaDfAlteracao() {
 		return notaDfAlteracao;
 	}
 
-	public void setNotaDfAlteracao(Timestamp notaDfAlteracao) {
-		this.notaDfAlteracao = notaDfAlteracao;
+	public void setNotaDfAlteracao(Date date) {
+		this.notaDfAlteracao = date;
 	}
 
 	public String getNotaCdUsu() {

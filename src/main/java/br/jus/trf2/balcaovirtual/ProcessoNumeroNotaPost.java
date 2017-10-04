@@ -22,8 +22,12 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
 					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.orgao + "'.");
 
+		if (!req.pessoal && ud.unidade == null)
+			throw new PresentableUnloggedException(
+					"Usuário '" + u.usuario + "' só pode fazer anotações pessoais no órgão '" + req.orgao + "'.");
+
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao);
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
 
 			Nota nota = new Nota();
 			nota.setProcesso(p);
@@ -35,6 +39,7 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 			nota.setNotaNmUsu(u.nome);
 			nota.setNotaIeUnidade(ud.unidade);
 			nota.setNotaIeUsu(ud.id);
+			nota.setNotaDfAlteracao(dao.obtemData());
 			dao.persist(nota);
 
 			resp.nota = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota();
@@ -43,6 +48,9 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 			resp.nota.texto = nota.getNotaTxConteudo();
 			resp.nota.dataalteracao = nota.getNotaDfAlteracao();
 			resp.nota.nomeusuario = nota.getNotaNmUsu();
+		} catch (Exception e) {
+			Dao.rollbackCurrentTransaction();
+			throw e;
 		}
 	}
 

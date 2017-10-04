@@ -4,16 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.model.Nota;
+import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 	@Override
@@ -30,37 +32,22 @@ public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 
 		resp.list = new ArrayList<>();
 
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		try {
-			conn = Utils.getConnection();
-			pstmt = conn.prepareStatement(Utils.getSQL("notas"));
-			pstmt.setString(1, req.numero);
-			pstmt.setString(2, req.orgao);
-			pstmt.setLong(3, ud.id);
-			if (ud.unidade != null)
-				pstmt.setLong(4, ud.unidade);
-			else
-				pstmt.setString(4, null);
-			rset = pstmt.executeQuery();
+		try (Dao dao = new Dao()) {
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
 
-			while (rset.next()) {
-				Nota m = new Nota();
-				m.idnota = rset.getString("nota_id");
-				m.texto = rset.getString("nota_tx_conteudo");
-				m.pessoal = rset.getBoolean("nota_lg_pessoal");
-				m.nomeusuario = rset.getString("nota_nm_usu");
-				m.dataalteracao = rset.getTimestamp("nota_df_alteracao");
+			if (l == null)
+				return;
+
+			for (Nota nota : l) {
+				br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota m = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.Nota();
+				m.idnota = Long.toString(nota.getNotaId());
+				m.texto = nota.getNotaTxConteudo();
+				m.pessoal = nota.getNotaLgPessoal();
+				m.nomeusuario = nota.getNotaNmUsu();
+				m.dataalteracao = nota.getNotaDfAlteracao();
 				resp.list.add(m);
 			}
-		} finally {
-			if (rset != null)
-				rset.close();
-			if (pstmt != null)
-				pstmt.close();
-			if (conn != null)
-				conn.close();
 		}
 	}
 
