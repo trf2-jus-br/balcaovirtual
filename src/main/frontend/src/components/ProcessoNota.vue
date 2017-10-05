@@ -75,7 +75,7 @@ export default {
           }
           this.errormsg = undefined
           if (this.state === undefined) this.state = 'ready'
-          this.$emit('input', this.textoAtual)
+          this.$nextTick(() => this.$emit('input', this.textoAtual))
           setTimeout(this.carregarNota, 120000)
         },
         error => UtilsBL.errormsg(error, this))
