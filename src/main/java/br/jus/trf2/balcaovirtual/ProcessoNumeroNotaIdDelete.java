@@ -23,6 +23,8 @@ public class ProcessoNumeroNotaIdDelete implements IProcessoNumeroNotaIdDelete {
 
 		try (Dao dao = new Dao()) {
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
+			if (nota == null)
+				return;
 			Processo p = dao.obtemProcesso(req.numero, req.orgao, false);
 			if (p == null)
 				throw new Exception("processo não encontrado");

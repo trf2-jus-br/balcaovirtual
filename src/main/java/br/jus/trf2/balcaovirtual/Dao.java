@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Orgao;
@@ -28,16 +29,20 @@ public class Dao implements Closeable {
 		// identifica o órgao
 		Orgao o = (Orgao) em.createNamedQuery("Orgao.findSigla").setParameter("sigla", orgaoSigla).getSingleResult();
 
+		Processo p = null;
 		// verifica se o processo já está cadastrado
-		Processo p = (Processo) em.createNamedQuery("Processo.findNumeroEOrgao").setParameter("numero", numero)
-				.setParameter("orgao", o).getSingleResult();
-
-		if (criar && p == null) {
-			// insere um novo processo na tabela
-			p = new Processo();
-			p.setOrgao(o);
-			p.setProcCd(numero);
-			em.persist(p);
+		try {
+			p = (Processo) em.createNamedQuery("Processo.findNumeroEOrgao").setParameter("numero", numero)
+					.setParameter("orgao", o).getSingleResult();
+		} catch (NoResultException e) {
+			if (criar) {
+				// insere um novo processo na tabela
+				p = new Processo();
+				p.setOrgao(o);
+				p.setProcCd(numero);
+				this.persist(p);
+				// p = obtemProcesso(numero, orgaoSigla, false);
+			}
 		}
 
 		return p;
@@ -70,6 +75,7 @@ public class Dao implements Closeable {
 		if (!em.getTransaction().isActive())
 			beginTransaction();
 		this.em.persist(o);
+		this.em.flush();
 	}
 
 	public void remove(Object o) {

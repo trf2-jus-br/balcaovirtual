@@ -2,66 +2,105 @@
   <div class="card card-consulta-processual mb-3" style="background-color: #f8ff99">
     <div class="card-header">
       <strong>{{titulo}}</strong>
-      <button type="button" class="close d-print-none" @click="esconderNotas()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span class="pull-right chars-left">{{caracteresRestantes}}</span>
+      <span class="close-button d-print-none icone-em-linha" aria-hidden="true" @click="esconderNotas()">
+        <i class="fa fa-close"></i>
+      </span>
+      <span v-if="state === 'changed'" class="pull-right chars-left icone-em-linha">{{limit - count}}/{{limit}} restantes</span>
+      <span v-if="errormsg === undefined &amp;&amp; (state === undefined || state === 'processing')" class="pull-right processing icone-em-linha">
+        <i class="fa fa-refresh fa-spin fa-fw"></i>
+      </span>
     </div>
     <div class="card-body">
       <div class="alert alert-danger" role="alert" v-if="errormsg">{{errormsg}}</div>
-      <textarea ref="notaUnidade" v-model="textoAtual" @input="notaAlterada"></textarea> texto: {{texto}} id: {{id}} pessoal: {{pessoal}} data: {{dataalteracao}}
+      <textarea :disabled="state === undefined || errormsg !== undefined" ref="textarea" v-model="textoAtual" @input="notaAlterada"></textarea>
     </div>
   </div>
 </template>
 
 <script>
 import UtilsBL from '../bl/utils.js'
-import Debounce from 'debounce'
+import _ from 'underscore'
 
 export default {
   name: 'processo-nota',
-  props: ['titulo', 'id', 'texto', 'pessoal', 'dataalteracao', 'processo', 'orgao'],
+  props: ['titulo', 'pessoal', 'processo', 'orgao'],
   mounted () {
+    this.carregarNota()
   },
   data () {
     return {
-      state: 'uninitialized',
+      state: undefined,
+      id: undefined,
+      dataalteracao: undefined,
       textoAtual: undefined,
       textoAnterior: undefined,
       textoDebonced: undefined,
-      errormsg: undefined
-    }
-  },
-
-  computed: {
-    caracteresRestantes: function () {
-      var count = this.textoAtual !== undefined ? UtilsBL.getUTF8Length(this.textoAtual) : 0
-      var limit = 2000
-      if (count === 0) return ''
-      return (limit - count) + '/' + limit + ' restantes'
+      errormsg: undefined,
+      limit: 2000
     }
   },
 
   watch: {
-    texto: function () {
-      this.textoAtual = this.texto
+    count: function () {
+      console.log(this.count)
+      if (this.count > this.limit) {
+        this.textoAtual = UtilsBL.clipUTF8Length(this.textoAtual, this.limit)
+        this.notaAlterada()
+      }
+    }
+  },
+
+  computed: {
+    count: function () {
+      return this.textoAtual !== undefined ? UtilsBL.getUTF8Length(this.textoAtual) : 0
     }
   },
 
   methods: {
+    carregarNota: function () {
+      if (this.state !== undefined && this.state !== 'ready') {
+        setTimeout(this.carregarNota, 120000)
+        return
+      }
+      this.$http.get('processo/' + this.processo + '/nota?orgao=' + this.orgao).then(
+        response => {
+          for (var i = 0; i < response.data.list.length; i++) {
+            var n = response.data.list[i]
+            if (n.pessoal !== this.pessoal) continue
+            UtilsBL.overrideProperties(n, response.data.list[i])
+            this.id = n.idnota
+            this.dataalteracao = n.dataalteracao
+            this.textoAnterior = n.texto
+            this.textoAtual = n.texto
+          }
+          this.errormsg = undefined
+          if (this.state === undefined) this.state = 'ready'
+          this.$emit('input', this.textoAtual)
+          setTimeout(this.carregarNota, 120000)
+        },
+        error => UtilsBL.errormsg(error, this))
+    },
+
     esconderNotas: function () {
       this.$parent.$parent.$parent.$emit('setting', 'mostrarNotas', false)
     },
 
     atualizar: function (nota) {
       if (nota === undefined) nota = { idnota: undefined, texto: undefined, dataalteracao: undefined, pessoal: this.pessoal }
-      console.log('emiti:', nota)
-      this.$emit('salva', nota)
+      if (this.textoAtual === nota.texto) this.state = 'ready'
+      else {
+        this.state = 'changed'
+        this.refletirAlteracao()
+      }
+
+      this.dataalteracao = nota.dataalteracao
+      this.id = nota.idnota
+      //      console.log('emiti:', nota)
+      //      this.$emit('salva', nota)
     },
 
-    refletirAlteracao: Debounce(function () {
+    refletirAlteracao: _.debounce(function () {
       console.log('debounced', this.textoAtual)
-      if (this.textoAtual !== undefined && this.textoAtual.trim() === '') this.textoAtual = undefined
       // if (this.textoAtual === this.textoAnterior) return
 
       if (this.textoAtual) {
@@ -73,11 +112,18 @@ export default {
     }, 2000),
 
     notaAlterada: function () {
-      this.state = 'changed'
-      this.refletirAlteracao()
+      if (this.textoAtual !== undefined && this.textoAtual.trim() === '') this.textoAtual = undefined
+      if (this.state !== 'processing') {
+        this.state = 'changed'
+        this.refletirAlteracao()
+      } else {
+        this.refletirAlteracao.clear()
+      }
+      this.$emit('input', this.textoAtual)
     },
 
     postNota: function (texto) {
+      this.state = 'processing'
       this.$http.post('processo/' + this.processo + '/nota?orgao=' + this.orgao, {
         texto: texto,
         pessoal: this.pessoal
@@ -89,6 +135,7 @@ export default {
     },
 
     putNota: function (texto) {
+      this.state = 'processing'
       this.$http.put('processo/' + this.processo + '/nota/' + this.id + '?orgao=' + this.orgao, {
         texto: texto,
         pessoal: this.pessoal,
@@ -101,6 +148,7 @@ export default {
     },
 
     deleteNota: function () {
+      this.state = 'processing'
       this.$http.delete('processo/' + this.processo + '/nota/' + this.id + '?orgao=' + this.orgao, {}).then(
         response => {
           this.atualizar()
@@ -123,6 +171,10 @@ textarea {
 }
 
 .chars-left {
+  margin-right: 1em;
+}
+
+.processing {
   margin-right: 1em;
 }
 </style>

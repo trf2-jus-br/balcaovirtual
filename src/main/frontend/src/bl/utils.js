@@ -186,5 +186,21 @@ export default {
       }
     }
     return utf8length
+  },
+
+  clipUTF8Length: function (string, length) {
+    var utf8length = 0
+    for (var n = 0; n < string.length; n++) {
+      var c = string.charCodeAt(n)
+      if (c < 128) {
+        utf8length++
+      } else if (c > 127 && c < 2048) {
+        utf8length = utf8length + 2
+      } else {
+        utf8length = utf8length + 3
+      }
+      if (utf8length > length) return string.substring(0, n)
+    }
+    return string
   }
 }

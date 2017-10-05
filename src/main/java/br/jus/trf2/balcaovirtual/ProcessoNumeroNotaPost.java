@@ -1,5 +1,7 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.util.List;
+
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaPost;
@@ -8,7 +10,6 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.model.Nota;
-import br.jus.trf2.balcaovirtual.model.Orgao;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
@@ -28,6 +29,12 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 
 		try (Dao dao = new Dao()) {
 			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
+			for (Nota n : l) {
+				if (n.getNotaLgPessoal() == req.pessoal)
+					throw new PresentableUnloggedException(
+							"Esta nota já foi criada por outro usuário, suas anotações não serão gravadas. Por favor, recarregue esta página e aplique novamente suas alterações.");
+			}
 
 			Nota nota = new Nota();
 			nota.setProcesso(p);

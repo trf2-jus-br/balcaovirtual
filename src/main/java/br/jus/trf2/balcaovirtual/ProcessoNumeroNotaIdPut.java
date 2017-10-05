@@ -1,7 +1,5 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.util.Date;
-
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdPut;
@@ -27,11 +25,14 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
 			dao.beginTransaction();
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
-			if (p != nota.getProcesso())
-				throw new Exception("identificadores de processo inválidos");
+			if (nota == null)
+				throw new PresentableUnloggedException(
+						"Esta nota foi removida por outro usuário, suas alterações não serão gravadas. Por favor, recarregue esta página e aplique novamente suas alterações.");
 			if (nota.getNotaDfAlteracao().getTime() != req.dataalteracao.getTime())
 				throw new PresentableUnloggedException(
-						"Esta nota foi alterada por outro usuário, suas alterações não serão gravadas. Por favor, recarregue e aplique novamente suas alterações.");
+						"Esta nota foi alterada por outro usuário, suas alterações não serão gravadas. Por favor, recarregue esta página e aplique novamente suas alterações.");
+			if (p != nota.getProcesso())
+				throw new Exception("identificadores de processo inválidos");
 			nota.setNotaId(Long.valueOf(req.id));
 			nota.setNotaTxConteudo(req.texto);
 

@@ -199,6 +199,10 @@ export default {
 </script>
 
 <style>
+.close-button {
+  float: right;
+}
+
 .icone-em-linha {
   color: black;
   opacity: 0.2;
