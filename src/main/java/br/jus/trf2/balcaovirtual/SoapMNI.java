@@ -296,6 +296,9 @@ public class SoapMNI {
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");
 
+		if (nomePdfs == null)
+			throw new Exception("Não é possível peticionar sem que seja fornecido um PDF");
+
 		String numProcFormated = numProc;
 		try {
 			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",

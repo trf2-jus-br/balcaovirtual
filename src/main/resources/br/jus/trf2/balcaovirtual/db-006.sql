@@ -1,4 +1,4 @@
-CREATE TABLE `balcao_virtual`.`nota` (
+CREATE TABLE `trfBalcaoVirtual`.`nota` (
   `NOTA_ID` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador da nota',
   `PROC_ID` INT NOT NULL COMMENT 'Identificador do processo',
   `NOTA_LG_PESSOAL` TINYINT NOT NULL DEFAULT 0 COMMENT 'Indica se a nota é pessoal ou da unidade',
