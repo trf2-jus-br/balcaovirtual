@@ -4,48 +4,48 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the estilo database table.
  * 
  */
 @Entity
-@NamedQuery(name="Estilo.findAll", query="SELECT e FROM Estilo e")
+@Table(name="estilo")
+@NamedQuery(name = "Estilo.findAll", query = "SELECT e FROM Estilo e")
 public class Estilo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ESTI_ID")
-	private int estiId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ESTI_ID")
+	private Long estiId;
 
-	@Column(name="ESTI_LG_INTERNO")
+	@Column(name = "ESTI_LG_INTERNO")
 	private byte estiLgInterno;
 
-	@Column(name="ESTI_LG_PESSOAL")
+	@Column(name = "ESTI_LG_PESSOAL")
 	private byte estiLgPessoal;
 
-	@Column(name="ESTI_NM")
+	@Column(name = "ESTI_NM")
 	private String estiNm;
 
-	@Column(name="ESTI_NR_ORDEM")
+	@Column(name = "ESTI_NR_ORDEM")
 	private int estiNrOrdem;
 
-	@Column(name="ESTI_TP_COR")
+	@Column(name = "ESTI_TP_COR")
 	private String estiTpCor;
 
-	//bi-directional many-to-one association to Marca
-	@OneToMany(mappedBy="estilo")
+	// bi-directional many-to-one association to Marca
+	@OneToMany(mappedBy = "estilo")
 	private List<Marca> marcas;
 
 	public Estilo() {
 	}
 
-	public int getEstiId() {
+	public Long getEstiId() {
 		return this.estiId;
 	}
 
-	public void setEstiId(int estiId) {
+	public void setEstiId(Long estiId) {
 		this.estiId = estiId;
 	}
 

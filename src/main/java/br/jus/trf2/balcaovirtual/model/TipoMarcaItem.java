@@ -4,45 +4,49 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the tipo_marca_item database table.
  * 
  */
 @Entity
-@Table(name="tipo_marca_item")
-@NamedQuery(name="TipoMarcaItem.findAll", query="SELECT t FROM TipoMarcaItem t")
+@Table(name = "tipo_marca_item")
+@NamedQueries({
+		// findAll
+		@NamedQuery(name = "TipoMarcaItem.findAll", query = "SELECT t FROM TipoMarcaItem t"),
+
+		// findClasse
+		@NamedQuery(name = "TipoMarcaItem.findClasse", query = "select tmi from TipoMarca tm, in(tm.tipoMarcaItems) as tmi, in(tm.cnjClasses) as cl where cl.cnclId = :idclasse order by tmi.timiNrOrdem") })
 public class TipoMarcaItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="TIMI_ID")
-	private int timiId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "TIMI_ID")
+	private Long timiId;
 
-	@Column(name="TIMI_NM")
+	@Column(name = "TIMI_NM")
 	private String timiNm;
 
-	@Column(name="TIMI_NR_ORDEM")
+	@Column(name = "TIMI_NR_ORDEM")
 	private int timiNrOrdem;
 
-	//bi-directional many-to-one association to Marca
-	@OneToMany(mappedBy="tipoMarcaItem")
+	// bi-directional many-to-one association to Marca
+	@OneToMany(mappedBy = "tipoMarcaItem")
 	private List<Marca> marcas;
 
-	//bi-directional many-to-one association to TipoMarca
+	// bi-directional many-to-one association to TipoMarca
 	@ManyToOne
-	@JoinColumn(name="TIMA_ID")
+	@JoinColumn(name = "TIMA_ID")
 	private TipoMarca tipoMarca;
 
 	public TipoMarcaItem() {
 	}
 
-	public int getTimiId() {
+	public Long getTimiId() {
 		return this.timiId;
 	}
 
-	public void setTimiId(int timiId) {
+	public void setTimiId(Long timiId) {
 		this.timiId = timiId;
 	}
 

@@ -9,6 +9,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="orgao")
 @NamedQueries({ @NamedQuery(name = "Orgao.findAll", query = "SELECT o FROM Orgao o"),
 		@NamedQuery(name = "Orgao.findSigla", query = "SELECT o FROM Orgao o WHERE orgaSg = :sigla") })
 public class Orgao implements Serializable {
@@ -17,7 +18,7 @@ public class Orgao implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ORGA_ID")
-	private int orgaId;
+	private Long orgaId;
 
 	@Column(name = "ORGA_SG")
 	private String orgaSg;
@@ -29,11 +30,11 @@ public class Orgao implements Serializable {
 	public Orgao() {
 	}
 
-	public int getOrgaId() {
+	public Long getOrgaId() {
 		return this.orgaId;
 	}
 
-	public void setOrgaId(int orgaId) {
+	public void setOrgaId(Long orgaId) {
 		this.orgaId = orgaId;
 	}
 

@@ -1,7 +1,6 @@
 package br.jus.trf2.balcaovirtual.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -12,12 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the marca database table.
  * 
  */
 @Entity
+@Table(name="marca")
 @NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m")
 public class Marca implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +26,7 @@ public class Marca implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MARC_ID")
-	private int marcId;
+	private Long marcId;
 
 	@Column(name = "MARC_CD_USU")
 	private String marcCdUsu;
@@ -34,25 +35,25 @@ public class Marca implements Serializable {
 	private Timestamp marcDfAlteracao;
 
 	@Column(name = "MARC_ID_PECA")
-	private int marcIdPeca;
+	private Long marcIdPeca;
 
 	@Column(name = "MARC_IE_UNIDADE")
-	private Integer marcIeUnidade;
+	private Long marcIeUnidade;
 
 	@Column(name = "MARC_IE_USU")
-	private int marcIeUsu;
+	private Long marcIeUsu;
 
 	@Column(name = "MARC_LG_INTERNO")
-	private byte marcLgInterno;
+	private boolean marcLgInterno;
 
 	@Column(name = "MARC_NM_USU")
 	private String marcNmUsu;
 
 	@Column(name = "MARC_NR_PAG_FINAL")
-	private BigDecimal marcNrPagFinal;
+	private Integer marcNrPagFinal;
 
 	@Column(name = "MARC_NR_PAG_INICIAL")
-	private BigDecimal marcNrPagInicial;
+	private Integer marcNrPagInicial;
 
 	@Column(name = "MARC_TX_CONTEUDO")
 	private String marcTxConteudo;
@@ -75,11 +76,11 @@ public class Marca implements Serializable {
 	public Marca() {
 	}
 
-	public int getMarcId() {
+	public Long getMarcId() {
 		return this.marcId;
 	}
 
-	public void setMarcId(int marcId) {
+	public void setMarcId(Long marcId) {
 		this.marcId = marcId;
 	}
 
@@ -99,35 +100,35 @@ public class Marca implements Serializable {
 		this.marcDfAlteracao = marcDfAlteracao;
 	}
 
-	public int getMarcIdPeca() {
+	public Long getMarcIdPeca() {
 		return this.marcIdPeca;
 	}
 
-	public void setMarcIdPeca(int marcIdPeca) {
+	public void setMarcIdPeca(Long marcIdPeca) {
 		this.marcIdPeca = marcIdPeca;
 	}
 
-	public Integer getMarcIeUnidade() {
+	public Long getMarcIeUnidade() {
 		return this.marcIeUnidade;
 	}
 
-	public void setMarcIeUnidade(int marcIeUnidade) {
+	public void setMarcIeUnidade(Long marcIeUnidade) {
 		this.marcIeUnidade = marcIeUnidade;
 	}
 
-	public int getMarcIeUsu() {
+	public Long getMarcIeUsu() {
 		return this.marcIeUsu;
 	}
 
-	public void setMarcIeUsu(int marcIeUsu) {
+	public void setMarcIeUsu(Long marcIeUsu) {
 		this.marcIeUsu = marcIeUsu;
 	}
 
-	public byte getMarcLgInterno() {
+	public boolean getMarcLgInterno() {
 		return this.marcLgInterno;
 	}
 
-	public void setMarcLgInterno(byte marcLgInterno) {
+	public void setMarcLgInterno(boolean marcLgInterno) {
 		this.marcLgInterno = marcLgInterno;
 	}
 
@@ -139,19 +140,19 @@ public class Marca implements Serializable {
 		this.marcNmUsu = marcNmUsu;
 	}
 
-	public BigDecimal getMarcNrPagFinal() {
+	public Integer getMarcNrPagFinal() {
 		return this.marcNrPagFinal;
 	}
 
-	public void setMarcNrPagFinal(BigDecimal marcNrPagFinal) {
+	public void setMarcNrPagFinal(Integer marcNrPagFinal) {
 		this.marcNrPagFinal = marcNrPagFinal;
 	}
 
-	public BigDecimal getMarcNrPagInicial() {
+	public Integer getMarcNrPagInicial() {
 		return this.marcNrPagInicial;
 	}
 
-	public void setMarcNrPagInicial(BigDecimal marcNrPagInicial) {
+	public void setMarcNrPagInicial(Integer marcNrPagInicial) {
 		this.marcNrPagInicial = marcNrPagInicial;
 	}
 

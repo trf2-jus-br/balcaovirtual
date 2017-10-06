@@ -39,9 +39,8 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 			try {
 				List<Object[]> l = (List<Object[]>) em.createQuery(Utils.getSQL("jpa-marcas"))
 						.setParameter("processo", req.numero).setParameter("orgao", req.orgao)
-						.setParameter("interno", Byte.parseByte(u.isInterno() ? "1" : "0"))
-						.setParameter("usuario", ud.id.intValue())
-						.setParameter("unidade", ud.unidade != null ? ud.unidade.intValue() : null).getResultList();
+						.setParameter("interno", u.isInterno()).setParameter("usuario", ud.id.longValue())
+						.setParameter("unidade", ud.unidade != null ? ud.unidade.longValue() : null).getResultList();
 
 				for (Object[] i : l) {
 					br.jus.trf2.balcaovirtual.model.Marca m = (br.jus.trf2.balcaovirtual.model.Marca) i[0];
@@ -49,9 +48,9 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 
 					Marca r = new Marca();
 					r.dataalteracao = m.getMarcDfAlteracao();
-					r.idestilo = Integer.toString(m.getEstilo().getEstiId());
-					r.idmarca = Integer.toString(m.getMarcId());
-					r.idpeca = Integer.toString(m.getMarcIdPeca());
+					r.idestilo = Long.toString(m.getEstilo().getEstiId());
+					r.idmarca = Long.toString(m.getMarcId());
+					r.idpeca = Long.toString(m.getMarcIdPeca());
 					r.nomeusuario = m.getMarcNmUsu();
 					r.paginicial = m.getMarcNrPagInicial() != null ? m.getMarcNrPagInicial().toString() : null;
 					r.pagfinal = m.getMarcNrPagFinal() != null ? m.getMarcNrPagFinal().toString() : null;

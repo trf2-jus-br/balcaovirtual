@@ -13,12 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the processo database table.
  * 
  */
 @Entity
+@Table(name="processo")
 @NamedQueries({
 		// findAll
 		@NamedQuery(name = "Processo.findAll", query = "SELECT p FROM Processo p"),
@@ -31,7 +33,7 @@ public class Processo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PROC_ID")
-	private int procId;
+	private Long procId;
 
 	@Column(name = "PROC_CD")
 	private String procCd;
@@ -48,11 +50,11 @@ public class Processo implements Serializable {
 	public Processo() {
 	}
 
-	public int getProcId() {
+	public Long getProcId() {
 		return this.procId;
 	}
 
-	public void setProcId(int procId) {
+	public void setProcId(Long procId) {
 		this.procId = procId;
 	}
 

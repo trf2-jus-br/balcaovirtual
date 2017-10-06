@@ -12,12 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the notaa database table.
  * 
  */
 @Entity
+@Table(name="nota")
 @NamedQueries({
 		// findAll
 		@NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n"),
@@ -52,7 +54,7 @@ public class Nota implements Serializable {
 	private String notaNmUsu;
 
 	@Column(name = "NOTA_IE_USU")
-	private long notaIeUsu;
+	private Long notaIeUsu;
 
 	@Column(name = "NOTA_IE_UNIDADE")
 	private Long notaIeUnidade;
@@ -129,11 +131,11 @@ public class Nota implements Serializable {
 		this.notaIeUnidade = notaIeUnidade;
 	}
 
-	public long getNotaIeUsu() {
+	public Long getNotaIeUsu() {
 		return notaIeUsu;
 	}
 
-	public void setNotaIeUsu(long notaIeUsu) {
+	public void setNotaIeUsu(Long notaIeUsu) {
 		this.notaIeUsu = notaIeUsu;
 	}
 

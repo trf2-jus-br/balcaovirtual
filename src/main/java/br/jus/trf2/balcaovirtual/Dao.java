@@ -8,9 +8,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Orgao;
 import br.jus.trf2.balcaovirtual.model.Processo;
+import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class Dao implements Closeable {
 	private EntityManager em;
@@ -51,6 +53,12 @@ public class Dao implements Closeable {
 	public List<Nota> obtemNotas(Processo p, Long ieusuario, Long ieunidade) {
 		List<Nota> r = (List<Nota>) em.createNamedQuery("Nota.findProcesso").setParameter("processo", p)
 				.setParameter("ieusuario", ieusuario).setParameter("ieunidade", ieunidade).getResultList();
+		return r;
+	}
+
+	public List<TipoMarcaItem> obtemTipoMarcaItens(Long idclasse) {
+		List<TipoMarcaItem> r = (List<TipoMarcaItem>) em.createNamedQuery("TipoMarcaItem.findClasse")
+				.setParameter("idclasse", idclasse).getResultList();
 		return r;
 	}
 

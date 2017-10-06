@@ -4,50 +4,42 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the tipo_marca database table.
  * 
  */
 @Entity
-@Table(name="tipo_marca")
-@NamedQuery(name="TipoMarca.findAll", query="SELECT t FROM TipoMarca t")
+@Table(name = "tipo_marca")
+@NamedQuery(name = "TipoMarca.findAll", query = "SELECT t FROM TipoMarca t")
 public class TipoMarca implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="TIMA_ID")
-	private int timaId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "TIMA_ID")
+	private Long timaId;
 
-	@Column(name="TIMA_NM")
+	@Column(name = "TIMA_NM")
 	private String timaNm;
 
-	//bi-directional many-to-one association to TipoMarcaItem
-	@OneToMany(mappedBy="tipoMarca")
+	// bi-directional many-to-one association to TipoMarcaItem
+	@OneToMany(mappedBy = "tipoMarca")
 	private List<TipoMarcaItem> tipoMarcaItems;
 
-	//bi-directional many-to-many association to CnjClasse
+	// bi-directional many-to-many association to CnjClasse
 	@ManyToMany
-	@JoinTable(
-		name="tx_tipo_marca_cnj_classe"
-		, joinColumns={
-			@JoinColumn(name="TIMA_ID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="CNCL_ID")
-			}
-		)
+	@JoinTable(name = "tx_tipo_marca_cnj_classe", joinColumns = {
+			@JoinColumn(name = "TIMA_ID") }, inverseJoinColumns = { @JoinColumn(name = "CNCL_ID") })
 	private List<CnjClasse> cnjClasses;
 
 	public TipoMarca() {
 	}
 
-	public int getTimaId() {
+	public Long getTimaId() {
 		return this.timaId;
 	}
 
-	public void setTimaId(int timaId) {
+	public void setTimaId(Long timaId) {
 		this.timaId = timaId;
 	}
 

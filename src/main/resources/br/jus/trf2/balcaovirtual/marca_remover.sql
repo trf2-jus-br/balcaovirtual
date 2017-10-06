@@ -1,1 +1,0 @@
-delete from marca where marc_id = ?

@@ -4,44 +4,44 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-
 /**
  * The persistent class for the sinal database table.
  * 
  */
 @Entity
-@NamedQuery(name="Sinal.findAll", query="SELECT s FROM Sinal s")
+@Table(name="sinal")
+@NamedQuery(name = "Sinal.findAll", query = "SELECT s FROM Sinal s")
 public class Sinal implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="SINA_ID")
-	private int sinaId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "SINA_ID")
+	private Long sinaId;
 
-	@Column(name="SINA_CD_PROC")
+	@Column(name = "SINA_CD_PROC")
 	private String sinaCdProc;
 
-	@Column(name="SINA_CD_USU")
+	@Column(name = "SINA_CD_USU")
 	private String sinaCdUsu;
 
-	@Column(name="SINA_DF_RECENTE")
+	@Column(name = "SINA_DF_RECENTE")
 	private Timestamp sinaDfRecente;
 
-	@Column(name="SINA_LG_FAVORITO")
-	private byte sinaLgFavorito;
+	@Column(name = "SINA_LG_FAVORITO")
+	private boolean sinaLgFavorito;
 
-	@Column(name="SINA_LG_INTERNO")
-	private byte sinaLgInterno;
+	@Column(name = "SINA_LG_INTERNO")
+	private boolean sinaLgInterno;
 
 	public Sinal() {
 	}
 
-	public int getSinaId() {
+	public Long getSinaId() {
 		return this.sinaId;
 	}
 
-	public void setSinaId(int sinaId) {
+	public void setSinaId(Long sinaId) {
 		this.sinaId = sinaId;
 	}
 
@@ -69,19 +69,19 @@ public class Sinal implements Serializable {
 		this.sinaDfRecente = sinaDfRecente;
 	}
 
-	public byte getSinaLgFavorito() {
+	public boolean getSinaLgFavorito() {
 		return this.sinaLgFavorito;
 	}
 
-	public void setSinaLgFavorito(byte sinaLgFavorito) {
+	public void setSinaLgFavorito(boolean sinaLgFavorito) {
 		this.sinaLgFavorito = sinaLgFavorito;
 	}
 
-	public byte getSinaLgInterno() {
+	public boolean getSinaLgInterno() {
 		return this.sinaLgInterno;
 	}
 
-	public void setSinaLgInterno(byte sinaLgInterno) {
+	public void setSinaLgInterno(boolean sinaLgInterno) {
 		this.sinaLgInterno = sinaLgInterno;
 	}
 

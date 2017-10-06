@@ -1,7 +1,7 @@
 <template>
   <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas">
     <div class="card-deck">
-      <processo-nota v-if="temCodigoDeUnidade" ref="notaUnidade" :processo="processo" :orgao="orgao" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="false" @input="notaUnidadeAlterada"></processo-nota>
+      <processo-nota v-show="temCodigoDeUnidade" ref="notaUnidade" :processo="processo" :orgao="orgao" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="false" @input="notaUnidadeAlterada"></processo-nota>
       <processo-nota ref="notaPessoal" :processo="processo" :orgao="orgao" titulo="Notas Pessoais" style="background-color: #f8ff99" :pessoal="true" @input="notaPessoalAlterada"></processo-nota>
     </div>
   </div>
