@@ -16,8 +16,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
-import com.crivano.swaggerservlet.SwaggerAuthorizationException;
-
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 

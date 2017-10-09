@@ -1,24 +1,8 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Scanner;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NameNotFoundException;
-import javax.sql.DataSource;
-
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
-
-	public static boolean getMarcasAtivas() {
-		return Boolean.parseBoolean(SwaggerUtils.getProperty("balcaovirtual.marcas", "false"));
-	}
-
 	public static String getOrgaos() {
 		try {
 			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",

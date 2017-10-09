@@ -17,9 +17,6 @@ import br.jus.trf2.balcaovirtual.model.Processo;
 public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 	@Override
 	public void run(ProcessoNumeroNotaGetRequest req, ProcessoNumeroNotaGetResponse resp) throws Exception {
-		if (!Utils.getMarcasAtivas())
-			throw new PresentableUnloggedException("disabled");
-
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");

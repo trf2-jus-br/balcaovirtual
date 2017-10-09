@@ -28,11 +28,8 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		super.setActionPackage("br.jus.trf2.balcaovirtual");
 
-		super.addProperty(new PublicProperty("balcaovirtual.marcas"));
 		super.addProperty(new PublicProperty("balcaovirtual.env"));
-
 		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
-
 		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
 
 		for (String s : SwaggerUtils.getProperty("balcaovirtual.orgaos", "").split(",")) {
@@ -100,26 +97,24 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			});
 		}
 
-		if (Utils.getMarcasAtivas()) {
-			addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
-				@Override
-				public String getUrl() {
-					return SwaggerUtils.getProperty("balcaovirtual.datasource.name", "balcaovirtualds");
-				}
+		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
+			@Override
+			public String getUrl() {
+				return SwaggerUtils.getProperty("balcaovirtual.datasource.name", "balcaovirtualds");
+			}
 
-				@Override
-				public boolean test() throws Exception {
-					try (Dao dao = new Dao()) {
-						return dao.obtemData() != null;
-					}
+			@Override
+			public boolean test() throws Exception {
+				try (Dao dao = new Dao()) {
+					return dao.obtemData() != null;
 				}
+			}
 
-				@Override
-				public boolean isPartial() {
-					return false;
-				}
-			});
-		}
+			@Override
+			public boolean isPartial() {
+				return false;
+			}
+		});
 
 	}
 

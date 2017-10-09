@@ -1,12 +1,7 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
@@ -17,15 +12,11 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroMarcasGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
-import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 	@Override
 	public void run(ProcessoNumeroMarcasGetRequest req, ProcessoNumeroMarcasGetResponse resp) throws Exception {
-		if (!Utils.getMarcasAtivas())
-			throw new PresentableUnloggedException("disabled");
-
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");
