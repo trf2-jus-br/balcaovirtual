@@ -1,7 +1,7 @@
 package br.jus.trf2.balcaovirtual.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -18,8 +19,14 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="marca")
-@NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m")
+@Table(name = "marca")
+@NamedQueries({
+		// findAll
+		@NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m"),
+
+		// findProcessoUsuario
+		@NamedQuery(name = "Marca.findProcessoUsuario", query = "select m, tmi.timiNm from Marca m join m.estilo e left join m.tipoMarcaItem tmi where m.processo = :processo and e.estiLgInterno = m.marcLgInterno and m.marcLgInterno = :interno and ((m.marcIeUsu = :ieusuario and m.marcIeUsu is not null) or (e.estiLgPessoal = 0 and m.marcIeUnidade = :ieunidade and m.marcIeUnidade is not null))") })
+
 public class Marca implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +39,7 @@ public class Marca implements Serializable {
 	private String marcCdUsu;
 
 	@Column(name = "MARC_DF_ALTERACAO")
-	private Timestamp marcDfAlteracao;
+	private Date marcDfAlteracao;
 
 	@Column(name = "MARC_ID_PECA")
 	private Long marcIdPeca;
@@ -92,11 +99,11 @@ public class Marca implements Serializable {
 		this.marcCdUsu = marcCdUsu;
 	}
 
-	public Timestamp getMarcDfAlteracao() {
+	public Date getMarcDfAlteracao() {
 		return this.marcDfAlteracao;
 	}
 
-	public void setMarcDfAlteracao(Timestamp marcDfAlteracao) {
+	public void setMarcDfAlteracao(Date marcDfAlteracao) {
 		this.marcDfAlteracao = marcDfAlteracao;
 	}
 

@@ -1,46 +1,35 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoListarSinaisGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetResponse;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoListarSinaisGet implements IProcessoListarSinaisGet {
 
 	@Override
 	public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception {
-		br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = SessionsCreatePost.assertUsuario();
+
 		resp.list = new ArrayList<>();
 
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		try {
-			conn = Utils.getConnection();
-			pstmt = conn.prepareStatement(Utils.getSQL("listar-sinais"));
-			pstmt.setString(1, u.usuario);
-			pstmt.setBoolean(2, u.isInterno());
-			rset = pstmt.executeQuery();
+		try (Dao dao = new Dao()) {
+			List<Sinal> l = dao.obtemSinais(u.isInterno(), u.usuario);
 
-			while (rset.next()) {
-				Processo p = new Processo();
-				p.numero = rset.getString("sina_cd_proc");
-				p.favorito = rset.getBoolean("sina_lg_favorito");
-				p.recente = rset.getTimestamp("sina_df_recente");
+			if (l == null)
+				return;
+
+			for (Sinal sinal : l) {
+				br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo p = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo();
+				p.numero = sinal.getSinaCdProc();
+				p.favorito = sinal.getSinaLgFavorito();
+				p.recente = sinal.getSinaDfRecente();
 				resp.list.add(p);
 			}
-		} finally {
-			if (rset != null)
-				rset.close();
-			if (pstmt != null)
-				pstmt.close();
-			if (conn != null)
-				conn.close();
 		}
 	}
 

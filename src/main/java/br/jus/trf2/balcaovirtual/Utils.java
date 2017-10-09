@@ -120,39 +120,4 @@ public class Utils {
 			return null;
 		return s.replace("-", "").replace(".", "").replace("/", "");
 	}
-
-	public static Connection getConnection() throws Exception {
-		try {
-			Context initContext = new InitialContext();
-			Context envContext = (Context) initContext.lookup("java:");
-			String dsName = SwaggerUtils.getProperty("balcaovirtual.datasource.name",
-					"java:/jboss/datasources/BalcaoVirtualDS");
-			DataSource ds = (DataSource) envContext.lookup(dsName);
-			Connection connection = ds.getConnection();
-			if (connection == null)
-				throw new Exception("Can't open connection to MySQL.");
-			return connection;
-		} catch (NameNotFoundException nnfe) {
-			Connection connection = null;
-
-			Class.forName("com.mysql.jdbc.Driver");
-
-			String dbURL = SwaggerUtils.getProperty("balcaovirtual.datasource.url", null);
-			String username = SwaggerUtils.getProperty("balcaovirtual.datasource.username", null);
-			String password = SwaggerUtils.getProperty("balcaovirtual.datasource.password", null);
-			connection = DriverManager.getConnection(dbURL, username, password);
-			if (connection == null)
-				throw new Exception("Can't open connection to MySQL.");
-			return connection;
-		}
-	}
-
-	public static String getSQL(String filename) throws IOException {
-		try (InputStream is = Utils.class.getResourceAsStream(filename + ".sql");
-				Scanner sc = new Scanner(is, "UTF-8")) {
-			String text = sc.useDelimiter("\\A").next();
-			return text;
-		}
-	}
-
 }

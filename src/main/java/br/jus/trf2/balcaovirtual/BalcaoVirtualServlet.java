@@ -31,9 +31,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		super.addProperty(new PublicProperty("balcaovirtual.marcas"));
 		super.addProperty(new PublicProperty("balcaovirtual.env"));
 
-		super.addProperty(new RestrictedProperty("balcaovirtual.datasource.url"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.datasource.username"));
-		super.addProperty(new PrivateProperty("balcaovirtual.datasource.password"));
 		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
 
 		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
@@ -112,13 +109,13 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 				@Override
 				public boolean test() throws Exception {
-					Utils.getConnection().close();
-					return true;
+					try (Dao dao = new Dao()) {
+						return dao.obtemData() != null;
+					}
 				}
 
 				@Override
 				public boolean isPartial() {
-					// TODO Auto-generated method stub
 					return false;
 				}
 			});

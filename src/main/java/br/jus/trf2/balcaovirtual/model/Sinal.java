@@ -1,16 +1,29 @@
 package br.jus.trf2.balcaovirtual.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the sinal database table.
  * 
  */
 @Entity
-@Table(name="sinal")
-@NamedQuery(name = "Sinal.findAll", query = "SELECT s FROM Sinal s")
+@Table(name = "sinal")
+@NamedQueries({
+		// findUsuario
+		@NamedQuery(name = "Sinal.findUsuario", query = "select s from Sinal s where s.sinaCdUsu = :usuario and s.sinaLgInterno = :interno and (s.sinaLgFavorito <> 0 or s.sinaDfRecente is not null) order by s.sinaDfRecente desc"),
+
+		// findUsuarioNumero
+		@NamedQuery(name = "Sinal.findUsuarioNumero", query = "select s from Sinal s where s.sinaCdProc = :numero and s.sinaCdUsu = :usuario and s.sinaLgInterno = :interno") })
 public class Sinal implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +39,7 @@ public class Sinal implements Serializable {
 	private String sinaCdUsu;
 
 	@Column(name = "SINA_DF_RECENTE")
-	private Timestamp sinaDfRecente;
+	private Date sinaDfRecente;
 
 	@Column(name = "SINA_LG_FAVORITO")
 	private boolean sinaLgFavorito;
@@ -61,11 +74,11 @@ public class Sinal implements Serializable {
 		this.sinaCdUsu = sinaCdUsu;
 	}
 
-	public Timestamp getSinaDfRecente() {
+	public Date getSinaDfRecente() {
 		return this.sinaDfRecente;
 	}
 
-	public void setSinaDfRecente(Timestamp sinaDfRecente) {
+	public void setSinaDfRecente(Date sinaDfRecente) {
 		this.sinaDfRecente = sinaDfRecente;
 	}
 

@@ -8,10 +8,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Orgao;
 import br.jus.trf2.balcaovirtual.model.Processo;
+import br.jus.trf2.balcaovirtual.model.Sinal;
 import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class Dao implements Closeable {
@@ -60,6 +60,27 @@ public class Dao implements Closeable {
 		List<TipoMarcaItem> r = (List<TipoMarcaItem>) em.createNamedQuery("TipoMarcaItem.findClasse")
 				.setParameter("idclasse", idclasse).getResultList();
 		return r;
+	}
+
+	public List<Object[]> obtemMarcas(Processo p, boolean interno, Long ieusuario, Long ieunidade) {
+		List<Object[]> r = (List<Object[]>) em.createNamedQuery("Marca.findProcessoUsuario").setParameter("processo", p)
+				.setParameter("interno", interno).setParameter("ieusuario", ieusuario)
+				.setParameter("ieunidade", ieunidade).getResultList();
+		return r;
+	}
+
+	public List<Sinal> obtemSinais(boolean interno, String usuario) {
+		List<Sinal> r = (List<Sinal>) em.createNamedQuery("Sinal.findUsuario").setParameter("interno", interno)
+				.setParameter("usuario", usuario).getResultList();
+		return r;
+	}
+
+	public Sinal obtemSinais(boolean interno, String usuario, String numero) {
+		List<Sinal> r = (List<Sinal>) em.createNamedQuery("Sinal.findUsuarioNumero").setParameter("interno", interno)
+				.setParameter("usuario", usuario).setParameter("numero", numero).getResultList();
+		if (r == null || r.size() == 0)
+			return null;
+		return r.get(0);
 	}
 
 	public void beginTransaction() {

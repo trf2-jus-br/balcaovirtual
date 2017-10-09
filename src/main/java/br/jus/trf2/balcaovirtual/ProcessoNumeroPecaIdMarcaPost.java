@@ -1,18 +1,18 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.Types;
+import java.util.List;
 
-import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdMarcaPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdMarcaPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdMarcaPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.model.Estilo;
+import br.jus.trf2.balcaovirtual.model.Marca;
+import br.jus.trf2.balcaovirtual.model.Processo;
+import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarcaPost {
 
@@ -25,71 +25,64 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
 					+ "' não pode fazer marcações porque não foi autenticado no órgão '" + req.orgao + "'.");
-		
-	  	// verifica se o texto representa um tipo_marca_item
-	    // select tmi from TipoMarcaItem tmi TxTipoMarcaCnjClasse tx tx.cnclId = :idclasse and :texto like CONCAT(timiNm, '%')
 
-
-		Connection conn = null;
-		CallableStatement cstmt = null;
-		try {
-			conn = Utils.getConnection();
-
-			cstmt = conn.prepareCall("{ call sp_gravar_marca(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
-
-			cstmt.setString(1, req.numero);
-			cstmt.setString(2, req.orgao);
-			cstmt.setString(3, req.idclasse);
-			cstmt.setString(4, req.id);
-			cstmt.setString(5, req.idmarca);
-			cstmt.setString(6, req.texto);
-			cstmt.setString(7, req.idestilo);
-			cstmt.setString(8, req.paginicial);
-			cstmt.setString(9, req.pagfinal);
-			cstmt.setBoolean(10, u.isInterno());
-			cstmt.setString(11, u.usuario);
-			cstmt.setString(12, u.nome);
-
-			cstmt.setLong(13, ud.id);
-			if (ud.unidade != null)
-				cstmt.setLong(14, ud.unidade);
+		try (Dao dao = new Dao()) {
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			Marca m = null;
+			if (req.idmarca != null)
+				m = dao.find(Marca.class, Long.valueOf(req.idmarca));
 			else
-				cstmt.setString(14, null);
+				m = new Marca();
 
-			// nova idmarca
-			cstmt.registerOutParameter(15, Types.VARCHAR);
+			// verifica se o estilo está compatível com o usuário
+			// (interno/externo)
+			Estilo estilo = dao.find(Estilo.class, Long.valueOf(req.idestilo));
+			if (estilo == null || estilo.isEstiLgInterno())
+				throw new PresentableUnloggedException("Estilo inválido.");
 
-			// timi_nm
-			cstmt.registerOutParameter(16, Types.VARCHAR);
+			// verifica se o texto representa um tipo_marca_item
+			List<TipoMarcaItem> l = dao.obtemTipoMarcaItens(Long.valueOf(req.idclasse));
+			TipoMarcaItem tmi = null;
+			String texto = req.texto;
+			for (TipoMarcaItem i : l) {
+				if (i.getTimiNm() != null && texto != null && texto.startsWith(i.getTimiNm())) {
+					tmi = i;
+					texto = texto.substring(tmi.getTimiNm().length());
+					if (texto.startsWith(" - "))
+						texto = texto.substring(3);
+					texto = texto.trim();
+					if (texto.length() == 0)
+						texto = null;
+					break;
+				}
+			}
 
-			// complemento
-			cstmt.registerOutParameter(17, Types.VARCHAR);
-
-			// Error
-			cstmt.registerOutParameter(18, Types.VARCHAR);
-
-			cstmt.execute();
-
-			if (cstmt.getString(18) != null)
-				throw new PresentableException(cstmt.getString(18));
+			m.setMarcIdPeca(req.id != null ? Long.valueOf(req.id) : null);
+			m.setProcesso(p);
+			m.setTipoMarcaItem(tmi);
+			m.setEstilo(estilo);
+			m.setMarcTxConteudo(texto);
+			m.setMarcNrPagInicial(req.paginicial != null ? Integer.valueOf(req.paginicial) : null);
+			m.setMarcNrPagFinal(req.pagfinal != null ? Integer.valueOf(req.pagfinal) : null);
+			m.setMarcLgInterno(u.isInterno());
+			m.setMarcCdUsu(u.usuario);
+			m.setMarcNmUsu(u.nome);
+			m.setMarcIeUsu(ud.id);
+			m.setMarcIeUnidade(ud.unidade);
+			m.setMarcDfAlteracao(dao.obtemData());
+			dao.persist(m);
 
 			// Produce response
-			Marca m = new Marca();
-			m.idmarca = cstmt.getString(15);
-			m.idpeca = req.id;
-
-			String complemento = cstmt.getString(17);
-			String marcador = cstmt.getString(16);
-			m.texto = marcador != null ? marcador + (complemento != null ? " - " + complemento : "") : complemento;
-			m.idestilo = req.idestilo;
-			m.paginicial = req.paginicial;
-			m.pagfinal = req.pagfinal;
-			resp.marca = m;
-		} finally {
-			if (cstmt != null)
-				cstmt.close();
-			if (conn != null)
-				conn.close();
+			resp.marca = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marca();
+			resp.marca.idmarca = Long.toString(m.getMarcId());
+			resp.marca.idpeca = req.id;
+			resp.marca.texto = tmi != null ? tmi.getTimiNm() + (texto != null ? " - " + texto : "") : texto;
+			resp.marca.idestilo = req.idestilo;
+			resp.marca.paginicial = req.paginicial;
+			resp.marca.pagfinal = req.pagfinal;
+		} catch (Exception e) {
+			Dao.rollbackCurrentTransaction();
+			throw e;
 		}
 	}
 

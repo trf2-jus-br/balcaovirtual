@@ -9,7 +9,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="estilo")
+@Table(name = "estilo")
 @NamedQuery(name = "Estilo.findAll", query = "SELECT e FROM Estilo e")
 public class Estilo implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,10 +20,10 @@ public class Estilo implements Serializable {
 	private Long estiId;
 
 	@Column(name = "ESTI_LG_INTERNO")
-	private byte estiLgInterno;
+	private boolean estiLgInterno;
 
 	@Column(name = "ESTI_LG_PESSOAL")
-	private byte estiLgPessoal;
+	private boolean estiLgPessoal;
 
 	@Column(name = "ESTI_NM")
 	private String estiNm;
@@ -42,31 +42,31 @@ public class Estilo implements Serializable {
 	}
 
 	public Long getEstiId() {
-		return this.estiId;
+		return estiId;
 	}
 
 	public void setEstiId(Long estiId) {
 		this.estiId = estiId;
 	}
 
-	public byte getEstiLgInterno() {
-		return this.estiLgInterno;
+	public boolean isEstiLgInterno() {
+		return estiLgInterno;
 	}
 
-	public void setEstiLgInterno(byte estiLgInterno) {
+	public void setEstiLgInterno(boolean estiLgInterno) {
 		this.estiLgInterno = estiLgInterno;
 	}
 
-	public byte getEstiLgPessoal() {
-		return this.estiLgPessoal;
+	public boolean isEstiLgPessoal() {
+		return estiLgPessoal;
 	}
 
-	public void setEstiLgPessoal(byte estiLgPessoal) {
+	public void setEstiLgPessoal(boolean estiLgPessoal) {
 		this.estiLgPessoal = estiLgPessoal;
 	}
 
 	public String getEstiNm() {
-		return this.estiNm;
+		return estiNm;
 	}
 
 	public void setEstiNm(String estiNm) {
@@ -74,7 +74,7 @@ public class Estilo implements Serializable {
 	}
 
 	public int getEstiNrOrdem() {
-		return this.estiNrOrdem;
+		return estiNrOrdem;
 	}
 
 	public void setEstiNrOrdem(int estiNrOrdem) {
@@ -82,7 +82,7 @@ public class Estilo implements Serializable {
 	}
 
 	public String getEstiTpCor() {
-		return this.estiTpCor;
+		return estiTpCor;
 	}
 
 	public void setEstiTpCor(String estiTpCor) {

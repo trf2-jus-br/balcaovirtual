@@ -1,16 +1,11 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.Types;
-
-import com.crivano.swaggerservlet.PresentableException;
-
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroSinalizarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoNumeroSinalizarPost implements IProcessoNumeroSinalizarPost {
 
@@ -18,50 +13,35 @@ public class ProcessoNumeroSinalizarPost implements IProcessoNumeroSinalizarPost
 	public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
 
-		Connection conn = null;
-		CallableStatement cstmt = null;
-		try {
-			conn = Utils.getConnection();
-
-			cstmt = conn.prepareCall("{ call sp_gravar_sinal(?,?,?,?,?,?,?,?) }");
-
-			cstmt.setString(1, req.numero);
+		try (Dao dao = new Dao()) {
+			Sinal s = dao.obtemSinais(u.isInterno(), u.usuario, req.numero);
+			if (s == null) {
+				s = new Sinal();
+				s.setSinaCdProc(req.numero);
+				s.setSinaCdUsu(u.usuario);
+				s.setSinaLgInterno(u.isInterno());
+			}
 			if (req.favorito != null)
-				cstmt.setBoolean(2, req.favorito);
-			else
-				cstmt.setString(2, null);
+				s.setSinaLgFavorito(req.favorito);
 			if (req.recente != null)
-				cstmt.setBoolean(3, req.recente);
-			else
-				cstmt.setString(3, null);
-			cstmt.setBoolean(4, u.isInterno());
-			cstmt.setString(5, u.usuario);
+				if (req.recente)
+					s.setSinaDfRecente(dao.obtemData());
+				else
+					s.setSinaDfRecente(null);
+			dao.persist(s);
+			if (!s.getSinaLgFavorito() && s.getSinaDfRecente() == null)
+				dao.remove(s);
 
-			// favorito
-			cstmt.registerOutParameter(6, Types.BOOLEAN);
+			resp.processo = new Processo();
+			resp.processo.numero = req.numero;
 
-			// recente
-			cstmt.registerOutParameter(7, Types.TIMESTAMP);
-
-			// Error
-			cstmt.registerOutParameter(8, Types.VARCHAR);
-
-			cstmt.execute();
-
-			if (cstmt.getString(8) != null)
-				throw new PresentableException(cstmt.getString(8));
-
-			// Produce response
-			Processo p = new Processo();
-			p.favorito = cstmt.getBoolean(6);
-			p.recente = cstmt.getTimestamp(7);
-			p.numero = req.numero;
-			resp.processo = p;
-		} finally {
-			if (cstmt != null)
-				cstmt.close();
-			if (conn != null)
-				conn.close();
+			if (s != null) {
+				resp.processo.favorito = s.getSinaLgFavorito();
+				resp.processo.recente = s.getSinaDfRecente();
+			}
+		} catch (Exception e) {
+			Dao.rollbackCurrentTransaction();
+			throw e;
 		}
 	}
 
