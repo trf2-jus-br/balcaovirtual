@@ -42,7 +42,6 @@ export default {
 
   watch: {
     count: function () {
-      console.log(this.count)
       if (this.count > this.limit) {
         this.textoAtual = UtilsBL.clipUTF8Length(this.textoAtual, this.limit)
         this.notaAlterada()
@@ -95,14 +94,9 @@ export default {
 
       this.dataalteracao = nota.dataalteracao
       this.id = nota.idnota
-      //      console.log('emiti:', nota)
-      //      this.$emit('salva', nota)
     },
 
     refletirAlteracao: _.debounce(function () {
-      console.log('debounced', this.textoAtual)
-      // if (this.textoAtual === this.textoAnterior) return
-
       if (this.textoAtual) {
         if (this.id) this.putNota(this.textoAtual)
         else this.postNota(this.textoAtual)

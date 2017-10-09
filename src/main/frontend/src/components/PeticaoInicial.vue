@@ -520,7 +520,6 @@ export default {
     },
 
     adicionarArquivo: function () {
-      console.log(this.$refs.clip.$el)
       this.$refs.clip.$el.firstChild.click()
     },
 

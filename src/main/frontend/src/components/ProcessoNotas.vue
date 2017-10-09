@@ -46,13 +46,11 @@ export default {
     },
 
     notaUnidadeAlterada: function (texto) {
-      console.log('unidade: ', texto)
       this.notaUnidade = texto !== undefined
       this.notasAlteradas()
     },
 
     notaPessoalAlterada: function (texto) {
-      console.log('pessoal: ', texto)
       this.notaPessoal = texto !== undefined
       this.notasAlteradas()
     },

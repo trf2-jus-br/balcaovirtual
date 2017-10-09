@@ -749,22 +749,15 @@ export default {
         pagfinal: marca.pagfinal
       }
 
-      console.log('salvando... ')
-      console.log(data)
-
       this.$http.post('processo/' + this.numero + '/peca/' + this.currentMovDoc.doc.idDocumento + '/marca?orgao=' + this.orgao,
         data, { block: true }).then(response => {
           if (this.currentMarca) {
-            console.log('alterado... ')
             var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
             UtilsBL.overrideProperties(marca, response.data.marca)
             UtilsBL.overrideProperties(this.currentMovDoc.marca[index], marca)
-            console.log(this.currentMovDoc.marca[index])
           } else {
-            console.log('novo... ')
             UtilsBL.overrideProperties(marca, response.data.marca)
             this.currentMovDoc.marca.push(marca)
-            console.log(marca)
           }
         }, error => {
           Bus.$emit('message', 'Erro', error.data.errormsg)
@@ -774,7 +767,6 @@ export default {
     excluirProcessoPecaDetalhes: function () {
       if (!this.currentMovDoc || !this.currentMarca) return
 
-      console.log('removendo... ')
       this.$http.delete('marca/' + this.currentMarca.idmarca, { block: true }).then(response => {
         var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
         if (index > -1) this.currentMovDoc.marca.splice(index, 1)

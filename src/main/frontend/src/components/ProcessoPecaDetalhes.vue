@@ -102,22 +102,18 @@ export default {
 
   methods: {
     show: function (marca, marcadores, pagmin, pagmax) {
-      console.log(pagmin)
       this.marcadores = marcadores
       this.pagmin = pagmin
       this.pagmax = pagmax
       this.paginicial = undefined
       this.pagfinal = undefined
-      console.log('show')
       if (marca) {
-        console.log(marca)
         this.texto = marca.texto
         this.estilo = marca.idestilo
         this.paginicial = marca.paginicial
         this.pagfinal = marca.pagfinal
         this.editando = true
       } else {
-        console.log('sem marca')
         this.texto = undefined
         this.estilo = this.$parent.$parent.jwt.origin ? '1' : '3'
         this.editando = false
@@ -139,8 +135,6 @@ export default {
     },
 
     save: function (e) {
-      console.log(e)
-
       // Close on Esc
       if (e.isOK === undefined) e.cancel()
 

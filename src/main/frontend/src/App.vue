@@ -80,6 +80,7 @@ import MessageBox from './components/MessageBox'
 export default {
   name: 'app',
   mounted () {
+    UtilsBL.overrideProperties(this.settings, JSON.parse(localStorage.getItem('settings')) || {})
     this.$router.beforeEach((to, from, next) => {
       next()
       if (to.meta && to.meta.title) {
@@ -167,7 +168,7 @@ export default {
       loading: false,
       test: { properties: {} },
       errormsg: undefined,
-      settings: JSON.parse(localStorage.getItem('settings')) || {
+      settings: {
         timeline: undefined,
         timelineIncompatible: undefined,
         filtrarMovimentos: undefined,

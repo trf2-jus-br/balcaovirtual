@@ -35,7 +35,6 @@ export default {
   validarCNPJ: function (cnpj) {
     cnpj = cnpj.replace(/\D/g, '')
 
-    console.log(cnpj.length)
     if (cnpj.length !== 14) return false
 
     // Elimina CNPJs invalidos conhecidos
@@ -70,7 +69,6 @@ export default {
       if (pos < 2) pos = 9
     }
     resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-    console.log(resultado, digitos.charAt(0))
     if (resultado + '' !== digitos.charAt(0)) return false
 
     tamanho = tamanho + 1
@@ -82,7 +80,6 @@ export default {
       if (pos < 2) pos = 9
     }
     resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-    console.log(resultado)
     if (resultado + '' !== digitos.charAt(1)) return false
 
     return true
