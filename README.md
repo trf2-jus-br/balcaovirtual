@@ -1,4 +1,4 @@
-# balcaovirtual
+# Balcão Virtual
 
 Balcão Virtual é um site que permite acessar sistemas processuais compatíveis com o Modelo Nacional de Interoperabilidade - MNI.
 
@@ -52,13 +52,7 @@ Armazena arquivos temporários e PDFs em diretórios no FileSystem. É interessa
 <property name="balcaovirtual.upload.dir.temp" value="~/tmp"/>
  ```
 
-Requer um banco de dados para armazenar marcas, notas e sinais. Em um servidor de aplicação como o JBoss, pode ser configurado um _pool_ chamado BalcaoVirtualDS, alternativamente podem ser informadas propriedades com o dados de conexão.
-
-```xml
-<property name="balcaovirtual.datasource.url" value="jdbc:mysql://localhost:3306/balcao_virtual"/>
-<property name="balcaovirtual.datasource.username" value="root"/>
-<property name="balcaovirtual.datasource.password" value="senha_secreta"/>
- ```
+Requer um banco de dados para armazenar marcas, notas e sinais. Em um servidor de aplicação como o JBoss, pode ser configurado um _pool_ chamado BalcaoVirtualDS.
 
 Precisa de um servidor SMTP para o envio de emails de sugestões.
 
