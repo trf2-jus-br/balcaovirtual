@@ -2,6 +2,11 @@ package br.jus.trf2.balcaovirtual;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,6 +34,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		super.setActionPackage("br.jus.trf2.balcaovirtual");
 
 		super.addProperty(new PublicProperty("balcaovirtual.env"));
+		super.addProperty(new PublicProperty("balcaovirtual.wootric.token"));
 		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
 		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
 
@@ -73,6 +79,35 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				return true;
 			}
 		}
+
+		class FileSystemWriteDependency extends TestableDependency {
+			private static final String TESTING = "testing...";
+			String path;
+
+			FileSystemWriteDependency(String service, String path, boolean partial, long msMin, long msMax) {
+				super("filesystem", service, partial, msMin, msMax);
+				this.path = path;
+			}
+
+			@Override
+			public String getUrl() {
+				return path;
+			}
+
+			@Override
+			public boolean test() throws Exception {
+				Path file = Paths.get(path + "/test.temp");
+				Files.write(file, TESTING.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+				String s = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+				return s != null;
+			}
+		}
+
+		addDependency(new FileSystemWriteDependency("upload.dir.temp",
+				SwaggerUtils.getProperty("balcaovirtual.upload.dir.temp", "[undefined]"), false, 0, 10000));
+
+		addDependency(new FileSystemWriteDependency("upload.dir.final",
+				SwaggerUtils.getProperty("balcaovirtual.upload.dir.final", "[undefined]"), false, 0, 10000));
 
 		addDependency(new HttpGetDependency("apolows", Utils.getWsProcessualUrl() + "/classe-cnj/81?orgao=TRF2", false,
 				0, 10000));

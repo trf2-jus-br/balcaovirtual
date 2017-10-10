@@ -683,6 +683,17 @@ public interface IBalcaoVirtual {
 		public void run(AvisoListarGetRequest req, AvisoListarGetResponse resp) throws Exception;
 	}
 
+	public class AvisoPendenteXmlGetRequest implements ISwaggerRequest {
+	}
+
+	public class AvisoPendenteXmlGetResponse implements ISwaggerResponse {
+		public String jwt;
+	}
+
+	public interface IAvisoPendenteXmlGet extends ISwaggerMethod {
+		public void run(AvisoPendenteXmlGetRequest req, AvisoPendenteXmlGetResponse resp) throws Exception;
+	}
+
 	public class ClasseIdGetRequest implements ISwaggerRequest {
 		public String id;
 		public String orgao;

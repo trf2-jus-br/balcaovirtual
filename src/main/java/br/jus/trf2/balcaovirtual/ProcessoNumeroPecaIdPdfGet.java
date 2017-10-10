@@ -10,7 +10,7 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 	@Override
 	public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, req.orgao, req.numero, req.id);
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, req.orgao, req.numero, req.id, null);
 	}
 
 	@Override

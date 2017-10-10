@@ -298,6 +298,55 @@ public interface ISistemaProcessual {
 				UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse resp) throws Exception;
 	}
 
+	public class UsuarioWebUsernameAvisoPendenteExportarGetRequest implements ISwaggerRequest {
+		public String username;
+	}
+
+	public class UsuarioWebUsernameAvisoPendenteExportarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/xml";
+		public String contentdisposition = "attachment; filename=avisos.xml";
+
+		public Long contentlength;
+		public InputStream inputstream;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
+	}
+
+	public interface IUsuarioWebUsernameAvisoPendenteExportarGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernameAvisoPendenteExportarGetRequest req,
+				UsuarioWebUsernameAvisoPendenteExportarGetResponse resp) throws Exception;
+	}
+
 	public class ClasseCnjIdGetRequest implements ISwaggerRequest {
 		public String id;
 		public String orgao;
