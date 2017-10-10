@@ -80,7 +80,7 @@ import MessageBox from './components/MessageBox'
 export default {
   name: 'app',
   mounted () {
-    UtilsBL.overrideProperties(this.settings, JSON.parse(localStorage.getItem('settings')) || {})
+    UtilsBL.overrideProperties(this.settings, JSON.parse(localStorage.getItem('bv-settings')) || {})
     this.$router.beforeEach((to, from, next) => {
       next()
       if (to.meta && to.meta.title) {
@@ -127,7 +127,7 @@ export default {
     this.$on('setting', (key, value) => {
       this.settings[key] = value
       var json = JSON.stringify(this.settings)
-      localStorage.setItem('settings', json)
+      localStorage.setItem('bv-settings', json)
     })
 
     var prg = this.$refs.progressModal
@@ -159,6 +159,18 @@ export default {
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {
         this.test = response.data
+
+        if (this.test.properties['balcaovirtual.wootric.token'] &&
+          this.test.properties['balcaovirtual.wootric.token'] !== '[undefined]' &&
+          this.jwt) {
+          // This loads the Wootric survey
+          // window.wootric_survey_immediately = true
+          window.wootricSettings = {
+            email: this.jwt.username,
+            account_token: this.test.properties['balcaovirtual.wootric.token']
+          }
+          window.wootric('run')
+        }
       }, error => UtilsBL.errormsg(error, this))
     })
   },

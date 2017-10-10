@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import decode from 'jwt-decode'
 
-const ID_TOKEN_KEY = 'id_token'
+const ID_TOKEN_KEY = 'bv-jwt'
 
 export default {
   logout: function () {
