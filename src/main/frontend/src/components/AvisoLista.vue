@@ -35,11 +35,11 @@
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <!--
-                                                                    <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
-                                                                    </a>
-                                                                    <a class="dropdown-item" @click="exportarXML()">Exportar XML
-                                                                    </a>
-                                                                    -->
+                                                                              <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
+                                                                              </a>
+                                                                              -->
+              <a class="dropdown-item" @click="exportarXML()">Exportar XML
+              </a>
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
             </div>
           </div>
@@ -496,6 +496,16 @@ export default {
 
     imprimir: function () {
       window.print()
+    },
+
+    exportarXML: function () {
+      this.$http.get('aviso-pendente/xml').then(response => {
+        var jwt = response.data.jwt
+        window.open(this.$http.options.root + '/download/' + jwt + '/' + this.$parent.jwt.username + '-avisos-pendentes.pdf')
+        UtilsBL.logEvento('aviso', 'mostrar avisos-pendentes.xml')
+      }, error => {
+        Bus.$emit('message', 'Erro', error.data.errormsg)
+      })
     }
   }
 }
