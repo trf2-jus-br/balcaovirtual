@@ -27,9 +27,11 @@ public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 		resp.list = new ArrayList<>();
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
-			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
+			Processo p = dao.obtemProcesso(req.numero, req.orgao, false);
+			if (p == null)
+				return;
 
+			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
 			if (l == null)
 				return;
 
