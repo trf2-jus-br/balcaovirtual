@@ -37,7 +37,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 			// verifica se o estilo está compatível com o usuário
 			// (interno/externo)
 			Estilo estilo = dao.find(Estilo.class, Long.valueOf(req.idestilo));
-			if (estilo == null || estilo.isEstiLgInterno())
+			if (estilo == null || (estilo.isEstiLgInterno() != u.isInterno()))
 				throw new PresentableUnloggedException("Estilo inválido.");
 
 			// verifica se o texto representa um tipo_marca_item
