@@ -84,6 +84,14 @@ public interface IBalcaoVirtual {
 		public String quantidade;
 	}
 
+	public class QuantidadeConfirmadaPorData implements ISwaggerModel {
+		public String data;
+		public String quantidadeDoUsuarioPorConfirmacao;
+		public String quantidadeDoUsuarioPorOmissao;
+		public String quantidadeDoGrupoPorConfirmacao;
+		public String quantidadeDoGrupoPorOmissao;
+	}
+
 	public class PeticaoIntercorrenteResumo implements ISwaggerModel {
 		public String processo;
 		public String protocolo;
@@ -111,6 +119,8 @@ public interface IBalcaoVirtual {
 		public String multiplicadorprazo;
 		public String datalimiteintimacaoautomatica;
 		public String assunto;
+		public String dataconfirmacao;
+		public String usuarioconfirmacao;
 	}
 
 	public class Processo implements ISwaggerModel {
@@ -692,6 +702,34 @@ public interface IBalcaoVirtual {
 
 	public interface IAvisoPendenteXmlGet extends ISwaggerMethod {
 		public void run(AvisoPendenteXmlGetRequest req, AvisoPendenteXmlGetResponse resp) throws Exception;
+	}
+
+	public class AvisoConfirmadoContarGetRequest implements ISwaggerRequest {
+	}
+
+	public class AvisoConfirmadoContarGetResponse implements ISwaggerResponse {
+		public List<QuantidadeConfirmadaPorData> list;
+	}
+
+	public interface IAvisoConfirmadoContarGet extends ISwaggerMethod {
+		public void run(AvisoConfirmadoContarGetRequest req, AvisoConfirmadoContarGetResponse resp) throws Exception;
+	}
+
+	public class AvisoConfirmadoListarGetRequest implements ISwaggerRequest {
+		public String datainicial;
+		public String datafinal;
+		public Boolean confirmacao;
+		public Boolean omissao;
+		public Boolean grupo;
+	}
+
+	public class AvisoConfirmadoListarGetResponse implements ISwaggerResponse {
+		public List<Aviso> list;
+		public List<ListStatus> status;
+	}
+
+	public interface IAvisoConfirmadoListarGet extends ISwaggerMethod {
+		public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception;
 	}
 
 	public class ClasseIdGetRequest implements ISwaggerRequest {

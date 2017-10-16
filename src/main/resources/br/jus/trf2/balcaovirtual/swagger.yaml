@@ -111,6 +111,36 @@ parameters:
     description: Data a ser consultada
     required: true
     type: string
+  datainicial:
+    name: datainicial
+    in: query
+    description: Data a ser consultada
+    required: true
+    type: string
+  datafinal:
+    name: datafinal
+    in: query
+    description: Data a ser consultada
+    required: true
+    type: string
+  confirmacao:
+    name: confirmacao
+    in: query
+    description: Incluir avisos confirmados por confirmação explícita
+    required: true
+    type: boolean
+  omissao:
+    name: omissao
+    in: query
+    description: Incluir avisos confirmados por omissão
+    required: true
+    type: boolean
+  grupo:
+    name: grupo
+    in: query
+    description: Incluir avisos confirmados por outros usuários do mesmo grupo
+    required: true
+    type: boolean
   id:
     name: id
     in: path
@@ -968,6 +998,55 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /aviso-confirmado/contar:
+    get:
+      description: Listar a quantidade de avisos confirmados nos últimos dias
+      tags: [aviso]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/QuantidadeConfirmadaPorData"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /aviso-confirmado/listar:
+    get:
+      description: Listar as intimações confirmadas para o usuário logado
+      tags: [aviso]
+      parameters:
+        - $ref: "#/parameters/datainicial"
+        - $ref: "#/parameters/datafinal"
+        - $ref: "#/parameters/confirmacao"
+        - $ref: "#/parameters/omissao"
+        - $ref: "#/parameters/grupo"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Aviso"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /classe/{id}:
     get:
       description: Obter dados de uma classe pela id
@@ -1145,6 +1224,21 @@ definitions:
       quantidade:
         type: string
 
+  QuantidadeConfirmadaPorData:
+    description: Data e quantidade de avisos confirmados
+    type: object
+    properties:
+      data:
+        type: string
+      quantidadeDoUsuarioPorConfirmacao:
+        type: string
+      quantidadeDoUsuarioPorOmissao:
+        type: string
+      quantidadeDoGrupoPorConfirmacao:
+        type: string
+      quantidadeDoGrupoPorOmissao:
+        type: string
+
   PeticaoIntercorrenteResumo:
     description: Petição intercorrente
     type: object
@@ -1199,6 +1293,10 @@ definitions:
       datalimiteintimacaoautomatica:
         type: string
       assunto:
+        type: string
+      dataconfirmacao:
+        type: string
+      usuarioconfirmacao:
         type: string
 
   Processo:

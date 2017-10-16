@@ -6,6 +6,8 @@ import ProcessoLista from '@/components/ProcessoLista'
 import PeticaoInicial from '@/components/PeticaoInicial'
 import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
 import AvisoLista from '@/components/AvisoLista'
+import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
+import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
@@ -60,6 +62,17 @@ export default new Router({
       path: '/aviso-lista',
       name: 'Lista de Avisos',
       component: AvisoLista
+    },
+    {
+      path: '/aviso-confirmado-recentes',
+      name: 'Avisos Confirmados Recentemente',
+      component: AvisoConfirmadoRecentes
+    },
+    {
+      path:
+        '/aviso-confirmado-lista/:dataInicial/:dataFinal/:porConfirmacao/:porOmissao/:doGrupo',
+      name: 'Lista de Avisos Confirmados',
+      component: AvisoConfirmadoLista
     },
     {
       path: '/sugestoes',
