@@ -57,7 +57,10 @@ export default {
       if (contains(m, [11, 76])) {
         if (m.complemento[0] === 'Despacho' || m.complemento[0] === 'Decisão') {
           e = timeline.conclusao
-        } else if (m.complemento[0] === 'Sentença') e = timeline.sentenca
+        } else if (
+          m.complemento[0] === 'Sentença' ||
+          m.complemento[0] === 'Sentença/Julgamento'
+        ) { e = timeline.sentenca }
       }
       if (
         contains(m, [78]) // Inteiro Teor
@@ -155,8 +158,12 @@ export default {
         if (!ti.contador) continue
         perc = ti.tempoMedio / tempoAcumulado
         ti.transito = 'verde'
-        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) { ti.transito = 'laranja' }
-        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) { ti.transito = 'vermelho' }
+        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) {
+          ti.transito = 'laranja'
+        }
+        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) {
+          ti.transito = 'vermelho'
+        }
         if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
       }
     }
