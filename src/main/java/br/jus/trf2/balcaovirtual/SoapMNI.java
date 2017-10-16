@@ -163,7 +163,7 @@ public class SoapMNI {
 				ls.stacktrace = SwaggerUtils.stackAsString(ex);
 			}
 
-			if (aviso != null) {
+			if (aviso != null && aviso.value != null) {
 				for (TipoAvisoComunicacaoPendente a : aviso.value) {
 					Aviso i = new Aviso();
 					switch (a.getTipoComunicacao()) {
