@@ -420,8 +420,11 @@
                       <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
                       <template v-if="movdoc.doc">
                         <td>
-                          <p class="mb-0">
+                          <p class="mb-0" v-if="movdoc.doc.idDocumento">
                             <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
+                            <a href="" @click.prevent="mostrarPeca(movdoc.doc.idDocumento, 'attachment')">
+                              <span class="fa fa-download icone-em-linha"></span>
+                            </a>
                             <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
                               <span class="fa fa-pencil icone-em-linha"></span>
                             </a>
@@ -466,19 +469,27 @@
 
           <div class="row no-gutters">
             <div class="col col-auto mr-1">
-              <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none mt-3">Filtrar Movimentos
+              <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none mt-3">
+                <span class="fa fa-filter"></span>
+                Filtrar Movimentos
               </button>
             </div>
             <div class="col col-auto mr-1">
-              <button type="button" v-if="marcasativas &amp;&amp; (filtro !== '#marca')" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none mt-3">Filtrar Marcas
+              <button type="button" v-if="marcasativas &amp;&amp; (filtro !== '#marca')" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none mt-3">
+                <span class="fa fa-filter"></span>
+                Filtrar Marcas
               </button>
             </div>
             <div class="col col-auto ml-auto">
-              <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none mt-3">PDF Completo
+              <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none mt-3">
+                <span class="fa fa-download"></span>
+                PDF Completo
               </button>
             </div>
             <div class="col col-auto ml-1">
-              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none mt-3">Imprimir</button>
+              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none mt-3">
+                <span class="fa fa-print"></span>
+                Imprimir</button>
             </div>
           </div>
 
@@ -672,10 +683,12 @@ export default {
     mostrarProcessosRelacionados: function (ativo) {
       this.$parent.$emit('setting', 'mostrarProcessosRelacionados', ativo)
     },
-    mostrarPeca: function (idDocumento) {
+    mostrarPeca: function (idDocumento, disposition) {
       this.$http.get('processo/' + this.numero + '/peca/' + idDocumento + '/pdf?orgao=' + this.orgao).then(response => {
         var jwt = response.data.jwt
-        window.open(this.$http.options.root + '/download/' + jwt + '/' + this.numero + '-peca-' + idDocumento + '.pdf')
+        var url = this.$http.options.root + '/download/' + jwt + '/' + this.numero + '-peca-' + idDocumento + '.pdf'
+        if (disposition) window.location = url + '?disposition=attachment'
+        else window.open(url)
         UtilsBL.logEvento('consulta-processual', 'mostrar pdf peça')
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
