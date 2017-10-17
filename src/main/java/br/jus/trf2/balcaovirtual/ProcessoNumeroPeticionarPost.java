@@ -11,6 +11,9 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 			throws Exception {
 		String authorization = SessionsCreatePost.assertAuthorization();
 
+		if (true)
+			throw new Exception("Erro simulado!");
+
 		String mensagem = SoapMNI.enviarPeticaoIntercorrente(authorization, req.orgao, req.numero,
 				req.tipopeticao.split("-")[1], Integer.parseInt(req.nivelsigilo), req.pdfs, null);
 		resp.status = mensagem;

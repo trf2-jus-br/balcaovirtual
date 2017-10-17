@@ -76,7 +76,7 @@
 
               <td>
                 <a @click="view(doc)">
-                  <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                  <a :href="$http.options.root + '/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
                   </a>
                 </a>
               </td>
@@ -102,6 +102,10 @@
         <button type="button" @click="carregarProtocoladosRecentemente()" id="protocoladosRecentemente" class="btn btn-secondary d-print-none mr-3 mt-3">Consultar Protocolos
         </button>
         <button type="button" @click="limpar()" id="limpar" v-if="!editando" class="btn btn-secondary d-print-none mt-3">Enviar Outras Petições</button>
+        <button type="button" @click="imprimirArquivosComErro()" v-if="arquivosComErro.length > 0" class="btn btn-info float-right ml-3 d-print-none mt-3">
+          Imprimir Arquivos com Erro&nbsp;&nbsp;
+          <span class="badge badge-pill badge-warning">{{arquivosComErro.length}}</span>
+        </button>
         <button type="button" @click="imprimir()" id="imprimir" v-if="!editando" class="btn btn-info float-right ml-3 d-print-none mt-3">Imprimir</button>
         <button type="button" @click="peticionar()" id="prosseguir" v-if="arquivos.length > 0 && (editando || arquivosAProtocolar)" :disabled="!isAllValid()" class="btn btn-primary float-right d-print-none mt-3">
           Protocolar&nbsp;&nbsp;
@@ -261,6 +265,14 @@ export default {
       var a = this.resumoPorData
       a = UtilsBL.filtrarPorSubstring(a, this.filtroProtocolo)
       return a
+    },
+
+    arquivosComErro: function () {
+      var a = []
+      for (var i = 0; i < this.arquivos.length; i++) {
+        if (this.arquivos[i].errormsg) a.push(this.arquivos[i])
+      }
+      return a
     }
   },
 
@@ -412,6 +424,89 @@ export default {
       }
       var func = this.enviarPeticao
       Bus.$emit('prgStart', 'Protocolando Petições Intercorrentes', lote.length, function (i) { func(lote[i]) }, this.organizarArquivos)
+    },
+
+    exibirAviso: function (aviso) {
+      this.aviso = aviso
+    },
+
+    marcarTodos: function () {
+      var docs = this.filtrados
+      for (var i = 0; i < docs.length; i++) {
+        var doc = docs[i]
+        if (!doc.disabled) doc.checked = this.todos
+      }
+    },
+
+    printPdf: function (url) {
+      var iframe = this._printIframe
+      if (!this._printIframe) {
+        iframe = this._printIframe = document.createElement('iframe')
+        document.body.appendChild(iframe)
+
+        iframe.style.display = 'none'
+        iframe.onload = function () {
+          setTimeout(function () {
+            iframe.focus()
+            iframe.contentWindow.print()
+          }, 1)
+        }
+      }
+
+      iframe.src = url
+    },
+
+    imprimirArquivo: function (arquivo, lote) {
+      console.log('vai imprimir', url)
+      this.errormsg = undefined
+      if (lote) Bus.$emit('prgCaption', 'Imprimindo ' + arquivo.nome)
+
+      var url = this.$http.options.root + '/arquivo-temporario/' + arquivo.id
+      console.log(url)
+
+      var iframe = document.createElement('iframe')
+      document.body.appendChild(iframe)
+      iframe.style.display = 'none'
+      iframe.onload = function () {
+        console.log('carregou')
+        setTimeout(function () {
+          console.log('imprimindo...')
+          iframe.focus()
+          iframe.contentWindow.print()
+          setTimeout(function () {
+            if (lote) Bus.$emit('prgNext')
+            setTimeout(function () {
+              console.log('vai fechar...')
+              iframe.remove()
+              console.log('fechou')
+            }, 10000)
+          }, 2000)
+        }, 2000)
+      }
+      iframe.src = url
+
+      // setTimeout(function () {
+      //   var w = window.open(url, '_blank')
+      //   window.focus()
+      //   setTimeout(function () {
+      //     console.log('carregou')
+      //     setTimeout(function () {
+      //       console.log('imprimindo...')
+      //       w.print()
+      //       setTimeout(function () {
+      //         console.log('vai fechar')
+      //         w.close()
+      //         UtilsBL.logEvento('peticao-inicial', 'imprimir')
+      //         if (lote) Bus.$emit('prgNext')
+      //       }, 100)
+      //     }, 500)
+      //   }, 5000)
+      // }, 500)
+    },
+
+    imprimirArquivosComErro: function () {
+      var a = this.arquivosComErro
+      Bus.$emit('prgStart', 'Imprimindo Arquivos', a.length, (i) => this.imprimirArquivo(a[i], true))
     },
 
     limpar: function () {
