@@ -64,7 +64,7 @@
               <div class="card text-white bg-primary card-consulta-processual mb-3">
                 <div class="card-body">
                   <img id="logo-header" class="float-right" src="../assets/users.png" height="64"></img>
-                  <p class="card-text">
+                  <p class="card-text" v-if="fixed.partesAtivas">
                     <small>{{fixed.partesAtivas[0].tipoAtuacao}}</small>
                     <br />
                     <b>{{fixed.partesAtivas[0].pessoa.nome}}</b>
@@ -72,7 +72,7 @@
                       <a href="" @click.prevent="mostrarPartes(true)">+{{fixed.partesAtivas.length-1}}</a>
                     </b>
                   </p>
-                  <p class="card-text">
+                  <p class="card-text" v-if="fixed.partesPassivas">
                     <small>{{fixed.partesPassivas[0].tipoAtuacao}}</small>
                     <br />
                     <b>{{fixed.partesPassivas[0].pessoa.nome}}</b>
@@ -135,7 +135,7 @@
                     <br>
                     <b>{{fixed.assuntoPrincipalDescricao}}</b>
                   </p>
-                  <p class="card-text" v-if="proc.dadosBasicos.outroParametro.numCDA">
+                  <p class="card-text" v-if="proc.dadosBasicos.outroParametro &amp;&amp; proc.dadosBasicos.outroParametro.numCDA">
                     <small>CDA</small>
                     <br>
                     <b>{{proc.dadosBasicos.outroParametro.numCDA[0]}}</b>
@@ -338,7 +338,7 @@
                       <p v-html="fixed.numCDAs"></p>
                     </div>
 
-                    <div class="col col-sm-3" v-if="proc.dadosBasicos.outrosnumeros[0]">
+                    <div class="col col-sm-3" v-if="proc.dadosBasicos.outrosnumeros &amp;&amp; proc.dadosBasicos.outrosnumeros[0]">
                       <label>Número Antigo</label>
                       <p v-html="proc.dadosBasicos.outrosnumeros[0]"></p>
                     </div>
