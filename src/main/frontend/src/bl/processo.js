@@ -352,7 +352,7 @@ export default {
       .join('')
       .trim()
   },
-  regexFormatarProcesso: /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?(\d{2})?/,
+  regexFormatarProcesso: /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?/,
   formatarProcesso: function (filename) {
     var m = this.regexFormatarProcesso.exec(filename)
     if (!m) return

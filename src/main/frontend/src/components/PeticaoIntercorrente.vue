@@ -197,8 +197,7 @@ import UtilsBL from '../bl/utils.js'
 import ProcessoMultiplos from './ProcessoMultiplos'
 import { Bus } from '../bl/bus.js'
 
-const reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?$/
-const regex = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?/
+const reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?$/
 
 export default {
   name: 'peticao-intercorrente',
@@ -267,7 +266,7 @@ export default {
 
   methods: {
     addedFileProxy: function (file) {
-      var proc = this.getProcesso(file.name)
+      var proc = ProcessoBL.formatarProcesso(file.name)
 
       this.arquivos.push({
         file: file,
@@ -433,12 +432,12 @@ export default {
       var arq = this.arquivoCorrente
       var i
       if (!arr || arr.length === 0) return
-      arq.processo = this.getProcesso(ProcessoBL.somenteNumeros(arr[0]))
+      arq.processo = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arr[0]))
       for (i = 1; i < arr.length; i++) {
         var newArq = {
           file: arq.file,
           nome: arq.nome,
-          processo: this.getProcesso(ProcessoBL.somenteNumeros(arr[i])),
+          processo: ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arr[i])),
           bloq: arq.bloq,
           perc: arq.perc,
           size: arq.size,
@@ -464,7 +463,7 @@ export default {
         this.organizarArquivos()
         return
       }
-      arq.processo = this.getProcesso(ProcessoBL.somenteNumeros(arq.processo))
+      arq.processo = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arq.processo))
       this.validarArquivo(arq)
       this.organizarArquivos()
     },
@@ -532,14 +531,6 @@ export default {
         }
         if (a.protocolado !== true && !a.anexo) this.arquivosAProtocolar++
       }
-    },
-
-    getProcesso: function (filename) {
-      var m = regex.exec(filename)
-      if (!m) return
-      var s = m[1] + '-' + m[2] + '.' + m[3] + '.' + m[4] + '.' + m[5] + '.' + m[6]
-      if (m[7]) s += m[7]
-      return s
     },
 
     arquivo: function (file) {

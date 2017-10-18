@@ -35,7 +35,7 @@ export default {
       if (e.isOK === undefined) e.cancel()
       if (!e.isOK) return
 
-      var reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})(\d{2})?$/
+      var reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?$/
       var reSep = /(?:\s+|\s*(?:,|;)\s*)/
 
       if ((this.processos || '') === '') {
