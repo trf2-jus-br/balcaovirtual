@@ -343,14 +343,8 @@ export default {
       .replace(/\n/g, '<br/>')
   },
   somenteNumeros: function (s) {
-    return s
-      .split('-')
-      .join('')
-      .split('.')
-      .join('')
-      .split('/')
-      .join('')
-      .trim()
+    if (s === undefined) return
+    return s.replace(/\D/g, '')
   },
   regexFormatarProcesso: /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?/,
   formatarProcesso: function (filename) {

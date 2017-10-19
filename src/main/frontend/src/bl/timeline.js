@@ -31,12 +31,12 @@ export default {
     )
   },
 
-  updateTimeline: function (orgao, processo, calcularTempos) {
+  updateTimeline: function (orgao, movdoc, calcularTempos) {
     var contains = function (m, a) {
       return a.indexOf(m.movimentoLocal.codigoMovimento) !== -1
     }
     var timeline = this.emptyTimeline()
-    var movs = processo.movimento
+    var movs = movdoc
     var prev
     var fApelacao = false
 
@@ -46,9 +46,9 @@ export default {
     var e
     var hora, ultHora
     for (var i = movs.length - 1; i >= 0; i--) {
-      var m = movs[i]
+      var m = movs[i].mov
       e = undefined
-      if (!m.movimentoLocal) continue
+      if (m === undefined || !m.movimentoLocal) continue
       if (
         contains(m, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 60, 61, 62, 63, 80, 81, 83])
       ) {
