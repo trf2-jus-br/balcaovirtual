@@ -391,6 +391,7 @@
                     <option>#sentenca</option>
                     <option>#suspensao</option>
                     <option>#apelacao</option>
+                    <option>#execucao</option>
                     <option>#baixa</option>
                     <option>#arquivamento</option>
                   </datalist>
