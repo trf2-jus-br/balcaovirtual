@@ -26,6 +26,7 @@ export default {
         },
         devolucaoapelacao: {},
         baixa: {},
+        execucao: {},
         arquivamento: {}
       })
     )
@@ -60,7 +61,9 @@ export default {
         } else if (
           m.complemento[0] === 'Sentença' ||
           m.complemento[0] === 'Sentença/Julgamento'
-        ) { e = timeline.sentenca }
+        ) {
+          e = timeline.sentenca
+        }
       }
       if (
         contains(m, [78]) // Inteiro Teor
@@ -83,6 +86,7 @@ export default {
       if (contains(m, [27])) e = timeline.juntada
       if (contains(m, [101])) e = timeline.suspensao
       if (contains(m, [19])) e = timeline.audiencia
+      if (contains(m, [18])) e = timeline.execucao
       if (contains(m, [26])) e = timeline.baixa
       if (e) {
         if (calcularTempos) {
@@ -132,6 +136,7 @@ export default {
         e === timeline.conclusao ||
         e === timeline.sentenca ||
         e === timeline.apelacao ||
+        e === timeline.execucao ||
         e === timeline.baixa
       ) {
         for (var k in timeline) {
@@ -167,6 +172,7 @@ export default {
         if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
       }
     }
+    console.log(timeline)
     return timeline
   }
 }

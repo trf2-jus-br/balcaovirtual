@@ -2,7 +2,7 @@
   <div>
     <div class="row justify-content-center" style="margin-top: -1em; margin-bottom: -1em;" ng-if="deviceDetector.raw.browser.chrome">
       <div class="col col-sm-12 col-md-10">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" :viewBox="'0 0 ' + (timeline.execucao.passou ? '900' : '800') + ' 300'">
           <defs>
             <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
               <path d="M0,0 L0,6 L9,3 z" />
@@ -89,7 +89,7 @@
             </g>
 
             <!-- Segunda metade -->
-            <g id="baixa" transform="translate(650, 150)" :class="classes.baixa">
+            <g id="baixa" :transform="'translate(' + (timeline.execucao.passou ? '750' : '650') + ', 150)'" :class="classes.baixa">
               <rect x="-80" y="-5" width="60" height="10" class="linha" data-toggle="tooltip" data-html="true" :title="tooltips.baixa" />
               <a href="">
                 <circle r="20" class="bola" @click.prevent="filtrarMovimentos( '#baixa')" />
@@ -97,6 +97,16 @@
               <text class="textointerno" text-anchor="middle" alignment-baseline="central">{{contador(timeline.baixa.contador)}}</text>
 
               <text y="40" class="texto" text-anchor="middle" alignment-baseline="middle">Baixa</text>
+            </g>
+
+            <g id="execucao" transform="translate(650, 150)" v-if="timeline.execucao.passou" :class="classes.execucao">
+              <rect x="-80" y="-5" width="60" height="10" class="linha" data-toggle="tooltip" data-html="true" :title="tooltips.execucao" />
+              <a href="">
+                <circle r="20" class="bola" @click.prevent="filtrarMovimentos( '#execucao')" />
+              </a>
+              <text class="textointerno" text-anchor="middle" alignment-baseline="central">{{contador(timeline.execucao.contador)}}</text>
+
+              <text y="40" class="texto" text-anchor="middle" alignment-baseline="middle">Execução</text>
             </g>
 
             <g id="sentenca" transform="translate(550, 150)" :class="classes.sentenca">
