@@ -466,7 +466,8 @@ export default {
 
       var iframe = document.createElement('iframe')
       document.body.appendChild(iframe)
-      iframe.style.display = 'none'
+      iframe.style.width = '0px'
+      iframe.style.height = '0px'
       iframe.onload = function () {
         console.log('carregou')
         setTimeout(function () {
@@ -479,9 +480,9 @@ export default {
               console.log('vai fechar...')
               iframe.remove()
               console.log('fechou')
-            }, 10000)
+            }, 60000)
           }, 2000)
-        }, 2000)
+        }, 1)
       }
       iframe.src = url
 
