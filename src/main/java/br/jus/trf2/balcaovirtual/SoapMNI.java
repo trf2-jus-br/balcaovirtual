@@ -214,12 +214,7 @@ public class SoapMNI {
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");
 
-		String numProcFormated = numProc;
-		try {
-			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",
-					"$1-$2.$3.$4.$5.$6$7");
-		} catch (Exception ex) {
-		}
+		String numProcFormated = Utils.formatarNumeroProcesso(numProc);
 
 		String system = orgao.toLowerCase();
 		URL url = new URL(Utils.getMniWsdlUrl(system));
@@ -299,12 +294,7 @@ public class SoapMNI {
 		if (nomePdfs == null && pdf == null)
 			throw new Exception("Não é possível peticionar sem que seja fornecido um PDF");
 
-		String numProcFormated = numProc;
-		try {
-			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",
-					"$1-$2.$3.$4.$5.$6$7");
-		} catch (Exception ex) {
-		}
+		String numProcFormated = Utils.formatarNumeroProcesso(numProc);
 
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();

@@ -128,4 +128,15 @@ public class Utils {
 		return dt.toString(dtfBR);
 
 	}
+
+	public static String formatarNumeroProcesso(String numProc) {
+		String numProcFormated = numProc;
+		try {
+			numProcFormated = numProc.replaceAll("^(\\d{7})-?(\\d{2})\\.?(\\d{4})\\.?(4)\\.?(02)\\.?(\\d{4})(\\d{2})?",
+					"$1-$2.$3.$4.$5.$6$7");
+		} catch (Exception ex) {
+		}
+		return numProcFormated;
+	}
+
 }

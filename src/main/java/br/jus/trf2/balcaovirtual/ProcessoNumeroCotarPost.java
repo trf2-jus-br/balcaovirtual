@@ -2,7 +2,6 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.concurrent.Future;
 
-import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerUtils;
@@ -30,24 +29,13 @@ public class ProcessoNumeroCotarPost implements IProcessoNumeroCotarPost {
 		try (Dao dao = new Dao()) {
 			dataHora = Utils.formatarDataHoraMinuto(dao.obtemData());
 		}
-		
-		 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-         <head>
-             <style type="text/css">
-                 @page {
-                     margin-left: 3cm;
-                     margin-right: 3cm;
-                     margin-top: 3cm;
-                     margin-bottom: 3cm;
-                 }
-             </style>
-         </head>
-         <body>
-             <p align="center">Cota nos autos do Processo 0000588-48.2004.4.02.5117</p><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><table width="100%"><tr><td align="center"><br/>Ciente. Nada a opor.<br/><br/></td></tr></table><p align="right">Giovanni da Silva de Souza - 19/10/2017</p>
-         </body>
-     </html>
 
-		String html = "<p align=\"center\">" + req.texto + "</p><p>" + dataHora + "</p><p>" + u.nome + "</p>";
+		String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@page {margin-left: 3cm; margin-right: 3cm; margin-top: 3cm; margin-bottom: 3cm;}</style></head><body>";
+		html += "<p align=\"center\">Cota nos autos do Processo " + Utils.formatarNumeroProcesso(req.numero)
+				+ "</p><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
+		html += "<table width=\"100%\"><tr><td align=\"center\"><br/>" + req.texto + "<br/><br/></td></tr></table>";
+		html += "<p align=\"right\">" + u.nome + " - " + dataHora + "</p>";
+		html += "</body></html>";
 
 		HtmlPdfPostRequest q = new HtmlPdfPostRequest();
 		q.html = html;
