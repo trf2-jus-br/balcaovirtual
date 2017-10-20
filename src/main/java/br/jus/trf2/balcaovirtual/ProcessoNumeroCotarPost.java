@@ -21,20 +21,20 @@ public class ProcessoNumeroCotarPost implements IProcessoNumeroCotarPost {
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
-		String dataHora = null;
+		String data = null;
 
 		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.orgao.toLowerCase() + ".cota.tipo",
 				"Parâmetro de tipo de documento não configurado", true);
 
 		try (Dao dao = new Dao()) {
-			dataHora = Utils.formatarDataHoraMinuto(dao.obtemData());
+			data = Utils.formatarDataHoraMinuto(dao.obtemData());
 		}
 
 		String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@page {margin-left: 3cm; margin-right: 3cm; margin-top: 3cm; margin-bottom: 3cm;}</style></head><body>";
 		html += "<p align=\"center\">Cota nos autos do Processo " + Utils.formatarNumeroProcesso(req.numero)
 				+ "</p><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
 		html += "<table width=\"100%\"><tr><td align=\"center\"><br/>" + req.texto + "<br/><br/></td></tr></table>";
-		html += "<p align=\"right\">" + u.nome + " - " + dataHora + "</p>";
+		html += "<p align=\"right\">" + u.nome + " - " + data + "</p>";
 		html += "</body></html>";
 
 		HtmlPdfPostRequest q = new HtmlPdfPostRequest();

@@ -121,9 +121,17 @@ public class Utils {
 		return s.replace("-", "").replace(".", "").replace("/", "");
 	}
 
-	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
+	private static final DateTimeFormatter dtfBRHHMM = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
 
 	public static String formatarDataHoraMinuto(Date d) {
+		DateTime dt = new DateTime(d.getTime());
+		return dt.toString(dtfBRHHMM);
+
+	}
+
+	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy");
+
+	public static String formatarData(Date d) {
 		DateTime dt = new DateTime(d.getTime());
 		return dt.toString(dtfBR);
 
