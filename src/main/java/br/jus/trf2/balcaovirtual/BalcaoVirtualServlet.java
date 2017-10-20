@@ -36,10 +36,12 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		super.addProperty(new PublicProperty("balcaovirtual.env"));
 		super.addProperty(new PublicProperty("balcaovirtual.wootric.token"));
 		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
+		super.addProperty(new RestrictedProperty("balcaovirtual.ws.documental.url"));
 		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
 
 		for (String s : SwaggerUtils.getProperty("balcaovirtual.orgaos", "").split(",")) {
 			super.addProperty(new RestrictedProperty("balcaovirtual.mni." + s.toLowerCase() + ".url"));
+			super.addProperty(new PublicProperty("balcaovirtual." + s.toLowerCase() + ".cota.tipo"));
 		}
 
 		super.addProperty(new PrivateProperty("balcaovirtual.jwt.secret"));

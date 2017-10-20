@@ -1,0 +1,82 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: SistemaDocumental
+  description: Micro-serviço para interagir com sistemas documentais
+
+basePath: /sisdoc/api/v1
+schemes: [http,https]
+consumes: [application/json]
+produces: [application/json]
+
+tags:
+  - name: proc
+    description: Dados de processos
+  - name: utils
+    description: Utilitários
+
+paths:
+  /html-pdf:
+    post:
+      description: Converter HTML em PDF
+      tags: [utils]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/html"
+        - $ref: "#/parameters/conv"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              pdf:
+                $ref: "#/definitions/PDF"
+              pages:
+                $ref: "#/definitions/Pages"
+              size:
+                $ref: "#/definitions/Size"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+parameters:
+  html:
+    name: html
+    in: formData
+    description: HTML a ser convertido
+    required: true
+    type: string
+  conv:
+    name: conv
+    in: formData
+    description: Tipo do conversor
+    required: true
+    type: string
+            
+definitions:
+  PDF:
+    type: string
+    format: byte
+    description: Nome do usuário
+    example: Renato Crivano
+    
+  Pages:
+    description: Número de páginas
+    type: string      
+    example: 1
+    
+  Size:
+    description: Tamanho em bytes
+    type: string
+    example: 1024
+  
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+    example:
+      error: Não foi possível realizar a operação

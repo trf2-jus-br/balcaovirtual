@@ -28,7 +28,20 @@ export default {
   },
 
   decodeToken: function (encodedToken) {
-    return decode(encodedToken)
+    var decoded = decode(encodedToken)
+    if (decoded && decoded.users) {
+      var a = decoded.users.split(';')
+      decoded.parsedUsers = {}
+      for (var i = 0; i < a.length; i++) {
+        var b = a[i].split(',')
+        decoded.parsedUsers[b[0]] = {
+          ieusu: b[1],
+          ieunidade: b[2],
+          perfil: b[3]
+        }
+      }
+    }
+    return decoded
   },
 
   getTokenExpirationDate: function (encodedToken) {

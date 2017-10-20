@@ -290,13 +290,13 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,
-			int nvlSigilo, String nomePdfs) throws Exception {
+			int nvlSigilo, String nomePdfs, byte pdf[]) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");
 
-		if (nomePdfs == null)
+		if (nomePdfs == null && pdf == null)
 			throw new Exception("Não é possível peticionar sem que seja fornecido um PDF");
 
 		String numProcFormated = numProc;
@@ -312,16 +312,26 @@ public class SoapMNI {
 		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
 		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
 		List<TipoDocumento> l = new ArrayList<>();
-		for (String nomePdf : nomePdfs.split(",")) {
+		if (nomePdfs != null) {
+			for (String nomePdf : nomePdfs.split(",")) {
+				TipoDocumento doc = new TipoDocumento();
+				doc.setMimetype("application/pdf");
+				doc.setDataHora(dataEnvio);
+				doc.setNivelSigilo(nvlSigilo);
+				doc.setTipoDocumento(tpDoc);
+				Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
+				byte[] data = Files.readAllBytes(path);
+				doc.setConteudo(data);
+				l.add(doc);
+			}
+		}
+		if (pdf != null) {
 			TipoDocumento doc = new TipoDocumento();
 			doc.setMimetype("application/pdf");
 			doc.setDataHora(dataEnvio);
-			doc.setNivelSigilo(nvlSigilo);
+			doc.setNivelSigilo(0);
 			doc.setTipoDocumento(tpDoc);
-			// doc.setTipoDocumento("58198");//tpDoc);
-			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
-			byte[] data = Files.readAllBytes(path);
-			doc.setConteudo(data);
+			doc.setConteudo(pdf);
 			l.add(doc);
 		}
 

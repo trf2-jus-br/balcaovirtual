@@ -26,7 +26,7 @@
               <span v-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
                 Digital</span>
               <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
-                Físico</span>: {{proc.dadosBasicos.numero}}
+                Físico</span> {{proc.dadosBasicos.numero}}
               <a v-if="this.favorito !== undefined && !this.favorito" href="" @click.prevent="favoritar(true)">
                 <span class="fa fa-star-o icone-em-linha" title="Acrescentar à lista de processos favoritos"></span>
               </a>
@@ -491,6 +491,11 @@
                 <span class="fa fa-print"></span>
                 Imprimir</button>
             </div>
+            <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'procurador'">
+              <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none mt-3">
+                <span class="fa fa-comment"></span>
+                Enviar Cota</button>
+            </div>
           </div>
 
           <div class="row">
@@ -507,6 +512,7 @@
     </div>
 
     <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
+    <processo-cota ref="processoCota" :processo="numero" :orgao="orgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
   </div>
 </template>
 
@@ -517,6 +523,7 @@ import UtilsBL from '../bl/utils.js'
 import Timeline from './timeline'
 import ProcessoPecaDetalhes from './ProcessoPecaDetalhes'
 import ProcessoNotas from './ProcessoNotas'
+import ProcessoCota from './ProcessoCota'
 import CnjClasseBL from '../bl/cnj-classe.js'
 import CnjAssuntoBL from '../bl/cnj-assunto.js'
 import { Bus } from '../bl/bus.js'
@@ -531,6 +538,8 @@ export default {
       Bus.$emit('block', 20)
       this.$http.get('processo/' + this.numero + '/validar').then(response => {
         this.orgao = response.data.orgao
+        console.log(this.$parent.jwt)
+        this.perfil = this.$parent.jwt.parsedUsers[this.orgao.toLowerCase()].perfil
         this.$http.get('processo/' + this.numero + '/consultar?orgao=' + this.orgao).then(
           response => {
             Bus.$emit('release')
@@ -583,6 +592,7 @@ export default {
       modified: undefined,
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
       orgao: undefined,
+      perfil: undefined,
       gui: {},
       filtro: undefined,
       tipoRepresentante: {
@@ -743,6 +753,18 @@ export default {
       )
     },
 
+    cotar: function () {
+      this.$refs.processoCota.show()
+    },
+
+    cotaEnviada: function (msg) {
+      Bus.$emit('message', 'Sucesso', 'Cota enviada com sucesso. ' + msg)
+    },
+
+    cotaNaoEnviada: function (msg, texto) {
+      Bus.$emit('message', 'Erro', 'Não foi possível enviar a cota "' + texto + '". Ocorreu o erro: "' + msg + '"')
+    },
+
     salvarProcessoPecaDetalhes: function (marca) {
       if (!this.currentMovDoc) return
 
@@ -822,7 +844,8 @@ export default {
   components: {
     timeline: Timeline,
     'processo-peca-detalhes': ProcessoPecaDetalhes,
-    'processo-notas': ProcessoNotas
+    'processo-notas': ProcessoNotas,
+    'processo-cota': ProcessoCota
   }
 }
 </script>

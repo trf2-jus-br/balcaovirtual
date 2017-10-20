@@ -1,5 +1,11 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
@@ -30,6 +36,16 @@ public class Utils {
 			return SwaggerUtils.getRequiredProperty("balcaovirtual.ws.processual.url",
 					"Não foi possível localizar a propridade que configura a URL do webservice de integração com o sistema processual.",
 					false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+
+	}
+
+	public static String getWsDocumentalUrl() {
+		try {
+			return SwaggerUtils.getRequiredProperty("balcaovirtual.ws.documental.url",
+					"Não foi possível localizar a propridade que configura a URL do webservice documental.", false);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
@@ -103,5 +119,13 @@ public class Utils {
 		if (s == null)
 			return null;
 		return s.replace("-", "").replace(".", "").replace("/", "");
+	}
+
+	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
+
+	public static String formatarDataHoraMinuto(Date d) {
+		DateTime dt = new DateTime(d.getTime());
+		return dt.toString(dtfBR);
+
 	}
 }

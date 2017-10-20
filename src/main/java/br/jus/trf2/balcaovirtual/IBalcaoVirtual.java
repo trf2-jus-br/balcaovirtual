@@ -382,6 +382,21 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
+	public class ProcessoNumeroCotarPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String nivelsigilo;
+		public String texto;
+	}
+
+	public class ProcessoNumeroCotarPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IProcessoNumeroCotarPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroCotarPostRequest req, ProcessoNumeroCotarPostResponse resp) throws Exception;
+	}
+
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {
 		public String numero;
 		public String id;

@@ -57,7 +57,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				else
 					usuarios += ";";
 				usuarios += u.orgao.toLowerCase() + "," + u.codusu + ","
-						+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null");
+						+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null") + ","
+						+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 			}
 		}
 

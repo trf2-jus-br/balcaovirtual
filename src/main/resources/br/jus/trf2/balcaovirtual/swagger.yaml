@@ -87,6 +87,12 @@ parameters:
     description: Código do nivel de sigilo
     type: string
     required: true
+  texto:
+    name: texto
+    in: formData
+    description: Texto
+    type: string
+    required: true
   pdfs:
     name: pdfs
     in: formData
@@ -189,12 +195,6 @@ parameters:
     description: Id da marca
     type: string
     required: false
-  texto:
-    name: texto
-    in: formData
-    description: Texto da marca
-    type: string
-    required: true
   idestilo:
     name: idestilo
     in: formData
@@ -589,6 +589,29 @@ paths:
         - $ref: "#/parameters/tipopeticao"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/pdfs"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /processo/{numero}/cotar:
+    post:
+      description: Enviar cota para um processo
+      tags: [peticionamento]
+      consumes: ["application/x-www-form-urlencoded"]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/texto"
       responses:
         200:
           description: Successful response
