@@ -491,7 +491,7 @@
                 <span class="fa fa-print"></span>
                 Imprimir</button>
             </div>
-            <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'procurador'">
+            <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'disabled-procurador'">
               <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none mt-3">
                 <span class="fa fa-comment"></span>
                 Enviar Cota</button>
