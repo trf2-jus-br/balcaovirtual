@@ -56,6 +56,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		resp.sentenciado = r.sentenciado;
 		resp.baixado = r.baixado;
 		resp.cdas = r.cdas;
+		resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
 	}
 
 	@Override

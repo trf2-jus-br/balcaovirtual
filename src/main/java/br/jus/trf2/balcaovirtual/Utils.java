@@ -126,7 +126,11 @@ public class Utils {
 	public static String formatarDataHoraMinuto(Date d) {
 		DateTime dt = new DateTime(d.getTime());
 		return dt.toString(dtfBRHHMM);
+	}
 
+	public static Date parsearDataHoraMinuto(String s) {
+		DateTime dt = DateTime.parse(s, dtfBRHHMM);
+		return dt.toDate();
 	}
 
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy");

@@ -1,6 +1,7 @@
 package br.jus.trf2.sistemaprocessual;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
@@ -201,6 +202,7 @@ public interface ISistemaProcessual {
 		public Boolean sentenciado;
 		public Boolean baixado;
 		public String cdas;
+		public String dataultimomovimento;
 	}
 
 	public interface IProcessoValidarNumeroGet extends ISwaggerMethod {

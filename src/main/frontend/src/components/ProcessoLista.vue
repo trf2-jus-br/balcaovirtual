@@ -72,6 +72,7 @@
                 <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
               </th>
               <th>Processo</th>
+              <th>Último Movimento</th>
               <th>Órgão</th>
               <th>Unidade</th>
               <th>Suporte</th>
@@ -89,6 +90,9 @@
                 <span class=" unbreakable">
                   <router-link :to="{name: 'Processo', params: {numero: p.numero}}" target="_blank">{{p.numeroFormatado}}</router-link>
                 </span>
+              </td>
+              <td>
+                <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
               </td>
               <td>{{p.orgao}}</td>
               <td>{{p.unidade}}</td>
@@ -238,6 +242,8 @@ export default {
   methods: {
     fixProcesso: function (p) {
       UtilsBL.applyDefauts(p, {
+        dataultimomovimento: undefined,
+        dataultimomovimentoFormatada: undefined,
         numero: undefined,
         numeroFormatado: undefined,
         orgao: undefined,
@@ -259,6 +265,9 @@ export default {
         favorito: undefined,
         recente: undefined
       })
+      if (p.dataultimomovimento !== undefined) {
+        p.dataultimomovimentoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(p.dataultimomovimento)
+      }
       if (p.numero !== undefined) {
         p.numero = ProcessoBL.somenteNumeros(p.numero)
         p.numeroFormatado = ProcessoBL.formatarProcesso(p.numero)
@@ -487,3 +496,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.destaque {
+  color: red;
+}
+</style>

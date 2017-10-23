@@ -294,6 +294,7 @@ public interface IBalcaoVirtual {
 		public Boolean sentenciado;
 		public Boolean baixado;
 		public String cdas;
+		public Date dataultimomovimento;
 	}
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {

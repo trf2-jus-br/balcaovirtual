@@ -477,6 +477,8 @@ paths:
                 $ref: "#/definitions/Baixado"
               cdas:
                 $ref: "#/definitions/CDAs"
+              dataultimomovimento:
+                $ref: "#/definitions/DataUltimoMovimento"
                 
         500:
           description: Error ocurred
@@ -1237,6 +1239,11 @@ definitions:
   CDAs:
     description: Número de CDAs separado por vírgula
     type: string
+    
+  DataUltimoMovimento:
+    description: Data do último movimento do processo
+    type: string
+    format: date-time
     
   QuantidadePorData:
     description: Data e quantidade de itens
