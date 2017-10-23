@@ -20,11 +20,11 @@
 import UtilsBL from '../bl/utils.js'
 
 var textos = [
-  'A União (Fazenda Nacional) requer o ingresso no feito e vista dos autos após as Informações da Autoridade Coatora',
-  'A União (Fazenda Nacional) requer o arquivamento dos autos, nos termos do art. 40 da LEF e da Portaria PGFN nº 396/2016 (RDCC).',
   'MM. Juízo, ciente, nada a opor.',
-  'A União (Fazenda Nacional) informa que a(s) Inscrição(ões) demanda(s) permanecem parceladas',
-  'Devolvo os autos tendo em vista que a União (Fazenda Nacional) não é parte'
+  'Devolvo os autos tendo em vista que a União não é parte.',
+  'A União requer o ingresso no feito e vista dos autos após as Informações da Autoridade Coatora.',
+  'A União requer o arquivamento dos autos, nos termos do art. 40 da LEF e da Portaria PGFN nº 396/2016 (RDCC).',
+  'A União informa que a(s) Inscrição(ões) demanda(s) permanecem parceladas.'
 ]
 
 export default {
