@@ -115,8 +115,8 @@ export default {
         this.editando = true
       } else {
         this.texto = undefined
-        this.estilo = this.$parent.$parent.jwt.origin ? '1' : '3'
         this.editando = false
+        this.estilo = this.$parent.$parent.jwt.origin ? '2' : '4'
       }
       if (this.paginicial === undefined) this.paginicial = this.pagmin
       if (this.pagfinal === undefined) this.pagfinal = this.pagmax
