@@ -57,6 +57,37 @@
 
         <timeline :timeline="timeline"></timeline>
 
+        <div class="row no-gutters pt-0">
+          <div class="col col-auto mr-1" v-if="!$parent.settings.filtrarMovimentos">
+            <button type="button" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none">
+              <span class="fa fa-filter"></span>
+              Filtrar Movimentos
+            </button>
+          </div>
+          <div class="col col-auto mr-1" v-if="filtro !== '#marca'">
+            <button type="button" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none">
+              <span class="fa fa-filter"></span>
+              Filtrar Marcas
+            </button>
+          </div>
+          <div class="col col-auto ml-auto">
+            <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none">
+              <span class="fa fa-download"></span>
+              PDF Completo
+            </button>
+          </div>
+          <div class="col col-auto ml-1">
+            <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
+              <span class="fa fa-print"></span>
+              Imprimir</button>
+          </div>
+          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'disabled-procurador'">
+            <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
+              <span class="fa fa-comment"></span>
+              Enviar Cota</button>
+          </div>
+        </div>
+
         <template v-if="proc &amp;&amp; proc.dadosBasicos">
           <!-- QUADROS COLORIDOS -->
           <div class="d-print-none mt-3" v-if="errormsg === undefined">
@@ -465,37 +496,6 @@
                   </template>
                 </tbody>
               </table>
-            </div>
-          </div>
-
-          <div class="row no-gutters">
-            <div class="col col-auto mr-1">
-              <button type="button" v-if="!$parent.settings.filtrarMovimentos" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none mt-3">
-                <span class="fa fa-filter"></span>
-                Filtrar Movimentos
-              </button>
-            </div>
-            <div class="col col-auto mr-1">
-              <button type="button" v-if="marcasativas &amp;&amp; (filtro !== '#marca')" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none mt-3">
-                <span class="fa fa-filter"></span>
-                Filtrar Marcas
-              </button>
-            </div>
-            <div class="col col-auto ml-auto">
-              <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none mt-3">
-                <span class="fa fa-download"></span>
-                PDF Completo
-              </button>
-            </div>
-            <div class="col col-auto ml-1">
-              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none mt-3">
-                <span class="fa fa-print"></span>
-                Imprimir</button>
-            </div>
-            <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'disabled-procurador'">
-              <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none mt-3">
-                <span class="fa fa-comment"></span>
-                Enviar Cota</button>
             </div>
           </div>
 

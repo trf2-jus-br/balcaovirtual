@@ -14,7 +14,7 @@
       </form>
       <div style="width: 100%" slot="modal-footer">
         <b-btn variant="outline-warning" @click="preview" :disabled="errors.any()">
-          Prever PDF
+          Prever Cota
         </b-btn>
         <b-btn class="float-right ml-2" variant="primary" @click="save" :disabled="errors.any()">
           Prosseguir
@@ -24,7 +24,7 @@
         </b-btn>
       </div>
     </b-modal>
-    <pdf-preview ref="pdfPreview" title="Visualização do PDF" :src="previewUrl"></pdf-preview>
+    <pdf-preview ref="pdfPreview" title="Pré-visualização da Cota" :src="previewUrl"></pdf-preview>
   </div>
 </template>
 
