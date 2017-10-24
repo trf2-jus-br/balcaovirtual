@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="processosMultiplos" v-model="showModal" title="Cota nos Autos" close-title="Cancelar" ok-title="Prosseguir" hide-header-close @hide="save">
+    <b-modal id="cota" ref="modal" v-model="showModal" title="Cota nos Autos" hide-header-close>
       <form>
         <label class="control-label" for="texto" style="width: 100%">Texto</label>
         <b-form-input type="text" list="lst_cotas" name="texto" id="texto" v-model="texto" class="form-control" aria-describedby="cotaHelp" :class="{'is-invalid': errors.has('texto') }" style="width: 100%" autofocus v-validate.initial="'required'"></b-form-input>
@@ -12,12 +12,25 @@
           <strong>Atenção</strong>! Ao clicar em prosseguir, o texto acima será convertido em um PDF e instantaneamente protocolado na forma de uma Petição Intercorrente. Por favor, verifique o texto antes de clicar em 'Prosseguir'.</small>
         <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{errormsg}}</em>
       </form>
+      <div style="width: 100%" slot="modal-footer">
+        <b-btn variant="outline-warning" @click="preview" :disabled="errors.any()">
+          Prever PDF
+        </b-btn>
+        <b-btn class="float-right ml-2" variant="primary" @click="save" :disabled="errors.any()">
+          Prosseguir
+        </b-btn>
+        <b-btn class="float-right" variant="secondary" @click="$refs.modal.hide(false)">
+          Cancelar
+        </b-btn>
+      </div>
     </b-modal>
+    <pdf-preview ref="pdfPreview" title="Visualização do PDF" :src="previewUrl"></pdf-preview>
   </div>
 </template>
 
 <script>
 import UtilsBL from '../bl/utils.js'
+import PdfPreview from './PdfPreviewModal'
 
 var textos = [
   'MM. Juízo, ciente, nada a opor.',
@@ -37,7 +50,8 @@ export default {
       textos: textos,
       showModal: false,
       errormsg: undefined,
-      texto: ''
+      texto: '',
+      previewUrl: undefined
     }
   },
 
@@ -51,17 +65,13 @@ export default {
       e.cancel()
     },
 
-    save: function (e) {
-      if (e.isOK === undefined) e.cancel()
-      if (!e.isOK) return
-
+    save: function () {
       if ((this.texto || '') === '') {
         this.errormsg = 'Texto deve ser informado.'
-        e.cancel()
         return
       }
 
-      this.$http.post('processo/' + this.processo + '/cotar', {
+      this.$http.post('processo/' + this.processo + '/cota/enviar', {
         orgao: this.orgao,
         nivelsigilo: '0',
         texto: this.texto
@@ -71,7 +81,24 @@ export default {
       }, error => {
         this.$emit('erro', error.data.errormsg, this.texto)
       })
+
+      this.$refs.modal.hide(true)
+    },
+
+    preview: function () {
+      this.$http.post('processo/' + this.processo + '/cota/previsao-pdf', {
+        orgao: this.orgao,
+        nivelsigilo: '0',
+        texto: this.texto
+      }, { block: true }).then(response => {
+        this.previewUrl = this.$http.options.root + '/download/' + response.data.jwt + '/cota.pdf'
+        this.$refs.pdfPreview.show(true)
+      }, error => UtilsBL.errormsg(error, this))
     }
+  },
+
+  components: {
+    'pdf-preview': PdfPreview
   }
 }
 </script>

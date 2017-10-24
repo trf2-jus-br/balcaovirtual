@@ -79,6 +79,9 @@ public interface IBalcaoVirtual {
 	public class CDAs implements ISwaggerModel {
 	}
 
+	public class DataUltimoMovimento implements ISwaggerModel {
+	}
+
 	public class QuantidadePorData implements ISwaggerModel {
 		public String data;
 		public String quantidade;
@@ -383,19 +386,36 @@ public interface IBalcaoVirtual {
 				throws Exception;
 	}
 
-	public class ProcessoNumeroCotarPostRequest implements ISwaggerRequest {
+	public class ProcessoNumeroCotaPrevisaoPdfPostRequest implements ISwaggerRequest {
 		public String numero;
 		public String orgao;
 		public String nivelsigilo;
 		public String texto;
 	}
 
-	public class ProcessoNumeroCotarPostResponse implements ISwaggerResponse {
+	public class ProcessoNumeroCotaPrevisaoPdfPostResponse implements ISwaggerResponse {
+		public String jwt;
+	}
+
+	public interface IProcessoNumeroCotaPrevisaoPdfPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
+				throws Exception;
+	}
+
+	public class ProcessoNumeroCotaEnviarPostRequest implements ISwaggerRequest {
+		public String numero;
+		public String orgao;
+		public String nivelsigilo;
+		public String texto;
+	}
+
+	public class ProcessoNumeroCotaEnviarPostResponse implements ISwaggerResponse {
 		public String status;
 	}
 
-	public interface IProcessoNumeroCotarPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroCotarPostRequest req, ProcessoNumeroCotarPostResponse resp) throws Exception;
+	public interface IProcessoNumeroCotaEnviarPost extends ISwaggerMethod {
+		public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {

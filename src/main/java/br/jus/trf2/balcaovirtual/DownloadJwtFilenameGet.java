@@ -26,15 +26,24 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	@Override
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
+		String username = (String) map.get("username");
+		String name = (String) map.get("name");
 		String file = (String) map.get("file");
 		String numProc = (String) map.get("proc");
 		String numDoc = (String) map.get("doc");
 		String orgao = (String) map.get("orgao");
 		String type = (String) map.get("typ");
+		String text = (String) map.get("text");
 		String disposition = "attachment".equals(req.disposition) ? "attachment" : "inline";
 		if (!"download".equals(type))
 			throw new Exception("Tipo de token JWT inválido");
-		if (file != null && file.equals("avisos-pendentes.xml")) {
+		if (text != null) {
+			byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(name, numProc, text);
+			resp.contentdisposition = "inline";
+			resp.contentlength = (long) pdf.length;
+			resp.contenttype = "application/pdf";
+			resp.inputstream = new ByteArrayInputStream(pdf);
+		} else if (file != null && file.equals("avisos-pendentes.xml")) {
 			// Processo completo
 			Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse>> future = SwaggerCall
 					.callAsync("obter XML de avisos", "Bearer " + req.jwt, "GET",
@@ -86,8 +95,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		return map;
 	}
 
-	public static String jwt(String origin, String username, String orgao, String processo, String documento,
-			String arquivo) {
+	public static String jwt(String origin, String username, String nome, String orgao, String processo,
+			String documento, String arquivo, String texto) {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h
@@ -103,6 +112,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		if (origin != null)
 			claims.put("origin", origin);
 		claims.put("username", username);
+		if (nome != null)
+			claims.put("name", nome);
 		if (orgao != null)
 			claims.put("orgao", orgao);
 		if (processo != null)
@@ -111,6 +122,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			claims.put("doc", documento);
 		if (arquivo != null)
 			claims.put("file", arquivo);
+		if (texto != null)
+			claims.put("text", texto);
 		claims.put("typ", "download");
 
 		final String jwt = signer.sign(claims);
