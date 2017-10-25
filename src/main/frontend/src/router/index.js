@@ -8,6 +8,7 @@ import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
 import AvisoLista from '@/components/AvisoLista'
 import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
 import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
+import EtiquetaLista from '@/components/EtiquetaLista'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
@@ -47,6 +48,11 @@ export default new Router({
       path: '/processo-lista',
       name: 'Lista de Processos',
       component: ProcessoLista
+    },
+    {
+      path: '/etiqueta-lista',
+      name: 'Lista de Etiquetas',
+      component: EtiquetaLista
     },
     {
       path: '/peticao-inicial',
