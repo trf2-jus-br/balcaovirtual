@@ -129,6 +129,8 @@ public class Utils {
 	}
 
 	public static Date parsearDataHoraMinuto(String s) {
+		if (s == null)
+			return null;
 		DateTime dt = DateTime.parse(s, dtfBRHHMM);
 		return dt.toDate();
 	}
