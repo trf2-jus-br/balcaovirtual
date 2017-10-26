@@ -9,6 +9,7 @@ import AvisoLista from '@/components/AvisoLista'
 import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
 import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
 import EtiquetaLista from '@/components/EtiquetaLista'
+import Mesa from '@/components/Mesa'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
@@ -68,6 +69,11 @@ export default new Router({
       path: '/aviso-lista',
       name: 'Lista de Avisos',
       component: AvisoLista
+    },
+    {
+      path: '/mesa',
+      name: 'Mesa',
+      component: Mesa
     },
     {
       path: '/aviso-confirmado-recentes',

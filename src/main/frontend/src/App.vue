@@ -35,6 +35,9 @@
                 <li class="nav-item" v-if="!jwt.origin">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação</router-link>
                 </li>
+                <li class="nav-item" v-if="!!jwt.origin &amp;&amp; test.properties['balcaovirtual.env'] !== 'prod'">
+                  <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Mesa</router-link>
+                </li>
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Sugestões'}" tag="a">Sugestões</router-link>
                 </li>
