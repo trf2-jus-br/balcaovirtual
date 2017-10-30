@@ -89,6 +89,33 @@ public class Utils {
 		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
 	}
 
+	public static String getAssijusEndpoint() {
+		try {
+			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.endpoint",
+					"Não foi configurada a URL do Assijus", false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+	}
+
+	public static String getAssijusSystemMovimentos() {
+		try {
+			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.system.movimentos",
+					"Não foi configurada o sistema de movimentos do Assijus", false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+	}
+
+	public static String getAssijusSystemExpedientes() {
+		try {
+			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.system.expedientes",
+					"Não foi configurada o sistema de expedientes do Assijus", false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+	}
+
 	/**
 	 * Remove os acentos da string
 	 * 
@@ -141,6 +168,15 @@ public class Utils {
 		DateTime dt = new DateTime(d.getTime());
 		return dt.toString(dtfBR);
 
+	}
+
+	private static final DateTimeFormatter dtfJPHHMMSS = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+	public static Date parsearDataHoraFormatoJapones(String s) {
+		if (s == null)
+			return null;
+		DateTime dt = DateTime.parse(s, dtfJPHHMMSS);
+		return dt.toDate();
 	}
 
 	public static String formatarNumeroProcesso(String numProc) {

@@ -23,7 +23,7 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Processos'}" tag="a" exact>Processos</router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod'">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Etiquetas'}" tag="a" exact>Etiquetas</router-link>
                 </li>
                 <li class="nav-item" v-if="!jwt.origin &amp;&amp; false">

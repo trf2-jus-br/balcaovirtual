@@ -44,6 +44,10 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			super.addProperty(new PublicProperty("balcaovirtual." + s.toLowerCase() + ".cota.tipo"));
 		}
 
+		super.addProperty(new PublicProperty("balcaovirtual.assijus.endpoint"));
+		super.addProperty(new PublicProperty("balcaovirtual.assijus.system.expedientes"));
+		super.addProperty(new PublicProperty("balcaovirtual.assijus.system.movimentos"));
+
 		super.addProperty(new PrivateProperty("balcaovirtual.jwt.secret"));
 		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.final"));
 		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.temp"));
@@ -64,7 +68,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			String testsite;
 
 			HttpGetDependency(String service, String testsite, boolean partial, long msMin, long msMax) {
-				super("rest webservice", service, partial, msMin, msMax);
+				super("rest", service, partial, msMin, msMax);
 				this.testsite = testsite;
 			}
 
@@ -116,7 +120,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		String[] systems = Utils.getOrgaos().split(",");
 		for (final String system : systems) {
-			addDependency(new TestableDependency("soap webservice", "mni-" + system.toLowerCase(), false, 0, 10000) {
+			addDependency(new TestableDependency("soap", "mni-" + system.toLowerCase(), false, 0, 10000) {
 
 				@Override
 				public String getUrl() {

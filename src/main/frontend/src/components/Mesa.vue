@@ -19,7 +19,7 @@
           </div>
           <select id="mesa" class="form-control" v-model="mesa" @change="selecionarMesa" name="mesa">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="i in mesas" :value="i.id">{{i.nome}}</option>
+            <option v-for="i in mesas" :value="i">{{i.nome}}</option>
           </select>
         </div>
       </div>
@@ -32,9 +32,9 @@
         </div>
       </div>
       <div class="col-sm-auto ml-auto">
-        <button type="button" @click="criar()" class="btn btn-primary ml-1" title="">
-          Assinar&nbsp;&nbsp
-          <span class="badge badge-pill badge-warning">{{filtradosEMarcados.length}}</span>
+        <button type="button" @click="assinarDocumentos()" class="btn btn-primary ml-1" title="">
+          <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp
+          <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
         </button>
       </div>
     </div>
@@ -57,11 +57,10 @@
               </th>
               <th>Documento</th>
               <th>Processo</th>
-              <th>Situação</th>
               <th>Motivo</th>
               <th>Origem</th>
               <th>Data/Hora</th>
-              <th style="text-align: center"></th>
+              <th>Situação</th>
             </tr>
           </thead>
           <tbody>
@@ -69,29 +68,30 @@
               <td style="text-align: center">
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
               </td>
-              <td>{{f.documento}}</td>
               <td>
+                <span v-if="!f.docid">{{f.documento}}</span>
+
+                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f)">{{f.docdescr}}</a>
+
+                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f, 'attachment')">
+                  <span class="fa fa-download icone-em-linha"></span>
+                </a>
+
+                <a href="" v-if="f.docid" @click.prevent="assinarDocumento(f)">
+                  <span class="fa fa-certificate icone-em-linha" title="Assinar Digitalmente"></span>
+                </a>
+              </td>
+              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">
                 <span class="unbreakable">
                   <router-link :to="{name: 'Processo', params: {numero: f.processo}}" target="_blank">{{f.processoFormatado}}</router-link>
                 </span>
               </td>
-              <td>{{f.situacao}}
+              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.motivo}}</td>
+              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.responsavel}}</td>
+              <td class="td-middle" v-if="f.rows" :rowspan="f.rows" v-html="f.dataentradaFormatada"></td>
+              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.situacao}}
                 <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
                 </span>
-              </td>
-              <td>{{f.motivo}}</td>
-              <td>{{f.origem}}</td>
-              <td>{{f.datahora}}</td>
-              <td align="right">
-                <a href="" @click.prevent="acrescentar(f)">
-                  <span class="fa fa-certificate icone-em-linha" title="Assinar Digitalmente"></span>
-                </a>
-                <a v-if="f.quantidade > 0" href="" @click.prevent="subtrair(f)">
-                  <span class="fa fa-minus icone-em-linha"></span>
-                </a>
-                <a v-if="f.quantidade > 0" href="" @click.prevent="editar(f)">
-                  <span class="fa fa-pencil icone-em-linha"></span>
-                </a>
               </td>
             </tr>
           </tbody>
@@ -133,12 +133,29 @@ export default {
     filtrados: function () {
       var a = this.lista
       a = UtilsBL.filtrarPorSubstring(a, this.filtro)
+      var procnum, procline
+      for (var i = 0; i < a.length; i++) {
+        if (procnum !== a[i].processo) {
+          procnum = a[i].processo
+          procline = i
+          a[i].rows = 1
+        } else {
+          a[procline].rows++
+          a[i].rows = 0
+        }
+      }
       return a
     },
 
     filtradosEMarcados: function () {
       return this.filtrados.filter(function (item) {
         return item.checked
+      })
+    },
+
+    filtradosEMarcadosEAssinaveis: function () {
+      return this.filtrados.filter(function (item) {
+        return item.docid
       })
     }
   },
@@ -149,64 +166,51 @@ export default {
         response => {
           var list = response.data.list
           for (var i = 0; i < list.length; i++) {
-            this.mesas.push({ id: list[1].id, nome: list[i].nome })
+            var m = list[i]
+            this.mesas.push({ id: m.id, nome: m.nome })
           }
-        },
-        error => {
-          this.mesas.push({
-            id: '1',
-            nome: 'Balcão de Entrada - 12VF'
-          })
-          this.mesas.push({
-            id: '2',
-            nome: 'Gabinete - 12VF'
-          })
-          this.mesa = '1'
-          this.selecionarMesa()
-          /* UtilsBL.errormsg(error, this) */
-          return error
-        }
+          if (this.mesas.length > 0) {
+            this.mesa = this.mesas[0]
+            this.selecionarMesa()
+          }
+        }, error => UtilsBL.errormsg(error, this)
       )
     },
 
     selecionarMesa: function () {
-      this.$http.get('mesa/' + this.mesa, { block: true }).then(
+      console.log('mesa', this.mesa)
+      this.$http.get('mesa/' + this.mesa.id, { block: true }).then(
         response => {
+          this.lista.length = 0
           var list = response.data.list
           for (var i = 0; i < list.length; i++) {
-            this.lista.push(this.fixItem(list[1]))
+            this.lista.push(this.fixItem(list[i]))
           }
-        },
-        error => {
-          this.lista.push(this.fixItem({
-            datahora: '1968-12-16T10:00:00',
-            processo: '00996027720164025151',
-            documento: '2017.3000.000017-1',
-            motivo: 'Novo Documento Cadastrado',
-            situacao: 'Aguardando',
-            origem: 'jrjtah'
-          }))
-          // UtilsBL.errormsg(error, this)
-          return error
-        }
+        }, error => UtilsBL.errormsg(error, this)
       )
     },
 
     fixItem: function (item) {
       UtilsBL.applyDefauts(item, {
+        rows: 1,
         checked: true,
         disabled: false,
-        datahora: undefined,
+        dataentrada: undefined,
+        dataentradaFormatada: undefined,
+        doccode: undefined,
+        documento: undefined,
         processo: undefined,
         processoFormatado: undefined,
-        documento: undefined,
         motivo: undefined,
         situacao: undefined,
-        origem: undefined,
+        responsavel: undefined,
         errormsg: undefined
       })
       if (item.processo !== undefined) {
         item.processoFormatado = ProcessoBL.formatarProcesso(item.processo)
+      }
+      if (item.dataentrada !== undefined) {
+        item.dataentradaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(item.dataentrada)
       }
       return item
     },
@@ -217,6 +221,87 @@ export default {
         var doc = docs[i]
         doc.checked = this.todos
       }
+    },
+
+    mostrarDocumento: function (item, disposition) {
+      var form = document.createElement('form')
+      form.action = this.$parent.test.properties['balcaovirtual.assijus.endpoint'] + '/api/v1/view' +
+        (disposition === 'attachment' ? '?disposition=attachment' : '')
+      form.method = 'POST'
+      form.target = '_blank'
+      form.style.display = 'none'
+
+      var cpf = document.createElement('input')
+      cpf.type = 'text'
+      cpf.name = 'cpf'
+      cpf.value = this.$parent.jwt.cpf
+
+      var system = document.createElement('input')
+      system.type = 'text'
+      system.name = 'system'
+      system.value = item.docsystem
+
+      var docid = document.createElement('input')
+      docid.type = 'text'
+      docid.name = 'id'
+      docid.value = item.docid
+
+      var docsecret = document.createElement('input')
+      docsecret.type = 'text'
+      docsecret.name = 'secret'
+      docsecret.value = item.docsecret
+
+      var submit = document.createElement('input')
+      submit.type = 'submit'
+      submit.id = 'submitView'
+
+      form.appendChild(cpf)
+      form.appendChild(system)
+      form.appendChild(docid)
+      form.appendChild(docsecret)
+      form.appendChild(submit)
+      document.body.appendChild(form)
+
+      /* global $ */
+      $('#submitView').click()
+
+      document.body.removeChild(form)
+    },
+
+    criarAssinavel: function (item) {
+      return {
+        id: item.docid,
+        system: item.docsystem,
+        code: item.doccode,
+        descr: item.docdescr,
+        kind: item.dockind,
+        origin: 'Balcão Virtual'
+      }
+    },
+
+    assinarDocumento: function (item) {
+      this.chamarAssijus([this.criarAssinavel(item)])
+    },
+
+    assinarDocumentos: function () {
+      var list = []
+      for (var i = 0; i < this.filtradosEMarcadosEAssinaveis.length; i++) {
+        list.push(this.criarAssinavel(this.filtradosEMarcadosEAssinaveis[i]))
+      }
+      if (list.length > 0) this.chamarAssijus(list)
+    },
+
+    chamarAssijus: function (list) {
+      var json = JSON.stringify({ list: list })
+      this.$http.post(this.$parent.test.properties['balcaovirtual.assijus.endpoint'] + '/api/v1/store', { payload: json }, { block: true }).then(
+        response => {
+          var callback = window.location.href + ''
+          console.log(callback)
+          window.location.href = this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
+            '/?endpointautostart=true&endpointlistkey=' + response.data.key +
+            '&endpointcallback=' + encodeURI(callback).replace('#', '__hashsign__')
+        },
+        error => UtilsBL.errormsg(error, this))
     },
 
     editar: function () {
@@ -247,5 +332,9 @@ export default {
 <style scoped>
 .destaque {
   color: red;
+}
+
+.td-middle {
+  vertical-align: middle;
 }
 </style>

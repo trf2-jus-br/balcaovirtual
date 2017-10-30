@@ -221,6 +221,28 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
+  /usuario-web/{username}/aviso-confirmado/contar:
+    get:
+      description: Listar a quantidade de avisos confirmados nos últimos dias
+      tags: [aviso]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/dias"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/QuantidadeConfirmada"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
 
   /usuario-web/{username}/peticao-intercorrente/contar:
     get:
@@ -289,6 +311,101 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
+  /usuario/{username}/mesas:
+    get:
+      description: Obter mesas virtuais
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Mesa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /usuario/{username}/local/{id}/mesa/{id2}/documentos:
+    get:
+      description: Obter documentos em mesa virtual
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/MesaDocumento"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /usuario/{username}/local/{id}/mesa/{id2}/movimentos:
+    get:
+      description: Obter documentos em mesa virtual
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/MesaMovimento"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /usuario/{username}/local/{id}/mesa/{id2}/expedientes:
+    get:
+      description: Obter documentos em mesa virtual
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/MesaExpediente"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+
 
   /classe-cnj/{id}:
     get:
@@ -481,6 +598,21 @@ definitions:
         type: string
       quantidade:
         type: string
+        
+  QuantidadeConfirmada:
+    description: Data e quantidade de avisos confirmados
+    type: object
+    properties:
+      data:
+        type: string
+      quantidadeDoUsuarioPorConfirmacao:
+        type: string
+      quantidadeDoUsuarioPorOmissao:
+        type: string
+      quantidadeDoGrupoPorConfirmacao:
+        type: string
+      quantidadeDoGrupoPorOmissao:
+        type: string
 
   PeticaoIntercorrente:
     description: Petição intercorrente
@@ -497,6 +629,72 @@ definitions:
       unidade:
         type: string
       orgao:
+        type: string
+
+  Mesa:
+    description: Mesa virtual
+    type: object
+    properties:
+      orgao:
+        type: string
+      idlocal:
+        type: string
+      idmesa:
+        type: string
+      nome:
+        type: string
+
+  MesaDocumento:
+    description: Mesa virtual
+    type: object
+    properties:
+      datadeentrada:
+        type: string
+      numerodoprocesso:
+        type: string
+      numerododocumento:
+        type: string
+      motivo:
+        type: string
+      situacao:
+        type: string
+      usuarioinclusao:
+        type: string
+
+  MesaMovimento:
+    description: Mesa virtual
+    type: object
+    properties:
+      coddoc:
+        type: string
+      segredo:
+        type: string
+      numerodoprocesso:
+        type: string
+      ato:
+        type: string
+      motivo:
+        type: string
+      datahoramovimento:
+        type: string
+      codsecao:
+        type: string
+
+  MesaExpediente:
+    description: Mesa virtual
+    type: object
+    properties:
+      codsecao:
+        type: string
+      coddoc:
+        type: string
+      numerododocumento:
+        type: string
+      numerodoprocesso:
+        type: string
+      segredo:
+        type: string
+      descr:
         type: string
 
   Numero:

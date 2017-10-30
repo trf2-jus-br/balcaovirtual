@@ -11,6 +11,8 @@ consumes: [application/json]
 produces: [application/json]
 
 tags:
+  - name: mesa
+    description: Mesa Virtual
   - name: consulta
     description: Consulta Processual
   - name: peticionamento
@@ -1096,6 +1098,48 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /mesa:
+    get:
+      description: Listar as mesas virtuais disponíveis
+      tags: [mesa]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Mesa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /mesa/{id}:
+    get:
+      description: Listar os documentos na mesa virtual
+      tags: [mesa]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Documento"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /classe/{id}:
     get:
       description: Obter dados de uma classe pela id
@@ -1209,6 +1253,15 @@ definitions:
       nome:
         type: string
 
+  Mesa:
+    description: Mesa Virtual
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+
   Numero:
     description: Número do processo
     type: string
@@ -1284,13 +1337,13 @@ definitions:
     properties:
       data:
         type: string
-      quantidadeDoUsuarioPorConfirmacao:
+      quantidadedousuarioporconfirmacao:
         type: string
-      quantidadeDoUsuarioPorOmissao:
+      quantidadedousuarioporomissao:
         type: string
-      quantidadeDoGrupoPorConfirmacao:
+      quantidadedogrupoporconfirmacao:
         type: string
-      quantidadeDoGrupoPorOmissao:
+      quantidadedogrupoporomissao:
         type: string
 
   PeticaoIntercorrenteResumo:
@@ -1400,6 +1453,38 @@ definitions:
       nomeusuario:
         type: string
       dataalteracao:
+        type: string
+        format: date-time
+        
+  Documento:
+    description: Documento na mesa de trabalho
+    type: object
+    properties:
+      docsystem:
+        type: string
+      docid:
+        type: string
+      docsecret:
+        type: string
+      doccode:
+        type: string
+      docdescr:
+        type: string
+      dockind:
+        type: string
+      docorigin:
+        type: string
+      documento:
+        type: string
+      processo:
+        type: string
+      motivo:
+        type: string
+      situacao:
+        type: string
+      responsavel:
+        type: string
+      dataentrada:
         type: string
         format: date-time
         

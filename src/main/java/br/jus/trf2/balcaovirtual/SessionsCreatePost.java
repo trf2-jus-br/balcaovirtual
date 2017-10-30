@@ -109,6 +109,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		String email;
 		String nome;
 		String usuario;
+		String cpf;
 		Map<String, UsuarioDetalhe> usuarios;
 
 		boolean isInterno() {
@@ -123,6 +124,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		u.origem = (String) jwt.get("origin");
 		u.email = (String) jwt.get("email");
 		u.nome = (String) jwt.get("name");
+		u.cpf = (String) jwt.get("cpf");
 		u.usuario = (String) jwt.get("username");
 		String users = (String) jwt.get("users");
 		if (users != null && users.length() > 0) {

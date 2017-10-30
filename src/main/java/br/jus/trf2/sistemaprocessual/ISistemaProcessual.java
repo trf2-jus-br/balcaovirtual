@@ -1,7 +1,6 @@
 package br.jus.trf2.sistemaprocessual;
 
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
@@ -59,6 +58,14 @@ public interface ISistemaProcessual {
 		public String quantidade;
 	}
 
+	public class QuantidadeConfirmada implements ISwaggerModel {
+		public String data;
+		public String quantidadeDoUsuarioPorConfirmacao;
+		public String quantidadeDoUsuarioPorOmissao;
+		public String quantidadeDoGrupoPorConfirmacao;
+		public String quantidadeDoGrupoPorOmissao;
+	}
+
 	public class PeticaoIntercorrente implements ISwaggerModel {
 		public String processo;
 		public String protocolo;
@@ -66,6 +73,41 @@ public interface ISistemaProcessual {
 		public String classe;
 		public String unidade;
 		public String orgao;
+	}
+
+	public class Mesa implements ISwaggerModel {
+		public String orgao;
+		public String idlocal;
+		public String idmesa;
+		public String nome;
+	}
+
+	public class MesaDocumento implements ISwaggerModel {
+		public String datadeentrada;
+		public String numerodoprocesso;
+		public String numerododocumento;
+		public String motivo;
+		public String situacao;
+		public String usuarioinclusao;
+	}
+
+	public class MesaMovimento implements ISwaggerModel {
+		public String coddoc;
+		public String segredo;
+		public String numerodoprocesso;
+		public String ato;
+		public String motivo;
+		public String datahoramovimento;
+		public String codsecao;
+	}
+
+	public class MesaExpediente implements ISwaggerModel {
+		public String codsecao;
+		public String coddoc;
+		public String numerododocumento;
+		public String numerodoprocesso;
+		public String segredo;
+		public String descr;
 	}
 
 	public class Numero implements ISwaggerModel {
@@ -111,6 +153,9 @@ public interface ISistemaProcessual {
 	}
 
 	public class CDAs implements ISwaggerModel {
+	}
+
+	public class DataUltimoMovimento implements ISwaggerModel {
 	}
 
 	public class Error implements ISwaggerModel {
@@ -272,6 +317,20 @@ public interface ISistemaProcessual {
 		public void run(UsuarioWebUsernameGetRequest req, UsuarioWebUsernameGetResponse resp) throws Exception;
 	}
 
+	public class UsuarioWebUsernameAvisoConfirmadoContarGetRequest implements ISwaggerRequest {
+		public String username;
+		public String dias;
+	}
+
+	public class UsuarioWebUsernameAvisoConfirmadoContarGetResponse implements ISwaggerResponse {
+		public List<QuantidadeConfirmada> list;
+	}
+
+	public interface IUsuarioWebUsernameAvisoConfirmadoContarGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernameAvisoConfirmadoContarGetRequest req,
+				UsuarioWebUsernameAvisoConfirmadoContarGetResponse resp) throws Exception;
+	}
+
 	public class UsuarioWebUsernamePeticaoIntercorrenteContarGetRequest implements ISwaggerRequest {
 		public String username;
 		public String dias;
@@ -347,6 +406,66 @@ public interface ISistemaProcessual {
 	public interface IUsuarioWebUsernameAvisoPendenteExportarGet extends ISwaggerMethod {
 		public void run(UsuarioWebUsernameAvisoPendenteExportarGetRequest req,
 				UsuarioWebUsernameAvisoPendenteExportarGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioUsernameMesasGetRequest implements ISwaggerRequest {
+		public String username;
+	}
+
+	public class UsuarioUsernameMesasGetResponse implements ISwaggerResponse {
+		public List<Mesa> list;
+	}
+
+	public interface IUsuarioUsernameMesasGet extends ISwaggerMethod {
+		public void run(UsuarioUsernameMesasGetRequest req, UsuarioUsernameMesasGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2DocumentosGetRequest implements ISwaggerRequest {
+		public String username;
+		public String id;
+		public String id2;
+		public String orgao;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2DocumentosGetResponse implements ISwaggerResponse {
+		public List<MesaDocumento> list;
+	}
+
+	public interface IUsuarioUsernameLocalIdMesaId2DocumentosGet extends ISwaggerMethod {
+		public void run(UsuarioUsernameLocalIdMesaId2DocumentosGetRequest req,
+				UsuarioUsernameLocalIdMesaId2DocumentosGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2MovimentosGetRequest implements ISwaggerRequest {
+		public String username;
+		public String id;
+		public String id2;
+		public String orgao;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2MovimentosGetResponse implements ISwaggerResponse {
+		public List<MesaMovimento> list;
+	}
+
+	public interface IUsuarioUsernameLocalIdMesaId2MovimentosGet extends ISwaggerMethod {
+		public void run(UsuarioUsernameLocalIdMesaId2MovimentosGetRequest req,
+				UsuarioUsernameLocalIdMesaId2MovimentosGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2ExpedientesGetRequest implements ISwaggerRequest {
+		public String username;
+		public String id;
+		public String id2;
+		public String orgao;
+	}
+
+	public class UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse implements ISwaggerResponse {
+		public List<MesaExpediente> list;
+	}
+
+	public interface IUsuarioUsernameLocalIdMesaId2ExpedientesGet extends ISwaggerMethod {
+		public void run(UsuarioUsernameLocalIdMesaId2ExpedientesGetRequest req,
+				UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse resp) throws Exception;
 	}
 
 	public class ClasseCnjIdGetRequest implements ISwaggerRequest {

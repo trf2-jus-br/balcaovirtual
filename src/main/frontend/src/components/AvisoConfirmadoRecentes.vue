@@ -4,6 +4,12 @@
       <div class="col-md-12">
         <h4 class="text-center mt-3 mb-3">Intimações/Citações Confirmadas Recentemente</h4>
       </div>
+
+      <div class="col col-sm-12" v-if="errormsg">
+        <p class="alert alert-danger">
+          <strong>Erro!</strong> {{errormsg}}
+        </p>
+      </div>
     </div>
 
     <!-- QUANTIDADE POR DATA -->
@@ -29,28 +35,25 @@
                 <span v-html="p.dataFormatada"></span>
               </td>
               <td style="text-align: center;">
-                <a href="" @click.prevent="listar(p.data, true, false, false)">{{p.quantidadeDoUsuarioPorConfirmacao}}</a>
+                <a href="" @click.prevent="listar(p.data, true, false, false)">{{p.quantidadedousuarioporconfirmacao}}</a>
               </td>
               <td style="text-align: center;">
-                <a href="" @click.prevent="listar(p.data, false, true, false)">{{p.quantidadeDoUsuarioPorOmissao}}</a>
+                <a href="" @click.prevent="listar(p.data, false, true, false)">{{p.quantidadedousuarioporomissao}}</a>
               </td>
               <td style="text-align: center;">
-                <a href="" @click.prevent="listar(p.data, true, false, true)">{{p.quantidadeDoGrupoPorConfirmacao}}</a>
+                <a href="" @click.prevent="listar(p.data, true, false, true)">{{p.quantidadedogrupoporconfirmacao}}</a>
               </td>
               <td style="text-align: center;">
-                <a href="" @click.prevent="listar(p.data, false, true, true)">{{p.quantidadeDoGrupoPorOmissao}}</a>
+                <a href="" @click.prevent="listar(p.data, false, true, true)">{{p.quantidadedogrupoporomissao}}</a>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col col-sm-12" v-if="quantidadePorData.length == 0">
+      <div class="col col-sm-12" v-if="!errormsg &amp;&amp; quantidadePorData.length == 0">
         <p class="alert alert-warning">
           <strong>Atenção!</strong> Nenhuma intimação/citação confirmada nos últimos 7 dias.
         </p>
-      </div>
-      <div class="col-sm-12" style="padding-top: 1em;">
-        <button type="button" @click="pesquisaAvancada()" v-if="quantidadePorData !== undefined" class="btn btn-success d-print-none">Pesquisa Avançada</button>
       </div>
     </div>
   </div>
@@ -58,7 +61,6 @@
 
 <script>
 import UtilsBL from '../bl/utils.js'
-import { Bus } from '../bl/bus.js'
 
 export default {
   name: 'aviso-confirmado-recentes',
@@ -71,16 +73,14 @@ export default {
           qd.dataFormatada = UtilsBL.formatDDMMYYYY(qd.data)
           this.quantidadePorData.push(qd)
         }
-      }, error => {
-        console.log(error)
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
+      }, error => UtilsBL.errormsg(error, this))
     })
   },
 
   data () {
     return {
-      quantidadePorData: []
+      quantidadePorData: [],
+      errormsg: undefined
     }
   },
 

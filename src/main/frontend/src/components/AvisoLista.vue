@@ -34,12 +34,8 @@
           <div class="btn-group btn-block" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <!--
-                                                                              <a class="dropdown-item" @click="carregarConfirmadosRecentemente()">Consultar Confirmados
-                                                                              </a>
-                                                                              -->
-              <a class="dropdown-item" @click="exportarXML()">Exportar XML
-              </a>
+              <router-link class="dropdown-item" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'" :to="{name:'Avisos Confirmados Recentemente'}" tag="a" exact>Consultar Confirmados</router-link>
+              <a class="dropdown-item" @click="exportarXML()">Exportar XML</a>
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
             </div>
           </div>

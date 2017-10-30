@@ -43,6 +43,11 @@ public interface IBalcaoVirtual {
 		public String nome;
 	}
 
+	public class Mesa implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
 	public class Numero implements ISwaggerModel {
 	}
 
@@ -89,10 +94,10 @@ public interface IBalcaoVirtual {
 
 	public class QuantidadeConfirmadaPorData implements ISwaggerModel {
 		public String data;
-		public String quantidadeDoUsuarioPorConfirmacao;
-		public String quantidadeDoUsuarioPorOmissao;
-		public String quantidadeDoGrupoPorConfirmacao;
-		public String quantidadeDoGrupoPorOmissao;
+		public String quantidadedousuarioporconfirmacao;
+		public String quantidadedousuarioporomissao;
+		public String quantidadedogrupoporconfirmacao;
+		public String quantidadedogrupoporomissao;
 	}
 
 	public class PeticaoIntercorrenteResumo implements ISwaggerModel {
@@ -149,6 +154,22 @@ public interface IBalcaoVirtual {
 		public Boolean pessoal;
 		public String nomeusuario;
 		public Date dataalteracao;
+	}
+
+	public class Documento implements ISwaggerModel {
+		public String docsystem;
+		public String docid;
+		public String docsecret;
+		public String doccode;
+		public String docdescr;
+		public String dockind;
+		public String docorigin;
+		public String documento;
+		public String processo;
+		public String motivo;
+		public String situacao;
+		public String responsavel;
+		public Date dataentrada;
 	}
 
 	public class Marcador implements ISwaggerModel {
@@ -766,6 +787,30 @@ public interface IBalcaoVirtual {
 
 	public interface IAvisoConfirmadoListarGet extends ISwaggerMethod {
 		public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception;
+	}
+
+	public class MesaGetRequest implements ISwaggerRequest {
+	}
+
+	public class MesaGetResponse implements ISwaggerResponse {
+		public List<Mesa> list;
+	}
+
+	public interface IMesaGet extends ISwaggerMethod {
+		public void run(MesaGetRequest req, MesaGetResponse resp) throws Exception;
+	}
+
+	public class MesaIdGetRequest implements ISwaggerRequest {
+		public String id;
+		public String orgao;
+	}
+
+	public class MesaIdGetResponse implements ISwaggerResponse {
+		public List<Documento> list;
+	}
+
+	public interface IMesaIdGet extends ISwaggerMethod {
+		public void run(MesaIdGetRequest req, MesaIdGetResponse resp) throws Exception;
 	}
 
 	public class ClasseIdGetRequest implements ISwaggerRequest {
