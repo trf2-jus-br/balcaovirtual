@@ -1395,6 +1395,7 @@ definitions:
         type: string
       dataaviso:
         type: string
+        format: date-time
       tipo:
         type: string
       processo:
@@ -1423,10 +1424,12 @@ definitions:
         type: string
       datalimiteintimacaoautomatica:
         type: string
+        format: date-time
       assunto:
         type: string
       dataconfirmacao:
         type: string
+        format: date-time
       usuarioconfirmacao:
         type: string
 

@@ -158,6 +158,28 @@ public interface ISistemaProcessual {
 	public class DataUltimoMovimento implements ISwaggerModel {
 	}
 
+	public class Aviso implements ISwaggerModel {
+		public String idAviso;
+		public String dataAviso;
+		public String tipo;
+		public String processo;
+		public String unidade;
+		public String unidadeNome;
+		public String unidadeTipo;
+		public String orgao;
+		public String localidade;
+		public String teor;
+		public String eventoIntimacao;
+		public String motivoIntimacao;
+		public String numeroPrazo;
+		public String tipoPrazo;
+		public String multiplicadorPrazo;
+		public String dataLimiteIntimacaoAutomatica;
+		public String assunto;
+		public String dataConfirmacao;
+		public String usuarioConfirmacao;
+	}
+
 	public class Error implements ISwaggerModel {
 		public String error;
 	}
@@ -329,6 +351,24 @@ public interface ISistemaProcessual {
 	public interface IUsuarioWebUsernameAvisoConfirmadoContarGet extends ISwaggerMethod {
 		public void run(UsuarioWebUsernameAvisoConfirmadoContarGetRequest req,
 				UsuarioWebUsernameAvisoConfirmadoContarGetResponse resp) throws Exception;
+	}
+
+	public class UsuarioWebUsernameAvisoConfirmadoListarGetRequest implements ISwaggerRequest {
+		public String username;
+		public String dataInicial;
+		public String dataFinal;
+		public Boolean confirmacao;
+		public Boolean omissao;
+		public Boolean grupo;
+	}
+
+	public class UsuarioWebUsernameAvisoConfirmadoListarGetResponse implements ISwaggerResponse {
+		public List<Aviso> list;
+	}
+
+	public interface IUsuarioWebUsernameAvisoConfirmadoListarGet extends ISwaggerMethod {
+		public void run(UsuarioWebUsernameAvisoConfirmadoListarGetRequest req,
+				UsuarioWebUsernameAvisoConfirmadoListarGetResponse resp) throws Exception;
 	}
 
 	public class UsuarioWebUsernamePeticaoIntercorrenteContarGetRequest implements ISwaggerRequest {

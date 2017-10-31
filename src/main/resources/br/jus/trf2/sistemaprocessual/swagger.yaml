@@ -244,6 +244,32 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /usuario-web/{username}/aviso-confirmado/listar:
+    get:
+      description: Listar os avisos confirmados
+      tags: [aviso]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/dataInicial"
+        - $ref: "#/parameters/dataFinal"
+        - $ref: "#/parameters/confirmacao"
+        - $ref: "#/parameters/omissao"
+        - $ref: "#/parameters/grupo"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Aviso"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /usuario-web/{username}/peticao-intercorrente/contar:
     get:
       description: Validar o número do processo
@@ -492,6 +518,36 @@ parameters:
     description: Data a ser consultada
     required: true
     type: string
+  dataInicial:
+    name: dataInicial
+    in: query
+    description: Data inicial
+    required: true
+    type: string
+  dataFinal:
+    name: dataFinal
+    in: query
+    description: Data final
+    required: true
+    type: string
+  confirmacao:
+    name: confirmacao
+    in: query
+    description: Por confirmação
+    required: true
+    type: boolean
+  omissao:
+    name: omissao
+    in: query
+    description: Por omissão
+    required: true
+    type: boolean
+  grupo:
+    name: grupo
+    in: query
+    description: Pelo grupo
+    required: true
+    type: boolean
   id:
     name: id
     in: path
@@ -771,6 +827,49 @@ definitions:
   DataUltimoMovimento:
     description: Data do último movimento do processo
     type: string
+
+  Aviso:
+    description: Aviso
+    type: object
+    properties:
+      idAviso:
+        type: string
+      dataAviso:
+        type: string
+      tipo:
+        type: string
+      processo:
+        type: string
+      unidade:
+        type: string
+      unidadeNome:
+        type: string
+      unidadeTipo:
+        type: string
+      orgao:
+        type: string
+      localidade:
+        type: string
+      teor:
+        type: string
+      eventoIntimacao:
+        type: string
+      motivoIntimacao:
+        type: string
+      numeroPrazo:
+        type: string
+      tipoPrazo:
+        type: string
+      multiplicadorPrazo:
+        type: string
+      dataLimiteIntimacaoAutomatica:
+        type: string
+      assunto:
+        type: string
+      dataConfirmacao:
+        type: string
+      usuarioConfirmacao:
+        type: string
     
   Error:
     type: object

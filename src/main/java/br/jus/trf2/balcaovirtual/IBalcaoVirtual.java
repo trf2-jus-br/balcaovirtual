@@ -111,7 +111,7 @@ public interface IBalcaoVirtual {
 
 	public class Aviso implements ISwaggerModel {
 		public String idaviso;
-		public String dataaviso;
+		public Date dataaviso;
 		public String tipo;
 		public String processo;
 		public String unidade;
@@ -125,9 +125,9 @@ public interface IBalcaoVirtual {
 		public String numeroprazo;
 		public String tipoprazo;
 		public String multiplicadorprazo;
-		public String datalimiteintimacaoautomatica;
+		public Date datalimiteintimacaoautomatica;
 		public String assunto;
-		public String dataconfirmacao;
+		public Date dataconfirmacao;
 		public String usuarioconfirmacao;
 	}
 

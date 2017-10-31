@@ -32,7 +32,7 @@
           <tbody>
             <tr v-for="p in quantidadePorData">
               <td>
-                <span v-html="p.dataFormatada"></span>
+                <span v-html="p.data"></span>
               </td>
               <td style="text-align: center;">
                 <a href="" @click.prevent="listar(p.data, true, false, false)">{{p.quantidadedousuarioporconfirmacao}}</a>
@@ -65,19 +65,22 @@ import UtilsBL from '../bl/utils.js'
 export default {
   name: 'aviso-confirmado-recentes',
 
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
-      this.$http.get('aviso-confirmado/contar', { block: true }).then(response => {
-        for (var i = 0; i < response.data.list.length; i++) {
-          var qd = response.data.list[i]
-          qd.dataFormatada = UtilsBL.formatDDMMYYYY(qd.data)
-          this.quantidadePorData.push(qd)
-        }
-      }, error => UtilsBL.errormsg(error, this))
+      this.$http.get('aviso-confirmado/contar', { block: true }).then(
+        response => {
+          for (var i = 0; i < response.data.list.length; i++) {
+            var qd = response.data.list[i]
+            // qd.dataFormatada = UtilsBL.formatDDMMYYYY(qd.data)
+            this.quantidadePorData.push(qd)
+          }
+        },
+        error => UtilsBL.errormsg(error, this)
+      )
     })
   },
 
-  data () {
+  data() {
     return {
       quantidadePorData: [],
       errormsg: undefined
@@ -85,7 +88,7 @@ export default {
   },
 
   methods: {
-    listar: function (data, porConfirmacao, porOmissao, doGrupo) {
+    listar: function(data, porConfirmacao, porOmissao, doGrupo) {
       this.$router.push({
         name: 'Lista de Avisos Confirmados',
         params: {
@@ -98,7 +101,7 @@ export default {
       })
     },
 
-    imprimir: function () {
+    imprimir: function() {
       window.print()
     }
   }

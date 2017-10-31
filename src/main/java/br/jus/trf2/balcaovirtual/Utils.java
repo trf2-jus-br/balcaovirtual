@@ -162,12 +162,33 @@ public class Utils {
 		return dt.toDate();
 	}
 
+	private static final DateTimeFormatter dtfBRHHMMSS = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+
+	public static String formatarDataHoraMinutoSegundo(Date d) {
+		DateTime dt = new DateTime(d.getTime());
+		return dt.toString(dtfBRHHMMSS);
+	}
+
+	public static Date parsearDataHoraMinutoSegundo(String s) {
+		if (s == null)
+			return null;
+		DateTime dt = DateTime.parse(s, dtfBRHHMMSS);
+		return dt.toDate();
+	}
+
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy");
 
 	public static String formatarData(Date d) {
 		DateTime dt = new DateTime(d.getTime());
 		return dt.toString(dtfBR);
 
+	}
+
+	public static Date parsearData(String s) {
+		if (s == null)
+			return null;
+		DateTime dt = DateTime.parse(s, dtfBR);
+		return dt.toDate();
 	}
 
 	private static final DateTimeFormatter dtfJPHHMMSS = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
