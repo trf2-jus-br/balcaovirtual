@@ -17,13 +17,15 @@ public class MesaGet implements IMesaGet {
 
 	@Override
 	public void run(MesaGetRequest req, MesaGetResponse resp) throws Exception {
+		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (!u.isInterno())
 			throw new Exception("Mesas só podem ser acessadas por usuários internos");
 
 		Future<SwaggerAsyncResponse<UsuarioUsernameMesasGetResponse>> future = SwaggerCall.callAsync(
-				"obter mesas virtuais", null, "GET", Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/mesas",
-				null, UsuarioUsernameMesasGetResponse.class);
+				"obter mesas virtuais", "Bearer " + authorization, "GET",
+				Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/mesas", null,
+				UsuarioUsernameMesasGetResponse.class);
 		SwaggerAsyncResponse<UsuarioUsernameMesasGetResponse> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();

@@ -175,7 +175,7 @@ public class SoapMNI {
 						break;
 					}
 					i.processo = a.getProcesso().getNumero();
-					i.dataaviso = a.getDataDisponibilizacao();
+					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
 					i.idaviso = a.getIdAviso();
 					i.orgao = orgao;
 					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
@@ -188,7 +188,7 @@ public class SoapMNI {
 						if (p.getNome().equals("tipoOrgaoJulgador"))
 							i.unidadetipo = p.getValor();
 						if (p.getNome().equals("dtLimitIntimAut"))
-							i.datalimiteintimacaoautomatica = p.getValor();
+							i.datalimiteintimacaoautomatica = Utils.parsearApoloDataHoraMinuto(p.getValor());
 						if (p.getNome().equals("eventoIntimacao"))
 							i.eventointimacao = p.getValor();
 						if (p.getNome().equals("numeroPrazo"))

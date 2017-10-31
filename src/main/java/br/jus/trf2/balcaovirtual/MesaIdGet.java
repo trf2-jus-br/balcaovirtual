@@ -23,6 +23,7 @@ public class MesaIdGet implements IMesaIdGet {
 
 	@Override
 	public void run(MesaIdGetRequest req, MesaIdGetResponse resp) throws Exception {
+		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (!u.isInterno())
 			throw new Exception("Mesas só podem ser acessadas por usuários internos");
@@ -34,7 +35,7 @@ public class MesaIdGet implements IMesaIdGet {
 		resp.list = new ArrayList<>();
 		{
 			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2DocumentosGetResponse>> future = SwaggerCall
-					.callAsync("obter documentos em mesa virtual", null, "GET",
+					.callAsync("obter documentos em mesa virtual", "Bearer " + authorization, "GET",
 							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
 									+ idmesa + "/documentos?orgao=" + orgao,
 							null, UsuarioUsernameLocalIdMesaId2DocumentosGetResponse.class);
@@ -52,7 +53,12 @@ public class MesaIdGet implements IMesaIdGet {
 				d.motivo = rd.motivo;
 				d.situacao = rd.situacao;
 				d.responsavel = rd.usuarioinclusao;
-				d.dataentrada = Utils.parsearDataHoraFormatoJapones(rd.datadeentrada);
+				d.dataentrada = Utils.parsearDataHoraFormatoJS(rd.datadeentrada);
+				if (d.documento != null && d.documento.length() > 0
+						&& (d.processo == null || d.processo.length() == 0)) {
+					d.processo = d.documento;
+					d.documento = null;
+				}
 				resp.list.add(d);
 			}
 		}
@@ -60,7 +66,7 @@ public class MesaIdGet implements IMesaIdGet {
 		// Incluir movimentos
 		{
 			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2MovimentosGetResponse>> future = SwaggerCall
-					.callAsync("obter movimentos em mesa virtual", null, "GET",
+					.callAsync("obter movimentos em mesa virtual", "Bearer " + authorization, "GET",
 							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
 									+ idmesa + "/movimentos?orgao=" + orgao,
 							null, UsuarioUsernameLocalIdMesaId2MovimentosGetResponse.class);
@@ -73,6 +79,7 @@ public class MesaIdGet implements IMesaIdGet {
 			for (MesaMovimento rm : r.list) {
 				String processo = Utils.removePontuacao(rm.numerodoprocesso);
 				for (Documento d : resp.list) {
+					System.out.println(d.processo + " - " + processo);
 					if (d.processo.equals(processo) && d.documento == null) {
 						if (d.docsystem != null) {
 							Documento nd = new Documento();
@@ -87,12 +94,14 @@ public class MesaIdGet implements IMesaIdGet {
 							d = nd;
 						}
 						d.docsystem = Utils.getAssijusSystemMovimentos();
-						d.docid = u.cpf + rm.codsecao + "_" + rm.coddoc + "_"
-								+ Utils.parsearDataHoraFormatoJapones(rm.datahoramovimento).getTime();
-						d.docsecret = rm.segredo;
+						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc + "_"
+								+ Utils.parsearDataHoraFormatoJS(rm.datahoramovimento).getTime();
+						d.docsecret = Utils.makeSecret(rm.segredo);
 						d.doccode = Utils.formatarNumeroProcesso(processo);
 						d.docdescr = rm.motivo;
 						d.dockind = rm.ato;
+						if (d.docdescr == null || d.docdescr.length() == 0)
+							d.docdescr = rm.ato;
 						break;
 					}
 				}
@@ -102,7 +111,7 @@ public class MesaIdGet implements IMesaIdGet {
 		// Incluir expedientes
 		{
 			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse>> future = SwaggerCall
-					.callAsync("obter expedientes em mesa virtual", null, "GET",
+					.callAsync("obter expedientes em mesa virtual", "Bearer " + authorization, "GET",
 							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
 									+ idmesa + "/expedientes?orgao=" + orgao,
 							null, UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse.class);
@@ -119,8 +128,8 @@ public class MesaIdGet implements IMesaIdGet {
 				for (Documento d : resp.list) {
 					if (d.processo.equals(processo) && d.documento != null && d.documento.equals(documento)) {
 						d.docsystem = Utils.getAssijusSystemExpedientes();
-						d.docid = u.cpf + rm.codsecao + "_" + rm.coddoc;
-						d.docsecret = rm.segredo;
+						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc;
+						d.docsecret = Utils.makeSecret(rm.segredo);
 						d.doccode = rm.numerododocumento;
 						d.docdescr = rm.descr;
 						d.dockind = "Expediente";
@@ -129,59 +138,60 @@ public class MesaIdGet implements IMesaIdGet {
 				}
 			}
 		}
+		if (false) {
+			{
+				Documento d = new Documento();
+				d.docsystem = Utils.getAssijusSystemMovimentos();
+				d.docid = "00489623760_51_4950827_1283805660000";
+				d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
+				d.doccode = Utils.formatarNumeroProcesso("0010021-86.2005.4.02.5167");
+				d.docdescr = "CERTIDÃO - Citação/intimação";
+				d.dockind = "Citação/intimação";
+				d.docorigin = "Apolo";
+				d.documento = "CERTIDÃO - Citação/intimação";
+				d.processo = Utils.removePontuacao("0010021-86.2005.4.02.5167");
+				d.motivo = "Pronto para ser assinado";
+				d.situacao = "Já verifiquei";
+				d.responsavel = "JRJTAH";
+				d.dataentrada = new Date();
+				resp.list.add(d);
+			}
 
-		{
-			Documento d = new Documento();
-			d.docsystem = Utils.getAssijusSystemMovimentos();
-			d.docid = "00489623760_51_4950827_1283805660000";
-			d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
-			d.doccode = Utils.formatarNumeroProcesso("0010021-86.2005.4.02.5167");
-			d.docdescr = "CERTIDÃO - Citação/intimação";
-			d.dockind = "Citação/intimação";
-			d.docorigin = "Apolo";
-			d.documento = "CERTIDÃO - Citação/intimação";
-			d.processo = Utils.removePontuacao("0010021-86.2005.4.02.5167");
-			d.motivo = "Pronto para ser assinado";
-			d.situacao = "Já verifiquei";
-			d.responsavel = "JRJTAH";
-			d.dataentrada = new Date();
-			resp.list.add(d);
-		}
+			{
+				Documento d = new Documento();
+				d.docsystem = Utils.getAssijusSystemMovimentos();
+				d.docid = "00489623760_51_4950827_1283805660000";
+				d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
+				d.doccode = Utils.formatarNumeroProcesso("0010021-86.2005.4.02.5167");
+				d.docdescr = "Teste";
+				d.dockind = "TEste";
+				d.docorigin = "Apolo";
+				d.documento = "Teste";
+				d.processo = Utils.removePontuacao("0010021-86.2005.4.02.5167");
+				d.motivo = "Pronto para ser assinado";
+				d.situacao = "Já verifiquei";
+				d.responsavel = "JRJTAH";
+				d.dataentrada = new Date();
+				resp.list.add(d);
+			}
 
-		{
-			Documento d = new Documento();
-			d.docsystem = Utils.getAssijusSystemMovimentos();
-			d.docid = "00489623760_51_4950827_1283805660000";
-			d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
-			d.doccode = Utils.formatarNumeroProcesso("0010021-86.2005.4.02.5167");
-			d.docdescr = "Teste";
-			d.dockind = "TEste";
-			d.docorigin = "Apolo";
-			d.documento = "Teste";
-			d.processo = Utils.removePontuacao("0010021-86.2005.4.02.5167");
-			d.motivo = "Pronto para ser assinado";
-			d.situacao = "Já verifiquei";
-			d.responsavel = "JRJTAH";
-			d.dataentrada = new Date();
-			resp.list.add(d);
-		}
-
-		{
-			Documento d = new Documento();
-			d.docsystem = Utils.getAssijusSystemMovimentos();
-			d.docid = "00489623760_51_4950827_1283805660000";
-			d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
-			d.doccode = Utils.formatarNumeroProcesso("0000229-40.2015.4.02.0000");
-			d.docdescr = "CERTIDÃO - Citação/intimação";
-			d.dockind = "Citação/intimação";
-			d.docorigin = "Apolo";
-			d.documento = "CERTIDÃO - Citação/intimação";
-			d.processo = Utils.removePontuacao("0000229-40.2015.4.02.0000");
-			d.motivo = "Testando outro processo";
-			d.situacao = "Só para ter 3.";
-			d.responsavel = "JRJOEE";
-			d.dataentrada = new Date(new Date().getTime() - 100000);
-			resp.list.add(d);
+			{
+				Documento d = new Documento();
+				d.docsystem = Utils.getAssijusSystemMovimentos();
+				d.docid = "00489623760_51_4950827_1283805660000";
+				d.docsecret = "9F60BC8503C57109DBB2EEBCF2A9165A962FDD7D";
+				d.doccode = Utils.formatarNumeroProcesso("0000229-40.2015.4.02.0000");
+				d.docdescr = "CERTIDÃO - Citação/intimação";
+				d.dockind = "Citação/intimação";
+				d.docorigin = "Apolo";
+				d.documento = "CERTIDÃO - Citação/intimação";
+				d.processo = Utils.removePontuacao("0000229-40.2015.4.02.0000");
+				d.motivo = "Testando outro processo";
+				d.situacao = "Só para ter 3.";
+				d.responsavel = "JRJOEE";
+				d.dataentrada = new Date(new Date().getTime() - 100000);
+				resp.list.add(d);
+			}
 		}
 	}
 

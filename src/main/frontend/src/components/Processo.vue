@@ -81,7 +81,7 @@
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
+          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>

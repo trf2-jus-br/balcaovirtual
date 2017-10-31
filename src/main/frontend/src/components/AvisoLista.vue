@@ -35,8 +35,9 @@
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <router-link class="dropdown-item" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'" :to="{name:'Avisos Confirmados Recentemente'}" tag="a" exact>Consultar Confirmados</router-link>
-              <a class="dropdown-item" @click="exportarXML()">Exportar XML</a>
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
+              <a class="dropdown-item" @click="exportarXML('pendente')">Exportar avisos-pendentes.xml</a>
+              <a class="dropdown-item" @click="exportarXML('confirmado')">Exportar avisos-confirmados.xml</a>
             </div>
           </div>
         </div>
@@ -264,8 +265,8 @@ export default {
             aviso.checked = true
             aviso.disabled = false
             aviso.processoFormatado = ProcessoBL.formatarProcesso(aviso.processo)
-            aviso.dataavisoFormatada = UtilsBL.formatDDMMYYYYHHMM(aviso.dataaviso)
-            aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
+            aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataaviso)
+            aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
             aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
             this.avisos.push(aviso)
           }
@@ -494,11 +495,11 @@ export default {
       window.print()
     },
 
-    exportarXML: function () {
-      this.$http.get('aviso-pendente/xml').then(response => {
+    exportarXML: function (tipo) {
+      this.$http.get('aviso-' + tipo + '/xml').then(response => {
         var jwt = response.data.jwt
-        window.open(this.$http.options.root + '/download/' + jwt + '/' + this.$parent.jwt.username + '-avisos-pendentes.pdf')
-        UtilsBL.logEvento('aviso', 'mostrar avisos-pendentes.xml')
+        window.open(this.$http.options.root + '/download/' + jwt + '/' + this.$parent.jwt.username + '-avisos-' + tipo + 's.pdf')
+        UtilsBL.logEvento('aviso', 'mostrar avisos-' + tipo + 's.xml')
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
       })

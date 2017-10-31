@@ -795,6 +795,17 @@ public interface IBalcaoVirtual {
 		public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception;
 	}
 
+	public class AvisoConfirmadoXmlGetRequest implements ISwaggerRequest {
+	}
+
+	public class AvisoConfirmadoXmlGetResponse implements ISwaggerResponse {
+		public String jwt;
+	}
+
+	public interface IAvisoConfirmadoXmlGet extends ISwaggerMethod {
+		public void run(AvisoConfirmadoXmlGetRequest req, AvisoConfirmadoXmlGetResponse resp) throws Exception;
+	}
+
 	public class MesaGetRequest implements ISwaggerRequest {
 	}
 

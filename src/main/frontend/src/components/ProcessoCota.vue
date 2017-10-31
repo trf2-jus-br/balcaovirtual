@@ -55,10 +55,6 @@ var textos = [
 ]
 
 var defaultCargoEmpresa = {
-  'jfrj.jus.br': {
-    cargo: 'Cargo de teste',
-    empresa: 'JFRJ'
-  },
   'pgfn.gov.br': {
     cargo: 'Procurador da Fazenda Nacional',
     empresa: 'PRFN-2ªR'

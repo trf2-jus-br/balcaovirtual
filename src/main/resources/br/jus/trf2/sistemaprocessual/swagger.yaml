@@ -338,6 +338,30 @@ paths:
           schema:
             $ref: "#/definitions/Error"
             
+  /usuario-web/{username}/aviso-confirmado/exportar:
+    get:
+      description: Obter o XML dos avisos confirmados
+      tags: [aviso]
+      produces: [application/xml]
+      parameters:
+        - $ref: "#/parameters/username"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: application/xml
+            Content-Disposition:
+              type: string
+              description: attachment; filename=avisos.xml
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
   /usuario/{username}/mesas:
     get:
       description: Obter mesas virtuais

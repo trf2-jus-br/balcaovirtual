@@ -19,6 +19,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoConfirmadoExportarGetResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoPendenteExportarGetResponse;
 
 public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
@@ -59,6 +60,22 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			UsuarioWebUsernameAvisoPendenteExportarGetResponse r = (UsuarioWebUsernameAvisoPendenteExportarGetResponse) sar
 					.getResp();
 			resp.contentdisposition = "attachment;filename=" + map.get("username") + "-avisos-pendentes.xml";
+			resp.contentlength = r.contentlength;
+			resp.contenttype = r.contenttype;
+			resp.inputstream = r.inputstream;
+		} else if (file != null && file.equals("avisos-confirmados.xml")) {
+			// Processo completo
+			Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse>> future = SwaggerCall
+					.callAsync("obter XML de avisos confirmados", "Bearer " + req.jwt, "GET",
+							Utils.getWsProcessualUrl() + "/usuario-web/" + map.get("username")
+									+ "/aviso-confirmado/exportar",
+							null, UsuarioWebUsernameAvisoConfirmadoExportarGetResponse.class);
+			SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse> sar = future.get();
+			if (sar.getException() != null)
+				throw sar.getException();
+			UsuarioWebUsernameAvisoConfirmadoExportarGetResponse r = (UsuarioWebUsernameAvisoConfirmadoExportarGetResponse) sar
+					.getResp();
+			resp.contentdisposition = "attachment;filename=" + map.get("username") + "-avisos-confirmados.xml";
 			resp.contentlength = r.contentlength;
 			resp.contenttype = r.contenttype;
 			resp.inputstream = r.inputstream;

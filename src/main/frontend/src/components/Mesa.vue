@@ -107,10 +107,9 @@ import ProcessoBL from '../bl/processo.js'
 // import { Bus } from '../bl/bus.js'
 
 export default {
-  components: {
-  },
+  components: {},
 
-  mounted () {
+  mounted() {
     this.errormsg = undefined
 
     setTimeout(() => {
@@ -118,7 +117,7 @@ export default {
     })
   },
 
-  data () {
+  data() {
     return {
       mesa: undefined,
       mesas: [],
@@ -130,7 +129,7 @@ export default {
   },
 
   computed: {
-    filtrados: function () {
+    filtrados: function() {
       var a = this.lista
       a = UtilsBL.filtrarPorSubstring(a, this.filtro)
       var procnum, procline
@@ -147,21 +146,21 @@ export default {
       return a
     },
 
-    filtradosEMarcados: function () {
-      return this.filtrados.filter(function (item) {
+    filtradosEMarcados: function() {
+      return this.filtrados.filter(function(item) {
         return item.checked
       })
     },
 
-    filtradosEMarcadosEAssinaveis: function () {
-      return this.filtrados.filter(function (item) {
+    filtradosEMarcadosEAssinaveis: function() {
+      return this.filtrados.filter(function(item) {
         return item.docid
       })
     }
   },
 
   methods: {
-    carregarMesas: function () {
+    carregarMesas: function() {
       this.$http.get('mesa', { block: true }).then(
         response => {
           var list = response.data.list
@@ -173,11 +172,12 @@ export default {
             this.mesa = this.mesas[0]
             this.selecionarMesa()
           }
-        }, error => UtilsBL.errormsg(error, this)
+        },
+        error => UtilsBL.errormsg(error, this)
       )
     },
 
-    selecionarMesa: function () {
+    selecionarMesa: function() {
       console.log('mesa', this.mesa)
       this.$http.get('mesa/' + this.mesa.id, { block: true }).then(
         response => {
@@ -186,11 +186,12 @@ export default {
           for (var i = 0; i < list.length; i++) {
             this.lista.push(this.fixItem(list[i]))
           }
-        }, error => UtilsBL.errormsg(error, this)
+        },
+        error => UtilsBL.errormsg(error, this)
       )
     },
 
-    fixItem: function (item) {
+    fixItem: function(item) {
       UtilsBL.applyDefauts(item, {
         rows: 1,
         checked: true,
@@ -210,12 +211,14 @@ export default {
         item.processoFormatado = ProcessoBL.formatarProcesso(item.processo)
       }
       if (item.dataentrada !== undefined) {
-        item.dataentradaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(item.dataentrada)
+        item.dataentradaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
+          item.dataentrada
+        )
       }
       return item
     },
 
-    marcarTodos: function () {
+    marcarTodos: function() {
       var docs = this.filtrados
       for (var i = 0; i < docs.length; i++) {
         var doc = docs[i]
@@ -223,9 +226,11 @@ export default {
       }
     },
 
-    mostrarDocumento: function (item, disposition) {
+    mostrarDocumento: function(item, disposition) {
       var form = document.createElement('form')
-      form.action = this.$parent.test.properties['balcaovirtual.assijus.endpoint'] + '/api/v1/view' +
+      form.action =
+        this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
+        '/api/v1/view' +
         (disposition === 'attachment' ? '?disposition=attachment' : '')
       form.method = 'POST'
       form.target = '_blank'
@@ -268,7 +273,7 @@ export default {
       document.body.removeChild(form)
     },
 
-    criarAssinavel: function (item) {
+    criarAssinavel: function(item) {
       return {
         id: item.docid,
         system: item.docsystem,
@@ -279,11 +284,11 @@ export default {
       }
     },
 
-    assinarDocumento: function (item) {
+    assinarDocumento: function(item) {
       this.chamarAssijus([this.criarAssinavel(item)])
     },
 
-    assinarDocumentos: function () {
+    assinarDocumentos: function() {
       var list = []
       for (var i = 0; i < this.filtradosEMarcadosEAssinaveis.length; i++) {
         list.push(this.criarAssinavel(this.filtradosEMarcadosEAssinaveis[i]))
@@ -291,28 +296,39 @@ export default {
       if (list.length > 0) this.chamarAssijus(list)
     },
 
-    chamarAssijus: function (list) {
+    chamarAssijus: function(list) {
       var json = JSON.stringify({ list: list })
-      this.$http.post(this.$parent.test.properties['balcaovirtual.assijus.endpoint'] + '/api/v1/store', { payload: json }, { block: true }).then(
-        response => {
-          var callback = window.location.href + ''
-          console.log(callback)
-          window.location.href = this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
-            '/?endpointautostart=true&endpointlistkey=' + response.data.key +
-            '&endpointcallback=' + encodeURI(callback).replace('#', '__hashsign__')
-        },
-        error => UtilsBL.errormsg(error, this))
+      this.$http
+        .post(
+          this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
+            '/api/v1/store',
+          { payload: json },
+          { block: true }
+        )
+        .then(
+          response => {
+            var callback = window.location.href + ''
+            console.log(callback)
+            window.location.href =
+              this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
+              '/?endpointautostart=true&endpointlistkey=' +
+              response.data.key +
+              '&endpointcallback=' +
+              encodeURI(callback).replace('#', '__hashsign__')
+          },
+          error => UtilsBL.errormsg(error, this)
+        )
     },
 
-    editar: function () {
+    editar: function() {
       this.$refs.etiqueta.show()
     },
 
-    exibirProcessosMultiplos: function () {
+    exibirProcessosMultiplos: function() {
       this.$refs.processosMultiplos.show()
     },
 
-    acrescentarProcessosNaLista: function (arr) {
+    acrescentarProcessosNaLista: function(arr) {
       if (!arr || arr.length === 0) return
       this.pasta = 'inbox'
       for (var i = 0; i < arr.length; i++) {
