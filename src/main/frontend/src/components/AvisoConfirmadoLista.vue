@@ -37,7 +37,7 @@
           </div>
           <div class="col-sm-auto">
             <label for="pesquisar">&nbsp;</label>
-            <button id="pesquisar" class="btn btn-primary btn-block" data-style="expand-left" @click="confirmarEmLote()">
+            <button id="pesquisar" class="btn btn-primary btn-block" data-style="expand-left" @click="pesquisar(dataInicial, dataFinal, porConfirmacao, porOmissao, doGrupo)">
               Pesquisar
             </button>
           </div>
@@ -333,7 +333,10 @@ export default {
                 aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
                   aviso.datalimiteintimacaoautomatica
                 )
-                aviso.datarecebimento = aviso.dataconfirmacaoFormatada.replace('&nbsp;', ' ')
+                aviso.datarecebimento = aviso.dataconfirmacaoFormatada.replace(
+                  '&nbsp;',
+                  ' '
+                )
                 aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
                 aviso.teor = ProcessoBL.formatarTexto(aviso.teor)
                 this.avisos.push(aviso)
@@ -344,6 +347,26 @@ export default {
             Bus.$emit('message', 'Erro', error.data.errormsg)
           }
         )
+    },
+
+    pesquisar: function(
+      dataInicial,
+      dataFinal,
+      porConfirmacao,
+      porOmissao,
+      doGrupo
+    ) {
+      this.$router.push({
+        name: 'Lista de Avisos Confirmados',
+        params: {
+          dataInicial: dataInicial,
+          dataFinal: dataFinal,
+          porConfirmacao: porConfirmacao,
+          porOmissao: porOmissao,
+          doGrupo: doGrupo
+        }
+      })
+      this.carregarLista()
     },
 
     sort: function(field) {
