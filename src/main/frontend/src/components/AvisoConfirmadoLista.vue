@@ -26,11 +26,11 @@
         <div class="form-groupx col-sm-auto">
           <label for="dataFinal" class="mb-0">Tipo de Confirmação</label>
           <div>
-            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porConfirmacao"> Por Confirmação
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porConfirmacao"> Manual
             </label>
           </div>
           <div>
-            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porOmissao"> Por Omissão
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porOmissao"> Automática
             </label>
           </div>
         </div>

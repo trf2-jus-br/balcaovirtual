@@ -23,10 +23,10 @@
               <th style="text-align: center;" colspan="2">Quantidade do Grupo</th>
             </tr>
             <tr>
-              <th style="text-align: center;">Por Confirmação</th>
-              <th style="text-align: center;">Por Omissão</th>
-              <th style="text-align: center;">Por Confirmação</th>
-              <th style="text-align: center;">Por Omissão</th>
+              <th style="text-align: center;">Confirmação Manual</th>
+              <th style="text-align: center;">Confirmação Automática</th>
+              <th style="text-align: center;">Confirmação Manual</th>
+              <th style="text-align: center;">Confirmação Automática</th>
             </tr>
           </thead>
           <tbody>

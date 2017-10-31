@@ -147,14 +147,6 @@
           </g>
         </svg>
       </div>
-      <div class="col col-sm-12" v-if="!$parent.$parent.settings.timeline">
-        <p class="alert alert-warning alert-dismissible fade show" role="alert">
-          <button type="button" @click.prevent="$parent.$parent.$emit('setting', 'timeline', true)" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <strong>Linha do Tempo do Processo</strong> é um diagrama que resume as ocorrências observadas em um processo judicial. Situações que ainda não ocorreram permanecem em cinza. Eventos detectados no histórico de movimentos são apresentados como círculos pretos e o caminho até eles é marcado de azul. Quando um mesmo evento ocorre mais de uma vez, o número total de ocorrências é apresentado dentro do respectivo círculo. O último evento detectado é marcado com um círculo laranja e ao seu lado podem ser apresentados alguns detalhes referentes, apenas, a esta última ocorrência.
-        </p>
-      </div>
     </div>
 
     <div class="row" v-if="!deviceDetector.raw.browser.chrome">

@@ -34,11 +34,14 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		String orgao = (String) map.get("orgao");
 		String type = (String) map.get("typ");
 		String text = (String) map.get("text");
+		String cargo = (String) map.get("cargo");
+		String empresa = (String) map.get("empresa");
+		String unidade = (String) map.get("unidade");
 		String disposition = "attachment".equals(req.disposition) ? "attachment" : "inline";
 		if (!"download".equals(type))
 			throw new Exception("Tipo de token JWT inválido");
 		if (text != null) {
-			byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(name, numProc, text);
+			byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(name, numProc, text, cargo, empresa, unidade);
 			resp.contentdisposition = "inline";
 			resp.contentlength = (long) pdf.length;
 			resp.contenttype = "application/pdf";
@@ -96,7 +99,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	}
 
 	public static String jwt(String origin, String username, String nome, String orgao, String processo,
-			String documento, String arquivo, String texto) {
+			String documento, String arquivo, String texto, String cargo, String empresa, String unidade) {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h
@@ -124,6 +127,12 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			claims.put("file", arquivo);
 		if (texto != null)
 			claims.put("text", texto);
+		if (cargo != null)
+			claims.put("cargo", cargo);
+		if (empresa != null)
+			claims.put("empresa", empresa);
+		if (unidade != null)
+			claims.put("unidade", unidade);
 		claims.put("typ", "download");
 
 		final String jwt = signer.sign(claims);

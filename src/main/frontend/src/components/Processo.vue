@@ -81,7 +81,7 @@
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || perfil === 'disabled-procurador'">
+          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>
@@ -513,7 +513,7 @@
     </div>
 
     <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
-    <processo-cota ref="processoCota" :processo="numero" :orgao="orgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
+    <processo-cota ref="processoCota" :processo="numero" :orgao="orgao" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
   </div>
 </template>
 
@@ -531,61 +531,91 @@ import { Bus } from '../bl/bus.js'
 
 export default {
   name: 'processo',
-  mounted () {
-    this.$on('filtrar', (texto) => { this.filtrarMovimentos(texto) })
+  mounted() {
+    this.$on('filtrar', texto => {
+      this.filtrarMovimentos(texto)
+    })
 
     // Validar o número do processo
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       Bus.$emit('block', 20)
-      this.$http.get('processo/' + this.numero + '/validar').then(response => {
-        this.orgao = response.data.orgao
-        console.log(this.$parent.jwt)
-        this.perfil = this.$parent.jwt.parsedUsers[this.orgao.toLowerCase()].perfil
-        this.$http.get('processo/' + this.numero + '/consultar?orgao=' + this.orgao).then(
-          response => {
-            Bus.$emit('release')
-            try {
-              this.proc = response.data.value
-              if (this.proc.movimento) {
-                this.proc.movimento = this.proc.movimento.sort(function (a, b) {
-                  if (a.dataHora < b.dataHora) {
-                    return 1
+      this.$http.get('processo/' + this.numero + '/validar').then(
+        response => {
+          this.orgao = response.data.orgao
+          console.log(this.$parent.jwt)
+
+          // eslint-disable-next-line
+          this.perfil = this.$parent.jwt.parsedUsers[
+            this.orgao.toLowerCase()
+          ].perfil
+          this.$http
+            .get('processo/' + this.numero + '/consultar?orgao=' + this.orgao)
+            .then(
+              response => {
+                Bus.$emit('release')
+                try {
+                  this.proc = response.data.value
+                  if (this.proc.movimento) {
+                    this.proc.movimento = this.proc.movimento.sort(function(
+                      a,
+                      b
+                    ) {
+                      if (a.dataHora < b.dataHora) {
+                        return 1
+                      }
+                      if (a.dataHora > b.dataHora) {
+                        return -1
+                      }
+                      return 0
+                    })
                   }
-                  if (a.dataHora > b.dataHora) {
-                    return -1
-                  }
-                  return 0
-                })
+
+                  // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
+                  var interno = !!this.$parent.jwt.origin && false
+                  this.fixed = ProcessoBL.fixProc(this.proc)
+                  this.timeline = TimelineBL.updateTimeline(
+                    this.orgao,
+                    this.fixed.movdoc,
+                    interno
+                  )
+                  this.getDescriptions()
+                  this.getMarcadores()
+                  this.getMarcas()
+
+                  this.$http
+                    .post('processo/' + this.numero + '/sinalizar', {
+                      recente: true
+                    })
+                    .then(
+                      response => {
+                        this.favorito = !!response.data.processo.favorito
+                      },
+                      error => {
+                        this.warningmsg = error.data.errormsg
+                      }
+                    )
+                } catch (e) {
+                  console.error(e)
+                }
+              },
+              error => {
+                Bus.$emit('release')
+                UtilsBL.errormsg(error, this)
               }
-
-              // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
-              var interno = !!this.$parent.jwt.origin && false
-              this.fixed = ProcessoBL.fixProc(this.proc)
-              this.timeline = TimelineBL.updateTimeline(this.orgao, this.fixed.movdoc, interno)
-              this.getDescriptions()
-              this.getMarcadores()
-              this.getMarcas()
-
-              this.$http.post('processo/' + this.numero + '/sinalizar', { recente: true }).then(response => {
-                this.favorito = !!response.data.processo.favorito
-              }, error => {
-                this.warningmsg = error.data.errormsg
-              })
-            } catch (e) {
-              console.error(e)
-            }
-          },
-          error => {
-            Bus.$emit('release')
-            UtilsBL.errormsg(error, this)
-          })
-      }, error => {
-        Bus.$emit('release')
-        this.errormsg = 'Não foi possível obter informações sobre o processo ' + this.numero + ': ' + error.data.errormsg
-      })
+            )
+        },
+        error => {
+          Bus.$emit('release')
+          this.errormsg =
+            'Não foi possível obter informações sobre o processo ' +
+            this.numero +
+            ': ' +
+            error.data.errormsg
+        }
+      )
     })
   },
-  data () {
+  data() {
     return {
       favorito: undefined,
       timeline: TimelineBL.emptyTimeline(),
@@ -614,7 +644,7 @@ export default {
     }
   },
   computed: {
-    filtrados: function () {
+    filtrados: function() {
       // Referência à this.modified é necessária para recalcular quando mostra o texto
       console.log('recalculando filtrados...', this.modified)
       var a = ProcessoBL.filtrar(this.fixed.movdoc, this.filtro)
@@ -622,104 +652,174 @@ export default {
     }
   },
   methods: {
-    getMarcadores: function () {
+    getMarcadores: function() {
       // Carregar os marcadores da classe
-      this.$http.get('classe/' + this.proc.dadosBasicos.classeProcessual + '/marcadores').then(response => {
-        if (!response.data.list) return
-        for (var i = 0; i < response.data.list.length; i++) {
-          this.marcadores.push(response.data.list[i].texto)
-        }
-      }, error => {
-        if (error.data.errormsg === 'disabled') {
-          this.marcasativas = false
-          return
-        }
-        UtilsBL.errormsg(error, this)
-      })
-    },
-    getMarcas: function () {
-      // Carregar os marcadores da classe
-      this.$http.get('processo/' + this.numero + '/marcas?orgao=' + this.orgao).then(response => {
-        // if (!response.data.list) return
-        for (var i = 0; i < response.data.list.length; i++) {
-          var marca = response.data.list[i]
-          for (var j = 0; j < this.fixed.movdoc.length; j++) {
-            var movdoc = this.fixed.movdoc[j]
-            if (movdoc.doc && movdoc.doc.idDocumento === marca.idpeca) {
-              movdoc.marca.push({
-                idmarca: marca.idmarca,
-                texto: marca.texto,
-                idestilo: marca.idestilo,
-                paginicial: marca.paginicial,
-                pagfinal: marca.pagfinal
-              })
+      this.$http
+        .get(
+          'classe/' + this.proc.dadosBasicos.classeProcessual + '/marcadores'
+        )
+        .then(
+          response => {
+            if (!response.data.list) return
+            for (var i = 0; i < response.data.list.length; i++) {
+              this.marcadores.push(response.data.list[i].texto)
             }
+          },
+          error => {
+            if (error.data.errormsg === 'disabled') {
+              this.marcasativas = false
+              return
+            }
+            UtilsBL.errormsg(error, this)
           }
-        }
-      }, error => {
-        if (error.data.errormsg === 'disabled') {
-          this.marcasativas = false
-          return
-        }
-        UtilsBL.errormsg(error, this)
-      })
+        )
     },
-    getDescriptions: function () {
+    getMarcas: function() {
+      // Carregar os marcadores da classe
+      this.$http
+        .get('processo/' + this.numero + '/marcas?orgao=' + this.orgao)
+        .then(
+          response => {
+            // if (!response.data.list) return
+            for (var i = 0; i < response.data.list.length; i++) {
+              var marca = response.data.list[i]
+              for (var j = 0; j < this.fixed.movdoc.length; j++) {
+                var movdoc = this.fixed.movdoc[j]
+                if (movdoc.doc && movdoc.doc.idDocumento === marca.idpeca) {
+                  movdoc.marca.push({
+                    idmarca: marca.idmarca,
+                    texto: marca.texto,
+                    idestilo: marca.idestilo,
+                    paginicial: marca.paginicial,
+                    pagfinal: marca.pagfinal
+                  })
+                }
+              }
+            }
+          },
+          error => {
+            if (error.data.errormsg === 'disabled') {
+              this.marcasativas = false
+              return
+            }
+            UtilsBL.errormsg(error, this)
+          }
+        )
+    },
+    getDescriptions: function() {
       var db = this.proc.dadosBasicos
 
       // Carregar a classe
-      this.$set(this.fixed, 'classeProcessualDescricao', CnjClasseBL.nome(db.classeProcessual))
-      this.$set(this.fixed, 'classeProcessualDescricaoCompleta', CnjClasseBL.nomeCompleto(db.classeProcessual))
+      this.$set(
+        this.fixed,
+        'classeProcessualDescricao',
+        CnjClasseBL.nome(db.classeProcessual)
+      )
+      this.$set(
+        this.fixed,
+        'classeProcessualDescricaoCompleta',
+        CnjClasseBL.nomeCompleto(db.classeProcessual)
+      )
 
       // Carregar assuntos (partimos do princípio que sempre
       // há um assunto principal e que sempre é o primeiro)
-      if (db.assunto && db.assunto.length > 0 && Number(db.assunto[0].codigoNacional) > 0) {
+      if (
+        db.assunto &&
+        db.assunto.length > 0 &&
+        Number(db.assunto[0].codigoNacional) > 0
+      ) {
         for (var i = 0; i < db.assunto.length; i++) {
           var ass = db.assunto[i]
           ass.descricao = CnjAssuntoBL.nome(ass.codigoNacional)
           ass.descricaoCompleta = CnjAssuntoBL.nomeCompleto(ass.codigoNacional)
           if (ass.principal) {
             this.$set(this.fixed, 'assuntoPrincipalDescricao', ass.descricao)
-            this.$set(this.fixed, 'assuntoPrincipalDescricaoCompleta', ass.descricaoCompleta)
+            this.$set(
+              this.fixed,
+              'assuntoPrincipalDescricaoCompleta',
+              ass.descricaoCompleta
+            )
           }
         }
       }
     },
-    mostrarTexto: function (doc, f) {
+    mostrarTexto: function(doc, f) {
       ProcessoBL.mostrarTexto(this.fixed.movdoc, doc, f)
       this.modified = new Date()
     },
-    mostrarDadosComplementares: function (ativo) {
+    mostrarDadosComplementares: function(ativo) {
       this.$parent.$emit('setting', 'mostrarDadosComplementares', ativo)
     },
-    mostrarProcessosRelacionados: function (ativo) {
+    mostrarProcessosRelacionados: function(ativo) {
       this.$parent.$emit('setting', 'mostrarProcessosRelacionados', ativo)
     },
-    mostrarPeca: function (idDocumento, disposition) {
-      this.$http.get('processo/' + this.numero + '/peca/' + idDocumento + '/pdf?orgao=' + this.orgao).then(response => {
-        var jwt = response.data.jwt
-        var url = this.$http.options.root + '/download/' + jwt + '/' + this.numero + '-peca-' + idDocumento + '.pdf'
-        if (disposition) window.location = url + '?disposition=attachment'
-        else window.open(url)
-        UtilsBL.logEvento('consulta-processual', 'mostrar pdf peça')
-      }, error => {
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
+    mostrarPeca: function(idDocumento, disposition) {
+      this.$http
+        .get(
+          'processo/' +
+            this.numero +
+            '/peca/' +
+            idDocumento +
+            '/pdf?orgao=' +
+            this.orgao
+        )
+        .then(
+          response => {
+            var jwt = response.data.jwt
+            var url =
+              this.$http.options.root +
+              '/download/' +
+              jwt +
+              '/' +
+              this.numero +
+              '-peca-' +
+              idDocumento +
+              '.pdf'
+            if (disposition) window.location = url + '?disposition=attachment'
+            else window.open(url)
+            UtilsBL.logEvento('consulta-processual', 'mostrar pdf peça')
+          },
+          error => {
+            Bus.$emit('message', 'Erro', error.data.errormsg)
+          }
+        )
     },
-    mostrarCompleto: function () {
-      this.$http.get('processo/' + this.numero + '/pdf?orgao=' + this.orgao).then(response => {
-        var jwt = response.data.jwt
-        window.open(this.$http.options.root + '/download/' + jwt + '/' + this.numero + '.pdf')
-        UtilsBL.logEvento('consulta-processual', 'mostrar pdf completo', 'individual')
-      }, error => {
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
+    mostrarCompleto: function() {
+      this.$http
+        .get('processo/' + this.numero + '/pdf?orgao=' + this.orgao)
+        .then(
+          response => {
+            var jwt = response.data.jwt
+            window.open(
+              this.$http.options.root +
+                '/download/' +
+                jwt +
+                '/' +
+                this.numero +
+                '.pdf'
+            )
+            UtilsBL.logEvento(
+              'consulta-processual',
+              'mostrar pdf completo',
+              'individual'
+            )
+          },
+          error => {
+            Bus.$emit('message', 'Erro', error.data.errormsg)
+          }
+        )
     },
-    filtrarMovimentos: function (texto) {
+    filtrarMovimentos: function(texto) {
       this.$parent.$emit('setting', 'filtrarMovimentos', texto !== undefined)
       var f = this.filtro
       if (texto) {
-        if (texto.length > 0 && texto.substring(0, 1) === '#' && f && f.length > 0 && f.substring(0, 1) === '#') {
+        if (
+          texto.length > 0 &&
+          texto.substring(0, 1) === '#' &&
+          f &&
+          f.length > 0 &&
+          f.substring(0, 1) === '#'
+        ) {
           this.filtro = f + ' ' + texto
           return
         }
@@ -727,51 +827,77 @@ export default {
       this.filtro = texto
       this.$nextTick(() => this.$refs.filtro.focus())
     },
-    mostrarPartes: function (ativo) {
+    mostrarPartes: function(ativo) {
       this.$parent.$emit('setting', 'mostrarPartes', ativo)
     },
-    imprimir: function () {
+    imprimir: function() {
       window.print()
     },
-    formatDDMMYYYHHMM: function (s) {
+    formatDDMMYYYHHMM: function(s) {
       if (s === undefined) {
         return
       }
-      var r = s.substring(6, 8) + '/' + s.substring(4, 6) +
-        '/' + s.substring(0, 4) + ' ' +
-        s.substring(8, 10) + ':' +
+      var r =
+        s.substring(6, 8) +
+        '/' +
+        s.substring(4, 6) +
+        '/' +
+        s.substring(0, 4) +
+        ' ' +
+        s.substring(8, 10) +
+        ':' +
         s.substring(10, 12)
       r = r.replace(' ', '&nbsp;')
       return r
     },
 
-    exibirProcessoPecaDetalhes: function (movdoc, marca) {
+    exibirProcessoPecaDetalhes: function(movdoc, marca) {
       this.currentMovDoc = movdoc
       this.currentMarca = marca
-      this.$refs.processoPecaDetalhes.show(marca, this.marcadores,
-        movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaInicial : undefined,
-        movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaFinal : undefined
+      this.$refs.processoPecaDetalhes.show(
+        marca,
+        this.marcadores,
+        movdoc.doc && movdoc.doc.outroParametro
+          ? movdoc.doc.outroParametro.paginaInicial
+          : undefined,
+        movdoc.doc && movdoc.doc.outroParametro
+          ? movdoc.doc.outroParametro.paginaFinal
+          : undefined
       )
     },
 
-    cotar: function () {
+    cotar: function() {
       this.$refs.processoCota.show()
     },
 
-    cotaEnviada: function (msg) {
+    cotaEnviada: function(msg) {
       Bus.$emit('message', 'Sucesso', 'Cota enviada com sucesso. ' + msg)
     },
 
-    cotaNaoEnviada: function (msg, texto) {
-      Bus.$emit('message', 'Erro', 'Não foi possível enviar a cota "' + texto + '". Ocorreu o erro: "' + msg + '"')
+    cotaNaoEnviada: function(msg, texto) {
+      Bus.$emit(
+        'message',
+        'Erro',
+        'Não foi possível enviar a cota "' +
+          texto +
+          '". Ocorreu o erro: "' +
+          msg +
+          '"'
+      )
     },
 
-    salvarProcessoPecaDetalhes: function (marca) {
+    salvarProcessoPecaDetalhes: function(marca) {
       if (!this.currentMovDoc) return
 
       var movdoc = this.currentMovDoc
-      var inicial = movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaInicial : undefined
-      var final = movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaFinal : undefined
+      var inicial =
+        movdoc.doc && movdoc.doc.outroParametro
+          ? movdoc.doc.outroParametro.paginaInicial
+          : undefined
+      var final =
+        movdoc.doc && movdoc.doc.outroParametro
+          ? movdoc.doc.outroParametro.paginaFinal
+          : undefined
       if (inicial === marca.paginicial && final === marca.pagfinal) {
         marca.paginicial = undefined
         marca.pagfinal = undefined
@@ -786,43 +912,70 @@ export default {
         pagfinal: marca.pagfinal
       }
 
-      this.$http.post('processo/' + this.numero + '/peca/' + this.currentMovDoc.doc.idDocumento + '/marca?orgao=' + this.orgao,
-        data, { block: true }).then(response => {
-          if (this.currentMarca) {
-            var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
-            UtilsBL.overrideProperties(marca, response.data.marca)
-            UtilsBL.overrideProperties(this.currentMovDoc.marca[index], marca)
-          } else {
-            UtilsBL.overrideProperties(marca, response.data.marca)
-            this.currentMovDoc.marca.push(marca)
+      this.$http
+        .post(
+          'processo/' +
+            this.numero +
+            '/peca/' +
+            this.currentMovDoc.doc.idDocumento +
+            '/marca?orgao=' +
+            this.orgao,
+          data,
+          { block: true }
+        )
+        .then(
+          response => {
+            if (this.currentMarca) {
+              var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
+              UtilsBL.overrideProperties(marca, response.data.marca)
+              UtilsBL.overrideProperties(this.currentMovDoc.marca[index], marca)
+            } else {
+              UtilsBL.overrideProperties(marca, response.data.marca)
+              this.currentMovDoc.marca.push(marca)
+            }
+          },
+          error => {
+            Bus.$emit('message', 'Erro', error.data.errormsg)
           }
-        }, error => {
-          Bus.$emit('message', 'Erro', error.data.errormsg)
-        })
+        )
     },
 
-    excluirProcessoPecaDetalhes: function () {
+    excluirProcessoPecaDetalhes: function() {
       if (!this.currentMovDoc || !this.currentMarca) return
 
-      this.$http.delete('marca/' + this.currentMarca.idmarca, { block: true }).then(response => {
-        var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
-        if (index > -1) this.currentMovDoc.marca.splice(index, 1)
-      }, error => {
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
+      this.$http
+        .delete('marca/' + this.currentMarca.idmarca, { block: true })
+        .then(
+          response => {
+            var index = this.currentMovDoc.marca.indexOf(this.currentMarca)
+            if (index > -1) this.currentMovDoc.marca.splice(index, 1)
+          },
+          error => {
+            Bus.$emit('message', 'Erro', error.data.errormsg)
+          }
+        )
     },
 
-    favoritar: function (favorito) {
+    favoritar: function(favorito) {
       this.errormsg = undefined
-      this.$http.post('processo/' + this.numero + '/sinalizar', { favorito: favorito }, { block: true }).then(response => {
-        var d = response.data
-        this.favorito = d.processo.favorito
-      }, error => {
-        this.warningmsg = error.data.errormsg
-      })
+      this.$http
+        .post(
+          'processo/' + this.numero + '/sinalizar',
+          { favorito: favorito },
+          { block: true }
+        )
+        .then(
+          response => {
+            var d = response.data
+            this.favorito = d.processo.favorito
+          },
+          error => {
+            this.warningmsg = error.data.errormsg
+          }
+        )
     },
 
-    mostrarNotas: function (show) {
+    mostrarNotas: function(show) {
       this.$parent.$emit('setting', 'mostrarNotas', show)
 
       this.$nextTick(() => {
@@ -831,12 +984,19 @@ export default {
       })
     },
 
-    notasAlteradas: function () {
-      if (this.notaUnidade !== undefined && this.notaUnidade.trim() === '') this.notaUnidade = undefined
-      if (this.notaPessoal !== undefined && this.notaPessoal.trim() === '') this.notaPessoal = undefined
+    notasAlteradas: function() {
+      if (this.notaUnidade !== undefined && this.notaUnidade.trim() === '') {
+        this.notaUnidade = undefined
+      }
+      if (this.notaPessoal !== undefined && this.notaPessoal.trim() === '') {
+        this.notaPessoal = undefined
+      }
       this.$refs.notaUnidade.style.height = '5px'
       this.$refs.notaPessoal.style.height = '5px'
-      var h = Math.max(this.$refs.notaUnidade.scrollHeight, this.$refs.notaPessoal.scrollHeight)
+      var h = Math.max(
+        this.$refs.notaUnidade.scrollHeight,
+        this.$refs.notaPessoal.scrollHeight
+      )
       this.$refs.notaUnidade.style.height = h + 'px'
       this.$refs.notaPessoal.style.height = h + 'px'
     }
@@ -865,11 +1025,11 @@ export default {
 }
 
 .marca {
-  padding-left: 0.0rem;
-  padding-right: 0.0rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
   margin-right: 0.5rem;
   margin-bottom: 0;
-  margin-top: 0.0rem;
+  margin-top: 0rem;
 }
 
 .marca-yellow {
@@ -897,18 +1057,18 @@ export default {
 }
 
 .odd {
-  background-color: rgba(0, 0, 0, .05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.card-consulta-processual DIV P B {
+.card-consulta-processual div p b {
   color: #fff;
 }
 
-.card-consulta-processual DIV P {
+.card-consulta-processual div p {
   margin-bottom: 0.5rem;
 }
 
-.card-consulta-processual DIV I {
+.card-consulta-processual div i {
   line-height: 3rem;
   height: 3rem;
   color: #fff;

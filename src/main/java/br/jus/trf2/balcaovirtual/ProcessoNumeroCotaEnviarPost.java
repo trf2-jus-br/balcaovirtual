@@ -16,7 +16,8 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
-		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto);
+		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,
+				req.unidade);
 
 		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.orgao.toLowerCase() + ".cota.tipo",
 				"Parâmetro de tipo de documento não configurado", true);

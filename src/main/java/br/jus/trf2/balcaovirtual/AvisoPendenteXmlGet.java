@@ -14,8 +14,8 @@ public class AvisoPendenteXmlGet implements IAvisoPendenteXmlGet {
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (u.isInterno())
 			throw new PresentableUnloggedException("Exportação XML de avisos disponível apenas para usuários externos");
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, null, null, null, null, "avisos-pendentes.xml",
-				null);
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, null, null, null, null, "avisos-pendentes.xml", null,
+				null, null, null);
 	}
 
 	@Override

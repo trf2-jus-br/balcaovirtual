@@ -412,6 +412,9 @@ public interface IBalcaoVirtual {
 		public String orgao;
 		public String nivelsigilo;
 		public String texto;
+		public String cargo;
+		public String empresa;
+		public String unidade;
 	}
 
 	public class ProcessoNumeroCotaPrevisaoPdfPostResponse implements ISwaggerResponse {
@@ -428,6 +431,9 @@ public interface IBalcaoVirtual {
 		public String orgao;
 		public String nivelsigilo;
 		public String texto;
+		public String cargo;
+		public String empresa;
+		public String unidade;
 	}
 
 	public class ProcessoNumeroCotaEnviarPostResponse implements ISwaggerResponse {

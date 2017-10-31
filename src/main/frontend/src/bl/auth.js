@@ -41,6 +41,8 @@ export default {
         }
       }
     }
+    decoded.company =
+      decoded.email !== null ? decoded.email.split('@')[1] : undefined
     return decoded
   },
 

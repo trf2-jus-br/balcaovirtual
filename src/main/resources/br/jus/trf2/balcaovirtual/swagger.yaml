@@ -275,6 +275,24 @@ parameters:
     description: Data da última alteração do registro para evitar sobreescrever alterações alheias
     type: string
     format: date-time
+  cargo:
+    name: cargo
+    in: formData
+    description: Cargo para ser impresso na cota
+    type: string
+    required: true
+  empresa:
+    name: empresa
+    in: formData
+    description: Empresa para ser impresso na cota
+    type: string
+    required: true
+  unidade:
+    name: unidade
+    in: formData
+    description: Unidade para ser impresso na cota
+    type: string
+    required: true
     
 
 ################################################################################
@@ -616,6 +634,9 @@ paths:
         - $ref: "#/parameters/orgao"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/texto"
+        - $ref: "#/parameters/cargo"
+        - $ref: "#/parameters/empresa"
+        - $ref: "#/parameters/unidade"
       responses:
         200:
           description: Successful response
@@ -640,6 +661,9 @@ paths:
         - $ref: "#/parameters/orgao"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/texto"
+        - $ref: "#/parameters/cargo"
+        - $ref: "#/parameters/empresa"
+        - $ref: "#/parameters/unidade"
       responses:
         200:
           description: Successful response
