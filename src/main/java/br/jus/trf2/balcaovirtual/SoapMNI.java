@@ -153,6 +153,9 @@ public class SoapMNI {
 			ListStatus ls = new ListStatus();
 			ls.system = system;
 			status.add(ls);
+			Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
+			requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
+			requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 			try {
 				client.consultarAvisosPendentes(null, idConsultante, null, null, sucesso, mensagem, aviso);
 				if (!sucesso.value)
