@@ -160,7 +160,7 @@ export default {
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
         },
         error => {
-          this.errormsg = 'Não foi possível obter informações sobre o processo "' + this.numero + '". (' + error.data.errormsg + ')'
+          this.errormsg = error.data.errormsg || `Não foi possível obter informações sobre o processo "${this.numero}"`
         })
     }
   }
