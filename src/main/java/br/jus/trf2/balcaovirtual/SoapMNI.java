@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 
 import br.jus.cnj.intercomunicacao_2_2.ModalidadePoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadeRelacionamentoProcessual;
+import br.jus.cnj.intercomunicacao_2_2.ModalidadeRepresentanteProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
 import br.jus.cnj.intercomunicacao_2_2.TipoComunicacaoProcessual;
@@ -41,6 +42,7 @@ import br.jus.cnj.intercomunicacao_2_2.TipoPessoa;
 import br.jus.cnj.intercomunicacao_2_2.TipoPoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoProcessoJudicial;
 import br.jus.cnj.intercomunicacao_2_2.TipoQualificacaoPessoa;
+import br.jus.cnj.intercomunicacao_2_2.TipoRepresentanteProcessual;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
@@ -379,8 +381,8 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
-			int classe, String cdas, String pas, int nvlSigilo, List<Parte> partes, String nomePdfs, String tpDocPdfs)
-			throws Exception {
+			int classe, String cdas, String pas, int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada,
+			boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -413,6 +415,7 @@ public class SoapMNI {
 		}
 
 		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();
+		TipoParte tp = null;
 		for (Parte parte : partes) {
 			ModalidadePoloProcessual m = parte.polo == 1 ? ModalidadePoloProcessual.AT : ModalidadePoloProcessual.PA;
 			TipoPoloProcessual tpp = null;
@@ -440,15 +443,28 @@ public class SoapMNI {
 				tqp = TipoQualificacaoPessoa.AUTORIDADE;
 				break;
 			case 4:
+				if (tp == null)
+					throw new Exception("Não há pessoa para vincular ao advogado");
+				TipoRepresentanteProcessual rp = new TipoRepresentanteProcessual();
+				rp.setNome(parte.nome);
+				rp.setInscricao(Utils.removePontuacao(parte.documento));
+				rp.setTipoRepresentante(ModalidadeRepresentanteProcessual.A);
+				// rp.setNumeroDocumentoPrincipal("11111111111");
+				// rp.setIntimacao(false);
+				tp.getAdvogado().add(rp);
 				tqp = TipoQualificacaoPessoa.ORGAOREPRESENTACAO;
-				break;
+				continue;
 			}
 
-			TipoParte tp = new TipoParte();
+			tp = new TipoParte();
+			if (justicagratuita && tqp == TipoQualificacaoPessoa.FISICA)
+				tp.setAssistenciaJudiciaria(true);
 			tp.setRelacionamentoProcessual(ModalidadeRelacionamentoProcessual.RP);
 			TipoPessoa pess = new TipoPessoa();
 			pess.setNome(parte.nome);
 			pess.setNumeroDocumentoPrincipal(Utils.removePontuacao(parte.documento));
+			// pess.setCidadeNatural("Rio de Janeiro");
+			// pess.setEstadoNatural("RJ");
 			pess.setTipoPessoa(tqp);
 			tp.setPessoa(pess);
 			tpp.getParte().add(tp);
@@ -458,6 +474,17 @@ public class SoapMNI {
 		dadosBasicos.setClasseProcessual(classe);
 		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
 
+		if (prioridadeidoso) {
+			dadosBasicos.getPrioridade().add("IDOSO");
+		}
+
+		if (tutelaantecipada) {
+			TipoParametro tla = new TipoParametro();
+			tla.setNome("TUTELAANTECIPADA");
+			tla.setValor("TRUE");
+			parametros.add(tla);
+		}
+
 		if (cdas != null) {
 			for (String s : cdas.split(",")) {
 				String ss = Utils.removePontuacao(s).trim();
@@ -466,6 +493,7 @@ public class SoapMNI {
 				TipoParametro cda = new TipoParametro();
 				cda.setNome("NUMEROCDA");
 				cda.setValor(ss);
+				parametros.add(cda);
 			}
 		}
 
@@ -477,6 +505,7 @@ public class SoapMNI {
 				TipoParametro pa = new TipoParametro();
 				pa.setNome("NUMEROPROCESSOADMINISTRATIVO");
 				pa.setValor(ss);
+				parametros.add(pa);
 			}
 		}
 

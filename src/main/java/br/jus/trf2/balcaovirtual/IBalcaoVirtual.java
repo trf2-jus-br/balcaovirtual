@@ -19,6 +19,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class Entidade implements ISwaggerModel {
+		public String orgao;
 		public String id;
 		public String nome;
 	}
@@ -194,6 +195,21 @@ public interface IBalcaoVirtual {
 	public class Ativo implements ISwaggerModel {
 	}
 
+	public class Id implements ISwaggerModel {
+	}
+
+	public class Nome implements ISwaggerModel {
+	}
+
+	public class Oab implements ISwaggerModel {
+	}
+
+	public class NumeroDoDocumento implements ISwaggerModel {
+	}
+
+	public class TipoDeDocumento implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String errormsg;
 	}
@@ -238,7 +254,6 @@ public interface IBalcaoVirtual {
 	}
 
 	public class ConfigEntidadesGetRequest implements ISwaggerRequest {
-		public String orgao;
 	}
 
 	public class ConfigEntidadesGetResponse implements ISwaggerResponse {
@@ -299,6 +314,57 @@ public interface IBalcaoVirtual {
 	public interface IConfigLocalidadeIdEspecialidadeId2ClassesGet extends ISwaggerMethod {
 		public void run(ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest req,
 				ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception;
+	}
+
+	public class ConfigPessoaFisicaCpfGetRequest implements ISwaggerRequest {
+		public String cpf;
+		public String orgao;
+	}
+
+	public class ConfigPessoaFisicaCpfGetResponse implements ISwaggerResponse {
+		public String orgao;
+		public String id;
+		public String nome;
+		public String documento;
+		public String tipodedocumento;
+	}
+
+	public interface IConfigPessoaFisicaCpfGet extends ISwaggerMethod {
+		public void run(ConfigPessoaFisicaCpfGetRequest req, ConfigPessoaFisicaCpfGetResponse resp) throws Exception;
+	}
+
+	public class ConfigPessoaJuridicaCnpjGetRequest implements ISwaggerRequest {
+		public String cnpj;
+		public String orgao;
+	}
+
+	public class ConfigPessoaJuridicaCnpjGetResponse implements ISwaggerResponse {
+		public String orgao;
+		public String id;
+		public String nome;
+		public String documento;
+		public String tipodedocumento;
+	}
+
+	public interface IConfigPessoaJuridicaCnpjGet extends ISwaggerMethod {
+		public void run(ConfigPessoaJuridicaCnpjGetRequest req, ConfigPessoaJuridicaCnpjGetResponse resp)
+				throws Exception;
+	}
+
+	public class ConfigAdvogadoOabGetRequest implements ISwaggerRequest {
+		public String oab;
+		public String orgao;
+	}
+
+	public class ConfigAdvogadoOabGetResponse implements ISwaggerResponse {
+		public String orgao;
+		public String id;
+		public String nome;
+		public String oab;
+	}
+
+	public interface IConfigAdvogadoOabGet extends ISwaggerMethod {
+		public void run(ConfigAdvogadoOabGetRequest req, ConfigAdvogadoOabGetResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroValidarGetRequest implements ISwaggerRequest {
@@ -376,6 +442,9 @@ public interface IBalcaoVirtual {
 		public String cdas;
 		public String pas;
 		public String nivelsigilo;
+		public Boolean justicagratuita;
+		public Boolean tutelaantecipada;
+		public Boolean prioridadeidoso;
 		public String partes;
 		public String pdfs;
 		public String classificacoes;

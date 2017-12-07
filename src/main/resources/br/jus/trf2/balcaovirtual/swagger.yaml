@@ -89,6 +89,24 @@ parameters:
     description: Código do nivel de sigilo
     type: string
     required: true
+  tutelaantecipada:
+    name: tutelaantecipada
+    in: formData
+    description: Tutela ou liminar antecipada
+    type: boolean
+    required: true
+  justicagratuita:
+    name: justicagratuita
+    in: formData
+    description: Justiça gratuíta
+    type: boolean
+    required: true
+  prioridadeidoso:
+    name: prioridadeidoso
+    in: formData
+    description: Tutela ou liminar antecipada
+    type: boolean
+    required: true
   texto:
     name: texto
     in: formData
@@ -113,6 +131,24 @@ parameters:
     description: Referência para o PDF que foi enviado previamente para o servidor
     type: string
     required: true
+  cpf:
+    name: cpf
+    in: path
+    description: CPF da pessoa
+    required: true
+    type: string
+  cnpj:
+    name: cnpj
+    in: path
+    description: CNPJ da pessoa
+    required: true
+    type: string
+  oab:
+    name: oab
+    in: path
+    description: OAB do advogado
+    required: true
+    type: string
   data:
     name: data
     in: query
@@ -363,8 +399,7 @@ paths:
     get:
       description: Diversos parâmetros para petição inicial
       tags: [config]
-      parameters:
-        - $ref: "#/parameters/orgaoquery"
+      parameters: []
       responses:
         200:
           description: Successful response
@@ -461,6 +496,89 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+
+  /config/pessoa-fisica/{cpf}:
+    get:
+      description: Pessoa Física
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/cpf"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              orgao:
+                $ref: "#/definitions/Orgao"
+              id:
+                $ref: "#/definitions/Id"
+              nome:
+                $ref: "#/definitions/Nome"
+              documento:
+                $ref: "#/definitions/NumeroDoDocumento"
+              tipodedocumento:
+                $ref: "#/definitions/TipoDeDocumento"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /config/pessoa-juridica/{cnpj}:
+    get:
+      description: Pessoa Jurídica
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/cnpj"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              orgao:
+                $ref: "#/definitions/Orgao"
+              id:
+                $ref: "#/definitions/Id"
+              nome:
+                $ref: "#/definitions/Nome"
+              documento:
+                $ref: "#/definitions/NumeroDoDocumento"
+              tipodedocumento:
+                $ref: "#/definitions/TipoDeDocumento"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /config/advogado/{oab}:
+    get:
+      description: Advogado
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/oab"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              orgao:
+                $ref: "#/definitions/Orgao"
+              id:
+                $ref: "#/definitions/Id"
+              nome:
+                $ref: "#/definitions/Nome"
+              oab:
+                $ref: "#/definitions/Oab"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /processo/{numero}/validar:
     get:
       description: Validar o número do processo
@@ -585,6 +703,9 @@ paths:
         - $ref: "#/parameters/cdas"
         - $ref: "#/parameters/pas"
         - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/justicagratuita"
+        - $ref: "#/parameters/tutelaantecipada"
+        - $ref: "#/parameters/prioridadeidoso"
         - $ref: "#/parameters/partes"
         - $ref: "#/parameters/pdfs"
         - $ref: "#/parameters/classificacoes"
@@ -1255,6 +1376,8 @@ definitions:
     description: Entidade
     type: object
     properties:
+      orgao:
+        type: string
       id:
         type: string
       nome:
@@ -1569,6 +1692,31 @@ definitions:
   Ativo:
     type: boolean
     description: Ativo true ou false
+    
+  Id:
+    description: Identificador
+    type: string
+    example: 123456
+
+  Nome:
+    description: Nome
+    type: string
+    example: Renato Crivano
+    
+  Oab:
+    description: OAB
+    type: string
+    example: RJ122355
+    
+  NumeroDoDocumento:
+    description: Número de CPF ou CNPJ
+    type: string
+    example: 11111111111
+    
+  TipoDeDocumento:
+    description: Tipo de documento
+    type: string
+    example: CPF
     
   Error:
     type: object

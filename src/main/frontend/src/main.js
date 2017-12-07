@@ -32,6 +32,11 @@ VeeValidate.Validator.extend('cnpj', {
   validate: ValidacaoBL.validarCNPJ
 })
 
+VeeValidate.Validator.extend('oab', {
+  getMessage: field => 'OAB ' + field + ' inválido.',
+  validate: ValidacaoBL.validarOAB
+})
+
 Vue.use(VueResource)
 Vue.use(VueClip)
 Vue.use(VeeValidate)

@@ -84,23 +84,21 @@
                 <th>Descrição</th>
                 <th>Arquivo</th>
                 <th>Status</th>
-                <th style="text-align: center" v-if="editando"></th>
+                <th style="text-align: center"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
                 <td>
-                  <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
+                  <select style="min-width: 8em;" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
                     <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
                     <option disabled hidden selected value=""> [Selecionar]</option>
                   </select>
-                  <span v-if="!editando">{{f.tipodescr}}</span>
                 </td>
 
                 <td>
                   <div class="input-group">
-                    <input v-if="editando" type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
-                    <span v-if="!editando">{{f.nome}}</span>
+                    <input type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
                   </div>
                 </td>
 
@@ -118,8 +116,10 @@
                   <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
                 </td>
 
-                <td align="center" v-if="editando">
-                  <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
+                <td align="right">
+                  <a href="" @click.prevent="removerArquivo(f)">
+                    <span class="fa fa-remove icone-em-linha"></span>
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -185,15 +185,15 @@
           </div>
 
           <div class="form-check col-md-3">
-            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Justiça Gratuita
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="justicagratuita"> Justiça Gratuita
             </label>
           </div>
           <div class="form-check col-md-3">
-            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Tutela Liminar/Antecipada
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="tutelaantecipada"> Tutela Liminar/Antecipada
             </label>
           </div>
           <div class="form-check col-md-3">
-            <label class="form-check-label"> <input type="checkbox" class="form-check-input"> Prioridade de Idoso
+            <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="prioridadeidoso"> Prioridade de Idoso
             </label>
           </div>
         </div>
@@ -235,15 +235,21 @@
                 </td>
 
                 <td :colspan="p.tipopessoa == '3' ? 2 : 1">
-                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" />
-                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" />
-                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" />
-                  <input type="text" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required'" />
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" @change="alterouCpf(p)" />
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
+                  
+                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'">
+                    <option disabled selected hidden :value="undefined">[Selecionar]</option>
+                    <option v-for="l in entidadesFiltradas" :value="l.id">{{l.nome}}</option>
+                  </select>
+
+                  
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required|oab'" @change="alterouOab(p)" />
                 </td>
 
                 <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
 
-                <td align="right" v-if="editando ">
+                <td align="right">
                   <a href="" @click.prevent="removerParte(p)">
                     <span class="fa fa-remove icone-em-linha"></span>
                   </a>
@@ -270,6 +276,7 @@ import UtilsBL from '../bl/utils.js'
 // import CnjClasseBL from '../bl/cnj-classe.js'
 import { Bus } from '../bl/bus.js'
 import AwesomeMask from 'awesome-mask'
+import ValidacaoBL from '../bl/validacao.js'
 
 const polos = [{
   id: 1,
@@ -279,7 +286,7 @@ const polos = [{
   nome: 'Passivo'
 }]
 
-const partes = [{ polo: 1, tipopessoa: '1' }, { polo: 2, tipopessoa: '2' }]
+const partes = [{ polo: 1, tipopessoa: '1', documento: undefined, nome: undefined }, { polo: 2, tipopessoa: '2', documento: undefined, nome: undefined }]
 
 const tipospeca = [{
   id: 1,
@@ -321,6 +328,7 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.carregarOrgaos()
+      this.carregarEntidades()
     })
   },
 
@@ -345,13 +353,16 @@ export default {
       pa: undefined,
 
       nivelsigilo: false,
+      justicagratuita: false,
+      tutelaantecipada: false,
+      prioridadeidoso: false,
 
+      entidades: [],
       orgaos: [],
       localidades: [],
       especialidades: [],
       classes: [],
 
-      editando: true,
       tipos: [],
       dataDeProtocolo: undefined,
       resumoPorData: [],
@@ -382,10 +393,14 @@ export default {
   },
 
   computed: {
-    resumoPorDataFiltrado: function () {
+    entidadesFiltradas: function () {
       console.log('recalculando filtrados...', this.modified)
-      var a = this.resumoPorData
-      a = UtilsBL.filtrarPorSubstring(a, this.filtroProtocolo)
+      var a = this.entidades
+      if (!a || !this.orgao) return []
+      var org = this.orgao.toUpperCase()
+      a = a.filter((item) => {
+        return item.orgao === org
+      })
       return a
     },
 
@@ -415,6 +430,10 @@ export default {
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
       })
+    },
+
+    carregarEntidades: function () {
+      this.carregar('config/entidades', 'entidades', 'entidade')
     },
 
     carregarOrgaos: function () {
@@ -578,7 +597,7 @@ export default {
     //
 
     adicionarParte: function () {
-      this.partes.push({ polo: 2, tipopessoa: 1 })
+      this.partes.push({ polo: 2, tipopessoa: 1, documento: undefined, nome: undefined })
       this.validar()
     },
 
@@ -612,13 +631,57 @@ export default {
       })
     },
 
+    alterouCpf: function(parte) {
+      console.log(parte.documento)
+      var cpf = ProcessoBL.somenteNumeros(parte.documento)
+      if (!cpf || !ValidacaoBL.validarCPF(cpf)) {
+        parte.nome = undefined
+        this.validar()
+        return
+      }
+      this.$http.get('config/pessoa-fisica/' + cpf + '?orgao=' + this.orgao, { block: true }).then(response => {
+        console.log(response.data)
+        parte.nome = response.data.nome
+        this.validar()
+      }, error => UtilsBL.errormsg(error, this))
+    },
+
+    alterouCnpj: function(parte) {
+      console.log(parte.documento)
+      var cnpj = ProcessoBL.somenteNumeros(parte.documento)
+      if (!cnpj || !ValidacaoBL.validarCNPJ(cnpj)) {
+        parte.nome = undefined
+        this.validar()
+        return
+      }
+      this.$http.get('config/pessoa-juridica/' + cnpj + '?orgao=' + this.orgao, { block: true }).then(response => {
+        console.log(response.data)
+        parte.nome = response.data.nome
+        this.validar()
+      }, error => UtilsBL.errormsg(error, this))
+    },
+
+    alterouOab: function(parte) {
+      console.log(parte.documento)
+      var oab = parte.documento
+      if (!oab || !ValidacaoBL.validarOAB(oab)) {
+        parte.nome = undefined
+        this.validar()
+        return
+      }
+      this.$http.get('config/advogado/' + oab + '?orgao=' + this.orgao, { block: true }).then(response => {
+        console.log(response.data)
+        parte.nome = response.data.nome
+        this.validar()
+      }, error => UtilsBL.errormsg(error, this))
+    },
+
     //
     // Peticionar
     //
     peticionar: function () {
       this.errormsg = undefined
       this.$validator.validateAll().then((result) => { if (!result) return })
-      this.editando = false
       var pdfs, classificacoes, i
       for (i = 0; i < this.arquivos.length; i++) {
         if (pdfs) pdfs += ','
@@ -637,6 +700,9 @@ export default {
         cdas: this.ef ? this.cda : undefined,
         pas: this.ef ? this.pa : undefined,
         nivelsigilo: this.nivelsigilo ? 1 : 0,
+        justicagratuita: this.justicagratuita,
+        tutelaantecipada: this.tutelaantecipada,
+        prioridadeidoso: this.prioridadeidoso,
         partes: JSON.stringify(this.partes),
         pdfs: pdfs,
         classificacoes: classificacoes
@@ -648,7 +714,6 @@ export default {
 
     limpar: function () {
       this.successmsg = undefined
-      this.editando = true
       this.arquivos.length = 0
       this.valor = undefined
       this.cda = undefined

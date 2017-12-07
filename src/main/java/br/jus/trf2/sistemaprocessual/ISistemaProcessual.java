@@ -158,6 +158,14 @@ public interface ISistemaProcessual {
 	public class DataUltimoMovimento implements ISwaggerModel {
 	}
 
+	public class Pessoa implements ISwaggerModel {
+		public String orgao;
+		public String id;
+		public String nome;
+		public String documento;
+		public String tipodedocumento;
+	}
+
 	public class Aviso implements ISwaggerModel {
 		public String idAviso;
 		public String dataAviso;
@@ -223,6 +231,58 @@ public interface ISistemaProcessual {
 	public interface ILocalidadeIdEspecialidadeId2ClasseGet extends ISwaggerMethod {
 		public void run(LocalidadeIdEspecialidadeId2ClasseGetRequest req,
 				LocalidadeIdEspecialidadeId2ClasseGetResponse resp) throws Exception;
+	}
+
+	public class PessoaFisicaDocumentoGetRequest implements ISwaggerRequest {
+		public String documento;
+		public String orgao;
+	}
+
+	public class PessoaFisicaDocumentoGetResponse implements ISwaggerResponse {
+		public List<Pessoa> list;
+	}
+
+	public interface IPessoaFisicaDocumentoGet extends ISwaggerMethod {
+		public void run(PessoaFisicaDocumentoGetRequest req, PessoaFisicaDocumentoGetResponse resp) throws Exception;
+	}
+
+	public class PessoaJuridicaDocumentoGetRequest implements ISwaggerRequest {
+		public String documento;
+		public String orgao;
+	}
+
+	public class PessoaJuridicaDocumentoGetResponse implements ISwaggerResponse {
+		public List<Pessoa> list;
+	}
+
+	public interface IPessoaJuridicaDocumentoGet extends ISwaggerMethod {
+		public void run(PessoaJuridicaDocumentoGetRequest req, PessoaJuridicaDocumentoGetResponse resp)
+				throws Exception;
+	}
+
+	public class AdvogadoDocumentoGetRequest implements ISwaggerRequest {
+		public String documento;
+		public String orgao;
+	}
+
+	public class AdvogadoDocumentoGetResponse implements ISwaggerResponse {
+		public List<Pessoa> list;
+	}
+
+	public interface IAdvogadoDocumentoGet extends ISwaggerMethod {
+		public void run(AdvogadoDocumentoGetRequest req, AdvogadoDocumentoGetResponse resp) throws Exception;
+	}
+
+	public class OrgaoPublicoListarGetRequest implements ISwaggerRequest {
+		public String orgao;
+	}
+
+	public class OrgaoPublicoListarGetResponse implements ISwaggerResponse {
+		public List<Pessoa> list;
+	}
+
+	public interface IOrgaoPublicoListarGet extends ISwaggerMethod {
+		public void run(OrgaoPublicoListarGetRequest req, OrgaoPublicoListarGetResponse resp) throws Exception;
 	}
 
 	public class AutenticarPostRequest implements ISwaggerRequest {

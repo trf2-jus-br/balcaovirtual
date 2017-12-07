@@ -83,6 +83,93 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /pessoa-fisica/{documento}:
+    get:
+      description: Pessoa Física
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/documento"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Pessoa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /pessoa-juridica/{documento}:
+    get:
+      description: Pessoa Jurídica
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/documento"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Pessoa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /advogado/{documento}:
+    get:
+      description: Advogado
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/documento"
+        - $ref: "#/parameters/orgaoquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Pessoa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /orgao-publico/listar:
+    get:
+      description: Listagem de órgãos públicos
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/orgaoqueryopcional"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Pessoa"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /autenticar:
     post:
       description: Autenticar usuário
@@ -590,7 +677,19 @@ parameters:
     description: Órgao
     required: true
     type: string
-            
+  orgaoqueryopcional:
+    name: orgao
+    in: query
+    description: Órgao
+    required: false
+    type: string
+  documento:
+    name: documento
+    in: path
+    description: Número do CPF ou CNPJ só algarismos
+    required: true
+    type: string
+
 definitions:
   Nome:
     type: string
@@ -844,13 +943,24 @@ definitions:
     description: Número de CDAs separado por vírgula
     type: string
     
-  CDAs:
-    description: Número de CDAs separado por vírgula
-    type: string
-    
   DataUltimoMovimento:
     description: Data do último movimento do processo
     type: string
+
+  Pessoa:
+    description: Dados sobre pessoa física ou jurídica
+    type: object
+    properties:
+      orgao:
+        type: string
+      id:
+        type: string
+      nome:
+        type: string
+      documento:
+        type: string
+      tipodedocumento:
+        type: string
 
   Aviso:
     description: Aviso

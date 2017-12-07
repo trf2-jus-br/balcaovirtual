@@ -83,5 +83,11 @@ export default {
     if (resultado + '' !== digitos.charAt(1)) return false
 
     return true
+  },
+
+  validarOAB: function (oab) {
+    const regex = /^[A-Z]{2}[0-9]{4,6}$/
+    if (regex.exec(oab) !== null) return true
+    return false
   }
 }
