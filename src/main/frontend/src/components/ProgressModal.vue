@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import bModal from 'bootstrap-vue/es/components/modal/modal'
+// import bModal from 'bootstrap-vue/es/components/modal/modal'
+import { bModal } from 'bootstrap-vue/lib/components'
 
 export default {
   name: 'progressBar',
