@@ -275,6 +275,7 @@ public interface ISistemaProcessual {
 
 	public class OrgaoPublicoListarGetRequest implements ISwaggerRequest {
 		public String orgao;
+		public String tipodedocumento;
 	}
 
 	public class OrgaoPublicoListarGetResponse implements ISwaggerResponse {

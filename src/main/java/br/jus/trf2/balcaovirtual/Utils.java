@@ -267,4 +267,14 @@ public class Utils {
 		return bytesToHex(calcSha1(bytes));
 	}
 
+	public static double parsearValor(String s) {
+		if (s == null)
+			return 0;
+		s = s.trim();
+		if (s.length() == 0)
+			return 0;
+		s = s.replace(".", "").replace(",", ".");
+		return Double.parseDouble(s);
+	}
+
 }

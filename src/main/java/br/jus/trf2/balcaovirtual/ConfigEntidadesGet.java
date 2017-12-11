@@ -20,7 +20,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		Future<SwaggerAsyncResponse<OrgaoPublicoListarGetResponse>> future = SwaggerCall.callAsync("obter localidades",
-				null, "GET", Utils.getWsProcessualUrl() + "/orgao-publico/listar", null,
+				null, "GET", Utils.getWsProcessualUrl() + "/orgao-publico/listar?tipodedocumento=cnpj", null,
 				OrgaoPublicoListarGetResponse.class);
 		SwaggerAsyncResponse<OrgaoPublicoListarGetResponse> sar = future.get();
 		if (sar.getException() != null)
@@ -28,11 +28,13 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 		OrgaoPublicoListarGetResponse r = (OrgaoPublicoListarGetResponse) sar.getResp();
 
 		resp.list = new ArrayList<>();
-		for (Pessoa idNome : r.list) {
+		for (Pessoa p : r.list) {
 			Entidade o = new Entidade();
-			o.orgao = idNome.orgao;
-			o.id = idNome.id;
-			o.nome = idNome.nome;
+			o.orgao = p.orgao;
+			o.id = p.id;
+			o.nome = p.nome;
+			o.documento = p.documento;
+			o.tipodedocumento = p.tipodedocumento;
 			resp.list.add(o);
 		}
 	}

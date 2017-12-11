@@ -22,6 +22,8 @@ public interface IBalcaoVirtual {
 		public String orgao;
 		public String id;
 		public String nome;
+		public String documento;
+		public String tipodedocumento;
 	}
 
 	public class Localidade implements ISwaggerModel {
@@ -439,6 +441,7 @@ public interface IBalcaoVirtual {
 		public String localidade;
 		public String especialidade;
 		public String classe;
+		public String valorcausa;
 		public String cdas;
 		public String pas;
 		public String nivelsigilo;

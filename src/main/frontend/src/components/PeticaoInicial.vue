@@ -132,7 +132,7 @@
           <h5 class="mt-3 mb-2">Dados Básicos</h5>
         </div>
       </div>
-      <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: #f7f7f9">
+      <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
         <div class="row">
           <div class="form-group col-md-2">
             <label for="orgao">Órgão</label>
@@ -164,7 +164,7 @@
           </div>
 
           <div class="form-group col-md-2">
-            <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
+            <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" v-model="valorcausa" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
           </div>
 
           <div class="form-group col-md-6" v-if="ef">
@@ -238,9 +238,9 @@
                   <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" @change="alterouCpf(p)" />
                   <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
                   
-                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'">
+                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" @change="alterouEntidade(p)">
                     <option disabled selected hidden :value="undefined">[Selecionar]</option>
-                    <option v-for="l in entidadesFiltradas" :value="l.id">{{l.nome}}</option>
+                    <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
                   </select>
 
                   
@@ -286,7 +286,7 @@ const polos = [{
   nome: 'Passivo'
 }]
 
-const partes = [{ polo: 1, tipopessoa: '1', documento: undefined, nome: undefined }, { polo: 2, tipopessoa: '2', documento: undefined, nome: undefined }]
+const partes = [{ polo: 1, tipopessoa: '1', documento: undefined, nome: undefined }, { polo: 2, tipopessoa: '1', documento: undefined, nome: undefined }]
 
 const tipospeca = [{
   id: 1,
@@ -347,7 +347,7 @@ export default {
       localidade: undefined,
       especialidade: undefined,
       classe: undefined,
-      valor: undefined,
+      valorcausa: undefined,
 
       cda: undefined,
       pa: undefined,
@@ -632,7 +632,6 @@ export default {
     },
 
     alterouCpf: function(parte) {
-      console.log(parte.documento)
       var cpf = ProcessoBL.somenteNumeros(parte.documento)
       if (!cpf || !ValidacaoBL.validarCPF(cpf)) {
         parte.nome = undefined
@@ -640,14 +639,12 @@ export default {
         return
       }
       this.$http.get('config/pessoa-fisica/' + cpf + '?orgao=' + this.orgao, { block: true }).then(response => {
-        console.log(response.data)
         parte.nome = response.data.nome
         this.validar()
       }, error => UtilsBL.errormsg(error, this))
     },
 
     alterouCnpj: function(parte) {
-      console.log(parte.documento)
       var cnpj = ProcessoBL.somenteNumeros(parte.documento)
       if (!cnpj || !ValidacaoBL.validarCNPJ(cnpj)) {
         parte.nome = undefined
@@ -655,14 +652,12 @@ export default {
         return
       }
       this.$http.get('config/pessoa-juridica/' + cnpj + '?orgao=' + this.orgao, { block: true }).then(response => {
-        console.log(response.data)
         parte.nome = response.data.nome
         this.validar()
       }, error => UtilsBL.errormsg(error, this))
     },
 
     alterouOab: function(parte) {
-      console.log(parte.documento)
       var oab = parte.documento
       if (!oab || !ValidacaoBL.validarOAB(oab)) {
         parte.nome = undefined
@@ -670,10 +665,20 @@ export default {
         return
       }
       this.$http.get('config/advogado/' + oab + '?orgao=' + this.orgao, { block: true }).then(response => {
-        console.log(response.data)
         parte.nome = response.data.nome
         this.validar()
       }, error => UtilsBL.errormsg(error, this))
+    },
+
+    alterouEntidade: function(parte) {
+      parte.nome = undefined
+      for (var i = 0; i < this.entidadesFiltradas.length; i++) {
+        var e = this.entidadesFiltradas[i]
+        if (e.documento === parte.documento) {
+          parte.nome = e.nome
+        }
+      }
+      this.validar()
     },
 
     //
@@ -692,11 +697,15 @@ export default {
         else classificacoes = ''
         classificacoes += this.arquivos[i].tipo
       }
+
+      console.log('valorcausa', this.valorcausa)
+
       this.$http.post('peticao-inicial/protocolar', {
         orgao: this.orgao,
         localidade: this.localidade,
         especialidade: this.especialidade,
         classe: this.classe,
+        valorcausa: this.valorcausa,
         cdas: this.ef ? this.cda : undefined,
         pas: this.ef ? this.pa : undefined,
         nivelsigilo: this.nivelsigilo ? 1 : 0,
@@ -715,7 +724,7 @@ export default {
     limpar: function () {
       this.successmsg = undefined
       this.arquivos.length = 0
-      this.valor = undefined
+      this.valorcausa = undefined
       this.cda = undefined
       this.pa = undefined
     },

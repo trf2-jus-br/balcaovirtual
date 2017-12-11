@@ -381,8 +381,9 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
-			int classe, String cdas, String pas, int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada,
-			boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs) throws Exception {
+			int classe, double valorCausa, String cdas, String pas, int nvlSigilo, boolean justicagratuita,
+			boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs)
+			throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -440,7 +441,7 @@ public class SoapMNI {
 				tqp = TipoQualificacaoPessoa.JURIDICA;
 				break;
 			case 3:
-				tqp = TipoQualificacaoPessoa.AUTORIDADE;
+				tqp = TipoQualificacaoPessoa.JURIDICA;
 				break;
 			case 4:
 				if (tp == null)
@@ -457,8 +458,8 @@ public class SoapMNI {
 			}
 
 			tp = new TipoParte();
-			if (justicagratuita && tqp == TipoQualificacaoPessoa.FISICA)
-				tp.setAssistenciaJudiciaria(true);
+			// if (justicagratuita && tqp == TipoQualificacaoPessoa.FISICA)
+			// tp.setAssistenciaJudiciaria(true);
 			tp.setRelacionamentoProcessual(ModalidadeRelacionamentoProcessual.RP);
 			TipoPessoa pess = new TipoPessoa();
 			pess.setNome(parte.nome);
@@ -472,10 +473,19 @@ public class SoapMNI {
 
 		dadosBasicos.setCodigoLocalidade(localidade);
 		dadosBasicos.setClasseProcessual(classe);
+		//dadosBasicos.setClasseProcessual(20);
+		dadosBasicos.setValorCausa(valorCausa);
 		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
 
 		if (prioridadeidoso) {
 			dadosBasicos.getPrioridade().add("IDOSO");
+		}
+
+		if (justicagratuita) {
+			TipoParametro jg = new TipoParametro();
+			jg.setNome("JUSTICAGRATUITA");
+			jg.setValor("TRUE");
+			parametros.add(jg);
 		}
 
 		if (tutelaantecipada) {

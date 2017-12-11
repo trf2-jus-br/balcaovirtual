@@ -155,6 +155,7 @@ paths:
       tags: [config]
       parameters:
         - $ref: "#/parameters/orgaoqueryopcional"
+        - $ref: "#/parameters/tipodedocumentoqueryopcional"
       responses:
         200:
           description: Successful response
@@ -681,6 +682,12 @@ parameters:
     name: orgao
     in: query
     description: Órgao
+    required: false
+    type: string
+  tipodedocumentoqueryopcional:
+    name: tipodedocumento
+    in: query
+    description: Tipo de documento deve ser cnpj para restrigir apenas as entidades que possuem cnpj
     required: false
     type: string
   documento:

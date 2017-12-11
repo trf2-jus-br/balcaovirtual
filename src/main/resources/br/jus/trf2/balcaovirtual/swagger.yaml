@@ -275,6 +275,12 @@ parameters:
     description: Classe do CNJ
     type: string
     required: true
+  valorcausa:
+    name: valorcausa
+    in: formData
+    description: Valor da Causa
+    type: string
+    required: true
   cdas:
     name: cdas
     in: formData
@@ -700,6 +706,7 @@ paths:
         - $ref: "#/parameters/localidade"
         - $ref: "#/parameters/especialidade"
         - $ref: "#/parameters/classe"
+        - $ref: "#/parameters/valorcausa"
         - $ref: "#/parameters/cdas"
         - $ref: "#/parameters/pas"
         - $ref: "#/parameters/nivelsigilo"
@@ -1381,6 +1388,10 @@ definitions:
       id:
         type: string
       nome:
+        type: string
+      documento:
+        type: string
+      tipodedocumento:
         type: string
 
   Localidade:
