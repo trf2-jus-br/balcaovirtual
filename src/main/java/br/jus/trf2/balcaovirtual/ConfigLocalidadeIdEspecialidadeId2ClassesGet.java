@@ -34,8 +34,9 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 			if (idNome.classecnj == null || idNome.classecnj.codigo == null || idNome.classecnj.descricao == null)
 				continue;
 			Classe o = new Classe();
-			o.id = Integer.toString(idNome.classecnj.codigo.intValue());
-			o.nome = idNome.classecnj.descricao;//.split(" - ")[0];
+			o.id = Integer.toString(idNome.classecnj.codigo.intValue()) + "|" + idNome.id;
+			// o.nome = idNome.classecnj.descricao;//.split(" - ")[0];
+			o.nome = idNome.nome;//.split(" - ")[0];
 			resp.list.add(o);
 		}
 	}

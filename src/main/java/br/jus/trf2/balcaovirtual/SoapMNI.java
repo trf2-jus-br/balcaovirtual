@@ -381,7 +381,7 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
-			int classe, double valorCausa, String cdas, String pas, int nvlSigilo, boolean justicagratuita,
+			String classe, double valorCausa, String cdas, String pas, int nvlSigilo, boolean justicagratuita,
 			boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs)
 			throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
@@ -472,13 +472,31 @@ public class SoapMNI {
 		}
 
 		dadosBasicos.setCodigoLocalidade(localidade);
-		dadosBasicos.setClasseProcessual(classe);
-		//dadosBasicos.setClasseProcessual(20);
+		// dadosBasicos.setClasseProcessual(20);
 		dadosBasicos.setValorCausa(valorCausa);
-		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
+		List<TipoParametro> parametros = dadosBasicos.getOutroParametro();// new
+																			// ArrayList<TipoParametro>();
+
+		// Classe processual e parâmetro adicional para informar a classe do
+		// Apolo
+		String aClasse[] = classe.split("\\|");
+		dadosBasicos.setClasseProcessual(Integer.parseInt(aClasse[0]));
+		if (aClasse.length == 2) {
+			TipoParametro p = new TipoParametro();
+			p.setNome("CLASSEINTERNA");
+			p.setValor(aClasse[1]);
+			parametros.add(p);
+		}
 
 		if (prioridadeidoso) {
 			dadosBasicos.getPrioridade().add("IDOSO");
+		}
+
+		if (justicagratuita) {
+			TipoParametro jg = new TipoParametro();
+			jg.setNome("JUSTICAGRATUITA");
+			jg.setValor("TRUE");
+			parametros.add(jg);
 		}
 
 		if (justicagratuita) {
