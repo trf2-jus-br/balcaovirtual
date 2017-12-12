@@ -22,6 +22,11 @@
       </div>
     </div>
 
+    <div class="row" v-if="alerta &amp;&amp; !successmsg">
+      <div class="col col-sm-12"><p class="alert alert-warning" v-html="alerta"></p>
+      </div>
+    </div>
+
     <template v-if="successmsg">
       <div class="row">
         <div class="col col-sm-12">
@@ -31,11 +36,20 @@
         </div>
       </div>
 
-      <div class="row ">
-        <div class="col-sm-12 ">
-          <button type="button " @click="limpar()" id="voltar" class="btn btn-secondary float-right d-print-none mt-3 ">Enviar Outra Petição</button>
+      <div class="row justify-content-end align-items-center mt-3">
+        <div class="col-sm-auto">
+          <div>
+            <label class="form-check-label">
+              <input type="checkbox" v-model="manterCampos">
+              Manter preenchimento anterior
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-auto">
+          <button type="button " @click="limpar()" id="voltar" class="btn btn-secondary d-print-none">Enviar Outra Petição</button>
         </div>
       </div>
+
     </template>
 
     <template v-if="!successmsg">
@@ -322,6 +336,10 @@ const tipospessoa = [{
   nome: 'Advogado'
 }]
 
+const alertas = {
+  'jfrj': '<strong>Atenção</strong>: O serviço de petição inicial pela internet não deve ser utilizado para o ajuizamento de TURMA RECURSAL e plantão judiciário. Nestes casos, as petições devem ser protocoladas por meio físico, junto a Seção de Distribuição da TURMA RECURSAL ou no JUÍZO DE PLANTÃO, conforme o caso.'
+}
+
 export default {
   name: 'peticao-inicial',
 
@@ -339,9 +357,11 @@ export default {
       invalidFiles: [],
 
       polos: polos,
-      partes: partes,
+      partes: JSON.parse(JSON.stringify(partes)),
       tipospeca: tipospeca,
       tipospessoa: tipospessoa,
+
+      alertas: alertas,
 
       orgao: undefined,
       localidade: undefined,
@@ -375,6 +395,7 @@ export default {
       errormsg: undefined,
       warningmsg: undefined,
       successmsg: undefined,
+      manterCampos: false,
       vueclipOptions: {
         url: this.$http.options.root + '/../upload',
         headers: {
@@ -407,6 +428,10 @@ export default {
     ef: function () {
       // Substituir pelo uso de um parâmetro de retorno referente à classe escolhida
       return this.classe === '1116' || this.classe === '203' || this.classe === '99'
+    },
+
+    alerta: function () {
+      return this.alertas[this.orgao]
     }
   },
 
@@ -723,10 +748,25 @@ export default {
 
     limpar: function () {
       this.successmsg = undefined
-      this.arquivos.length = 0
-      this.valorcausa = undefined
-      this.cda = undefined
-      this.pa = undefined
+      if (!this.manterCampos) {
+        this.arquivos.length = 0
+        this.orgao = undefined
+        this.localidade = undefined
+        this.especialidade = undefined
+        this.classe = undefined
+
+        this.nivelsigilo = false
+        this.justicagratuita = false
+        this.tutelaantecipada = false
+        this.prioridadeidoso = false
+
+        this.valorcausa = undefined
+        this.cda = undefined
+        this.pa = undefined
+        this.$set(this, 'partes', JSON.parse(JSON.stringify(partes)))
+      }
+      this.ordenarPartes()
+      this.validar()
     },
 
     imprimir: function () {
