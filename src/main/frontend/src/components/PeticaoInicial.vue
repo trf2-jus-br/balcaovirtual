@@ -426,8 +426,10 @@ export default {
     },
 
     ef: function () {
+      if (!this.classe) return false
+      var c = this.classe.split('|')[0]
       // Substituir pelo uso de um parâmetro de retorno referente à classe escolhida
-      return this.classe === '1116' || this.classe === '203' || this.classe === '99'
+      return c === '1116' || c === '203' || c === '99'
     },
 
     alerta: function () {
