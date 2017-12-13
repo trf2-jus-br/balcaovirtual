@@ -224,7 +224,7 @@
       <div class="row">
         <div class="col-sm-12">
           <table class="table table-peticao table-responsive">
-            <thead class="thead-inverse">
+            <thead class="thead-inverse" @click="validar()">
               <tr>
                 <th>Polo</th>
                 <th>Tipo</th>
@@ -258,7 +258,7 @@
                   </select>
 
                   
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" />
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
                 </td>
 
                 <td v-if="p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
@@ -707,8 +707,18 @@ export default {
       }
       this.$http.get('config/advogado/' + oab + '?orgao=' + this.orgao, { block: true }).then(response => {
         parte.nome = response.data.nome
-        this.validar()
+        window.setTimeout(() => this.validar(), 100)
       }, error => UtilsBL.errormsg(error, this))
+    },
+
+    fixOab: function(parte) {
+      var oab = parte.documento
+      if (!oab) return
+      if (oab.length < 6) return
+      while (oab.length < 8) oab = oab.substring(0, 2) + '0' + oab.substring(2)
+      this.$set(parte, 'documento', oab)
+      this.alterouOab(parte)
+      window.setTimeout(() => this.validar(), 100)
     },
 
     alterouEntidade: function(parte) {
