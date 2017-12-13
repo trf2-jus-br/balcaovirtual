@@ -183,13 +183,13 @@
 
           <div class="form-group col-md-6" v-if="ef">
             <label for="cda">CDA</label>
-            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" v-validate.initial="'required'" />
+            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" />
             <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
           </div>
 
           <div class="form-group col-md-6" v-if="ef">
             <label for="pa">Processo Administrativo</label>
-            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" v-validate.initial="'required'" />
+            <input type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" />
             <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
           </div>
 
