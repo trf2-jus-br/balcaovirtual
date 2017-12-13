@@ -312,7 +312,7 @@ public class SoapMNI {
 				TipoDocumento doc = new TipoDocumento();
 				doc.setMimetype("application/pdf");
 				doc.setDataHora(dataEnvio);
-				doc.setNivelSigilo(nvlSigilo);
+				doc.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
 				doc.setTipoDocumento(tpDoc);
 				Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 				byte[] data = Files.readAllBytes(path);
