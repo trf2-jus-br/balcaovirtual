@@ -416,6 +416,7 @@ public class SoapMNI {
 		}
 
 		TipoCabecalhoProcesso dadosBasicos = new TipoCabecalhoProcesso();
+		dadosBasicos.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
 		TipoParte tp = null;
 		for (Parte parte : partes) {
 			ModalidadePoloProcessual m = parte.polo == 1 ? ModalidadePoloProcessual.AT : ModalidadePoloProcessual.PA;
