@@ -171,15 +171,15 @@
           </div>
           <div class="form-group col-md-3">
             <label for="classe">Classe</label>
-            <select id="classe" class="form-control" v-model="classe" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
+            <select id="classe" class="form-control" v-model="classe" @change="selecionarClasse(classe)" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
               <option disabled selected hidden :value="undefined">[Selecionar]</option>
               <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
             </select>
           </div>
 
           <div class="form-group col-md-2">
-            <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" v-model="valorcausa" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'">
-          </div>
+            <label for="valor">Valor da Causa</label> <input type="text" class="form-control" id="valor" name="valorDaCausa" v-model="valorcausa" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'" :class="{ 'is-invalid': errors.has('valorDaCausa') }" v-validate.initial="valordacausaobrigatorio ? 'required|min:5' : ''">
+          </div>  
 
           <div class="form-group col-md-6" v-if="ef">
             <label for="cda">CDA</label>
@@ -432,6 +432,14 @@ export default {
 
     alerta: function () {
       return this.alertas[this.orgao]
+    },
+
+    valordacausaobrigatorio: function() {
+      if (!this.classes || !this.classe) return false
+      for (var i = 0; i < this.classes.length; i++) {
+        if (this.classe === this.classes[i].id) return this.classes[i].valordacausaobrigatorio
+      }
+      return false
     }
   },
 
@@ -495,6 +503,12 @@ export default {
       this.classe = undefined
       this.classes.length = 0
       this.carregarClasses()
+    },
+
+    selecionarClasse: function () {
+      this.$nextTick(() => {
+        this.validar()
+      })
     },
 
     carregarClasses: function () {

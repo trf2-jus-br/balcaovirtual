@@ -44,6 +44,7 @@ public interface ISistemaProcessual {
 	public class IdNomeClasseCNJ implements ISwaggerModel {
 		public String id;
 		public String nome;
+		public Boolean valordacausaobrigatorio;
 		public ClasseCNJ classecnj;
 	}
 

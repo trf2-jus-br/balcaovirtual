@@ -37,6 +37,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 			o.id = Integer.toString(idNome.classecnj.codigo.intValue()) + "|" + idNome.id;
 			// o.nome = idNome.classecnj.descricao;//.split(" - ")[0];
 			o.nome = idNome.nome;//.split(" - ")[0];
+			o.valordacausaobrigatorio = idNome.valordacausaobrigatorio;
 			resp.list.add(o);
 		}
 	}

@@ -39,6 +39,7 @@ public interface IBalcaoVirtual {
 	public class Classe implements ISwaggerModel {
 		public String id;
 		public String nome;
+		public Boolean valordacausaobrigatorio;
 	}
 
 	public class OrgaoInfo implements ISwaggerModel {

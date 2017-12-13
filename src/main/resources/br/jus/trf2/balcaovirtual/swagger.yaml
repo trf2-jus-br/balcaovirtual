@@ -1420,6 +1420,8 @@ definitions:
         type: string
       nome:
         type: string
+      valordacausaobrigatorio:
+        type: boolean
 
   OrgaoInfo:
     description: Classe
