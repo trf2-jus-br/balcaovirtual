@@ -408,7 +408,7 @@ public class SoapMNI {
 			byte[] data = Files.readAllBytes(path);
 			doc.setConteudo(data);
 			TipoParametro classificacao = new TipoParametro();
-			classificacao.setNome("classificacao");
+			classificacao.setNome("CLASSIFICACAO");
 			classificacao.setValor(classificacoes[i]);
 			doc.getOutroParametro().add(classificacao);
 			l.add(doc);
