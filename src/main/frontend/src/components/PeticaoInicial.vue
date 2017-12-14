@@ -700,6 +700,12 @@ export default {
 
     alterouOab: function(parte) {
       var oab = parte.documento
+
+      if (oab) {
+        oab = oab.toUpperCase()
+        parte.documento = oab
+      }
+
       if (!oab || !ValidacaoBL.validarOAB(oab)) {
         parte.nome = undefined
         this.validar()
