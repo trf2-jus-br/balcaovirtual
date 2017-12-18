@@ -724,6 +724,13 @@ paths:
             properties:
               status:
                 type: string
+              protocolo:
+                type: string
+              data:
+                type: string
+                format: date-time
+              numero:
+                type: string
         500:
           description: Error ocurred
           schema:

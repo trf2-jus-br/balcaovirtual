@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoInicialProtocolarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostResponse;
+import br.jus.trf2.balcaovirtual.SoapMNI.PeticaoInicial;
 
 public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPost {
 
@@ -24,10 +25,13 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 
 		List<SoapMNI.Parte> partes = gson.fromJson(req.partes, type);
 
-		String mensagem = SoapMNI.enviarPeticaoInicial(authorization, req.orgao, req.localidade, req.especialidade,
+		PeticaoInicial pi = SoapMNI.enviarPeticaoInicial(authorization, req.orgao, req.localidade, req.especialidade,
 				req.classe, Utils.parsearValor(req.valorcausa), req.cdas, req.pas, Integer.parseInt(req.nivelsigilo),
 				req.justicagratuita, req.tutelaantecipada, req.prioridadeidoso, partes, req.pdfs, req.classificacoes);
-		resp.status = mensagem;
+		resp.status = pi.mensagem;
+		resp.protocolo = pi.protocolo;
+		resp.data = pi.data;
+		resp.numero = pi.numProcFormatado;
 	}
 
 	@Override

@@ -380,10 +380,17 @@ public class SoapMNI {
 		String nome;
 	}
 
-	public static String enviarPeticaoInicial(String idManif, String orgao, String localidade, String especialidade,
-			String classe, double valorCausa, String cdas, String pas, int nvlSigilo, boolean justicagratuita,
-			boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs)
-			throws Exception {
+	public static class PeticaoInicial {
+		String mensagem;
+		String protocolo;
+		Date data;
+		String numProcFormatado;
+	}
+
+	public static PeticaoInicial enviarPeticaoInicial(String idManif, String orgao, String localidade,
+			String especialidade, String classe, double valorCausa, String cdas, String pas, int nvlSigilo,
+			boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes,
+			String nomePdfs, String tpDocPdfs) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -550,19 +557,29 @@ public class SoapMNI {
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
+		String numProc = null;
+		String numProcFormatado = null;
+		for (TipoParametro p : parametro.value) {
+			if (p.getNome().equalsIgnoreCase("numerodoprocesso")) {
+				numProc = p.getValor();
+				numProcFormatado = Utils.formatarNumeroProcesso(numProc);
+				break;
+			}
+		}
+
 		DateTime dt = DateTime.parse(dataOperacao.value, dtfMNI);
+		String dataProtocoloFormatada = dt.toString(dtfBR);
 
 		boolean sent = false;
-		String numProcFormated = "?";
 		if (email != null) {
 			try {
 				String conteudo = "Prezado(a) " + nome
 						+ ",\n\nAcusamos o recebimento da petição inicial conforme dados abaixo:"
-						+ "\n\nProcesso Autuado Número: " + numProcFormated + "\nProtocolo: "
-						+ protocoloRecebimento.value + "\nData/Hora do Protocolo: " + dt.toString(dtfBR)
+						+ "\n\nProcesso Autuado Número: " + numProcFormatado + "\nProtocolo: "
+						+ protocoloRecebimento.value + "\nData/Hora do Protocolo: " + dataProtocoloFormatada
 						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
 				Correio.enviar(email, "Balcão Virtual: Protocolo de Recebimento", conteudo,
-						numProcFormated + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
+						numProcFormatado + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
 						recibo.value);
 				sent = true;
 			} catch (Exception ex) {
@@ -571,11 +588,18 @@ public class SoapMNI {
 		}
 
 		SwaggerUtils.log(SoapMNI.class)
-				.warn("*** Processo: " + numProcFormated + " Petição Inicial protocolada: " + protocoloRecebimento.value
-						+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
+				.warn("*** Processo: " + numProcFormatado + " Petição Inicial protocolada: "
+						+ protocoloRecebimento.value + " Por: " + usuario + " Email: " + email
+						+ (sent ? "" : " (email não enviado)"));
 
-		return "Protocolo: " + protocoloRecebimento.value + ", Data: " + dt.toString(dtfBR)
-				+ (sent ? "" : " (email não enviado)");
+		PeticaoInicial pi = new PeticaoInicial();
+
+		pi.mensagem = "Protocolo: " + protocoloRecebimento.value + ", Data: " + dataProtocoloFormatada
+				+ ", Processo Autuado: " + numProcFormatado + (sent ? "" : " (email não enviado)");
+		pi.protocolo = protocoloRecebimento.value;
+		pi.data = dt.toDate();
+		pi.numProcFormatado = numProcFormatado;
+		return pi;
 	}
 
 }

@@ -456,6 +456,9 @@ public interface IBalcaoVirtual {
 
 	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {
 		public String status;
+		public String protocolo;
+		public Date data;
+		public String numero;
 	}
 
 	public interface IPeticaoInicialProtocolarPost extends ISwaggerMethod {
