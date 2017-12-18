@@ -57,31 +57,31 @@
 
         <timeline :timeline="timeline"></timeline>
 
-        <div class="row no-gutters pt-0">
+        <div class="row no-gutters mt-2">
           <div class="col col-auto mr-1" v-if="!$parent.settings.filtrarMovimentos">
             <button type="button" @click="filtrarMovimentos('')" class="btn btn-secondary d-print-none">
               <span class="fa fa-filter"></span>
               Filtrar Movimentos
             </button>
           </div>
-          <div class="col col-auto mr-1" v-if="filtro !== '#marca'">
+          <div class="col col-auto mr-1 mb-3" v-if="filtro !== '#marca'">
             <button type="button" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none">
               <span class="fa fa-filter"></span>
               Filtrar Marcas
             </button>
           </div>
-          <div class="col col-auto ml-auto">
+          <div class="col col-auto ml-auto mb-3">
             <button type="button" @click="mostrarCompleto()" id="download" class="btn btn-info d-print-none">
               <span class="fa fa-download"></span>
               PDF Completo
             </button>
           </div>
-          <div class="col col-auto ml-1">
+          <div class="col col-auto ml-1 mb-3">
             <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
+          <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>
@@ -90,7 +90,7 @@
 
         <template v-if="proc &amp;&amp; proc.dadosBasicos">
           <!-- QUADROS COLORIDOS -->
-          <div class="d-print-none mt-3" v-if="errormsg === undefined">
+          <div class="d-print-none" v-if="errormsg === undefined">
             <div class="card-deck">
               <div class="card text-white bg-primary card-consulta-processual mb-3">
                 <div class="card-body">
