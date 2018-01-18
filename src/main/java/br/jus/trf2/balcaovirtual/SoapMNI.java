@@ -355,7 +355,7 @@ public class SoapMNI {
 						+ "\n\nProcesso Número: " + numProcFormated + "\nProtocolo: " + protocoloRecebimento.value
 						+ "\nData/Hora do Protocolo: " + dt.toString(dtfBR)
 						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
-				Correio.enviar(email, "Balcão Virtual: Protocolo de Recebimento", conteudo,
+				Correio.enviar(email, "Balcão Virtual: Protocolo de Petição Intercorrente", conteudo,
 						numProcFormated + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
 						recibo.value);
 				sent = true;
@@ -578,7 +578,7 @@ public class SoapMNI {
 						+ "\n\nProcesso Autuado Número: " + numProcFormatado + "\nProtocolo: "
 						+ protocoloRecebimento.value + "\nData/Hora do Protocolo: " + dataProtocoloFormatada
 						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
-				Correio.enviar(email, "Balcão Virtual: Protocolo de Recebimento", conteudo,
+				Correio.enviar(email, "Balcão Virtual: Protocolo de Petição Inicial", conteudo,
 						numProcFormatado + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
 						recibo.value);
 				sent = true;

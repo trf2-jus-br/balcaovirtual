@@ -14,7 +14,8 @@ import 'bootstrap'
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueClip from 'vue-clip'
-import VeeValidate from 'vee-validate'
+import VeeValidate, { Validator } from 'vee-validate'
+import ptBR from 'vee-validate/dist/locale/pt_BR'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
@@ -37,9 +38,14 @@ VeeValidate.Validator.extend('oab', {
   validate: ValidacaoBL.validarOAB
 })
 
+ptBR.messages.cpf = field => 'CPF ' + field + ' inválido.'
+ptBR.messages.cnpj = field => 'CNPJ ' + field + ' inválido.'
+ptBR.messages.oab = field => 'OAB ' + field + ' inválido.'
+Validator.localize('pt_BR', ptBR)
+
 Vue.use(VueResource)
 Vue.use(VueClip)
-Vue.use(VeeValidate)
+Vue.use(VeeValidate, { locale: 'pt_BR' })
 Vue.use(BootstrapVue)
 
 Vue.component('v-select', vSelect)
@@ -52,12 +58,12 @@ Vue.http.options.root = process.env.API_URL
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  mounted () {
-    Vue.http.interceptors.push(function (request, next) {
+  mounted() {
+    Vue.http.interceptors.push(function(request, next) {
       if (request.block) Bus.$emit('block', request.blockmin, request.blockmax)
 
       // continue to next interceptor
-      next(function (response) {
+      next(function(response) {
         if (request.block) Bus.$emit('release')
         if (response.status === 401) location.reload()
       })

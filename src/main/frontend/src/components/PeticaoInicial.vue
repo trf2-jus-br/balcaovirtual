@@ -63,6 +63,7 @@
               </div>
             </template>
           </vue-clip>
+          <div v-if="arquivos.length == 0" class="invalid-feedback" style="display: block">É necessário fornecer os PDFs para prosseguir</div>
         </div>
       </div>
 
@@ -78,7 +79,7 @@
 
       <div class="row" v-if="arquivos.length > 0">
         <div class="col-sm-12 col-md-12">
-          <table class="table table-peticao table-responsive table-full-width">
+          <table class="table table-peticao table-responsive table-full-width mb-0">
             <thead class="thead-inverse">
               <tr>
                 <th>Tipo</th>
@@ -92,7 +93,7 @@
               <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
                 <td v-if="!editando">{{localizar(f.tipo, tipospeca)}}</td>
                 <td v-if="editando">
-                  <select style="min-width: 8em;" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate.initial="'required'">
+                  <select class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate="'required'">
                     <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
                     <option disabled hidden selected value=""> [Selecionar]</option>
                   </select>
@@ -127,10 +128,11 @@
               </tr>
             </tbody>
           </table>
+          <div v-if="faltaTeorDaPeticao" class="invalid-feedback" style="display: block">É necessário informar o teor da petição</div>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-md-12">
           <h5 class="mt-3 mb-2">Dados Básicos</h5>
         </div>
@@ -138,43 +140,21 @@
       <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
         <div class="row">
           <div class="form-group col-md-2">
-            <label for="orgao">Órgão</label>
-            <div v-if="!editando">{{localizar(orgao, orgaos)}}</div>
-            <select v-if="editando" id="orgao" class="form-control" v-model="orgao" @change="selecionarOrgao(orgao)" name="orgao" :class="{ 'is-invalid': errors.has('orgao') }" v-validate.initial="'required'">
-              <option disabled selected hidden :value="undefined">[Selecionar]</option>
-              <option v-for="l in orgaos" :value="l.id">{{l.nome}}</option>
-            </select>
+            <my-select name="orgao" label="Órgão" v-model="orgao" :list="orgaos" @change="selecionarOrgao" :edit="editando" v-validate="'required'" :error="errors.first('orgao')"></my-select>
           </div>
           <div class="form-group col-md-3">
-            <label for="localidade">Localidade</label>
-            <div v-if="!editando">{{localizar(localidade, localidades)}}</div>
-            <select v-if="editando" id="localidade" class="form-control" v-model="localidade" @change="selecionarLocalidade(localidade)" name="localidade" :class="{ 'is-invalid': errors.has('localidade') }" v-validate.initial="'required'">
-              <option disabled selected hidden :value="undefined">[Selecionar]</option>
-              <option v-for="l in localidades" :value="l.id">{{l.nome}}</option>
-            </select>
+            <my-select :disabled="localidades.length == 0" name="localidade" label="Localidade" v-model="localidade" :list="localidades" @change="selecionarLocalidade" :edit="editando" v-validate="'required'" :error="errors.first('localidade')"></my-select>
           </div>
           <div class="form-group col-md-2">
-            <label for="especialidade">Especialidade</label>
-            <div v-if="!editando">{{localizar(especialidade, especialidades)}}</div>
-            <select v-if="editando" id="especialidade" class="form-control" v-model="especialidade" @change="selecionarEspecialidade(especialidade)" name="especialidade" :class="{ 'is-invalid': errors.has('especialidade') }" v-validate.initial="'required'">
-              <option disabled selected hidden :value="undefined">[Selecionar]</option>
-              <option v-for="l in especialidades" :value="l.id">{{l.nome}}</option>
-            </select>
+            <my-select :disabled="especialidades.length == 0" name="especialidade" label="Especialidade" v-model="especialidade" :list="especialidades" @change="selecionarEspecialidade" :edit="editando" v-validate="'required'" :error="errors.first('especialidade')"></my-select>
           </div>
           <div class="form-group col-md-3">
-            <label for="classe">Classe</label>
-            <div v-if="!editando">{{localizar(classe, classes)}}</div>
-            <select v-if="editando" id="classe" class="form-control" v-model="classe" @change="selecionarClasse(classe)" name="classe" :class="{ 'is-invalid': errors.has('classe') }" v-validate.initial="'required'">
-              <option disabled selected hidden :value="undefined">[Selecionar]</option>
-              <option v-for="l in classes" :value="l.id">{{l.nome}}</option>
-            </select>
+            <my-select :disabled="classes.length == 0" name="classe" label="Classe" v-model="classe" :list="classes" @change="selecionarClasse" :edit="editando" v-validate="'required'" :error="errors.first('classe')"></my-select>
           </div>
 
           <div class="form-group col-md-2">
-            <label for="valor">Valor da Causa</label> 
-            <div v-if="!editando">{{valorcausa}}</div>
-            <input v-if="editando" type="text" class="form-control" id="valor" name="valorDaCausa" v-model="valorcausa" aria-describedby="valorDaCausa" placeholder="0,00" v-mask="'money'" :class="{ 'is-invalid': errors.has('valorDaCausa') }" v-validate.initial="valordacausaobrigatorio ? 'required|min:5' : ''">
-          </div>  
+            <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5' : ''" :error="errors.first('valorcausa')"></my-input>
+          </div>
 
           <div class="form-group col-md-6" v-if="ef">
             <label for="cda">CDA</label>
@@ -249,17 +229,22 @@
 
                 <td v-if="!editando">{{p.documento}}</td>
                 <td v-if="editando" :colspan="p.tipopessoa == '3' ? 2 : 1">
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CPF" v-if="p.tipopessoa == '1'" v-validate.initial="'required|cpf'" v-mask="'999.999.999-99'" @change="alterouCpf(p)" />
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate.initial="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
-                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate.initial="'required'" @change="alterouEntidade(p)">
+                  <my-input v-if="p.tipopessoa == '1'" :disabled="!orgao" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
+
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
+
+                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
                     <option disabled selected hidden :value="undefined">[Selecionar]</option>
                     <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
                   </select>
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate.initial="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
+
+                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
                 </td>
 
                 <td v-if="!editando">{{p.nome}}</td>
-                <td v-if="editando &amp;&amp; p.tipopessoa !== '3'"><input type=" text " class="form-control mr-sm-2 " :class="{ 'is-invalid': errors.has('nome[' + index +']') }" v-model="p.nome " :name="'nome[' + index +']'" placeholder="Nome Completo " v-validate.initial="'required'" /></td>
+                <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
+                  <my-input :disabled="!orgao" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
+                </td>
 
                 <td v-if="editando" align="right">
                   <a href="" @click.prevent="removerParte(p)">
@@ -274,7 +259,7 @@
 
       <div class="row align-items-center d-print-none">
         <div v-if="editando" class="col-sm-12">
-          <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none">Protocolar</button>
+          <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || faltaTeorDaPeticao || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none">Protocolar</button>
         </div>
 
         <template v-if="!editando">
@@ -306,6 +291,8 @@ import UtilsBL from '../bl/utils.js'
 import { Bus } from '../bl/bus.js'
 import AwesomeMask from 'awesome-mask'
 import ValidacaoBL from '../bl/validacao.js'
+import MySelect from './MySelect'
+import MyInput from './MyInput'
 
 const polos = [{
   id: 1,
@@ -369,6 +356,7 @@ export default {
   data () {
     return {
       // remover
+      aorgao2: undefined,
       files: [],
       invalidFiles: [],
 
@@ -410,7 +398,6 @@ export default {
       mostrarQuantidadePorData: undefined,
       quantidadePorData: [],
       arquivos: [],
-      arquivosAProtocolar: undefined,
       arquivoCorrente: undefined,
       errormsg: undefined,
       warningmsg: undefined,
@@ -462,6 +449,14 @@ export default {
         if (this.classe === this.classes[i].id) return this.classes[i].valordacausaobrigatorio
       }
       return false
+    },
+
+    faltaTeorDaPeticao: function() {
+      if (this.arquivos.length === 0) return true
+      for (var i = 0; i < this.arquivos.length; i++) {
+        if (this.arquivos[i].tipo === 1) return false
+      }
+      return true
     }
   },
 
@@ -482,6 +477,16 @@ export default {
           return 0
         })
         // if (!this[item]) this[item] = response.data.list[0].id
+
+        // Desabilitando especialidades criminais enquanto não temos a possibilidade de informar dados de inquérito
+        if (items === 'especialidades') {
+          for (i = 0; i < this.especialidades.length; i++) {
+            if (this.especialidades[i].nome.toUpperCase() === 'CRIMINAL') {
+              this.especialidades.splice(i, 1)
+              return
+            }
+          }
+        }
       }, error => {
         Bus.$emit('message', 'Erro', error.data.errormsg)
       })
@@ -611,6 +616,7 @@ export default {
     },
 
     selecionarTipo: function (arq, tipo) {
+      this.organizarArquivos()
     },
 
     selecionarSegredo: function (arq, segredo) {
@@ -621,11 +627,11 @@ export default {
     },
 
     organizarArquivos: function () {
-      this.arquivosAProtocolar = 0
+      console.log(this.arquivos)
       this.arquivos.sort(function (a, b) {
-        if (a.processo && !b.processo) return -1
-        if (!a.processo && b.processo) return 1
-        if (a.processo !== b.processo) return a.processo < b.processo ? -1 : 1
+        if (a.tipo && !b.tipo) return -1
+        if (!a.tipo && b.tipo) return 1
+        if (a.tipo !== b.tipo) return a.tipo < b.tipo ? -1 : 1
         if (a.nome !== b.nome) { return a.nome.replace('.pdf', '') < b.nome.replace('.pdf', '') ? -1 : 1 }
         return 0
       })
@@ -763,7 +769,17 @@ export default {
     //
     peticionar: function () {
       this.errormsg = undefined
-      this.$validator.validateAll().then((result) => { if (!result) return })
+      this.$validator.validateAll().then((result) => {
+        if (!result) {
+          this.errormsg = 'Por favor, verifique o preenchimento dos campos marcados em vermelho e repita a operação.'
+          return
+        } else {
+          this.peticionarEnviar()
+        }
+      })
+    },
+
+    peticionarEnviar: function() {
       var pdfs, classificacoes, i
       for (i = 0; i < this.arquivos.length; i++) {
         if (pdfs) pdfs += ','
@@ -843,6 +859,11 @@ export default {
     }
   },
 
+  components: {
+    MySelect,
+    MyInput
+  },
+
   directives: {
     'mask': AwesomeMask
   }
@@ -859,6 +880,10 @@ export default {
   white-space: nowrap;
   word-break: keep-all;
   hyphens: none;
+}
+
+TABLE.table-peticao TBODY TD {
+  vertical-align: top;
 }
 
 @media print {
