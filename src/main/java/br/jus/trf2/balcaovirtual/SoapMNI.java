@@ -390,7 +390,7 @@ public class SoapMNI {
 	public static PeticaoInicial enviarPeticaoInicial(String idManif, String orgao, String localidade,
 			String especialidade, String classe, double valorCausa, String cdas, String pas, int nvlSigilo,
 			boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes,
-			String nomePdfs, String tpDocPdfs) throws Exception {
+			String nomePdfs, String tpDocPdfs, String nomePoloAtivo, String nomePoloPassivo) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -484,6 +484,20 @@ public class SoapMNI {
 		dadosBasicos.setValorCausa(valorCausa);
 		List<TipoParametro> parametros = dadosBasicos.getOutroParametro();// new
 																			// ArrayList<TipoParametro>();
+		
+		if (nomePoloAtivo != null) {
+			TipoParametro p = new TipoParametro();
+			p.setNome("NOMEPOLOATIVO");
+			p.setValor(nomePoloAtivo);
+			parametros.add(p);
+		}
+
+		if (nomePoloPassivo != null) {
+			TipoParametro p = new TipoParametro();
+			p.setNome("NOMEPOLOPASSIVO");
+			p.setValor(nomePoloPassivo);
+			parametros.add(p);
+		}
 
 		// Classe processual e parâmetro adicional para informar a classe do
 		// Apolo

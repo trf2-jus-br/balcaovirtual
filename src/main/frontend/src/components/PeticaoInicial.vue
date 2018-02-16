@@ -216,7 +216,7 @@
                 <td v-if="editando">
                   <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
                     <option disabled hidden selected value="">[Selecionar]</option>
-                    <option v-for="polo in polos" :value="polo.id">{{polo.nome}}</option>
+                    <option v-for="polo in polos" :value="polo.id">{{poloNome(polo.nome)}}</option>
                   </select>
                 </td>
                 <td v-if="!editando">{{localizar(p.tipopessoa, tipospessoa)}}</td>
@@ -287,7 +287,7 @@
 import AuthBL from '../bl/auth.js'
 import ProcessoBL from '../bl/processo.js'
 import UtilsBL from '../bl/utils.js'
-// import CnjClasseBL from '../bl/cnj-classe.js'
+import CnjClasseBL from '../bl/cnj-classe.js'
 import { Bus } from '../bl/bus.js'
 import AwesomeMask from 'awesome-mask'
 import ValidacaoBL from '../bl/validacao.js'
@@ -422,8 +422,6 @@ export default {
 
   computed: {
     entidadesFiltradas: function () {
-      console.log('recalculando filtrados...', this.modified)
-      var a = this.entidades
       if (!a || !this.orgao) return []
       var org = this.orgao.toUpperCase()
       a = a.filter((item) => {
@@ -563,8 +561,12 @@ export default {
     },
 
     completeProxy: function (file, status, xhr) {
-      var json = JSON.parse(xhr.response)
       var arq = this.arquivo(file)
+      if (file.status === 'error') {
+        arq.errormsg = file.errorMessage
+        return
+      }
+      var json = JSON.parse(xhr.response)
       arq.size = json.size
       arq.id = json.id
       this.validarArquivo(arq)
@@ -627,8 +629,6 @@ export default {
     },
 
     organizarArquivos: function () {
-      console.log(this.arquivos)
-      this.arquivos.sort(function (a, b) {
         if (a.tipo && !b.tipo) return -1
         if (!a.tipo && b.tipo) return 1
         if (a.tipo !== b.tipo) return a.tipo < b.tipo ? -1 : 1
@@ -675,6 +675,20 @@ export default {
     selecionarPolo: function (parte, polo) {
       this.ordenarPartes()
       this.validar()
+    },
+
+    poloNome: function(nome) {
+      if (this.classe) {
+        var c = this.classe.split('|')[0]
+        var n
+        if (nome === 'Ativo') {
+          n = CnjClasseBL.poloAtivo(c)
+        } else {
+          n = CnjClasseBL.poloPassivo(c)
+        }
+        if (n) return n
+      }
+      return nome
     },
 
     selecionarTipoPessoa: function (parte, tipoPessoa) {
@@ -791,8 +805,6 @@ export default {
         classificacoes += this.arquivos[i].tipo
       }
 
-      console.log('valorcausa', this.valorcausa)
-
       this.$http.post('peticao-inicial/protocolar', {
         orgao: this.orgao,
         localidade: this.localidade,
@@ -807,7 +819,9 @@ export default {
         prioridadeidoso: this.prioridadeidoso,
         partes: JSON.stringify(this.partes),
         pdfs: pdfs,
-        classificacoes: classificacoes
+        classificacoes: classificacoes,
+        nomepoloativo: this.poloNome('Ativo'),
+        nomepolopassivo: this.poloNome('Passivo')
       }, { block: true }).then(response => {
         this.successmsg = response.data.status
         this.protocolo = response.data.protocolo

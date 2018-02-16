@@ -27,7 +27,8 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 
 		PeticaoInicial pi = SoapMNI.enviarPeticaoInicial(authorization, req.orgao, req.localidade, req.especialidade,
 				req.classe, Utils.parsearValor(req.valorcausa), req.cdas, req.pas, Integer.parseInt(req.nivelsigilo),
-				req.justicagratuita, req.tutelaantecipada, req.prioridadeidoso, partes, req.pdfs, req.classificacoes);
+				req.justicagratuita, req.tutelaantecipada, req.prioridadeidoso, partes, req.pdfs, req.classificacoes,
+				req.nomepoloativo, req.nomepolopassivo);
 		resp.status = pi.mensagem;
 		resp.protocolo = pi.protocolo;
 		resp.data = pi.data;

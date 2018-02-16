@@ -452,6 +452,8 @@ public interface IBalcaoVirtual {
 		public String partes;
 		public String pdfs;
 		public String classificacoes;
+		public String nomepoloativo;
+		public String nomepolopassivo;
 	}
 
 	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {

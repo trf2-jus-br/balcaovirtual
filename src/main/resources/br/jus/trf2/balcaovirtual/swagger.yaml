@@ -125,6 +125,18 @@ parameters:
     description: Classificações dos PDFs que foram enviados previamente para o servidor, separadas por vírgula
     type: string
     required: true
+  nomepoloativo:
+    name: nomepoloativo
+    in: formData
+    description: Nome do Polo Ativo
+    type: string
+    required: false
+  nomepolopassivo:
+    name: nomepolopassivo
+    in: formData
+    description: Nome do Polo Passivo
+    type: string
+    required: false
   pdf:
     name: pdf
     in: path
@@ -716,6 +728,8 @@ paths:
         - $ref: "#/parameters/partes"
         - $ref: "#/parameters/pdfs"
         - $ref: "#/parameters/classificacoes"
+        - $ref: "#/parameters/nomepoloativo"
+        - $ref: "#/parameters/nomepolopassivo"
       responses:
         200:
           description: Successful response
