@@ -629,6 +629,7 @@ export default {
     },
 
     organizarArquivos: function () {
+      this.arquivos.sort(function (a, b) {
         if (a.tipo && !b.tipo) return -1
         if (!a.tipo && b.tipo) return 1
         if (a.tipo !== b.tipo) return a.tipo < b.tipo ? -1 : 1
