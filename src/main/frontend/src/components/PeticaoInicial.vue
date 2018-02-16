@@ -422,9 +422,9 @@ export default {
 
   computed: {
     entidadesFiltradas: function () {
-      if (!a || !this.orgao) return []
+      if (!this.entidades || !this.orgao) return []
       var org = this.orgao.toUpperCase()
-      a = a.filter((item) => {
+      var a = this.entidades.filter((item) => {
         return item.orgao === org
       })
       return a
