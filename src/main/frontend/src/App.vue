@@ -50,7 +50,7 @@
                   <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span>{{jwt.username}}</span>
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <div class="dropdown-menu logout" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" @click="logout">Logout</a>
                   </div>
                 </li>
@@ -274,6 +274,12 @@ body {
   margin: 0;
   padding-bottom: 6rem;
   min-height: 100%;
+}
+
+div.dropdown-menu.logout {
+  right: 0px;
+  left: auto;
+  min-width: 0px;
 }
 
 DIV.foot {
