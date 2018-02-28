@@ -153,7 +153,7 @@
           </div>
 
           <div class="form-group col-md-2">
-            <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5' : ''" :error="errors.first('valorcausa')"></my-input>
+            <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''" :error="errors.first('valorcausa')"></my-input>
           </div>
 
           <div class="form-group col-md-6" v-if="ef">
