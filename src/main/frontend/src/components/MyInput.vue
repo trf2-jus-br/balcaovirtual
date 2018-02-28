@@ -1,7 +1,7 @@
 <template>
   <div>
     <label v-if="label" :for="name">{{label}}</label>
-    <div v-if="!edit">{{nome}}</div>
+    <div v-if="!edit">{{value}}</div>
     <input type="text" v-if="edit" :id="name" class="form-control" 
       :placeholder="placeholder" v-mask="mask != undefined ? mask : ''"
       :disabled="disabled"
