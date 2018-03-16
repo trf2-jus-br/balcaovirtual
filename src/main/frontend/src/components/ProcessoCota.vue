@@ -74,6 +74,7 @@ export default {
     if (company && this.defs && !(this.cargo && this.empresa)) {
       this.cargo = this.defs.cargo
       this.empresa = this.defs.empresa
+      this.validar()
     }
     console.log('Empresa: ', this.empresa, ', Cargo: ', this.cargo)
   },
@@ -136,6 +137,10 @@ export default {
         this.previewUrl = this.$http.options.root + '/download/' + response.data.jwt + '/cota.pdf'
         this.$refs.pdfPreview.show(true)
       }, error => UtilsBL.errormsg(error, this))
+    },
+
+    validar: function () {
+      this.$nextTick(() => this.$validator.validateAll())
     }
   },
 
