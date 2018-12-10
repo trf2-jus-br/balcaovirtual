@@ -3,6 +3,7 @@ package br.jus.trf2.balcaovirtual;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
 import com.crivano.swaggerservlet.ISwaggerModel;
@@ -711,6 +712,7 @@ public interface IBalcaoVirtual {
 
 		public Long contentlength;
 		public InputStream inputstream;
+		public Map<String, List<String>> headerFields;
 
 		public String getContenttype() {
 			return contenttype;
@@ -742,6 +744,14 @@ public interface IBalcaoVirtual {
 
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
+		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
+		public void setHeaderFields(Map<String, List<String>> headerFields) {
+			this.headerFields = headerFields;
 		}
 	}
 
@@ -759,6 +769,7 @@ public interface IBalcaoVirtual {
 
 		public Long contentlength;
 		public InputStream inputstream;
+		public Map<String, List<String>> headerFields;
 
 		public String getContenttype() {
 			return contenttype;
@@ -790,6 +801,14 @@ public interface IBalcaoVirtual {
 
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
+		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
+		public void setHeaderFields(Map<String, List<String>> headerFields) {
+			this.headerFields = headerFields;
 		}
 	}
 
