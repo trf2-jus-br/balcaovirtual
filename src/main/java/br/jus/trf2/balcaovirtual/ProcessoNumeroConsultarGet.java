@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroConsultarGet;
@@ -11,8 +12,10 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 	@Override
 	public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp) throws Exception {
 		String authorization = SessionsCreatePost.assertAuthorization();
-		String json = SoapMNI.consultarProcesso(authorization, req.orgao, req.numero);
-		resp.payload = json.getBytes(StandardCharsets.UTF_8);
+		String json = SoapMNI.consultarProcesso(authorization, req.orgao, req.numero, true, true, true);
+		byte[] ba = json.getBytes(StandardCharsets.UTF_8);
+		resp.inputstream = new ByteArrayInputStream(ba);
+		resp.contentlength = (long) ba.length;
 		resp.contenttype = "application/json";
 	}
 

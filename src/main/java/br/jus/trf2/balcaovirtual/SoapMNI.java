@@ -10,12 +10,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
+import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.w3c.dom.Node;
 
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
@@ -95,10 +103,9 @@ public class SoapMNI {
 		}
 	}
 
-	public static String consultarProcesso(String idManif, String orgao, String numProc) throws Exception {
-		URL url = new URL(Utils.getMniWsdlUrl(orgao));
-		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+	public static String consultarProcesso(String idManif, String orgao, String numProc, boolean cabecalho,
+			boolean movimentos, boolean documentos) throws Exception {
+		ServicoIntercomunicacao222 client = getClient(orgao);
 
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
@@ -108,7 +115,8 @@ public class SoapMNI {
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 
-		client.consultarProcesso(idManif, null, numProc, null, true, true, true, null, sucesso, mensagem, processo);
+		client.consultarProcesso("vsv", "senha", numProc, null, movimentos, cabecalho, documentos, null, sucesso,
+				mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
@@ -119,18 +127,73 @@ public class SoapMNI {
 		return gson.toJson(processo);
 	}
 
+	private static ServicoIntercomunicacao222 getClient(String orgao) throws Exception {
+		URL url = new URL(Utils.getMniWsdlUrl(orgao));
+		// ServicoIntercomunicacao222_Service service = new
+		// ServicoIntercomunicacao222_Service(url);
+
+		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service();
+		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		// ServicoIntercomunicacao222 port =
+		// service.getPort(ServicoIntercomunicacao222.class);
+
+		// String endpointURL =
+		// "http://10.50.1.36/eproc/ws/controlador_ws.php?srv=intercomunicacao2.2";
+		String endpointURL = "https://eproc-homologacao.jfrj.jus.br/eproc/ws/controlador_ws.php?srv=intercomunicacao2.2";
+		BindingProvider bp = (BindingProvider) client;
+		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointURL);
+
+		Binding binding = bp.getBinding();
+		List<Handler> handlerList = binding.getHandlerChain();
+		handlerList.add(new Handler() {
+
+			@Override
+			public boolean handleMessage(MessageContext context) {
+				SOAPMessageContext soapmc = (SOAPMessageContext) context;
+
+				Boolean outboundProperty = (Boolean) soapmc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+
+				if (outboundProperty.booleanValue()) {
+					try {
+						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
+						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
+							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
+								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
+								documento1.setElementQName(new QName("documento"));
+							}
+						}
+					} catch (SOAPException e) {
+						e.printStackTrace();
+					}
+				}
+
+				return true;
+			}
+
+			@Override
+			public boolean handleFault(MessageContext context) {
+				return true;
+			}
+
+			@Override
+			public void close(MessageContext context) {
+			}
+
+		});
+		binding.setHandlerChain(handlerList);
+		return client;
+	}
+
 	public static byte[] obterPecaProcessual(String idManif, String orgao, String numProc, String documento)
 			throws Exception {
-		URL url = new URL(Utils.getMniWsdlUrl(orgao));
-		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		ServicoIntercomunicacao222 client = getClient(orgao);
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<TipoProcessoJudicial> processo = new Holder<>();
 		List<String> l = new ArrayList<>();
 		l.add(documento);
 
-		client.consultarProcesso(idManif, null, numProc, null, false, false, false, l, sucesso, mensagem, processo);
+		client.consultarProcesso("vsv", "senha", numProc, null, false, false, false, l, sucesso, mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 		return processo.value.getDocumento().get(0).getConteudo();
@@ -145,9 +208,7 @@ public class SoapMNI {
 			String system = orgao.toLowerCase();
 			if (!u.usuarios.containsKey(system))
 				continue;
-			URL url = new URL(Utils.getMniWsdlUrl(system));
-			ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-			ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+			ServicoIntercomunicacao222 client = getClient(system);
 			Holder<Boolean> sucesso = new Holder<>();
 			Holder<String> mensagem = new Holder<>();
 			Holder<List<TipoAvisoComunicacaoPendente>> aviso = new Holder<>();
@@ -159,7 +220,7 @@ public class SoapMNI {
 			requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 			requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 			try {
-				client.consultarAvisosPendentes(null, idConsultante, null, null, sucesso, mensagem, aviso);
+				client.consultarAvisosPendentes(null, "vsv", "senha", null, sucesso, mensagem, aviso);
 				if (!sucesso.value)
 					throw new Exception(mensagem.value);
 			} catch (Exception ex) {
@@ -222,9 +283,7 @@ public class SoapMNI {
 		String numProcFormated = Utils.formatarNumeroProcesso(numProc);
 
 		String system = orgao.toLowerCase();
-		URL url = new URL(Utils.getMniWsdlUrl(system));
-		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		ServicoIntercomunicacao222 client = getClient(system);
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<List<TipoComunicacaoProcessual>> comunicacao = new Holder<>();
@@ -303,9 +362,7 @@ public class SoapMNI {
 
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();
-		URL url = new URL(Utils.getMniWsdlUrl(orgao));
-		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		ServicoIntercomunicacao222 client = getClient(orgao);
 		List<TipoDocumento> l = new ArrayList<>();
 		if (nomePdfs != null) {
 			for (String nomePdf : nomePdfs.split(",")) {
@@ -339,7 +396,7 @@ public class SoapMNI {
 		Holder<byte[]> recibo = new Holder<>();
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.entregarManifestacaoProcessual(idManif, null, numProc, null, l, dataEnvio,
+		client.entregarManifestacaoProcessual("vsv", "senha", numProc, null, l, dataEnvio,
 				new ArrayList<TipoParametro>(), sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo,
 				parametro);
 		if (!sucesso.value)
@@ -398,9 +455,7 @@ public class SoapMNI {
 
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();
-		URL url = new URL(Utils.getMniWsdlUrl(orgao));
-		ServicoIntercomunicacao222_Service service = new ServicoIntercomunicacao222_Service(url);
-		ServicoIntercomunicacao222 client = service.getServicoIntercomunicacao222SOAP();
+		ServicoIntercomunicacao222 client = getClient(orgao);
 		List<TipoDocumento> l = new ArrayList<>();
 		// String tpDocs[] = tpDocPdfs.split(",");
 		int i = 0;
@@ -484,7 +539,7 @@ public class SoapMNI {
 		dadosBasicos.setValorCausa(valorCausa);
 		List<TipoParametro> parametros = dadosBasicos.getOutroParametro();// new
 																			// ArrayList<TipoParametro>();
-		
+
 		if (nomePoloAtivo != null) {
 			TipoParametro p = new TipoParametro();
 			p.setNome("NOMEPOLOATIVO");

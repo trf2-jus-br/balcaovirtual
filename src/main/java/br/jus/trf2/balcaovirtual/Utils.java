@@ -121,8 +121,7 @@ public class Utils {
 	/**
 	 * Remove os acentos da string
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcento(String acentuado) {
@@ -275,6 +274,12 @@ public class Utils {
 			return 0;
 		s = s.replace(".", "").replace(",", ".");
 		return Double.parseDouble(s);
+	}
+
+	public static String convertStreamToString(java.io.InputStream is) {
+		@SuppressWarnings("resource")
+		java.util.Scanner s = new java.util.Scanner(is, "UTF-8").useDelimiter("\\A");
+		return s.hasNext() ? s.next() : "";
 	}
 
 }

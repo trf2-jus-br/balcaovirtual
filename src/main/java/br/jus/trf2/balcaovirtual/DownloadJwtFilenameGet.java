@@ -1,24 +1,37 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Future;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfSmartCopy;
+import com.j256.simplemagic.ContentInfo;
+import com.j256.simplemagic.ContentInfoUtil;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoNumeroPdfGetResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoConfirmadoExportarGetResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoPendenteExportarGetResponse;
 
@@ -82,23 +95,55 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		} else if (numDoc != null) {
 			// Peça Processual
 			byte[] ab = SoapMNI.obterPecaProcessual(req.jwt, orgao, numProc, numDoc);
-			resp.contentdisposition = disposition + ";filename=" + numProc + "-peca-" + numDoc + ".pdf";
+
+			ContentInfo info = new ContentInfoUtil().findMatch(ab);
+			resp.contenttype = info.getMimeType();
+			resp.contentdisposition = disposition + ";filename=" + numProc + "-peca-" + numDoc + "."
+					+ info.getFileExtensions()[0];
+
 			resp.contentlength = (long) ab.length;
 			resp.inputstream = new ByteArrayInputStream(ab);
 		} else {
 			// Processo completo
-			Future<SwaggerAsyncResponse<ProcessoNumeroPdfGetResponse>> future = SwaggerCall.callAsync(
-					"obter PDF completo de processo", "Bearer " + req.jwt, "GET",
-					Utils.getWsProcessualUrl() + "/processo/" + numProc + "/pdf", null,
-					ProcessoNumeroPdfGetResponse.class);
-			SwaggerAsyncResponse<ProcessoNumeroPdfGetResponse> sar = future.get();
-			if (sar.getException() != null)
-				throw sar.getException();
-			ProcessoNumeroPdfGetResponse r = (ProcessoNumeroPdfGetResponse) sar.getResp();
+
+			// Consulta o processo para saber quais são os documentos a serem concatenados
+			String json = SoapMNI.consultarProcesso(req.jwt, orgao, numProc, false, false, true);
+
+			JSONObject proc = new JSONObject(json).getJSONObject("value");
+			JSONArray docs = proc.getJSONArray("documento");
+
+			// Cria um documento em diretório temporário para agregar os diversos PDFs
+			String dirTemp = Utils.getDirTemp();
+			String bufName = dirTemp + "/" + numProc + "-completo-" + UUID.randomUUID().toString() + ".pdf";
+			FileOutputStream buf = new FileOutputStream(bufName);
+			Document document = new Document();
+			PdfCopy copy = new PdfSmartCopy(document, buf);
+			document.open();
+			PdfReader reader;
+
+			for (int i = 0; i < docs.length(); i++) {
+				String idDocumento = docs.getJSONObject(i).getString("idDocumento");
+
+				byte[] ab = SoapMNI.obterPecaProcessual(req.jwt, orgao, numProc, idDocumento);
+
+				ContentInfo info = new ContentInfoUtil().findMatch(ab);
+				if (!"application/pdf".equals(info.getMimeType())) {
+					String html = new String(ab, StandardCharsets.UTF_8);
+					if (html.toLowerCase().contains("charset=windows-1252"))
+						html = new String(ab, StandardCharsets.ISO_8859_1);
+					ab = new Html2Pdf().converter(html);
+				}
+
+				reader = new PdfReader(ab);
+				copy.addDocument(reader);
+				reader.close();
+			}
+			document.close();
+
 			resp.contentdisposition = disposition + ";filename=" + numProc + "-completo.pdf";
-			resp.contentlength = r.contentlength;
-			resp.contenttype = r.contenttype;
-			resp.inputstream = r.inputstream;
+			resp.contentlength = (long) new File(bufName).length();
+			resp.contenttype = "application/pdf";
+			resp.inputstream = new FileInputStream(bufName);
 		}
 	}
 
