@@ -15,8 +15,8 @@ public class AvisoConfirmadoXmlGet implements IAvisoConfirmadoXmlGet {
 		if (u.isInterno())
 			throw new PresentableUnloggedException(
 					"Exportação XML de avisos confirmados disponível apenas para usuários externos");
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, null, null, null, null, "avisos-confirmados.xml",
-				null, null, null, null);
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.senha, u.usuario, null, null, null, null,
+				"avisos-confirmados.xml", null, null, null, null);
 	}
 
 	@Override

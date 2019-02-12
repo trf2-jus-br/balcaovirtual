@@ -41,6 +41,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
 		String username = (String) map.get("username");
+		String password = SessionsCreatePost.decrypt((String) map.get("pwd"));
 		String name = (String) map.get("name");
 		String file = (String) map.get("file");
 		String numProc = (String) map.get("proc");
@@ -94,7 +95,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			resp.inputstream = r.inputstream;
 		} else if (numDoc != null) {
 			// Peça Processual
-			byte[] ab = SoapMNI.obterPecaProcessual(req.jwt, orgao, numProc, numDoc);
+			byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
 
 			ContentInfo info = new ContentInfoUtil().findMatch(ab);
 			resp.contenttype = info.getMimeType();
@@ -107,7 +108,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			// Processo completo
 
 			// Consulta o processo para saber quais são os documentos a serem concatenados
-			String json = SoapMNI.consultarProcesso(req.jwt, orgao, numProc, false, false, true);
+			String json = SoapMNI.consultarProcesso(username, password, orgao, numProc, false, false, true);
 
 			JSONObject proc = new JSONObject(json).getJSONObject("value");
 			JSONArray docs = proc.getJSONArray("documento");
@@ -124,7 +125,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			for (int i = 0; i < docs.length(); i++) {
 				String idDocumento = docs.getJSONObject(i).getString("idDocumento");
 
-				byte[] ab = SoapMNI.obterPecaProcessual(req.jwt, orgao, numProc, idDocumento);
+				byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, idDocumento);
 
 				ContentInfo info = new ContentInfoUtil().findMatch(ab);
 				if (!"application/pdf".equals(info.getMimeType())) {
@@ -160,8 +161,9 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		return map;
 	}
 
-	public static String jwt(String origin, String username, String nome, String orgao, String processo,
-			String documento, String arquivo, String texto, String cargo, String empresa, String unidade) {
+	public static String jwt(String origin, String username, String password, String nome, String orgao,
+			String processo, String documento, String arquivo, String texto, String cargo, String empresa,
+			String unidade) throws Exception {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h
@@ -177,6 +179,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		if (origin != null)
 			claims.put("origin", origin);
 		claims.put("username", username);
+		claims.put("pwd", SessionsCreatePost.encrypt(password));
 		if (nome != null)
 			claims.put("name", nome);
 		if (orgao != null)

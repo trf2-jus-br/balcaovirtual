@@ -20,8 +20,8 @@ public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPre
 	public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
 			throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.nome, req.orgao, req.numero, null, null, req.texto,
-				req.cargo, req.empresa, req.unidade);
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, u.nome, req.orgao, req.numero, null, null,
+				req.texto, req.cargo, req.empresa, req.unidade);
 	}
 
 	public static byte[] criarPDF(String nome, String numero, String texto, String cargo, String empresa,

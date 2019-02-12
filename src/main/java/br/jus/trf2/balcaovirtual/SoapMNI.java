@@ -103,8 +103,8 @@ public class SoapMNI {
 		}
 	}
 
-	public static String consultarProcesso(String idManif, String orgao, String numProc, boolean cabecalho,
-			boolean movimentos, boolean documentos) throws Exception {
+	public static String consultarProcesso(String idConsultante, String senhaConsultante, String orgao, String numProc,
+			boolean cabecalho, boolean movimentos, boolean documentos) throws Exception {
 		ServicoIntercomunicacao222 client = getClient(orgao);
 
 		Holder<Boolean> sucesso = new Holder<>();
@@ -115,8 +115,8 @@ public class SoapMNI {
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 
-		client.consultarProcesso("vsv", "senha", numProc, null, movimentos, cabecalho, documentos, null, sucesso,
-				mensagem, processo);
+		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, movimentos, cabecalho, documentos,
+				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
@@ -184,8 +184,8 @@ public class SoapMNI {
 		return client;
 	}
 
-	public static byte[] obterPecaProcessual(String idManif, String orgao, String numProc, String documento)
-			throws Exception {
+	public static byte[] obterPecaProcessual(String idConsultante, String senhaConsultante, String orgao,
+			String numProc, String documento) throws Exception {
 		ServicoIntercomunicacao222 client = getClient(orgao);
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
@@ -193,14 +193,15 @@ public class SoapMNI {
 		List<String> l = new ArrayList<>();
 		l.add(documento);
 
-		client.consultarProcesso("vsv", "senha", numProc, null, false, false, false, l, sucesso, mensagem, processo);
+		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, false, false, false, l, sucesso,
+				mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 		return processo.value.getDocumento().get(0).getConteudo();
 	}
 
-	public static void consultarAvisosPendentes(String idConsultante, List<Aviso> list, List<ListStatus> status)
-			throws Exception {
+	public static void consultarAvisosPendentes(String idConsultante, String senhaConsultante, List<Aviso> list,
+			List<ListStatus> status) throws Exception {
 
 		Usuario u = SessionsCreatePost.assertUsuario();
 
@@ -220,7 +221,7 @@ public class SoapMNI {
 			requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 			requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 			try {
-				client.consultarAvisosPendentes(null, "vsv", "senha", null, sucesso, mensagem, aviso);
+				client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, sucesso, mensagem, aviso);
 				if (!sucesso.value)
 					throw new Exception(mensagem.value);
 			} catch (Exception ex) {
@@ -273,8 +274,8 @@ public class SoapMNI {
 		}
 	}
 
-	public static void consultarTeorComunicacao(String idConsultante, String numProc, String idAviso, String orgao,
-			ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
+	public static void consultarTeorComunicacao(String idConsultante, String senhaConsultante, String numProc,
+			String idAviso, String orgao, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -288,7 +289,7 @@ public class SoapMNI {
 		Holder<String> mensagem = new Holder<>();
 		Holder<List<TipoComunicacaoProcessual>> comunicacao = new Holder<>();
 
-		client.consultarTeorComunicacao(idConsultante, idAviso, null, null, sucesso, mensagem, comunicacao);
+		client.consultarTeorComunicacao(idConsultante, idAviso, null, senhaConsultante, sucesso, mensagem, comunicacao);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
@@ -348,8 +349,8 @@ public class SoapMNI {
 
 	}
 
-	public static String enviarPeticaoIntercorrente(String idManif, String orgao, String numProc, String tpDoc,
-			int nvlSigilo, String nomePdfs, byte pdf[]) throws Exception {
+	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String orgao,
+			String numProc, String tpDoc, int nvlSigilo, String nomePdfs, byte pdf[]) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -396,7 +397,7 @@ public class SoapMNI {
 		Holder<byte[]> recibo = new Holder<>();
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.entregarManifestacaoProcessual("vsv", "senha", numProc, null, l, dataEnvio,
+		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio,
 				new ArrayList<TipoParametro>(), sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo,
 				parametro);
 		if (!sucesso.value)

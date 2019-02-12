@@ -22,7 +22,7 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.orgao.toLowerCase() + ".cota.tipo",
 				"Parâmetro de tipo de documento não configurado", true);
 
-		String mensagem = SoapMNI.enviarPeticaoIntercorrente(authorization, req.orgao, req.numero, tipo,
+		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.orgao, req.numero, tipo,
 				Integer.parseInt(req.nivelsigilo), null, pdf);
 		resp.status = mensagem;
 	}
