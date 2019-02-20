@@ -53,7 +53,7 @@
           </div>
         </div>
 
-        <processo-notas :processo="numero" :orgao="orgao" @ativar="notas = true" @desativar="notas = false"></processo-notas>
+        <processo-notas :processo="numero" :sistema="sistema" @ativar="notas = true" @desativar="notas = false"></processo-notas>
 
         <timeline :timeline="timeline"></timeline>
 
@@ -513,7 +513,7 @@
     </div>
 
     <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
-    <processo-cota ref="processoCota" :processo="numero" :orgao="orgao" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
+    <processo-cota ref="processoCota" :processo="numero" :sistema="sistema" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
   </div>
 </template>
 
@@ -541,15 +541,15 @@ export default {
       Bus.$emit('block', 20)
       this.$http.get('processo/' + this.numero + '/validar').then(
         response => {
-          this.orgao = response.data.orgao
+          this.sistema = response.data.sistema
           console.log(this.$parent.jwt)
 
           // eslint-disable-next-line
           this.perfil = this.$parent.jwt.parsedUsers[
-            this.orgao.toLowerCase()
+            this.sistema
           ].perfil
           this.$http
-            .get('processo/' + this.numero + '/consultar?orgao=' + this.orgao)
+            .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema)
             .then(
               response => {
                 Bus.$emit('release')
@@ -574,7 +574,7 @@ export default {
                   var interno = !!this.$parent.jwt.origin && false
                   this.fixed = ProcessoBL.fixProc(this.proc)
                   this.timeline = TimelineBL.updateTimeline(
-                    this.orgao,
+                    this.sistema,
                     this.fixed.movdoc,
                     interno
                   )
@@ -622,7 +622,7 @@ export default {
       fixed: undefined,
       modified: undefined,
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
-      orgao: undefined,
+      sistema: undefined,
       perfil: undefined,
       gui: {},
       filtro: undefined,
@@ -677,7 +677,7 @@ export default {
     getMarcas: function() {
       // Carregar os marcadores da classe
       this.$http
-        .get('processo/' + this.numero + '/marcas?orgao=' + this.orgao)
+        .get('processo/' + this.numero + '/marcas?sistema=' + this.sistema)
         .then(
           response => {
             // if (!response.data.list) return
@@ -760,8 +760,8 @@ export default {
             this.numero +
             '/peca/' +
             idDocumento +
-            '/pdf?orgao=' +
-            this.orgao
+            '/pdf?sistema=' +
+            this.sistema
         )
         .then(
           response => {
@@ -786,7 +786,7 @@ export default {
     },
     mostrarCompleto: function() {
       this.$http
-        .get('processo/' + this.numero + '/pdf?orgao=' + this.orgao)
+        .get('processo/' + this.numero + '/pdf?sistema=' + this.sistema)
         .then(
           response => {
             var jwt = response.data.jwt
@@ -918,8 +918,8 @@ export default {
             this.numero +
             '/peca/' +
             this.currentMovDoc.doc.idDocumento +
-            '/marca?orgao=' +
-            this.orgao,
+            '/marca?sistema=' +
+            this.sistema,
           data,
           { block: true }
         )

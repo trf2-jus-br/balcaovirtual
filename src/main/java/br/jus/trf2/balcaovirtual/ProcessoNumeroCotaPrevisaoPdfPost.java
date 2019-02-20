@@ -20,7 +20,7 @@ public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPre
 	public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
 			throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, u.nome, req.orgao, req.numero, null, null,
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, u.nome, req.sistema, req.numero, null, null,
 				req.texto, req.cargo, req.empresa, req.unidade);
 	}
 

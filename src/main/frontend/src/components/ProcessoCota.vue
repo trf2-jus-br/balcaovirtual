@@ -64,7 +64,7 @@ var defaultCargoEmpresa = {
 export default {
   name: 'processo-cota',
 
-  props: ['processo', 'orgao', 'unidade'],
+  props: ['processo', 'sistema', 'unidade'],
 
   mounted () {
     var company = this.$parent.$parent.jwt.company
@@ -109,7 +109,7 @@ export default {
       }
 
       this.$http.post('processo/' + this.processo + '/cota/enviar', {
-        orgao: this.orgao,
+        sistema: this.sistema,
         nivelsigilo: '0',
         texto: this.texto,
         cargo: this.cargo,
@@ -127,7 +127,7 @@ export default {
 
     preview: function () {
       this.$http.post('processo/' + this.processo + '/cota/previsao-pdf', {
-        orgao: this.orgao,
+        sistema: this.sistema,
         nivelsigilo: '0',
         texto: this.texto,
         cargo: this.cargo,

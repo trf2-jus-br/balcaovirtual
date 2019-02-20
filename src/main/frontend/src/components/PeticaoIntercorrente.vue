@@ -60,7 +60,7 @@
 
               <td v-show="!f.anexo" :rowspan="f.rowspan">
                 <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
-                  <option v-for="tipo in filtrarTipos(f.orgao)" :value="tipo.orgao+'-'+tipo.id">{{tipo.descricao}}</option>
+                  <option v-for="tipo in filtrarTipos(f.sistema)" :value="tipo.sistema+'-'+tipo.id">{{tipo.descricao}}</option>
                   <option disabled hidden selected value="">[Selecionar]</option>
                 </select>
                 <span v-if="!editando">{{f.tipodescr}}</span>
@@ -179,7 +179,7 @@
                 <span v-html="r.dataprotocoloFormatada"></span>
               </td>
               <td>{{r.protocolo}}</td>
-              <td>{{r.orgao}}</td>
+              <td>{{r.sistema}}</td>
               <td>{{r.unidade}}</td>
             </tr>
           </tbody>
@@ -289,7 +289,7 @@ export default {
         status: undefined,
         validando: undefined,
         valido: undefined,
-        orgao: undefined,
+        sistema: undefined,
         errormsg: undefined,
         tipo: undefined,
         tipodescr: undefined,
@@ -314,9 +314,9 @@ export default {
       return false
     },
 
-    filtrarTipos: function (orgao) {
+    filtrarTipos: function (sistema) {
       return this.tipos.filter(function (item) {
-        return item.orgao === orgao
+        return item.sistema === sistema
       })
     },
 
@@ -366,6 +366,7 @@ export default {
           var d = response.data
           a.status = d.unidade + '/' + d.orgao
           a.orgao = d.orgao
+          a.sistema = d.sistema
           a.validando = false
           a.valido = true
         }, error => {
@@ -379,7 +380,7 @@ export default {
     enviarPeticao: function (item) {
       Bus.$emit('prgCaption', 'Enviando ' + item.arq.processo)
       this.$http.post('processo/' + ProcessoBL.somenteNumeros(item.arq.processo) + '/peticionar', {
-        orgao: item.arq.orgao,
+        sistema: item.arq.sistema,
         tipopeticao: item.arq.tipo,
         nivelsigilo: item.arq.segredo,
         pdfs: item.pdfs
@@ -584,7 +585,7 @@ export default {
 
     descricaoTipoPorCodigo: function (tipo) {
       for (var i = 0; i < this.tipos.length; i++) {
-        if ((this.tipos[i].orgao + '-' + this.tipos[i].id) === tipo) {
+        if ((this.tipos[i].sistema + '-' + this.tipos[i].id) === tipo) {
           return this.tipos[i].descricao
         }
       }

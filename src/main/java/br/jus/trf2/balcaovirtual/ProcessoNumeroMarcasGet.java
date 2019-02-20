@@ -20,7 +20,7 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		resp.list = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 			throw new PresentableUnloggedException("disabled");
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
 			List<Object[]> l = dao.obtemMarcas(p, u.isInterno(), ud.id, ud.unidade);
 
 			if (l == null)

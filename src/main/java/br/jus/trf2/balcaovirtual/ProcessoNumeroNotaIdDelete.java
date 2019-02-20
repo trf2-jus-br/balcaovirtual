@@ -15,17 +15,17 @@ public class ProcessoNumeroNotaIdDelete implements IProcessoNumeroNotaIdDelete {
 	@Override
 	public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
-					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.orgao + "'.");
+					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.sistema + "'.");
 
 		try (Dao dao = new Dao()) {
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
 			if (nota == null)
 				return;
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, false);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, false);
 			if (p == null)
 				throw new Exception("processo não encontrado");
 			if (p != nota.getProcesso())

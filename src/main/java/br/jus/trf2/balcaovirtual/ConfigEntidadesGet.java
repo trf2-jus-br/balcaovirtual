@@ -27,7 +27,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter localidades", null, "GET",
-							Utils.getApiUrl(system) + "/orgao-publico/listar?tipodedocumento=cnpj", null,
+							Utils.getApiUrl(system) + "/sistema-publico/listar?tipodedocumento=cnpj", null,
 							OrgaoPublicoListarGetResponse.class));
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
@@ -38,7 +38,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 			if (r.list != null)
 				for (Pessoa p : r.list) {
 					Entidade o = new Entidade();
-					o.orgao = p.orgao;
+					o.sistema = p.sistema;
 					o.id = p.id;
 					o.nome = p.nome;
 					o.documento = p.documento;

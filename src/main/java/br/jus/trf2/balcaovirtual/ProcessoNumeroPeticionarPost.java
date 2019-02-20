@@ -13,7 +13,7 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 
-		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.orgao, req.numero,
+		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero,
 				req.tipopeticao.split("-")[1], Integer.parseInt(req.nivelsigilo), req.pdfs, null);
 		resp.status = mensagem;
 	}

@@ -16,11 +16,11 @@ public interface IBalcaoVirtual {
 	public class ConfigTipoPeticaoIntercorrente implements ISwaggerModel {
 		public String id;
 		public String descricao;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class Entidade implements ISwaggerModel {
-		public String orgao;
+		public String sistema;
 		public String id;
 		public String nome;
 		public String documento;
@@ -43,7 +43,7 @@ public interface IBalcaoVirtual {
 		public Boolean valordacausaobrigatorio;
 	}
 
-	public class OrgaoInfo implements ISwaggerModel {
+	public class SistemaInfo implements ISwaggerModel {
 		public String id;
 		public String nome;
 	}
@@ -56,7 +56,7 @@ public interface IBalcaoVirtual {
 	public class Numero implements ISwaggerModel {
 	}
 
-	public class Orgao implements ISwaggerModel {
+	public class Sistema implements ISwaggerModel {
 	}
 
 	public class Unidade implements ISwaggerModel {
@@ -111,7 +111,7 @@ public interface IBalcaoVirtual {
 		public String dataprotocolo;
 		public String classe;
 		public String unidade;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class Aviso implements ISwaggerModel {
@@ -123,6 +123,7 @@ public interface IBalcaoVirtual {
 		public String unidadenome;
 		public String unidadetipo;
 		public String orgao;
+		public String sistema;
 		public String localidade;
 		public String teor;
 		public String eventointimacao;
@@ -268,19 +269,19 @@ public interface IBalcaoVirtual {
 		public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception;
 	}
 
-	public class ConfigOrgaosGetRequest implements ISwaggerRequest {
+	public class ConfigSistemasGetRequest implements ISwaggerRequest {
 	}
 
-	public class ConfigOrgaosGetResponse implements ISwaggerResponse {
-		public List<OrgaoInfo> list;
+	public class ConfigSistemasGetResponse implements ISwaggerResponse {
+		public List<SistemaInfo> list;
 	}
 
-	public interface IConfigOrgaosGet extends ISwaggerMethod {
-		public void run(ConfigOrgaosGetRequest req, ConfigOrgaosGetResponse resp) throws Exception;
+	public interface IConfigSistemasGet extends ISwaggerMethod {
+		public void run(ConfigSistemasGetRequest req, ConfigSistemasGetResponse resp) throws Exception;
 	}
 
 	public class ConfigLocalidadesGetRequest implements ISwaggerRequest {
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigLocalidadesGetResponse implements ISwaggerResponse {
@@ -293,7 +294,7 @@ public interface IBalcaoVirtual {
 
 	public class ConfigLocalidadeIdEspecialidadesGetRequest implements ISwaggerRequest {
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigLocalidadeIdEspecialidadesGetResponse implements ISwaggerResponse {
@@ -308,7 +309,7 @@ public interface IBalcaoVirtual {
 	public class ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest implements ISwaggerRequest {
 		public String id;
 		public String id2;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse implements ISwaggerResponse {
@@ -322,11 +323,11 @@ public interface IBalcaoVirtual {
 
 	public class ConfigPessoaFisicaCpfGetRequest implements ISwaggerRequest {
 		public String cpf;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigPessoaFisicaCpfGetResponse implements ISwaggerResponse {
-		public String orgao;
+		public String sistema;
 		public String id;
 		public String nome;
 		public String documento;
@@ -339,11 +340,11 @@ public interface IBalcaoVirtual {
 
 	public class ConfigPessoaJuridicaCnpjGetRequest implements ISwaggerRequest {
 		public String cnpj;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigPessoaJuridicaCnpjGetResponse implements ISwaggerResponse {
-		public String orgao;
+		public String sistema;
 		public String id;
 		public String nome;
 		public String documento;
@@ -357,11 +358,11 @@ public interface IBalcaoVirtual {
 
 	public class ConfigAdvogadoOabGetRequest implements ISwaggerRequest {
 		public String oab;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ConfigAdvogadoOabGetResponse implements ISwaggerResponse {
-		public String orgao;
+		public String sistema;
 		public String id;
 		public String nome;
 		public String oab;
@@ -377,6 +378,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroValidarGetResponse implements ISwaggerResponse {
 		public String numero;
+		public String sistema;
 		public String orgao;
 		public String unidade;
 		public String localnaunidade;
@@ -397,7 +399,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroConsultarGetRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
@@ -457,7 +459,7 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroPecaIdPdfGetRequest implements ISwaggerRequest {
 		public String numero;
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroPecaIdPdfGetResponse implements ISwaggerResponse {
@@ -471,7 +473,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroPdfGetRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse {
@@ -483,7 +485,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class PeticaoInicialProtocolarPostRequest implements ISwaggerRequest {
-		public String orgao;
+		public String sistema;
 		public String localidade;
 		public String especialidade;
 		public String classe;
@@ -515,7 +517,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 		public String tipopeticao;
 		public String nivelsigilo;
 		public String pdfs;
@@ -532,7 +534,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroCotaPrevisaoPdfPostRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 		public String nivelsigilo;
 		public String texto;
 		public String cargo;
@@ -551,7 +553,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroCotaEnviarPostRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 		public String nivelsigilo;
 		public String texto;
 		public String cargo;
@@ -571,7 +573,7 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {
 		public String numero;
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroAvisoIdReceberPostResponse implements ISwaggerResponse {
@@ -579,7 +581,7 @@ public interface IBalcaoVirtual {
 		public String dataaviso;
 		public String tipo;
 		public String processo;
-		public String orgao;
+		public String sistema;
 		public String teor;
 		public String datarecebimento;
 	}
@@ -615,7 +617,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroMarcasGetRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroMarcasGetResponse implements ISwaggerResponse {
@@ -630,7 +632,7 @@ public interface IBalcaoVirtual {
 		public String numero;
 		public String id;
 		public String idclasse;
-		public String orgao;
+		public String sistema;
 		public String idmarca;
 		public String texto;
 		public String idestilo;
@@ -649,7 +651,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroNotaGetRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ProcessoNumeroNotaGetResponse implements ISwaggerResponse {
@@ -662,7 +664,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroNotaPostRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 		public String texto;
 		public Boolean pessoal;
 	}
@@ -678,7 +680,7 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroNotaIdPutRequest implements ISwaggerRequest {
 		public String numero;
 		public String id;
-		public String orgao;
+		public String sistema;
 		public String texto;
 		public Date dataalteracao;
 	}
@@ -693,7 +695,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroNotaIdDeleteRequest implements ISwaggerRequest {
 		public String numero;
-		public String orgao;
+		public String sistema;
 		public String id;
 	}
 
@@ -960,7 +962,7 @@ public interface IBalcaoVirtual {
 
 	public class MesaIdGetRequest implements ISwaggerRequest {
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class MesaIdGetResponse implements ISwaggerResponse {
@@ -973,7 +975,7 @@ public interface IBalcaoVirtual {
 
 	public class ClasseIdGetRequest implements ISwaggerRequest {
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class ClasseIdGetResponse implements ISwaggerResponse {
@@ -989,7 +991,7 @@ public interface IBalcaoVirtual {
 
 	public class AssuntoIdGetRequest implements ISwaggerRequest {
 		public String id;
-		public String orgao;
+		public String sistema;
 	}
 
 	public class AssuntoIdGetResponse implements ISwaggerResponse {

@@ -103,9 +103,9 @@ public class SoapMNI {
 		}
 	}
 
-	public static String consultarProcesso(String idConsultante, String senhaConsultante, String orgao, String numProc,
-			boolean cabecalho, boolean movimentos, boolean documentos) throws Exception {
-		ServicoIntercomunicacao222 client = getClient(orgao);
+	public static String consultarProcesso(String idConsultante, String senhaConsultante, String sistema,
+			String numProc, boolean cabecalho, boolean movimentos, boolean documentos) throws Exception {
+		ServicoIntercomunicacao222 client = getClient(sistema);
 
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
@@ -127,8 +127,8 @@ public class SoapMNI {
 		return gson.toJson(processo);
 	}
 
-	private static ServicoIntercomunicacao222 getClient(String orgao) throws Exception {
-		URL url = new URL(Utils.getMniWsdlUrl(orgao));
+	private static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
+		URL url = new URL(Utils.getMniWsdlUrl(sistema));
 		// ServicoIntercomunicacao222_Service service = new
 		// ServicoIntercomunicacao222_Service(url);
 
@@ -139,7 +139,7 @@ public class SoapMNI {
 
 		// String endpointURL =
 		// "http://10.50.1.36/eproc/ws/controlador_ws.php?srv=intercomunicacao2.2";
-		String endpointURL = Utils.getMniWsdlEndpoint(orgao);
+		String endpointURL = Utils.getMniWsdlEndpoint(sistema);
 		BindingProvider bp = (BindingProvider) client;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointURL);
 
@@ -184,9 +184,9 @@ public class SoapMNI {
 		return client;
 	}
 
-	public static byte[] obterPecaProcessual(String idConsultante, String senhaConsultante, String orgao,
+	public static byte[] obterPecaProcessual(String idConsultante, String senhaConsultante, String sistema,
 			String numProc, String documento) throws Exception {
-		ServicoIntercomunicacao222 client = getClient(orgao);
+		ServicoIntercomunicacao222 client = getClient(sistema);
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
 		Holder<TipoProcessoJudicial> processo = new Holder<>();
@@ -244,7 +244,8 @@ public class SoapMNI {
 					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
 					i.idaviso = a.getIdAviso();
 					// TODO: Trocar esse órgão por system?
-					i.orgao = system;
+					i.sistema = system;
+					i.orgao = Utils.getOrgao(system);
 					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
 					i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
 					if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
@@ -275,7 +276,7 @@ public class SoapMNI {
 	}
 
 	public static void consultarTeorComunicacao(String idConsultante, String senhaConsultante, String numProc,
-			String idAviso, String orgao, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
+			String idAviso, String sistema, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -283,7 +284,7 @@ public class SoapMNI {
 
 		String numProcFormated = Utils.formatarNumeroProcesso(numProc);
 
-		String system = orgao.toLowerCase();
+		String system = sistema.toLowerCase();
 		ServicoIntercomunicacao222 client = getClient(system);
 		Holder<Boolean> sucesso = new Holder<>();
 		Holder<String> mensagem = new Holder<>();
@@ -311,7 +312,7 @@ public class SoapMNI {
 		resp.processo = numProc;
 		resp.dataaviso = c.getDataReferencia();
 		resp.idaviso = idAviso;
-		resp.orgao = orgao;
+		resp.sistema = sistema;
 		resp.teor = c.getTeor();
 
 		// byte[] pdf = null;
@@ -349,7 +350,7 @@ public class SoapMNI {
 
 	}
 
-	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String orgao,
+	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
 			String numProc, String tpDoc, int nvlSigilo, String nomePdfs, byte pdf[]) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
@@ -363,7 +364,7 @@ public class SoapMNI {
 
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();
-		ServicoIntercomunicacao222 client = getClient(orgao);
+		ServicoIntercomunicacao222 client = getClient(sistema);
 		List<TipoDocumento> l = new ArrayList<>();
 		if (nomePdfs != null) {
 			for (String nomePdf : nomePdfs.split(",")) {
@@ -445,7 +446,7 @@ public class SoapMNI {
 		String numProcFormatado;
 	}
 
-	public static PeticaoInicial enviarPeticaoInicial(String idManif, String orgao, String localidade,
+	public static PeticaoInicial enviarPeticaoInicial(String idManif, String sistema, String localidade,
 			String especialidade, String classe, double valorCausa, String cdas, String pas, int nvlSigilo,
 			boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes,
 			String nomePdfs, String tpDocPdfs, String nomePoloAtivo, String nomePoloPassivo) throws Exception {
@@ -456,7 +457,7 @@ public class SoapMNI {
 
 		String dataEnvio = new DateTime(new Date()).toString("yyyyMMddHHmmss");
 		String dirFinal = Utils.getDirFinal();
-		ServicoIntercomunicacao222 client = getClient(orgao);
+		ServicoIntercomunicacao222 client = getClient(sistema);
 		List<TipoDocumento> l = new ArrayList<>();
 		// String tpDocs[] = tpDocPdfs.split(",");
 		int i = 0;

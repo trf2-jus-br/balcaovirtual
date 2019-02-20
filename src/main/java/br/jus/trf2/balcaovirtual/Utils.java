@@ -56,7 +56,9 @@ public class Utils {
 	public static String getMniWsdlEndpoint(String system) {
 		try {
 			return SwaggerUtils.getRequiredProperty(system + ".mni.endpoint",
-					"Não foi possível localizar propriedade que configure o ENDPOINT do MNI: " + system + ".mni.endpoint", false);
+					"Não foi possível localizar propriedade que configure o ENDPOINT do MNI: " + system
+							+ ".mni.endpoint",
+					false);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
@@ -299,6 +301,11 @@ public class Utils {
 		@SuppressWarnings("resource")
 		java.util.Scanner s = new java.util.Scanner(is, "UTF-8").useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";
+	}
+
+	public static String getOrgao(String system) {
+		// TODO: Implementar esse método
+		return null;
 	}
 
 }

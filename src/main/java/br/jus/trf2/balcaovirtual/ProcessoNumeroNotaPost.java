@@ -17,18 +17,18 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 	@Override
 	public void run(ProcessoNumeroNotaPostRequest req, ProcessoNumeroNotaPostResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
-					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.orgao + "'.");
+					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.sistema + "'.");
 
 		if (!req.pessoal && ud.unidade == null)
 			throw new PresentableUnloggedException(
-					"Usuário '" + u.usuario + "' só pode fazer anotações pessoais no órgão '" + req.orgao + "'.");
+					"Usuário '" + u.usuario + "' só pode fazer anotações pessoais no órgão '" + req.sistema + "'.");
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
 			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
 			for (Nota n : l) {
 				if (n.getNotaLgPessoal() == req.pessoal)

@@ -45,7 +45,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		for (String system : mcr.responses.keySet()) {
 			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) mcr.responses.get(system);
 			resp.numero = r.numero;
-			resp.orgao = system; //r.orgao;
+			resp.sistema = system; // r.sistema;
+			resp.orgao = r.orgao; // r.sistema;
 			resp.unidade = r.unidade != null ? r.unidade.trim() : null;
 			resp.localnaunidade = r.localNaUnidade;
 			resp.segredodejustica = r.segredodejustica;

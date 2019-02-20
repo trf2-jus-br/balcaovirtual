@@ -65,8 +65,8 @@ parameters:
     description: Senha do usuário
     type: string
     required: true
-  orgao:
-    name: orgao
+  sistema:
+    name: sistema
     in: formData
     description: Órgão do processo
     required: true
@@ -227,8 +227,8 @@ parameters:
     description: Informar attachment se desejar receber como um download
     required: false
     type: string
-  orgaoquery:
-    name: orgao
+  sistemaquery:
+    name: sistema
     in: query
     description: Órgao
     required: true
@@ -432,7 +432,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/orgaos:
+  /config/sistemas:
     get:
       description: Diversos parâmetros para petição inicial
       tags: [config]
@@ -446,7 +446,7 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/OrgaoInfo"
+                  $ref: "#/definitions/SistemaInfo"
         500:
           description: Error ocurred
           schema:
@@ -456,7 +456,7 @@ paths:
       description: Diversos parâmetros para petição inicial
       tags: [config]
       parameters:
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -477,7 +477,7 @@ paths:
       tags: [config]
       parameters:
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -499,7 +499,7 @@ paths:
       parameters:
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/id2"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -521,15 +521,15 @@ paths:
       tags: [config]
       parameters:
         - $ref: "#/parameters/cpf"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
           schema:
             type: object
             properties:
-              orgao:
-                $ref: "#/definitions/Orgao"
+              sistema:
+                $ref: "#/definitions/Sistema"
               id:
                 $ref: "#/definitions/Id"
               nome:
@@ -549,15 +549,15 @@ paths:
       tags: [config]
       parameters:
         - $ref: "#/parameters/cnpj"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
           schema:
             type: object
             properties:
-              orgao:
-                $ref: "#/definitions/Orgao"
+              sistema:
+                $ref: "#/definitions/Sistema"
               id:
                 $ref: "#/definitions/Id"
               nome:
@@ -577,15 +577,15 @@ paths:
       tags: [config]
       parameters:
         - $ref: "#/parameters/oab"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
           schema:
             type: object
             properties:
-              orgao:
-                $ref: "#/definitions/Orgao"
+              sistema:
+                $ref: "#/definitions/Sistema"
               id:
                 $ref: "#/definitions/Id"
               nome:
@@ -611,6 +611,8 @@ paths:
             properties:
               numero:
                 $ref: "#/definitions/Numero"
+              sistema:
+                $ref: "#/definitions/Sistema"
               orgao:
                 $ref: "#/definitions/Orgao"
               unidade:
@@ -646,7 +648,7 @@ paths:
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -672,7 +674,7 @@ paths:
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -693,7 +695,7 @@ paths:
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -714,7 +716,7 @@ paths:
       tags: [peticionamento]
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
-        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/sistema"
         - $ref: "#/parameters/localidade"
         - $ref: "#/parameters/especialidade"
         - $ref: "#/parameters/classe"
@@ -756,7 +758,7 @@ paths:
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/sistema"
         - $ref: "#/parameters/tipopeticao"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/pdfs"
@@ -780,7 +782,7 @@ paths:
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/sistema"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/texto"
         - $ref: "#/parameters/cargo"
@@ -807,7 +809,7 @@ paths:
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgao"
+        - $ref: "#/parameters/sistema"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/texto"
         - $ref: "#/parameters/cargo"
@@ -833,7 +835,7 @@ paths:
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -848,7 +850,7 @@ paths:
                 type: string
               processo:
                 type: string
-              orgao:
+              sistema:
                 type: string
               teor:
                 type: string
@@ -904,7 +906,7 @@ paths:
       tags: [marca]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -928,7 +930,7 @@ paths:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/idclasse"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
         - $ref: "#/parameters/idmarca"
         - $ref: "#/parameters/texto"
         - $ref: "#/parameters/idestilo"
@@ -952,7 +954,7 @@ paths:
       tags: [nota]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -972,7 +974,7 @@ paths:
       consumes: ["application/x-www-form-urlencoded"]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
         - $ref: "#/parameters/texto"
         - $ref: "#/parameters/pessoal"
       responses:
@@ -995,7 +997,7 @@ paths:
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
         - $ref: "#/parameters/texto"
         - $ref: "#/parameters/dataalteracao"
       responses:
@@ -1014,7 +1016,7 @@ paths:
       tags: [nota]
       parameters:
         - $ref: "#/parameters/numero"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
         - $ref: "#/parameters/id"
       responses:
         200:
@@ -1316,7 +1318,7 @@ paths:
       tags: [mesa]
       parameters:
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -1338,7 +1340,7 @@ paths:
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -1364,7 +1366,7 @@ paths:
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/id"
-        - $ref: "#/parameters/orgaoquery"
+        - $ref: "#/parameters/sistemaquery"
       responses:
         200:
           description: Successful response
@@ -1397,14 +1399,14 @@ definitions:
         type: string
       descricao:
         type: string
-      orgao:
+      sistema:
         type: string
 
   Entidade:
     description: Entidade
     type: object
     properties:
-      orgao:
+      sistema:
         type: string
       id:
         type: string
@@ -1444,7 +1446,7 @@ definitions:
       valordacausaobrigatorio:
         type: boolean
 
-  OrgaoInfo:
+  SistemaInfo:
     description: Classe
     type: object
     properties:
@@ -1466,6 +1468,11 @@ definitions:
     description: Número do processo
     type: string
     example: 00002294020154020000
+
+  Sistema:
+    description: Órgão do processo
+    type: string
+    example: br.jus.jfrj.eproc
 
   Orgao:
     description: Órgão do processo
@@ -1560,7 +1567,7 @@ definitions:
         type: string
       unidade:
         type: string
-      orgao:
+      sistema:
         type: string
 
   Aviso:
@@ -1583,6 +1590,8 @@ definitions:
       unidadetipo:
         type: string
       orgao:
+        type: string
+      sistema:
         type: string
       localidade:
         type: string

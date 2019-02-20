@@ -14,7 +14,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 	public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp) throws Exception {
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
-		String json = SoapMNI.consultarProcesso(u.usuario, u.senha, req.orgao, req.numero, true, true, true);
+		String json = SoapMNI.consultarProcesso(u.usuario, u.senha, req.sistema, req.numero, true, true, true);
 		byte[] ba = json.getBytes(StandardCharsets.UTF_8);
 		resp.inputstream = new ByteArrayInputStream(ba);
 		resp.contentlength = (long) ba.length;

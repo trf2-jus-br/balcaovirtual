@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import br.jus.trf2.balcaovirtual.model.Nota;
-import br.jus.trf2.balcaovirtual.model.Orgao;
+import br.jus.trf2.balcaovirtual.model.Sistema;
 import br.jus.trf2.balcaovirtual.model.Processo;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
@@ -27,23 +27,24 @@ public class Dao implements Closeable {
 		return (Date) em.createNativeQuery("select sysdate() from dual").getSingleResult();
 	}
 
-	public Processo obtemProcesso(String numero, String orgaoSigla, boolean criar) {
+	public Processo obtemProcesso(String numero, String sistemaSigla, boolean criar) {
 		// identifica o órgao
-		Orgao o = (Orgao) em.createNamedQuery("Orgao.findSigla").setParameter("sigla", orgaoSigla).getSingleResult();
+		Sistema o = (Sistema) em.createNamedQuery("Sistema.findSigla").setParameter("sigla", sistemaSigla)
+				.getSingleResult();
 
 		Processo p = null;
 		// verifica se o processo já está cadastrado
 		try {
-			p = (Processo) em.createNamedQuery("Processo.findNumeroEOrgao").setParameter("numero", numero)
-					.setParameter("orgao", o).getSingleResult();
+			p = (Processo) em.createNamedQuery("Processo.findNumeroESistema").setParameter("numero", numero)
+					.setParameter("sistema", o).getSingleResult();
 		} catch (NoResultException e) {
 			if (criar) {
 				// insere um novo processo na tabela
 				p = new Processo();
-				p.setOrgao(o);
+				p.setSistema(o);
 				p.setProcCd(numero);
 				this.persist(p);
-				// p = obtemProcesso(numero, orgaoSigla, false);
+				// p = obtemProcesso(numero, sistemaSigla, false);
 			}
 		}
 

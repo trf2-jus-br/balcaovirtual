@@ -15,14 +15,14 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 	@Override
 	public void run(ProcessoNumeroNotaIdPutRequest req, ProcessoNumeroNotaIdPutResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
-					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.orgao + "'.");
+					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.sistema + "'.");
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
 			dao.beginTransaction();
 			Nota nota = dao.find(Nota.class, Long.valueOf(req.id));
 			if (nota == null)

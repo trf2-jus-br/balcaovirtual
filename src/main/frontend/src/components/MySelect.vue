@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label for="orgao">{{label}}</label>
+    <label :for="name">{{label}}</label>
     <div v-if="!edit">{{nome}}</div>
     <select v-if="edit" :disabled="disabled" :id="name" class="form-control"  v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-on:change="$emit('change')" :name="name" :class="{ 'is-invalid': error }">
       <option disabled selected hidden :value="undefined">[Selecionar]</option>

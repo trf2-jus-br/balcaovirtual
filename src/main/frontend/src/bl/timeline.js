@@ -32,7 +32,7 @@ export default {
     )
   },
 
-  updateTimeline: function (orgao, movdoc, calcularTempos) {
+  updateTimeline: function (sistema, movdoc, calcularTempos) {
     var contains = function (m, a) {
       return a.indexOf(m.movimentoLocal.codigoMovimento) !== -1
     }
@@ -41,8 +41,8 @@ export default {
     var prev
     var fApelacao = false
 
-    timeline.sentenca.texto = orgao === 'TRF2' ? 'Inteiro Teor' : 'Sentença'
-    timeline.apelacao.texto = orgao === 'TRF2' ? undefined : 'TRF2'
+    timeline.sentenca.texto = sistema === 'br.jus.trf2.apolo' ? 'Inteiro Teor' : 'Sentença'
+    timeline.apelacao.texto = sistema === 'br.jus.trf2.apolo' ? undefined : 'TRF2'
 
     var e
     var hora, ultHora

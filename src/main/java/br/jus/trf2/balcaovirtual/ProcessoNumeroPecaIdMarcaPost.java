@@ -20,14 +20,14 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 	public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
 			throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
-					+ "' não pode fazer marcações porque não foi autenticado no órgão '" + req.orgao + "'.");
+					+ "' não pode fazer marcações porque não foi autenticado no órgão '" + req.sistema + "'.");
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, true);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
 			Marca m = null;
 			if (req.idmarca != null)
 				m = dao.find(Marca.class, Long.valueOf(req.idmarca));

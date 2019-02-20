@@ -20,13 +20,13 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="processo")
+@Table(name = "processo")
 @NamedQueries({
 		// findAll
 		@NamedQuery(name = "Processo.findAll", query = "SELECT p FROM Processo p"),
 
 		// findNumeroEOrgao
-		@NamedQuery(name = "Processo.findNumeroEOrgao", query = "SELECT p FROM Processo p WHERE p.procCd = :numero and p.orgao = :orgao") })
+		@NamedQuery(name = "Processo.findNumeroEOrgao", query = "SELECT p FROM Processo p WHERE p.procCd = :numero and p.sistema = :sistema") })
 public class Processo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class Processo implements Serializable {
 	// bi-directional many-to-one association to Orgao
 	@ManyToOne
 	@JoinColumn(name = "ORGA_ID")
-	private Orgao orgao;
+	private Sistema sistema;
 
 	public Processo() {
 	}
@@ -88,12 +88,12 @@ public class Processo implements Serializable {
 		return marca;
 	}
 
-	public Orgao getOrgao() {
-		return this.orgao;
+	public Sistema getSistema() {
+		return sistema;
 	}
 
-	public void setOrgao(Orgao orgao) {
-		this.orgao = orgao;
+	public void setSistema(Sistema sistema) {
+		this.sistema = sistema;
 	}
 
 }

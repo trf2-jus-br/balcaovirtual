@@ -453,7 +453,7 @@ export default {
       this.errormsg = undefined
       if (lote) Bus.$emit('prgCaption', 'Confirmando ' + aviso.processo)
 
-      this.$http.post('processo/' + aviso.processo + '/aviso/' + aviso.idaviso + '/receber?orgao=' + aviso.orgao, {}, { block: !lote }).then(response => {
+      this.$http.post('processo/' + aviso.processo + '/aviso/' + aviso.idaviso + '/receber?sistema=' + aviso.sistema, {}, { block: !lote }).then(response => {
         var d = response.data
         aviso.teor = ProcessoBL.formatarTexto(d.teor)
         aviso.datarecebimento = d.datarecebimento
@@ -485,6 +485,7 @@ export default {
         processos.push({
           numero: ProcessoBL.formatarProcesso(avisos[i].processo),
           orgao: avisos[i].orgao,
+          sistema: avisos[i].sistema,
           unidade: avisos[i].unidade
         })
       }

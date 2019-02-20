@@ -20,14 +20,14 @@ public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 		Usuario u = SessionsCreatePost.assertUsuario();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 		if (ud == null)
 			throw new PresentableUnloggedException("disabled");
 
 		resp.list = new ArrayList<>();
 
 		try (Dao dao = new Dao()) {
-			Processo p = dao.obtemProcesso(req.numero, req.orgao, false);
+			Processo p = dao.obtemProcesso(req.numero, req.sistema, false);
 			if (p == null)
 				return;
 

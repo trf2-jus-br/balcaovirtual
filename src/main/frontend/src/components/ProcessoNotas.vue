@@ -1,8 +1,8 @@
 <template>
   <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas">
     <div class="card-deck">
-      <processo-nota v-show="temCodigoDeUnidade" ref="notaUnidade" :processo="processo" :orgao="orgao" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="false" @input="notaUnidadeAlterada"></processo-nota>
-      <processo-nota ref="notaPessoal" :processo="processo" :orgao="orgao" titulo="Notas Pessoais" style="background-color: #f8ff99" :pessoal="true" @input="notaPessoalAlterada"></processo-nota>
+      <processo-nota v-show="temCodigoDeUnidade" ref="notaUnidade" :processo="processo" :sistema="sistema" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="false" @input="notaUnidadeAlterada"></processo-nota>
+      <processo-nota ref="notaPessoal" :processo="processo" :sistema="sistema" titulo="Notas Pessoais" style="background-color: #f8ff99" :pessoal="true" @input="notaPessoalAlterada"></processo-nota>
     </div>
   </div>
 </template>
@@ -12,14 +12,14 @@ import ProcessoNota from './ProcessoNota'
 
 export default {
   name: 'processo-notas',
-  props: ['processo', 'orgao'],
+  props: ['processo', 'sistema'],
   mounted () {
     var jwt = this.$parent.$parent.jwt
     if (jwt.users) {
       var users = jwt.users.split(';')
       for (var i = 0; i < users.length; i++) {
         var user = users[i].split(',')
-        if (user[0] === this.orgao.toLowerCase()) {
+        if (user[0] === this.sistema) {
           if (user[2] !== 'null') this.temCodigoDeUnidade = true
         }
       }

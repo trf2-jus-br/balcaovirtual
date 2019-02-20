@@ -10,7 +10,7 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 	@Override
 	public void run(ProcessoNumeroPdfGetRequest req, ProcessoNumeroPdfGetResponse resp) throws Exception {
 		Usuario u = SessionsCreatePost.assertUsuario();
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, null, req.orgao, req.numero, null, null,
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, null, req.sistema, req.numero, null, null,
 				null, null, null, null);
 	}
 

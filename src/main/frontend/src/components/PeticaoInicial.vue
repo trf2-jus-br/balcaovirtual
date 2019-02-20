@@ -140,7 +140,7 @@
       <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
         <div class="row">
           <div class="form-group col-md-2">
-            <my-select name="orgao" label="Órgão" v-model="orgao" :list="orgaos" @change="selecionarOrgao" :edit="editando" v-validate="'required'" :error="errors.first('orgao')"></my-select>
+            <my-select name="sistema" label="Sistema" v-model="sistema" :list="sistemas" @change="selecionarSistema" :edit="editando" v-validate="'required'" :error="errors.first('sistema')"></my-select>
           </div>
           <div class="form-group col-md-3">
             <my-select :disabled="localidades.length == 0" name="localidade" label="Localidade" v-model="localidade" :list="localidades" @change="selecionarLocalidade" :edit="editando" v-validate="'required'" :error="errors.first('localidade')"></my-select>
@@ -229,21 +229,21 @@
 
                 <td v-if="!editando">{{p.documento}}</td>
                 <td v-if="editando" :colspan="p.tipopessoa == '3' ? 2 : 1">
-                  <my-input v-if="p.tipopessoa == '1'" :disabled="!orgao" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
+                  <my-input v-if="p.tipopessoa == '1'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
 
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
+                  <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
 
-                  <select :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
+                  <select :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
                     <option disabled selected hidden :value="undefined">[Selecionar]</option>
                     <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
                   </select>
 
-                  <input type="text" :disabled="!orgao" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
+                  <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
                 </td>
 
                 <td v-if="!editando">{{p.nome}}</td>
                 <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
-                  <my-input :disabled="!orgao" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
+                  <my-input :disabled="!sistema" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
                 </td>
 
                 <td v-if="editando" align="right">
@@ -348,15 +348,13 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
-      this.carregarOrgaos()
+      this.carregarSistemas()
       this.carregarEntidades()
     })
   },
 
   data () {
     return {
-      // remover
-      aorgao2: undefined,
       files: [],
       invalidFiles: [],
 
@@ -367,7 +365,7 @@ export default {
 
       alertas: alertas,
 
-      orgao: undefined,
+      sistema: undefined,
       localidade: undefined,
       especialidade: undefined,
       classe: undefined,
@@ -382,7 +380,7 @@ export default {
       prioridadeidoso: false,
 
       entidades: [],
-      orgaos: [],
+      sistemas: [],
       localidades: [],
       especialidades: [],
       classes: [],
@@ -422,10 +420,10 @@ export default {
 
   computed: {
     entidadesFiltradas: function () {
-      if (!this.entidades || !this.orgao) return []
-      var org = this.orgao.toUpperCase()
+      if (!this.entidades || !this.sistema) return []
+      var org = this.sistema.toUpperCase()
       var a = this.entidades.filter((item) => {
-        return item.orgao === org
+        return item.sistema === org
       })
       return a
     },
@@ -438,7 +436,7 @@ export default {
     },
 
     alerta: function () {
-      return this.alertas[this.orgao]
+      return this.alertas[this.sistema]
     },
 
     valordacausaobrigatorio: function() {
@@ -494,11 +492,11 @@ export default {
       this.carregar('config/entidades', 'entidades', 'entidade')
     },
 
-    carregarOrgaos: function () {
-      this.carregar('config/orgaos', 'orgaos', 'orgao')
+    carregarSistemas: function () {
+      this.carregar('config/sistemas', 'sistemas', 'sistema')
     },
 
-    selecionarOrgao: function () {
+    selecionarSistema: function () {
       this.localidade = undefined
       this.localidades.length = 0
       this.especialidade = undefined
@@ -509,7 +507,7 @@ export default {
     },
 
     carregarLocalidades: function () {
-      this.carregar('config/localidades?orgao=' + this.orgao, 'localidades', 'localidade')
+      this.carregar('config/localidades?sistema=' + this.sistema, 'localidades', 'localidade')
     },
 
     selecionarLocalidade: function () {
@@ -521,7 +519,7 @@ export default {
     },
 
     carregarEspecialidades: function () {
-      this.carregar('config/localidade/' + this.localidade + '/especialidades?orgao=' + this.orgao, 'especialidades', 'especialidade')
+      this.carregar('config/localidade/' + this.localidade + '/especialidades?sistema=' + this.sistema, 'especialidades', 'especialidade')
     },
 
     selecionarEspecialidade: function () {
@@ -537,7 +535,7 @@ export default {
     },
 
     carregarClasses: function () {
-      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classes?orgao=' + this.orgao, 'classes', 'classe')
+      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classes?sistema=' + this.sistema, 'classes', 'classe')
     },
 
     //
@@ -552,7 +550,7 @@ export default {
         status: undefined,
         validando: undefined,
         valido: undefined,
-        orgao: undefined,
+        sistema: undefined,
         errormsg: undefined,
         tipo: undefined,
         tipodescr: undefined,
@@ -589,8 +587,8 @@ export default {
         a.valido = false
         this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/validar', { block: true }).then(response => {
           var d = response.data
-          a.status = d.unidade + '/' + d.orgao
-          a.orgao = d.orgao
+          a.status = d.unidade + '/' + d.sistema
+          a.sistema = d.sistema
           a.validando = false
           a.valido = true
         }, error => {
@@ -720,7 +718,7 @@ export default {
         this.validar()
         return
       }
-      this.$http.get('config/pessoa-fisica/' + cpf + '?orgao=' + this.orgao, { block: true }).then(response => {
+      this.$http.get('config/pessoa-fisica/' + cpf + '?sistema=' + this.sistema, { block: true }).then(response => {
         parte.nome = response.data.nome
         this.validar()
       }, error => UtilsBL.errormsg(error, this))
@@ -733,7 +731,7 @@ export default {
         this.validar()
         return
       }
-      this.$http.get('config/pessoa-juridica/' + cnpj + '?orgao=' + this.orgao, { block: true }).then(response => {
+      this.$http.get('config/pessoa-juridica/' + cnpj + '?sistema=' + this.sistema, { block: true }).then(response => {
         parte.nome = response.data.nome
         this.validar()
       }, error => UtilsBL.errormsg(error, this))
@@ -752,7 +750,7 @@ export default {
         this.validar()
         return
       }
-      this.$http.get('config/advogado/' + oab + '?orgao=' + this.orgao, { block: true }).then(response => {
+      this.$http.get('config/advogado/' + oab + '?sistema=' + this.sistema, { block: true }).then(response => {
         parte.nome = response.data.nome
         window.setTimeout(() => this.validar(), 100)
       }, error => UtilsBL.errormsg(error, this))
@@ -807,7 +805,7 @@ export default {
       }
 
       this.$http.post('peticao-inicial/protocolar', {
-        orgao: this.orgao,
+        sistema: this.sistema,
         localidade: this.localidade,
         especialidade: this.especialidade,
         classe: this.classe,
@@ -843,7 +841,7 @@ export default {
       this.numeroFormatado = undefined
       if (!this.manterCampos) {
         this.arquivos.length = 0
-        this.orgao = undefined
+        this.sistema = undefined
         this.localidade = undefined
         this.especialidade = undefined
         this.classe = undefined

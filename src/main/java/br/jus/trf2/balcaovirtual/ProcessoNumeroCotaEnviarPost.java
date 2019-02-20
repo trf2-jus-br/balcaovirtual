@@ -15,14 +15,14 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 			throws Exception {
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.orgao.toLowerCase());
+		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,
 				req.unidade);
 
-		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.orgao.toLowerCase() + ".cota.tipo",
+		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.sistema.toLowerCase() + ".cota.tipo",
 				"Parâmetro de tipo de documento não configurado", true);
 
-		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.orgao, req.numero, tipo,
+		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero, tipo,
 				Integer.parseInt(req.nivelsigilo), null, pdf);
 		resp.status = mensagem;
 	}

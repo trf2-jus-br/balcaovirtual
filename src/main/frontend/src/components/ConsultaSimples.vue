@@ -62,12 +62,13 @@
               <input type="text" class="form-control" id="procurador" placeholder="" v-model="procurador">
             </div>
             <div class="form-group col col-md-2">
-              <label for="orgao">Órgão</label>
-              <select class="form-control" id="orgao" v-model="orgao">
+              <label for="sistema">Sistema</label>
+              <select class="form-control" id="sistema" v-model="sistema">
                 <option selected value="">[Todos]</option>
-                <option>TRF2</option>
-                <option>JFRJ</option>
-                <option>JFES</option>
+                <option>br.jus.jfrj.eproc</option>
+                <option>br.jus.trf2.apolo</option>
+                <option>br.jus.jfrj.apolo</option>
+                <option>br.jus.jfes.apolo</option>
               </select>
             </div>
 

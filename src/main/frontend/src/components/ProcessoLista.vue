@@ -246,7 +246,7 @@ export default {
         dataultimomovimentoFormatada: undefined,
         numero: undefined,
         numeroFormatado: undefined,
-        orgao: undefined,
+        sistema: undefined,
         unidade: undefined,
         usuarioautorizado: undefined,
         segredodejustica: undefined,
@@ -319,7 +319,7 @@ export default {
       processos[i].jwt = undefined
       processos[i].state = undefined
       processos[i].perc = undefined
-      this.$http.get('processo/' + processos[i].numero + '/pdf?orgao=' + processos[i].orgao).then(response => {
+      this.$http.get('processo/' + processos[i].numero + '/pdf?sistema=' + processos[i].sistema).then(response => {
         if (i + 1 < processos.length) this.$nextTick(() => this.obterJwt(processos, i + 1))
         else this.$nextTick(this.continuarBaixando)
         processos[i].jwt = response.data.jwt
