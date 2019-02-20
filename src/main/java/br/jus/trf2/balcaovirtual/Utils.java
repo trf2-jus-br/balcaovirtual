@@ -11,33 +11,52 @@ import org.joda.time.format.DateTimeFormatter;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Utils {
-	public static String getOrgaos() {
+//	public static String getOrgaos() {
+//		try {
+//			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",
+//					"Não foi possível localizar propriedade que configure a lista de órgãos.", false);
+//		} catch (Exception e) {
+//			throw new RuntimeException("Erro de configuração", e);
+//		}
+//
+//	}
+
+	public static String[] getSystems() {
+		String systems = SwaggerUtils.getProperty("balcaovirtual.systems", null);
+		if (systems == null)
+			return null;
+		return systems.split(",");
+	}
+
+	public static String getPassword(String system) {
+		return SwaggerUtils.getProperty(system + ".password", null);
+	}
+
+	public static String getApiUrl(String system) {
 		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",
-					"Não foi possível localizar propriedade que configure a lista de órgãos.", false);
+			return SwaggerUtils.getRequiredProperty(system + ".api.url",
+					"Não foi possível localizar propriedade que configure a URL da API do sistema processual: " + system
+							+ ".api.url",
+					false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+	}
+
+	public static String getMniWsdlUrl(String system) {
+		try {
+			return SwaggerUtils.getRequiredProperty(system + ".mni.url",
+					"Não foi possível localizar propriedade que configure a URL do MNI: " + system + ".mni.url", false);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
 
 	}
 
-	public static String getMniWsdlUrl(String orgao) {
+	public static String getMniWsdlEndpoint(String system) {
 		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.mni." + orgao.toLowerCase() + ".url",
-					"Não foi possível localizar propriedade que configure a URL do MNI: " + "balcaovirtual.mni."
-							+ orgao.toLowerCase() + ".url",
-					false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
-
-	}
-
-	public static String getWsProcessualUrl() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.ws.processual.url",
-					"Não foi possível localizar a propridade que configura a URL do webservice de integração com o sistema processual.",
-					false);
+			return SwaggerUtils.getRequiredProperty(system + ".mni.endpoint",
+					"Não foi possível localizar propriedade que configure o ENDPOINT do MNI: " + system + ".mni.endpoint", false);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}

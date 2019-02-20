@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
+import com.crivano.swaggerservlet.dependency.SwaggerServletDependency;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 import com.crivano.swaggerservlet.property.PrivateProperty;
 import com.crivano.swaggerservlet.property.PublicProperty;
@@ -115,11 +116,21 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addDependency(new FileSystemWriteDependency("upload.dir.final",
 				SwaggerUtils.getProperty("balcaovirtual.upload.dir.final", "[undefined]"), false, 0, 10000));
 
-		addDependency(new HttpGetDependency("apolows", Utils.getWsProcessualUrl() + "/classe-cnj/81?orgao=TRF2", false,
-				0, 10000));
+		for (final String system : Utils.getSystems()) {
+			addDependency(new SwaggerServletDependency("ws", "blucservice", false, 0, 10000) {
 
-		String[] systems = Utils.getOrgaos().split(",");
-		for (final String system : systems) {
+				@Override
+				public String getUrl() {
+					return Utils.getApiUrl(system);
+				}
+
+				@Override
+				public String getResponsable() {
+					return null;
+				}
+
+			});
+
 			addDependency(new TestableDependency("soap", "mni-" + system.toLowerCase(), false, 0, 10000) {
 
 				@Override

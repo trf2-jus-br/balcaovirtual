@@ -204,8 +204,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Get the name of the local host, for use in the EHLO and HELO commands.
-	 * The property mail.smtp.localhost overrides mail.smtp.localaddress, which
+	 * Get the name of the local host, for use in the EHLO and HELO commands. The
+	 * property mail.smtp.localhost overrides mail.smtp.localaddress, which
 	 * overrides what InetAddress would tell us.
 	 */
 	public synchronized String getLocalHost() {
@@ -220,7 +220,6 @@ public class SMTPTransport extends Transport {
 				localHostName = localHost.getHostName();
 				// if we can't get our name, use local address literal
 				if (localHostName == null)
-					// XXX - not correct for IPv6
 					localHostName = "[" + localHost.getHostAddress() + "]";
 			}
 		} catch (UnknownHostException uhex) {
@@ -238,10 +237,10 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Start the SMTP protocol on the given socket, which was already connected
-	 * by the caller. Useful for implementing the SMTP ATRN command (RFC 2645)
-	 * where an existing connection is used when the server reverses roles and
-	 * becomes the client.
+	 * Start the SMTP protocol on the given socket, which was already connected by
+	 * the caller. Useful for implementing the SMTP ATRN command (RFC 2645) where an
+	 * existing connection is used when the server reverses roles and becomes the
+	 * client.
 	 * 
 	 * @since JavaMail 1.3.3
 	 */
@@ -269,8 +268,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Sets the SASL realm to be used for DIGEST-MD5 authentication.
 	 * 
-	 * @param saslRealm
-	 *            the name of the realm to use for SASL authentication.
+	 * @param saslRealm the name of the realm to use for SASL authentication.
 	 * 
 	 * @since JavaMail 1.3.1
 	 */
@@ -282,8 +280,8 @@ public class SMTPTransport extends Transport {
 	 * Should we report even successful sends by throwing an exception? If so, a
 	 * <code>SendFailedException</code> will always be thrown and an
 	 * {@link com.sun.mail.smtp.SMTPAddressSucceededException
-	 * SMTPAddressSucceededException} will be included in the exception chain
-	 * for each successful address, along with the usual
+	 * SMTPAddressSucceededException} will be included in the exception chain for
+	 * each successful address, along with the usual
 	 * {@link com.sun.mail.smtp.SMTPAddressFailedException
 	 * SMTPAddressFailedException} for each unsuccessful address.
 	 * 
@@ -298,8 +296,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Set whether successful sends should be reported by throwing an exception.
 	 * 
-	 * @param reportSuccess
-	 *            should we throw an exception on success?
+	 * @param reportSuccess should we throw an exception on success?
 	 * 
 	 * @since JavaMail 1.3.2
 	 */
@@ -322,8 +319,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Set whether the STARTTLS command should be used.
 	 * 
-	 * @param useStartTLS
-	 *            should we use the STARTTLS command?
+	 * @param useStartTLS should we use the STARTTLS command?
 	 * 
 	 * @since JavaMail 1.3.2
 	 */
@@ -345,13 +341,12 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Set whether the RSET command should be used instead of the NOOP command
-	 * in the
+	 * Set whether the RSET command should be used instead of the NOOP command in
+	 * the
 	 * 
 	 * @{link #isConnected isConnected} method.
 	 * 
-	 * @param useRset
-	 *            should we use the RSET command?
+	 * @param useRset should we use the RSET command?
 	 * 
 	 * @since JavaMail 1.4
 	 */
@@ -361,9 +356,9 @@ public class SMTPTransport extends Transport {
 
 	/**
 	 * Return the last response we got from the server. A failed send is often
-	 * followed by an RSET command, but the response from the RSET command is
-	 * not saved. Instead, this returns the response from the command before the
-	 * RSET command.
+	 * followed by an RSET command, but the response from the RSET command is not
+	 * saved. Instead, this returns the response from the command before the RSET
+	 * command.
 	 * 
 	 * @return last response from server
 	 * 
@@ -397,24 +392,19 @@ public class SMTPTransport extends Transport {
 	 * connect to "localhost" if the host was null.
 	 * <p>
 	 * 
-	 * Unless mail.smtp.ehlo is set to false, we'll try to identify ourselves
-	 * using the ESMTP command EHLO.
+	 * Unless mail.smtp.ehlo is set to false, we'll try to identify ourselves using
+	 * the ESMTP command EHLO.
 	 * 
 	 * If mail.smtp.auth is set to true, we insist on having a username and
-	 * password, and will try to authenticate ourselves if the server supports
-	 * the AUTH extension (RFC 2554).
+	 * password, and will try to authenticate ourselves if the server supports the
+	 * AUTH extension (RFC 2554).
 	 * 
-	 * @param host
-	 *            the name of the host to connect to
-	 * @param port
-	 *            the port to use (-1 means use default port)
-	 * @param user
-	 *            the name of the user to login as
-	 * @param passwd
-	 *            the user's password
+	 * @param host   the name of the host to connect to
+	 * @param port   the port to use (-1 means use default port)
+	 * @param user   the name of the user to login as
+	 * @param passwd the user's password
 	 * @return true if connection successful, false if authentication failed
-	 * @exception MessagingException
-	 *                for non-authentication failures
+	 * @exception MessagingException for non-authentication failures
 	 */
 	protected boolean protocolConnect(String host, int port, String user, String passwd) throws MessagingException {
 		// setting mail.smtp.ehlo to false disables attempts to use EHLO
@@ -428,16 +418,16 @@ public class SMTPTransport extends Transport {
 			out.println("DEBUG SMTP: useEhlo " + useEhlo + ", useAuth " + useAuth);
 
 		/*
-		 * If mail.smtp.auth is set, make sure we have a valid username and
-		 * password, even if we might not end up using it (e.g., because the
-		 * server doesn't support ESMTP or doesn't support the AUTH extension).
+		 * If mail.smtp.auth is set, make sure we have a valid username and password,
+		 * even if we might not end up using it (e.g., because the server doesn't
+		 * support ESMTP or doesn't support the AUTH extension).
 		 */
 		if (useAuth && (user == null || passwd == null))
 			return false;
 
 		/*
-		 * If port is not specified, set it to value of mail.smtp.port property
-		 * if it exists, otherwise default to 25.
+		 * If port is not specified, set it to value of mail.smtp.port property if it
+		 * exists, otherwise default to 25.
 		 */
 		if (port == -1) {
 			String portstring = session.getProperty("mail." + name + ".port");
@@ -466,9 +456,9 @@ public class SMTPTransport extends Transport {
 		if (useStartTLS && supportsExtension("STARTTLS")) {
 			startTLS();
 			/*
-			 * Have to issue another EHLO to update list of extensions
-			 * supported, especially authentication mechanisms. Don't know if
-			 * this could ever fail, but we ignore failure.
+			 * Have to issue another EHLO to update list of extensions supported, especially
+			 * authentication mechanisms. Don't know if this could ever fail, but we ignore
+			 * failure.
 			 */
 			ehlo(getLocalHost());
 		}
@@ -482,12 +472,11 @@ public class SMTPTransport extends Transport {
 			}
 			// if authentication fails, close connection and return false
 			if (supportsAuthentication("LOGIN") || supportsExtension("AUTH=LOGIN")) {
-				// XXX - could use "initial response" capability
 				int resp = simpleCommand("AUTH LOGIN");
 
 				/*
-				 * A 530 response indicates that the server wants us to issue a
-				 * STARTTLS command first. Do that and try again.
+				 * A 530 response indicates that the server wants us to issue a STARTTLS command
+				 * first. Do that and try again.
 				 */
 				if (resp == 530) {
 					startTLS();
@@ -495,13 +484,12 @@ public class SMTPTransport extends Transport {
 				}
 
 				/*
-				 * Wrap a BASE64Encoder around a ByteArrayOutputstream to craft
-				 * b64 encoded username and password strings.
+				 * Wrap a BASE64Encoder around a ByteArrayOutputstream to craft b64 encoded
+				 * username and password strings.
 				 * 
-				 * Also note that unlike the B64 definition in MIME, CRLFs
-				 * should *not* be inserted during the encoding process. So I
-				 * use Integer.MAX_VALUE (0x7fffffff (> 1G)) as the
-				 * bytesPerLine, which should be sufficiently large!
+				 * Also note that unlike the B64 definition in MIME, CRLFs should *not* be
+				 * inserted during the encoding process. So I use Integer.MAX_VALUE (0x7fffffff
+				 * (> 1G)) as the bytesPerLine, which should be sufficiently large!
 				 */
 				try {
 					try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -533,13 +521,12 @@ public class SMTPTransport extends Transport {
 					}
 				}
 			} else if (supportsAuthentication("PLAIN")) {
-				// XXX - could use "initial response" capability
 				int resp = simpleCommand("AUTH PLAIN");
 				try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
 						OutputStream b64os = new BASE64EncoderStream(bos, Integer.MAX_VALUE)) {
 					if (resp == 334) {
 						// send "<NUL>user<NUL>passwd"
-						// XXX - we don't send an authorization identity
+						// we don't send an authorization identity
 						b64os.write(0);
 						b64os.write(ASCIIUtility.getBytes(user));
 						b64os.write(0);
@@ -594,40 +581,37 @@ public class SMTPTransport extends Transport {
 	 * 
 	 * If all the <code>addresses</code> succeed the SMTP check using the
 	 * <code>RCPT TO:</code> command, we attempt to send the message. A
-	 * TransportEvent of type MESSAGE_DELIVERED is fired indicating the
-	 * successful submission of a message to the SMTP host.
+	 * TransportEvent of type MESSAGE_DELIVERED is fired indicating the successful
+	 * submission of a message to the SMTP host.
 	 * <p>
 	 * 
 	 * If some of the <code>addresses</code> fail the SMTP check, and the
-	 * <code>mail.stmp.sendpartial</code> property is not set, sending is
-	 * aborted. The TransportEvent of type MESSAGE_NOT_DELIVERED is fired
-	 * containing the valid and invalid addresses. The SendFailedException is
+	 * <code>mail.stmp.sendpartial</code> property is not set, sending is aborted.
+	 * The TransportEvent of type MESSAGE_NOT_DELIVERED is fired containing the
+	 * valid and invalid addresses. The SendFailedException is also thrown.
+	 * <p>
+	 * 
+	 * If some of the <code>addresses</code> fail the SMTP check, and the
+	 * <code>mail.stmp.sendpartial</code> property is set to true, the message is
+	 * sent. The TransportEvent of type MESSAGE_PARTIALLY_DELIVERED is fired
+	 * containing the valid and invalid addresses. The SMTPSendFailedException is
 	 * also thrown.
-	 * <p>
-	 * 
-	 * If some of the <code>addresses</code> fail the SMTP check, and the
-	 * <code>mail.stmp.sendpartial</code> property is set to true, the message
-	 * is sent. The TransportEvent of type MESSAGE_PARTIALLY_DELIVERED is fired
-	 * containing the valid and invalid addresses. The SMTPSendFailedException
-	 * is also thrown.
 	 * <p>
 	 * 
 	 * MessagingException is thrown if the message can't write out an
 	 * RFC822-compliant stream using its <code>writeTo</code> method.
 	 * <p>
 	 * 
-	 * @param message
-	 *            The MimeMessage to be sent
-	 * @param addresses
-	 *            List of addresses to send this message to
+	 * @param message   The MimeMessage to be sent
+	 * @param addresses List of addresses to send this message to
 	 * @see javax.mail.event.TransportEvent
-	 * @exception SMTPSendFailedException
-	 *                if the send failed because of an SMTP command error
-	 * @exception SendFailedException
-	 *                if the send failed because of invalid addresses.
-	 * @exception MessagingException
-	 *                if the connection is dead or not in the connected state or
-	 *                if the message is not a MimeMessage.
+	 * @exception SMTPSendFailedException if the send failed because of an SMTP
+	 *                                    command error
+	 * @exception SendFailedException     if the send failed because of invalid
+	 *                                    addresses.
+	 * @exception MessagingException      if the connection is dead or not in the
+	 *                                    connected state or if the message is not a
+	 *                                    MimeMessage.
 	 */
 	public synchronized void sendMessage(Message message, Address[] addresses)
 			throws MessagingException, SendFailedException {
@@ -664,7 +648,7 @@ public class SMTPTransport extends Transport {
 		if (use8bit && supportsExtension("8BITMIME")) {
 			if (convertTo8Bit(this.message)) {
 				// in case we made any changes, save those changes
-				// XXX - this will change the Message-ID
+				// this will change the Message-ID
 				try {
 					this.message.saveChanges();
 				} catch (MessagingException mex) {
@@ -846,13 +830,13 @@ public class SMTPTransport extends Transport {
 
 	/**
 	 * If the Part is a text part and has a Content-Transfer-Encoding of
-	 * "quoted-printable" or "base64", and it obeys the rules for "8bit"
-	 * encoding, change the encoding to "8bit". If the part is a multipart,
-	 * recursively process all its parts.
+	 * "quoted-printable" or "base64", and it obeys the rules for "8bit" encoding,
+	 * change the encoding to "8bit". If the part is a multipart, recursively
+	 * process all its parts.
 	 * 
 	 * @return true if any changes were made
 	 * 
-	 *         XXX - This is really quite a hack.
+	 *         This is really quite a hack.
 	 */
 	private boolean convertTo8Bit(MimePart part) {
 		boolean changed = false;
@@ -863,13 +847,12 @@ public class SMTPTransport extends Transport {
 					InputStream is = part.getInputStream();
 					if (is8Bit(is)) {
 						/*
-						 * If the message was created using an InputStream then
-						 * we have to extract the content as an object and set
-						 * it back as an object so that the content will be
+						 * If the message was created using an InputStream then we have to extract the
+						 * content as an object and set it back as an object so that the content will be
 						 * re-encoded.
 						 * 
-						 * If the message was not created using an InputStream,
-						 * the following should have no effect.
+						 * If the message was not created using an InputStream, the following should
+						 * have no effect.
 						 */
 						part.setContent(part.getContent(), part.getContentType());
 						part.setHeader("Content-Transfer-Encoding", "8bit");
@@ -893,11 +876,10 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Check whether the data in the given InputStream follows the rules for
-	 * 8bit text. Lines have to be 998 characters or less and no NULs are
-	 * allowed. CR and LF must occur in pairs but we don't check that because we
-	 * assume this is text and we convert all CR/LF combinations into canonical
-	 * CRLF later.
+	 * Check whether the data in the given InputStream follows the rules for 8bit
+	 * text. Lines have to be 998 characters or less and no NULs are allowed. CR and
+	 * LF must occur in pairs but we don't check that because we assume this is text
+	 * and we convert all CR/LF combinations into canonical CRLF later.
 	 */
 	private boolean is8Bit(InputStream is) {
 		int b;
@@ -948,8 +930,7 @@ public class SMTPTransport extends Transport {
 	/**
 	 * Issue the <code>HELO</code> command.
 	 * 
-	 * @param domain
-	 *            our domain
+	 * @param domain our domain
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -964,8 +945,7 @@ public class SMTPTransport extends Transport {
 	 * Issue the <code>EHLO</code> command. Collect the returned list of service
 	 * extensions.
 	 * 
-	 * @param domain
-	 *            our domain
+	 * @param domain our domain
 	 * @return true if command succeeds
 	 * 
 	 * @since JavaMail 1.4.1
@@ -1019,8 +999,7 @@ public class SMTPTransport extends Transport {
 	 * <li>SMTPMessage.getEnvelopeFrom()</li>
 	 * <li>mail.smtp.from property</li>
 	 * <li>From: header in the message</li>
-	 * <li>System username using the InternetAddress.getLocalAddress()
-	 * method</li>
+	 * <li>System username using the InternetAddress.getLocalAddress() method</li>
 	 * </ol>
 	 * 
 	 * @since JavaMail 1.4.1
@@ -1054,15 +1033,13 @@ public class SMTPTransport extends Transport {
 			// Nato: ret = ((SMTPMessage) message).getDSNRet();
 			if (ret == null)
 				ret = session.getProperty("mail." + name + ".dsn.ret");
-			// XXX - check for legal syntax?
 			if (ret != null)
 				cmd += " RET=" + ret;
 		}
 
 		/*
-		 * If an RFC 2554 submitter has been specified, and the server supports
-		 * the AUTH extension, include the AUTH= element on the MAIL FROM
-		 * command.
+		 * If an RFC 2554 submitter has been specified, and the server supports the AUTH
+		 * extension, include the AUTH= element on the MAIL FROM command.
 		 */
 		if (supportsExtension("AUTH")) {
 			String submitter = null;
@@ -1070,7 +1047,6 @@ public class SMTPTransport extends Transport {
 				submitter = ((SMTPMessage) message).getSubmitter();
 			if (submitter == null)
 				submitter = session.getProperty("mail." + name + ".submitter");
-			// XXX - check for legal syntax?
 			if (submitter != null) {
 				try {
 					String s = xtext(submitter);
@@ -1097,10 +1073,9 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Sends each address to the SMTP host using the <code>RCPT TO:</code>
-	 * command and copies the address either into the validSentAddr or
-	 * invalidAddr arrays. Sets the <code>sendFailed</code> flag to true if any
-	 * addresses failed.
+	 * Sends each address to the SMTP host using the <code>RCPT TO:</code> command
+	 * and copies the address either into the validSentAddr or invalidAddr arrays.
+	 * Sets the <code>sendFailed</code> flag to true if any addresses failed.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1109,10 +1084,10 @@ public class SMTPTransport extends Transport {
 	 * section 4.3 S: 250, 251 F: 550, 551, 552, 553, 450, 451, 452 E: 500, 501,
 	 * 503, 421
 	 * 
-	 * and how we map the above error/failure conditions to valid/invalid
-	 * address vectors that are reported in the thrown exception: invalid addr:
-	 * 550, 501, 503, 551, 553 valid addr: 552 (quota), 450, 451, 452 (quota),
-	 * 421 (srvr abort)
+	 * and how we map the above error/failure conditions to valid/invalid address
+	 * vectors that are reported in the thrown exception: invalid addr: 550, 501,
+	 * 503, 551, 553 valid addr: 552 (quota), 450, 451, 452 (quota), 421 (srvr
+	 * abort)
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void rcptTo() throws MessagingException {
@@ -1141,7 +1116,6 @@ public class SMTPTransport extends Transport {
 			// Nato: notify = ((SMTPMessage) message).getDSNNotify();
 			if (notify == null)
 				notify = session.getProperty("mail." + name + ".dsn.notify");
-			// XXX - check for legal syntax?
 			if (notify != null)
 				dsn = true;
 		}
@@ -1360,8 +1334,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Issue the <code>STARTTLS</code> command and switch the socket to TLS mode
-	 * if it succeeds.
+	 * Issue the <code>STARTTLS</code> command and switch the socket to TLS mode if
+	 * it succeeds.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1422,8 +1396,8 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Start the protocol to the server on serverSocket, assumed to be provided
-	 * and connected by the caller.
+	 * Start the protocol to the server on serverSocket, assumed to be provided and
+	 * connected by the caller.
 	 */
 	private void openServer() throws MessagingException {
 		int port = -1;
@@ -1482,10 +1456,8 @@ public class SMTPTransport extends Transport {
 	 * Send the command to the server. If the expected response code is not
 	 * received, throw a MessagingException.
 	 * 
-	 * @param cmd
-	 *            the command to send
-	 * @param expect
-	 *            the expected response code
+	 * @param cmd    the command to send
+	 * @param expect the expected response code
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1533,8 +1505,7 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Send the command to the server and return the response code from the
-	 * server.
+	 * Send the command to the server and return the response code from the server.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1544,8 +1515,7 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Send the command to the server and return the response code from the
-	 * server.
+	 * Send the command to the server and return the response code from the server.
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1669,8 +1639,7 @@ public class SMTPTransport extends Transport {
 	 * Check if we're in the connected state. Don't bother checking whether the
 	 * server is still alive, that will be detected later.
 	 * 
-	 * @exception IllegalStateException
-	 *                if not connected
+	 * @exception IllegalStateException if not connected
 	 * 
 	 * @since JavaMail 1.4.1
 	 */
@@ -1694,12 +1663,11 @@ public class SMTPTransport extends Transport {
 
 	/**
 	 * Return true if the SMTP server supports the specified service extension.
-	 * Extensions are reported as results of the EHLO command when connecting to
-	 * the server. See <A HREF="http://www.ietf.org/rfc/rfc1869.txt">RFC
-	 * 1869</A> and other RFCs that define specific extensions.
+	 * Extensions are reported as results of the EHLO command when connecting to the
+	 * server. See <A HREF="http://www.ietf.org/rfc/rfc1869.txt">RFC 1869</A> and
+	 * other RFCs that define specific extensions.
 	 * 
-	 * @param ext
-	 *            the service extension name
+	 * @param ext the service extension name
 	 * @return true if the extension is supported
 	 * 
 	 * @since JavaMail 1.3.2
@@ -1709,11 +1677,10 @@ public class SMTPTransport extends Transport {
 	}
 
 	/**
-	 * Return the parameter the server provided for the specified service
-	 * extension, or null if the extension isn't supported.
+	 * Return the parameter the server provided for the specified service extension,
+	 * or null if the extension isn't supported.
 	 * 
-	 * @param ext
-	 *            the service extension name
+	 * @param ext the service extension name
 	 * @return the extension parameter
 	 * 
 	 * @since JavaMail 1.3.2
@@ -1727,8 +1694,7 @@ public class SMTPTransport extends Transport {
 	 * mechanism? Uses the extension information returned by the server from the
 	 * EHLO command.
 	 * 
-	 * @param auth
-	 *            the authentication mechanism
+	 * @param auth the authentication mechanism
 	 * @return true if the authentication mechanism is supported
 	 * 
 	 * @since JavaMail 1.4.1

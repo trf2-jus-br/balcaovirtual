@@ -33,111 +33,111 @@ public class MesaIdGet implements IMesaIdGet {
 		String idlocal = split[1];
 		String idmesa = split[2];
 		resp.list = new ArrayList<>();
-		{
-			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2DocumentosGetResponse>> future = SwaggerCall
-					.callAsync("obter documentos em mesa virtual", "Bearer " + authorization, "GET",
-							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
-									+ idmesa + "/documentos?orgao=" + orgao,
-							null, UsuarioUsernameLocalIdMesaId2DocumentosGetResponse.class);
-			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2DocumentosGetResponse> sar = future.get();
-			if (sar.getException() != null)
-				throw sar.getException();
-			UsuarioUsernameLocalIdMesaId2DocumentosGetResponse r = (UsuarioUsernameLocalIdMesaId2DocumentosGetResponse) sar
-					.getResp();
-
-			for (MesaDocumento rd : r.list) {
-				Documento d = new Documento();
-				d.docorigin = "Apolo";
-				d.documento = rd.numerododocumento;
-				d.processo = Utils.removePontuacao(rd.numerodoprocesso);
-				d.motivo = rd.motivo;
-				d.situacao = rd.situacao;
-				d.responsavel = rd.usuarioinclusao;
-				d.dataentrada = Utils.parsearDataHoraFormatoJS(rd.datadeentrada);
-				if (d.documento != null && d.documento.length() > 0
-						&& (d.processo == null || d.processo.length() == 0)) {
-					d.processo = d.documento;
-					d.documento = null;
-				}
-				resp.list.add(d);
-			}
-		}
-
-		// Incluir movimentos
-		{
-			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2MovimentosGetResponse>> future = SwaggerCall
-					.callAsync("obter movimentos em mesa virtual", "Bearer " + authorization, "GET",
-							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
-									+ idmesa + "/movimentos?orgao=" + orgao,
-							null, UsuarioUsernameLocalIdMesaId2MovimentosGetResponse.class);
-			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2MovimentosGetResponse> sar = future.get();
-			if (sar.getException() != null)
-				throw sar.getException();
-			UsuarioUsernameLocalIdMesaId2MovimentosGetResponse r = (UsuarioUsernameLocalIdMesaId2MovimentosGetResponse) sar
-					.getResp();
-
-			for (MesaMovimento rm : r.list) {
-				String processo = Utils.removePontuacao(rm.numerodoprocesso);
-				for (Documento d : resp.list) {
-					System.out.println(d.processo + " - " + processo);
-					if (d.processo.equals(processo) && d.documento == null) {
-						if (d.docsystem != null) {
-							Documento nd = new Documento();
-							nd.docorigin = d.docorigin;
-							nd.documento = d.documento;
-							nd.processo = d.processo;
-							nd.motivo = d.motivo;
-							nd.situacao = d.situacao;
-							nd.responsavel = d.responsavel;
-							nd.dataentrada = d.dataentrada;
-							resp.list.add(nd);
-							d = nd;
-						}
-						d.docsystem = Utils.getAssijusSystemMovimentos();
-						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc + "_"
-								+ Utils.parsearDataHoraFormatoJS(rm.datahoramovimento).getTime();
-						d.docsecret = Utils.makeSecret(rm.segredo);
-						d.doccode = Utils.formatarNumeroProcesso(processo);
-						d.docdescr = rm.motivo;
-						d.dockind = rm.ato;
-						if (d.docdescr == null || d.docdescr.length() == 0)
-							d.docdescr = rm.ato;
-						break;
-					}
-				}
-			}
-		}
-
-		// Incluir expedientes
-		{
-			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse>> future = SwaggerCall
-					.callAsync("obter expedientes em mesa virtual", "Bearer " + authorization, "GET",
-							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
-									+ idmesa + "/expedientes?orgao=" + orgao,
-							null, UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse.class);
-			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse> sar = future.get();
-			if (sar.getException() != null)
-				throw sar.getException();
-			UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse r = (UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse) sar
-					.getResp();
-
-			for (MesaExpediente rm : r.list) {
-				String processo = Utils.removePontuacao(rm.numerodoprocesso);
-				String documento = Utils.removePontuacao(rm.numerododocumento);
-
-				for (Documento d : resp.list) {
-					if (d.processo.equals(processo) && d.documento != null && d.documento.equals(documento)) {
-						d.docsystem = Utils.getAssijusSystemExpedientes();
-						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc;
-						d.docsecret = Utils.makeSecret(rm.segredo);
-						d.doccode = rm.numerododocumento;
-						d.docdescr = rm.descr;
-						d.dockind = "Expediente";
-						break;
-					}
-				}
-			}
-		}
+//		{
+//			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2DocumentosGetResponse>> future = SwaggerCall
+//					.callAsync("obter documentos em mesa virtual", "Bearer " + authorization, "GET",
+//							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
+//									+ idmesa + "/documentos?orgao=" + orgao,
+//							null, UsuarioUsernameLocalIdMesaId2DocumentosGetResponse.class);
+//			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2DocumentosGetResponse> sar = future.get();
+//			if (sar.getException() != null)
+//				throw sar.getException();
+//			UsuarioUsernameLocalIdMesaId2DocumentosGetResponse r = (UsuarioUsernameLocalIdMesaId2DocumentosGetResponse) sar
+//					.getResp();
+//
+//			for (MesaDocumento rd : r.list) {
+//				Documento d = new Documento();
+//				d.docorigin = "Apolo";
+//				d.documento = rd.numerododocumento;
+//				d.processo = Utils.removePontuacao(rd.numerodoprocesso);
+//				d.motivo = rd.motivo;
+//				d.situacao = rd.situacao;
+//				d.responsavel = rd.usuarioinclusao;
+//				d.dataentrada = Utils.parsearDataHoraFormatoJS(rd.datadeentrada);
+//				if (d.documento != null && d.documento.length() > 0
+//						&& (d.processo == null || d.processo.length() == 0)) {
+//					d.processo = d.documento;
+//					d.documento = null;
+//				}
+//				resp.list.add(d);
+//			}
+//		}
+//
+//		// Incluir movimentos
+//		{
+//			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2MovimentosGetResponse>> future = SwaggerCall
+//					.callAsync("obter movimentos em mesa virtual", "Bearer " + authorization, "GET",
+//							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
+//									+ idmesa + "/movimentos?orgao=" + orgao,
+//							null, UsuarioUsernameLocalIdMesaId2MovimentosGetResponse.class);
+//			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2MovimentosGetResponse> sar = future.get();
+//			if (sar.getException() != null)
+//				throw sar.getException();
+//			UsuarioUsernameLocalIdMesaId2MovimentosGetResponse r = (UsuarioUsernameLocalIdMesaId2MovimentosGetResponse) sar
+//					.getResp();
+//
+//			for (MesaMovimento rm : r.list) {
+//				String processo = Utils.removePontuacao(rm.numerodoprocesso);
+//				for (Documento d : resp.list) {
+//					System.out.println(d.processo + " - " + processo);
+//					if (d.processo.equals(processo) && d.documento == null) {
+//						if (d.docsystem != null) {
+//							Documento nd = new Documento();
+//							nd.docorigin = d.docorigin;
+//							nd.documento = d.documento;
+//							nd.processo = d.processo;
+//							nd.motivo = d.motivo;
+//							nd.situacao = d.situacao;
+//							nd.responsavel = d.responsavel;
+//							nd.dataentrada = d.dataentrada;
+//							resp.list.add(nd);
+//							d = nd;
+//						}
+//						d.docsystem = Utils.getAssijusSystemMovimentos();
+//						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc + "_"
+//								+ Utils.parsearDataHoraFormatoJS(rm.datahoramovimento).getTime();
+//						d.docsecret = Utils.makeSecret(rm.segredo);
+//						d.doccode = Utils.formatarNumeroProcesso(processo);
+//						d.docdescr = rm.motivo;
+//						d.dockind = rm.ato;
+//						if (d.docdescr == null || d.docdescr.length() == 0)
+//							d.docdescr = rm.ato;
+//						break;
+//					}
+//				}
+//			}
+//		}
+//
+//		// Incluir expedientes
+//		{
+//			Future<SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse>> future = SwaggerCall
+//					.callAsync("obter expedientes em mesa virtual", "Bearer " + authorization, "GET",
+//							Utils.getWsProcessualUrl() + "/usuario/" + u.usuario + "/local/" + idlocal + "/mesa/"
+//									+ idmesa + "/expedientes?orgao=" + orgao,
+//							null, UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse.class);
+//			SwaggerAsyncResponse<UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse> sar = future.get();
+//			if (sar.getException() != null)
+//				throw sar.getException();
+//			UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse r = (UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse) sar
+//					.getResp();
+//
+//			for (MesaExpediente rm : r.list) {
+//				String processo = Utils.removePontuacao(rm.numerodoprocesso);
+//				String documento = Utils.removePontuacao(rm.numerododocumento);
+//
+//				for (Documento d : resp.list) {
+//					if (d.processo.equals(processo) && d.documento != null && d.documento.equals(documento)) {
+//						d.docsystem = Utils.getAssijusSystemExpedientes();
+//						d.docid = u.cpf + "_" + rm.codsecao + "_" + rm.coddoc;
+//						d.docsecret = Utils.makeSecret(rm.segredo);
+//						d.doccode = rm.numerododocumento;
+//						d.docdescr = rm.descr;
+//						d.dockind = "Expediente";
+//						break;
+//					}
+//				}
+//			}
+//		}
 		if (false) {
 			{
 				Documento d = new Documento();

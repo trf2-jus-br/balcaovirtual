@@ -7,91 +7,104 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.lang3.ArrayUtils;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerCallParameters;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
 
 public class SessionsCreatePost implements ISessionsCreatePost {
+	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
+	public static final long TIMEOUT_MILLISECONDS = 15000;
+
 	@Override
 	public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception {
-
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
 				throw new PresentableUnloggedException("Usuário não autorizado.");
 		}
 
-		String origem = "int";
-		UsuarioWebUsernameGetResponse r;
-		try {
-			r = wsAutenticar(origem, req.username, req.password);
-		} catch (Exception ex) {
-			origem = null;
-			try {
-				r = wsAutenticar(origem, req.username, req.password);
-			} catch (Exception ex2) {
-				if (ex.getMessage().contains("unknown path"))
-					throw ex2;
-				else
-					throw ex;
-			}
+		// Read list from connected systems
+		String[] systems = Utils.getSystems();
+		if (systems == null)
+			return;
+
+		String authorization = "Basic " + SwaggerUtils.base64Encode((req.username + ":" + req.password).getBytes());
+		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
+		for (String system : systems) {
+			String urlsys = Utils.getApiUrl(system);
+
+			UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
+			q.username = req.username;
+			mapp.put(system, new SwaggerCallParameters(system + "-autenticar-usuário", authorization, "GET",
+					urlsys + "/usuario-web/" + req.username, q, UsuarioWebUsernameGetResponse.class));
+
 		}
 
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, TIMEOUT_MILLISECONDS);
+
+		// TODO: Tratar o caso do usuário interno (int) para o Apolo!
+//		String origem = "int";
+//		UsuarioWebUsernameGetResponse r;
+//		try {
+//			r = wsAutenticar(origem, req.username, req.password);
+//		} catch (Exception ex) {
+//			origem = null;
+//			try {
+//				r = wsAutenticar(origem, req.username, req.password);
+//			} catch (Exception ex2) {
+//				if (ex.getMessage().contains("unknown path"))
+//					throw ex2;
+//				else
+//					throw ex;
+//			}
+//		}
+
+		String origem = null;
 		String usuarios = null;
-		if (r.usuarios != null && r.usuarios.size() > 0) {
-			for (ISistemaProcessual.Usuario u : r.usuarios) {
-				if (usuarios == null)
-					usuarios = "";
-				else
-					usuarios += ";";
-				usuarios += u.orgao.toLowerCase() + "," + u.codusu + ","
-						+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null") + ","
-						+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
-			}
+		String cpf = null;
+		String nome = null;
+		String email = null;
+		for (String system : mcr.responses.keySet()) {
+			UsuarioWebUsernameGetResponse u = (UsuarioWebUsernameGetResponse) mcr.responses.get(system);
+			if (u.cpf != null)
+				cpf = u.cpf;
+			if (u.nome != null)
+				nome = u.nome;
+			if (u.email != null)
+				email = u.email;
+
+			if (usuarios == null)
+				usuarios = "";
+			else
+				usuarios += ";";
+			usuarios += system + "," + u.codusu + ","
+					+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null") + ","
+					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
 
-		String jwt = jwt(origem, req.username, req.password, r.cpf, r.nome, r.email, usuarios);
+		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
-	}
-
-	private UsuarioWebUsernameGetResponse wsAutenticar(String origin, String username, String password)
-			throws Exception, InterruptedException, ExecutionException, PresentableUnloggedException {
-		String url = "usuario-web";
-		if (origin != null && origin.startsWith("int"))
-			url = "usuario";
-
-		UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
-		q.username = username;
-
-		String authorization = "Basic " + SwaggerUtils.base64Encode((username + ":" + password).getBytes());
-		Future<SwaggerAsyncResponse<UsuarioWebUsernameGetResponse>> future = SwaggerCall.callAsync("autenticar usuário",
-				authorization, "GET", Utils.getWsProcessualUrl() + "/" + url + "/" + username, q,
-				UsuarioWebUsernameGetResponse.class);
-		SwaggerAsyncResponse<UsuarioWebUsernameGetResponse> sar = future.get();
-		if (sar.getException() != null)
-			throw new PresentableUnloggedException(sar.getException().getLocalizedMessage(), sar.getException());
-		UsuarioWebUsernameGetResponse r = (UsuarioWebUsernameGetResponse) sar.getResp();
-		return r;
 	}
 
 	private static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
@@ -118,6 +131,14 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		String usuario;
 		String cpf;
 		String senha;
+
+		String orgao;
+		String codusu;
+		String codusuweb;
+		String codunidade;
+		String perfil;
+		String system;
+
 		Map<String, UsuarioDetalhe> usuarios;
 
 		boolean isInterno() {

@@ -17,7 +17,7 @@ public class ConfigAdvogadoOabGet implements IConfigAdvogadoOabGet {
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		Future<SwaggerAsyncResponse<AdvogadoDocumentoGetResponse>> future = SwaggerCall.callAsync("obter advogado",
-				null, "GET", Utils.getWsProcessualUrl() + "/advogado/" + req.oab + "?orgao=" + req.orgao, null,
+				null, "GET", Utils.getApiUrl(req.orgao) + "/advogado/" + req.oab + "?orgao=" + req.orgao, null,
 				AdvogadoDocumentoGetResponse.class);
 		SwaggerAsyncResponse<AdvogadoDocumentoGetResponse> sar = future.get();
 		if (sar.getException() != null)

@@ -21,7 +21,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseGetResponse>> future = SwaggerCall.callAsync(
-				"obter classes", null, "GET", Utils.getWsProcessualUrl() + "/localidade/" + req.id + "/especialidade/"
+				"obter classes", null, "GET", Utils.getApiUrl(req.orgao) + "/localidade/" + req.id + "/especialidade/"
 						+ req.id2 + "/classe?orgao=" + req.orgao,
 				null, LocalidadeIdEspecialidadeId2ClasseGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseGetResponse> sar = future.get();
@@ -36,7 +36,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 			Classe o = new Classe();
 			o.id = Integer.toString(idNome.classecnj.codigo.intValue()) + "|" + idNome.id;
 			// o.nome = idNome.classecnj.descricao;//.split(" - ")[0];
-			o.nome = idNome.nome;//.split(" - ")[0];
+			o.nome = idNome.nome;// .split(" - ")[0];
 			o.valordacausaobrigatorio = idNome.valordacausaobrigatorio;
 			resp.list.add(o);
 		}

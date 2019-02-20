@@ -18,7 +18,7 @@ public class ConfigPessoaJuridicaCnpjGet implements IConfigPessoaJuridicaCnpjGet
 
 		Future<SwaggerAsyncResponse<PessoaJuridicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
 				"obter pessoa jurídica", null, "GET",
-				Utils.getWsProcessualUrl() + "/pessoa-juridica/" + req.cnpj + "?orgao=" + req.orgao, null,
+				Utils.getApiUrl(req.orgao) + "/pessoa-juridica/" + req.cnpj + "?orgao=" + req.orgao, null,
 				PessoaJuridicaDocumentoGetResponse.class);
 		SwaggerAsyncResponse<PessoaJuridicaDocumentoGetResponse> sar = future.get();
 		if (sar.getException() != null)

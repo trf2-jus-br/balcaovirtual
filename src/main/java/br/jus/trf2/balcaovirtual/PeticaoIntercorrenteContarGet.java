@@ -1,11 +1,12 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
 
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerCallParameters;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoIntercorrenteContarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetRequest;
@@ -19,28 +20,32 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 	@Override
 	public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
 			throws Exception {
-
+		String authorization = SessionsCreatePost.assertAuthorization();
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 
-		Future<SwaggerAsyncResponse<UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse>> future = SwaggerCall
-				.callAsync("obter tipos de petição intercorrente", null, "GET",
-						Utils.getWsProcessualUrl() + "/usuario-web/" + jwt.get("username")
-								+ "/peticao-intercorrente/contar?dias=7",
-						null, UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse.class);
-		SwaggerAsyncResponse<UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse> sar = future.get();
-		if (sar.getException() != null)
-			throw sar.getException();
-		UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse r = (UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse) sar
-				.getResp();
+		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
+		for (String system : Utils.getSystems()) {
+			mapp.put(system,
+					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente", null, "GET",
+							Utils.getApiUrl(system) + "/usuario-web/" + jwt.get("username")
+									+ "/peticao-intercorrente/contar?dias=7",
+							null, UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse.class));
+
+		}
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
-		if (r.list != null)
-			for (Contagem i : r.list) {
-				QuantidadePorData t = new QuantidadePorData();
-				t.data = i.data;
-				t.quantidade = i.quantidade;
-				resp.list.add(t);
-			}
+		for (String system : mcr.responses.keySet()) {
+			UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse r = (UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse) mcr.responses
+					.get(system);
+			if (r.list != null)
+				for (Contagem i : r.list) {
+					QuantidadePorData t = new QuantidadePorData();
+					t.data = i.data;
+					t.quantidade = i.quantidade;
+					resp.list.add(t);
+				}
+		}
 	}
 
 	@Override

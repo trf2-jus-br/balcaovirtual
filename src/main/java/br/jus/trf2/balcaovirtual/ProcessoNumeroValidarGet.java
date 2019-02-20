@@ -1,9 +1,11 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.util.concurrent.Future;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerCallParameters;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
@@ -16,6 +18,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 	@Override
 	public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception {
+		String auth = SessionsCreatePost.assertAuthorization();
 		String url = null;
 		try {
 			Usuario u = SessionsCreatePost.assertUsuario();
@@ -25,39 +28,38 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 				url = "/usuario-web/" + u.usuario + "/processo/" + req.numero;
 		} catch (Exception e) {
 			url = "/processo/validar/" + req.numero;
+		}
+
+		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
+		for (String system : Utils.getSystems()) {
+			ProcessoValidarNumeroGetRequest q = new ProcessoValidarNumeroGetRequest();
+			q.numero = req.numero;
+			mapp.put(system, new SwaggerCallParameters(system + " - validar número de processo", null, "GET",
+					Utils.getApiUrl(system) + url, null, ProcessoValidarNumeroGetResponse.class));
 
 		}
-		ProcessoValidarNumeroGetRequest q = new ProcessoValidarNumeroGetRequest();
-		q.numero = req.numero;
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
 
-		Future<SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse>> future = SwaggerCall.callAsync(
-				"validar número de processo", null, "GET", Utils.getWsProcessualUrl() + url, null,
-				ProcessoValidarNumeroGetResponse.class);
-		SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse> sar = future.get();
-		if (sar.getException() != null)
-			throw sar.getException();
-		ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) sar.getResp();
-		// if ("TRF - 2a Região".equals(r.orgao))
-		// r.orgao = "TRF2";
-		// if ("Seção Judiciária do RJ".equals(r.orgao))
-		// r.orgao = "JFRJ";
-		// if ("Seção Judiciária do ES".equals(r.orgao))
-		// r.orgao = "JFES";
-
-		resp.numero = r.numero;
-		resp.orgao = r.orgao;
-		resp.unidade = r.unidade != null ? r.unidade.trim() : null;
-		resp.localnaunidade = r.localNaUnidade;
-		resp.segredodejustica = r.segredodejustica;
-		resp.segredodejusticadesistema = r.segredodejusticadesistema;
-		resp.segredodejusticaabsoluto = r.segredodejusticaabsoluto;
-		resp.usuarioautorizado = r.usuarioautorizado;
-		resp.digital = r.eletronico;
-		resp.sentenciado = r.sentenciado;
-		resp.baixado = r.baixado;
-		resp.cdas = r.cdas;
-		if (r.dataultimomovimento != null)
-			resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
+		// TODO: Falta lógica para escolher o mais importante dos resultados.
+		// TODO: Incluir o system no resultado
+		for (String system : mcr.responses.keySet()) {
+			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) mcr.responses.get(system);
+			resp.numero = r.numero;
+			resp.orgao = system; //r.orgao;
+			resp.unidade = r.unidade != null ? r.unidade.trim() : null;
+			resp.localnaunidade = r.localNaUnidade;
+			resp.segredodejustica = r.segredodejustica;
+			resp.segredodejusticadesistema = r.segredodejusticadesistema;
+			resp.segredodejusticaabsoluto = r.segredodejusticaabsoluto;
+			resp.usuarioautorizado = r.usuarioautorizado;
+			resp.digital = r.eletronico;
+			resp.sentenciado = r.sentenciado;
+			resp.baixado = r.baixado;
+			resp.cdas = r.cdas;
+			if (r.dataultimomovimento != null)
+				resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
+			break;
+		}
 	}
 
 	@Override

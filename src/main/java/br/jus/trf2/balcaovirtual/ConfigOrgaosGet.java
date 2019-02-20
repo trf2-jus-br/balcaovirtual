@@ -16,7 +16,8 @@ public class ConfigOrgaosGet implements IConfigOrgaosGet {
 
 		resp.list = new ArrayList<>();
 
-		for (String orgao : Utils.getOrgaos().split(",")) {
+		// TODO: Trocar órgão por system
+		for (String orgao : Utils.getSystems()) {
 			String system = orgao.toLowerCase();
 			if (!u.usuarios.containsKey(system))
 				continue;

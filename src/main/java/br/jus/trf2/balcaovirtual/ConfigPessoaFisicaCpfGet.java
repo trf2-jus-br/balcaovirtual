@@ -18,7 +18,7 @@ public class ConfigPessoaFisicaCpfGet implements IConfigPessoaFisicaCpfGet {
 
 		Future<SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
 				"obter pessoa física", null, "GET",
-				Utils.getWsProcessualUrl() + "/pessoa-fisica/" + req.cpf + "?orgao=" + req.orgao, null,
+				Utils.getApiUrl(req.orgao) + "/pessoa-fisica/" + req.cpf + "?orgao=" + req.orgao, null,
 				PessoaFisicaDocumentoGetResponse.class);
 		SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse> sar = future.get();
 		if (sar.getException() != null)
@@ -27,7 +27,7 @@ public class ConfigPessoaFisicaCpfGet implements IConfigPessoaFisicaCpfGet {
 
 		if (r.list == null || r.list.size() == 0)
 			return;
-		
+
 		resp.orgao = r.list.get(0).orgao;
 		resp.id = r.list.get(0).id;
 		resp.nome = r.list.get(0).nome;

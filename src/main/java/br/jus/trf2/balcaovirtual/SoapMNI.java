@@ -139,7 +139,7 @@ public class SoapMNI {
 
 		// String endpointURL =
 		// "http://10.50.1.36/eproc/ws/controlador_ws.php?srv=intercomunicacao2.2";
-		String endpointURL = "https://eproc-homologacao.jfrj.jus.br/eproc/ws/controlador_ws.php?srv=intercomunicacao2.2";
+		String endpointURL = Utils.getMniWsdlEndpoint(orgao);
 		BindingProvider bp = (BindingProvider) client;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointURL);
 
@@ -205,8 +205,7 @@ public class SoapMNI {
 
 		Usuario u = SessionsCreatePost.assertUsuario();
 
-		for (String orgao : Utils.getOrgaos().split(",")) {
-			String system = orgao.toLowerCase();
+		for (String system : Utils.getSystems()) {
 			if (!u.usuarios.containsKey(system))
 				continue;
 			ServicoIntercomunicacao222 client = getClient(system);
@@ -244,7 +243,8 @@ public class SoapMNI {
 					i.processo = a.getProcesso().getNumero();
 					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
 					i.idaviso = a.getIdAviso();
-					i.orgao = orgao;
+					// TODO: Trocar esse órgão por system?
+					i.orgao = system;
 					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
 					i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
 					if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0

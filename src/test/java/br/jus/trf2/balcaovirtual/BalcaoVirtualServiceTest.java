@@ -14,7 +14,6 @@ public class BalcaoVirtualServiceTest extends SwaggerTestSupport {
 
 	@Override
 	protected String getPackage() {
-		// TODO Auto-generated method stub
 		return "br.jus.trf2.balcaovirtual";
 	}
 

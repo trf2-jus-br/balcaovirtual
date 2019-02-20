@@ -20,7 +20,7 @@ public class ConfigLocalidadesGet implements IConfigLocalidadesGet {
 		SessionsCreatePost.assertUsuarioAutorizado();
 
 		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync("obter localidades", null,
-				"GET", Utils.getWsProcessualUrl() + "/localidade?orgao=" + req.orgao, null,
+				"GET", Utils.getApiUrl(req.orgao) + "/localidade?orgao=" + req.orgao, null,
 				LocalidadeGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeGetResponse> sar = future.get();
 		if (sar.getException() != null)
