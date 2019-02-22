@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+	targetNamespace="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/">
+	<xs:import
+		schemaLocation="http://localhost:8080/balcaovirtual/mnixsd1.xml"
+		namespace="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+	<xs:element name="consultarProcesso">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q1:idConsultante"
+					xmlns:q1="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q2:senhaConsultante"
+					xmlns:q2="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q3:numeroProcesso"
+					xmlns:q3="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q4:dataReferencia"
+					xmlns:q4="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q5:movimentos"
+					xmlns:q5="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q6:incluirCabecalho"
+					xmlns:q6="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q7:incluirDocumentos" xmlns:q7="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q8:documento1"
+					xmlns:q8="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarProcessoResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q9:sucesso"
+					xmlns:q9="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q10:mensagem"
+					xmlns:q10="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q11:processo"
+					xmlns:q11="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarTeorComunicacao">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q12:idConsultante"
+					xmlns:q12="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="1" maxOccurs="1"
+					ref="q13:identificadorAviso" xmlns:q13="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q14:numeroProcesso"
+					xmlns:q14="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q15:senhaConsultante" xmlns:q15="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarTeorComunicacaoResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q16:sucesso"
+					xmlns:q16="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q17:mensagem"
+					xmlns:q17="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q18:comunicacao"
+					xmlns:q18="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="entregarManifestacaoProcessual">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q19:idManifestante"
+					xmlns:q19="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q20:senhaManifestante" xmlns:q20="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q21:numeroProcesso"
+					xmlns:q21="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q22:dadosBasicos"
+					xmlns:q22="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q23:documento"
+					xmlns:q23="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q24:dataEnvio"
+					xmlns:q24="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q25:parametros"
+					xmlns:q25="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="entregarManifestacaoProcessualResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q26:sucesso"
+					xmlns:q26="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q27:mensagem"
+					xmlns:q27="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q28:protocoloRecebimento" xmlns:q28="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q29:dataOperacao"
+					xmlns:q29="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q30:recibo"
+					xmlns:q30="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q31:parametro"
+					xmlns:q31="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarAvisosPendentes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q32:idRepresentado"
+					xmlns:q32="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q33:idConsultante"
+					xmlns:q33="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q34:senhaConsultante" xmlns:q34="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q35:dataReferencia"
+					xmlns:q35="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarAvisosPendentesResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q36:sucesso"
+					xmlns:q36="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q37:mensagem"
+					xmlns:q37="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="q38:aviso"
+					xmlns:q38="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarAlteracao">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q39:idConsultante"
+					xmlns:q39="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q40:senhaConsultante" xmlns:q40="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q41:numeroProcesso"
+					xmlns:q41="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consultarAlteracaoResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q42:sucesso"
+					xmlns:q42="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q43:mensagem"
+					xmlns:q43="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q44:hashCabecalho"
+					xmlns:q44="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1"
+					ref="q45:hashMovimentacoes" xmlns:q45="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q46:hashDocumentos"
+					xmlns:q46="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="confirmarRecebimento">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" ref="q47:idRecebedor"
+					xmlns:q47="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q48:senhaRecebedor"
+					xmlns:q48="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q49:protocolo"
+					xmlns:q49="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="confirmarRecebimentoResposta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="q50:sucesso"
+					xmlns:q50="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+				<xs:element minOccurs="0" maxOccurs="1" ref="q51:mensagem"
+					xmlns:q51="http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

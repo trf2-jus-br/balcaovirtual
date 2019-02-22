@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "servico-intercomunicacao-2.2.2", targetNamespace = "http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/", wsdlLocation = "http://vmwebmnih2012/servico-intercomunicacao-2.2.2-mtom/jfrj/?wsdl")
+@WebServiceClient(name = "servico-intercomunicacao-2.2.2", targetNamespace = "http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/", wsdlLocation = "http://localhost:8080/balcaovirtual/mniwsdl.xml")
 public class ServicoIntercomunicacao222_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class ServicoIntercomunicacao222_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://vmwebmnih2012/servico-intercomunicacao-2.2.2-mtom/jfrj/?wsdl");
+            url = new URL("http://localhost:8080/balcaovirtual/mniwsdl.xml");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

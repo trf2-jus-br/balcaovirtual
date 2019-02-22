@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+	targetNamespace="http://www.cnj.jus.br/intercomunicacao-2.2.2"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.cnj.jus.br/intercomunicacao-2.2.2">
+	<xs:complexType name="tipoProcessoJudicial">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="dadosBasicos"
+				type="tns:tipoCabecalhoProcesso" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="movimento"
+				type="tns:tipoMovimentoProcessual" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="documento"
+				type="tns:tipoDocumento" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="tipoCabecalhoProcesso">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="polo"
+				type="tns:tipoPoloProcessual" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="assunto"
+				type="tns:tipoAssuntoProcessual" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="magistradoAtuante"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="processoVinculado"
+				type="tns:tipoVinculacaoProcessual" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="prioridade"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="outroParametro"
+				type="tns:tipoParametro" />
+			<xs:element minOccurs="0" maxOccurs="1" name="valorCausa"
+				type="xs:double" />
+			<xs:element minOccurs="0" maxOccurs="1" name="orgaoJulgador"
+				type="tns:tipoOrgaoJulgador" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="outrosnumeros"
+				type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="numero" type="xs:string" />
+		<xs:attribute name="competencia" type="xs:int" />
+		<xs:attribute name="classeProcessual" type="xs:int" use="required" />
+		<xs:attribute name="codigoLocalidade" type="xs:string" />
+		<xs:attribute name="nivelSigilo" type="xs:int" use="required" />
+		<xs:attribute name="intervencaoMP" type="xs:boolean" />
+		<xs:attribute name="tamanhoProcesso" type="xs:int" />
+		<xs:attribute name="dataAjuizamento" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoPoloProcessual">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="parte"
+				type="tns:tipoParte" />
+		</xs:sequence>
+		<xs:attribute name="polo" type="tns:modalidadePoloProcessual" />
+	</xs:complexType>
+	<xs:complexType name="tipoParte">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="pessoa"
+				type="tns:tipoPessoa" />
+			<xs:element minOccurs="0" maxOccurs="1" name="interessePublico"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="advogado"
+				nillable="true" type="tns:tipoRepresentanteProcessual" />
+			<xs:element minOccurs="0" maxOccurs="unbounded"
+				name="pessoaProcessualRelacionada" nillable="true" type="tns:tipoParte" />
+		</xs:sequence>
+		<xs:attribute name="assistenciaJudiciaria" type="xs:boolean" />
+		<xs:attribute name="intimacaoPendente" type="xs:int" />
+		<xs:attribute name="relacionamentoProcessual"
+			type="tns:modalidadeRelacionamentoProcessual" />
+	</xs:complexType>
+	<xs:complexType name="tipoPessoa">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="outroNome"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="documento"
+				type="tns:tipoDocumentoIdentificacao" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="endereco"
+				type="tns:tipoEndereco" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="pessoaRelacionada"
+				nillable="true" type="tns:tipoRelacionamentoPessoal" />
+			<xs:element minOccurs="0" maxOccurs="1" name="pessoaVinculada"
+				type="tns:tipoPessoa" />
+		</xs:sequence>
+		<xs:attribute name="nome" type="xs:string" />
+		<xs:attribute name="sexo" type="tns:modalidadeGeneroPessoa"
+			use="required" />
+		<xs:attribute name="nomeGenitor" type="xs:string" />
+		<xs:attribute name="nomeGenitora" type="xs:string" />
+		<xs:attribute name="dataNascimento" type="xs:string" />
+		<xs:attribute name="dataObito" type="xs:string" />
+		<xs:attribute name="numeroDocumentoPrincipal" type="xs:string" />
+		<xs:attribute name="tipoPessoa" type="tns:tipoQualificacaoPessoa"
+			use="required" />
+		<xs:attribute name="cidadeNatural" type="xs:string" />
+		<xs:attribute name="estadoNatural" type="xs:string" />
+		<xs:attribute default="BR" name="nacionalidade" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoDocumentoIdentificacao">
+		<xs:attribute name="codigoDocumento" type="xs:string" />
+		<xs:attribute name="emissorDocumento" type="xs:string" />
+		<xs:attribute name="tipoDocumento" type="tns:modalidadeDocumentoIdentificador"
+			use="required" />
+		<xs:attribute name="nome" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="modalidadeDocumentoIdentificador">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CI" />
+			<xs:enumeration value="CNH" />
+			<xs:enumeration value="TE" />
+			<xs:enumeration value="CN" />
+			<xs:enumeration value="CC" />
+			<xs:enumeration value="PAS" />
+			<xs:enumeration value="CT" />
+			<xs:enumeration value="RIC" />
+			<xs:enumeration value="CMF" />
+			<xs:enumeration value="PIS_PASEP" />
+			<xs:enumeration value="CEI" />
+			<xs:enumeration value="NIT" />
+			<xs:enumeration value="CP" />
+			<xs:enumeration value="IF" />
+			<xs:enumeration value="OAB" />
+			<xs:enumeration value="RJC" />
+			<xs:enumeration value="RGE" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tipoEndereco">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="logradouro"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="numero"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="complemento"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="bairro"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="cidade"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="estado"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="pais" type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="cep" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoRelacionamentoPessoal">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="pessoa"
+				type="tns:tipoPessoa" />
+		</xs:sequence>
+		<xs:attribute name="modalidadeRelacionamento" type="tns:modalidadesRelacionamentoPessoal" />
+	</xs:complexType>
+	<xs:simpleType name="modalidadesRelacionamentoPessoal">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="P" />
+			<xs:enumeration value="AP" />
+			<xs:enumeration value="SP" />
+			<xs:enumeration value="T" />
+			<xs:enumeration value="C" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="modalidadeGeneroPessoa">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="M" />
+			<xs:enumeration value="F" />
+			<xs:enumeration value="D" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tipoQualificacaoPessoa">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="fisica" />
+			<xs:enumeration value="juridica" />
+			<xs:enumeration value="autoridade" />
+			<xs:enumeration value="orgaorepresentacao" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tipoRepresentanteProcessual">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="endereco"
+				type="tns:tipoEndereco" />
+		</xs:sequence>
+		<xs:attribute name="nome" type="xs:string" />
+		<xs:attribute name="inscricao" type="xs:string" />
+		<xs:attribute name="numeroDocumentoPrincipal" type="xs:string" />
+		<xs:attribute name="intimacao" type="xs:boolean" use="required" />
+		<xs:attribute name="tipoRepresentante"
+			type="tns:modalidadeRepresentanteProcessual" use="required" />
+	</xs:complexType>
+	<xs:simpleType name="modalidadeRepresentanteProcessual">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A" />
+			<xs:enumeration value="E" />
+			<xs:enumeration value="M" />
+			<xs:enumeration value="D" />
+			<xs:enumeration value="P" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="modalidadeRelacionamentoProcessual">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CP" />
+			<xs:enumeration value="RP" />
+			<xs:enumeration value="TF" />
+			<xs:enumeration value="AT" />
+			<xs:enumeration value="AS" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="modalidadePoloProcessual">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AT" />
+			<xs:enumeration value="PA" />
+			<xs:enumeration value="TC" />
+			<xs:enumeration value="FL" />
+			<xs:enumeration value="TJ" />
+			<xs:enumeration value="AD" />
+			<xs:enumeration value="VI" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tipoAssuntoProcessual">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="codigoNacional"
+				type="xs:int" />
+			<xs:element minOccurs="0" maxOccurs="1" name="assuntoLocal"
+				type="tns:tipoAssuntoLocal" />
+		</xs:sequence>
+		<xs:attribute name="principal" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="tipoAssuntoLocal">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="assuntoLocalPai"
+				type="tns:tipoAssuntoLocal" />
+		</xs:sequence>
+		<xs:attribute name="codigoAssunto" type="xs:int" use="required" />
+		<xs:attribute name="codigoPaiNacional" type="xs:int" use="required" />
+		<xs:attribute name="descricao" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoVinculacaoProcessual">
+		<xs:attribute name="numeroProcesso" type="xs:string" />
+		<xs:attribute name="vinculo" type="tns:modalidadeVinculacaoProcesso"
+			use="required" />
+	</xs:complexType>
+	<xs:simpleType name="modalidadeVinculacaoProcesso">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CX" />
+			<xs:enumeration value="CT" />
+			<xs:enumeration value="DP" />
+			<xs:enumeration value="OR" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tipoParametro">
+		<xs:attribute name="nome" type="xs:string" />
+		<xs:attribute name="valor" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoOrgaoJulgador">
+		<xs:attribute name="codigoOrgao" type="xs:string" />
+		<xs:attribute name="nomeOrgao" type="xs:string" />
+		<xs:attribute name="instancia" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ORIG" />
+					<xs:enumeration value="REV" />
+					<xs:enumeration value="ESP" />
+					<xs:enumeration value="EXT" />
+					<xs:enumeration value="ADM" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="codigoMunicipioIBGE" type="xs:int"
+			use="required" />
+	</xs:complexType>
+	<xs:complexType name="tipoMovimentoProcessual">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="complemento"
+				nillable="true" type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="movimentoNacional"
+				type="tns:tipoMovimentoNacional" />
+			<xs:element minOccurs="0" maxOccurs="1" name="movimentoLocal"
+				type="tns:tipoMovimentoLocal" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="idDocumentoVinculado"
+				nillable="true" type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="dataHora" type="xs:string" />
+		<xs:attribute name="nivelSigilo" type="xs:int" />
+		<xs:attribute name="identificadorMovimento" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoMovimentoNacional">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="complemento"
+				type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="codigoNacional" type="xs:int" use="required" />
+	</xs:complexType>
+	<xs:complexType name="tipoMovimentoLocal">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="movimentoLocalPai"
+				type="tns:tipoMovimentoLocal" />
+		</xs:sequence>
+		<xs:attribute name="codigoMovimento" type="xs:int" use="required" />
+		<xs:attribute name="codigoPaiNacional" type="xs:int" use="required" />
+		<xs:attribute name="descricao" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoDocumento">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="conteudo"
+				type="xs:base64Binary" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="assinatura"
+				type="tns:tipoAssinatura" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="outroParametro"
+				type="tns:tipoParametro" />
+			<xs:any minOccurs="0" maxOccurs="1" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="documentoVinculado"
+				type="tns:tipoDocumento" />
+		</xs:sequence>
+		<xs:attribute name="idDocumento" type="xs:string" />
+		<xs:attribute name="idDocumentoVinculado" type="xs:string" />
+		<xs:attribute name="tipoDocumento" type="xs:string" />
+		<xs:attribute name="dataHora" type="xs:string" />
+		<xs:attribute name="mimetype" type="xs:string" />
+		<xs:attribute name="nivelSigilo" type="xs:int" />
+		<xs:attribute name="movimento" type="xs:int" />
+		<xs:attribute name="hash" type="xs:string" />
+		<xs:attribute name="descricao" type="xs:string" />
+		<xs:attribute name="tipoDocumentoLocal" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoAssinatura">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="signatarioLogin"
+				type="tns:tipoSignatarioSimples" />
+		</xs:sequence>
+		<xs:attribute name="assinatura" type="xs:string" />
+		<xs:attribute name="dataAssinatura" type="xs:string" />
+		<xs:attribute name="cadeiaCertificado" type="xs:string" />
+		<xs:attribute name="algoritmoHash" type="xs:string" />
+		<xs:attribute name="codificacaoCertificado" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoSignatarioSimples">
+		<xs:attribute name="identificador" type="xs:string" />
+		<xs:attribute name="dataHora" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="tipoComunicacaoProcessual">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="destinatario"
+				type="tns:tipoParte" />
+			<xs:element minOccurs="0" maxOccurs="1" name="processo"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="teor" type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="documento"
+				type="tns:tipoDocumento" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="parametro"
+				type="xs:string" />
+			<xs:any minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" />
+		<xs:attribute name="tipoComunicacao" type="xs:string" />
+		<xs:attribute name="tipoPrazo" type="tns:tipoPrazo" />
+		<xs:attribute name="dataReferencia" type="xs:string" />
+		<xs:attribute name="prazo" type="xs:int" />
+		<xs:attribute name="nivelSigilo" type="xs:int" />
+	</xs:complexType>
+	<xs:simpleType name="tipoPrazo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="HOR" />
+			<xs:enumeration value="DIA" />
+			<xs:enumeration value="MES" />
+			<xs:enumeration value="ANO" />
+			<xs:enumeration value="DATA_CERTA" />
+			<xs:enumeration value="SEMPRAZO" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tipoAvisoComunicacaoPendente">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="destinatario"
+				type="tns:tipoParte" />
+			<xs:element minOccurs="0" maxOccurs="1" name="processo"
+				type="tns:tipoCabecalhoProcesso" />
+			<xs:element minOccurs="0" maxOccurs="1" name="dataDisponibilizacao"
+				type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="idAviso" type="xs:string" />
+		<xs:attribute name="tipoComunicacao" type="xs:string" />
+	</xs:complexType>
+</xs:schema>

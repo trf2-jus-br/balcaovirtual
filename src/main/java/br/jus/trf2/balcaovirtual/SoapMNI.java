@@ -446,10 +446,11 @@ public class SoapMNI {
 		String numProcFormatado;
 	}
 
-	public static PeticaoInicial enviarPeticaoInicial(String idManif, String sistema, String localidade,
-			String especialidade, String classe, double valorCausa, String cdas, String pas, int nvlSigilo,
-			boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso, List<Parte> partes,
-			String nomePdfs, String tpDocPdfs, String nomePoloAtivo, String nomePoloPassivo) throws Exception {
+	public static PeticaoInicial enviarPeticaoInicial(String idManif, String senhaManif, String sistema,
+			String localidade, String especialidade, String classe, double valorCausa, String cdas, String pas,
+			int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso,
+			List<Parte> partes, String nomePdfs, String tpDocPdfs, String nomePoloAtivo, String nomePoloPassivo)
+			throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -459,7 +460,7 @@ public class SoapMNI {
 		String dirFinal = Utils.getDirFinal();
 		ServicoIntercomunicacao222 client = getClient(sistema);
 		List<TipoDocumento> l = new ArrayList<>();
-		// String tpDocs[] = tpDocPdfs.split(",");
+		String tpDocs[] = tpDocPdfs.split(",");
 		int i = 0;
 		String classificacoes[] = tpDocPdfs.split(",");
 		for (String nomePdf : nomePdfs.split(",")) {
@@ -467,7 +468,9 @@ public class SoapMNI {
 			doc.setMimetype("application/pdf");
 			doc.setDataHora(dataEnvio);
 			doc.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
-			// doc.setTipoDocumento(tpDocs[i]);
+			//doc.setTipoDocumento(tpDocs[i]);
+			// TODO: Substituir esse número mágico pela tabela de tipos de documentos
+			doc.setTipoDocumento("58");
 			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 			byte[] data = Files.readAllBytes(path);
 			doc.setConteudo(data);
@@ -623,8 +626,8 @@ public class SoapMNI {
 		Holder<byte[]> recibo = new Holder<>();
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.entregarManifestacaoProcessual(idManif, null, null, dadosBasicos, l, dataEnvio, parametros, sucesso,
-				mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
+		client.entregarManifestacaoProcessual(idManif, senhaManif, null, dadosBasicos, l, dataEnvio, parametros,
+				sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 

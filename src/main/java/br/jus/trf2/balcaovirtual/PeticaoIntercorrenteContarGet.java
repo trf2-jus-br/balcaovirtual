@@ -20,7 +20,6 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 	@Override
 	public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();

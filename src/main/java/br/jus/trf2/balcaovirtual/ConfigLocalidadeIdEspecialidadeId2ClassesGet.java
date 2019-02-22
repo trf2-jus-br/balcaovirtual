@@ -22,7 +22,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseGetResponse>> future = SwaggerCall.callAsync(
 				"obter classes", null, "GET", Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade/"
-						+ req.id2 + "/classe?sistema=" + req.sistema,
+						+ req.id2 + "/classe",
 				null, LocalidadeIdEspecialidadeId2ClasseGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseGetResponse> sar = future.get();
 		if (sar.getException() != null)

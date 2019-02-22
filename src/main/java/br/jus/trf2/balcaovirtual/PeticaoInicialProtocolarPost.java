@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoInicialProtocolarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostResponse;
+import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 import br.jus.trf2.balcaovirtual.SoapMNI.PeticaoInicial;
 
 public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPost {
@@ -17,7 +18,7 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 	@Override
 	public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
+		Usuario u = SessionsCreatePost.assertUsuario();
 
 		Gson gson = new GsonBuilder().create();
 		Type type = new TypeToken<List<SoapMNI.Parte>>() {
@@ -25,10 +26,10 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 
 		List<SoapMNI.Parte> partes = gson.fromJson(req.partes, type);
 
-		PeticaoInicial pi = SoapMNI.enviarPeticaoInicial(authorization, req.sistema, req.localidade, req.especialidade,
-				req.classe, Utils.parsearValor(req.valorcausa), req.cdas, req.pas, Integer.parseInt(req.nivelsigilo),
-				req.justicagratuita, req.tutelaantecipada, req.prioridadeidoso, partes, req.pdfs, req.classificacoes,
-				req.nomepoloativo, req.nomepolopassivo);
+		PeticaoInicial pi = SoapMNI.enviarPeticaoInicial(u.usuario, u.senha, req.sistema, req.localidade,
+				req.especialidade, req.classe, Utils.parsearValor(req.valorcausa), req.cdas, req.pas,
+				Integer.parseInt(req.nivelsigilo), req.justicagratuita, req.tutelaantecipada, req.prioridadeidoso,
+				partes, req.pdfs, req.classificacoes, req.nomepoloativo, req.nomepolopassivo);
 		resp.status = pi.mensagem;
 		resp.protocolo = pi.protocolo;
 		resp.data = pi.data;

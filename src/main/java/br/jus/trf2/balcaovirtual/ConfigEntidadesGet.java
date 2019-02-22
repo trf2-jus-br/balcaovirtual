@@ -38,7 +38,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 			if (r.list != null)
 				for (Pessoa p : r.list) {
 					Entidade o = new Entidade();
-					o.sistema = p.sistema;
+					o.sistema = system;
 					o.id = p.id;
 					o.nome = p.nome;
 					o.documento = p.documento;

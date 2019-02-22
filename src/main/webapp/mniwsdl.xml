@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="servico-intercomunicacao-2.2.2"
+	targetNamespace="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+	xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+	xmlns:i0="http://www.cnj.jus.br" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+
+	<wsdl:import namespace="http://www.cnj.jus.br"
+		location="http://localhost:8080/balcaovirtual/mniwsdl0.xml" />
+	<wsdl:types />
+	<wsdl:binding name="servico-intercomunicacao-2.2.2SOAP"
+		type="i0:servico-intercomunicacao-2.2.2">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="consultarProcesso">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/consultarProcesso"
+				style="document" />
+			<wsdl:input name="consultarProcessoRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="consultarProcessoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="consultarTeorComunicacao">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/consultarTeorComunicacao"
+				style="document" />
+			<wsdl:input name="consultarTeorComunicacaoRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="consultarTeorComunicacaoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="entregarManifestacaoProcessual">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/entregarManifestacaoProcessual"
+				style="document" />
+			<wsdl:input name="entregarManifestacaoProcessualRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="entregarManifestacaoProcessualResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="consultarAvisosPendentes">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/consultarAvisosPendentes"
+				style="document" />
+			<wsdl:input name="consultarAvisosPendentesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="consultarAvisosPendentesResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="consultarAlteracao">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/consultarAlteracao"
+				style="document" />
+			<wsdl:input name="consultarAlteracaoRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="consultarAlteracaoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="confirmarRecebimento">
+			<soap:operation
+				soapAction="http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/confirmarRecebimento"
+				style="document" />
+			<wsdl:input name="confirmarRecebimentoRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="confirmarRecebimentoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="servico-intercomunicacao-2.2.2">
+		<wsdl:port name="servico-intercomunicacao-2.2.2SOAP"
+			binding="tns:servico-intercomunicacao-2.2.2SOAP">
+			<soap:address
+				location="https://mni.trf2.jus.br/servico-intercomunicacao-2.2.2-mtom/jfrj/ServicoIntercomunicacaoWS.svc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

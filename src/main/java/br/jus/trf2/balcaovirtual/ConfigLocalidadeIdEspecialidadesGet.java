@@ -22,7 +22,7 @@ public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdE
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse>> future = SwaggerCall.callAsync(
 				"obter especialidades", null, "GET",
-				Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade?sistema=" + req.sistema, null,
+				Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade", null,
 				LocalidadeIdEspecialidadeGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse> sar = future.get();
 		if (sar.getException() != null)

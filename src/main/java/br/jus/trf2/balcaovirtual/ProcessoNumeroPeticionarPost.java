@@ -10,7 +10,6 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 	@Override
 	public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 
 		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero,
