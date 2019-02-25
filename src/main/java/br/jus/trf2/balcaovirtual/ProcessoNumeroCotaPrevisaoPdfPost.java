@@ -2,17 +2,11 @@ package br.jus.trf2.balcaovirtual;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
-import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaPrevisaoPdfPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemadocumental.ISistemaDocumental.HtmlPdfPostRequest;
-import br.jus.trf2.sistemadocumental.ISistemaDocumental.HtmlPdfPostResponse;
 
 public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPrevisaoPdfPost {
 
@@ -46,16 +40,7 @@ public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPre
 		html += "<br/><p align=\"left\">" + nome + "<br/>" + cargo + "<br/>" + empresa + "</p>";
 		html += "</body></html>";
 
-		HtmlPdfPostRequest q = new HtmlPdfPostRequest();
-		q.html = html;
-		q.conv = "0";
-		Future<SwaggerAsyncResponse<HtmlPdfPostResponse>> future = SwaggerCall.callAsync("converter HTML em PDF", null,
-				"POST", Utils.getWsDocumentalUrl() + "/html-pdf", q, HtmlPdfPostResponse.class);
-		SwaggerAsyncResponse<HtmlPdfPostResponse> sar = future.get();
-		if (sar.getException() != null)
-			throw new Exception(sar.getException().getLocalizedMessage(), sar.getException());
-		HtmlPdfPostResponse r = (HtmlPdfPostResponse) sar.getResp();
-		return r.pdf;
+		return new Html2Pdf().converter(html);
 	}
 
 	@Override
