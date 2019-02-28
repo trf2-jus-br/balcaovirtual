@@ -209,6 +209,12 @@ parameters:
     description: Número da id só algarismos
     required: true
     type: string
+  id3:
+    name: id3
+    in: path
+    description: Número da id só algarismos
+    required: true
+    type: string
   jwt:
     name: jwt
     in: path
@@ -285,6 +291,12 @@ parameters:
     name: classe
     in: formData
     description: Classe do CNJ
+    type: string
+    required: true
+  assunto:
+    name: assunto
+    in: formData
+    description: Assunto do CNJ
     type: string
     required: true
   valorcausa:
@@ -515,6 +527,30 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /config/localidade/{id}/especialidade/{id2}/classe/{id3}/assuntos:
+    get:
+      description: Assuntos de determinada localidade/especie/classe
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/id3"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Assunto"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /config/pessoa-fisica/{cpf}:
     get:
       description: Pessoa Física
@@ -720,6 +756,7 @@ paths:
         - $ref: "#/parameters/localidade"
         - $ref: "#/parameters/especialidade"
         - $ref: "#/parameters/classe"
+        - $ref: "#/parameters/assunto"
         - $ref: "#/parameters/valorcausa"
         - $ref: "#/parameters/cdas"
         - $ref: "#/parameters/pas"
@@ -1445,6 +1482,15 @@ definitions:
         type: string
       valordacausaobrigatorio:
         type: boolean
+
+  Assunto:
+    description: Assunto
+    type: object
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
 
   SistemaInfo:
     description: Classe

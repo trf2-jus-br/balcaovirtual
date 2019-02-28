@@ -43,6 +43,11 @@ public interface IBalcaoVirtual {
 		public Boolean valordacausaobrigatorio;
 	}
 
+	public class Assunto implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
 	public class SistemaInfo implements ISwaggerModel {
 		public String id;
 		public String nome;
@@ -321,6 +326,22 @@ public interface IBalcaoVirtual {
 				ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception;
 	}
 
+	public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest implements ISwaggerRequest {
+		public String id;
+		public String id2;
+		public String id3;
+		public String sistema;
+	}
+
+	public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse implements ISwaggerResponse {
+		public List<Classe> list;
+	}
+
+	public interface IConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet extends ISwaggerMethod {
+		public void run(ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest req,
+				ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse resp) throws Exception;
+	}
+
 	public class ConfigPessoaFisicaCpfGetRequest implements ISwaggerRequest {
 		public String cpf;
 		public String sistema;
@@ -501,6 +522,7 @@ public interface IBalcaoVirtual {
 		public String classificacoes;
 		public String nomepoloativo;
 		public String nomepolopassivo;
+		public String assunto;
 	}
 
 	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {

@@ -57,6 +57,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			resp.contenttype = "application/pdf";
 			resp.inputstream = new ByteArrayInputStream(pdf);
 		} else if (file != null && file.equals("avisos-pendentes.xml")) {
+			
+			
 			// TODO: IMPLEMENTAR
 //			// Processo completo
 //			Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse>> future = SwaggerCall

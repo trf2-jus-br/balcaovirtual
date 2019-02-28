@@ -152,6 +152,10 @@
             <my-select :disabled="classes.length == 0" name="classe" label="Classe" v-model="classe" :list="classes" @change="selecionarClasse" :edit="editando" v-validate="'required'" :error="errors.first('classe')"></my-select>
           </div>
 
+          <div class="form-group col-md-3">
+            <my-select :disabled="assuntos.length == 0" name="assunto" label="Assunto" v-model="assunto" :list="assuntos" @change="selecionarAssunto" :edit="editando" v-validate="'required'" :error="errors.first('assunto')"></my-select>
+          </div>
+
           <div class="form-group col-md-2">
             <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''" :error="errors.first('valorcausa')"></my-input>
           </div>
@@ -369,6 +373,7 @@ export default {
       localidade: undefined,
       especialidade: undefined,
       classe: undefined,
+      assunto: undefined,
       valorcausa: undefined,
 
       cda: undefined,
@@ -384,6 +389,7 @@ export default {
       localidades: [],
       especialidades: [],
       classes: [],
+      assuntos: [],
 
       tipos: [],
       protocolo: undefined,
@@ -528,14 +534,24 @@ export default {
       this.carregarClasses()
     },
 
+    carregarClasses: function () {
+      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classes?sistema=' + this.sistema, 'classes', 'classe')
+    },
+
     selecionarClasse: function () {
+      this.assunto = undefined
+      this.assuntos.length = 0
+      this.carregarAssuntos()
+    },
+
+    carregarAssuntos: function () {
+      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classe/' + this.classe + '/assuntos?sistema=' + this.sistema, 'assuntos', 'assunto')
+    },
+
+    selecionarAssunto: function () {
       this.$nextTick(() => {
         this.validar()
       })
-    },
-
-    carregarClasses: function () {
-      this.carregar('config/localidade/' + this.localidade + '/especialidade/' + this.especialidade + '/classes?sistema=' + this.sistema, 'classes', 'classe')
     },
 
     //
@@ -809,6 +825,7 @@ export default {
         localidade: this.localidade,
         especialidade: this.especialidade,
         classe: this.classe,
+        assunto: this.assunto,
         valorcausa: this.valorcausa,
         cdas: this.ef ? this.cda : undefined,
         pas: this.ef ? this.pa : undefined,

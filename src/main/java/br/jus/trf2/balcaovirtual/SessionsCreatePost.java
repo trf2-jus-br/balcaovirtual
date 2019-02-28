@@ -101,7 +101,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null") + ","
 					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
-
+		if (usuarios == null)
+			throw new Exception("Nenhum usuário localizado na base com esse identificador");
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;

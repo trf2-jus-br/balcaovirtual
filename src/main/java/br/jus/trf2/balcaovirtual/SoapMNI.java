@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Files;
@@ -13,6 +14,11 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
@@ -40,6 +46,7 @@ import com.google.gson.reflect.TypeToken;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadePoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadeRelacionamentoProcessual;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadeRepresentanteProcessual;
+import br.jus.cnj.intercomunicacao_2_2.TipoAssuntoProcessual;
 import br.jus.cnj.intercomunicacao_2_2.TipoAvisoComunicacaoPendente;
 import br.jus.cnj.intercomunicacao_2_2.TipoCabecalhoProcesso;
 import br.jus.cnj.intercomunicacao_2_2.TipoComunicacaoProcessual;
@@ -63,6 +70,19 @@ public class SoapMNI {
 	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
 	// private static final DateTimeFormatter dtfFILE =
 	// DateTimeFormat.forPattern("yyyy-MM-dd-HH-mm");
+
+	private static String getNodeString(Node node) {
+		try {
+			StringWriter writer = new StringWriter();
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(new DOMSource(node), new StreamResult(writer));
+			String output = writer.toString();
+			return output.substring(output.indexOf("?>") + 2);// remove <?xml version="1.0" encoding="UTF-8"?>
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+		return node.getTextContent();
+	}
 
 	private static class ConsultaProcessualExclStrat implements ExclusionStrategy {
 
@@ -156,6 +176,7 @@ public class SoapMNI {
 				if (outboundProperty.booleanValue()) {
 					try {
 						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
+						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
 						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
 							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
@@ -447,10 +468,10 @@ public class SoapMNI {
 	}
 
 	public static PeticaoInicial enviarPeticaoInicial(String idManif, String senhaManif, String sistema,
-			String localidade, String especialidade, String classe, double valorCausa, String cdas, String pas,
-			int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada, boolean prioridadeidoso,
-			List<Parte> partes, String nomePdfs, String tpDocPdfs, String nomePoloAtivo, String nomePoloPassivo)
-			throws Exception {
+			String localidade, String especialidade, String classe, String assuntoPrincipal, double valorCausa,
+			String cdas, String pas, int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada,
+			boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs, String nomePoloAtivo,
+			String nomePoloPassivo) throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -468,7 +489,7 @@ public class SoapMNI {
 			doc.setMimetype("application/pdf");
 			doc.setDataHora(dataEnvio);
 			doc.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
-			//doc.setTipoDocumento(tpDocs[i]);
+			// doc.setTipoDocumento(tpDocs[i]);
 			// TODO: Substituir esse número mágico pela tabela de tipos de documentos
 			doc.setTipoDocumento("58");
 			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
@@ -569,6 +590,12 @@ public class SoapMNI {
 			p.setValor(aClasse[1]);
 			parametros.add(p);
 		}
+
+		// Assunto principal
+		TipoAssuntoProcessual tap = new TipoAssuntoProcessual();
+		tap.setCodigoNacional(Integer.parseInt(assuntoPrincipal));
+		tap.setPrincipal(true);
+		dadosBasicos.getAssunto().add(tap);
 
 		if (prioridadeidoso) {
 			dadosBasicos.getPrioridade().add("IDOSO");

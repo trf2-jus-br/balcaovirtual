@@ -23,7 +23,7 @@ import _ from 'underscore'
 
 export default {
   name: 'processo-nota',
-  props: ['titulo', 'pessoal', 'processo', 'orgao'],
+  props: ['titulo', 'pessoal', 'processo', 'sistema'],
   mounted () {
     this.carregarNota()
   },
@@ -61,7 +61,7 @@ export default {
         setTimeout(this.carregarNota, 120000)
         return
       }
-      this.$http.get('processo/' + this.processo + '/nota?orgao=' + this.orgao).then(
+      this.$http.get('processo/' + this.processo + '/nota?sistema=' + this.sistema).then(
         response => {
           for (var i = 0; i < response.data.list.length; i++) {
             var n = response.data.list[i]
@@ -118,7 +118,7 @@ export default {
 
     postNota: function (texto) {
       this.state = 'processing'
-      this.$http.post('processo/' + this.processo + '/nota?orgao=' + this.orgao, {
+      this.$http.post('processo/' + this.processo + '/nota?sistema=' + this.sistema, {
         texto: texto,
         pessoal: this.pessoal
       }).then(
@@ -130,7 +130,7 @@ export default {
 
     putNota: function (texto) {
       this.state = 'processing'
-      this.$http.put('processo/' + this.processo + '/nota/' + this.id + '?orgao=' + this.orgao, {
+      this.$http.put('processo/' + this.processo + '/nota/' + this.id + '?sistema=' + this.sistema, {
         texto: texto,
         pessoal: this.pessoal,
         dataalteracao: this.dataalteracao
@@ -143,7 +143,7 @@ export default {
 
     deleteNota: function () {
       this.state = 'processing'
-      this.$http.delete('processo/' + this.processo + '/nota/' + this.id + '?orgao=' + this.orgao, {}).then(
+      this.$http.delete('processo/' + this.processo + '/nota/' + this.id + '?sistema=' + this.sistema, {}).then(
         response => {
           this.atualizar()
         },
