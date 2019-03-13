@@ -8,12 +8,12 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.crivano.swaggerservlet.SwaggerUtils;
+import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
 //	public static String getOrgaos() {
 //		try {
-//			return SwaggerUtils.getRequiredProperty("balcaovirtual.orgaos",
+//			return SwaggerUtils.getProperty("orgaos",
 //					"Não foi possível localizar propriedade que configure a lista de órgãos.", false);
 //		} catch (Exception e) {
 //			throw new RuntimeException("Erro de configuração", e);
@@ -22,121 +22,66 @@ public class Utils {
 //	}
 
 	public static String[] getSystems() {
-		String systems = SwaggerUtils.getProperty("balcaovirtual.systems", null);
+		String systems = SwaggerServlet.getProperty("systems");
 		if (systems == null)
 			return null;
 		return systems.split(",");
 	}
 
 	public static String getPassword(String system) {
-		return SwaggerUtils.getProperty(system + ".password", null);
+		return SwaggerServlet.getProperty(system + ".password");
 	}
 
 	public static String getApiUrl(String system) {
-		try {
-			return SwaggerUtils.getRequiredProperty(system + ".api.url",
-					"Não foi possível localizar propriedade que configure a URL da API do sistema processual: " + system
-							+ ".api.url",
-					false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty(system + ".api.url");
 	}
 
 	public static String getMniWsdlUrl(String system) {
-		try {
-			return SwaggerUtils.getRequiredProperty(system + ".mni.url",
-					"Não foi possível localizar propriedade que configure a URL do MNI: " + system + ".mni.url", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty(system + ".mni.url");
 
 	}
 
 	public static String getMniWsdlEndpoint(String system) {
-		try {
-			return SwaggerUtils.getRequiredProperty(system + ".mni.endpoint",
-					"Não foi possível localizar propriedade que configure o ENDPOINT do MNI: " + system
-							+ ".mni.endpoint",
-					false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty(system + ".mni.endpoint");
 
 	}
 
 	public static String getWsDocumentalUrl() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.ws.documental.url",
-					"Não foi possível localizar a propridade que configura a URL do webservice documental.", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty("ws.documental.url");
 
 	}
 
 	public static String getDirTemp() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.upload.dir.temp",
-					"Não foi configurado o diretório temporário dos PDFs", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
-
+		return SwaggerServlet.getProperty("upload.dir.temp");
 	}
 
 	public static String getDirFinal() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.upload.dir.final",
-					"Não foi configurado o diretório de destino dos PDFs", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
-
+		return SwaggerServlet.getProperty("upload.dir.final");
 	}
 
 	public static String getUsuariosRestritos() {
-		try {
-			return SwaggerUtils.getProperty("balcaovirtual.username.restriction", null);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty("username.restriction");
 
 	}
 
 	public static String getJwtIssuer() {
-		return "balcaovirtual.trf2.jus.br";
+		return "trf2.jus.br";
 	}
 
 	public static String getJwtSecret() {
-		return SwaggerUtils.getProperty("balcaovirtual.jwt.secret", null);
+		return SwaggerServlet.getProperty("jwt.secret");
 	}
 
 	public static String getAssijusEndpoint() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.endpoint",
-					"Não foi configurada a URL do Assijus", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty("assijus.endpoint");
 	}
 
 	public static String getAssijusSystemMovimentos() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.system.movimentos",
-					"Não foi configurada o sistema de movimentos do Assijus", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty("assijus.system.movimentos");
 	}
 
 	public static String getAssijusSystemExpedientes() {
-		try {
-			return SwaggerUtils.getRequiredProperty("balcaovirtual.assijus.system.expedientes",
-					"Não foi configurada o sistema de expedientes do Assijus", false);
-		} catch (Exception e) {
-			throw new RuntimeException("Erro de configuração", e);
-		}
+		return SwaggerServlet.getProperty("assijus.system.expedientes");
 	}
 
 	/**

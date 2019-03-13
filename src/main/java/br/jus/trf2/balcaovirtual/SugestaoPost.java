@@ -1,6 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
-import com.crivano.swaggerservlet.SwaggerUtils;
+import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISugestaoPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SugestaoPostRequest;
@@ -17,11 +17,8 @@ public class SugestaoPost implements ISugestaoPost {
 		sb.append(req.email);
 		sb.append("\n\nMensagem: ");
 		sb.append(req.mensagem);
-		Correio.enviar(
-				SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.destinatario",
-						"Não foi especificado o destinatário do email de sugestões.", false),
-				SwaggerUtils.getProperty("balcaovirtual.smtp.assunto", "Balcão Virtual: Sugestão"), sb.toString(), null,
-				null, null);
+		Correio.enviar(SwaggerServlet.getProperty("smtp.destinatario"), SwaggerServlet.getProperty("smtp.assunto"),
+				sb.toString(), null, null, null);
 	}
 
 	@Override

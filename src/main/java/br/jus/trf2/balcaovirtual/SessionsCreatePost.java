@@ -121,8 +121,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 	}
 
 	public static class UsuarioDetalhe {
-		Long id;
-		Long unidade;
+		String id;
+		String unidade;
 	}
 
 	public static class Usuario {
@@ -164,9 +164,9 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				String[] ss = s.split(",");
 				UsuarioDetalhe ud = new UsuarioDetalhe();
 				if (!"null".equals(ss[1]))
-					ud.id = Long.valueOf(ss[1]);
+					ud.id = ss[1];
 				if (!"null".equals(ss[2]))
-					ud.unidade = Long.valueOf(ss[2]);
+					ud.unidade = ss[2];
 				u.usuarios.put(ss[0], ud);
 			}
 		}

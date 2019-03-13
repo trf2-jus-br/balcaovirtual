@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class Correio {
@@ -58,9 +59,8 @@ public class Correio {
 			String nomeArquivo, String tipoArquivo, byte[] conteudoArquivo) throws Exception {
 		final String[] to = { destinatario };
 
-		Correio.enviar(SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.remetente",
-				"remetente de email não configurado.", false), to, assunto, conteudo, null, nomeArquivo, tipoArquivo,
-				conteudoArquivo);
+		Correio.enviar(SwaggerServlet.getProperty("smtp.remetente"), to, assunto, conteudo, null, nomeArquivo,
+				tipoArquivo, conteudoArquivo);
 	}
 
 	public static void enviar(final String remetente, final String[] destinatarios, final String assunto,
@@ -68,9 +68,8 @@ public class Correio {
 			byte[] conteudoArquivo) throws Exception {
 
 		List<String> listaServidoresEmail = new ArrayList<String>();
-		listaServidoresEmail.add(
-				SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.host", "Host de SMTP não configurado.", false));
-		String host2 = SwaggerUtils.getProperty("balcaovirtual.smtp.host.alt", null);
+		listaServidoresEmail.add(SwaggerServlet.getProperty("smtp.host"));
+		String host2 = SwaggerServlet.getProperty("smtp.host.alt");
 		if (host2 != null)
 			listaServidoresEmail.add(host2);
 
@@ -111,12 +110,10 @@ public class Correio {
 		// mostra os passos do envio da mensagem e o
 		// recebimento da mensagem do servidor no console.
 		Session session = null;
-		if (Boolean.valueOf(SwaggerUtils.getProperty("balcaovirtual.smtp.auth", "false"))) {
+		if (Boolean.valueOf(SwaggerServlet.getProperty("smtp.auth"))) {
 			props.put("mail.smtp.auth", "true");
-			final String usuario = SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.auth.usuario",
-					"Usuário do SMTP não informado.", false);
-			final String senha = SwaggerUtils.getRequiredProperty("balcaovirtual.smtp.auth.senha",
-					"Senha do SMTP não informada.", false);
+			final String usuario = SwaggerServlet.getProperty("smtp.auth.usuario");
+			final String senha = SwaggerServlet.getProperty("smtp.auth.senha");
 			session = Session.getInstance(props, new Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(usuario, senha);
@@ -198,8 +195,7 @@ public class Correio {
 		// Transport.send(msg);
 
 		Transport tr = new SMTPTransport(session, null);
-		tr.connect(servidorEmail, Integer.valueOf(SwaggerUtils.getProperty("balcaovirtual.smtp.porta", "25")), null,
-				null);
+		tr.connect(servidorEmail, Integer.valueOf(SwaggerServlet.getProperty("smtp.porta")), null, null);
 		msg.saveChanges(); // don't forget this
 		tr.sendMessage(msg, msg.getAllRecipients());
 		tr.close();

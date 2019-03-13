@@ -1,6 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
-import com.crivano.swaggerservlet.SwaggerUtils;
+import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaEnviarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaEnviarPostRequest;
@@ -19,8 +19,7 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,
 				req.unidade);
 
-		String tipo = SwaggerUtils.getRequiredProperty("balcaovirtual." + req.sistema.toLowerCase() + ".cota.tipo",
-				"Parâmetro de tipo de documento não configurado", true);
+		String tipo = SwaggerServlet.getProperty(req.sistema.toLowerCase() + ".cota.tipo");
 
 		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero, tipo,
 				Integer.parseInt(req.nivelsigilo), null, pdf);

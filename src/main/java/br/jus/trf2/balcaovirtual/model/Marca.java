@@ -45,10 +45,10 @@ public class Marca implements Serializable {
 	private Long marcIdPeca;
 
 	@Column(name = "MARC_IE_UNIDADE")
-	private Long marcIeUnidade;
+	private String marcIeUnidade;
 
 	@Column(name = "MARC_IE_USU")
-	private Long marcIeUsu;
+	private String marcIeUsu;
 
 	@Column(name = "MARC_LG_INTERNO")
 	private boolean marcLgInterno;
@@ -115,19 +115,19 @@ public class Marca implements Serializable {
 		this.marcIdPeca = marcIdPeca;
 	}
 
-	public Long getMarcIeUnidade() {
+	public String getMarcIeUnidade() {
 		return this.marcIeUnidade;
 	}
 
-	public void setMarcIeUnidade(Long marcIeUnidade) {
+	public void setMarcIeUnidade(String marcIeUnidade) {
 		this.marcIeUnidade = marcIeUnidade;
 	}
 
-	public Long getMarcIeUsu() {
+	public String getMarcIeUsu() {
 		return this.marcIeUsu;
 	}
 
-	public void setMarcIeUsu(Long marcIeUsu) {
+	public void setMarcIeUsu(String marcIeUsu) {
 		this.marcIeUsu = marcIeUsu;
 	}
 

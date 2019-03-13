@@ -12,12 +12,8 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.crivano.swaggerservlet.SwaggerServlet;
-import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.SwaggerServletDependency;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
-import com.crivano.swaggerservlet.property.PrivateProperty;
-import com.crivano.swaggerservlet.property.PublicProperty;
-import com.crivano.swaggerservlet.property.RestrictedProperty;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
@@ -27,43 +23,52 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
 
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
+	public void initialize(ServletConfig config) throws ServletException {
+		setAPI(IBalcaoVirtual.class);
 
-		super.setAPI(IBalcaoVirtual.class);
+		setActionPackage("br.jus.trf2.balcaovirtual");
 
-		super.setActionPackage("br.jus.trf2.balcaovirtual");
+		addPublicProperty("systems");
+		addPublicProperty("env");
+		addPublicProperty("wootric.token", null);
+		
+		addRestrictedProperty("username.restriction", null);
 
-		super.addProperty(new PublicProperty("balcaovirtual.env"));
-		super.addProperty(new PublicProperty("balcaovirtual.wootric.token"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.ws.processual.url"));
-		super.addProperty(new PublicProperty("balcaovirtual.ws.documental.url"));
-		super.addProperty(new PublicProperty("balcaovirtual.orgaos"));
-
-		for (String s : SwaggerUtils.getProperty("balcaovirtual.orgaos", "").split(",")) {
-			super.addProperty(new RestrictedProperty("balcaovirtual.mni." + s.toLowerCase() + ".url"));
-			super.addProperty(new PublicProperty("balcaovirtual." + s.toLowerCase() + ".cota.tipo"));
+		addRestrictedProperty("datasource.url", null);
+		if (getProperty("datasource.url") != null) {
+			addRestrictedProperty("datasource.username");
+			addRestrictedProperty("datasource.password");
+			addRestrictedProperty("datasource.name", null);
+		} else {
+			addRestrictedProperty("datasource.username", null);
+			addRestrictedProperty("datasource.password", null);
+			addRestrictedProperty("datasource.name", "balcaovirtualds");
 		}
 
-		super.addProperty(new PublicProperty("balcaovirtual.assijus.endpoint"));
-		super.addProperty(new PublicProperty("balcaovirtual.assijus.system.expedientes"));
-		super.addProperty(new PublicProperty("balcaovirtual.assijus.system.movimentos"));
+		for (String s : getProperty("systems").split(",")) {
+			addRestrictedProperty(s.toLowerCase() + ".api.url");
+			addRestrictedProperty(s.toLowerCase() + ".mni.url");
+			addRestrictedProperty(s.toLowerCase() + ".mni.endpoint");
+			addPublicProperty(s.toLowerCase() + ".cota.tipo");
+		}
 
-		super.addProperty(new PrivateProperty("balcaovirtual.jwt.secret"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.final"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.upload.dir.temp"));
+//		addPublicProperty("assijus.endpoint");
+//		addPublicProperty("assijus.system.expedientes");
+//		addPublicProperty("assijus.system.movimentos");
 
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.remetente"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.host"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.host.alt"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.auth"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.auth.usuario"));
-		super.addProperty(new PrivateProperty("balcaovirtual.smtp.auth.senha"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.porta"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.destinatario"));
-		super.addProperty(new RestrictedProperty("balcaovirtual.smtp.assunto"));
+		addPrivateProperty("jwt.secret");
+		addRestrictedProperty("upload.dir.final");
+		addRestrictedProperty("upload.dir.temp");
 
-		super.setAuthorizationToProperties(SwaggerUtils.getProperty("balcaovirtual.properties.secret", null));
+		addRestrictedProperty("smtp.remetente", null);
+		addRestrictedProperty("smtp.host", null);
+		addRestrictedProperty("smtp.host.alt", null);
+		addRestrictedProperty("smtp.auth", "false");
+		addRestrictedProperty("smtp.auth.usuario", null);
+		addPrivateProperty("smtp.auth.senha", null);
+		addRestrictedProperty("smtp.porta", "25");
+		addRestrictedProperty("smtp.destinatario", null);
+		addRestrictedProperty("smtp.assunto", "Balcão Virtual: Sugestão");
 
 		class HttpGetDependency extends TestableDependency {
 			String testsite;
@@ -110,11 +115,11 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			}
 		}
 
-		addDependency(new FileSystemWriteDependency("upload.dir.temp",
-				SwaggerUtils.getProperty("balcaovirtual.upload.dir.temp", "[undefined]"), false, 0, 10000));
+		addDependency(
+				new FileSystemWriteDependency("upload.dir.temp", getProperty("upload.dir.temp"), false, 0, 10000));
 
-		addDependency(new FileSystemWriteDependency("upload.dir.final",
-				SwaggerUtils.getProperty("balcaovirtual.upload.dir.final", "[undefined]"), false, 0, 10000));
+		addDependency(
+				new FileSystemWriteDependency("upload.dir.final", getProperty("upload.dir.final"), false, 0, 10000));
 
 		for (final String system : Utils.getSystems()) {
 			addDependency(new SwaggerServletDependency("ws", "blucservice", false, 0, 10000) {
@@ -152,7 +157,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
 			@Override
 			public String getUrl() {
-				return SwaggerUtils.getProperty("balcaovirtual.datasource.name", "balcaovirtualds");
+				return getProperty("datasource.name");
 			}
 
 			@Override

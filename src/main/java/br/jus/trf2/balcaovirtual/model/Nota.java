@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="nota")
+@Table(name = "nota")
 @NamedQueries({
 		// findAll
 		@NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n"),
@@ -54,10 +54,10 @@ public class Nota implements Serializable {
 	private String notaNmUsu;
 
 	@Column(name = "NOTA_IE_USU")
-	private Long notaIeUsu;
+	private String notaIeUsu;
 
 	@Column(name = "NOTA_IE_UNIDADE")
-	private Long notaIeUnidade;
+	private String notaIeUnidade;
 
 	// bi-directional many-to-one association to Processo
 	@ManyToOne
@@ -123,19 +123,19 @@ public class Nota implements Serializable {
 		this.notaNmUsu = notaNmUsu;
 	}
 
-	public Long getNotaIeUnidade() {
+	public String getNotaIeUnidade() {
 		return notaIeUnidade;
 	}
 
-	public void setNotaIeUnidade(Long notaIeUnidade) {
+	public void setNotaIeUnidade(String notaIeUnidade) {
 		this.notaIeUnidade = notaIeUnidade;
 	}
 
-	public Long getNotaIeUsu() {
+	public String getNotaIeUsu() {
 		return notaIeUsu;
 	}
 
-	public void setNotaIeUsu(Long notaIeUsu) {
+	public void setNotaIeUsu(String notaIeUsu) {
 		this.notaIeUsu = notaIeUsu;
 	}
 

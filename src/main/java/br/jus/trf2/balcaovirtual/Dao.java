@@ -51,7 +51,7 @@ public class Dao implements Closeable {
 		return p;
 	}
 
-	public List<Nota> obtemNotas(Processo p, Long ieusuario, Long ieunidade) {
+	public List<Nota> obtemNotas(Processo p, String ieusuario, String ieunidade) {
 		List<Nota> r = (List<Nota>) em.createNamedQuery("Nota.findProcesso").setParameter("processo", p)
 				.setParameter("ieusuario", ieusuario).setParameter("ieunidade", ieunidade).getResultList();
 		return r;
@@ -63,7 +63,7 @@ public class Dao implements Closeable {
 		return r;
 	}
 
-	public List<Object[]> obtemMarcas(Processo p, boolean interno, Long ieusuario, Long ieunidade) {
+	public List<Object[]> obtemMarcas(Processo p, boolean interno, String ieusuario, String ieunidade) {
 		List<Object[]> r = (List<Object[]>) em.createNamedQuery("Marca.findProcessoUsuario").setParameter("processo", p)
 				.setParameter("interno", interno).setParameter("ieusuario", ieusuario)
 				.setParameter("ieunidade", ieunidade).getResultList();
