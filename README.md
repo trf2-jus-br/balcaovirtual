@@ -1,23 +1,23 @@
 # Balcão Virtual
 
-Balcão Virtual é um site que permite acessar sistemas processuais compatíveis com o Modelo Nacional de Interoperabilidade - MNI.
+Balcão Virtual (BV) é um site que permite acessar sistemas processuais compatíveis com o Modelo Nacional de Interoperabilidade - MNI. Clique [aqui](https://docs.google.com/presentation/d/11qFey-qboRy3G0X4thrT3370daoDSTCRetbv_LfDOSc/edit?usp=sharing) para ver a apresentação do sistema.
 
-As operações disponíveis são:
+![balcao-virtual-consulta-processual](https://user-images.githubusercontent.com/4137623/54284473-bec09a00-457e-11e9-9864-c3baf411792d.png)
+
+#### As operações disponíveis são:
 - Consulta processual;
 - Peticionamento inicial;
 - Peticionamento intercorrente em lote;
 - Recebimento de intimações e citações.
 
-Além disso, o Balcão Virtual disponibiliza:
+#### Além disso, o Balcão Virtual disponibiliza:
 - Visualização gráfica dos principais eventos ocorridos no processo - Timeline Processual;
 - Lista de processos recentes e favoritos;
 - Marcações em peças processuais que podem ser de texto livre ou seguindo um padrão que pode ser definido para cada classe processual;
 - Anotações relacionadas ao processo, pessoais ou da unidade;
 - Inclusão de cotas em processos;
 - Download do PDF completo do processo;
-- Impressão em lote dos PDFs completos;
-
-![balcao-virtual-consulta-processual](https://user-images.githubusercontent.com/4137623/54284473-bec09a00-457e-11e9-9864-c3baf411792d.png)
+- Impressão em lote dos PDFs completos.
 
 ## Arquitetura
 
