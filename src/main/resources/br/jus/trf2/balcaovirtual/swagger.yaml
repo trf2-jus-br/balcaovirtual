@@ -463,6 +463,26 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+  /config/tipos-documento-peticao-inicial:
+    get:
+      description: Tipos de documento para petição inicial
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/TipoDocumentoPeticaoInicial"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
   /config/localidades:
     get:
       description: Diversos parâmetros para petição inicial
@@ -678,6 +698,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
   /processo/{numero}/consultar:
     get:
       description: Enviar petições para um processo
@@ -689,20 +710,19 @@ paths:
         200:
           description: Successful response
           schema:
-            type: object
-            properties:
-              payload:
-                type: string
-                format: byte
-                description: PDF codificado em base64
-              contenttype:
-                type: string
-                description: Constante em application/pdf
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: application/pdf
+            Content-Disposition:
+              type: string
+              description: attachment
         500:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-            
+
   /processo/{numero}/peca/{id}/pdf:
     get:
       description: Obter o PDF de uma peça processual para visualização
@@ -1126,7 +1146,6 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-
 
   /download/{jwt}/{filename}:
     get:
@@ -1806,7 +1825,18 @@ definitions:
     description: Tipo de documento
     type: string
     example: CPF
-    
+
+  TipoDocumentoPeticaoInicial:
+    description: Tipo de documento
+    type: object
+    properties:
+      id:
+        type: string
+        description: Identificador do tipo de documento
+      nome:
+        type: string
+        description: Nome do tipo de documento
+
   Error:
     type: object
     properties:

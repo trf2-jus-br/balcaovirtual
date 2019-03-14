@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "orgao")
+@Table(name = "sistema")
 @NamedQueries({ @NamedQuery(name = "Sistema.findAll", query = "SELECT o FROM Sistema o"),
 		@NamedQuery(name = "Sistema.findSigla", query = "SELECT o FROM Sistema o WHERE sistSg = :sigla") })
 public class Sistema implements Serializable {

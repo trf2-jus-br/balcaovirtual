@@ -139,24 +139,24 @@
       </div>
       <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
         <div class="row">
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4">
             <my-select name="sistema" label="Sistema" v-model="sistema" :list="sistemas" @change="selecionarSistema" :edit="editando" v-validate="'required'" :error="errors.first('sistema')"></my-select>
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-4">
             <my-select :disabled="localidades.length == 0" name="localidade" label="Localidade" v-model="localidade" :list="localidades" @change="selecionarLocalidade" :edit="editando" v-validate="'required'" :error="errors.first('localidade')"></my-select>
           </div>
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4">
             <my-select :disabled="especialidades.length == 0" name="especialidade" label="Especialidade" v-model="especialidade" :list="especialidades" @change="selecionarEspecialidade" :edit="editando" v-validate="'required'" :error="errors.first('especialidade')"></my-select>
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-4">
             <my-select :disabled="classes.length == 0" name="classe" label="Classe" v-model="classe" :list="classes" @change="selecionarClasse" :edit="editando" v-validate="'required'" :error="errors.first('classe')"></my-select>
           </div>
 
-          <div class="form-group col-md-3">
-            <my-select :disabled="assuntos.length == 0" name="assunto" label="Assunto" v-model="assunto" :list="assuntos" @change="selecionarAssunto" :edit="editando" v-validate="'required'" :error="errors.first('assunto')"></my-select>
+          <div class="form-group col-md-4">
+            <my-select :disabled="assuntos.length == 0" name="assunto" label="Assunto Principal" v-model="assunto" :list="assuntos" @change="selecionarAssunto" :edit="editando" v-validate="'required'" :error="errors.first('assunto')"></my-select>
           </div>
 
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4">
             <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''" :error="errors.first('valorcausa')"></my-input>
           </div>
 
@@ -456,7 +456,7 @@ export default {
     faltaTeorDaPeticao: function() {
       if (this.arquivos.length === 0) return true
       for (var i = 0; i < this.arquivos.length; i++) {
-        if (this.arquivos[i].tipo === 1) return false
+        if (this.arquivos[i].tipo === 1 || this.arquivos[i].tipo === '1') return false
       }
       return true
     }
@@ -466,7 +466,7 @@ export default {
     //
     // Selects
     //
-    carregar: function (url, items, item) {
+    carregar: function (url, items, item, sort) {
       this.$http.get(url, { block: true }).then(response => {
         this[items].length = 0
         this[item] = undefined
@@ -474,10 +474,12 @@ export default {
         // if (items === 'classes') {
         // for (i = 0; i < this.classes.length; i++) this.classes[i].nome = CnjClasseBL.nomeCompleto(this.classes[i].id)
         // }
-        this[items].sort(function (a, b) {
-          if (a.nome !== b.nome) return a.nome < b.nome ? -1 : 1
-          return 0
-        })
+        if (sort !== false) {
+          this[items].sort(function (a, b) {
+            if (a.nome !== b.nome) return a.nome < b.nome ? -1 : 1
+            return 0
+          })
+        }
         // if (!this[item]) this[item] = response.data.list[0].id
 
         // Desabilitando especialidades criminais enquanto não temos a possibilidade de informar dados de inquérito
@@ -510,10 +512,15 @@ export default {
       this.classe = undefined
       this.classes.length = 0
       this.carregarLocalidades()
+      this.carregarTiposDePeca()
     },
 
     carregarLocalidades: function () {
       this.carregar('config/localidades?sistema=' + this.sistema, 'localidades', 'localidade')
+    },
+
+    carregarTiposDePeca: function () {
+      this.carregar('config/tipos-documento-peticao-inicial?sistema=' + this.sistema, 'tipospeca', 'tipo', false)
     },
 
     selecionarLocalidade: function () {

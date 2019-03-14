@@ -28,6 +28,17 @@ public class Utils {
 		return systems.split(",");
 	}
 
+	public static String getName(String system) {
+		try {
+			return SwaggerUtils.getRequiredProperty(system + ".name",
+					"Não foi possível localizar propriedade que configure o nome do sistema processual: " + system
+							+ ".name",
+					false);
+		} catch (Exception e) {
+			throw new RuntimeException("Erro de configuração", e);
+		}
+	}
+
 	public static String getPassword(String system) {
 		return SwaggerServlet.getProperty(system + ".password");
 	}

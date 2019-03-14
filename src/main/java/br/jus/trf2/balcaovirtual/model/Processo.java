@@ -26,7 +26,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Processo.findAll", query = "SELECT p FROM Processo p"),
 
 		// findNumeroEOrgao
-		@NamedQuery(name = "Processo.findNumeroEOrgao", query = "SELECT p FROM Processo p WHERE p.procCd = :numero and p.sistema = :sistema") })
+		@NamedQuery(name = "Processo.findNumeroESistema", query = "SELECT p FROM Processo p WHERE p.procCd = :numero and p.sistema = :sistema") })
 public class Processo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class Processo implements Serializable {
 
 	// bi-directional many-to-one association to Orgao
 	@ManyToOne
-	@JoinColumn(name = "ORGA_ID")
+	@JoinColumn(name = "SIST_ID")
 	private Sistema sistema;
 
 	public Processo() {

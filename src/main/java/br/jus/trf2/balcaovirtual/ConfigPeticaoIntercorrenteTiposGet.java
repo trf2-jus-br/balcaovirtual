@@ -40,7 +40,7 @@ public class ConfigPeticaoIntercorrenteTiposGet implements IConfigPeticaoInterco
 					ConfigTipoPeticaoIntercorrente t = new ConfigTipoPeticaoIntercorrente();
 					t.id = i.id;
 					t.descricao = i.descricao;
-					t.sistema = i.sistema;// .replace("SJ", "JF");
+					t.sistema = system;
 					resp.list.add(t);
 				}
 		}

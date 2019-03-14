@@ -64,6 +64,9 @@ public interface IBalcaoVirtual {
 	public class Sistema implements ISwaggerModel {
 	}
 
+	public class Orgao implements ISwaggerModel {
+	}
+
 	public class Unidade implements ISwaggerModel {
 	}
 
@@ -220,6 +223,11 @@ public interface IBalcaoVirtual {
 	public class TipoDeDocumento implements ISwaggerModel {
 	}
 
+	public class TipoDocumentoPeticaoInicial implements ISwaggerModel {
+		public String id;
+		public String nome;
+	}
+
 	public class Error implements ISwaggerModel {
 		public String errormsg;
 	}
@@ -285,6 +293,19 @@ public interface IBalcaoVirtual {
 		public void run(ConfigSistemasGetRequest req, ConfigSistemasGetResponse resp) throws Exception;
 	}
 
+	public class ConfigTiposDocumentoPeticaoInicialGetRequest implements ISwaggerRequest {
+		public String sistema;
+	}
+
+	public class ConfigTiposDocumentoPeticaoInicialGetResponse implements ISwaggerResponse {
+		public List<TipoDocumentoPeticaoInicial> list;
+	}
+
+	public interface IConfigTiposDocumentoPeticaoInicialGet extends ISwaggerMethod {
+		public void run(ConfigTiposDocumentoPeticaoInicialGetRequest req,
+				ConfigTiposDocumentoPeticaoInicialGetResponse resp) throws Exception;
+	}
+
 	public class ConfigLocalidadesGetRequest implements ISwaggerRequest {
 		public String sistema;
 	}
@@ -334,7 +355,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse implements ISwaggerResponse {
-		public List<Classe> list;
+		public List<Assunto> list;
 	}
 
 	public interface IConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet extends ISwaggerMethod {
@@ -426,7 +447,6 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
 		public Map<String, List<String>> headerFields;
@@ -510,6 +530,7 @@ public interface IBalcaoVirtual {
 		public String localidade;
 		public String especialidade;
 		public String classe;
+		public String assunto;
 		public String valorcausa;
 		public String cdas;
 		public String pas;
@@ -522,7 +543,6 @@ public interface IBalcaoVirtual {
 		public String classificacoes;
 		public String nomepoloativo;
 		public String nomepolopassivo;
-		public String assunto;
 	}
 
 	public class PeticaoInicialProtocolarPostResponse implements ISwaggerResponse {
@@ -777,7 +797,6 @@ public interface IBalcaoVirtual {
 	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
 		public Map<String, List<String>> headerFields;
@@ -834,7 +853,6 @@ public interface IBalcaoVirtual {
 	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
 		public Map<String, List<String>> headerFields;

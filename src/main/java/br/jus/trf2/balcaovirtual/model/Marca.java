@@ -42,7 +42,7 @@ public class Marca implements Serializable {
 	private Date marcDfAlteracao;
 
 	@Column(name = "MARC_ID_PECA")
-	private Long marcIdPeca;
+	private String marcIdPeca;
 
 	@Column(name = "MARC_IE_UNIDADE")
 	private String marcIeUnidade;
@@ -107,11 +107,11 @@ public class Marca implements Serializable {
 		this.marcDfAlteracao = marcDfAlteracao;
 	}
 
-	public Long getMarcIdPeca() {
+	public String getMarcIdPeca() {
 		return this.marcIdPeca;
 	}
 
-	public void setMarcIdPeca(Long marcIdPeca) {
+	public void setMarcIdPeca(String marcIdPeca) {
 		this.marcIdPeca = marcIdPeca;
 	}
 

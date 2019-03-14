@@ -57,7 +57,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 				}
 			}
 
-			m.setMarcIdPeca(req.id != null ? Long.valueOf(req.id) : null);
+			m.setMarcIdPeca(req.id);
 			m.setProcesso(p);
 			m.setTipoMarcaItem(tmi);
 			m.setEstilo(estilo);

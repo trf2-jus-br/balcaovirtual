@@ -17,7 +17,10 @@
             </b-form-select>
           </div>
         </div>
-        <input class="mt-3 mb-3" type="checkbox" v-model="intervalo"> Intervalo de Páginas </input>
+        <div class="form-check">
+          <input id="intervaloDePaginas" class="mt-3 mb-3" type="checkbox" v-model="intervalo" :disabled="pagmin === 0 || pagmax === 0" />
+          <label class="form-check-label pl-0" for="intervaloDePaginas">Intervalo de Páginas</label>
+        </div>
         <div class="row" v-show="intervalo">
           <div class="col form-group">
             <label class="control-label" for="paginicial" style="width: 100%">Página Inicial</label>
@@ -103,8 +106,8 @@ export default {
   methods: {
     show: function (marca, marcadores, pagmin, pagmax) {
       this.marcadores = marcadores
-      this.pagmin = pagmin
-      this.pagmax = pagmax
+      this.pagmin = pagmin | 0
+      this.pagmax = pagmax | 0
       this.paginicial = undefined
       this.pagfinal = undefined
       if (marca) {
@@ -158,8 +161,8 @@ export default {
         texto: this.texto,
         idestilo: this.estilo,
         intervalo: this.intervalo,
-        paginicial: this.paginicial,
-        pagfinal: this.pagfinal
+        paginicial: this.paginicial !== 0 ? this.paginicial : undefined,
+        pagfinal: this.pagfinal !== 0 ? this.pagfinal : undefined
       })
     }
   }

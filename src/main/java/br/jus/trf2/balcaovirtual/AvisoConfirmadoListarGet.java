@@ -55,7 +55,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 					a.processo = ra.processo;
 					a.unidade = ra.unidade;
 					a.unidadetipo = ra.unidadeTipo;
-					a.sistema = ra.sistema;
+					a.sistema = system;
 					a.localidade = ra.localidade;
 					a.eventointimacao = ra.eventoIntimacao;
 					a.motivointimacao = ra.motivoIntimacao;

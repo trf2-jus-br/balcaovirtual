@@ -42,7 +42,7 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 				r.dataalteracao = m.getMarcDfAlteracao();
 				r.idestilo = Long.toString(m.getEstilo().getEstiId());
 				r.idmarca = Long.toString(m.getMarcId());
-				r.idpeca = Long.toString(m.getMarcIdPeca());
+				r.idpeca = m.getMarcIdPeca();
 				r.nomeusuario = m.getMarcNmUsu();
 				r.paginicial = m.getMarcNrPagInicial() != null ? m.getMarcNrPagInicial().toString() : null;
 				r.pagfinal = m.getMarcNrPagFinal() != null ? m.getMarcNrPagFinal().toString() : null;

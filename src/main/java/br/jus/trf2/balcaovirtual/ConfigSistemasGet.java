@@ -16,14 +16,12 @@ public class ConfigSistemasGet implements IConfigSistemasGet {
 
 		resp.list = new ArrayList<>();
 
-		// TODO: Trocar órgão por system
-		for (String sistema : Utils.getSystems()) {
-			String system = sistema.toLowerCase();
+		for (String system : Utils.getSystems()) {
 			if (!u.usuarios.containsKey(system))
 				continue;
 			SistemaInfo oi = new SistemaInfo();
 			oi.id = system;
-			oi.nome = sistema;
+			oi.nome = Utils.getName(system);
 			resp.list.add(oi);
 		}
 	}

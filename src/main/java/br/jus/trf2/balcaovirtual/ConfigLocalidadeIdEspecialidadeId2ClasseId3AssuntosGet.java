@@ -6,7 +6,7 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Classe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Assunto;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet;
@@ -34,7 +34,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet
 
 		resp.list = new ArrayList<>();
 		for (IdNome idNome : r.list) {
-			Classe o = new Classe();
+			Assunto o = new Assunto();
 			o.id = idNome.id;
 			o.nome = idNome.nome;
 			resp.list.add(o);

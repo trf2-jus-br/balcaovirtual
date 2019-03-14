@@ -63,21 +63,21 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, TIMEOUT_MILLISECONDS);
 
 		// TODO: Tratar o caso do usuário interno (int) para o Apolo!
-//		String origem = "int";
-//		UsuarioWebUsernameGetResponse r;
-//		try {
-//			r = wsAutenticar(origem, req.username, req.password);
-//		} catch (Exception ex) {
-//			origem = null;
-//			try {
-//				r = wsAutenticar(origem, req.username, req.password);
-//			} catch (Exception ex2) {
-//				if (ex.getMessage().contains("unknown path"))
-//					throw ex2;
-//				else
-//					throw ex;
-//			}
-//		}
+		// String origem = "int";
+		// UsuarioWebUsernameGetResponse r;
+		// try {
+		// r = wsAutenticar(origem, req.username, req.password);
+		// } catch (Exception ex) {
+		// origem = null;
+		// try {
+		// r = wsAutenticar(origem, req.username, req.password);
+		// } catch (Exception ex2) {
+		// if (ex.getMessage().contains("unknown path"))
+		// throw ex2;
+		// else
+		// throw ex;
+		// }
+		// }
 
 		String origem = null;
 		String usuarios = null;

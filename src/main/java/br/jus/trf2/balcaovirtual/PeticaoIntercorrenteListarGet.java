@@ -45,7 +45,7 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 					t.protocolo = i.protocolo;
 					t.dataprotocolo = i.dataprotocolo;
 					t.classe = i.classe;
-					t.sistema = i.sistema;
+					t.sistema = system;
 					t.unidade = i.unidade;
 					resp.list.add(t);
 				}

@@ -264,7 +264,6 @@ public class SoapMNI {
 					i.processo = a.getProcesso().getNumero();
 					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
 					i.idaviso = a.getIdAviso();
-					// TODO: Trocar esse órgão por system?
 					i.sistema = system;
 					i.orgao = Utils.getOrgao(system);
 					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
@@ -489,9 +488,9 @@ public class SoapMNI {
 			doc.setMimetype("application/pdf");
 			doc.setDataHora(dataEnvio);
 			doc.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
-			// doc.setTipoDocumento(tpDocs[i]);
+			doc.setTipoDocumento(tpDocs[i]);
 			// TODO: Substituir esse número mágico pela tabela de tipos de documentos
-			doc.setTipoDocumento("58");
+			// doc.setTipoDocumento("58");
 			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 			byte[] data = Files.readAllBytes(path);
 			doc.setConteudo(data);

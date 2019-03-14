@@ -18,7 +18,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Pessoa;
 public class ConfigEntidadesGet implements IConfigEntidadesGet {
 
 	@Override
-	// TODO: Trocar órgão por system
 	public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception {
 		String authorization = SessionsCreatePost.assertAuthorization();
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();

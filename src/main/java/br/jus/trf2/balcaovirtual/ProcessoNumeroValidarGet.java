@@ -41,12 +41,11 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
-		// TODO: Incluir o system no resultado
 		for (String system : mcr.responses.keySet()) {
 			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) mcr.responses.get(system);
 			resp.numero = r.numero;
-			resp.sistema = system; // r.sistema;
-			resp.orgao = r.orgao; // r.sistema;
+			resp.sistema = system;
+			resp.orgao = r.orgao;
 			resp.unidade = r.unidade != null ? r.unidade.trim() : null;
 			resp.localnaunidade = r.localNaUnidade;
 			resp.segredodejustica = r.segredodejustica;
