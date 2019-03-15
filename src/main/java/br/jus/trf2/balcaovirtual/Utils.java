@@ -11,15 +11,16 @@ import org.joda.time.format.DateTimeFormatter;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
-//	public static String getOrgaos() {
-//		try {
-//			return SwaggerUtils.getProperty("orgaos",
-//					"Não foi possível localizar propriedade que configure a lista de órgãos.", false);
-//		} catch (Exception e) {
-//			throw new RuntimeException("Erro de configuração", e);
-//		}
-//
-//	}
+	// public static String getOrgaos() {
+	// try {
+	// return SwaggerUtils.getProperty("orgaos",
+	// "Não foi possível localizar propriedade que configure a lista de
+	// órgãos.", false);
+	// } catch (Exception e) {
+	// throw new RuntimeException("Erro de configuração", e);
+	// }
+	//
+	// }
 
 	public static String[] getSystems() {
 		String systems = SwaggerServlet.getProperty("systems");
@@ -30,10 +31,7 @@ public class Utils {
 
 	public static String getName(String system) {
 		try {
-			return SwaggerUtils.getRequiredProperty(system + ".name",
-					"Não foi possível localizar propriedade que configure o nome do sistema processual: " + system
-							+ ".name",
-					false);
+			return SwaggerServlet.getProperty(system + ".name");
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
@@ -98,7 +96,8 @@ public class Utils {
 	/**
 	 * Remove os acentos da string
 	 * 
-	 * @param acentuado - String acentuada
+	 * @param acentuado
+	 *            - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcento(String acentuado) {
