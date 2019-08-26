@@ -509,11 +509,11 @@
             </div>
           </div>
         </template>
+
+      <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
+      <processo-cota ref="processoCota" :processo="numero" :sistema="sistema" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
       </div>
     </div>
-
-    <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
-    <processo-cota ref="processoCota" :processo="numero" :sistema="sistema" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
   </div>
 </template>
 
@@ -619,7 +619,6 @@ export default {
     return {
       favorito: undefined,
       timeline: TimelineBL.emptyTimeline(),
-      fixed: undefined,
       modified: undefined,
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
       sistema: undefined,
@@ -638,6 +637,7 @@ export default {
       partes: false,
       dadosComplementares: false,
       proc: undefined,
+      fixed: undefined,
       marcadores: [],
       marcasativas: true,
       notas: false

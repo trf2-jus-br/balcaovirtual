@@ -3,6 +3,7 @@ package br.jus.trf2.balcaovirtual;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
@@ -43,6 +44,10 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {
 			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) mcr.responses.get(system);
+			if (r.numero == null || r.perdecompetencia)
+				continue;
+			if (resp.numero != null)
+				throw new PresentableException("Não foi possível identificar qual sistema tem competência para o processo: " + resp.numero);
 			resp.numero = r.numero;
 			resp.sistema = system;
 			resp.orgao = r.orgao;
@@ -58,7 +63,6 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			resp.cdas = r.cdas;
 			if (r.dataultimomovimento != null)
 				resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
-			break;
 		}
 	}
 

@@ -23,6 +23,7 @@
 			<property name="hibernate.current_session_context_class"
 				value="thread" />
 			<property name="hibernate.query.substitutions" value="true 1, false 0" />
+<!-- 
 			<property name="hibernate.cache.use_second_level_cache"
 				value="true" />
 			<property name="hibernate.cache.infinispan.cachemanager"
@@ -37,6 +38,7 @@
 				value="classpath:ehcache.xml" />
 			<property name="hibernate.cache.region.factory_class"
 				value="org.jboss.as.jpa.hibernate4.infinispan.InfinispanRegionFactory" />
+ -->				
 		</properties>
 	</persistence-unit>
 </persistence>
