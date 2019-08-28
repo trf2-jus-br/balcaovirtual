@@ -1,4 +1,5 @@
 import UtilsBL from './utils.js'
+import EprocEtapa from './eproc-etapa.js'
 
 const DIA_EM_MINUTOS = 60 * 24
 
@@ -32,61 +33,79 @@ export default {
     )
   },
 
-  updateTimeline: function (sistema, movdoc, calcularTempos) {
-    var contains = function (m, a) {
-      return a.indexOf(m.movimentoLocal.codigoPaiNacional) !== -1
-    }
+  updateTimeline: function (sistema, movs, calcularTempos) {
     var timeline = this.emptyTimeline()
-    var movs = movdoc
+    timeline.sentenca.texto = sistema.includes('trf') ? 'Inteiro Teor' : 'Sentença'
+    timeline.apelacao.texto = sistema.includes('trf') ? undefined : 'TRF2'
+
+    if (sistema.includes('eproc')) {
+      this.updateTimelineEproc(timeline, movs, calcularTempos)
+    } else {
+      this.updateTimelineApolo(timeline, movs, calcularTempos)
+    }
+
+    // Calcula tempo médio e cores
+    if (calcularTempos) {
+      var ti,
+        tempoAcumulado,
+        perc, k
+      tempoAcumulado = 0
+      for (k in timeline) {
+        if (!timeline.hasOwnProperty(k)) continue
+        if (!timeline[k].contador) continue
+        timeline[k].tempoMedio = timeline[k].tempo / timeline[k].contador
+        tempoAcumulado += timeline[k].tempoMedio
+      }
+      for (k in timeline) {
+        if (!timeline.hasOwnProperty(k)) continue
+        ti = timeline[k]
+        if (!ti.contador) continue
+        perc = ti.tempoMedio / tempoAcumulado
+        ti.transito = 'verde'
+        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) ti.transito = 'laranja'
+        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) ti.transito = 'vermelho'
+        if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
+      }
+    }
+    console.log(timeline)
+    return timeline
+  },
+
+  updateTimelineEproc: function (timeline, movs, calcularTempos) {
+    var e
     var prev
     var fApelacao = false
-
-    timeline.sentenca.texto = sistema === 'br.jus.trf2.apolo' ? 'Inteiro Teor' : 'Sentença'
-    timeline.apelacao.texto = sistema === 'br.jus.trf2.apolo' ? undefined : 'TRF2'
-
-    var e
     var hora, ultHora
+    var depara = {
+      distribuicao: timeline.distribuicao,
+      'intimacao/citacao': timeline.intimacao,
+      remessa: timeline.remessa,
+      juntada: timeline.juntada,
+      devolucao: timeline.devolucao,
+      audiencia: timeline.audiencia,
+      conclusao: timeline.conclusao,
+      sentenca: timeline.sentenca,
+      suspensao: timeline.suspensao,
+      baixa: timeline.baixa
+    }
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i].mov
       e = undefined
       if (m === undefined || !m.movimentoLocal) continue
-      if (
-        contains(m, [26])
-      ) {
-        e = timeline.distribuicao
-      }
-      if (contains(m, [11, 76])) {
-        if (m.complemento[0] === 'Despacho' || m.complemento[0] === 'Decisão') {
-          e = timeline.conclusao
-        } else if (
-          m.complemento[0] === 'Sentença' ||
-          m.complemento[0] === 'Sentença/Julgamento'
-        ) {
-          e = timeline.sentenca
-        }
-      }
-      if (
-        contains(m, [78]) // Inteiro Teor
-      ) {
-        e = timeline.sentenca
-      }
-      if (contains(m, [12])) e = timeline.intimacao
-      if (contains(m, [14])) {
-        if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
+      var nome = EprocEtapa.nome(m.movimentoLocal.codigoMovimento)
+      if (!nome) continue
+      if (!depara[nome]) continue
+      e = depara[nome]
+      if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
+        if (e === timeline.remessa) {
           e = timeline.apelacao
           fApelacao = true
-        } else e = timeline.remessa
+        }
       }
-      if (contains(m, [15])) {
-        if (fApelacao) {
-          e = timeline.devolucaoapelacao
-          fApelacao = false
-        } else e = timeline.devolucao
+      if (fApelacao && e === timeline.devolucao) {
+        e = timeline.devolucaoapelacao
+        fApelacao = false
       }
-      if (contains(m, [67, 85, 581])) e = timeline.juntada
-      if (contains(m, [264, 12098, 12099])) e = timeline.suspensao
-      if (contains(m, [11385])) e = timeline.execucao
-      if (contains(m, [22])) e = timeline.baixa
       if (e) {
         if (calcularTempos) {
           if (!e.tempo) e.tempo = 0
@@ -145,49 +164,16 @@ export default {
 
       // if (e === timeline.devolucaoapelacao) break;
     }
-
-    // Calcula tempo médio e cores
-    if (calcularTempos) {
-      var ti, tempoAcumulado, perc
-      tempoAcumulado = 0
-      for (k in timeline) {
-        if (!timeline.hasOwnProperty(k)) continue
-        if (!timeline[k].contador) continue
-        timeline[k].tempoMedio = timeline[k].tempo / timeline[k].contador
-        tempoAcumulado += timeline[k].tempoMedio
-      }
-      for (k in timeline) {
-        if (!timeline.hasOwnProperty(k)) continue
-        ti = timeline[k]
-        if (!ti.contador) continue
-        perc = ti.tempoMedio / tempoAcumulado
-        ti.transito = 'verde'
-        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) {
-          ti.transito = 'laranja'
-        }
-        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) {
-          ti.transito = 'vermelho'
-        }
-        if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
-      }
-    }
-    console.log(timeline)
-    return timeline
   },
 
-  updateTimelineApolo: function (sistema, movdoc, calcularTempos) {
+  updateTimelineApolo: function (timeline, movs, calcularTempos) {
     var contains = function (m, a) {
       return a.indexOf(m.movimentoLocal.codigoMovimento) !== -1
     }
-    var timeline = this.emptyTimeline()
-    var movs = movdoc
-    var prev
-    var fApelacao = false
-
-    timeline.sentenca.texto = sistema === 'br.jus.trf2.apolo' ? 'Inteiro Teor' : 'Sentença'
-    timeline.apelacao.texto = sistema === 'br.jus.trf2.apolo' ? undefined : 'TRF2'
 
     var e
+    var prev
+    var fApelacao = false
     var hora, ultHora
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i].mov
@@ -289,33 +275,5 @@ export default {
 
       // if (e === timeline.devolucaoapelacao) break;
     }
-
-    // Calcula tempo médio e cores
-    if (calcularTempos) {
-      var ti, tempoAcumulado, perc
-      tempoAcumulado = 0
-      for (k in timeline) {
-        if (!timeline.hasOwnProperty(k)) continue
-        if (!timeline[k].contador) continue
-        timeline[k].tempoMedio = timeline[k].tempo / timeline[k].contador
-        tempoAcumulado += timeline[k].tempoMedio
-      }
-      for (k in timeline) {
-        if (!timeline.hasOwnProperty(k)) continue
-        ti = timeline[k]
-        if (!ti.contador) continue
-        perc = ti.tempoMedio / tempoAcumulado
-        ti.transito = 'verde'
-        if (ti.tempo > 15 * DIA_EM_MINUTOS && perc > 0.3) {
-          ti.transito = 'laranja'
-        }
-        if (ti.tempo > 30 * DIA_EM_MINUTOS && perc > 0.5) {
-          ti.transito = 'vermelho'
-        }
-        if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
-      }
-    }
-    console.log(timeline)
-    return timeline
   }
 }
