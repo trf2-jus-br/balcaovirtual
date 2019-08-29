@@ -13,7 +13,6 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 	@Override
 	public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,

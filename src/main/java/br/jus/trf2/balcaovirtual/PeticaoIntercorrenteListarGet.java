@@ -20,7 +20,6 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 	@Override
 	public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();

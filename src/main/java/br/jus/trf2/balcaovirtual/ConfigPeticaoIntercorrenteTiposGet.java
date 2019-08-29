@@ -20,8 +20,7 @@ public class ConfigPeticaoIntercorrenteTiposGet implements IConfigPeticaoInterco
 	@Override
 	public void run(ConfigPeticaoIntercorrenteTiposGetRequest req, ConfigPeticaoIntercorrenteTiposGetResponse resp)
 			throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		SessionsCreatePost.assertAuthorization();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {

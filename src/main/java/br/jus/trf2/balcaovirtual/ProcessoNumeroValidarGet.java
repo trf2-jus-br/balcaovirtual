@@ -19,7 +19,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 	@Override
 	public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception {
-		String auth = SessionsCreatePost.assertAuthorization();
+		SessionsCreatePost.assertAuthorization();
 		String url = null;
 		try {
 			Usuario u = SessionsCreatePost.assertUsuario();

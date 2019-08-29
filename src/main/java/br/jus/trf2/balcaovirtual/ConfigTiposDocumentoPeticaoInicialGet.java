@@ -19,7 +19,7 @@ public class ConfigTiposDocumentoPeticaoInicialGet implements IConfigTiposDocume
 	@Override
 	public void run(ConfigTiposDocumentoPeticaoInicialGetRequest req,
 			ConfigTiposDocumentoPeticaoInicialGetResponse resp) throws Exception {
-		SessionsCreatePost.assertUsuarioAutorizado();
+		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync(
 				"obter tipos de documento para petição inicial", null, "GET",

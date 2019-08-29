@@ -16,6 +16,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
+
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 
@@ -26,6 +28,11 @@ public class UploadServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
+		try {
+			SessionsCreatePost.assertAuthorization();
+		} catch (SwaggerAuthorizationException e) {
+			throw new ServletException("É necessário estar autenticado para enviar aquivos.");
+		}
 		String dirFinal = Utils.getDirFinal();
 		String dirTemp = Utils.getDirTemp();
 

@@ -12,6 +12,7 @@ public class ArquivoTemporarioPdfGet implements IArquivoTemporarioPdfGet {
 
 	@Override
 	public void run(ArquivoTemporarioPdfGetRequest req, ArquivoTemporarioPdfGetResponse resp) throws Exception {
+		SessionsCreatePost.assertAuthorization();
 		byte[] ab = Files.readAllBytes(Paths.get(Utils.getDirFinal() + "/" + req.pdf + ".pdf"));
 		resp.contentlength = (long) ab.length;
 		resp.contentdisposition = "inline;filename=" + req.pdf + ".pdf";

@@ -19,7 +19,6 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 
 	@Override
 	public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();

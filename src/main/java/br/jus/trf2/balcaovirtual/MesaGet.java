@@ -17,8 +17,8 @@ public class MesaGet implements IMesaGet {
 
 	@Override
 	public void run(MesaGetRequest req, MesaGetResponse resp) throws Exception {
-//		String authorization = SessionsCreatePost.assertAuthorization();
-//		Usuario u = SessionsCreatePost.assertUsuario();
+		String authorization = SessionsCreatePost.assertAuthorization();
+		Usuario u = SessionsCreatePost.assertUsuario();
 //		if (!u.isInterno())
 //			throw new Exception("Mesas só podem ser acessadas por usuários internos");
 //
