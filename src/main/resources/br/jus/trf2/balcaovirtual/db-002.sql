@@ -1,5 +1,5 @@
 -- cria a nova tabela que guardar sinalizações em processos (favorito/recente)
-CREATE TABLE `balcao_virtual`.`sinal` (
+CREATE TABLE sinal (
   `SINA_ID` INT NOT NULL AUTO_INCREMENT COMMENT 'Id do sinal',
   `SINA_CD_USU` VARCHAR(30) NOT NULL COMMENT 'Username do usuário',
   `SINA_LG_INTERNO` TINYINT NOT NULL COMMENT 'Indica se usuário é interno ou externo',
@@ -9,11 +9,11 @@ CREATE TABLE `balcao_virtual`.`sinal` (
   PRIMARY KEY (`SINA_ID`))
 COMMENT = 'Sinalização de processos favoritos e recentes';
 
-ALTER TABLE `balcao_virtual`.`sinal` 
+ALTER TABLE sinal 
 ADD UNIQUE INDEX `UK_SINA_USU_PROC` (`SINA_CD_USU` ASC, `SINA_LG_INTERNO` ASC, `SINA_CD_PROC` ASC);
 
 -- altera a tabela de marca para incluir o username (cd_usu)
-ALTER TABLE `balcao_virtual`.`marca` 
+ALTER TABLE marca 
 CHANGE COLUMN `MARC_LG_INTERNO` `MARC_LG_INTERNO` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'Indica se o usuário é interno ou externo' ,
 ADD COLUMN `MARC_CD_USU` VARCHAR(30) NOT NULL COMMENT 'Username do usuário' AFTER `MARC_DF_ALTERACAO`;
 

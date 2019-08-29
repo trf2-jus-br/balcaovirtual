@@ -1,4 +1,4 @@
-CREATE TABLE `trfBalcaoVirtual`.`nota` (
+CREATE TABLE `nota` (
   `NOTA_ID` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador da nota',
   `PROC_ID` INT NOT NULL COMMENT 'Identificador do processo',
   `NOTA_LG_PESSOAL` TINYINT NOT NULL DEFAULT 0 COMMENT 'Indica se a nota é pessoal ou da unidade',
@@ -14,7 +14,7 @@ CREATE TABLE `trfBalcaoVirtual`.`nota` (
   UNIQUE INDEX `UK_PROC_PESSOAL` (`PROC_ID` ASC, `NOTA_LG_PESSOAL` ASC, `NOTA_LG_INTERNO` ASC, `NOTA_IE_USU` ASC),
   CONSTRAINT `FK_NOTA_PROC_ID`
     FOREIGN KEY (`PROC_ID`)
-    REFERENCES `balcao_virtual`.`processo` (`PROC_ID`)
+    REFERENCES `processo` (`PROC_ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 COMMENT = 'Armazena notas relativas ao processo, as notas podem ser pessoais ou da unidade/grupo';
