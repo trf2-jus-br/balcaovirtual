@@ -1,0 +1,43 @@
+{
+  "icons": [
+    {
+      "src": "/balcaovirtual/static/icons/icon_512x512.fb754f2a98a4f06c21d8178f11949340.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/balcaovirtual/static/icons/icon_384x384.f6089f74ae314cba3e47deb73cec031e.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/balcaovirtual/static/icons/icon_256x256.c9f89dccd3074bfc2f988a78ceec71bd.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/balcaovirtual/static/icons/icon_192x192.45a00d564ea8d7bf8640c81c3cd34f40.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/balcaovirtual/static/icons/icon_128x128.aa2d34248c9a8beb0b201107e8d0d9cd.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/balcaovirtual/static/icons/icon_96x96.bf63c29177172a2ddc389430ed2b966f.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Balcão Virtual",
+  "short_name": "Balcão Virtual",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "/balcaovirutal/index.html",
+  "description": "Interface para acesso aos sistemas processuais.",
+  "background_color": "#212529",
+  "theme_color": "#212529",
+  "theme-color": "#212529"
+}

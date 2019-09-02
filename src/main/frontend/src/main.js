@@ -75,3 +75,14 @@ new Vue({
     App
   }
 })
+
+var regServiceWorker = function() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js', {
+      scope: '/balcaovirtual/'
+    }).then(() => console.log('Service Worker registered successfully.')).catch(error => console.log('Service Worker registration failed:', error))
+  }
+}
+
+regServiceWorker()
+
