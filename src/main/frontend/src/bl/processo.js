@@ -247,8 +247,8 @@ export default {
           for (k = 0; k < ff.length; k++) {
             if (
               (ff[k] === '#marca' && a[i].marca && a[i].marca.length > 0) ||
-              (a[i].mov && a[i].mov.tipo && a[i].mov.tipo === ff[k])
-            ) {
+              (a[i].mov && a[i].mov.tipo && a[i].mov.tipo.includes(ff[k]))
+              ) {
               fs.push(a[i])
               break
             }

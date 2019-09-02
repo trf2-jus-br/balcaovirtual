@@ -79,9 +79,9 @@ export default {
     var depara = {
       distribuicao: timeline.distribuicao,
       'intimacao/citacao': timeline.intimacao,
-      remessa: timeline.remessa,
+      remessa: undefined,
       juntada: timeline.juntada,
-      devolucao: timeline.devolucao,
+      devolucao: undefined,
       audiencia: timeline.audiencia,
       conclusao: timeline.conclusao,
       sentenca: timeline.sentenca,
@@ -96,6 +96,21 @@ export default {
       if (!nome) continue
       if (!depara[nome]) continue
       e = depara[nome]
+      if (e === timeline.intimacao) {
+        if (timeline.intimacao.contador) timeline.intimacao.contador += 1
+        else timeline.intimacao.contador = 1
+        timeline.intimacao.passou = true
+        m.tipo = '#intimacao'
+        if (m.complemento && m.complemento.length >= 2 && m.complemento[2].includes('Status: FECHADO')) {
+          if (timeline.remessa.contador) timeline.remessa.contador += 1
+          else timeline.remessa.contador = 1
+          timeline.remessa.passou = true
+          m.tipo += ' #remessa'
+          e = timeline.devolucao
+        } else {
+          e = timeline.remessa
+        }
+      }
       if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
         if (e === timeline.remessa) {
           e = timeline.apelacao
@@ -119,7 +134,7 @@ export default {
 
         for (var key in timeline) {
           if (timeline.hasOwnProperty(key) && e === timeline[key]) {
-            m.tipo = '#' + key
+            m.tipo = (m.tipo !== undefined) ? m.tipo + ' #' + key : '#' + key
           }
         }
         e.passou = true
@@ -139,6 +154,10 @@ export default {
           }
           if (m.complemento && m.complemento.length > 1) {
             e.complemento[1] = UtilsBL.trunc(m.complemento[1], 30, true)
+          }
+          if (m.complemento && m.complemento.length > 2) {
+            var c = m.complemento[2]
+            if (c && c.includes('Parte: ')) e.complemento[1] = UtilsBL.trunc(c.substring(c.indexOf('Parte: ')), 30, true)
           }
           if (
             m.complemento &&

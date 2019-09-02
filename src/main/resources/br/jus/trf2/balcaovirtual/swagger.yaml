@@ -1442,6 +1442,29 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /recurso/{arquivo}:
+    get:
+      description: Obter arquivo pelo nome
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/arquivo"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: text/xml
+            Content-Disposition:
+              type: string
+              description: attachment
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
 
 ################################################################################
 #                                     Definitions                              #

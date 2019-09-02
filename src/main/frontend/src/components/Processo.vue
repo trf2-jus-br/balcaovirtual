@@ -25,7 +25,7 @@
               Processo
               <span v-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
                 Digital</span>
-              <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
+              <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
                 Físico</span> {{proc.dadosBasicos.numero}}
               <a v-if="this.favorito !== undefined && !this.favorito" href="" @click.prevent="favoritar(true)">
                 <span class="fa fa-star-o icone-em-linha" title="Acrescentar à lista de processos favoritos"></span>

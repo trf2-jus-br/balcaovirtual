@@ -13,7 +13,7 @@
 	xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
 
 	<wsdl:import namespace="http://www.cnj.jus.br"
-		location="http://localhost:8080/balcaovirtual/mniwsdl0.xml" />
+		location="http://localhost:8080/balcaovirtual/api/v1/recurso/mniwsdl0.xml" />
 	<wsdl:types />
 	<wsdl:binding name="servico-intercomunicacao-2.2.2SOAP"
 		type="i0:servico-intercomunicacao-2.2.2">
