@@ -31,7 +31,7 @@ public class Utils {
 
 	public static String getName(String system) {
 		try {
-			return SwaggerServlet.getProperty(system + ".name");
+			return SwaggerServlet.getProperty(system.toLowerCase() + ".name");
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
