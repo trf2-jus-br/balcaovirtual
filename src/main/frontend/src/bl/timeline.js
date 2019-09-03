@@ -11,7 +11,6 @@ export default {
           passou: true
         },
         distribuicao: {},
-        primeirodespacho: {},
         intimacao: {},
         remessa: {},
         devolucao: {},
@@ -79,47 +78,67 @@ export default {
     var depara = {
       distribuicao: timeline.distribuicao,
       'intimacao/citacao': timeline.intimacao,
-      remessa: undefined,
+      remessa: timeline.remessa,
       juntada: timeline.juntada,
-      devolucao: undefined,
+      devolucao: timeline.devolucao,
       audiencia: timeline.audiencia,
       conclusao: timeline.conclusao,
       sentenca: timeline.sentenca,
       suspensao: timeline.suspensao,
-      baixa: timeline.baixa
+      baixa: timeline.baixa,
+      apelacao: timeline.apelacao
     }
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i].mov
       e = undefined
       if (m === undefined || !m.movimentoLocal) continue
       var nome = EprocEtapa.nome(m.movimentoLocal.codigoMovimento)
-      if (!nome) continue
-      if (!depara[nome]) continue
-      e = depara[nome]
-      if (e === timeline.intimacao) {
-        if (timeline.intimacao.contador) timeline.intimacao.contador += 1
-        else timeline.intimacao.contador = 1
-        timeline.intimacao.passou = true
-        m.tipo = '#intimacao'
-        if (m.complemento && m.complemento.length >= 2 && m.complemento[2].includes('Status: FECHADO')) {
-          if (timeline.remessa.contador) timeline.remessa.contador += 1
-          else timeline.remessa.contador = 1
-          timeline.remessa.passou = true
-          m.tipo += ' #remessa'
-          e = timeline.devolucao
-        } else {
-          e = timeline.remessa
+      if (!nome && m.movimentoLocal.codigoMovimento === 2147483647) {
+        if (m.movimentoLocal.descricao) {
+          var c = m.movimentoLocal.descricao
+          if (c.startsWith('Distribuição-Sorteio Automático') || c.startsWith('Redistribuição')) e = timeline.distribuicao
+          else if (c.startsWith('Intimação')) e = timeline.intimacao
+          else if (c.startsWith('Remessa, Carga - TRF - 2ª Região')) e = timeline.apelacao
+          else if (c.startsWith('Remessa, Carga')) e = timeline.remessa
+          else if (c.startsWith('Devolução de Remessa')) e = timeline.devolucao
+          else if (c.startsWith('Juntada')) e = timeline.juntada
+          else if (c.startsWith('Audiência')) e = timeline.audiencia
+          else if (c.startsWith('Conclusão - Sentença') || c.startsWith('Inteiro Teor')) e = timeline.sentenca
+          else if (c.startsWith('Conclusão')) e = timeline.conclusao
+          else if (c.startsWith('Suspensão')) e = timeline.suspensao
+          else if (c.startsWith('Procedimento de Execução de Sentença')) e = timeline.execucao
+          else if (c.startsWith('Baixa')) e = timeline.baixa
+          else continue
         }
-      }
-      if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
-        if (e === timeline.remessa) {
-          e = timeline.apelacao
-          fApelacao = true
+      } else {
+        if (!nome) continue
+        if (!depara[nome]) continue
+        e = depara[nome]
+        if (e === timeline.intimacao) {
+          if (timeline.intimacao.contador) timeline.intimacao.contador += 1
+          else timeline.intimacao.contador = 1
+          timeline.intimacao.passou = true
+          m.tipo = '#intimacao'
+          if (m.complemento && m.complemento.length >= 3 && m.complemento[2].includes('Status: FECHADO')) {
+            if (timeline.remessa.contador) timeline.remessa.contador += 1
+            else timeline.remessa.contador = 1
+            timeline.remessa.passou = true
+            m.tipo += ' #remessa'
+            e = timeline.devolucao
+          } else {
+            e = timeline.remessa
+          }
         }
-      }
-      if (fApelacao && e === timeline.devolucao) {
-        e = timeline.devolucaoapelacao
-        fApelacao = false
+        if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
+          if (e === timeline.remessa) {
+            e = timeline.apelacao
+            fApelacao = true
+          }
+        }
+        if (fApelacao && e === timeline.devolucao) {
+          e = timeline.devolucaoapelacao
+          fApelacao = false
+        }
       }
       if (e) {
         if (calcularTempos) {
@@ -156,7 +175,7 @@ export default {
             e.complemento[1] = UtilsBL.trunc(m.complemento[1], 30, true)
           }
           if (m.complemento && m.complemento.length > 2) {
-            var c = m.complemento[2]
+            c = m.complemento[2]
             if (c && c.includes('Parte: ')) e.complemento[1] = UtilsBL.trunc(c.substring(c.indexOf('Parte: ')), 30, true)
           }
           if (
