@@ -154,14 +154,18 @@ export default {
       if (n === '') return
       this.$http.get('processo/' + n + '/validar', { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
-          if (!response.data.usuarioautorizado) {
+          if (response.data.unidade && !response.data.usuarioautorizado) {
             this.errormsg = 'Processo em segredo de justiça. (' + response.data.unidade + ')'
+            return
+          }
+          if (!response.data.numero) {
+            this.errormsg = `Processo "${this.numero}" não encontrado em: ${this.$parent.nomesSistemas}`
             return
           }
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
         },
         error => {
-          this.errormsg = error.data.errormsg || `Não foi possível obter informações sobre o processo "${this.numero}"`
+          this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`
         })
     }
   }

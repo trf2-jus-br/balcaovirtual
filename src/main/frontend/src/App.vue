@@ -166,6 +166,18 @@ export default {
       this.$http.get('test?skip=all').then(response => {
         this.test = response.data
 
+        if (this.test.properties['balcaovirtual.systems']) {
+          this.nomesSistemas = ''
+          var a = this.test.properties['balcaovirtual.systems'].split(',')
+          for (var i = 0; i < a.length; i++) {
+            if (i > 0) {
+              if (i === a.length - 1) this.nomesSistemas += ' e '
+              else this.nomesSistemas += ', '
+            }
+            this.nomesSistemas += this.test.properties['balcaovirtual.' + a[i] + '.name']
+          }
+        }
+
         if (this.test.properties['balcaovirtual.wootric.token'] &&
           this.test.properties['balcaovirtual.wootric.token'] !== '[undefined]' &&
           this.jwt) {
@@ -185,6 +197,7 @@ export default {
       blockCounter: 0,
       loading: false,
       test: { properties: {} },
+      nomesSistemas: undefined,
       errormsg: undefined,
       settings: {
         timeline: undefined,
