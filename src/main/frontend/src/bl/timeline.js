@@ -1,5 +1,4 @@
 import UtilsBL from './utils.js'
-import EprocEtapa from './eproc-etapa.js'
 
 const DIA_EM_MINUTOS = 60 * 24
 
@@ -75,45 +74,50 @@ export default {
     var prev
     var fApelacao = false
     var hora, ultHora
-    var depara = {
-      distribuicao: timeline.distribuicao,
-      'intimacao/citacao': timeline.intimacao,
-      remessa: timeline.remessa,
-      juntada: timeline.juntada,
-      devolucao: timeline.devolucao,
-      audiencia: timeline.audiencia,
-      conclusao: timeline.conclusao,
-      sentenca: timeline.sentenca,
-      suspensao: timeline.suspensao,
-      baixa: timeline.baixa,
-      apelacao: timeline.apelacao
-    }
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i].mov
       e = undefined
       if (m === undefined || !m.movimentoLocal) continue
-      var nome = EprocEtapa.nome(m.movimentoLocal.codigoMovimento)
-      if (!nome && m.movimentoLocal.codigoMovimento === 2147483647) {
+      if (m.movimentoLocal.codigoMovimento === 2147483647) {
         if (m.movimentoLocal.descricao) {
-          var c = m.movimentoLocal.descricao
-          if (c.startsWith('Distribuição-Sorteio Automático') || c.startsWith('Redistribuição')) e = timeline.distribuicao
-          else if (c.startsWith('Intimação')) e = timeline.intimacao
-          else if (c.startsWith('Remessa, Carga - TRF - 2ª Região')) e = timeline.apelacao
-          else if (c.startsWith('Remessa, Carga')) e = timeline.remessa
-          else if (c.startsWith('Devolução de Remessa')) e = timeline.devolucao
-          else if (c.startsWith('Juntada')) e = timeline.juntada
-          else if (c.startsWith('Audiência')) e = timeline.audiencia
-          else if (c.startsWith('Conclusão - Sentença') || c.startsWith('Inteiro Teor')) e = timeline.sentenca
-          else if (c.startsWith('Conclusão')) e = timeline.conclusao
-          else if (c.startsWith('Suspensão')) e = timeline.suspensao
-          else if (c.startsWith('Procedimento de Execução de Sentença')) e = timeline.execucao
-          else if (c.startsWith('Baixa')) e = timeline.baixa
+          var c = UtilsBL.slugify(m.movimentoLocal.descricao)
+          if (UtilsBL.startsWith(c, 'distribuicao-sorteio-automatico', 'redistribuicao')) e = timeline.distribuicao
+          else if (UtilsBL.startsWith(c, 'intimacao')) e = timeline.intimacao
+          else if (UtilsBL.startsWith(c, 'remessa-carga-trf-2-regiao')) {
+            e = timeline.apelacao
+            fApelacao = true
+          } else if (UtilsBL.startsWith(c, 'remessa-carga')) e = timeline.remessa
+          else if (UtilsBL.startsWith(c, 'devolucao-de-remessa')) e = timeline.devolucao
+          else if (UtilsBL.startsWith(c, 'juntada')) e = timeline.juntada
+          else if (UtilsBL.startsWith(c, 'audiencia')) e = timeline.audiencia
+          else if (UtilsBL.startsWith(c, 'conclusao-sentenca', 'conclusao-para-sentenca', 'inteiro-teor')) e = timeline.sentenca
+          else if (UtilsBL.startsWith(c, 'conclusao')) e = timeline.conclusao
+          else if (UtilsBL.startsWith(c, 'suspensao')) e = timeline.suspensao
+          else if (UtilsBL.startsWith(c, 'procedimento-de-execucao-de-sentenca')) e = timeline.execucao
+          else if (UtilsBL.startsWith(c, 'baixa')) e = timeline.baixa
           else continue
+          if (fApelacao && e === timeline.devolucao) {
+            e = timeline.devolucaoapelacao
+            fApelacao = false
+          }
         }
       } else {
-        if (!nome) continue
-        if (!depara[nome]) continue
-        e = depara[nome]
+        if (m.movimentoLocal.descricao) {
+          c = UtilsBL.slugify(m.movimentoLocal.descricao)
+          if (UtilsBL.startsWith(c, 'distribuido', 'distribuicao', 'redistribuicao')) e = timeline.distribuicao
+          else if (UtilsBL.startsWith(c, 'intimacao-em-secretaria', 'intimacao-eletronica', 'citacao-eletronica-expedida-certificada', 'citacao-do-reu') && !UtilsBL.startsWith(c, 'intimacao-eletronica-confirmada')) e = timeline.intimacao
+          else if (UtilsBL.startsWith(c, 'peticao-protocolada-juntada', 'juntada', 'lavrada-certidao', 'juntado', 'peticao')) e = timeline.juntada
+          else if (UtilsBL.startsWith(c, 'audiencia-designada', 'audiencia-redesignada', 'audiencia-prorrogada', 'audiencia-convertida-em-diligencia', 'audiencia-realizada', 'audiencia-adiada')) e = timeline.audiencia
+          else if (UtilsBL.startsWith(c, 'ato-ordinatorio', 'despacho-decisao-arquivamento', 'decisao-despacho', 'despacho-decisao')) e = timeline.conclusao
+          else if (UtilsBL.startsWith(c, 'sentenca', 'inteiro-teor-ementa-acordao', 'relatorio-do-acordao')) e = timeline.sentenca
+          else if (UtilsBL.startsWith(c, 'suspensao-sobrestamento')) e = timeline.suspensao
+          else if (UtilsBL.startsWith(c, 'baixa-definitiva', 'baixa-processo-eletronico-baixado', 'cancelamento-de-distribuicao')) e = timeline.baixa
+          else if (UtilsBL.startsWith(c, 'remessa-externa') && c.includes('trf2')) e = timeline.apelacao
+          else if (UtilsBL.startsWith(c, 'remessa-externa')) e = timeline.remessa
+          else if (UtilsBL.startsWith(c, 'recebimento-trf2')) e = timeline.devolucaoapelacao
+          else if (UtilsBL.startsWith(c, 'recebimento') && !UtilsBL.startsWith(c, 'recebimento-movimentado-por')) e = timeline.devolucao
+          else continue
+        }
         if (e === timeline.intimacao) {
           if (timeline.intimacao.contador) timeline.intimacao.contador += 1
           else timeline.intimacao.contador = 1
@@ -128,16 +132,6 @@ export default {
           } else {
             e = timeline.remessa
           }
-        }
-        if (m.complemento && m.complemento[0] === 'TRF - 2ª Região') {
-          if (e === timeline.remessa) {
-            e = timeline.apelacao
-            fApelacao = true
-          }
-        }
-        if (fApelacao && e === timeline.devolucao) {
-          e = timeline.devolucaoapelacao
-          fApelacao = false
         }
       }
       if (e) {

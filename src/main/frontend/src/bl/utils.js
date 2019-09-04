@@ -202,5 +202,22 @@ export default {
       if (utf8length > length) return string.substring(0, n)
     }
     return string
+  },
+
+  slugify: function(text) {
+    const a = 'àáäâãèéëêìíïîòóöôùúüûñçßÿœæŕśńṕẃǵǹḿǘẍźḧ·/_,:;'
+    const b = 'aaaaaeeeeiiiioooouuuuncsyoarsnpwgnmuxzh------'
+    const p = new RegExp(a.split('').join('|'), 'g')
+    return text.toString().toLowerCase().trim()
+      .replace(p, c => b.charAt(a.indexOf(c))) // Replace special chars
+      .replace(/&/g, '-and-') // Replace & with 'and'
+      .replace(/[\s\W-]+/g, '-') // Replace spaces, non-word characters and dashes with a single dash (-)
+  },
+
+  startsWith: function(s) {
+    for (var i = 1; i < arguments.length; i++) {
+      if (s.startsWith(arguments[i])) return true
+    }
+    return false
   }
 }
