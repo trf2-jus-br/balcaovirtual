@@ -28,8 +28,8 @@ import com.crivano.swaggerservlet.SwaggerUtils;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRequest;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetResponse;
 
 public class SessionsCreatePost implements ISessionsCreatePost {
 	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
@@ -53,31 +53,14 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		for (String system : systems) {
 			String urlsys = Utils.getApiUrl(system);
 
-			UsuarioWebUsernameGetRequest q = new UsuarioWebUsernameGetRequest();
+			UsuarioUsernameGetRequest q = new UsuarioUsernameGetRequest();
 			q.username = req.username;
 			mapp.put(system, new SwaggerCallParameters(system + "-autenticar-usuário", authorization, "GET",
-					urlsys + "/usuario-web/" + req.username, q, UsuarioWebUsernameGetResponse.class));
+					urlsys + "/usuario/" + req.username, q, UsuarioUsernameGetResponse.class));
 
 		}
 
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, TIMEOUT_MILLISECONDS);
-
-		// TODO: Tratar o caso do usuário interno (int) para o Apolo!
-		// String origem = "int";
-		// UsuarioWebUsernameGetResponse r;
-		// try {
-		// r = wsAutenticar(origem, req.username, req.password);
-		// } catch (Exception ex) {
-		// origem = null;
-		// try {
-		// r = wsAutenticar(origem, req.username, req.password);
-		// } catch (Exception ex2) {
-		// if (ex.getMessage().contains("unknown path"))
-		// throw ex2;
-		// else
-		// throw ex;
-		// }
-		// }
 
 		String origem = null;
 		String usuarios = null;
@@ -85,7 +68,13 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		String nome = null;
 		String email = null;
 		for (String system : mcr.responses.keySet()) {
-			UsuarioWebUsernameGetResponse u = (UsuarioWebUsernameGetResponse) mcr.responses.get(system);
+			UsuarioUsernameGetResponse u = (UsuarioUsernameGetResponse) mcr.responses.get(system);
+			if (u.codusu == null)
+				continue;
+			if (origem == null)
+				origem = u.interno ? "int" : "ext";
+			else if (!origem.equals(u.interno ? "int" : "ext"))
+				throw new Exception("Usuário não pode ser interno em um sistema e externo em outro");
 			if (u.cpf != null)
 				cpf = u.cpf;
 			if (u.nome != null)
@@ -135,7 +124,6 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 
 		String orgao;
 		String codusu;
-		String codusuweb;
 		String codunidade;
 		String perfil;
 		String system;

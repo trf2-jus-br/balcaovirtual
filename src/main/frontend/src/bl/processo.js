@@ -72,6 +72,7 @@ export default {
           mov.movimentoLocal.descricao
         ) {
           for (k = 0; k < mov.complemento.length; k++) {
+            if (mov.complemento[k].startsWith('Movimentado por:')) continue
             if (mov.movimentoLocal.descricao !== mov.complemento[k]) {
               if (
                 mov.complemento[k].indexOf(mov.movimentoLocal.descricao) === 0

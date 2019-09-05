@@ -13,7 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoListarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoConfirmadoListarGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoConfirmadoListarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisoConfirmadoListarGetResponse;
 
 public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 
@@ -31,11 +31,11 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter quantidade de avisos confirmado",
 							"Bearer " + authorization, "GET",
-							Utils.getApiUrl(system) + "/usuario-web/" + jwt.get("username")
+							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/aviso-confirmado/listar?dataInicial=" + req.datainicial + "&dataFinal="
 									+ datafinal + "&confirmacao=" + req.confirmacao.toString() + "&omissao="
 									+ req.omissao.toString() + "&grupo=" + req.grupo.toString(),
-							null, UsuarioWebUsernameAvisoConfirmadoListarGetResponse.class));
+							null, UsuarioUsernameAvisoConfirmadoListarGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
@@ -44,7 +44,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 		resp.status = new ArrayList<>();
 
 		for (String system : mcr.responses.keySet()) {
-			UsuarioWebUsernameAvisoConfirmadoListarGetResponse r = (UsuarioWebUsernameAvisoConfirmadoListarGetResponse) mcr.responses
+			UsuarioUsernameAvisoConfirmadoListarGetResponse r = (UsuarioUsernameAvisoConfirmadoListarGetResponse) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (br.jus.trf2.sistemaprocessual.ISistemaProcessual.Aviso ra : r.list) {

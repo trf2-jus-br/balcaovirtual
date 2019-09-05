@@ -36,7 +36,7 @@ export default {
         var b = a[i].split(',')
         decoded.parsedUsers[b[0]] = {
           ieusu: b[1],
-          ieunidade: b[2],
+          ieunidade: b[2] === 'null' ? undefined : b[2],
           perfil: b[3]
         }
       }

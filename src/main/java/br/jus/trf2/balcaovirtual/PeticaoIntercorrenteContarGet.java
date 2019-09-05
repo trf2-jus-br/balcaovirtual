@@ -13,7 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetReq
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.QuantidadePorData;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Contagem;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteContarGetResponse;
 
 public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteContarGet {
 
@@ -26,16 +26,16 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente", null, "GET",
-							Utils.getApiUrl(system) + "/usuario-web/" + jwt.get("username")
+							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/peticao-intercorrente/contar?dias=7",
-							null, UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse.class));
+							null, UsuarioUsernamePeticaoIntercorrenteContarGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse r = (UsuarioWebUsernamePeticaoIntercorrenteContarGetResponse) mcr.responses
+			UsuarioUsernamePeticaoIntercorrenteContarGetResponse r = (UsuarioUsernamePeticaoIntercorrenteContarGetResponse) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (Contagem i : r.list) {

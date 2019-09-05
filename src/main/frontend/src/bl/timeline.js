@@ -118,7 +118,7 @@ export default {
           else if (UtilsBL.startsWith(c, 'recebimento') && !UtilsBL.startsWith(c, 'recebimento-movimentado-por')) e = timeline.devolucao
           else continue
         }
-        if (e === timeline.intimacao) {
+        if (e === timeline.intimacao && !UtilsBL.startsWith(c, 'intimacao-em-secretaria')) {
           if (timeline.intimacao.contador) timeline.intimacao.contador += 1
           else timeline.intimacao.contador = 1
           timeline.intimacao.passou = true

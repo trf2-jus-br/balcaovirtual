@@ -13,7 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetReq
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteResumo;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PeticaoIntercorrente;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteListarGetResponse;
 
 public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteListarGet {
 
@@ -26,16 +26,16 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter resumos de petições intercorrentes", null, "GET",
-							Utils.getApiUrl(system) + "/usuario-web/" + jwt.get("username")
+							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/peticao-intercorrente/listar?data=" + req.data,
-							null, UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse.class));
+							null, UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse r = (UsuarioWebUsernamePeticaoIntercorrenteListarGetResponse) mcr.responses
+			UsuarioUsernamePeticaoIntercorrenteListarGetResponse r = (UsuarioUsernamePeticaoIntercorrenteListarGetResponse) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (PeticaoIntercorrente i : r.list) {

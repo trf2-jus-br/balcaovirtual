@@ -13,7 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoContarGetResponse
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoConfirmadoContarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.QuantidadeConfirmadaPorData;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.QuantidadeConfirmada;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioWebUsernameAvisoConfirmadoContarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisoConfirmadoContarGetResponse;
 
 public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 
@@ -27,16 +27,16 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter quantidade de avisos confirmado",
 							"Bearer " + authorization, "GET",
-							Utils.getApiUrl(system) + "/usuario-web/" + jwt.get("username")
+							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/aviso-confirmado/contar?dias=100",
-							null, UsuarioWebUsernameAvisoConfirmadoContarGetResponse.class));
+							null, UsuarioUsernameAvisoConfirmadoContarGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioWebUsernameAvisoConfirmadoContarGetResponse r = (UsuarioWebUsernameAvisoConfirmadoContarGetResponse) mcr.responses
+			UsuarioUsernameAvisoConfirmadoContarGetResponse r = (UsuarioUsernameAvisoConfirmadoContarGetResponse) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (QuantidadeConfirmada i : r.list) {

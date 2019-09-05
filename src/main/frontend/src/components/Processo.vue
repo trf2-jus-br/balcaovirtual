@@ -571,7 +571,7 @@ export default {
                   }
 
                   // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
-                  var interno = !!this.$parent.jwt.origin && false
+                  var interno = (this.$parent.jwt.origin === 'int') && false
                   this.fixed = ProcessoBL.fixProc(this.proc)
                   this.timeline = TimelineBL.updateTimeline(
                     this.sistema,

@@ -23,10 +23,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		String url = null;
 		try {
 			Usuario u = SessionsCreatePost.assertUsuario();
-			if (u.isInterno())
-				url = "/usuario/" + u.usuario + "/processo/" + req.numero;
-			else
-				url = "/usuario-web/" + u.usuario + "/processo/" + req.numero;
+			url = "/usuario/" + u.usuario + "/processo/" + req.numero;
 		} catch (Exception e) {
 			url = "/processo/validar/" + req.numero;
 		}

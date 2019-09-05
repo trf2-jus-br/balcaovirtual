@@ -82,7 +82,7 @@ export default {
 
   computed: {
     estilosfiltrados: function () {
-      var interno = !!this.$parent.$parent.jwt.origin
+      var interno = this.$parent.$parent.jwt.origin === 'int'
       return this.estilos.filter((i) => i.interno === interno)
     }
   },
@@ -97,7 +97,7 @@ export default {
       if (this.editando) {
         this.estilo = estilo
       } else {
-        this.estilo = this.$parent.$parent.jwt.origin ? '2' : '4'
+        this.estilo = (this.$parent.$parent.jwt.origin === 'int') ? '2' : '4'
       }
       this.$refs.etiqueta.show()
       this.errormsg = undefined

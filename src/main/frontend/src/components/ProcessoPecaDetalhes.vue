@@ -55,6 +55,8 @@ export default {
   name: 'processo-peca-detalhes',
   data () {
     return {
+      interno: this.$parent.$parent.jwt.origin === 'int',
+      ieunidade: this.$parent.$parent.jwt.parsedUsers[this.$parent.sistema].ieunidade,
       editando: false,
       texto: '',
       marcadores: [],
@@ -70,28 +72,31 @@ export default {
         {
           text: 'Pessoal (int)',
           value: '1',
-          interno: true
+          interno: true,
+          pessoal: true
         }, {
           text: 'Unidade (int)',
           value: '2',
-          interno: true
+          interno: true,
+          pessoal: false
         },
         {
           text: 'Pessoal (ext)',
           value: '3',
-          interno: false
+          interno: false,
+          pessoal: true
         }, {
           text: 'Grupo (ext)',
           value: '4',
-          interno: false
+          interno: false,
+          pessoal: false
         }]
     }
   },
 
   computed: {
     estilosfiltrados: function () {
-      var interno = !!this.$parent.$parent.jwt.origin
-      return this.estilos.filter((i) => i.interno === interno)
+      return this.estilos.filter((i) => i.interno === this.interno && (i.pessoal || (this.interno && this.ieunidade) || (!this.interno && i.ieentidade)))
     }
   },
 
@@ -119,7 +124,7 @@ export default {
       } else {
         this.texto = undefined
         this.editando = false
-        this.estilo = this.$parent.$parent.jwt.origin ? '2' : '4'
+        this.estilo = (this.$parent.$parent.jwt.origin === 'int') ? (this.ieunidade ? '2' : '1') : '3'
       }
       if (this.paginicial === undefined) this.paginicial = this.pagmin
       if (this.pagfinal === undefined) this.pagfinal = this.pagmax
