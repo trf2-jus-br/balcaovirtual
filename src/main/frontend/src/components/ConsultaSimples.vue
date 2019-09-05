@@ -159,7 +159,7 @@ export default {
             return
           }
           if (!response.data.numero) {
-            this.errormsg = `Processo "${this.numero}" não encontrado em: ${this.$parent.nomesSistemas}`
+            this.errormsg = `Processo "${this.numero}" não encontrado`
             return
           }
           this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
