@@ -576,7 +576,8 @@ export default {
                   this.timeline = TimelineBL.updateTimeline(
                     this.sistema,
                     this.fixed.movdoc,
-                    interno
+                    interno,
+                    this.proc.dadosBasicos.classeProcessual
                   )
                   this.getDescriptions()
                   this.getMarcadores()

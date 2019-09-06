@@ -31,13 +31,13 @@ export default {
     )
   },
 
-  updateTimeline: function (sistema, movs, calcularTempos) {
+  updateTimeline: function (sistema, movs, calcularTempos, classeProcessual) {
     var timeline = this.emptyTimeline()
     timeline.sentenca.texto = sistema.includes('trf') ? 'Inteiro Teor' : 'Sentença'
     timeline.apelacao.texto = sistema.includes('trf') ? undefined : 'TRF2'
 
     if (sistema.includes('eproc')) {
-      this.updateTimelineEproc(timeline, movs, calcularTempos)
+      this.updateTimelineEproc(timeline, movs, calcularTempos, classeProcessual)
     } else {
       this.updateTimelineApolo(timeline, movs, calcularTempos)
     }
@@ -65,15 +65,21 @@ export default {
         if (ti.tempo > 60 * DIA_EM_MINUTOS && perc > 0.8) ti.transito = 'vinho'
       }
     }
-    console.log(timeline)
+    if (timeline.execucao.contador) timeline.execucao.contador = 1
     return timeline
   },
 
-  updateTimelineEproc: function (timeline, movs, calcularTempos) {
+  updateTimelineEproc: function (timeline, movs, calcularTempos, classeProcessual) {
     var e
     var prev
     var fApelacao = false
     var hora, ultHora
+    if ([157, 156, 12078, 12231, 12246, 155].includes(classeProcessual)) {
+      timeline.execucao.contador = 1
+      timeline.execucao.passou = true
+      timeline.execucao.esta = true
+      prev = timeline.execucao
+    }
     for (var i = movs.length - 1; i >= 0; i--) {
       var m = movs[i].mov
       e = undefined
@@ -116,6 +122,7 @@ export default {
           else if (UtilsBL.startsWith(c, 'remessa-externa')) e = timeline.remessa
           else if (UtilsBL.startsWith(c, 'recebimento-trf2')) e = timeline.devolucaoapelacao
           else if (UtilsBL.startsWith(c, 'recebimento') && !UtilsBL.startsWith(c, 'recebimento-movimentado-por')) e = timeline.devolucao
+          else if (UtilsBL.startsWith(c, 'execucao-cumprimento-de-sentenca')) e = timeline.execucao
           else continue
         }
         if (e === timeline.intimacao && !UtilsBL.startsWith(c, 'intimacao-em-secretaria')) {
