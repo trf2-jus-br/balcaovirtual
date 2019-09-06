@@ -15,14 +15,8 @@ export default {
   props: ['processo', 'sistema'],
   mounted () {
     var jwt = this.$parent.$parent.jwt
-    if (jwt.users) {
-      var users = jwt.users.split(';')
-      for (var i = 0; i < users.length; i++) {
-        var user = users[i].split(',')
-        if (user[0] === this.sistema) {
-          if (user[2] !== 'null') this.temCodigoDeUnidade = true
-        }
-      }
+    if (jwt.user[this.sistema]) {
+      this.temCodigoDeUnidade = jwt.user[this.sistema].ieunidade
     }
   },
   data () {

@@ -56,7 +56,7 @@ export default {
   data () {
     return {
       interno: this.$parent.$parent.jwt.origin === 'int',
-      ieunidade: this.$parent.$parent.jwt.parsedUsers[this.$parent.sistema].ieunidade,
+      ieunidade: this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade,
       editando: false,
       texto: '',
       marcadores: [],

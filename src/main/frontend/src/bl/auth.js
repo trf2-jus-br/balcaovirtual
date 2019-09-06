@@ -31,18 +31,24 @@ export default {
     var decoded = decode(encodedToken)
     if (decoded && decoded.users) {
       var a = decoded.users.split(';')
-      decoded.parsedUsers = {}
+      decoded.user = {}
       for (var i = 0; i < a.length; i++) {
         var b = a[i].split(',')
-        decoded.parsedUsers[b[0]] = {
+        decoded.user[b[0]] = {
           ieusu: b[1],
-          ieunidade: b[2] === 'null' ? undefined : b[2],
-          perfil: b[3]
+          origin: b[2],
+          ieentidade: b[3] === 'null' ? undefined : b[3],
+          entidade: b[4] === 'null' ? undefined : b[4],
+          ieunidade: b[5] === 'null' ? undefined : b[5],
+          unidade: b[6] === 'null' ? undefined : b[6],
+          perfil: b[7] === 'null' ? undefined : b[7]
         }
       }
     }
     decoded.company =
       decoded.email !== null ? decoded.email.split('@')[1] : undefined
+    decoded.isInterno = (sistema) => decoded.user[sistema] ? decoded.user[sistema].origin === 'int' : false
+    decoded.isExterno = (sistema) => decoded.user[sistema] ? decoded.user[sistema].origin === 'ext' : false
     return decoded
   },
 

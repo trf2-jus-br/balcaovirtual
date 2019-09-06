@@ -200,15 +200,15 @@
                         <label>{{parte.tipoAtuacao}}</label>
                         <p>{{parte.pessoa.nome}}</p>
                       </div>
-                      <div class="col" :class="{'col-sm-3': $parent.jwt.origin !== 'int', 'col-sm-2': $parent.jwt.origin === 'int'}">
+                      <div class="col" :class="{'col-sm-3': !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt.isInterno(sistema)}">
                         <label>Tipo</label>
                         <p>{{parte.pessoa.tipoPessoa}}</p>
                       </div>
-                      <div v-if="$parent.jwt.origin === 'int'" class="col col-sm-2">
+                      <div v-if="$parent.jwt.isInterno(sistema)" class="col col-sm-2">
                         <label>Documento</label>
                         <p>{{parte.documento}}</p>
                       </div>
-                      <div class="col" :class="{'col-sm-3': $parent.jwt.origin !== 'int', 'col-sm-2': $parent.jwt.origin === 'int'}">
+                      <div class="col" :class="{'col-sm-3': !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt.isInterno(sistema)}">
                         <label>Assistência Judiciária</label>
                         <p>{{parte.assistenciaJudiciaria ? "Sim" : "Não"}}</p>
                       </div>
@@ -545,7 +545,7 @@ export default {
           console.log(this.$parent.jwt)
 
           // eslint-disable-next-line
-          this.perfil = this.$parent.jwt.parsedUsers[
+          this.perfil = this.$parent.jwt.user[
             this.sistema
           ].perfil
           this.$http
@@ -571,12 +571,12 @@ export default {
                   }
 
                   // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
-                  var interno = (this.$parent.jwt.origin === 'int') && false
+                  var calcularTempos = (this.$parent.jwt.isInterno(this.sistema)) && false
                   this.fixed = ProcessoBL.fixProc(this.proc)
                   this.timeline = TimelineBL.updateTimeline(
                     this.sistema,
                     this.fixed.movdoc,
-                    interno,
+                    calcularTempos,
                     this.proc.dadosBasicos.classeProcessual
                   )
                   this.getDescriptions()

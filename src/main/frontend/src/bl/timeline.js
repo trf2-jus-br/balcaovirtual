@@ -114,7 +114,7 @@ export default {
           else if (UtilsBL.startsWith(c, 'intimacao-em-secretaria', 'intimacao-eletronica', 'citacao-eletronica-expedida-certificada', 'citacao-do-reu') && !UtilsBL.startsWith(c, 'intimacao-eletronica-confirmada')) e = timeline.intimacao
           else if (UtilsBL.startsWith(c, 'peticao-protocolada-juntada', 'juntada', 'lavrada-certidao', 'juntado', 'peticao')) e = timeline.juntada
           else if (UtilsBL.startsWith(c, 'audiencia-designada', 'audiencia-redesignada', 'audiencia-prorrogada', 'audiencia-convertida-em-diligencia', 'audiencia-realizada', 'audiencia-adiada')) e = timeline.audiencia
-          else if (UtilsBL.startsWith(c, 'ato-ordinatorio', 'despacho-decisao-arquivamento', 'decisao-despacho', 'despacho-decisao')) e = timeline.conclusao
+          else if (UtilsBL.startsWith(c, 'despacho-decisao-arquivamento', 'decisao-despacho', 'despacho-decisao')) e = timeline.conclusao
           else if (UtilsBL.startsWith(c, 'sentenca', 'inteiro-teor-ementa-acordao', 'relatorio-do-acordao')) e = timeline.sentenca
           else if (UtilsBL.startsWith(c, 'suspensao-sobrestamento')) e = timeline.suspensao
           else if (UtilsBL.startsWith(c, 'baixa-definitiva', 'baixa-processo-eletronico-baixado', 'cancelamento-de-distribuicao')) e = timeline.baixa
