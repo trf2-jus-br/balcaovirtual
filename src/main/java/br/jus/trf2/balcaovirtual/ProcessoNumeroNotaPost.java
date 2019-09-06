@@ -23,13 +23,13 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 			throw new PresentableUnloggedException("Usuário '" + u.usuario
 					+ "' não pode fazer anotações porque não foi autenticado no órgão '" + req.sistema + "'.");
 
-		if (!req.pessoal && ud.unidade == null)
+		if (!req.pessoal && ud.codunidade == null)
 			throw new PresentableUnloggedException(
 					"Usuário '" + u.usuario + "' só pode fazer anotações pessoais no órgão '" + req.sistema + "'.");
 
 		try (Dao dao = new Dao()) {
 			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
-			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
+			List<Nota> l = dao.obtemNotas(p, ud.id, ud.codunidade);
 			for (Nota n : l) {
 				if (n.getNotaLgPessoal() == req.pessoal)
 					throw new PresentableUnloggedException(
@@ -44,7 +44,7 @@ public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 			nota.setNotaLgInterno(u.isInterno());
 			nota.setNotaCdUsu(u.usuario);
 			nota.setNotaNmUsu(u.nome);
-			nota.setNotaIeUnidade(ud.unidade);
+			nota.setNotaIeUnidade(ud.codunidade);
 			nota.setNotaIeUsu(ud.id);
 			nota.setNotaDfAlteracao(dao.obtemData());
 			dao.persist(nota);

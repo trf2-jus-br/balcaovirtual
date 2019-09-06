@@ -29,7 +29,7 @@ public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 
 		try (Dao dao = new Dao()) {
 			Processo p = dao.obtemProcesso(req.numero, req.sistema, true);
-			List<Object[]> l = dao.obtemMarcas(p, u.isInterno(), ud.id, ud.unidade);
+			List<Object[]> l = dao.obtemMarcas(p, u.isInterno(), ud.id, ud.codunidade);
 
 			if (l == null)
 				return;

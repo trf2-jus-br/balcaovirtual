@@ -73,8 +73,8 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				continue;
 			if (origem == null)
 				origem = u.interno ? "int" : "ext";
-			else if (!origem.equals(u.interno ? "int" : "ext"))
-				throw new Exception("Usuário não pode ser interno em um sistema e externo em outro");
+			else if ((origem.equals("int") && !u.interno) || (origem.equals("ext") && u.interno))
+				origem = "int/ext";
 			if (u.cpf != null)
 				cpf = u.cpf;
 			if (u.nome != null)
@@ -87,7 +87,11 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			else
 				usuarios += ";";
 			usuarios += system + "," + u.codusu + ","
-					+ (u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : "null") + ","
+					+ (u.interno ? "int" : "ext") + ","
+					+ serialize(u.codentidade != null && !u.codentidade.equals("0") ? u.codentidade : null) + ","
+					+ serialize(u.entidade) + ","
+					+ serialize(u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : null) + ","
+					+ serialize(u.unidade) + ","
 					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
 		if (usuarios == null)
@@ -111,7 +115,12 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 
 	public static class UsuarioDetalhe {
 		String id;
+		String origem;
+		String codentidade;
+		String entidade;
+		String codunidade;
 		String unidade;
+		String perfil;
 	}
 
 	public static class Usuario {
@@ -121,12 +130,6 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		String usuario;
 		String cpf;
 		String senha;
-
-		String orgao;
-		String codusu;
-		String codunidade;
-		String perfil;
-		String system;
 
 		Map<String, UsuarioDetalhe> usuarios;
 
@@ -151,16 +154,31 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			for (String s : users.split(";")) {
 				String[] ss = s.split(",");
 				UsuarioDetalhe ud = new UsuarioDetalhe();
-				if (!"null".equals(ss[1]))
-					ud.id = ss[1];
-				if (!"null".equals(ss[2]))
-					ud.unidade = ss[2];
+				ud.id = parse(ss[1]);
+				ud.origem = parse(ss[2]);
+				ud.codentidade = parse(ss[3]);
+				ud.entidade = parse(ss[4]);
+				ud.codunidade = parse(ss[5]);
+				ud.codunidade = parse(ss[6]);
+				ud.perfil = parse(ss[7]);
 				u.usuarios.put(ss[0], ud);
 			}
 		}
 		return u;
 	}
 
+	private static String parse(String s) {
+		if ("null".equals(s))
+			return null;
+		return s;
+	}
+	
+	private static String serialize(String s) {
+		if (s == null || s.trim().length() == 0)
+			return "null";
+		return s.replace(",", ".").replace(";", ".Fs");
+	}
+	
 	public static Map<String, Object> assertUsuarioAutorizado() throws Exception {
 		String authorization = getAuthorizationHeader();
 		return verify(authorization);

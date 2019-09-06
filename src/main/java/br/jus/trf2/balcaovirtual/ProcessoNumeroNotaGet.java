@@ -31,7 +31,7 @@ public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 			if (p == null)
 				return;
 
-			List<Nota> l = dao.obtemNotas(p, ud.id, ud.unidade);
+			List<Nota> l = dao.obtemNotas(p, ud.id, ud.codunidade);
 			if (l == null)
 				return;
 

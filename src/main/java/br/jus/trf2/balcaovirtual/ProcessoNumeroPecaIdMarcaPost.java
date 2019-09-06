@@ -68,7 +68,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 			m.setMarcCdUsu(u.usuario);
 			m.setMarcNmUsu(u.nome);
 			m.setMarcIeUsu(ud.id);
-			m.setMarcIeUnidade(ud.unidade);
+			m.setMarcIeUnidade(ud.codunidade);
 			m.setMarcDfAlteracao(dao.obtemData());
 			dao.persist(m);
 

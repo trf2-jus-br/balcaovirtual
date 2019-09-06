@@ -39,7 +39,7 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 			nota.setNotaLgInterno(u.isInterno());
 			nota.setNotaCdUsu(u.usuario);
 			nota.setNotaNmUsu(u.nome);
-			nota.setNotaIeUnidade(ud.unidade);
+			nota.setNotaIeUnidade(ud.codunidade);
 			nota.setNotaIeUsu(ud.id);
 			nota.setNotaDfAlteracao(dao.obtemData());
 			dao.persist(nota);
