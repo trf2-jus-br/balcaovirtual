@@ -37,6 +37,24 @@ public class Utils {
 		}
 	}
 
+	public static String getSystemsNames() {
+		String s = null;
+		String[] systems = getSystems();
+		int i = 0;
+		for (String system : systems) {
+			String name = SwaggerServlet.getProperty(system.toLowerCase() + ".name");
+			if (i == 0)
+				s = "";
+			else if (i == systems.length - 1)
+				s += " e ";
+			else
+				s += ", ";
+			s += name;
+			i++;
+		}
+		return s;
+	}
+
 	public static String getPassword(String system) {
 		return SwaggerServlet.getProperty(system + ".password");
 	}

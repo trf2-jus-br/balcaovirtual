@@ -562,6 +562,7 @@ public interface IBalcaoVirtual {
 		public String sistema;
 		public String tipopeticao;
 		public String nivelsigilo;
+		public Boolean encerraprazos;
 		public String pdfs;
 	}
 

@@ -77,7 +77,9 @@ public class SoapMNI {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(new DOMSource(node), new StreamResult(writer));
 			String output = writer.toString();
-			return output.substring(output.indexOf("?>") + 2);// remove <?xml version="1.0" encoding="UTF-8"?>
+			return output.substring(output.indexOf("?>") + 2);// remove <?xml
+																// version="1.0"
+																// encoding="UTF-8"?>
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
@@ -371,7 +373,8 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
-			String numProc, String tpDoc, int nvlSigilo, String nomePdfs, byte pdf[]) throws Exception {
+			String numProc, String tpDoc, int nvlSigilo, String cpfEncerraPrazos, String nomePdfs, byte pdf[])
+			throws Exception {
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -418,9 +421,16 @@ public class SoapMNI {
 		Holder<byte[]> recibo = new Holder<>();
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
-		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio,
-				new ArrayList<TipoParametro>(), sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo,
-				parametro);
+		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
+		if (cpfEncerraPrazos != null) {
+			TipoParametro identEncerraPrazos = new TipoParametro();
+			identEncerraPrazos.setNome("identEncerraPrazos");
+			identEncerraPrazos.setValor(cpfEncerraPrazos);
+			parametros.add(identEncerraPrazos);
+		}
+
+		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio, parametros,
+				sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
@@ -489,7 +499,8 @@ public class SoapMNI {
 			doc.setDataHora(dataEnvio);
 			doc.setNivelSigilo(nvlSigilo == 0 ? 0 : 5);
 			doc.setTipoDocumento(tpDocs[i]);
-			// TODO: Substituir esse número mágico pela tabela de tipos de documentos
+			// TODO: Substituir esse número mágico pela tabela de tipos de
+			// documentos
 			// doc.setTipoDocumento("58");
 			Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 			byte[] data = Files.readAllBytes(path);

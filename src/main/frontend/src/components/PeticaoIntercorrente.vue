@@ -41,6 +41,7 @@
               <th>Processo</th>
               <th>Tipo</th>
               <th>Segredo</th>
+              <th>Encerra Prazos</th>
               <th>Arquivo</th>
               <th>Status</th>
               <th style="text-align: center" v-if="editando"></th>
@@ -72,6 +73,14 @@
                   <option disabled hidden selected value="">[Selecionar]</option>
                 </select>
                 <span v-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span>
+              </td>
+
+              <td v-show="!f.anexo" :rowspan="f.rowspan">
+                <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.encerraprazos" :disabled="f.protocolado" @change="selecionarEncerraPrazos(f, f.encerraprazos)">
+                  <option v-for="ep in encerraPrazos" :value="ep.codigo">{{ep.nome}}</option>
+                  <option disabled hidden selected value="">[Selecionar]</option>
+                </select>
+                <span v-if="!editando">{{f.encerraprazos ? 'Sim' : 'Não'}}</span>
               </td>
 
               <td>
@@ -242,6 +251,13 @@ export default {
         codigo: 1,
         nome: 'Sim'
       }],
+      encerraPrazos: [{
+        codigo: 0,
+        nome: 'Não'
+      }, {
+        codigo: 1,
+        nome: 'Sim'
+      }],
       vueclipOptions: {
         url: this.$http.options.root + '/../upload',
         headers: {
@@ -293,7 +309,8 @@ export default {
         errormsg: undefined,
         tipo: undefined,
         tipodescr: undefined,
-        segredo: undefined
+        segredo: undefined,
+        encerraprazos: undefined
       })
     },
 
@@ -383,6 +400,7 @@ export default {
         sistema: item.arq.sistema,
         tipopeticao: item.arq.tipo,
         nivelsigilo: item.arq.segredo,
+        encerraprazos: item.arq.encerraprazos,
         pdfs: item.pdfs
       }).then(response => {
         for (var i = item.index; i <= item.indexFinal; i++) {
@@ -599,6 +617,13 @@ export default {
       }
     },
 
+    selecionarEncerraPrazos: function (arq, encerraprazos) {
+      for (var i = 0; i < this.arquivos.length; i++) {
+        var a = this.arquivos[i]
+        if (a !== arq && a.encerraprazos === undefined) a.encerraprazos = encerraprazos
+      }
+    },
+
     organizarArquivos: function () {
       this.arquivosAProtocolar = 0
       this.arquivos.sort(function (a, b) {
@@ -620,6 +645,7 @@ export default {
           arq.rowspan = arq.rowspan + 1
           a.tipo = arq.tipo
           a.segredo = arq.segredo
+          a.encerraprazos = arq.encerraprazos
           a.odd = arq.odd
         } else {
           a.rowspan = 1
@@ -642,6 +668,7 @@ export default {
         if (!this.arquivos[j].processo) return false
         if (!this.arquivos[j].tipo) return false
         if (this.arquivos[j].segredo === undefined) return false
+        if (this.arquivos[j].encerraprazos === undefined) return false
       }
       return true
     }

@@ -89,6 +89,12 @@ parameters:
     description: Código do nivel de sigilo
     type: string
     required: true
+  encerraprazos:
+    name: encerraprazos
+    in: formData
+    description: Informa se a petição intercorrente deve encerrar prazos abertos para a parte em questão
+    type: boolean
+    required: true
   tutelaantecipada:
     name: tutelaantecipada
     in: formData
@@ -818,6 +824,7 @@ paths:
         - $ref: "#/parameters/sistema"
         - $ref: "#/parameters/tipopeticao"
         - $ref: "#/parameters/nivelsigilo"
+        - $ref: "#/parameters/encerraprazos"
         - $ref: "#/parameters/pdfs"
       responses:
         200:

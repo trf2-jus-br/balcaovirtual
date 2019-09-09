@@ -86,8 +86,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 				usuarios = "";
 			else
 				usuarios += ";";
-			usuarios += system + "," + u.codusu + ","
-					+ (u.interno ? "int" : "ext") + ","
+			usuarios += system + "," + u.codusu + "," + (u.interno ? "int" : "ext") + ","
 					+ serialize(u.codentidade != null && !u.codentidade.equals("0") ? u.codentidade : null) + ","
 					+ serialize(u.entidade) + ","
 					+ serialize(u.codunidade != null && !u.codunidade.equals("0") ? u.codunidade : null) + ","
@@ -95,7 +94,9 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
 		if (usuarios == null)
-			throw new Exception("Nenhum usuário localizado na base com esse identificador");
+			throw new Exception(
+					"Nenhum usuário localizado na base com esse identificador. Base" + (systems.length == 1 ? "" : "s")
+							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".");
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
@@ -172,13 +173,13 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 			return null;
 		return s;
 	}
-	
+
 	private static String serialize(String s) {
 		if (s == null || s.trim().length() == 0)
 			return "null";
 		return s.replace(",", ".").replace(";", ".Fs");
 	}
-	
+
 	public static Map<String, Object> assertUsuarioAutorizado() throws Exception {
 		String authorization = getAuthorizationHeader();
 		return verify(authorization);
