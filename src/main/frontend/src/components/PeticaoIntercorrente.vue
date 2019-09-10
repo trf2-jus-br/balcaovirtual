@@ -174,7 +174,7 @@
               <th>Classe</th>
               <th>Data/Hora</th>
               <th>Protocolo</th>
-              <th>Órgão</th>
+              <th>Sistema/Órgão</th>
               <th>Unidade</th>
             </tr>
           </thead>
@@ -188,7 +188,7 @@
                 <span v-html="r.dataprotocoloFormatada"></span>
               </td>
               <td>{{r.protocolo}}</td>
-              <td>{{r.sistema}}</td>
+              <td>{{$parent.test.properties['balcaovirtual.' + r.sistema + '.name']}}</td>
               <td>{{r.unidade}}</td>
             </tr>
           </tbody>
@@ -252,10 +252,10 @@ export default {
         nome: 'Sim'
       }],
       encerraPrazos: [{
-        codigo: 0,
+        codigo: false,
         nome: 'Não'
       }, {
-        codigo: 1,
+        codigo: true,
         nome: 'Sim'
       }],
       vueclipOptions: {
