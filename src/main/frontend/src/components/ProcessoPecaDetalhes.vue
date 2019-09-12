@@ -55,7 +55,7 @@ export default {
   name: 'processo-peca-detalhes',
   data () {
     return {
-      interno: this.$parent.$parent.jwt.origin === 'int',
+      interno: this.$parent.$parent.jwt.isInterno(this.$parent.sistema),
       ieunidade: this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade,
       editando: false,
       texto: '',

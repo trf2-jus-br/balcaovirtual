@@ -412,25 +412,6 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /config/peticao-intercorrente/tipos:
-    get:
-      description: Tipos de petição intercorrente
-      tags: [config]
-      parameters: []
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: object
-            properties:
-              list:
-                type: array
-                items:
-                  $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"
-        500:
-          description: Error ocurred
-          schema:
-            $ref: "#/definitions/Error"
   /config/entidades:
     get:
       description: Diversos parâmetros para petição inicial
@@ -810,6 +791,27 @@ paths:
                 format: date-time
               numero:
                 type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /processo/{numero}/peticao-intercorrente/tipos:
+    get:
+      description: Tipos de petição intercorrente
+      tags: [config]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/sistema"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"
         500:
           description: Error ocurred
           schema:

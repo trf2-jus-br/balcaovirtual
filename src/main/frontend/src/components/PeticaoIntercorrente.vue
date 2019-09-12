@@ -61,7 +61,7 @@
 
               <td v-show="!f.anexo" :rowspan="f.rowspan">
                 <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
-                  <option v-for="tipo in filtrarTipos(f.sistema)" :value="tipo.sistema+'-'+tipo.id">{{tipo.descricao}}</option>
+                  <option v-for="tipo in f.tipos" :value="tipo.id">{{tipo.descricao}}</option>
                   <option disabled hidden selected value="">[Selecionar]</option>
                 </select>
                 <span v-if="!editando">{{f.tipodescr}}</span>
@@ -218,16 +218,6 @@ export default {
     ProcessoMultiplos
   },
 
-  mounted () {
-    this.$nextTick(() => {
-      this.$http.get('config/peticao-intercorrente/tipos', { block: true }).then(response => {
-        for (var i = 0; i < response.data.list.length; i++) this.tipos.push(response.data.list[i])
-      }, error => {
-        Bus.$emit('message', 'Erro', error.data.errormsg)
-      })
-    })
-  },
-
   data () {
     return {
       // remover
@@ -235,7 +225,6 @@ export default {
       invalidFiles: [],
 
       editando: true,
-      tipos: [],
       dataDeProtocolo: undefined,
       resumoPorData: [],
       filtroProtocolo: undefined,
@@ -307,6 +296,7 @@ export default {
         valido: undefined,
         sistema: undefined,
         errormsg: undefined,
+        tipos: undefined,
         tipo: undefined,
         tipodescr: undefined,
         segredo: undefined,
@@ -329,12 +319,6 @@ export default {
         if (arr[i].errorMessage) return true
       }
       return false
-    },
-
-    filtrarTipos: function (sistema) {
-      return this.tipos.filter(function (item) {
-        return item.sistema === sistema
-      })
     },
 
     carregarResumo: function (data) {
@@ -386,6 +370,14 @@ export default {
           a.sistema = d.sistema
           a.validando = false
           a.valido = true
+          this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/peticao-intercorrente/tipos?sistema=' + a.sistema, { block: true }).then(response => {
+            var d = response.data
+            a.tipos = d.list
+          }, error => {
+            a.validando = false
+            a.valido = false
+            a.errormsg = error.data.errormsg
+          })
         }, error => {
           a.validando = false
           a.valido = false
@@ -590,24 +582,23 @@ export default {
       this.organizarArquivos()
     },
 
-    selecionarTipo: function (arq, tipo) {
-      arq.tipodescr = this.descricaoTipoPorCodigo(tipo)
-      for (var i = 0; i < this.arquivos.length; i++) {
-        var a = this.arquivos[i]
-        if (a !== arq && !a.tipo) {
-          a.tipo = tipo
-          a.tipodescr = arq.tipodescr
+    descricaoTipoPorCodigo: function (arq, tipo) {
+      for (var i = 0; i < arq.tipos.length; i++) {
+        if (arq.tipos[i].id === tipo) {
+          return arq.tipos[i].descricao
         }
       }
     },
 
-    descricaoTipoPorCodigo: function (tipo) {
-      for (var i = 0; i < this.tipos.length; i++) {
-        if ((this.tipos[i].sistema + '-' + this.tipos[i].id) === tipo) {
-          return this.tipos[i].descricao
+    selecionarTipo: function (arq, tipo) {
+      arq.tipodescr = this.descricaoTipoPorCodigo(arq, tipo)
+      for (var i = 0; i < this.arquivos.length; i++) {
+        var a = this.arquivos[i]
+        if (a !== arq && a.sistema === arq.sistema && !a.tipo) {
+          a.tipo = tipo
+          a.tipodescr = arq.tipodescr
         }
       }
-      return tipo
     },
 
     selecionarSegredo: function (arq, segredo) {

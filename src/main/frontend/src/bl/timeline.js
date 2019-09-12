@@ -126,18 +126,20 @@ export default {
           else continue
         }
         if (e === timeline.intimacao && !UtilsBL.startsWith(c, 'intimacao-em-secretaria')) {
-          if (timeline.intimacao.contador) timeline.intimacao.contador += 1
-          else timeline.intimacao.contador = 1
-          timeline.intimacao.passou = true
-          m.tipo = '#intimacao'
-          if (m.complemento && m.complemento.length >= 3 && m.complemento[2].includes('Status: FECHADO')) {
-            if (timeline.remessa.contador) timeline.remessa.contador += 1
-            else timeline.remessa.contador = 1
-            timeline.remessa.passou = true
-            m.tipo += ' #remessa'
-            e = timeline.devolucao
-          } else {
-            e = timeline.remessa
+          if (!m.tipo || !m.tipo.includes('#intimacao ')) {
+            if (timeline.intimacao.contador) timeline.intimacao.contador += 1
+            else timeline.intimacao.contador = 1
+            timeline.intimacao.passou = true
+            m.tipo = '#intimacao '
+            if (m.complemento && m.complemento.length >= 3 && m.complemento[2].includes('Status: FECHADO')) {
+              if (timeline.remessa.contador) timeline.remessa.contador += 1
+              else timeline.remessa.contador = 1
+              timeline.remessa.passou = true
+              m.tipo += ' #remessa '
+              e = timeline.devolucao
+            } else {
+              e = timeline.remessa
+            }
           }
         }
       }
@@ -152,14 +154,20 @@ export default {
           ultHora = hora
         }
 
+        var keyFound
         for (var key in timeline) {
           if (timeline.hasOwnProperty(key) && e === timeline[key]) {
-            m.tipo = (m.tipo !== undefined) ? m.tipo + ' #' + key : '#' + key
+            keyFound = key
+            break
           }
         }
-        e.passou = true
-        if (e.contador) e.contador += 1
-        else e.contador = 1
+        var keyHash = '#' + keyFound + ' '
+        if (!m.tipo || !m.tipo.includes(keyHash)) {
+          m.tipo = (m.tipo !== undefined) ? m.tipo + keyHash : keyHash
+          e.passou = true
+          if (e.contador) e.contador += 1
+          else e.contador = 1
+        }
         if (prev) {
           prev.esta = false
 

@@ -259,18 +259,6 @@ public interface IBalcaoVirtual {
 		public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception;
 	}
 
-	public class ConfigPeticaoIntercorrenteTiposGetRequest implements ISwaggerRequest {
-	}
-
-	public class ConfigPeticaoIntercorrenteTiposGetResponse implements ISwaggerResponse {
-		public List<ConfigTipoPeticaoIntercorrente> list;
-	}
-
-	public interface IConfigPeticaoIntercorrenteTiposGet extends ISwaggerMethod {
-		public void run(ConfigPeticaoIntercorrenteTiposGetRequest req, ConfigPeticaoIntercorrenteTiposGetResponse resp)
-				throws Exception;
-	}
-
 	public class ConfigEntidadesGetRequest implements ISwaggerRequest {
 	}
 
@@ -554,6 +542,20 @@ public interface IBalcaoVirtual {
 
 	public interface IPeticaoInicialProtocolarPost extends ISwaggerMethod {
 		public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
+				throws Exception;
+	}
+	
+	public class ProcessoNumeroPeticaoIntercorrenteTiposGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String sistema;
+	}
+
+	public class ProcessoNumeroPeticaoIntercorrenteTiposGetResponse implements ISwaggerResponse {
+		public List<ConfigTipoPeticaoIntercorrente> list;
+	}
+
+	public interface IProcessoNumeroPeticaoIntercorrenteTiposGet extends ISwaggerMethod {
+		public void run(ProcessoNumeroPeticaoIntercorrenteTiposGetRequest req, ProcessoNumeroPeticaoIntercorrenteTiposGetResponse resp)
 				throws Exception;
 	}
 

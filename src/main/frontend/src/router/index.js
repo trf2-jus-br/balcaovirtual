@@ -13,6 +13,7 @@ import Mesa from '@/components/Mesa'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
+import Status from '@/components/Status'
 import ProcessoBL from '../bl/processo.js'
 
 Vue.use(Router)
@@ -90,6 +91,11 @@ export default new Router({
       path: '/sugestoes',
       name: 'Sugestões',
       component: Sugestoes
+    },
+    {
+      path: '/status',
+      name: 'Status',
+      component: Status
     },
     {
       path: '/sobre',

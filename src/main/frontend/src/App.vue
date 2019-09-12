@@ -35,7 +35,7 @@
                 <li class="nav-item" v-if="!(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação</router-link>
                 </li>
-                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; (jwt.origin === 'int')">
+                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Mesa</router-link>
                 </li>
                 <li class="nav-item">
@@ -51,6 +51,7 @@
                     <span>{{jwt.username}}</span>
                   </a>
                   <div class="dropdown-menu logout" aria-labelledby="navbarDropdownMenuLink">
+                    <router-link class="dropdown-item" active-class="active" :to="{name:'Status'}" tag="a" exact>Status</router-link>
                     <a class="dropdown-item" @click="logout">Logout</a>
                   </div>
                 </li>
@@ -169,7 +170,9 @@ export default {
         if (this.test.properties['balcaovirtual.systems']) {
           this.nomesSistemas = ''
           var a = this.test.properties['balcaovirtual.systems'].split(',')
+          this.sistemas = []
           for (var i = 0; i < a.length; i++) {
+            this.sistemas.push(a[i])
             if (i > 0) {
               if (i === a.length - 1) this.nomesSistemas += ' e '
               else this.nomesSistemas += ', '
@@ -198,6 +201,7 @@ export default {
       loading: false,
       test: { properties: {} },
       nomesSistemas: undefined,
+      sistemas: undefined,
       errormsg: undefined,
       settings: {
         timeline: undefined,

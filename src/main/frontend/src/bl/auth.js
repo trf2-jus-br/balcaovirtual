@@ -35,6 +35,7 @@ export default {
       for (var i = 0; i < a.length; i++) {
         var b = a[i].split(',')
         decoded.user[b[0]] = {
+          sistema: b[0],
           ieusu: b[1],
           origin: b[2],
           ieentidade: b[3] === 'null' ? undefined : b[3],

@@ -149,7 +149,7 @@ public class SoapMNI {
 		return gson.toJson(processo);
 	}
 
-	private static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
+	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
 		URL url = new URL(Utils.getMniWsdlUrl(sistema));
 		// ServicoIntercomunicacao222_Service service = new
 		// ServicoIntercomunicacao222_Service(url);
