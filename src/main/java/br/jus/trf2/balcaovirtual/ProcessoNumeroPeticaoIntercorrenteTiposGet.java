@@ -24,7 +24,7 @@ public class ProcessoNumeroPeticaoIntercorrenteTiposGet implements IProcessoNume
 
 		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteTiposGetResponse>> future = SwaggerCall
 				.callAsync("obter tipos de petição intercorrente", null, "GET",
-						Utils.getApiUrl(req.sistema) + "/usuario/" + u.usuarios.get(req.sistema).id + "/processo/" + req.numero
+						Utils.getApiUrl(req.sistema) + "/usuario/" + u.usuario + "/processo/" + req.numero
 								+ "/peticao-intercorrente/tipos",
 						null, UsuarioUsernameProcessoNumeroPeticaoIntercorrenteTiposGetResponse.class);
 		SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteTiposGetResponse> sar = future.get();
