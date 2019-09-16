@@ -93,7 +93,7 @@ parameters:
     name: encerraprazos
     in: formData
     description: Informa se a petição intercorrente deve encerrar prazos abertos para a parte em questão
-    type: boolean
+    type: string
     required: true
   tutelaantecipada:
     name: tutelaantecipada
@@ -795,7 +795,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-  /processo/{numero}/peticao-intercorrente/tipos:
+  /processo/{numero}/peticao-intercorrente/validar:
     get:
       description: Tipos de petição intercorrente
       tags: [config]
@@ -808,7 +808,9 @@ paths:
           schema:
             type: object
             properties:
-              list:
+              identencerraprazos:
+                type: string
+              tipos:
                 type: array
                 items:
                   $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"

@@ -77,8 +77,9 @@
 
               <td v-show="!f.anexo" :rowspan="f.rowspan">
                 <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.encerraprazos" :disabled="f.protocolado" @change="selecionarEncerraPrazos(f, f.encerraprazos)">
-                  <option v-for="ep in encerraPrazos" :value="ep.codigo">{{ep.nome}}</option>
                   <option disabled hidden selected value="">[Selecionar]</option>
+                  <option :value="false">Não</option>
+                  <option v-if="f.identencerraprazos" :value="true">Sim</option>
                 </select>
                 <span v-if="!editando">{{f.encerraprazos ? 'Sim' : 'Não'}}</span>
               </td>
@@ -240,13 +241,6 @@ export default {
         codigo: 1,
         nome: 'Sim'
       }],
-      encerraPrazos: [{
-        codigo: false,
-        nome: 'Não'
-      }, {
-        codigo: true,
-        nome: 'Sim'
-      }],
       vueclipOptions: {
         url: this.$http.options.root + '/../upload',
         headers: {
@@ -300,7 +294,8 @@ export default {
         tipo: undefined,
         tipodescr: undefined,
         segredo: undefined,
-        encerraprazos: undefined
+        encerraprazos: undefined,
+        identencerraprazos: undefined
       })
     },
 
@@ -370,9 +365,11 @@ export default {
           a.sistema = d.sistema
           a.validando = false
           a.valido = true
-          this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/peticao-intercorrente/tipos?sistema=' + a.sistema, { block: true }).then(response => {
+          this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/peticao-intercorrente/validar?sistema=' + a.sistema, { block: true }).then(response => {
             var d = response.data
-            a.tipos = d.list
+            a.tipos = d.tipos
+            a.identencerraprazos = d.identencerraprazos
+            if (a.identencerraprazos === undefined) a.encerraprazos = false
           }, error => {
             a.validando = false
             a.valido = false
@@ -392,7 +389,7 @@ export default {
         sistema: item.arq.sistema,
         tipopeticao: item.arq.tipo,
         nivelsigilo: item.arq.segredo,
-        encerraprazos: item.arq.encerraprazos,
+        encerraprazos: item.arq.encerraprazos ? item.arq.identencerraprazos : undefined,
         pdfs: item.pdfs
       }).then(response => {
         for (var i = item.index; i <= item.indexFinal; i++) {
@@ -636,7 +633,7 @@ export default {
           arq.rowspan = arq.rowspan + 1
           a.tipo = arq.tipo
           a.segredo = arq.segredo
-          a.encerraprazos = arq.encerraprazos
+          a.identencerraprazos = arq.identencerraprazos
           a.odd = arq.odd
         } else {
           a.rowspan = 1

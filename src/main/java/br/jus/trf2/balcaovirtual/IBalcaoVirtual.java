@@ -544,19 +544,20 @@ public interface IBalcaoVirtual {
 		public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
 				throws Exception;
 	}
-	
-	public class ProcessoNumeroPeticaoIntercorrenteTiposGetRequest implements ISwaggerRequest {
+
+	public class ProcessoNumeroPeticaoIntercorrenteValidarGetRequest implements ISwaggerRequest {
 		public String numero;
 		public String sistema;
 	}
 
-	public class ProcessoNumeroPeticaoIntercorrenteTiposGetResponse implements ISwaggerResponse {
-		public List<ConfigTipoPeticaoIntercorrente> list;
+	public class ProcessoNumeroPeticaoIntercorrenteValidarGetResponse implements ISwaggerResponse {
+		public String identencerraprazos;
+		public List<ConfigTipoPeticaoIntercorrente> tipos;
 	}
 
 	public interface IProcessoNumeroPeticaoIntercorrenteTiposGet extends ISwaggerMethod {
-		public void run(ProcessoNumeroPeticaoIntercorrenteTiposGetRequest req, ProcessoNumeroPeticaoIntercorrenteTiposGetResponse resp)
-				throws Exception;
+		public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req,
+				ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
@@ -564,7 +565,7 @@ public interface IBalcaoVirtual {
 		public String sistema;
 		public String tipopeticao;
 		public String nivelsigilo;
-		public Boolean encerraprazos;
+		public String encerraprazos;
 		public String pdfs;
 	}
 
@@ -1047,7 +1048,7 @@ public interface IBalcaoVirtual {
 	public interface IAssuntoIdGet extends ISwaggerMethod {
 		public void run(AssuntoIdGetRequest req, AssuntoIdGetResponse resp) throws Exception;
 	}
-	
+
 	public class RecursoArquivoGetRequest implements ISwaggerRequest {
 		public String arquivo;
 	}
@@ -1101,10 +1102,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IRecursoArquivoGet extends ISwaggerMethod {
-		public void run(RecursoArquivoGetRequest req, RecursoArquivoGetResponse resp)
-				throws Exception;
+		public void run(RecursoArquivoGetRequest req, RecursoArquivoGetResponse resp) throws Exception;
 	}
-
-
 
 }
