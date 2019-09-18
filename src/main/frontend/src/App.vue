@@ -20,22 +20,22 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Consulta Simples'}" tag="a" exact>Consulta</router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Processos'}" tag="a" exact>Processos</router-link>
                 </li>
-                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod'">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; test.properties['balcaovirtual.env'] !== 'prod'">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Etiquetas'}" tag="a" exact>Etiquetas</router-link>
                 </li>
-                <li class="nav-item" v-if="!(jwt.origin === 'int')">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Inicial'}" tag="a">Petição Inicial</router-link>
                 </li>
-                <li class="nav-item" v-if="!(jwt.origin === 'int')">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Intercorrente'}" tag="a">Petição Intercorrente</router-link>
                 </li>
-                <li class="nav-item" v-if="!(jwt.origin === 'int')">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação</router-link>
                 </li>
-                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
+                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; jwt &amp;&amp; jwt.username &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Mesa</router-link>
                 </li>
                 <li class="nav-item">

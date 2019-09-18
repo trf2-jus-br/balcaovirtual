@@ -32,7 +32,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addPublicProperty("env");
 		addPublicProperty("wootric.token", null);
 		addPublicProperty("base.url", "http://localhost:8080/balcaovirtual");
-		
+
 		addRestrictedProperty("username.restriction", null);
 
 		addRestrictedProperty("datasource.url", null);
@@ -51,12 +51,14 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			addRestrictedProperty(s.toLowerCase() + ".api.url");
 			addRestrictedProperty(s.toLowerCase() + ".mni.url");
 			addRestrictedProperty(s.toLowerCase() + ".mni.endpoint");
+			addRestrictedProperty(s.toLowerCase() + ".assijus.url");
+			addPrivateProperty(s.toLowerCase() + ".assijus.password");
 			addPublicProperty(s.toLowerCase() + ".cota.tipo");
 		}
 
-//		addPublicProperty("assijus.endpoint");
-//		addPublicProperty("assijus.system.expedientes");
-//		addPublicProperty("assijus.system.movimentos");
+		// addPublicProperty("assijus.endpoint");
+		// addPublicProperty("assijus.system.expedientes");
+		// addPublicProperty("assijus.system.movimentos");
 
 		addPrivateProperty("jwt.secret");
 		addRestrictedProperty("upload.dir.final");
@@ -152,6 +154,21 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 					return true;
 				}
 			});
+
+			addDependency(new SwaggerServletDependency(system.toLowerCase(), "assijus", false, 0, 10000) {
+
+				@Override
+				public String getUrl() {
+					return Utils.getAssijusUrl(system);
+				}
+
+				@Override
+				public String getResponsable() {
+					return null;
+				}
+
+			});
+
 		}
 
 		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {

@@ -69,8 +69,13 @@
 
               <td v-show="!f.anexo" :rowspan="f.rowspan">
                 <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.segredo" :disabled="f.protocolado" @change="selecionarSegredo(f, f.segredo)">
-                  <option v-for="segredo in segredos" :value="segredo.codigo">{{segredo.nome}}</option>
                   <option disabled hidden selected value="">[Selecionar]</option>
+                  <option :value="0">0. Sem Sigilo</option>
+                  <option v-if="f.sigilo >= 1" :value="1">1. Segredo de Justiça</option>
+                  <option v-if="f.sigilo >= 2" :value="2">2. Sigiloso Interno</option>
+                  <option v-if="f.sigilo >= 3" :value="3">3. Sigiloso Interno</option>
+                  <option v-if="f.sigilo >= 4" :value="4">4. Sigiloso Interno</option>
+                  <option v-if="f.sigilo >= 5" :value="5">5. Restrito Juiz</option>
                 </select>
                 <span v-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span>
               </td>
@@ -295,7 +300,9 @@ export default {
         tipodescr: undefined,
         segredo: undefined,
         encerraprazos: undefined,
-        identencerraprazos: undefined
+        identencerraprazos: undefined,
+        sigilo: undefined,
+        parte: undefined
       })
     },
 
@@ -369,6 +376,8 @@ export default {
             var d = response.data
             a.tipos = d.tipos
             a.identencerraprazos = d.identencerraprazos
+            a.sigilo = d.sigilo
+            a.parte = d.parte
             if (a.identencerraprazos === undefined) a.encerraprazos = false
           }, error => {
             a.validando = false
@@ -634,6 +643,8 @@ export default {
           a.tipo = arq.tipo
           a.segredo = arq.segredo
           a.identencerraprazos = arq.identencerraprazos
+          a.sigilo = arq.sigilo
+          a.parte = arq.parte
           a.odd = arq.odd
         } else {
           a.rowspan = 1

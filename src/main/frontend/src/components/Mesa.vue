@@ -49,7 +49,7 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm table-responsive">
+        <table class="table table-striped table-sm">
           <thead class="thead-inverse">
             <tr>
               <th style="text-align: center">
@@ -57,9 +57,8 @@
               </th>
               <th>Documento</th>
               <th>Processo</th>
-              <th>Motivo</th>
+              <th>Tipo</th>
               <th>Origem</th>
-              <th>Data/Hora</th>
               <th>Situação</th>
             </tr>
           </thead>
@@ -69,9 +68,7 @@
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
               </td>
               <td>
-                <span v-if="!f.docid">{{f.documento}}</span>
-
-                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f)">{{f.docdescr}}</a>
+                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f)">{{f.doccode}}</a>
 
                 <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f, 'attachment')">
                   <span class="fa fa-download icone-em-linha"></span>
@@ -81,15 +78,14 @@
                   <span class="fa fa-certificate icone-em-linha" title="Assinar Digitalmente"></span>
                 </a>
               </td>
-              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">
+              <td class="td-middle">
                 <span class="unbreakable">
                   <router-link :to="{name: 'Processo', params: {numero: f.processo}}" target="_blank">{{f.processoFormatado}}</router-link>
                 </span>
               </td>
-              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.motivo}}</td>
-              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.responsavel}}</td>
-              <td class="td-middle" v-if="f.rows" :rowspan="f.rows" v-html="f.dataentradaFormatada"></td>
-              <td class="td-middle" v-if="f.rows" :rowspan="f.rows">{{f.situacao}}
+              <td class="td-middle">{{f.dockind}}</td>
+              <td class="td-middle">{{f.docorigin}}</td>
+              <td class="td-middle">{{f.situacao}}
                 <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
                 </span>
               </td>

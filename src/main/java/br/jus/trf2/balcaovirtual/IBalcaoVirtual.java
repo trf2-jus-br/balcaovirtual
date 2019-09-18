@@ -552,6 +552,8 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroPeticaoIntercorrenteValidarGetResponse implements ISwaggerResponse {
 		public String identencerraprazos;
+		public Double sigilo;
+		public Boolean parte;
 		public List<ConfigTipoPeticaoIntercorrente> tipos;
 	}
 

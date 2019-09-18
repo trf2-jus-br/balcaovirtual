@@ -427,6 +427,11 @@ public class SoapMNI {
 			identEncerraPrazos.setNome("identEncerraPrazos");
 			identEncerraPrazos.setValor(cpfEncerraPrazos);
 			parametros.add(identEncerraPrazos);
+			
+			TipoParametro abrirPrazoAutomaticamente = new TipoParametro();
+			abrirPrazoAutomaticamente.setNome("abrirPrazoAutomaticamente");
+			abrirPrazoAutomaticamente.setValor("true");
+			parametros.add(abrirPrazoAutomaticamente);
 		}
 
 		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio, parametros,

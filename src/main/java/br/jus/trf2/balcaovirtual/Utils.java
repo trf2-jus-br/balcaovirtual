@@ -63,6 +63,14 @@ public class Utils {
 		return SwaggerServlet.getProperty(system + ".api.url");
 	}
 
+	public static String getAssijusUrl(String system) {
+		return SwaggerServlet.getProperty(system + ".assijus.url");
+	}
+
+	public static String getAssijusPassword(String system) {
+		return SwaggerServlet.getProperty(system + ".assijus.password");
+	}
+
 	public static String getMniWsdlUrl(String system) {
 		return SwaggerServlet.getProperty(system + ".mni.url");
 

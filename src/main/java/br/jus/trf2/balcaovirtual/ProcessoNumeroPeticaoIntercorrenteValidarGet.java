@@ -45,6 +45,8 @@ public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNu
 			resp.tipos.add(tpi);
 		}
 		resp.identencerraprazos = r.identencerraprazos;
+		resp.sigilo = r.sigilo;
+		resp.parte = r.parte;
 	}
 
 	@Override
