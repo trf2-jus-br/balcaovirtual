@@ -365,7 +365,19 @@ parameters:
     description: Unidade para ser impresso na cota
     type: string
     required: true
-    
+  tokenquery:
+    name: token
+    in: query
+    description: token de autorização
+    required: false
+    type: string
+  captchaquery:
+    name: captcha
+    in: query
+    description: senha do reCaptcha
+    required: false
+    type: string
+
 
 ################################################################################
 #                                           Paths                              #
@@ -646,6 +658,8 @@ paths:
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/captchaquery"
+        - $ref: "#/parameters/tokenquery"
       responses:
         200:
           description: Successful response
@@ -680,6 +694,8 @@ paths:
                 $ref: "#/definitions/CDAs"
               dataultimomovimento:
                 $ref: "#/definitions/DataUltimoMovimento"
+              token:
+                $ref: "#/definitions/Token"
                 
         500:
           description: Error ocurred
@@ -693,6 +709,7 @@ paths:
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
       responses:
         200:
           description: Successful response
@@ -718,6 +735,7 @@ paths:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
       responses:
         200:
           description: Successful response
@@ -739,6 +757,7 @@ paths:
       parameters:
         - $ref: "#/parameters/numero"
         - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
       responses:
         200:
           description: Successful response
@@ -1631,6 +1650,10 @@ definitions:
     description: Data do último movimento do processo
     type: string
     format: date-time
+    
+  Token:
+    description: Token para proteger a consulta pública
+    type: string
     
   QuantidadePorData:
     description: Data e quantidade de itens

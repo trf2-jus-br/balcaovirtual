@@ -67,7 +67,7 @@ export default {
   props: ['processo', 'sistema', 'unidade'],
 
   mounted () {
-    var company = this.$parent.$parent.jwt.company
+    var company = (this.$parent.$parent.jwt || {}).company
     this.defs = company ? defaultCargoEmpresa[company] : undefined
     this.cargo = this.$parent.$parent.settings.cotaCargo
     this.empresa = this.$parent.$parent.settings.cotaEmpresa

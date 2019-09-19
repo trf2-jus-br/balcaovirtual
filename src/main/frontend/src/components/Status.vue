@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="$parent.jwt">
       <div class="form-group col-md-4">
           <my-input :disabled="true" name="nome" label="Nome" v-model="$parent.jwt.name" :edit="true"></my-input>
         </div>
@@ -25,7 +25,7 @@
     </div>
 
     <!-- QUANTIDADE POR DATA -->
-    <div class="row">
+    <div class="row" v-if="$parent.jwt">
       <div class="col-md-12">
         <h4 class="mt-3 mb-3">Autenticação nos Sistemas</h4>
       </div>

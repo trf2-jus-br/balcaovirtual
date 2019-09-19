@@ -235,7 +235,7 @@ export default {
       var cpf = document.createElement('input')
       cpf.type = 'text'
       cpf.name = 'cpf'
-      cpf.value = this.$parent.jwt.cpf
+      cpf.value = (this.$parent.jwt || {}).cpf
 
       var system = document.createElement('input')
       system.type = 'text'

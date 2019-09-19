@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
+import com.crivano.swaggerservlet.SwaggerServlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
@@ -36,7 +37,13 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
 		String username = (String) map.get("username");
-		String password = SessionsCreatePost.decrypt((String) map.get("pwd"));
+		String password;
+		if (username != null)
+			password = SessionsCreatePost.decrypt((String) map.get("pwd"));
+		else {
+			username = SwaggerServlet.getProperty("public.username");
+			password = SwaggerServlet.getProperty("public.password");
+		}
 		String name = (String) map.get("name");
 		String file = (String) map.get("file");
 		String numProc = (String) map.get("proc");
@@ -57,40 +64,51 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			resp.contenttype = "application/pdf";
 			resp.inputstream = new ByteArrayInputStream(pdf);
 		} else if (file != null && file.equals("avisos-pendentes.xml")) {
-			
-			
+
 			// TODO: IMPLEMENTAR
-//			// Processo completo
-//			Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse>> future = SwaggerCall
-//					.callAsync("obter XML de avisos", "Bearer " + req.jwt, "GET",
-//							Utils.getWsProcessualUrl() + "/usuario-web/" + map.get("username")
-//									+ "/aviso-pendente/exportar",
-//							null, UsuarioWebUsernameAvisoPendenteExportarGetResponse.class);
-//			SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse> sar = future.get();
-//			if (sar.getException() != null)
-//				throw sar.getException();
-//			UsuarioWebUsernameAvisoPendenteExportarGetResponse r = (UsuarioWebUsernameAvisoPendenteExportarGetResponse) sar
-//					.getResp();
-//			resp.contentdisposition = "attachment;filename=" + map.get("username") + "-avisos-pendentes.xml";
-//			resp.contentlength = r.contentlength;
-//			resp.contenttype = r.contenttype;
-//			resp.inputstream = r.inputstream;
+			// // Processo completo
+			// Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse>>
+			// future = SwaggerCall
+			// .callAsync("obter XML de avisos", "Bearer " + req.jwt, "GET",
+			// Utils.getWsProcessualUrl() + "/usuario-web/" +
+			// map.get("username")
+			// + "/aviso-pendente/exportar",
+			// null, UsuarioWebUsernameAvisoPendenteExportarGetResponse.class);
+			// SwaggerAsyncResponse<UsuarioWebUsernameAvisoPendenteExportarGetResponse>
+			// sar = future.get();
+			// if (sar.getException() != null)
+			// throw sar.getException();
+			// UsuarioWebUsernameAvisoPendenteExportarGetResponse r =
+			// (UsuarioWebUsernameAvisoPendenteExportarGetResponse) sar
+			// .getResp();
+			// resp.contentdisposition = "attachment;filename=" +
+			// map.get("username") + "-avisos-pendentes.xml";
+			// resp.contentlength = r.contentlength;
+			// resp.contenttype = r.contenttype;
+			// resp.inputstream = r.inputstream;
 		} else if (file != null && file.equals("avisos-confirmados.xml")) {
 			// TODO: IMPLEMENTAR
-//			Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse>> future = SwaggerCall
-//					.callAsync("obter XML de avisos confirmados", "Bearer " + req.jwt, "GET",
-//							Utils.getWsProcessualUrl() + "/usuario-web/" + map.get("username")
-//									+ "/aviso-confirmado/exportar",
-//							null, UsuarioWebUsernameAvisoConfirmadoExportarGetResponse.class);
-//			SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse> sar = future.get();
-//			if (sar.getException() != null)
-//				throw sar.getException();
-//			UsuarioWebUsernameAvisoConfirmadoExportarGetResponse r = (UsuarioWebUsernameAvisoConfirmadoExportarGetResponse) sar
-//					.getResp();
-//			resp.contentdisposition = "attachment;filename=" + map.get("username") + "-avisos-confirmados.xml";
-//			resp.contentlength = r.contentlength;
-//			resp.contenttype = r.contenttype;
-//			resp.inputstream = r.inputstream;
+			// Future<SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse>>
+			// future = SwaggerCall
+			// .callAsync("obter XML de avisos confirmados", "Bearer " +
+			// req.jwt, "GET",
+			// Utils.getWsProcessualUrl() + "/usuario-web/" +
+			// map.get("username")
+			// + "/aviso-confirmado/exportar",
+			// null,
+			// UsuarioWebUsernameAvisoConfirmadoExportarGetResponse.class);
+			// SwaggerAsyncResponse<UsuarioWebUsernameAvisoConfirmadoExportarGetResponse>
+			// sar = future.get();
+			// if (sar.getException() != null)
+			// throw sar.getException();
+			// UsuarioWebUsernameAvisoConfirmadoExportarGetResponse r =
+			// (UsuarioWebUsernameAvisoConfirmadoExportarGetResponse) sar
+			// .getResp();
+			// resp.contentdisposition = "attachment;filename=" +
+			// map.get("username") + "-avisos-confirmados.xml";
+			// resp.contentlength = r.contentlength;
+			// resp.contenttype = r.contenttype;
+			// resp.inputstream = r.inputstream;
 		} else if (numDoc != null) {
 			// Peça Processual
 			byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
@@ -105,13 +123,15 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		} else {
 			// Processo completo
 
-			// Consulta o processo para saber quais são os documentos a serem concatenados
+			// Consulta o processo para saber quais são os documentos a serem
+			// concatenados
 			String json = SoapMNI.consultarProcesso(username, password, orgao, numProc, false, false, true);
 
 			JSONObject proc = new JSONObject(json).getJSONObject("value");
 			JSONArray docs = proc.getJSONArray("documento");
 
-			// Cria um documento em diretório temporário para agregar os diversos PDFs
+			// Cria um documento em diretório temporário para agregar os
+			// diversos PDFs
 			String dirTemp = Utils.getDirTemp();
 			String bufName = dirTemp + "/" + numProc + "-completo-" + UUID.randomUUID().toString() + ".pdf";
 			FileOutputStream buf = new FileOutputStream(bufName);
@@ -176,8 +196,10 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 		if (origin != null)
 			claims.put("origin", origin);
-		claims.put("username", username);
-		claims.put("pwd", SessionsCreatePost.encrypt(password));
+		if (username != null)
+			claims.put("username", username);
+		if (password != null)
+			claims.put("pwd", SessionsCreatePost.encrypt(password));
 		if (nome != null)
 			claims.put("name", nome);
 		if (orgao != null)

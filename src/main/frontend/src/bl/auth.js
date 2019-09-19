@@ -14,6 +14,7 @@ export default {
 
   clearIdToken: function () {
     localStorage.removeItem(ID_TOKEN_KEY)
+    Vue.http.headers.common['Authorization'] = undefined
   },
 
   // Get and store id_token in local storage

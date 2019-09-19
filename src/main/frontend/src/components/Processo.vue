@@ -81,7 +81,7 @@
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
+          <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>
@@ -200,15 +200,15 @@
                         <label>{{parte.tipoAtuacao}}</label>
                         <p>{{parte.pessoa.nome}}</p>
                       </div>
-                      <div class="col" :class="{'col-sm-3': !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt.isInterno(sistema)}">
+                      <div class="col" :class="{'col-sm-3': !$parent.jwt || !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt &amp;&amp; $parent.jwt.isInterno(sistema)}">
                         <label>Tipo</label>
                         <p>{{parte.pessoa.tipoPessoa}}</p>
                       </div>
-                      <div v-if="$parent.jwt.isInterno(sistema)" class="col col-sm-2">
+                      <div v-if="$parent.jwt &amp;&amp; $parent.jwt.isInterno(sistema)" class="col col-sm-2">
                         <label>Documento</label>
                         <p>{{parte.documento}}</p>
                       </div>
-                      <div class="col" :class="{'col-sm-3': !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt.isInterno(sistema)}">
+                      <div class="col" :class="{'col-sm-3': !$parent.jwt || !$parent.jwt.isInterno(sistema), 'col-sm-2': $parent.jwt &amp;&amp; $parent.jwt.isInterno(sistema)}">
                         <label>Assistência Judiciária</label>
                         <p>{{parte.assistenciaJudiciaria ? "Sim" : "Não"}}</p>
                       </div>
@@ -539,17 +539,18 @@ export default {
     // Validar o número do processo
     this.$nextTick(function() {
       Bus.$emit('block', 20)
-      this.$http.get('processo/' + this.numero + '/validar').then(
+      this.$http.get('processo/' + this.numero + '/validar' + (this.token ? '?token=' + this.token : '')).then(
         response => {
           this.sistema = response.data.sistema
-          console.log(this.$parent.jwt)
 
-          // eslint-disable-next-line
-          this.perfil = this.$parent.jwt.user[
-            this.sistema
-          ].perfil
+          if (this.$parent.jwt && this.$parent.jwt.user) {
+            // eslint-disable-next-line
+            this.perfil = this.$parent.jwt.user[
+              this.sistema
+            ].perfil
+          }
           this.$http
-            .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema)
+            .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
             .then(
               response => {
                 Bus.$emit('release')
@@ -571,7 +572,7 @@ export default {
                   }
 
                   // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
-                  var calcularTempos = (this.$parent.jwt.isInterno(this.sistema)) && false
+                  var calcularTempos = (this.$parent.jwt && this.$parent.jwt.isInterno(this.sistema)) && false
                   this.fixed = ProcessoBL.fixProc(this.proc)
                   this.timeline = TimelineBL.updateTimeline(
                     this.sistema,
@@ -580,21 +581,22 @@ export default {
                     this.proc.dadosBasicos.classeProcessual
                   )
                   this.getDescriptions()
-                  this.getMarcadores()
-                  this.getMarcas()
-
-                  this.$http
-                    .post('processo/' + this.numero + '/sinalizar', {
-                      recente: true
-                    })
-                    .then(
-                      response => {
-                        this.favorito = !!response.data.processo.favorito
-                      },
-                      error => {
-                        this.warningmsg = error.data.errormsg
-                      }
-                    )
+                  if (this.$parent.jwt) {
+                    this.getMarcadores()
+                    this.getMarcas()
+                    this.$http
+                      .post('processo/' + this.numero + '/sinalizar', {
+                        recente: true
+                      })
+                      .then(
+                        response => {
+                          this.favorito = !!response.data.processo.favorito
+                        },
+                        error => {
+                          this.warningmsg = error.data.errormsg
+                        }
+                      )
+                  }
                 } catch (e) {
                   console.error(e)
                 }
@@ -622,6 +624,7 @@ export default {
       timeline: TimelineBL.emptyTimeline(),
       modified: undefined,
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
+      token: this.$route.params.token,
       sistema: undefined,
       perfil: undefined,
       gui: {},
@@ -640,7 +643,7 @@ export default {
       proc: undefined,
       fixed: undefined,
       marcadores: [],
-      marcasativas: true,
+      marcasativas: this.$parent.jwt,
       notas: false
     }
   },
@@ -762,7 +765,7 @@ export default {
             '/peca/' +
             idDocumento +
             '/pdf?sistema=' +
-            this.sistema
+            this.sistema + (this.token ? '&token=' + this.token : '')
         )
         .then(
           response => {
@@ -787,7 +790,7 @@ export default {
     },
     mostrarCompleto: function() {
       this.$http
-        .get('processo/' + this.numero + '/pdf?sistema=' + this.sistema)
+        .get('processo/' + this.numero + '/pdf?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
         .then(
           response => {
             var jwt = response.data.jwt

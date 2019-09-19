@@ -404,6 +404,8 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroValidarGetRequest implements ISwaggerRequest {
 		public String numero;
+		public String token;
+		public String captcha;
 	}
 
 	public class ProcessoNumeroValidarGetResponse implements ISwaggerResponse {
@@ -421,6 +423,7 @@ public interface IBalcaoVirtual {
 		public Boolean baixado;
 		public String cdas;
 		public Date dataultimomovimento;
+		public String token;
 	}
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {
@@ -430,6 +433,7 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroConsultarGetRequest implements ISwaggerRequest {
 		public String numero;
 		public String sistema;
+		public String token;
 	}
 
 	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
@@ -489,6 +493,7 @@ public interface IBalcaoVirtual {
 		public String numero;
 		public String id;
 		public String sistema;
+		public String token;
 	}
 
 	public class ProcessoNumeroPecaIdPdfGetResponse implements ISwaggerResponse {
@@ -503,6 +508,7 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroPdfGetRequest implements ISwaggerRequest {
 		public String numero;
 		public String sistema;
+		public String token;
 	}
 
 	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse {

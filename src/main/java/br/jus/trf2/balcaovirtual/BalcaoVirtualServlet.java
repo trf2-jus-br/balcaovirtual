@@ -32,6 +32,10 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addPublicProperty("env");
 		addPublicProperty("wootric.token", null);
 		addPublicProperty("base.url", "http://localhost:8080/balcaovirtual");
+		addPublicProperty("recaptcha.site.key");
+		addPrivateProperty("recaptcha.secret.key");
+		addRestrictedProperty("public.username");
+		addPrivateProperty("public.password");
 
 		addRestrictedProperty("username.restriction", null);
 

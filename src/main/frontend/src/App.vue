@@ -45,8 +45,11 @@
                   <router-link class="nav-link" active-class="active" :to="{name:'Sobre'}" tag="a">Sobre</router-link>
                 </li>
               </ul>
-              <ul class="navbar-nav navbar-right" v-if="jwt &amp;&amp; jwt.username">
-                <li class="nav-item dropdown">
+              <ul class="navbar-nav navbar-right">
+                <li class="nav-item" v-if="!jwt">
+                  <router-link class="nav-link" active-class="active" :to="{name:'Login'}" tag="a">Login</router-link>
+                </li>
+                <li class="nav-item dropdown" v-if="jwt &amp;&amp; jwt.username">
                   <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span>{{jwt.username}}</span>
                   </a>
@@ -161,7 +164,7 @@ export default {
       AuthBL.setIdToken(this.token)
       this.jwt = AuthBL.decodeToken(this.token)
     } else {
-      this.$router.push({ name: 'Login' })
+      this.$router.push({ name: 'Consulta Simples' })
     }
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {
@@ -213,7 +216,7 @@ export default {
         mostrarProcessosRelacionados: undefined
       },
       token: undefined,
-      jwt: {}
+      jwt: undefined
     }
   },
   methods: {
@@ -222,8 +225,8 @@ export default {
     },
     logout: function () {
       AuthBL.logout()
-      this.jwt = {}
-      this.$router.push({ name: 'Login' })
+      this.jwt = undefined
+      this.$router.push({ name: 'Consulta Simples' })
     }
   },
   components: {

@@ -4,7 +4,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Consulta Processual</h4>
+        <h4 class="text-center mt-3 mb-3">Consulta Processual {{$parent.jwt ? '' : 'Pública'}}</h4>
       </div>
     </div>
 
@@ -25,7 +25,11 @@
               <div class="row pt-3">
                 <div class="col">
                   <button v-if="false" class="btn btn-secondary" @click="avancada=true">Pesquisa Avançada...</button>
-                  <button :disabled="numero === undefined || numero.trim() === ''" @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">Consultar</button>
+                  <invisible-recaptcha v-if="!$parent.jwt" :sitekey="$parent.test.properties['balcaovirtual.recaptcha.site.key']" :validate="() => {this.recaptchaLoading = true}" :callback="consultar"
+                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || numero === undefined || numero.trim() === ''" badge="bottomleft">
+                      Consultar
+                  </invisible-recaptcha>
+                  <button v-if="$parent.jwt" :disabled="numero === undefined || numero.trim() === ''" @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">Consultar</button>
                 </div>
               </div>
             </div>
@@ -130,11 +134,14 @@
 
 <script>
 import ProcessoBL from '../bl/processo.js'
+import InvisibleRecaptcha from 'vue-invisible-recaptcha'
+
 export default {
   name: 'consulta-simples',
 
   data () {
     return {
+      recaptchaLoading: false,
       errormsg: undefined,
       avancada: false,
       numero: undefined,
@@ -149,10 +156,14 @@ export default {
     }
   },
   methods: {
-    mostrarProcesso: function (numero) {
+    consultar: function (recaptchaToken) {
+      this.mostrarProcesso(this.numero, recaptchaToken)
+      console.log(recaptchaToken)
+    },
+    mostrarProcesso: function (numero, recaptchaToken) {
       var n = ProcessoBL.somenteNumeros(this.numero)
       if (n === '') return
-      this.$http.get('processo/' + n + '/validar', { block: true, blockmin: 0, blockmax: 20 }).then(
+      this.$http.get('processo/' + n + '/validar' + (recaptchaToken ? '?captcha=' + recaptchaToken : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
           if (response.data.unidade && !response.data.usuarioautorizado) {
             this.errormsg = 'Processo em segredo de justiça. (' + response.data.unidade + ')'
@@ -162,12 +173,15 @@ export default {
             this.errormsg = `Processo "${this.numero}" não encontrado`
             return
           }
-          this.$router.push({ name: 'Processo', params: { numero: response.data.numero } })
+          this.$router.push({ name: 'Processo', params: { numero: response.data.numero, token: response.data.token } })
         },
         error => {
           this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`
         })
     }
+  },
+  components: {
+    'invisible-recaptcha': InvisibleRecaptcha
   }
 }
 </script>

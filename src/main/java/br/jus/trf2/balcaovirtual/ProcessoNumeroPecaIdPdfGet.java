@@ -9,9 +9,21 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 
 	@Override
 	public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, null, req.sistema, req.numero, req.id, null,
-				null, null, null, null);
+		String usuario = null;
+		String senha = null;
+		String origem;
+
+		if (ProcessoNumeroValidarGet.assertValidToken(req.token, req.numero)) {
+			origem = "pub";
+		} else {
+			Usuario u;
+			u = SessionsCreatePost.assertUsuario();
+			usuario = u.usuario;
+			senha = u.senha;
+			origem = u.origem;
+		}
+		resp.jwt = DownloadJwtFilenameGet.jwt(origem, usuario, senha, null, req.sistema, req.numero, req.id, null, null,
+				null, null, null);
 	}
 
 	@Override

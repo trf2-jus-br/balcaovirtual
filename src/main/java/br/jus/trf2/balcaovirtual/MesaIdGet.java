@@ -1,12 +1,9 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
 
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
@@ -16,16 +13,9 @@ import br.jus.trf2.assijus.system.api.IAssijusSystem.DocListGetResponse;
 import br.jus.trf2.assijus.system.api.IAssijusSystem.Document;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Documento;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Mesa;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.MesaDocumento;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.MesaExpediente;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.MesaMovimento;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2DocumentosGetResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2ExpedientesGetResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2MovimentosGetResponse;
 
 public class MesaIdGet implements IMesaIdGet {
 

@@ -8,6 +8,9 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.crivano.swaggerservlet.ISwaggerRequest;
+import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
@@ -287,6 +290,38 @@ public class Utils {
 	public static String getOrgao(String system) {
 		// TODO: Implementar esse método
 		return null;
+	}
+
+	private static class VerifyCaptchaRequest implements ISwaggerRequest {
+		public String secret;
+		public String response;
+		public String remoteip;
+	}
+
+	private static class VerifyCaptchaResponse implements ISwaggerResponse {
+		public boolean success;
+		public String challenge_ts;
+		public String apk_package_name;
+	}
+
+	// Se houver erro de SSL, pode ser necessário instalar o certificado do
+	// Google na cadeia de certificados do Java, seguindo o exemplo abaixo:
+	//
+	// c:\OpenSSL-Win64\bin>openssl s_client -connect www.google.com:443 < NUL >
+	// google.crt
+	//
+	// e:\Desenvolvimento\jre1.8.0_162\bin>keytool -import -alias
+	// www.google.com -keystore ../lib/security/cacerts -file
+	// c:\OpenSSL-Win64\bin\google.crt
+	//
+	public static boolean verifyCaptcha(String token) throws Exception {
+		VerifyCaptchaRequest q = new VerifyCaptchaRequest();
+		q.secret = SwaggerServlet.getProperty("recaptcha.secret.key");
+		q.response = token;
+		q.remoteip = SwaggerServlet.getHttpServletRequest().getRemoteAddr();
+		VerifyCaptchaResponse r = SwaggerCall.doHTTP(null, "https://www.google.com/recaptcha/api/siteverify", "GET", q,
+				VerifyCaptchaResponse.class);
+		return r.success;
 	}
 
 }

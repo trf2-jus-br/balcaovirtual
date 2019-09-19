@@ -1,5 +1,5 @@
 <template>
-  <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas">
+  <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas" v-if="$parent.$parent.jwt">
     <div class="card-deck">
       <processo-nota v-show="temCodigoDeUnidade" ref="notaUnidade" :processo="processo" :sistema="sistema" titulo="Notas da Unidade" style="background-color: #f8ff99" :pessoal="false" @input="notaUnidadeAlterada"></processo-nota>
       <processo-nota ref="notaPessoal" :processo="processo" :sistema="sistema" titulo="Notas Pessoais" style="background-color: #f8ff99" :pessoal="true" @input="notaPessoalAlterada"></processo-nota>
@@ -15,7 +15,7 @@ export default {
   props: ['processo', 'sistema'],
   mounted () {
     var jwt = this.$parent.$parent.jwt
-    if (jwt.user[this.sistema]) {
+    if (jwt && jwt.user[this.sistema]) {
       this.temCodigoDeUnidade = jwt.user[this.sistema].ieunidade
     }
   },

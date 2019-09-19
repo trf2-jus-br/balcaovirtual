@@ -1,9 +1,17 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.auth0.jwt.JWTSigner;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
@@ -19,7 +27,15 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 	@Override
 	public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception {
-		SessionsCreatePost.assertAuthorization();
+		if (req.captcha != null) {
+			if (!Utils.verifyCaptcha(req.captcha))
+				throw new PresentableUnloggedException("Token de reCaptcha inválido");
+			resp.token = jwt(req.numero);
+		} else if (assertValidToken(req.token, req.numero)) {
+			resp.token = req.token;
+		} else
+			SessionsCreatePost.assertAuthorization();
+
 		String url = null;
 		try {
 			Usuario u = SessionsCreatePost.assertUsuario();
@@ -44,7 +60,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			if (r.numero == null || r.perdecompetencia)
 				continue;
 			if (resp.numero != null)
-				throw new PresentableException("Não foi possível identificar qual sistema tem competência para o processo: " + resp.numero);
+				throw new PresentableException(
+						"Não foi possível identificar qual sistema tem competência para o processo: " + resp.numero);
 			resp.numero = r.numero;
 			resp.sistema = system;
 			resp.orgao = r.orgao;
@@ -66,6 +83,48 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 	@Override
 	public String getContext() {
 		return "validar número de processo";
+	}
+
+	public static Map<String, Object> verify(String jwt) throws InvalidKeyException, NoSuchAlgorithmException,
+			IllegalStateException, SignatureException, IOException, JWTVerifyException {
+		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
+		Map<String, Object> map;
+		map = verifier.verify(jwt);
+		return map;
+	}
+
+	public static String jwt(String processo) throws Exception {
+		final String issuer = Utils.getJwtIssuer();
+		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+		// token expires in 12h
+		final long exp = iat + 12 * 60 * 60L;
+
+		final JWTSigner signer = new JWTSigner(Utils.getJwtSecret());
+		final HashMap<String, Object> claims = new HashMap<String, Object>();
+		if (issuer != null)
+			claims.put("iss", issuer);
+		claims.put("exp", exp);
+		claims.put("iat", iat);
+		claims.put("proc", processo);
+
+		claims.put("typ", "consulta-publica");
+
+		final String jwt = signer.sign(claims);
+		return jwt;
+	}
+
+	public static boolean assertValidToken(String token, String processo) throws PresentableUnloggedException {
+		if (token == null || processo == null)
+			return false;
+		Map<String, Object> m;
+		try {
+			m = verify(token);
+		} catch (Exception ex) {
+			throw new PresentableUnloggedException("Token de consulta pública inválido inválido", ex);
+		}
+		if (!m.get("proc").equals(processo))
+			throw new PresentableUnloggedException("Token de consulta pública com número de processo inválido");
+		return true;
 	}
 
 }
