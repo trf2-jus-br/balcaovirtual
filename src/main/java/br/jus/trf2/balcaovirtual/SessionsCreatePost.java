@@ -94,7 +94,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
 		if (usuarios == null)
-			throw new Exception(
+			throw new PresentableUnloggedException(
 					"Nenhum usuário localizado na base com esse identificador. Base" + (systems.length == 1 ? "" : "s")
 							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".");
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);

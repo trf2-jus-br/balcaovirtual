@@ -130,7 +130,8 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				new FileSystemWriteDependency("upload.dir.final", getProperty("upload.dir.final"), false, 0, 10000));
 
 		for (final String system : Utils.getSystems()) {
-			addDependency(new SwaggerServletDependency(system.toLowerCase(), "api", false, 0, 10000) {
+			String systemSlug = system.replace(".", "-");
+			addDependency(new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-api", false, 0, 10000) {
 
 				@Override
 				public String getUrl() {
@@ -144,7 +145,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 			});
 
-			addDependency(new TestableDependency(system.toLowerCase(), "mni", false, 0, 10000) {
+			addDependency(new TestableDependency(system.toLowerCase(), systemSlug + "-mni", false, 0, 10000) {
 
 				@Override
 				public String getUrl() {
@@ -159,7 +160,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				}
 			});
 
-			addDependency(new SwaggerServletDependency(system.toLowerCase(), "assijus", false, 0, 10000) {
+			addDependency(new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-assijus", false, 0, 10000) {
 
 				@Override
 				public String getUrl() {

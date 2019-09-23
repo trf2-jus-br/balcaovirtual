@@ -78,6 +78,7 @@
               <th>Nome</th>
               <th>API</th>
               <th>MNI</th>
+              <th>Assijus</th>
             </tr>
           </thead>
           <tbody>
@@ -96,6 +97,11 @@
               <td>
                 <span v-bind:class="classeDoTeste(mnis, s)">
                   {{mensagemDoTeste(mnis, s)}}
+                </span>
+              </td>
+              <td>
+                <span v-bind:class="classeDoTeste(assijuss, s)">
+                  {{mensagemDoTeste(assijuss, s)}}
                 </span>
               </td>
             </tr>
@@ -130,6 +136,7 @@ export default {
       test: undefined,
       apis: {},
       mnis: {},
+      assijuss: {},
       errormsg: undefined
     }
   },
@@ -151,10 +158,11 @@ export default {
       var dependencies = response.data.dependencies
       for (var i = 0; i < this.$parent.sistemas.length; i++) {
         var sistema = this.$parent.sistemas[i]
+        var sistemaSlug = sistema.replace(/\./g, '-')
         for (var j = 0; j < dependencies.length; j++) {
-          if (dependencies[j].category !== sistema) continue
-          if (dependencies[j].service === 'api') this.$set(this.apis, sistema, dependencies[j])
-          else if (dependencies[j].service === 'mni') this.$set(this.mnis, sistema, dependencies[j])
+          if (dependencies[j].service === sistemaSlug + '-api') this.$set(this.apis, sistema, dependencies[j])
+          else if (dependencies[j].service === sistemaSlug + '-mni') this.$set(this.mnis, sistema, dependencies[j])
+          else if (dependencies[j].service === sistemaSlug + '-assijus') this.$set(this.assijuss, sistema, dependencies[j])
         }
       }
     }
