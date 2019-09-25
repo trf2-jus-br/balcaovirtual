@@ -27,7 +27,7 @@
     <!-- QUANTIDADE POR DATA -->
     <div class="row" v-if="$parent.jwt">
       <div class="col-md-12">
-        <h4 class="mt-3 mb-3">Autenticação nos Sistemas</h4>
+        <h4 class="mt-3 mb-3">Identificação do Usuário nos Sistemas</h4>
       </div>
       <div class="col col-12">
         <table class="table table-striped mb-0 table-responsive">
@@ -74,8 +74,7 @@
         <table class="table table-striped mb-0 table-responsive">
           <thead class="thead-inverse">
             <tr>
-              <th>Código</th>
-              <th>Nome</th>
+              <th>Sistema/Órgão</th>
               <th>API</th>
               <th>MNI</th>
               <th>Assijus</th>
@@ -84,10 +83,7 @@
           <tbody>
             <tr v-for="s in $parent.sistemas">
               <td>
-                <span>{{s}}</span>
-              </td>
-              <td>
-                <span>{{$parent.test.properties['balcaovirtual.' + s + '.name']}}</span>
+                <span :title="'Identificador: ' + s">{{$parent.test.properties['balcaovirtual.' + s + '.name']}}</span>
               </td>
               <td>
                 <span v-bind:class="classeDoTeste(apis, s)">

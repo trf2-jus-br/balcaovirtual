@@ -34,6 +34,7 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 		resp.protocolo = pi.protocolo;
 		resp.data = pi.data;
 		resp.numero = pi.numProcFormatado;
+		resp.unidade = pi.unidade;
 	}
 
 	@Override

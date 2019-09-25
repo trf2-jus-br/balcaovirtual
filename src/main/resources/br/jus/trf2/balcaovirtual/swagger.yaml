@@ -694,6 +694,8 @@ paths:
                 $ref: "#/definitions/CDAs"
               dataultimomovimento:
                 $ref: "#/definitions/DataUltimoMovimento"
+              datavalidacao:
+                $ref: "#/definitions/DataValidacao"
               token:
                 $ref: "#/definitions/Token"
                 
@@ -809,6 +811,8 @@ paths:
                 type: string
                 format: date-time
               numero:
+                type: string
+              unidade:
                 type: string
         500:
           description: Error ocurred
@@ -1648,6 +1652,11 @@ definitions:
     
   DataUltimoMovimento:
     description: Data do último movimento do processo
+    type: string
+    format: date-time
+    
+  DataValidacao:
+    description: Data da validação
     type: string
     format: date-time
     

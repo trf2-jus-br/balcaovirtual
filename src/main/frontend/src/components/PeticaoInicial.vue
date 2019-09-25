@@ -33,6 +33,7 @@
           <p class="alert alert-success">
             <strong>Petição:</strong> {{protocolo}}<br/>
             <strong>Processo:</strong> {{numeroFormatado}}<br/>
+            <span v-show="unidade"><strong>Órgão:</strong> {{unidade}}<br/></span>
             <strong>Data de Entrada:</strong> <span v-html="dataDeProtocolo"></span>
           </p>
         </div>
@@ -175,19 +176,18 @@
           </div>
 
           <div class="form-check col-md-3">
-            <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
-            </label>
-          </div>
-
-          <div class="form-check col-md-3">
-            <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="justicagratuita"> Justiça Gratuita
-            </label>
-          </div>
-          <div class="form-check col-md-3">
             <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="tutelaantecipada"> Tutela Liminar/Antecipada
             </label>
           </div>
-          <div class="form-check col-md-3">
+          <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
+            <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
+            </label>
+          </div>
+          <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
+            <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="justicagratuita"> Justiça Gratuita
+            </label>
+          </div>
+          <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
             <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="prioridadeidoso"> Prioridade de Idoso
             </label>
           </div>
@@ -204,7 +204,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <table class="table table-peticao table-responsive table-full-width">
+          <table class="table table-peticao table-responsive table-full-width" :disabled="!sistema">
             <thead class="thead-inverse" @click="validar()">
               <tr>
                 <th>Polo</th>
@@ -395,6 +395,7 @@ export default {
       protocolo: undefined,
       dataDeProtocolo: undefined,
       numero: undefined,
+      unidade: undefined,
       editando: true,
 
       resumoPorData: [],
@@ -427,7 +428,7 @@ export default {
   computed: {
     entidadesFiltradas: function () {
       if (!this.entidades || !this.sistema) return []
-      var org = this.sistema.toUpperCase()
+      var org = this.sistema
       var a = this.entidades.filter((item) => {
         return item.sistema === org
       })
@@ -851,6 +852,7 @@ export default {
         this.dataDeProtocolo = UtilsBL.formatJSDDMMYYYYHHMM(response.data.data)
         this.numero = response.data.numero
         this.numeroFormatado = ProcessoBL.formatarProcesso(this.numero)
+        this.unidade = response.data.unidade
         this.editando = false
         UtilsBL.logEvento('peticionamento', 'enviar', 'petição inicial')
       }, error => UtilsBL.errormsg(error, this))

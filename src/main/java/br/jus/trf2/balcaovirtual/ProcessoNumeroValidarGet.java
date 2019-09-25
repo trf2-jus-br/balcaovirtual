@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +78,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			resp.cdas = r.cdas;
 			if (r.dataultimomovimento != null)
 				resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
+			resp.datavalidacao = new Date();
 		}
 	}
 

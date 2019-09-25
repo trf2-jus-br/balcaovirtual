@@ -504,7 +504,7 @@
               <hr class="mt-5 mb-1" />
               <p class="text-center">
                 As informações aqui contidas não produzem efeitos legais. Somente a publicação no D.O. tem validade para contagem de prazos.
-                <br>Consulta realizada em: {{proc.dadosBasicos.outroParametro.dataConsulta}}.
+                <br>Consulta realizada em: <span v-html="proc.dadosBasicos.outroParametro.dataConsulta ? proc.dadosBasicos.outroParametro.dataConsulta : dataValidacao"></span> - {{$parent.test.properties['balcaovirtual.' + sistema + '.name']}}.
               </p>
             </div>
           </div>
@@ -542,6 +542,7 @@ export default {
       this.$http.get('processo/' + this.numero + '/validar' + (this.token ? '?token=' + this.token : '')).then(
         response => {
           this.sistema = response.data.sistema
+          this.dataValidacao = UtilsBL.formatJSDDMMYYYYHHMM(response.data.datavalidacao)
 
           if (this.$parent.jwt && this.$parent.jwt.user) {
             // eslint-disable-next-line
@@ -626,6 +627,7 @@ export default {
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
       token: this.$route.params.token,
       sistema: undefined,
+      dataValidacao: undefined,
       perfil: undefined,
       gui: {},
       filtro: undefined,

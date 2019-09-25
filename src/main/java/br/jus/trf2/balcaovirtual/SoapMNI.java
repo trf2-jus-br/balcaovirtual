@@ -8,8 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
@@ -31,6 +33,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
+import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.SwaggerAsyncResponse;
+import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerCallParameters;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -42,6 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
+import com.j256.simplemagic.logger.Log;
 
 import br.jus.cnj.intercomunicacao_2_2.ModalidadePoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadeRelacionamentoProcessual;
@@ -64,6 +72,9 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetRequest;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
 
 public class SoapMNI {
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
@@ -427,7 +438,7 @@ public class SoapMNI {
 			identEncerraPrazos.setNome("identEncerraPrazos");
 			identEncerraPrazos.setValor(cpfEncerraPrazos);
 			parametros.add(identEncerraPrazos);
-			
+
 			TipoParametro abrirPrazoAutomaticamente = new TipoParametro();
 			abrirPrazoAutomaticamente.setNome("abrirPrazoAutomaticamente");
 			abrirPrazoAutomaticamente.setValor("true");
@@ -479,6 +490,7 @@ public class SoapMNI {
 		String protocolo;
 		Date data;
 		String numProcFormatado;
+		String unidade;
 	}
 
 	public static PeticaoInicial enviarPeticaoInicial(String idManif, String senhaManif, String sistema,
@@ -632,8 +644,13 @@ public class SoapMNI {
 
 		if (tutelaantecipada) {
 			TipoParametro tla = new TipoParametro();
-			tla.setNome("TUTELAANTECIPADA");
-			tla.setValor("TRUE");
+			if (sistema.contains("eproc")) {
+				tla.setNome("CautelaAntecipacaoTutela");
+				tla.setValor("1");
+			} else {
+				tla.setNome("TUTELAANTECIPADA");
+				tla.setValor("TRUE");
+			}
 			parametros.add(tla);
 		}
 
@@ -676,11 +693,27 @@ public class SoapMNI {
 		String numProc = null;
 		String numProcFormatado = null;
 		for (TipoParametro p : parametro.value) {
-			if (p.getNome().equalsIgnoreCase("numerodoprocesso")) {
+			if (p.getNome().equalsIgnoreCase("numerodoprocesso") || p.getNome().equalsIgnoreCase("numeroProcesso")) {
 				numProc = p.getValor();
 				numProcFormatado = Utils.formatarNumeroProcesso(numProc);
 				break;
 			}
+		}
+
+		String unidade = null;
+		try {
+			Future<SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse>> future = SwaggerCall.callAsync(
+					"validar depois de petição inicial", null, "GET",
+					Utils.getApiUrl(sistema) + "/processo/validar/" + numProc, null,
+					ProcessoValidarNumeroGetResponse.class);
+			SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse> sar = future.get();
+			if (sar.getException() != null)
+				throw sar.getException();
+			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) sar.getResp();
+			unidade = r.unidade != null ? r.unidade.trim() : null;
+
+		} catch (Exception ex) {
+			SwaggerUtils.log(SoapMNI.class).error("Não foi possível obter a unidade", ex);
 		}
 
 		DateTime dt = DateTime.parse(dataOperacao.value, dtfMNI);
@@ -711,10 +744,12 @@ public class SoapMNI {
 		PeticaoInicial pi = new PeticaoInicial();
 
 		pi.mensagem = "Protocolo: " + protocoloRecebimento.value + ", Data: " + dataProtocoloFormatada
-				+ ", Processo Autuado: " + numProcFormatado + (sent ? "" : " (email não enviado)");
+				+ ", Processo Autuado: " + numProcFormatado + (unidade != null ? " - " + unidade : "")
+				+ (sent ? "" : " (email não enviado)");
 		pi.protocolo = protocoloRecebimento.value;
 		pi.data = dt.toDate();
 		pi.numProcFormatado = numProcFormatado;
+		pi.unidade = unidade;
 		return pi;
 	}
 

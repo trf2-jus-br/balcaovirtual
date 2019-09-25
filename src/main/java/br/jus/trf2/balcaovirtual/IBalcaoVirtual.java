@@ -423,6 +423,7 @@ public interface IBalcaoVirtual {
 		public Boolean baixado;
 		public String cdas;
 		public Date dataultimomovimento;
+		public Date datavalidacao;
 		public String token;
 	}
 
@@ -544,6 +545,7 @@ public interface IBalcaoVirtual {
 		public String protocolo;
 		public Date data;
 		public String numero;
+		public String unidade;
 	}
 
 	public interface IPeticaoInicialProtocolarPost extends ISwaggerMethod {
