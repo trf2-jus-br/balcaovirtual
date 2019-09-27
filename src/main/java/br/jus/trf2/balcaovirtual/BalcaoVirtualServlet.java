@@ -53,6 +53,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		for (String s : getProperty("systems").split(",")) {
 			addPublicProperty(s.toLowerCase() + ".name");
 			addRestrictedProperty(s.toLowerCase() + ".api.url");
+			addRestrictedProperty(s.toLowerCase() + ".api.password", null);
 			addRestrictedProperty(s.toLowerCase() + ".mni.url");
 			addRestrictedProperty(s.toLowerCase() + ".mni.endpoint");
 			addRestrictedProperty(s.toLowerCase() + ".assijus.url");

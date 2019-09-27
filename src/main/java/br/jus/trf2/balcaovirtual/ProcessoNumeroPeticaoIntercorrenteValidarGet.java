@@ -3,6 +3,7 @@ package br.jus.trf2.balcaovirtual;
 import java.util.ArrayList;
 import java.util.concurrent.Future;
 
+import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
@@ -21,6 +22,9 @@ public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNu
 			ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception {
 		SessionsCreatePost.assertAuthorization();
 		Usuario u = SessionsCreatePost.assertUsuario();
+		
+		if (u.usuarios.get(req.sistema) == null) 
+			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 
 		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse>> future = SwaggerCall
 				.callAsync("obter tipos de petição intercorrente", null, "GET",

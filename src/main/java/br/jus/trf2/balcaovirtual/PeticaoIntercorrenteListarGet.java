@@ -13,6 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetReq
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteResumo;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PeticaoIntercorrente;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteListarGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteListarGetResponse;
 
 public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteListarGet {
@@ -23,12 +24,15 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
+		UsuarioUsernamePeticaoIntercorrenteListarGetRequest q = new UsuarioUsernamePeticaoIntercorrenteListarGetRequest();
+		q.data = req.data;
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - obter resumos de petições intercorrentes", null, "GET",
+					new SwaggerCallParameters(system + " - obter resumos de petições intercorrentes",
+							Utils.getPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
-									+ "/peticao-intercorrente/listar?data=" + req.data,
-							null, UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));
+									+ "/peticao-intercorrente/listar",
+							q, UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
