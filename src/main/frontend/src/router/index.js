@@ -31,6 +31,11 @@ export default new Router({
       component: ConsultaSimples
     },
     {
+      path: '/consultar/:numero',
+      name: 'Consultar',
+      component: ConsultaSimples
+    },
+    {
       path: '/processo/:numero',
       name: 'Processo',
       component: Processo,
@@ -101,6 +106,10 @@ export default new Router({
       path: '/sobre',
       name: 'Sobre',
       component: Sobre
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

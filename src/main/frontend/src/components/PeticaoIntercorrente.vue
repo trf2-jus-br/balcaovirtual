@@ -367,23 +367,31 @@ export default {
         a.valido = false
         this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/validar', { block: true }).then(response => {
           var d = response.data
-          a.status = d.unidade + '/' + d.orgao
           a.orgao = d.orgao
           a.sistema = d.sistema
           a.validando = false
-          a.valido = true
-          this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/peticao-intercorrente/validar?sistema=' + a.sistema, { block: true }).then(response => {
-            var d = response.data
-            a.tipos = d.tipos
-            a.identencerraprazos = d.identencerraprazos
-            a.sigilo = d.sigilo
-            a.parte = d.parte
-            if (a.identencerraprazos === undefined) a.encerraprazos = false
-          }, error => {
-            a.validando = false
-            a.valido = false
-            a.errormsg = error.data.errormsg
-          })
+          if (d.numero) {
+            a.status = d.unidade + '/' + d.orgao
+            a.valido = true
+            this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/peticao-intercorrente/validar?sistema=' + a.sistema, { block: true }).then(response => {
+              var d = response.data
+              a.tipos = d.tipos
+              a.identencerraprazos = d.identencerraprazos
+              a.sigilo = d.sigilo
+              a.parte = d.parte
+              if (a.identencerraprazos === undefined) a.encerraprazos = false
+            }, error => {
+              a.validando = false
+              a.valido = false
+              a.errormsg = error.data.errormsg
+              a.status = undefined
+              a.orgao = undefined
+              a.sistema = undefined
+            })
+          } else {
+            a.status = undefined
+            a.errormsg = 'Processo não encontrado'
+          }
         }, error => {
           a.validando = false
           a.valido = false

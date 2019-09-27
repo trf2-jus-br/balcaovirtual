@@ -504,7 +504,7 @@
               <hr class="mt-5 mb-1" />
               <p class="text-center">
                 As informações aqui contidas não produzem efeitos legais. Somente a publicação no D.O. tem validade para contagem de prazos.
-                <br>Consulta realizada em: <span v-html="proc.dadosBasicos.outroParametro.dataConsulta ? proc.dadosBasicos.outroParametro.dataConsulta : dataValidacao"></span> - {{$parent.test.properties['balcaovirtual.' + sistema + '.name']}}.
+                <br>Consulta <span v-if="!$parent.jwt">pública</span> realizada em: <span v-html="proc.dadosBasicos.outroParametro.dataConsulta ? proc.dadosBasicos.outroParametro.dataConsulta : dataValidacao"></span> - {{$parent.test.properties['balcaovirtual.' + sistema + '.name']}}.
               </p>
             </div>
           </div>

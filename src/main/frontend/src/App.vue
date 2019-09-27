@@ -164,7 +164,7 @@ export default {
       AuthBL.setIdToken(this.token)
       this.jwt = AuthBL.decodeToken(this.token)
     } else {
-      this.$router.push({ name: 'Consulta Simples' })
+      // this.$router.push({ name: 'Consulta Simples' })
     }
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {

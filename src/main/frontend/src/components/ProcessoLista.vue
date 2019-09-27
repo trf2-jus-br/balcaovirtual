@@ -73,7 +73,7 @@
               </th>
               <th>Processo</th>
               <th>Último Movimento</th>
-              <th>Órgão</th>
+              <th>Sistema/Órgão</th>
               <th>Unidade</th>
               <th>Suporte</th>
               <th>Acesso</th>
@@ -94,7 +94,7 @@
               <td>
                 <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
               </td>
-              <td>{{p.orgao}}</td>
+              <td><span :title="'Sigla do Sistema: ' + sistema">{{$parent.test.properties['balcaovirtual.' + p.sistema + '.name']}}</span></td>
               <td>{{p.unidade}}</td>
               <td>{{p.digitalFormatado}}</td>
               <td>{{p.acesso}}</td>
@@ -105,7 +105,7 @@
                 <span v-if="p.state=='in_progress' &amp;&amp; p.perc===undefined">Aguardando...</span>
                 <span v-if="p.state=='in_progress' &amp;&amp; p.perc !==undefined">{{p.perc}}%</span>
                 <span class="green" v-if="p.state=='complete'">Baixado</span>
-                <span v-if="p.errormsg" :class="{red: true}">Erro {{p.errormsg}}
+                <span v-if="p.errormsg" :class="{red: true}">{{p.errormsg}}
                 </span>
               </td>
 
@@ -289,9 +289,15 @@ export default {
       UtilsBL.quietBatch(a, (processo, cont) => {
         this.$http.get('processo/' + processo.numero + '/validar').then(
           (response) => {
-            UtilsBL.overrideProperties(processo, response.data)
-            processo.validado = true
-            this.fixProcesso(processo)
+            if (response.data.numero) {
+              UtilsBL.overrideProperties(processo, response.data)
+              processo.validado = true
+              this.fixProcesso(processo)
+            } else {
+              processo.checked = false
+              processo.disabled = true
+              processo.errormsg = 'Processo não encontrado'
+            }
             cont()
           },
           (error) => {

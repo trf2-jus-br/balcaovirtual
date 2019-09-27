@@ -23,9 +23,9 @@
                 </div>
               </div>
               <div class="row pt-3">
-                <div class="col">
+                <div class="col" v-if="$parent.test.properties">
                   <button v-if="false" class="btn btn-secondary" @click="avancada=true">Pesquisa Avançada...</button>
-                  <invisible-recaptcha v-if="!$parent.jwt" :sitekey="$parent.test.properties['balcaovirtual.recaptcha.site.key']" :validate="() => {this.recaptchaLoading = true}" :callback="consultar"
+                  <invisible-recaptcha ref="captcha" v-if="!$parent.jwt" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
                       class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || numero === undefined || numero.trim() === ''" badge="bottomleft">
                       Consultar
                   </invisible-recaptcha>
@@ -139,6 +139,18 @@ import InvisibleRecaptcha from 'vue-invisible-recaptcha'
 export default {
   name: 'consulta-simples',
 
+  mounted () {
+    if (this.$route.params.numero) {
+      this.numero = this.$route.params.numero
+      if (this.$parent.jwt) this.mostrarProcesso(this.numero)
+      else {
+        console.log(this.$refs.captcha)
+        console.log(this.recaptchaLoading)
+        this.fire(this.$refs.captcha)
+      }
+    }
+  },
+
   data () {
     return {
       recaptchaLoading: false,
@@ -155,10 +167,24 @@ export default {
       inquerito: undefined
     }
   },
+
+  beforeRouteUpdate (to, from, next) {
+    // this.numero = to.params.numero
+    // if (this.$parent.jwt) this.mostrarProcesso(this.numero)
+    // else this.$refs.captcha.click()
+    next()
+  },
+
+  computed: {
+    sitekey: function() {
+      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties['balcaovirtual.recaptcha.site.key']
+      return 'waiting...'
+    }
+  },
+
   methods: {
     consultar: function (recaptchaToken) {
       this.mostrarProcesso(this.numero, recaptchaToken)
-      console.log(recaptchaToken)
     },
     mostrarProcesso: function (numero, recaptchaToken) {
       var n = ProcessoBL.somenteNumeros(this.numero)
@@ -178,6 +204,15 @@ export default {
         error => {
           this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`
         })
+    },
+    captchaValidate: function() {
+      this.recaptchaLoading = true
+    },
+    fire: function(captcha) {
+      setTimeout(() => {
+        if (captcha.loaded) captcha.click()
+        else this.fire(captcha)
+      }, 200)
     }
   },
   components: {
