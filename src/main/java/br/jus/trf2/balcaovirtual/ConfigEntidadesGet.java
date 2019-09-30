@@ -24,7 +24,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - obter localidades", null, "GET",
+					new SwaggerCallParameters(system + " - obter localidades", Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/orgao-publico/listar?tipodedocumento=cnpj", null,
 							OrgaoPublicoListarGetResponse.class));
 		}

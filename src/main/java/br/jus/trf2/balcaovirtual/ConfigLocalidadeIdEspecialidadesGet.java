@@ -21,7 +21,7 @@ public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdE
 		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse>> future = SwaggerCall.callAsync(
-				"obter especialidades", null, "GET",
+				"obter especialidades", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade", null,
 				LocalidadeIdEspecialidadeGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse> sar = future.get();

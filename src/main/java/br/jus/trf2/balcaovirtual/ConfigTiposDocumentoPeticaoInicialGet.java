@@ -22,7 +22,7 @@ public class ConfigTiposDocumentoPeticaoInicialGet implements IConfigTiposDocume
 		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync(
-				"obter tipos de documento para petição inicial", null, "GET",
+				"obter tipos de documento para petição inicial", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/peticao/inicial/tipos-documento", null, LocalidadeGetResponse.class);
 		SwaggerAsyncResponse<LocalidadeGetResponse> sar = future.get();
 		if (sar.getException() != null)

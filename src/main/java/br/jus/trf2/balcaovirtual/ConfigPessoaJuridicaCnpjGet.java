@@ -17,7 +17,7 @@ public class ConfigPessoaJuridicaCnpjGet implements IConfigPessoaJuridicaCnpjGet
 		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<PessoaJuridicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
-				"obter pessoa jurídica", null, "GET",
+				"obter pessoa jurídica", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/pessoa-juridica/" + req.cnpj, null,
 				PessoaJuridicaDocumentoGetResponse.class);
 		SwaggerAsyncResponse<PessoaJuridicaDocumentoGetResponse> sar = future.get();

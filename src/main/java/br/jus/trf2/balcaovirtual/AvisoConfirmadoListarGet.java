@@ -30,7 +30,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter quantidade de avisos confirmado",
-							"Bearer " + authorization, "GET",
+							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/aviso-confirmado/listar?dataInicial=" + req.datainicial + "&dataFinal="
 									+ datafinal + "&confirmacao=" + req.confirmacao.toString() + "&omissao="

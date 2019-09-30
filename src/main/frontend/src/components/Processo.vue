@@ -192,8 +192,10 @@
                 </div>
                 <div class="card-body pb-0" v-for="polo in proc.dadosBasicos.polo">
                   <h6 class="card-subtitle mb-2 text-muted">
-                    <u>Pólo {{(polo.polo == 'AT') ? 'Ativo' : 'Passivo'}}</u>
+                    <u>{{polo.modalidadePoloProcessual}}</u>
                   </h6>
+
+                  
                   <template v-for="parte in polo.parte">
                     <div class="row">
                       <div class="col col-sm-6">

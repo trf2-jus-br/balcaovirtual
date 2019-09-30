@@ -26,7 +26,7 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter quantidade de avisos confirmado",
-							"Bearer " + authorization, "GET",
+							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/aviso-confirmado/contar?dias=100",
 							null, UsuarioUsernameAvisoConfirmadoContarGetResponse.class));

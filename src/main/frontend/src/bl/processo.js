@@ -2,12 +2,23 @@ import UtilsBL from './utils.js'
 import CnjClasseBL from './cnj-classe.js'
 
 export default {
+  modalidadePoloProcessual: {
+    AT: 'Pólo Ativo',
+    PA: 'Pólo Passivo',
+    TC: 'Terceiro',
+    FL: 'Fiscal da Lei Diverso',
+    TJ: 'Testemunha do Juízo',
+    AD: 'Assistente Simples Desinteressado (Amicus Curiae)',
+    VI: 'Vítima'
+  },
+
   fixProc: function (p) {
     var i, j, k
     var fixed = {}
     p.dadosBasicos.numero = this.formatarProcesso(p.dadosBasicos.numero)
 
     for (i = 0; i < p.dadosBasicos.polo.length; i++) {
+      p.dadosBasicos.polo[i].modalidadePoloProcessual = this.modalidadePoloProcessual[p.dadosBasicos.polo[i].polo]
       if (p.dadosBasicos.polo[i].polo === 'AT') {
         fixed.partesAtivas = p.dadosBasicos.polo[i].parte
       }

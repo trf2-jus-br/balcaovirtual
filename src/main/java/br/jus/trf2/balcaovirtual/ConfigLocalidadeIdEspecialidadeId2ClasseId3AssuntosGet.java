@@ -22,7 +22,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet
 		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseId3AssuntoGetResponse>> future = SwaggerCall
-				.callAsync("obter classes", null, "GET",
+				.callAsync("obter classes", Utils.getApiPassword(req.sistema), "GET",
 						Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade/" + req.id2
 								+ "/classe/" + req.id3.split("\\|")[1] + "/assunto",
 						null, LocalidadeIdEspecialidadeId2ClasseId3AssuntoGetResponse.class);

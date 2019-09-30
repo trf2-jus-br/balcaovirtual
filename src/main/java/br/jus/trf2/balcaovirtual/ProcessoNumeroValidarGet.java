@@ -49,7 +49,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		for (String system : Utils.getSystems()) {
 			ProcessoValidarNumeroGetRequest q = new ProcessoValidarNumeroGetRequest();
 			q.numero = req.numero;
-			mapp.put(system, new SwaggerCallParameters(system + " - validar número de processo", null, "GET",
+			mapp.put(system,
+					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system), "GET",
 					Utils.getApiUrl(system) + url, null, ProcessoValidarNumeroGetResponse.class));
 
 		}

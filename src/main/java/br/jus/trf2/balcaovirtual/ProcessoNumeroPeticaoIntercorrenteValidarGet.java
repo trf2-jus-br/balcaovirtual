@@ -27,7 +27,7 @@ public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNu
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 
 		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse>> future = SwaggerCall
-				.callAsync("obter tipos de petição intercorrente", null, "GET",
+				.callAsync("obter tipos de petição intercorrente", Utils.getApiPassword(req.sistema), "GET",
 						Utils.getApiUrl(req.sistema) + "/usuario/" + u.usuario + "/processo/" + req.numero
 								+ "/peticao-intercorrente/validar",
 						null, UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse.class);

@@ -58,7 +58,7 @@ public class Utils {
 		return s;
 	}
 
-	public static String getPassword(String system) {
+	public static String getApiPassword(String system) {
 		return SwaggerServlet.getProperty(system + ".api.password");
 	}
 

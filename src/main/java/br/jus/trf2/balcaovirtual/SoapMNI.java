@@ -434,10 +434,13 @@ public class SoapMNI {
 
 		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
 		if (cpfEncerraPrazos != null) {
-			TipoParametro identEncerraPrazos = new TipoParametro();
-			identEncerraPrazos.setNome("identEncerraPrazos");
-			identEncerraPrazos.setValor(cpfEncerraPrazos);
-			parametros.add(identEncerraPrazos);
+			String[] ieps = cpfEncerraPrazos.split(",");
+			for (String iep : ieps) {
+				TipoParametro identEncerraPrazos = new TipoParametro();
+				identEncerraPrazos.setNome("identEncerraPrazos");
+				identEncerraPrazos.setValor(iep);
+				parametros.add(identEncerraPrazos);
+			}
 
 			TipoParametro abrirPrazoAutomaticamente = new TipoParametro();
 			abrirPrazoAutomaticamente.setNome("abrirPrazoAutomaticamente");
@@ -703,7 +706,7 @@ public class SoapMNI {
 		String unidade = null;
 		try {
 			Future<SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse>> future = SwaggerCall.callAsync(
-					"validar depois de petição inicial", null, "GET",
+					"validar depois de petição inicial", Utils.getApiPassword(sistema), "GET",
 					Utils.getApiUrl(sistema) + "/processo/validar/" + numProc, null,
 					ProcessoValidarNumeroGetResponse.class);
 			SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse> sar = future.get();

@@ -29,7 +29,7 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter resumos de petições intercorrentes",
-							Utils.getPassword(system), "GET",
+							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/peticao-intercorrente/listar",
 							q, UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));

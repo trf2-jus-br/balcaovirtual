@@ -17,7 +17,7 @@ public class ConfigPessoaFisicaCpfGet implements IConfigPessoaFisicaCpfGet {
 		SessionsCreatePost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
-				"obter pessoa física", null, "GET",
+				"obter pessoa física", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/pessoa-fisica/" + req.cpf, null,
 				PessoaFisicaDocumentoGetResponse.class);
 		SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse> sar = future.get();

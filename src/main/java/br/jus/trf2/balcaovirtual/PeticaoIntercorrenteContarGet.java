@@ -25,7 +25,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente", null, "GET",
+					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente", Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/peticao-intercorrente/contar?dias=7",
 							null, UsuarioUsernamePeticaoIntercorrenteContarGetResponse.class));
