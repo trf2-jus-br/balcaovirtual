@@ -16,13 +16,14 @@ import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
+import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetRequest;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetResponse;
 
 public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
@@ -37,28 +38,31 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		} else
 			SessionsCreatePost.assertAuthorization();
 
-		String url = null;
+		String usuario = null;
 		try {
 			Usuario u = SessionsCreatePost.assertUsuario();
-			url = "/usuario/" + u.usuario + "/processo/" + req.numero;
+			usuario = u.usuario;
 		} catch (Exception e) {
-			url = "/processo/validar/" + req.numero;
+			usuario = SwaggerServlet.getProperty("public.username");
 		}
+		String url = "/usuario/" + usuario + "/processo/" + req.numero;
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
-			ProcessoValidarNumeroGetRequest q = new ProcessoValidarNumeroGetRequest();
+			UsuarioUsernameProcessoNumeroGetRequest q = new UsuarioUsernameProcessoNumeroGetRequest();
 			q.numero = req.numero;
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system), "GET",
-					Utils.getApiUrl(system) + url, null, ProcessoValidarNumeroGetResponse.class));
+					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
+							"GET", Utils.getApiUrl(system) + url, null,
+							UsuarioUsernameProcessoNumeroGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {
-			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) mcr.responses.get(system);
+			UsuarioUsernameProcessoNumeroGetResponse r = (UsuarioUsernameProcessoNumeroGetResponse) mcr.responses
+					.get(system);
 			if (r.numero == null || r.perdecompetencia)
 				continue;
 			if (resp.numero != null)

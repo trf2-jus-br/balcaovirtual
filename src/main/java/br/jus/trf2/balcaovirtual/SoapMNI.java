@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -33,11 +32,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
-import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
-import com.crivano.swaggerservlet.SwaggerCallParameters;
-import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -49,7 +45,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
-import com.j256.simplemagic.logger.Log;
 
 import br.jus.cnj.intercomunicacao_2_2.ModalidadePoloProcessual;
 import br.jus.cnj.intercomunicacao_2_2.ModalidadeRelacionamentoProcessual;
@@ -72,9 +67,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeGetResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ProcessoValidarNumeroGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetResponse;
 
 public class SoapMNI {
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
@@ -705,14 +698,14 @@ public class SoapMNI {
 
 		String unidade = null;
 		try {
-			Future<SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse>> future = SwaggerCall.callAsync(
+			Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroGetResponse>> future = SwaggerCall.callAsync(
 					"validar depois de petição inicial", Utils.getApiPassword(sistema), "GET",
-					Utils.getApiUrl(sistema) + "/processo/validar/" + numProc, null,
-					ProcessoValidarNumeroGetResponse.class);
-			SwaggerAsyncResponse<ProcessoValidarNumeroGetResponse> sar = future.get();
+					Utils.getApiUrl(sistema) + "/usuario/" + idManif + "/processo/" + numProc, null,
+					UsuarioUsernameProcessoNumeroGetResponse.class);
+			SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroGetResponse> sar = future.get();
 			if (sar.getException() != null)
 				throw sar.getException();
-			ProcessoValidarNumeroGetResponse r = (ProcessoValidarNumeroGetResponse) sar.getResp();
+			UsuarioUsernameProcessoNumeroGetResponse r = (UsuarioUsernameProcessoNumeroGetResponse) sar.getResp();
 			unidade = r.unidade != null ? r.unidade.trim() : null;
 
 		} catch (Exception ex) {
