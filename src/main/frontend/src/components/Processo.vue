@@ -546,11 +546,8 @@ export default {
           this.sistema = response.data.sistema
           this.dataValidacao = UtilsBL.formatJSDDMMYYYYHHMM(response.data.datavalidacao)
 
-          if (this.$parent.jwt && this.$parent.jwt.user) {
-            // eslint-disable-next-line
-            this.perfil = this.$parent.jwt.user[
-              this.sistema
-            ].perfil
+          if (this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema]) {
+            this.perfil = this.$parent.jwt.user[this.sistema].perfil
           }
           this.$http
             .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
