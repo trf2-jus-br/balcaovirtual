@@ -36,8 +36,8 @@
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <router-link class="dropdown-item" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'" :to="{name:'Avisos Confirmados Recentemente'}" tag="a" exact>Consultar Confirmados</router-link>
               <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
-              <a class="dropdown-item" @click="exportarXML('pendente')">Exportar avisos-pendentes.xml</a>
-              <a class="dropdown-item" @click="exportarXML('confirmado')">Exportar avisos-confirmados.xml</a>
+              <a v-if="false" class="dropdown-item" @click="exportarXML('pendente')">Exportar avisos-pendentes.xml</a>
+              <a v-if="false" class="dropdown-item" @click="exportarXML('confirmado')">Exportar avisos-confirmados.xml</a>
             </div>
           </div>
         </div>

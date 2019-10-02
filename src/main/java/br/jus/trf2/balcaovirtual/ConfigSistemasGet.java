@@ -19,6 +19,8 @@ public class ConfigSistemasGet implements IConfigSistemasGet {
 		for (String system : Utils.getSystems()) {
 			if (!u.usuarios.containsKey(system))
 				continue;
+			if (system.contains(".apolo"))
+				continue;
 			SistemaInfo oi = new SistemaInfo();
 			oi.id = system;
 			oi.nome = Utils.getName(system);

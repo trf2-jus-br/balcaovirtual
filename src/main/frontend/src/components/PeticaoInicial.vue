@@ -40,7 +40,13 @@
       </div>
     </template>
 
-    <template>
+    
+    <div class="row" v-if="sistemasCarregados &amp;&amp; sistemas.length == 0">
+      <div class="col col-sm-12"><p class="alert alert-warning">Login do usuário não permite peticionamento inicial em nenhum sistema processual.</p>
+      </div>
+    </div>
+
+    <template v-if="sistemasCarregados &amp;&amp; sistemas.length > 0">
       <div class="row pb-4" v-show="arquivos.length == 0">
         <div class="col-md-12">
           <vue-clip ref="clip" :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
@@ -385,11 +391,12 @@ export default {
       prioridadeidoso: false,
 
       entidades: [],
-      sistemas: [],
       localidades: [],
       especialidades: [],
       classes: [],
       assuntos: [],
+      sistemas: [],
+      sistemasCarregados: false,
 
       tipos: [],
       protocolo: undefined,
@@ -467,7 +474,7 @@ export default {
     //
     // Selects
     //
-    carregar: function (url, items, item, sort) {
+    carregar: function (url, items, item, sort, cont) {
       this.$http.get(url, { block: true }).then(response => {
         this[items].length = 0
         this[item] = undefined
@@ -481,6 +488,8 @@ export default {
             return 0
           })
         }
+
+        if (cont) cont()
         // if (!this[item]) this[item] = response.data.list[0].id
 
         // Desabilitando especialidades criminais enquanto não temos a possibilidade de informar dados de inquérito
@@ -502,7 +511,7 @@ export default {
     },
 
     carregarSistemas: function () {
-      this.carregar('config/sistemas', 'sistemas', 'sistema')
+      this.carregar('config/sistemas', 'sistemas', 'sistema', false, () => (this.sistemasCarregados = true))
     },
 
     selecionarSistema: function () {
