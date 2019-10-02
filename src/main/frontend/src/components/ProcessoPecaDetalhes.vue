@@ -56,7 +56,7 @@ export default {
   data () {
     return {
       interno: this.$parent.$parent.jwt ? this.$parent.$parent.jwt.isInterno(this.$parent.sistema) : undefined,
-      ieunidade: this.$parent.$parent.jwt ? this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade : undefined,
+      ieunidade: (this.$parent.$parent.jwt && this.$parent.$parent.jwt.user[this.$parent.sistema]) ? this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade : undefined,
       editando: false,
       texto: '',
       marcadores: [],

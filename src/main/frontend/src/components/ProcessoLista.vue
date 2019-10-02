@@ -94,7 +94,7 @@
               <td>
                 <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
               </td>
-              <td><span :title="'Sigla do Sistema: ' + sistema">{{$parent.test.properties['balcaovirtual.' + p.sistema + '.name']}}</span></td>
+              <td><span :title="'Sigla do Sistema: ' + p.sistema">{{$parent.test.properties['balcaovirtual.' + p.sistema + '.name']}}</span></td>
               <td>{{p.unidade}}</td>
               <td>{{p.digitalFormatado}}</td>
               <td>{{p.acesso}}</td>

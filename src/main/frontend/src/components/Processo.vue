@@ -53,7 +53,7 @@
           </div>
         </div>
 
-        <processo-notas :processo="numero" :sistema="sistema" @ativar="notas = true" @desativar="notas = false"></processo-notas>
+        <processo-notas v-if="marcasativas" :processo="numero" :sistema="sistema" @ativar="notas = true" @desativar="notas = false"></processo-notas>
 
         <timeline :timeline="timeline"></timeline>
 
@@ -512,8 +512,8 @@
           </div>
         </template>
 
-      <processo-peca-detalhes ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
-      <processo-cota ref="processoCota" :processo="numero" :sistema="sistema" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
+      <processo-peca-detalhes v-if="marcasativas" ref="processoPecaDetalhes" @ok="salvarProcessoPecaDetalhes" @remove="excluirProcessoPecaDetalhes"></processo-peca-detalhes>
+      <processo-cota v-if="marcasativas"  ref="processoCota" :processo="numero" :sistema="sistema" :unidade="proc.dadosBasicos.orgaoJulgador.nomeOrgao" @ok="cotaEnviada" @erro="cotaNaoEnviada"></processo-cota>
       </div>
     </div>
   </div>
@@ -644,7 +644,7 @@ export default {
       proc: undefined,
       fixed: undefined,
       marcadores: [],
-      marcasativas: this.$parent.jwt,
+      marcasativas: this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema],
       notas: false
     }
   },
@@ -680,6 +680,7 @@ export default {
         )
     },
     getMarcas: function() {
+      if (!this.marcasativas) return
       // Carregar os marcadores da classe
       this.$http
         .get('processo/' + this.numero + '/marcas?sistema=' + this.sistema)

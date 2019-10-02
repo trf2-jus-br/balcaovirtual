@@ -2,7 +2,7 @@
   <div class="container-fluid content">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Mesa Virtual</h4>
+        <h4 class="text-center mt-3 mb-3">Minutas</h4>
       </div>
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
@@ -42,7 +42,7 @@
     <div class="row" v-if="filtrados.length == 0">
       <div class="col col-sm-12">
         <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma documento na mesa.
+          <strong>Atenção!</strong> Nenhuma minuta encontrada.
         </p>
       </div>
     </div>
@@ -174,7 +174,6 @@ export default {
     },
 
     selecionarMesa: function() {
-      console.log('mesa', this.mesa)
       this.$http.get('mesa/' + this.mesa.id, { block: true }).then(
         response => {
           this.lista.length = 0

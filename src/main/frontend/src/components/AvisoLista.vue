@@ -245,37 +245,20 @@ export default {
     this.$on('filtrar', (texto) => { this.filtrarMovimentos(texto) })
 
     // Carragar a lista de avisos pendentes
-    this.$nextTick(function () {
-      var i
-
-      this.$http.get('aviso/listar', { block: true }).then(response => {
-        for (i = 0; i < response.data.status.length; i++) {
-          if (response.data.status[i].errormsg) {
-            if (this.errormsg === undefined) this.errormsg = ''
-            else this.errormsg += '; '
-            this.errormsg += response.data.status[i].system + ': ' + response.data.status[i].errormsg
-          }
-        }
-
-        if (response.data.list) {
-          this.$set(this, 'avisos', [])
-          for (i = 0; i < response.data.list.length; i++) {
-            var aviso = response.data.list[i]
-            aviso.errormsg = undefined
-            aviso.checked = true
-            aviso.disabled = false
-            aviso.processoFormatado = ProcessoBL.formatarProcesso(aviso.processo)
-            aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataaviso)
-            aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
-            aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
-            this.avisos.push(aviso)
-          }
-
-          this.montarOutline(this.avisos)
-        }
-        UtilsBL.logEvento('aviso', 'listar avisos')
-      }, error => UtilsBL.errormsg(error, this))
-    })
+    if (this.avisos === undefined) {
+      if (this.$parent.avisos) {
+        console.log('pegando do pai')
+        this.fixAvisos(this.$parent.avisos)
+      } else {
+        this.$nextTick(function () {
+          this.$http.get('aviso/listar', { block: true }).then(response => {
+            this.fixAvisos(response.data)
+            this.$parent.avisos = response.data
+            this.$parent.cAvisos = response.data.list.length
+          }, error => UtilsBL.errormsg(error, this))
+        })
+      }
+    }
   },
   data () {
     return {
@@ -328,6 +311,34 @@ export default {
     }
   },
   methods: {
+    fixAvisos: function (data) {
+      for (var i = 0; i < data.status.length; i++) {
+        if (data.status[i].errormsg) {
+          if (this.errormsg === undefined) this.errormsg = ''
+          else this.errormsg += '; '
+          this.errormsg += data.status[i].system + ': ' + data.status[i].errormsg
+        }
+      }
+
+      if (data.list) {
+        this.$set(this, 'avisos', [])
+        for (i = 0; i < data.list.length; i++) {
+          var aviso = data.list[i]
+          aviso.errormsg = undefined
+          aviso.checked = true
+          aviso.disabled = false
+          aviso.processoFormatado = ProcessoBL.formatarProcesso(aviso.processo)
+          aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataaviso)
+          aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
+          aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
+          this.avisos.push(aviso)
+        }
+
+        this.montarOutline(this.avisos)
+      }
+      UtilsBL.logEvento('aviso', 'listar avisos')
+    },
+
     sort: function (field) {
       if (field !== this.orderByField) {
         this.orderByField = field

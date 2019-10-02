@@ -23,7 +23,7 @@
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Processos'}" tag="a" exact>Processos</router-link>
                 </li>
-                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; test.properties['balcaovirtual.env'] !== 'prod'">
+                <li class="nav-item" v-if="false">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Etiquetas'}" tag="a" exact>Etiquetas</router-link>
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
@@ -33,10 +33,10 @@
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Intercorrente'}" tag="a">Petição Intercorrente</router-link>
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
-                  <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação<sup v-if="cAvisos"><span class="badge badge-pill badge-danger active-opacity">{{cAvisos}}</span></sup><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link>
                 </li>
                 <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; jwt &amp;&amp; jwt.username &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
-                  <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Mesa</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Minutas</router-link>
                 </li>
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Sugestões'}" tag="a">Sugestões</router-link>
@@ -125,12 +125,22 @@ export default {
     })
 
     this.$on('updateLogged', (token) => {
+      this.cAvisos = undefined
+      this.avisos = undefined
       if (token) {
         AuthBL.setIdToken(token)
         this.jwt = AuthBL.decodeToken(token)
         // $rootScope.updateLogged();
         // $state.go('consulta-processual');
-        this.$router.push({ name: 'Consulta Simples' })
+        if (this.jwt) {
+          // Carragar a lista de avisos pendentes
+          this.$nextTick(function () {
+            this.$http.get('aviso/listar', { block: false }).then(response => {
+              this.avisos = response.data
+              this.cAvisos = this.avisos.list.length
+            }, error => console.log('Erro carregando avisos', error))
+          })
+        }
       }
     })
 
@@ -160,12 +170,8 @@ export default {
 
     this.token = AuthBL.getIdToken()
     if (this.token && AuthBL.isTokenExpired(this.token)) this.token = undefined
-    if (this.token) {
-      AuthBL.setIdToken(this.token)
-      this.jwt = AuthBL.decodeToken(this.token)
-    } else {
-      // this.$router.push({ name: 'Consulta Simples' })
-    }
+    this.$parent.$emit('updateLogged', this.token)
+
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {
         this.test = response.data
@@ -216,7 +222,9 @@ export default {
         mostrarProcessosRelacionados: undefined
       },
       token: undefined,
-      jwt: undefined
+      jwt: undefined,
+      avisos: undefined,
+      cAvisos: undefined
     }
   },
   methods: {
@@ -226,6 +234,7 @@ export default {
     logout: function () {
       AuthBL.logout()
       this.jwt = undefined
+      this.$parent.$emit('updateLogged', undefined)
       this.$router.push({ name: 'Consulta Simples' })
     }
   },
@@ -537,5 +546,13 @@ em.invalid {
   font-size: 12px;
   line-height: 15px;
   color: #ee9393;
+}
+
+.active-opacity {
+  opacity: 0.75;
+}
+
+A.active .active-opacity {
+  opacity: 1.0 !important;
 }
 </style>

@@ -266,6 +266,11 @@ public class SoapMNI {
 					case "CIT":
 						i.tipo = "Citação";
 						break;
+					case "URG":
+						i.tipo = "Urgente";
+						break;
+					default:
+						i.tipo = a.getTipoComunicacao();
 					}
 					i.processo = a.getProcesso().getNumero();
 					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());

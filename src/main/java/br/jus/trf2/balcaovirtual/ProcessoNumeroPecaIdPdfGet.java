@@ -13,7 +13,7 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 		String senha = null;
 		String origem;
 
-		if (ProcessoNumeroValidarGet.assertValidToken(req.token, req.numero)) {
+		if (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero)) {
 			origem = "pub";
 		} else {
 			Usuario u;

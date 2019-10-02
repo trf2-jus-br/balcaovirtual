@@ -33,7 +33,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			if (!Utils.verifyCaptcha(req.captcha))
 				throw new PresentableUnloggedException("Token de reCaptcha inválido");
 			resp.token = jwt(req.numero);
-		} else if (assertValidToken(req.token, req.numero)) {
+		} else if (isValidToken(req.token, req.numero)) {
 			resp.token = req.token;
 		} else
 			SessionsCreatePost.assertAuthorization();
@@ -120,7 +120,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		return jwt;
 	}
 
-	public static boolean assertValidToken(String token, String processo) throws PresentableUnloggedException {
+	public static boolean isValidToken(String token, String processo) throws PresentableUnloggedException {
 		if (token == null || processo == null)
 			return false;
 		Map<String, Object> m;
