@@ -88,7 +88,7 @@
               </td>
               <td>
                 <span class=" unbreakable">
-                  <router-link :to="{name: 'Processo', params: {numero: p.numero}}" target="_blank">{{p.numeroFormatado}}</router-link>
+                  <router-link :to="{name: 'Processo', params: {numero: p.numero}, query: {avisos: $parent.cAvisos}}" target="_blank">{{p.numeroFormatado}}</router-link>
                 </span>
               </td>
               <td>

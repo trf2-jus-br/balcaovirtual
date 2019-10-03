@@ -7,6 +7,7 @@ import java.util.Map;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult.ListStatus;
 
 import br.jus.trf2.assijus.system.api.IAssijusSystem.DocListGetRequest;
 import br.jus.trf2.assijus.system.api.IAssijusSystem.DocListGetResponse;
@@ -36,8 +37,11 @@ public class MesaIdGet implements IMesaIdGet {
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
 
 		resp.list = new ArrayList<>();
+		resp.status = Utils.getStatus(mcr);
+
 		for (String system : mcr.responses.keySet()) {
 			DocListGetResponse r = (DocListGetResponse) mcr.responses.get(system);
+
 			for (Document rd : r.list) {
 				Documento d = new Documento();
 				d.docsystem = system;
@@ -56,7 +60,6 @@ public class MesaIdGet implements IMesaIdGet {
 				resp.list.add(d);
 			}
 		}
-
 	}
 
 	@Override

@@ -18,7 +18,7 @@
       <div class="card card-outline-info">
         <div class="card-header">
           Processo:
-          <router-link :to="{name: 'Processo', params: {numero: aviso.processo}}" target="_blank">{{aviso.processoFormatado}}</router-link>
+          <router-link :to="{name: 'Processo', params: {numero: aviso.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{aviso.processoFormatado}}</router-link>
           <br>Cadastro:
           <span v-html="aviso.dataavisoFormatada"></span>
           <br>Recebimento: {{aviso.datarecebimento}}

@@ -2,6 +2,7 @@ package br.jus.trf2.balcaovirtual;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -11,6 +12,8 @@ import org.joda.time.format.DateTimeFormatter;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
+import com.crivano.swaggerservlet.SwaggerMultipleCallResult.ListStatus;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
@@ -288,8 +291,7 @@ public class Utils {
 	}
 
 	public static String getOrgao(String system) {
-		// TODO: Implementar esse método
-		return null;
+		return getName(system).split("/")[1];
 	}
 
 	private static class VerifyCaptchaRequest implements ISwaggerRequest {
@@ -324,4 +326,15 @@ public class Utils {
 		return r.success;
 	}
 
+	public static ArrayList<IBalcaoVirtual.ListStatus> getStatus(SwaggerMultipleCallResult mcr) {
+		ArrayList<IBalcaoVirtual.ListStatus> l = new ArrayList<IBalcaoVirtual.ListStatus>();
+		for (ListStatus sts : mcr.status) {
+			IBalcaoVirtual.ListStatus lsts = new IBalcaoVirtual.ListStatus();
+			lsts.system = sts.system;
+			lsts.errormsg = sts.errormsg;
+			lsts.stacktrace = sts.stacktrace;
+			l.add(lsts);
+		}
+		return l;
+	}
 }

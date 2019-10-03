@@ -80,7 +80,7 @@
               </td>
               <td class="td-middle">
                 <span class="unbreakable">
-                  <router-link :to="{name: 'Processo', params: {numero: f.processo}}" target="_blank">{{f.processoFormatado}}</router-link>
+                  <router-link :to="{name: 'Processo', params: {numero: f.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processoFormatado}}</router-link>
                 </span>
               </td>
               <td class="td-middle">{{f.dockind}}</td>

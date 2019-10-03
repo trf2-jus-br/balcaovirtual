@@ -33,7 +33,7 @@
                   <router-link class="nav-link" active-class="active" :to="{name:'Petição Intercorrente'}" tag="a">Petição Intercorrente</router-link>
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
-                  <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação<sup v-if="cAvisos"><span class="badge badge-pill badge-danger active-opacity">{{cAvisos}}</span></sup><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link>
+                  <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação<sup v-if="cAvisos &amp;&amp; cAvisos > 0"><span class="badge badge-pill badge-danger active-opacity">{{cAvisos}}</span></sup><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link>
                 </li>
                 <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; jwt &amp;&amp; jwt.username &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Minutas</router-link>
@@ -133,13 +133,18 @@ export default {
         // $rootScope.updateLogged();
         // $state.go('consulta-processual');
         if (this.jwt) {
-          // Carragar a lista de avisos pendentes
-          this.$nextTick(function () {
-            this.$http.get('aviso/listar', { block: false }).then(response => {
-              this.avisos = response.data
-              this.cAvisos = this.avisos.list.length
-            }, error => console.log('Erro carregando avisos', error))
-          })
+          if (this.$route.query.avisos) {
+            this.cAvisos = this.$route.query.avisos
+            this.avisos = undefined
+          } else {
+            // Carragar a lista de avisos pendentes
+            this.$nextTick(function () {
+              this.$http.get('aviso/listar', { block: false }).then(response => {
+                this.avisos = response.data
+                this.cAvisos = this.avisos.list.length
+              }, error => console.log('Erro carregando avisos', error))
+            })
+          }
         }
       }
     })
@@ -170,7 +175,7 @@ export default {
 
     this.token = AuthBL.getIdToken()
     if (this.token && AuthBL.isTokenExpired(this.token)) this.token = undefined
-    this.$parent.$emit('updateLogged', this.token)
+    this.$emit('updateLogged', this.token)
 
     this.$nextTick(function () {
       this.$http.get('test?skip=all').then(response => {
@@ -234,7 +239,7 @@ export default {
     logout: function () {
       AuthBL.logout()
       this.jwt = undefined
-      this.$parent.$emit('updateLogged', undefined)
+      this.$emit('updateLogged', undefined)
       this.$router.push({ name: 'Consulta Simples' })
     }
   },

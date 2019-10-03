@@ -55,7 +55,7 @@
                   <button type="button" v-show="f.processo === undefined || f.processo === ''" @click="exibirProcessosMultiplos(f)" class="btn btn-sm btn-outline-primary ml-1" title="Inserir este PDF em múltiplos processos">&#x2795;</button>
                 </div>
                 <span class="unbreakable" v-if="!editando">
-                  <router-link :to="{name: 'Processo', params: {numero: f.processo}}" target="_blank">{{f.processo}}</router-link>
+                  <router-link :to="{name: 'Processo', params: {numero: f.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processo}}</router-link>
                 </span>
               </td>
 
@@ -187,7 +187,7 @@
           <tbody>
             <tr v-for="r in resumoPorDataFiltrado">
               <td>
-                <router-link :to="{name: 'Processo', params: {numero: r.processo}}" target="_blank">{{r.processo}}</router-link>
+                <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processo}}</router-link>
               </td>
               <td>{{r.classe}}</td>
               <td>

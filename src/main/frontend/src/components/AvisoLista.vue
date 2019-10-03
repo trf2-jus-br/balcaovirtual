@@ -20,7 +20,7 @@
       </div>
 
       <div class="row mb-3 d-print-none" v-show="avisos &amp;&amp; avisos.length > 0">
-        <div class="col-sm-2">
+        <div v-if="outlineMap &amp;&amp; outlineMap.length > 1" class="col-sm-2">
           <button type="button" @click="mostrarOutline()" :class="{'btn btn-block': true, 'btn-info': outlineAtivo, 'btn-outline-info': !outlineAtivo}">Filtro Hierárquico
           </button>
         </div>
@@ -90,8 +90,8 @@
                     </span>
                   </a>
                 </th>
-                <th>Prazo</th>
-                <th>
+                <th v-if="exibirPrazo">Prazo</th>
+                <th v-if="exibirDataLimite">
                   <a @click="sort('datalimiteintimacaoautomatica')">
                     Data Limite Int. Aut.
                     <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
@@ -109,7 +109,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="exibirEvento">
                   <a @click="sort('eventointimacao')">
                     Evento
                     <span v-show="orderByField == 'eventointimacao'">
@@ -118,7 +118,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="exibirMotivo">
                   <a @click="sort('motivointimacao')">
                     Motivo
                     <span v-show="orderByField == 'motivointimacao'">
@@ -136,7 +136,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="exibirAssunto">
                   <a @click="sort('assuntoNome')">
                     Assunto
                     <span v-show="orderByField == 'assuntoNome'">
@@ -147,7 +147,7 @@
                 </th>
                 <th>
                   <a @click="sort('orgao')">
-                    Órgão
+                    Sistema/Órgão
                     <span v-show="orderByField == 'orgao'">
                       <span v-show="!reverseSort">&#8679;</span>
                       <span v-show="reverseSort">&#8681;</span>
@@ -181,7 +181,7 @@
                     </span>
                   </a>
                 </th>
-                <th>Status</th>
+                <th v-if="exibirStatus">Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -193,22 +193,22 @@
                 <td>
                   <span v-html="r.dataavisoFormatada"></span>
                 </td>
-                <td>{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
-                <td>
+                <td v-if="exibirPrazo">{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
+                <td v-if="exibirDataLimite">
                   <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
                 </td>
                 <td>{{r.tipo}}</td>
-                <td>{{r.eventointimacao}}</td>
-                <td>{{r.motivointimacao}}</td>
+                <td v-if="exibirEvento">{{r.eventointimacao}}</td>
+                <td v-if="exibirMotivo">{{r.motivointimacao}}</td>
                 <td>
-                  <router-link :to="{name: 'Processo', params: {numero: r.processo}}" target="_blank">{{r.processoFormatado}}</router-link>
+                  <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processoFormatado}}</router-link>
                 </td>
-                <td>{{r.assuntoNome}}</td>
-                <td>{{r.orgao}}</td>
+                <td v-if="exibirAssunto">{{r.assuntoNome}}</td>
+                <td><span :title="'Identificador: ' + r.sistema">{{$parent.test.properties['balcaovirtual.' + r.sistema + '.name']}}</span></td>
                 <td :title="r.unidadenome">{{r.unidade}}</td>
                 <td v-if="false">{{r.unidadetipo}}</td>
                 <td v-if="false">{{r.localidade}}</td>
-                <td class="status-td">
+                <td class="status-td" v-if="exibirStatus">
                   <span v-if="r.errormsg" class="red" v-html="r.errormsg"></span>
                 </td>
                 <td align="right">
@@ -308,6 +308,48 @@ export default {
       return this.filtrados.filter(function (item) {
         return item.checked
       })
+    },
+
+    exibirPrazo: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].numeroprazo || this.filtrados[i].tipoprazo || this.filtrados[i].multiplicadorprazo) return true
+      }
+      return false
+    },
+
+    exibirDataLimite: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].datalimiteintimacaoautomatica) return true
+      }
+      return false
+    },
+
+    exibirEvento: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].eventointimacao) return true
+      }
+      return false
+    },
+
+    exibirMotivo: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].motivointimacao) return true
+      }
+      return false
+    },
+
+    exibirAssunto: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].assuntoNome) return true
+      }
+      return false
+    },
+
+    exibirStatus: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].errormsg) return true
+      }
+      return false
     }
   },
   methods: {
@@ -364,31 +406,37 @@ export default {
           outline.push(o)
           map[ko] = o
         }
+        a.filtro = ko
 
-        var kl = ko + ';' + a.localidade
-        if (!map[kl]) {
-          o = {
-            nome: a.localidade,
-            filtro: kl,
-            ativo: true
+        if (a.localidade) {
+          var kl = ko + ';' + a.localidade
+          if (!map[kl]) {
+            o = {
+              nome: a.localidade,
+              filtro: kl,
+              ativo: true
+            }
+            if (!map[ko].item) map[ko].item = []
+            map[ko].item.push(o)
+            map[kl] = o
           }
-          if (!map[ko].item) map[ko].item = []
-          map[ko].item.push(o)
-          map[kl] = o
-        }
+          a.filtro = kl
 
-        var kt = kl + ';' + a.unidadetipo
-        if (!map[kt]) {
-          o = {
-            nome: a.unidadetipo,
-            filtro: kt,
-            ativo: true
+          if (a.unidadetipo) {
+            var kt = kl + ';' + a.unidadetipo
+            if (!map[kt]) {
+              o = {
+                nome: a.unidadetipo,
+                filtro: kt,
+                ativo: true
+              }
+              if (!map[kl].item) map[kl].item = []
+              map[kl].item.push(o)
+              map[kt] = o
+            }
+            a.filtro = kt
           }
-          if (!map[kl].item) map[kl].item = []
-          map[kl].item.push(o)
-          map[kt] = o
         }
-        a.filtro = kt
       }
       this.outlineMap = map
       this.outline = outline
@@ -472,6 +520,7 @@ export default {
         aviso.checked = false
         aviso.disabled = true
         aviso.errormsg = undefined
+        if (this.$parent.cAvisos && this.$parent.cAvisos > 0) this.$parent.cAvisos--
         if (!lote) this.$set(this, 'aviso', aviso)
         UtilsBL.logEvento('aviso', 'confirmar', 'singular')
         if (lote) Bus.$emit('prgNext')

@@ -233,7 +233,7 @@ public class SoapMNI {
 		Usuario u = SessionsCreatePost.assertUsuario();
 
 		for (String system : Utils.getSystems()) {
-			if (!u.usuarios.containsKey(system))
+			if (!u.usuarios.containsKey(system) || !"ext".equals(u.usuarios.get(system).origem))
 				continue;
 			ServicoIntercomunicacao222 client = getClient(system);
 			Holder<Boolean> sucesso = new Holder<>();
@@ -266,8 +266,32 @@ public class SoapMNI {
 					case "CIT":
 						i.tipo = "Citação";
 						break;
+					case "NOT":
+						i.tipo = "Notificação";
+						break;
+					case "VIS":
+						i.tipo = "Vista para manifestação";
+						break;
 					case "URG":
 						i.tipo = "Urgente";
+						break;
+					case "BAI":
+						i.tipo = "Baixa de processos a Origem";
+						break;
+					case "DEV":
+						i.tipo = "Devolução";
+						break;
+					case "PTA":
+						i.tipo = "Pauta de julgamento/audiência";
+						break;
+					case "DIL":
+						i.tipo = "Baixa em Diligência";
+						break;
+//					case "VIS":
+//						i.tipo = "Vista para manifestação - Entidade Externa";
+//						break;
+					case "FCO":
+						i.tipo = "Fórum de Conciliação";
 						break;
 					default:
 						i.tipo = a.getTipoComunicacao();

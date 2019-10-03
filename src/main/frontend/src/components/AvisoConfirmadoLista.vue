@@ -197,7 +197,7 @@
                 <td>{{r.eventointimacao}}</td>
                 <td>{{r.motivointimacao}}</td>
                 <td>
-                  <router-link :to="{name: 'Processo', params: {numero: r.processo}}" target="_blank">{{r.processoFormatado}}</router-link>
+                  <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processoFormatado}}</router-link>
                 </td>
                 <td>{{r.assuntoNome}}</td>
                 <td>{{r.orgao}}</td>

@@ -1423,6 +1423,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/Documento"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:

@@ -1021,6 +1021,7 @@ public interface IBalcaoVirtual {
 
 	public class MesaIdGetResponse implements ISwaggerResponse {
 		public List<Documento> list;
+		public List<ListStatus> status;
 	}
 
 	public interface IMesaIdGet extends ISwaggerMethod {
