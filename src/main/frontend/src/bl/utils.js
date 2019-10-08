@@ -54,6 +54,17 @@ export default {
     return r
   },
 
+  formatJSDDMMYYYY: function (s) {
+    if (!s) return
+    var r =
+      s.substring(8, 10) +
+      '/' +
+      s.substring(5, 7) +
+      '/' +
+      s.substring(0, 4)
+    return r
+  },
+
   trunc: function (s, n, useWordBoundary) {
     if (s.length <= n) {
       return s

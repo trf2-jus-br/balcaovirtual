@@ -55,10 +55,12 @@
               <th style="text-align: center">
                 <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
               </th>
+              <th>Data</th>
               <th>Documento</th>
               <th>Processo</th>
               <th>Tipo</th>
-              <th>Origem</th>
+              <th>Responsável</th>
+              <th>Sistema/Órgão</th>
               <th>Situação</th>
             </tr>
           </thead>
@@ -68,13 +70,16 @@
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
               </td>
               <td>
-                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f)">{{f.doccode}}</a>
+              {{f.dataDeInclusaoFormatada}}
+              </td>
+              <td>
+                <a href="" v-if="f.id" @click.prevent="mostrarDocumento(f)">{{f.numeroDoDocumento}}</a>
 
-                <a href="" v-if="f.docid" @click.prevent="mostrarDocumento(f, 'attachment')">
+                <a href="" v-if="f.id" @click.prevent="mostrarDocumento(f, 'attachment')">
                   <span class="fa fa-download icone-em-linha"></span>
                 </a>
 
-                <a href="" v-if="f.docid" @click.prevent="assinarDocumento(f)">
+                <a href="" v-if="f.id" @click.prevent="assinarDocumento(f)">
                   <span class="fa fa-certificate icone-em-linha" title="Assinar Digitalmente"></span>
                 </a>
               </td>
@@ -83,9 +88,10 @@
                   <router-link :to="{name: 'Processo', params: {numero: f.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processoFormatado}}</router-link>
                 </span>
               </td>
-              <td class="td-middle">{{f.dockind}}</td>
-              <td class="td-middle">{{f.docorigin}}</td>
-              <td class="td-middle">{{f.situacao}}
+              <td class="td-middle">{{f.tipoDoDocumento}}</td>
+              <td class="td-middle"><span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{f.identificadorDoUsuarioQueIncluiu}}</span></td>
+              <td class="td-middle"><span :title="'Identificador: ' + f.sistema">{{$parent.test.properties['balcaovirtual.' + f.sistema + '.name']}}</span></td>
+              <td class="td-middle">{{f.descricaoDoStatus}}
                 <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
                 </span>
               </td>
@@ -130,8 +136,8 @@ export default {
       a = UtilsBL.filtrarPorSubstring(a, this.filtro)
       var procnum, procline
       for (var i = 0; i < a.length; i++) {
-        if (procnum !== a[i].processo) {
-          procnum = a[i].processo
+        if (procnum !== a[i].numeroDoProcesso) {
+          procnum = a[i].numeroDoProcesso
           procline = i
           a[i].rows = 1
         } else {
@@ -191,23 +197,26 @@ export default {
         rows: 1,
         checked: true,
         disabled: false,
-        dataentrada: undefined,
-        dataentradaFormatada: undefined,
-        doccode: undefined,
-        documento: undefined,
-        processo: undefined,
+        dataDeInclusao: undefined,
+        dataDeInclusaoFormatada: undefined,
+        id: undefined,
+        numeroDoDocumento: undefined,
+        tipoDoDocumento: undefined,
+        numeroDoProcesso: undefined,
         processoFormatado: undefined,
-        motivo: undefined,
-        situacao: undefined,
-        responsavel: undefined,
+        descricaoDoStatus: undefined,
+        identificadorDoUsuarioQueIncluiu: undefined,
+        nomeDoUsuarioQueIncluiu: undefined,
+        conteudo: undefined,
+        sistema: undefined,
         errormsg: undefined
       })
-      if (item.processo !== undefined) {
-        item.processoFormatado = ProcessoBL.formatarProcesso(item.processo)
+      if (item.numeroDoProcesso !== undefined) {
+        item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso)
       }
-      if (item.dataentrada !== undefined) {
-        item.dataentradaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
-          item.dataentrada
+      if (item.dataDeInclusao !== undefined) {
+        item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
+          item.dataDeInclusao
         )
       }
       return item
@@ -272,7 +281,7 @@ export default {
       return {
         id: item.docid,
         system: item.docsystem,
-        code: item.doccode,
+        code: item.numeroDoDocumento,
         descr: item.docdescr,
         kind: item.dockind,
         origin: 'Balcão Virtual'

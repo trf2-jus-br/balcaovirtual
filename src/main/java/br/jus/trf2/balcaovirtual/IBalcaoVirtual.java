@@ -12,6 +12,8 @@ import com.crivano.swaggerservlet.ISwaggerResponse;
 import com.crivano.swaggerservlet.ISwaggerResponseFile;
 import com.crivano.swaggerservlet.ISwaggerResponsePayload;
 
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Lembrete;
+
 public interface IBalcaoVirtual {
 	public class ConfigTipoPeticaoIntercorrente implements ISwaggerModel {
 		public String id;
@@ -170,23 +172,30 @@ public interface IBalcaoVirtual {
 		public Date dataalteracao;
 	}
 
-	public class Documento implements ISwaggerModel {
-		public String docsystem;
-		public String docid;
-		public String docsecret;
-		public String doccode;
-		public String docdescr;
-		public String dockind;
-		public String docorigin;
-		public String documento;
-		public String processo;
-		public String motivo;
-		public String situacao;
-		public String responsavel;
-		public Date dataentrada;
+	public class MesaDocumento implements ISwaggerModel {
+		public Date dataDeInclusao;
+		public String id;
+		public String numeroDoDocumento;
+		public String numeroDoProcesso;
+		public String descricao;
+		public String status;
+		public String descricaoDoStatus;
+		public String tipoDoDocumento;
+		public String identificadorDoUsuarioQueIncluiu;
+		public String nomeDoUsuarioQueIncluiu;
 		public String conteudo;
+		public String sistema;
+		public List<Lembrete> lembretes;
 	}
 
+	public class Lembrete implements ISwaggerModel {
+		public Date dataDeInclusao;
+		public String id;
+		public String identificadorDoUsuario;
+		public String nomeDoUsuario;
+		public String conteudo;
+	}
+	
 	public class Marcador implements ISwaggerModel {
 		public String texto;
 	}
@@ -1022,7 +1031,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class MesaIdGetResponse implements ISwaggerResponse {
-		public List<Documento> list;
+		public List<MesaDocumento> list;
 		public List<ListStatus> status;
 	}
 

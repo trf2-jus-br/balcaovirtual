@@ -8,15 +8,12 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
-import br.jus.trf2.assijus.system.api.IAssijusSystem.DocListGetRequest;
-import br.jus.trf2.assijus.system.api.IAssijusSystem.DocListGetResponse;
-import br.jus.trf2.assijus.system.api.IAssijusSystem.Document;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Documento;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdGet;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaDocumento;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetResponse;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.MesaDocumento;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2DocumentosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2DocumentosGetResponse;
 
@@ -28,79 +25,63 @@ public class MesaIdGet implements IMesaIdGet {
 		if (!u.isInterno())
 			throw new Exception("Mesas só podem ser acessadas por usuários internos");
 
-		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
-		for (String system : u.usuarios.keySet()) {
-			DocListGetRequest q = new DocListGetRequest();
-			q.cpf = u.cpf;
-			q.urlapi = Utils.getAssijusUrl(system);
-			mapp.put(system, new SwaggerCallParameters(system + " - listar minutas", Utils.getAssijusPassword(system),
-					"GET", Utils.getAssijusUrl(system) + "/doc/list", q, DocListGetResponse.class));
-		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
-
 		resp.list = new ArrayList<>();
+		resp.status = new ArrayList<>();
+
+		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
+		for (String system : Utils.getSystems()) {
+			if (!u.usuarios.containsKey(system) || !"int".equals(u.usuarios.get(system).origem)
+					|| !system.contains(".eproc"))
+				continue;
+
+			UsuarioUsernameLocalIdMesaId2DocumentosGetRequest q = new UsuarioUsernameLocalIdMesaId2DocumentosGetRequest();
+			q.username = u.usuario;
+			mapp.put(system,
+					new SwaggerCallParameters(system + " - listar minutas", Utils.getApiPassword(system), "GET",
+							Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/local/null/mesa/null/documentos", q,
+							UsuarioUsernameLocalIdMesaId2DocumentosGetResponse.class));
+		}
+
+		SwaggerMultipleCallResult mcr = null;
+		mcr = SwaggerCall.callMultiple(mapp, 15000);
 		resp.status = Utils.getStatus(mcr);
-
-		Map<String, SwaggerCallParameters> mapp2 = new HashMap<>();
-		Map<String, Documento> mapDocs = new HashMap();
-
 		for (String system : mcr.responses.keySet()) {
-			DocListGetResponse r = (DocListGetResponse) mcr.responses.get(system);
-
-			StringBuilder sb = new StringBuilder();
-			for (Document rd : r.list) {
-				Documento d = new Documento();
-				d.docsystem = system;
-				d.docid = rd.id;
-				d.docsecret = rd.secret;
-				d.doccode = rd.code;
-				d.docdescr = rd.descr;
-				d.dockind = rd.kind;
-				d.docorigin = Utils.getName(system);
-				d.documento = "";
-				d.processo = "";
-				d.motivo = "";
-				d.situacao = "";
-				d.responsavel = "";
-				d.dataentrada = null;
-				mapDocs.put(system + "|" + d.docid, d);
-				if (sb.length() > 0)
-					sb.append(",");
-				sb.append(d.docid);
-				resp.list.add(d);
-			}
-
-			// Complementar informações, necessário apenas para o Eproc
-			if (system.contains(".eproc") && sb.length() > 0) {
-				UsuarioUsernameLocalIdMesaId2DocumentosGetRequest q = new UsuarioUsernameLocalIdMesaId2DocumentosGetRequest();
-				q.ids = sb.toString();
-				mapp2.put(system,
-						new SwaggerCallParameters(system + " - complementar minutas", Utils.getAssijusPassword(system),
-								"GET", Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/local/null/mesa/null/documentos",
-								q, UsuarioUsernameLocalIdMesaId2DocumentosGetResponse.class));
-
-			}
-		}
-
-		SwaggerMultipleCallResult mcr2 = SwaggerCall.callMultiple(mapp2, 15000);
-		for (String system : mcr2.responses.keySet()) {
-			UsuarioUsernameLocalIdMesaId2DocumentosGetResponse r2 = (UsuarioUsernameLocalIdMesaId2DocumentosGetResponse) mcr2.responses
+			UsuarioUsernameLocalIdMesaId2DocumentosGetResponse r = (UsuarioUsernameLocalIdMesaId2DocumentosGetResponse) mcr.responses
 					.get(system);
-			for (MesaDocumento rd : r2.list) {
-				Documento d = mapDocs.get(system + "|" + rd.id);
-				if (d == null)
-					continue;
-				d.conteudo = rd.conteudo;
-				d.processo = rd.numerodoprocesso;
+			for (ISistemaProcessual.MesaDocumento a : r.list) {
+				IBalcaoVirtual.MesaDocumento i = new MesaDocumento();
+				i.dataDeInclusao = a.dataDeInclusao;
+				i.id = a.id;
+				i.numeroDoProcesso = a.numeroDoProcesso;
+				i.numeroDoDocumento = a.numeroDoDocumento;
+				i.descricao = a.descricao;
+				i.status = a.status;
+				i.descricaoDoStatus = a.descricaoDoStatus;
+				i.tipoDoDocumento = a.tipoDoDocumento;
+				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
+				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
+				i.conteudo = a.conteudo;
+				i.sistema = system;
+				if (a.lembretes != null) {
+					i.lembretes = new ArrayList<>();
+					for (ISistemaProcessual.Lembrete j : a.lembretes) {
+						IBalcaoVirtual.Lembrete lembrete = new IBalcaoVirtual.Lembrete();
+						lembrete.id = j.id;
+						lembrete.dataDeInclusao = j.dataDeInclusao;
+						lembrete.conteudo = j.conteudo;
+						lembrete.identificadorDoUsuario = j.identificadorDoUsuario;
+						lembrete.nomeDoUsuario = j.nomeDoUsuario;
+						i.lembretes.add(lembrete);
+					}
+				}
+				resp.list.add(i);
 			}
-
 		}
-
 	}
 
 	@Override
 	public String getContext() {
-		return "obter classe processual";
+		return "obter lista de minutas";
 	}
 
 }

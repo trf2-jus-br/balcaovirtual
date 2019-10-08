@@ -1403,7 +1403,7 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/Mesa"
+                  $ref: "#/definitions/MesaDocumento"
         500:
           description: Error ocurred
           schema:
@@ -1425,7 +1425,7 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/Documento"
+                  $ref: "#/definitions/MesaDocumento"
               status:
                 type: array
                 items:
@@ -1810,40 +1810,54 @@ definitions:
         type: string
         format: date-time
         
-  Documento:
-    description: Documento na mesa de trabalho
+  MesaDocumento:
+    description: Mesa virtual
     type: object
     properties:
-      docsystem:
-        type: string
-      docid:
-        type: string
-      docsecret:
-        type: string
-      doccode:
-        type: string
-      docdescr:
-        type: string
-      dockind:
-        type: string
-      docorigin:
-        type: string
-      documento:
-        type: string
-      processo:
-        type: string
-      motivo:
-        type: string
-      situacao:
-        type: string
-      responsavel:
-        type: string
-      dataentrada:
+      dataDeInclusao:
         type: string
         format: date-time
+      id:
+        type: string
+      numeroDoDocumento:
+        type: string
+      numeroDoProcesso:
+        type: string
+      descricao:
+        type: string
+      status:
+        type: string
+      descricaoDoStatus:
+        type: string
+      tipoDoDocumento:
+        type: string
+      identificadorDoUsuarioQueIncluiu:
+        type: string
+      nomeDoUsuarioQueIncluiu:
+        type: string
       conteudo:
         type: string
-        
+      lembretes:
+        type: array
+        items:
+          $ref: "#/definitions/Lembrete"
+
+  Lembrete:
+    description: Lembretes
+    type: object
+    properties:
+      dataDeInclusao:
+        type: string
+        format: date-time
+      id:
+        type: string
+      identificadorDoUsuario:
+        type: string
+      nomeDoUsuario:
+        type: string
+      conteudo:
+        type: string
+
   Marcador:
     description: Marcador
     type: object

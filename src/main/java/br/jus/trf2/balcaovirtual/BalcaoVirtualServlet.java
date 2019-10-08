@@ -56,8 +56,8 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			addRestrictedProperty(s.toLowerCase() + ".api.password", null);
 			addRestrictedProperty(s.toLowerCase() + ".mni.url");
 			addRestrictedProperty(s.toLowerCase() + ".mni.endpoint");
-			addRestrictedProperty(s.toLowerCase() + ".assijus.url");
-			addPrivateProperty(s.toLowerCase() + ".assijus.password");
+			addRestrictedProperty(s.toLowerCase() + ".assijus.url", null);
+			addPrivateProperty(s.toLowerCase() + ".assijus.password", null);
 			addPublicProperty(s.toLowerCase() + ".cota.tipo");
 		}
 
@@ -161,19 +161,21 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				}
 			});
 
-			addDependency(new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-assijus", false, 0, 10000) {
+			if (Utils.getAssijusUrl(system) != null) {
+				addDependency(
+						new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-assijus", false, 0, 10000) {
 
-				@Override
-				public String getUrl() {
-					return Utils.getAssijusUrl(system);
-				}
+							@Override
+							public String getUrl() {
+								return Utils.getAssijusUrl(system);
+							}
 
-				@Override
-				public String getResponsable() {
-					return null;
-				}
-
-			});
+							@Override
+							public String getResponsable() {
+								return null;
+							}
+						});
+			}
 
 		}
 
