@@ -143,11 +143,8 @@ export default {
     if (this.$route.params.numero) {
       this.numero = this.$route.params.numero
       if (this.$parent.jwt) this.mostrarProcesso(this.numero)
-      else {
-        console.log(this.$refs.captcha)
-        console.log(this.recaptchaLoading)
-        this.fire(this.$refs.captcha)
-      }
+      else if (this.$route.query.token) this.mostrarProcesso(this.numero, undefined, this.$route.query.token)
+      else this.fire(this.$refs.captcha)
     }
   },
 
@@ -186,10 +183,10 @@ export default {
     consultar: function (recaptchaToken) {
       this.mostrarProcesso(this.numero, recaptchaToken)
     },
-    mostrarProcesso: function (numero, recaptchaToken) {
+    mostrarProcesso: function (numero, recaptchaToken, token) {
       var n = ProcessoBL.somenteNumeros(this.numero)
       if (n === '') return
-      this.$http.get('processo/' + n + '/validar' + (recaptchaToken ? '?captcha=' + recaptchaToken : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
+      this.$http.get('processo/' + n + '/validar' + (recaptchaToken ? '?captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
           if (response.data.unidade && !response.data.usuarioautorizado) {
             this.errormsg = 'Processo em segredo de justiça. (' + response.data.unidade + ')'
@@ -199,7 +196,7 @@ export default {
             this.errormsg = `Processo "${this.numero}" não encontrado`
             return
           }
-          this.$router.push({ name: 'Processo', params: { numero: response.data.numero, token: response.data.token } })
+          this.$router.push({ name: 'Processo', params: { numero: response.data.numero, token: response.data.token, validar: response.data } })
         },
         error => {
           this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`

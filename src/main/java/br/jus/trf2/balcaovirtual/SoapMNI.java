@@ -3,6 +3,7 @@ package br.jus.trf2.balcaovirtual;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,12 +29,14 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -141,6 +144,7 @@ public class SoapMNI {
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 
+		senhaConsultante = preprocessarSenha(idConsultante, senhaConsultante, sistema);
 		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, movimentos, cabecalho, documentos,
 				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
@@ -151,6 +155,14 @@ public class SoapMNI {
 		Gson gson = new GsonBuilder().registerTypeAdapter(collectionType, new OutroParametroSerializer())
 				.setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
 		return gson.toJson(processo);
+	}
+
+	private static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
+		if (sistema.contains(".eproc") && idConsultante.equals(SwaggerServlet.getProperty("public.username"))) {
+			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
+			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
+		}
+		return senhaConsultante;
 	}
 
 	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
@@ -220,6 +232,7 @@ public class SoapMNI {
 		List<String> l = new ArrayList<>();
 		l.add(documento);
 
+		senhaConsultante = preprocessarSenha(idConsultante, senhaConsultante, sistema);
 		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, false, false, false, l, sucesso,
 				mensagem, processo);
 		if (!sucesso.value)
@@ -227,105 +240,98 @@ public class SoapMNI {
 		return processo.value.getDocumento().get(0).getConteudo();
 	}
 
-	public static void consultarAvisosPendentes(String idConsultante, String senhaConsultante, List<Aviso> list,
-			List<ListStatus> status) throws Exception {
+	public static void consultarAvisosPendentes(String system, String idConsultante, String senhaConsultante,
+			List<Aviso> list, List<ListStatus> status) throws Exception {
+		ServicoIntercomunicacao222 client = getClient(system);
+		Holder<Boolean> sucesso = new Holder<>();
+		Holder<String> mensagem = new Holder<>();
+		Holder<List<TipoAvisoComunicacaoPendente>> aviso = new Holder<>();
 
-		Usuario u = SessionsCreatePost.assertUsuario();
+		ListStatus ls = new ListStatus();
+		ls.system = system;
+		status.add(ls);
+		Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
+		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
+		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
+		try {
+			client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, sucesso, mensagem, aviso);
+			if (!sucesso.value)
+				throw new Exception(mensagem.value);
+		} catch (Exception ex) {
+			SwaggerUtils.log(SoapMNI.class).error("Erro obtendo a lista de {}", system, ex);
+			ls.errormsg = SwaggerUtils.messageAsString(ex);
+			ls.stacktrace = SwaggerUtils.stackAsString(ex);
+		}
 
-		for (String system : Utils.getSystems()) {
-			if (!u.usuarios.containsKey(system) || !"ext".equals(u.usuarios.get(system).origem))
-				continue;
-			ServicoIntercomunicacao222 client = getClient(system);
-			Holder<Boolean> sucesso = new Holder<>();
-			Holder<String> mensagem = new Holder<>();
-			Holder<List<TipoAvisoComunicacaoPendente>> aviso = new Holder<>();
-
-			ListStatus ls = new ListStatus();
-			ls.system = system;
-			status.add(ls);
-			Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
-			requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
-			requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
-			try {
-				client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, sucesso, mensagem, aviso);
-				if (!sucesso.value)
-					throw new Exception(mensagem.value);
-			} catch (Exception ex) {
-				SwaggerUtils.log(SoapMNI.class).error("Erro obtendo a lista de {}", system, ex);
-				ls.errormsg = SwaggerUtils.messageAsString(ex);
-				ls.stacktrace = SwaggerUtils.stackAsString(ex);
-			}
-
-			if (aviso != null && aviso.value != null) {
-				for (TipoAvisoComunicacaoPendente a : aviso.value) {
-					Aviso i = new Aviso();
-					switch (a.getTipoComunicacao()) {
-					case "INT":
-						i.tipo = "Intimação";
-						break;
-					case "CIT":
-						i.tipo = "Citação";
-						break;
-					case "NOT":
-						i.tipo = "Notificação";
-						break;
-					case "VIS":
-						i.tipo = "Vista para manifestação";
-						break;
-					case "URG":
-						i.tipo = "Urgente";
-						break;
-					case "BAI":
-						i.tipo = "Baixa de processos a Origem";
-						break;
-					case "DEV":
-						i.tipo = "Devolução";
-						break;
-					case "PTA":
-						i.tipo = "Pauta de julgamento/audiência";
-						break;
-					case "DIL":
-						i.tipo = "Baixa em Diligência";
-						break;
-//					case "VIS":
-//						i.tipo = "Vista para manifestação - Entidade Externa";
-//						break;
-					case "FCO":
-						i.tipo = "Fórum de Conciliação";
-						break;
-					default:
-						i.tipo = a.getTipoComunicacao();
-					}
-					i.processo = a.getProcesso().getNumero();
-					i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
-					i.idaviso = a.getIdAviso();
-					i.sistema = system;
-					i.orgao = Utils.getOrgao(system);
-					i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
-					i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
-					if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
-							&& a.getProcesso().getAssunto().get(0) != null
-							&& a.getProcesso().getAssunto().get(0).getCodigoNacional() != null)
-						i.assunto = a.getProcesso().getAssunto().get(0).getCodigoNacional().toString();
-					for (TipoParametro p : a.getProcesso().getOutroParametro()) {
-						if (p.getNome().equals("tipoOrgaoJulgador"))
-							i.unidadetipo = p.getValor();
-						if (p.getNome().equals("dtLimitIntimAut"))
-							i.datalimiteintimacaoautomatica = Utils.parsearApoloDataHoraMinuto(p.getValor());
-						if (p.getNome().equals("eventoIntimacao"))
-							i.eventointimacao = p.getValor();
-						if (p.getNome().equals("numeroPrazo"))
-							i.numeroprazo = p.getValor();
-						if (p.getNome().equals("tipoPrazo"))
-							i.tipoprazo = p.getValor();
-						if (p.getNome().equals("multiplicadorPrazo"))
-							i.multiplicadorprazo = p.getValor();
-						if (p.getNome().equals("motivoIntimacao"))
-							i.motivointimacao = p.getValor();
-					}
-					i.localidade = a.getProcesso().getCodigoLocalidade();
-					list.add(i);
+		if (aviso != null && aviso.value != null) {
+			for (TipoAvisoComunicacaoPendente a : aviso.value) {
+				Aviso i = new Aviso();
+				switch (a.getTipoComunicacao()) {
+				case "INT":
+					i.tipo = "Intimação";
+					break;
+				case "CIT":
+					i.tipo = "Citação";
+					break;
+				case "NOT":
+					i.tipo = "Notificação";
+					break;
+				case "VIS":
+					i.tipo = "Vista para manifestação";
+					break;
+				case "URG":
+					i.tipo = "Urgente";
+					break;
+				case "BAI":
+					i.tipo = "Baixa de processos a Origem";
+					break;
+				case "DEV":
+					i.tipo = "Devolução";
+					break;
+				case "PTA":
+					i.tipo = "Pauta de julgamento/audiência";
+					break;
+				case "DIL":
+					i.tipo = "Baixa em Diligência";
+					break;
+				// case "VIS":
+				// i.tipo = "Vista para manifestação - Entidade Externa";
+				// break;
+				case "FCO":
+					i.tipo = "Fórum de Conciliação";
+					break;
+				default:
+					i.tipo = a.getTipoComunicacao();
 				}
+				i.processo = a.getProcesso().getNumero();
+				i.dataaviso = Utils.parsearApoloDataHoraMinuto(a.getDataDisponibilizacao());
+				i.idaviso = a.getIdAviso();
+				i.sistema = system;
+				i.orgao = Utils.getOrgao(system);
+				i.unidade = a.getProcesso().getOrgaoJulgador().getCodigoOrgao();
+				i.unidadenome = a.getProcesso().getOrgaoJulgador().getNomeOrgao();
+				if (a.getProcesso().getAssunto() != null && a.getProcesso().getAssunto().size() > 0
+						&& a.getProcesso().getAssunto().get(0) != null
+						&& a.getProcesso().getAssunto().get(0).getCodigoNacional() != null)
+					i.assunto = a.getProcesso().getAssunto().get(0).getCodigoNacional().toString();
+				for (TipoParametro p : a.getProcesso().getOutroParametro()) {
+					if (p.getNome().equals("tipoOrgaoJulgador"))
+						i.unidadetipo = p.getValor();
+					if (p.getNome().equals("dtLimitIntimAut"))
+						i.datalimiteintimacaoautomatica = Utils.parsearApoloDataHoraMinuto(p.getValor());
+					if (p.getNome().equals("eventoIntimacao"))
+						i.eventointimacao = p.getValor();
+					if (p.getNome().equals("numeroPrazo"))
+						i.numeroprazo = p.getValor();
+					if (p.getNome().equals("tipoPrazo"))
+						i.tipoprazo = p.getValor();
+					if (p.getNome().equals("multiplicadorPrazo"))
+						i.multiplicadorprazo = p.getValor();
+					if (p.getNome().equals("motivoIntimacao"))
+						i.motivointimacao = p.getValor();
+				}
+				i.localidade = a.getProcesso().getCodigoLocalidade();
+				list.add(i);
 			}
 		}
 	}

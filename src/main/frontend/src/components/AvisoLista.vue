@@ -358,14 +358,15 @@ export default {
         if (data.status[i].errormsg) {
           if (this.errormsg === undefined) this.errormsg = ''
           else this.errormsg += '; '
-          this.errormsg += data.status[i].system + ': ' + data.status[i].errormsg
+          this.errormsg += status[i].system + ': ' + data.status[i].errormsg
         }
       }
 
       if (data.list) {
-        this.$set(this, 'avisos', [])
+        var aAvisos = []
         for (i = 0; i < data.list.length; i++) {
-          var aviso = data.list[i]
+          var aviso = {}
+          UtilsBL.applyDefauts(aviso, data.list[i])
           aviso.errormsg = undefined
           aviso.checked = true
           aviso.disabled = false
@@ -373,8 +374,9 @@ export default {
           aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataaviso)
           aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica)
           aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
-          this.avisos.push(aviso)
+          aAvisos.push(aviso)
         }
+        this.$set(this, 'avisos', aAvisos)
 
         this.montarOutline(this.avisos)
       }

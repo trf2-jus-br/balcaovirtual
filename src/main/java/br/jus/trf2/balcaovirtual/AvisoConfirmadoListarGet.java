@@ -50,7 +50,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 				for (br.jus.trf2.sistemaprocessual.ISistemaProcessual.Aviso ra : r.list) {
 					Aviso a = new Aviso();
 					a.idaviso = ra.idAviso;
-					a.dataaviso = Utils.parsearDataHoraMinutoSegundo(ra.dataAviso);
+					a.dataaviso = ra.dataAviso;
 					a.tipo = ra.tipo;
 					a.processo = ra.processo;
 					a.unidade = ra.unidade;
@@ -62,8 +62,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 					a.numeroprazo = ra.numeroPrazo;
 					a.tipoprazo = ra.tipoPrazo;
 					a.multiplicadorprazo = ra.multiplicadorPrazo;
-					a.datalimiteintimacaoautomatica = Utils
-							.parsearDataHoraMinutoSegundo(ra.dataLimiteIntimacaoAutomatica);
+					a.datalimiteintimacaoautomatica = ra.dataLimiteIntimacaoAutomatica;
 					a.assunto = ra.assunto;
 					a.dataconfirmacao = Utils.parsearDataHoraMinutoSegundo(ra.dataConfirmacao);
 					a.usuarioconfirmacao = ra.usuarioConfirmacao;

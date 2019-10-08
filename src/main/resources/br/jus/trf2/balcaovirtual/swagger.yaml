@@ -698,7 +698,10 @@ paths:
                 $ref: "#/definitions/DataValidacao"
               token:
                 $ref: "#/definitions/Token"
-                
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:
@@ -1838,6 +1841,8 @@ definitions:
       dataentrada:
         type: string
         format: date-time
+      conteudo:
+        type: string
         
   Marcador:
     description: Marcador

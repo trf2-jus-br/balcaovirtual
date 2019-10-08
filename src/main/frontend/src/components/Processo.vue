@@ -540,82 +540,8 @@ export default {
 
     // Validar o número do processo
     this.$nextTick(function() {
-      Bus.$emit('block', 20)
-      this.$http.get('processo/' + this.numero + '/validar' + (this.token ? '?token=' + this.token : '')).then(
-        response => {
-          this.sistema = response.data.sistema
-          this.dataValidacao = UtilsBL.formatJSDDMMYYYYHHMM(response.data.datavalidacao)
-
-          if (this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema]) {
-            this.perfil = this.$parent.jwt.user[this.sistema].perfil
-          }
-          this.$http
-            .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
-            .then(
-              response => {
-                Bus.$emit('release')
-                try {
-                  this.proc = response.data.value
-                  if (this.proc.movimento) {
-                    this.proc.movimento = this.proc.movimento.sort(function(
-                      a,
-                      b
-                    ) {
-                      if (a.dataHora < b.dataHora) {
-                        return 1
-                      }
-                      if (a.dataHora > b.dataHora) {
-                        return -1
-                      }
-                      return 0
-                    })
-                  }
-
-                  // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
-                  var calcularTempos = (this.$parent.jwt && this.$parent.jwt.isInterno(this.sistema)) && false
-                  this.fixed = ProcessoBL.fixProc(this.proc)
-                  this.timeline = TimelineBL.updateTimeline(
-                    this.sistema,
-                    this.fixed.movdoc,
-                    calcularTempos,
-                    this.proc.dadosBasicos.classeProcessual
-                  )
-                  this.getDescriptions()
-                  if (this.$parent.jwt) {
-                    this.getMarcadores()
-                    this.getMarcas()
-                    this.$http
-                      .post('processo/' + this.numero + '/sinalizar', {
-                        recente: true
-                      })
-                      .then(
-                        response => {
-                          this.favorito = !!response.data.processo.favorito
-                        },
-                        error => {
-                          this.warningmsg = error.data.errormsg
-                        }
-                      )
-                  }
-                } catch (e) {
-                  console.error(e)
-                }
-              },
-              error => {
-                Bus.$emit('release')
-                UtilsBL.errormsg(error, this)
-              }
-            )
-        },
-        error => {
-          Bus.$emit('release')
-          this.errormsg =
-            'Não foi possível obter informações sobre o processo ' +
-            this.numero +
-            ': ' +
-            error.data.errormsg
-        }
-      )
+      if (this.$route.params.validar) this.aplicarValidar(this.$route.params.validar, this.carregar)
+      else this.validar(this.carregar)
     })
   },
   data() {
@@ -624,7 +550,7 @@ export default {
       timeline: TimelineBL.emptyTimeline(),
       modified: undefined,
       numero: ProcessoBL.somenteNumeros(this.$route.params.numero),
-      token: this.$route.params.token,
+      token: this.$route.params.token ? this.$route.params.token : this.$route.query.token,
       sistema: undefined,
       dataValidacao: undefined,
       perfil: undefined,
@@ -657,6 +583,95 @@ export default {
     }
   },
   methods: {
+    validar: function(cont) {
+      Bus.$emit('block', 20, 30)
+      this.$http.get('processo/' + this.numero + '/validar' + (this.token ? '?token=' + this.token : '')).then(
+        response => {
+          this.aplicarValidar(response.data, cont)
+          Bus.$emit('release')
+        },
+        error => {
+          Bus.$emit('release')
+          this.errormsg =
+            'Não foi possível obter informações sobre o processo ' +
+            this.numero +
+            ': ' +
+            error.data.errormsg
+        }
+      )
+    },
+
+    aplicarValidar: function(data, cont) {
+      this.sistema = data.sistema
+      this.dataValidacao = UtilsBL.formatJSDDMMYYYYHHMM(data.datavalidacao)
+
+      if (this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema]) {
+        this.perfil = this.$parent.jwt.user[this.sistema].perfil
+      }
+      if (cont) cont()
+    },
+
+    carregar: function() {
+      Bus.$emit('block', 30, 100)
+      this.$http
+        .get('processo/' + this.numero + '/consultar?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
+        .then(
+          response => {
+            Bus.$emit('release')
+            try {
+              this.proc = response.data.value
+              if (this.proc.movimento) {
+                this.proc.movimento = this.proc.movimento.sort(function(
+                  a,
+                  b
+                ) {
+                  if (a.dataHora < b.dataHora) {
+                    return 1
+                  }
+                  if (a.dataHora > b.dataHora) {
+                    return -1
+                  }
+                  return 0
+                })
+              }
+
+              // Desabilitando o cálculo de tempos na timeline enquanto não ajustamos perfeitamente
+              var calcularTempos = (this.$parent.jwt && this.$parent.jwt.isInterno(this.sistema)) && false
+              this.fixed = ProcessoBL.fixProc(this.proc)
+              this.timeline = TimelineBL.updateTimeline(
+                this.sistema,
+                this.fixed.movdoc,
+                calcularTempos,
+                this.proc.dadosBasicos.classeProcessual
+              )
+              this.getDescriptions()
+              if (this.$parent.jwt) {
+                this.getMarcadores()
+                this.getMarcas()
+                this.$http
+                  .post('processo/' + this.numero + '/sinalizar', {
+                    recente: true
+                  })
+                  .then(
+                    response => {
+                      this.favorito = !!response.data.processo.favorito
+                    },
+                    error => {
+                      this.warningmsg = error.data.errormsg
+                    }
+                  )
+              }
+            } catch (e) {
+              console.error(e)
+            }
+          },
+          error => {
+            Bus.$emit('release')
+            UtilsBL.errormsg(error, this)
+          }
+        )
+    },
+
     getMarcadores: function() {
       // Carregar os marcadores da classe
       this.$http

@@ -184,6 +184,7 @@ public interface IBalcaoVirtual {
 		public String situacao;
 		public String responsavel;
 		public Date dataentrada;
+		public String conteudo;
 	}
 
 	public class Marcador implements ISwaggerModel {
@@ -425,6 +426,7 @@ public interface IBalcaoVirtual {
 		public Date dataultimomovimento;
 		public Date datavalidacao;
 		public String token;
+		public List<ListStatus> status;
 	}
 
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {

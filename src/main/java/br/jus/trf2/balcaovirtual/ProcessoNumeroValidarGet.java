@@ -58,6 +58,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
+		resp.status = Utils.getStatus(mcr);
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {

@@ -254,6 +254,19 @@ public class Utils {
 		return output;
 	}
 
+	public static byte[] calcSha256(byte[] content) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		md.reset();
+		md.update(content);
+		byte[] output = md.digest();
+		return output;
+	}
+
 	final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
 	public static String bytesToHex(byte[] bytes) {
