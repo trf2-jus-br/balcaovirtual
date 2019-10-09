@@ -11,8 +11,8 @@
       </div>
     </div>
 
-    <div class="row mb-3 d-print-none">
-      <div class="col-sm-auto ml-1">
+    <div class="row d-print-none">
+      <div class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
           <div class="input-group-addon">
             <span class="fa fa-map-marker"></span>
@@ -23,7 +23,7 @@
           </select>
         </div>
       </div>
-      <div class="col-sm-auto ml-1">
+      <div class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
           <div class="input-group-addon">
             <span class="fa fa-search"></span>
@@ -31,7 +31,7 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto ml-auto">
+      <div class="col-sm-auto ml-auto mb-3">
         <button type="button" @click="assinarDocumentos()" class="btn btn-primary ml-1" title="">
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp
           <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
@@ -73,15 +73,7 @@
               {{f.dataDeInclusaoFormatada}}
               </td>
               <td>
-                <a href="" v-if="f.id" @click.prevent="mostrarDocumento(f)">{{f.numeroDoDocumento}}</a>
-
-                <a href="" v-if="f.id" @click.prevent="mostrarDocumento(f, 'attachment')">
-                  <span class="fa fa-download icone-em-linha"></span>
-                </a>
-
-                <a href="" v-if="f.id" @click.prevent="assinarDocumento(f)">
-                  <span class="fa fa-certificate icone-em-linha" title="Assinar Digitalmente"></span>
-                </a>
+                  <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f}}">{{f.numeroDoDocumento}}</router-link>
               </td>
               <td class="td-middle">
                 <span class="unbreakable">
@@ -209,6 +201,7 @@ export default {
         nomeDoUsuarioQueIncluiu: undefined,
         conteudo: undefined,
         sistema: undefined,
+        lembretes: undefined,
         errormsg: undefined
       })
       if (item.numeroDoProcesso !== undefined) {
@@ -218,6 +211,11 @@ export default {
         item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
           item.dataDeInclusao
         )
+      }
+      if (item.lembretes) {
+        for (var i = 0; i < item.lembretes.length; i++) {
+          item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao)
+        }
       }
       return item
     },

@@ -15,8 +15,8 @@
 
     </div>
 
-    <div class="row mb-3 d-print-none">
-      <div class="col-sm-auto">
+    <div class="row d-print-none">
+      <div class="col-sm-auto mb-3">
         <div class="btn-group">
           <label class="btn" :class="{'active btn-primary': pasta === 'inbox',  'btn-outline-primary': pasta !== 'inbox'}">
             <input v-show="false" type="radio" v-model="pasta" value="inbox" autocomplete="off">
@@ -33,13 +33,13 @@
         </div>
       </div>
 
-      <div class="col-sm-auto mr-sm-auto">
+      <div class="col-sm-auto mr-sm-auto mb-3">
         <div class="input-group">
           <div class="input-group-addon">&#128269;</div>
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto" v-if="false">
+      <div class="col-sm-auto mb-3" v-if="false">
         <div class="btn-group btn-block" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
           <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -47,8 +47,8 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-auto">
-        <button type="button" @click="baixarEmLote()" class="btn btn-primary ml-1" title="Inserir este PDF em múltiplos processos">
+      <div class="col-sm-auto mb-3">
+        <button type="button" @click="baixarEmLote()" class="btn btn-primary" title="Inserir este PDF em múltiplos processos">
           Baixar Completo&nbsp;&nbsp
           <span class="badge badge-pill badge-warning">{{filtradosMarcadosDigitaisEAcessiveis.length}}</span>
         </button>

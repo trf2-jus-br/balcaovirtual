@@ -22,6 +22,7 @@ import router from './router'
 import { Bus } from './bl/bus.js'
 import ValidacaoBL from './bl/validacao.js'
 import vSelect from 'vue-select'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
 VeeValidate.Validator.extend('cpf', {
   getMessage: field => 'CPF ' + field + ' inválido.',
@@ -47,6 +48,7 @@ Vue.use(VueResource)
 Vue.use(VueClip)
 Vue.use(VeeValidate, { locale: 'pt_BR' })
 Vue.use(BootstrapVue)
+Vue.use(CKEditor)
 
 Vue.component('v-select', vSelect)
 

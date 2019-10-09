@@ -10,6 +10,7 @@ import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
 import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
 import EtiquetaLista from '@/components/EtiquetaLista'
 import Mesa from '@/components/Mesa'
+import Documento from '@/components/Documento'
 import Login from '@/components/Login'
 import Sugestoes from '@/components/Sugestoes'
 import Sobre from '@/components/Sobre'
@@ -80,6 +81,18 @@ export default new Router({
       path: '/mesa',
       name: 'Mesa',
       component: Mesa
+    },
+    {
+      path: '/documento/:numero',
+      name: 'Documento',
+      component: Documento,
+      meta: {
+        title: route => {
+          return (
+            'Documento ' + route.params.numero + '..'
+          )
+        }
+      }
     },
     {
       path: '/aviso-confirmado-recentes',
