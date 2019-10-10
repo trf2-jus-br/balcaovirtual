@@ -69,8 +69,7 @@ import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Servic
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
 
 public class SoapMNI {
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
@@ -733,15 +732,15 @@ public class SoapMNI {
 
 		String unidade = null;
 		try {
-			Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroGetResponse>> future = SwaggerCall.callAsync(
+			Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumerosGetResponse>> future = SwaggerCall.callAsync(
 					"validar depois de petição inicial", Utils.getApiPassword(sistema), "GET",
 					Utils.getApiUrl(sistema) + "/usuario/" + idManif + "/processo/" + numProc, null,
-					UsuarioUsernameProcessoNumeroGetResponse.class);
-			SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroGetResponse> sar = future.get();
+					UsuarioUsernameProcessoNumerosGetResponse.class);
+			SwaggerAsyncResponse<UsuarioUsernameProcessoNumerosGetResponse> sar = future.get();
 			if (sar.getException() != null)
 				throw sar.getException();
-			UsuarioUsernameProcessoNumeroGetResponse r = (UsuarioUsernameProcessoNumeroGetResponse) sar.getResp();
-			unidade = r.unidade != null ? r.unidade.trim() : null;
+			UsuarioUsernameProcessoNumerosGetResponse r = (UsuarioUsernameProcessoNumerosGetResponse) sar.getResp();
+			unidade = r.list.get(0).unidade != null ? r.list.get(0).unidade.trim() : null;
 
 		} catch (Exception ex) {
 			SwaggerUtils.log(SoapMNI.class).error("Não foi possível obter a unidade", ex);

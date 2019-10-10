@@ -188,15 +188,16 @@ export default {
       if (n === '') return
       this.$http.get('processo/' + n + '/validar' + (recaptchaToken ? '?captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
-          if (response.data.unidade && !response.data.usuarioautorizado) {
-            this.errormsg = 'Processo em segredo de justiça. (' + response.data.unidade + ')'
+          var p = (response.data.list && response.data.list.length === 1) ? response.data.list[0] : {}
+          if (p.unidade && !p.usuarioautorizado) {
+            this.errormsg = 'Processo em segredo de justiça. (' + p.unidade + ')'
             return
           }
-          if (!response.data.numero) {
+          if (!p.numero) {
             this.errormsg = `Processo "${this.numero}" não encontrado`
             return
           }
-          this.$router.push({ name: 'Processo', params: { numero: response.data.numero, token: response.data.token, validar: response.data } })
+          this.$router.push({ name: 'Processo', params: { numero: p.numero, token: p.token, validar: p } })
         },
         error => {
           this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`

@@ -233,6 +233,12 @@ parameters:
     description: Nome do arquivo de um artefato a ser baixado
     required: true
     type: string
+  arquivo:
+    name: arquivo
+    in: path
+    description: Nome do arquivo de um artefato a ser baixado
+    required: true
+    type: string
   disposition:
     name: disposition
     in: query
@@ -666,34 +672,10 @@ paths:
           schema:
             type: object
             properties:
-              numero:
-                $ref: "#/definitions/Numero"
-              sistema:
-                $ref: "#/definitions/Sistema"
-              orgao:
-                $ref: "#/definitions/Orgao"
-              unidade:
-                $ref: "#/definitions/Unidade"
-              localnaunidade:
-                $ref: "#/definitions/LocalNaUnidade"
-              segredodejustica:
-                $ref: "#/definitions/SegredoDeJustica"
-              segredodejusticadesistema:
-                $ref: "#/definitions/SegredoDeJusticaDeSistema"
-              segredodejusticaabsoluto:
-                $ref: "#/definitions/SegredoDeJusticaAbsoluto"
-              usuarioautorizado:
-                $ref: "#/definitions/UsuarioAutorizado"
-              digital:
-                $ref: "#/definitions/Digital"
-              sentenciado:
-                $ref: "#/definitions/Sentenciado"
-              baixado:
-                $ref: "#/definitions/Baixado"
-              cdas:
-                $ref: "#/definitions/CDAs"
-              dataultimomovimento:
-                $ref: "#/definitions/DataUltimoMovimento"
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/ProcessoValido"
               datavalidacao:
                 $ref: "#/definitions/DataValidacao"
               token:
@@ -821,6 +803,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+
   /processo/{numero}/peticao-intercorrente/validar:
     get:
       description: Tipos de petição intercorrente
@@ -1403,7 +1386,7 @@ paths:
               list:
                 type: array
                 items:
-                  $ref: "#/definitions/MesaDocumento"
+                  $ref: "#/definitions/Mesa"
         500:
           description: Error ocurred
           schema:
@@ -1772,6 +1755,40 @@ definitions:
       favorito:
         type: boolean
 
+  ProcessoValido:
+    description: Processo
+    type: object
+    properties:
+      numero:
+        $ref: "#/definitions/Numero"
+      sistema:
+        $ref: "#/definitions/Sistema"
+      orgao:
+        $ref: "#/definitions/Orgao"
+      unidade:
+        $ref: "#/definitions/Unidade"
+      localnaunidade:
+        $ref: "#/definitions/LocalNaUnidade"
+      segredodejustica:
+        $ref: "#/definitions/SegredoDeJustica"
+      segredodejusticadesistema:
+        $ref: "#/definitions/SegredoDeJusticaDeSistema"
+      segredodejusticaabsoluto:
+        $ref: "#/definitions/SegredoDeJusticaAbsoluto"
+      usuarioautorizado:
+        $ref: "#/definitions/UsuarioAutorizado"
+      digital:
+        $ref: "#/definitions/Digital"
+      sentenciado:
+        $ref: "#/definitions/Sentenciado"
+      baixado:
+        $ref: "#/definitions/Baixado"
+      cdas:
+        $ref: "#/definitions/CDAs"
+      dataultimomovimento:
+        $ref: "#/definitions/DataUltimoMovimento"
+
+
   Marca:
     description: Marca
     type: object
@@ -1814,6 +1831,8 @@ definitions:
     description: Mesa virtual
     type: object
     properties:
+      sistema:
+        $ref: "#/definitions/Sistema"
       dataDeInclusao:
         type: string
         format: date-time

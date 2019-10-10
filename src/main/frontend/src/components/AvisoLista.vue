@@ -30,21 +30,21 @@
             <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
           </div>
         </div>
-        <div class="col-sm-2 ml-sm-auto">
+        <div v-if="filtradosEMarcados.length || (exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod')" class="col-sm-2 ml-sm-auto">
           <div class="btn-group btn-block" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Avançado</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <router-link class="dropdown-item" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'" :to="{name:'Avisos Confirmados Recentemente'}" tag="a" exact>Consultar Confirmados</router-link>
-              <a class="dropdown-item" @click="listarProcessos()">Listar Processos Marcados</a>
+              <router-link class="dropdown-item" v-if="exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod'" :to="{name:'Avisos Confirmados Recentemente'}" tag="a" exact>Consultar Confirmados</router-link>
+              <a class="dropdown-item" v-if="filtradosEMarcados.length" @click="listarProcessos()">Listar Processos Marcados</a>
               <a v-if="false" class="dropdown-item" @click="exportarXML('pendente')">Exportar avisos-pendentes.xml</a>
               <a v-if="false" class="dropdown-item" @click="exportarXML('confirmado')">Exportar avisos-confirmados.xml</a>
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div v-if="filtradosEMarcadosEConfirmaveis.length" class="col-sm-2">
           <button class="btn btn-primary btn-block" data-style="expand-left" @click="confirmarEmLote()">
             Confirmar&nbsp;&nbsp
-            <span class="badge badge-pill badge-warning">{{filtradosEMarcados.length}}</span>
+            <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEConfirmaveis.length}}</span>
           </button>
         </div>
       </div>
@@ -100,7 +100,7 @@
                     </span>
                   </a>
                 </th>
-                <th>
+                <th v-if="exibirTipo">
                   <a @click="sort('tipo')">
                     Tipo
                     <span v-show="orderByField == 'tipo'">
@@ -197,7 +197,7 @@
                 <td v-if="exibirDataLimite">
                   <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
                 </td>
-                <td>{{r.tipo}}</td>
+                <td v-if="exibirTipo">{{r.tipo}}</td>
                 <td v-if="exibirEvento">{{r.eventointimacao}}</td>
                 <td v-if="exibirMotivo">{{r.motivointimacao}}</td>
                 <td>
@@ -212,7 +212,7 @@
                   <span v-if="r.errormsg" class="red" v-html="r.errormsg"></span>
                 </td>
                 <td align="right">
-                  <button type="button" v-if="!r.confirmado" @click="confirmarAviso(r, false)" class="btn btn-sm btn-primary d-print-none">Confirmar</button>
+                  <button type="button" v-if="!r.confirmado &amp;&amp; r.idaviso" @click="confirmarAviso(r, false)" class="btn btn-sm btn-primary d-print-none">Confirmar</button>
                   <button type="button" v-if="r.confirmado" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">Ver</button>
                 </td>
               </tr>
@@ -310,6 +310,12 @@ export default {
       })
     },
 
+    filtradosEMarcadosEConfirmaveis: function () {
+      return this.filtrados.filter(function (item) {
+        return item.idaviso
+      })
+    },
+
     exibirPrazo: function () {
       for (var i = 0; i < this.filtrados.length; i++) {
         if (this.filtrados[i].numeroprazo || this.filtrados[i].tipoprazo || this.filtrados[i].multiplicadorprazo) return true
@@ -320,6 +326,13 @@ export default {
     exibirDataLimite: function () {
       for (var i = 0; i < this.filtrados.length; i++) {
         if (this.filtrados[i].datalimiteintimacaoautomatica) return true
+      }
+      return false
+    },
+
+    exibirTipo: function () {
+      for (var i = 0; i < this.filtrados.length; i++) {
+        if (this.filtrados[i].tipo) return true
       }
       return false
     },
@@ -348,6 +361,13 @@ export default {
     exibirStatus: function () {
       for (var i = 0; i < this.filtrados.length; i++) {
         if (this.filtrados[i].errormsg) return true
+      }
+      return false
+    },
+
+    exibirConsultarConfirmados: function () {
+      for (var system in this.$parent.jwt.user) {
+        if (this.$parent.jwt.user.hasOwnProperty(system) && system.includes('.apolo')) return true
       }
       return false
     }
@@ -533,7 +553,7 @@ export default {
     },
 
     confirmarEmLote: function () {
-      var a = this.filtradosEMarcados
+      var a = this.filtradosEMarcadosEConfirmaveis
       Bus.$emit('prgStart', 'Confirmando Intimações/Citações', a.length, (i) => this.confirmarAviso(a[i], true))
     },
 

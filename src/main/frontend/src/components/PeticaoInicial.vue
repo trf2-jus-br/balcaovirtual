@@ -618,17 +618,6 @@ export default {
         a.status = 'Validando...'
         a.validando = true
         a.valido = false
-        this.$http.get('processo/' + ProcessoBL.somenteNumeros(a.processo) + '/validar', { block: true }).then(response => {
-          var d = response.data
-          a.status = d.unidade + '/' + d.sistema
-          a.sistema = d.sistema
-          a.validando = false
-          a.valido = true
-        }, error => {
-          a.validando = false
-          a.valido = false
-          a.errormsg = error.data.errormsg
-        })
       }
     },
 

@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
@@ -21,9 +24,11 @@ import com.crivano.swaggerservlet.SwaggerServlet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetRequest;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
 
 public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
@@ -45,47 +50,61 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		} catch (Exception e) {
 			usuario = SwaggerServlet.getProperty("public.username");
 		}
-		String url = "/usuario/" + usuario + "/processo/" + req.numero;
+
+		String[] numeros = req.numero.split(",");
+		if (numeros.length > 100)
+			throw new PresentableException(
+					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
-			UsuarioUsernameProcessoNumeroGetRequest q = new UsuarioUsernameProcessoNumeroGetRequest();
-			q.numero = req.numero;
+			UsuarioUsernameProcessoNumerosGetRequest q = new UsuarioUsernameProcessoNumerosGetRequest();
+			q.numeros = req.numero;
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
-							"GET", Utils.getApiUrl(system) + url, null,
-							UsuarioUsernameProcessoNumeroGetResponse.class));
+							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + "/processo/" + req.numero, null,
+							UsuarioUsernameProcessoNumerosGetResponse.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
 		resp.status = Utils.getStatus(mcr);
+		resp.list = new ArrayList<>();
+
+		Set<String> numerosRecebidos = new HashSet<>();
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernameProcessoNumeroGetResponse r = (UsuarioUsernameProcessoNumeroGetResponse) mcr.responses
+			UsuarioUsernameProcessoNumerosGetResponse rl = (UsuarioUsernameProcessoNumerosGetResponse) mcr.responses
 					.get(system);
-			if (r.numero == null || r.perdecompetencia)
+			if (rl.list == null || rl.list.size() == 0)
 				continue;
-			if (resp.numero != null)
-				throw new PresentableException(
-						"Não foi possível identificar qual sistema tem competência para o processo: " + resp.numero);
-			resp.numero = r.numero;
-			resp.sistema = system;
-			resp.orgao = r.orgao;
-			resp.unidade = r.unidade != null ? r.unidade.trim() : null;
-			resp.localnaunidade = r.localNaUnidade;
-			resp.segredodejustica = r.segredodejustica;
-			resp.segredodejusticadesistema = r.segredodejusticadesistema;
-			resp.segredodejusticaabsoluto = r.segredodejusticaabsoluto;
-			resp.usuarioautorizado = r.usuarioautorizado;
-			resp.digital = r.eletronico;
-			resp.sentenciado = r.sentenciado;
-			resp.baixado = r.baixado;
-			resp.cdas = r.cdas;
-			if (r.dataultimomovimento != null)
-				resp.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
-			resp.datavalidacao = new Date();
+			for (Processo r : rl.list) {
+				if (r.numero == null || r.perdecompetencia)
+					continue;
+				if (numerosRecebidos.contains(r.numero))
+					throw new PresentableException(
+							"Não foi possível identificar qual sistema tem competência para o processo: " + r.numero);
+				numerosRecebidos.add(r.numero);
+				ProcessoValido pv = new ProcessoValido();
+				pv.numero = r.numero;
+				pv.sistema = system;
+				pv.orgao = r.orgao;
+				pv.unidade = r.unidade != null ? r.unidade.trim() : null;
+				pv.localnaunidade = r.localNaUnidade;
+				pv.segredodejustica = r.segredodejustica;
+				pv.segredodejusticadesistema = r.segredodejusticadesistema;
+				pv.segredodejusticaabsoluto = r.segredodejusticaabsoluto;
+				pv.usuarioautorizado = r.usuarioautorizado;
+				pv.digital = r.eletronico;
+				pv.sentenciado = r.sentenciado;
+				pv.baixado = r.baixado;
+				pv.cdas = r.cdas;
+				if (r.dataultimomovimento != null)
+					pv.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
+				resp.list.add(pv);
+			}
 		}
+		resp.datavalidacao = new Date();
 	}
 
 	@Override

@@ -289,8 +289,8 @@ export default {
       UtilsBL.quietBatch(a, (processo, cont) => {
         this.$http.get('processo/' + processo.numero + '/validar').then(
           (response) => {
-            if (response.data.numero) {
-              UtilsBL.overrideProperties(processo, response.data)
+            if (response.data.list && response.data.list.length > 0 && response.data.list[0].numero) {
+              UtilsBL.overrideProperties(processo, response.data.list[0])
               processo.validado = true
               this.fixProcesso(processo)
             } else {
