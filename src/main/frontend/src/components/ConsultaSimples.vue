@@ -181,6 +181,7 @@ export default {
 
   methods: {
     consultar: function (recaptchaToken) {
+      this.recaptchaLoading = false
       this.mostrarProcesso(this.numero, recaptchaToken)
     },
     mostrarProcesso: function (numero, recaptchaToken, token) {

@@ -426,6 +426,10 @@ paths:
             properties:
               id_token:
                 type: string
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:

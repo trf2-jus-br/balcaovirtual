@@ -157,10 +157,10 @@ public class SoapMNI {
 	}
 
 	private static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
-		if (sistema.contains(".eproc") && idConsultante.equals(SwaggerServlet.getProperty("public.username"))) {
-			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
-			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
-		}
+//		if (sistema.contains(".eproc") && idConsultante.equals(SwaggerServlet.getProperty("public.username"))) {
+//			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
+//			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
+//		}
 		return senhaConsultante;
 	}
 

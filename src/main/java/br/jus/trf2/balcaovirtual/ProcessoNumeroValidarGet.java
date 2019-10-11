@@ -83,7 +83,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 					continue;
 				if (numerosRecebidos.contains(r.numero))
 					throw new PresentableException(
-							"Não foi possível identificar qual sistema tem competência para o processo: " + r.numero);
+							"Não foi possível identificar qual sistema tem competência para o processo: " + r.numero,
+							mcr.status);
 				numerosRecebidos.add(r.numero);
 				ProcessoValido pv = new ProcessoValido();
 				pv.numero = r.numero;

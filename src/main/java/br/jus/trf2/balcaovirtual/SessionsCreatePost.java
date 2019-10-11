@@ -61,6 +61,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		}
 
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, TIMEOUT_MILLISECONDS);
+		resp.status = Utils.getStatus(mcr);
 
 		String origem = null;
 		String usuarios = null;
@@ -93,10 +94,12 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 					+ serialize(u.unidade) + ","
 					+ (u.perfil != null && !u.perfil.equals("") ? u.perfil.toLowerCase() : "null");
 		}
+
 		if (usuarios == null)
-			throw new PresentableUnloggedException(
+			throw new SwaggerAuthorizationException(
 					"Nenhum usuário localizado na base com esse identificador. Base" + (systems.length == 1 ? "" : "s")
-							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".");
+							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
+					mcr.status);
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;

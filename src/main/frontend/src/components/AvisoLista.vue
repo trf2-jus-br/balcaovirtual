@@ -378,7 +378,7 @@ export default {
         if (data.status[i].errormsg) {
           if (this.errormsg === undefined) this.errormsg = ''
           else this.errormsg += '; '
-          this.errormsg += status[i].system + ': ' + data.status[i].errormsg
+          this.errormsg += data.status[i].system + ': ' + data.status[i].errormsg
         }
       }
 

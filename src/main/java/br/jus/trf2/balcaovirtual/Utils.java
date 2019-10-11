@@ -12,8 +12,8 @@ import org.joda.time.format.DateTimeFormatter;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
+import com.crivano.swaggerservlet.SwaggerCallStatus;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
-import com.crivano.swaggerservlet.SwaggerMultipleCallResult.ListStatus;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
@@ -341,7 +341,7 @@ public class Utils {
 
 	public static ArrayList<IBalcaoVirtual.ListStatus> getStatus(SwaggerMultipleCallResult mcr) {
 		ArrayList<IBalcaoVirtual.ListStatus> l = new ArrayList<IBalcaoVirtual.ListStatus>();
-		for (ListStatus sts : mcr.status) {
+		for (SwaggerCallStatus sts : mcr.status) {
 			IBalcaoVirtual.ListStatus lsts = new IBalcaoVirtual.ListStatus();
 			lsts.system = sts.system;
 			lsts.errormsg = sts.errormsg;

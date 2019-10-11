@@ -286,6 +286,7 @@ public interface IBalcaoVirtual {
 
 	public class SessionsCreatePostResponse implements ISwaggerResponse {
 		public String id_token;
+		public List<ListStatus> status;
 	}
 
 	public interface ISessionsCreatePost extends ISwaggerMethod {
