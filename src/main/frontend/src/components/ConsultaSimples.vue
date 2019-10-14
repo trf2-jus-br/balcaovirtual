@@ -198,7 +198,7 @@ export default {
             this.errormsg = `Processo "${this.numero}" não encontrado`
             return
           }
-          this.$router.push({ name: 'Processo', params: { numero: p.numero, token: p.token, validar: p } })
+          this.$router.push({ name: 'Processo', params: { numero: p.numero, token: response.data.token, validar: p } })
         },
         error => {
           this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`
