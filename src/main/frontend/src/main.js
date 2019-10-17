@@ -23,6 +23,11 @@ import { Bus } from './bl/bus.js'
 import ValidacaoBL from './bl/validacao.js'
 import vSelect from 'vue-select'
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import AwesomeMask from 'awesome-mask'
+import MySelect from './components/MySelect'
+import MyInput from './components/MyInput'
+import VueTheMask from 'vue-the-mask'
+// import {mask} from 'vue-the-mask'
 
 VeeValidate.Validator.extend('cpf', {
   getMessage: field => 'CPF ' + field + ' inválido.',
@@ -32,6 +37,11 @@ VeeValidate.Validator.extend('cpf', {
 VeeValidate.Validator.extend('cnpj', {
   getMessage: field => 'CNPJ ' + field + ' inválido.',
   validate: ValidacaoBL.validarCNPJ
+})
+
+VeeValidate.Validator.extend('cpfcnpj', {
+  getMessage: field => 'CPF/CNPJ ' + field + ' inválido.',
+  validate: ValidacaoBL.validarCPFCNPJ
 })
 
 VeeValidate.Validator.extend('oab', {
@@ -49,6 +59,12 @@ Vue.use(VueClip)
 Vue.use(VeeValidate, { locale: 'pt_BR' })
 Vue.use(BootstrapVue)
 Vue.use(CKEditor)
+Vue.use(VueTheMask)
+
+Vue.component('my-select', MySelect)
+Vue.component('my-input', MyInput)
+// Vue.directive('themask', mask)
+Vue.directive('awemask', AwesomeMask)
 
 Vue.component('v-select', vSelect)
 

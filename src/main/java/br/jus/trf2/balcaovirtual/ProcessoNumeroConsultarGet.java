@@ -37,7 +37,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		} catch (Exception ex) {
 		}
 
-		if (usuario == null && ProcessoNumeroValidarGet.isValidToken(req.token, req.numero)) {
+		if (usuario == null && (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero) || u != null)) {
 			usuario = SwaggerServlet.getProperty("public.username");
 			senha = SwaggerServlet.getProperty("public.password");
 		}

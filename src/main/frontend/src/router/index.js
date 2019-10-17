@@ -5,6 +5,7 @@ import Processo from '@/components/Processo'
 import ProcessoLista from '@/components/ProcessoLista'
 import PeticaoInicial from '@/components/PeticaoInicial'
 import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
+import ConsultaCertidao from '@/components/ConsultaCertidao'
 import AvisoLista from '@/components/AvisoLista'
 import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
 import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
@@ -56,6 +57,11 @@ export default new Router({
       path: '/processo-lista',
       name: 'Lista de Processos',
       component: ProcessoLista
+    },
+    {
+      path: '/consulta-certidao',
+      name: 'Certidão',
+      component: ConsultaCertidao
     },
     {
       path: '/etiqueta-lista',
