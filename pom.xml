@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaovirtual</artifactId>
-	<version>2.0.22-SNAPSHOT</version>
+	<version>2.0.23-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Balcão Virtual Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -14,12 +14,6 @@
 			<groupId>br.jus.trf2.sistemaprocessual</groupId>
 			<artifactId>sistemaprocessual-api</artifactId>
 			<version>2.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>br.jus.trf2.assijus</groupId>
-			<artifactId>assijus-system-api</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->

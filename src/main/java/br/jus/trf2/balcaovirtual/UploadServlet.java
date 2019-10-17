@@ -33,6 +33,8 @@ public class UploadServlet extends HttpServlet {
 //		} catch (SwaggerAuthorizationException e) {
 //			throw new ServletException("É necessário estar autenticado para enviar aquivos.");
 //		}
+		corsHeaders(response);
+
 		String dirFinal = Utils.getDirFinal();
 		String dirTemp = Utils.getDirTemp();
 
@@ -87,8 +89,6 @@ public class UploadServlet extends HttpServlet {
 					o.put("id", fileId);
 				}
 			}
-
-			corsHeaders(response);
 
 			response.setContentType("application/json; charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");

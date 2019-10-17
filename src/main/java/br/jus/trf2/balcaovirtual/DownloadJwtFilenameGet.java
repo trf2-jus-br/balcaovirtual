@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamReader;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -109,60 +113,85 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			// resp.contentlength = r.contentlength;
 			// resp.contenttype = r.contenttype;
 			// resp.inputstream = r.inputstream;
-		} else if (numDoc != null) {
-			// Peça Processual
-			byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
-
-			ContentInfo info = new ContentInfoUtil().findMatch(ab);
-			resp.contenttype = info.getMimeType();
-			resp.contentdisposition = disposition + ";filename=" + numProc + "-peca-" + numDoc + "."
-					+ info.getFileExtensions()[0];
-
-			resp.contentlength = (long) ab.length;
-			resp.inputstream = new ByteArrayInputStream(ab);
 		} else {
-			// Processo completo
+			ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
+			if (numDoc != null) {
 
-			// Consulta o processo para saber quais são os documentos a serem
-			// concatenados
-			String json = SoapMNI.consultarProcesso(username, password, orgao, numProc, false, false, true);
+				byte[] ab = null;
+				// Peça Processual
+				ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
 
-			JSONObject proc = new JSONObject(json).getJSONObject("value");
-			JSONArray docs = proc.getJSONArray("documento");
+				ContentInfo info = contentInfoUtil.findMatch(ab);
+				resp.contenttype = info.getMimeType();
 
-			// Cria um documento em diretório temporário para agregar os
-			// diversos PDFs
-			String dirTemp = Utils.getDirTemp();
-			String bufName = dirTemp + "/" + numProc + "-completo-" + UUID.randomUUID().toString() + ".pdf";
-			FileOutputStream buf = new FileOutputStream(bufName);
-			Document document = new Document();
-			PdfCopy copy = new PdfSmartCopy(document, buf);
-			document.open();
-			PdfReader reader;
-
-			for (int i = 0; i < docs.length(); i++) {
-				String idDocumento = docs.getJSONObject(i).getString("idDocumento");
-
-				byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, idDocumento);
-
-				ContentInfo info = new ContentInfoUtil().findMatch(ab);
-				if (!"application/pdf".equals(info.getMimeType())) {
-					String html = new String(ab, StandardCharsets.UTF_8);
-					if (html.toLowerCase().contains("charset=windows-1252"))
-						html = new String(ab, StandardCharsets.ISO_8859_1);
-					ab = new Html2Pdf().converter(html);
+				if (info.getMimeType().startsWith("application/xml")) {
+					final XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance()
+							.createXMLStreamReader(new ByteArrayInputStream(ab));
+					String fileEncoding = xmlStreamReader.getEncoding();
+					boolean fHtml = false;
+					while (xmlStreamReader.hasNext()) {
+						int eventType = xmlStreamReader.next();
+						if (eventType == XMLStreamConstants.START_ELEMENT) {
+							if (xmlStreamReader.getLocalName().equals("html"))
+								fHtml = true;
+							break;
+						}
+					}
+					xmlStreamReader.close();
+					if (fHtml) {
+						info = contentInfoUtil.findMimeTypeMatch("text/html");
+						resp.contenttype = info.getMimeType() + "; charset=" + fileEncoding;
+					}
 				}
+				resp.contentdisposition = disposition + ";filename=" + numProc + "-peca-" + numDoc + "."
+						+ info.getFileExtensions()[0];
 
-				reader = new PdfReader(ab);
-				copy.addDocument(reader);
-				reader.close();
+				resp.contentlength = (long) ab.length;
+				resp.inputstream = new ByteArrayInputStream(ab);
+			} else {
+				// Processo completo
+
+				// Consulta o processo para saber quais são os documentos a serem
+				// concatenados
+				String json = SoapMNI.consultarProcesso(username, password, orgao, numProc, false, false, true);
+
+				JSONObject proc = new JSONObject(json).getJSONObject("value");
+				JSONArray docs = proc.getJSONArray("documento");
+
+				// Cria um documento em diretório temporário para agregar os
+				// diversos PDFs
+				String dirTemp = Utils.getDirTemp();
+				String bufName = dirTemp + "/" + numProc + "-completo-" + UUID.randomUUID().toString() + ".pdf";
+				FileOutputStream buf = new FileOutputStream(bufName);
+				Document document = new Document();
+				PdfCopy copy = new PdfSmartCopy(document, buf);
+				document.open();
+				PdfReader reader;
+
+				for (int i = 0; i < docs.length(); i++) {
+					String idDocumento = docs.getJSONObject(i).getString("idDocumento");
+
+					byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, idDocumento);
+
+					ContentInfo info = contentInfoUtil.findMatch(ab);
+					if (!"application/pdf".equals(info.getMimeType())) {
+						String html = new String(ab, StandardCharsets.UTF_8);
+						if (html.toLowerCase().contains("charset=windows-1252"))
+							html = new String(ab, StandardCharsets.ISO_8859_1);
+						ab = new Html2Pdf().converter(html);
+					}
+
+					reader = new PdfReader(ab);
+					copy.addDocument(reader);
+					reader.close();
+				}
+				document.close();
+
+				resp.contentdisposition = disposition + ";filename=" + numProc + "-completo.pdf";
+				resp.contentlength = (long) new File(bufName).length();
+				resp.contenttype = "application/pdf";
+				resp.inputstream = new FileInputStream(bufName);
 			}
-			document.close();
-
-			resp.contentdisposition = disposition + ";filename=" + numProc + "-completo.pdf";
-			resp.contentlength = (long) new File(bufName).length();
-			resp.contenttype = "application/pdf";
-			resp.inputstream = new FileInputStream(bufName);
 		}
 	}
 
