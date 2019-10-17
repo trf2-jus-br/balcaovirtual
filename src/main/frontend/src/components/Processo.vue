@@ -435,71 +435,73 @@
 
           <div class="row" v-if="errormsg === undefined">
             <div class="col col-sm-12">
-              <table class="table table-sm mb-0 table-responsive">
-                <thead class="thead-inverse">
-                  <tr>
-                    <th>Data/Hora</th>
-                    <th v-if="sistema &amp;&amp; sistema.includes('.eproc')" class="text-right">#</th>
-                    <th>{{(sistema && sistema.includes('.eproc')) ? 'Evento' : 'Movimento'}}</th>
-                    <th>Peça</th>
-                    <th style="text-align: right">Página Inicial</th>
-                    <th style="text-align: right">Página Final</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <template v-for="movdoc in filtrados">
-                    <tr v-bind:class="{odd: movdoc.odd, highlightable: true}" v-bind:id="'mov' + movdoc.mov.dataHora">
-                      <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan">
-                        <span v-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span>
-                      </td>
-                      <td v-if="sistema && sistema.includes('.eproc') && movdoc.rowspan && !movdoc.hidemov" class="text-right">{{movdoc.mov.identificadorMovimento}}</td>
-                      <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
-                      <template v-if="movdoc.doc">
-                        <td>
-                          <p class="mb-0" v-if="movdoc.doc.idDocumento">
-                            <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
-                            <a href="" @click.prevent="mostrarPeca(movdoc.doc.idDocumento, 'attachment')">
-                              <span class="fa fa-download icone-em-linha"></span>
-                            </a>
-                            <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
-                              <span class="fa fa-pencil icone-em-linha"></span>
-                            </a>
-                            <a href="" v-if="movdoc.doc.exibirTexto == false" @click.prevent="mostrarTexto(movdoc.doc, true)">
-                              <span class="fa fa-search icone-em-linha"></span>
-                            </a>
-                          </p>
-                          <br v-if="false &amp;&amp; movdoc.marca &amp;&amp; movdoc.marca.length > 0">
-                          <template v-for="m in movdoc.marca">
-                            <p class="mt-1 mb-0" style="line-height: 1.4">
-                              <a href="" class="marca-ref" @click.prevent="exibirProcessoPecaDetalhes(movdoc, m)">
-                                <span class="marca" :class="{'marca-yellow' : m.idestilo == 2, 'marca-green': m.idestilo == 4, 'marca-pink': m.idestilo == 3, 'marca-blue': m.idestilo == 1}">{{m.texto}}
-                                  <span class="inquebravel" v-if="m.paginicial" v-html="'p.&nbsp' + m.paginicial + (m.paginicial !== m.pagfinal ? '&#8209;' + m.pagfinal : '') ">
-                                  </span>
-                                </span>
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Data/Hora</th>
+                      <th v-if="sistema &amp;&amp; sistema.includes('.eproc')" class="text-right">#</th>
+                      <th>{{(sistema && sistema.includes('.eproc')) ? 'Evento' : 'Movimento'}}</th>
+                      <th>Peça</th>
+                      <th style="text-align: right">Página Inicial</th>
+                      <th style="text-align: right">Página Final</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template v-for="movdoc in filtrados">
+                      <tr v-bind:class="{odd: movdoc.odd, highlightable: true}" v-bind:id="'mov' + movdoc.mov.dataHora">
+                        <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan">
+                          <span v-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span>
+                        </td>
+                        <td v-if="sistema && sistema.includes('.eproc') && movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" class="text-right">{{movdoc.mov.identificadorMovimento}}</td>
+                        <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
+                        <template v-if="movdoc.doc">
+                          <td>
+                            <p class="mb-0" v-if="movdoc.doc.idDocumento">
+                              <a href="" target="_blank" @click.prevent="mostrarPeca(movdoc.doc.idDocumento)">{{movdoc.doc.descricao}}</a>
+                              <a href="" @click.prevent="mostrarPeca(movdoc.doc.idDocumento, 'attachment')">
+                                <span class="fa fa-download icone-em-linha"></span>
+                              </a>
+                              <a href="" v-if="marcasativas &amp;&amp; movdoc.doc.idDocumento" @click.prevent="exibirProcessoPecaDetalhes(movdoc)">
+                                <span class="fa fa-pencil icone-em-linha"></span>
+                              </a>
+                              <a href="" v-if="movdoc.doc.exibirTexto == false" @click.prevent="mostrarTexto(movdoc.doc, true)">
+                                <span class="fa fa-search icone-em-linha"></span>
                               </a>
                             </p>
-                          </template>
+                            <br v-if="false &amp;&amp; movdoc.marca &amp;&amp; movdoc.marca.length > 0">
+                            <template v-for="m in movdoc.marca">
+                              <p class="mt-1 mb-0" style="line-height: 1.4">
+                                <a href="" class="marca-ref" @click.prevent="exibirProcessoPecaDetalhes(movdoc, m)">
+                                  <span class="marca" :class="{'marca-yellow' : m.idestilo == 2, 'marca-green': m.idestilo == 4, 'marca-pink': m.idestilo == 3, 'marca-blue': m.idestilo == 1}">{{m.texto}}
+                                    <span class="inquebravel" v-if="m.paginicial" v-html="'p.&nbsp' + m.paginicial + (m.paginicial !== m.pagfinal ? '&#8209;' + m.pagfinal : '') ">
+                                    </span>
+                                  </span>
+                                </a>
+                              </p>
+                            </template>
+                          </td>
+                          <td style="text-align: right">{{movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaInicial : ''}}</td>
+                          <td style="text-align: right">{{movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaFinal : ''}}</td>
+                        </template>
+                        <template v-else>
+                          <td colspan="3"></td>
+                        </template>
+                      </tr>
+                      <tr v-if="movdoc.doc.exibirTexto" v-bind:class="{odd: movdoc.odd}">
+                        <td colspan="5">
+                          <p class="alert alert-success mb-0 alert-dismissible fade show" role="alert">
+                            <button type="button" class="close d-print-none" @click="mostrarTexto(movdoc.doc, false)">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            <span v-html="movdoc.doc.outroParametro.textoMovimento"></span>
+                          </p>
                         </td>
-                        <td style="text-align: right">{{movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaInicial : ''}}</td>
-                        <td style="text-align: right">{{movdoc.doc && movdoc.doc.outroParametro ? movdoc.doc.outroParametro.paginaFinal : ''}}</td>
-                      </template>
-                      <template v-else>
-                        <td colspan="3"></td>
-                      </template>
-                    </tr>
-                    <tr v-if="movdoc.doc.exibirTexto" v-bind:class="{odd: movdoc.odd}">
-                      <td colspan="5">
-                        <p class="alert alert-success mb-0 alert-dismissible fade show" role="alert">
-                          <button type="button" class="close d-print-none" @click="mostrarTexto(movdoc.doc, false)">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                          <span v-html="movdoc.doc.outroParametro.textoMovimento"></span>
-                        </p>
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 

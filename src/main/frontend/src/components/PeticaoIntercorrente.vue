@@ -35,80 +35,82 @@
 
     <div class="row" v-if="arquivos.length > 0 &amp;&amp; !mostrarQuantidadePorData">
       <div class="col-sm-12" style="padding-top: 1em;">
-        <table class="table table-peticao table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Processo</th>
-              <th>Tipo</th>
-              <th>Segredo</th>
-              <th>Encerra Prazos</th>
-              <th>Arquivo</th>
-              <th>Status</th>
-              <th style="text-align: center" v-if="editando"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="f in arquivos" :class="{odd: f.odd}">
-              <td v-show="!f.anexo" :rowspan="f.rowspan">
-                <div v-if="editando" class="input-group">
-                  <input type="text" class="form-control" style="min-width: 16em;" placeholder="Número do Processo" v-model="f.processo" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
-                  <button type="button" v-show="f.processo === undefined || f.processo === ''" @click="exibirProcessosMultiplos(f)" class="btn btn-sm btn-outline-primary ml-1" title="Inserir este PDF em múltiplos processos">&#x2795;</button>
-                </div>
-                <span class="unbreakable" v-if="!editando">
-                  <router-link :to="{name: 'Processo', params: {numero: f.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processo}}</router-link>
-                </span>
-              </td>
+        <div class="table-responsive">
+          <table class="table table-peticao">
+            <thead class="thead-dark">
+              <tr>
+                <th>Processo</th>
+                <th>Tipo</th>
+                <th>Segredo</th>
+                <th>Encerra Prazos</th>
+                <th>Arquivo</th>
+                <th>Status</th>
+                <th style="text-align: center" v-if="editando"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="f in arquivos" :class="{odd: f.odd}">
+                <td v-show="!f.anexo" :rowspan="f.rowspan">
+                  <div v-if="editando" class="input-group">
+                    <input type="text" class="form-control" style="min-width: 16em;" placeholder="Número do Processo" v-model="f.processo" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
+                    <button type="button" v-show="f.processo === undefined || f.processo === ''" @click="exibirProcessosMultiplos(f)" class="btn btn-sm btn-outline-primary ml-1" title="Inserir este PDF em múltiplos processos">&#x2795;</button>
+                  </div>
+                  <span class="unbreakable" v-if="!editando">
+                    <router-link :to="{name: 'Processo', params: {numero: f.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processo}}</router-link>
+                  </span>
+                </td>
 
-              <td v-show="!f.anexo" :rowspan="f.rowspan">
-                <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
-                  <option v-for="tipo in f.tipos" :value="tipo.id">{{tipo.descricao}}</option>
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                </select>
-                <span v-if="!editando">{{f.tipodescr}}</span>
-              </td>
+                <td v-show="!f.anexo" :rowspan="f.rowspan">
+                  <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
+                    <option v-for="tipo in f.tipos" :value="tipo.id">{{tipo.descricao}}</option>
+                    <option disabled hidden selected value="">[Selecionar]</option>
+                  </select>
+                  <span v-if="!editando">{{f.tipodescr}}</span>
+                </td>
 
-              <td v-show="!f.anexo" :rowspan="f.rowspan">
-                <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.segredo" :disabled="f.protocolado" @change="selecionarSegredo(f, f.segredo)">
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                  <option :value="0">0. Sem Sigilo</option>
-                  <option v-if="f.sigilo >= 1" :value="1">1. Segredo de Justiça</option>
-                  <option v-if="f.sigilo >= 2" :value="2">2. Sigiloso Interno</option>
-                  <option v-if="f.sigilo >= 3" :value="3">3. Sigiloso Interno</option>
-                  <option v-if="f.sigilo >= 4" :value="4">4. Sigiloso Interno</option>
-                  <option v-if="f.sigilo >= 5" :value="5">5. Restrito Juiz</option>
-                </select>
-                <span v-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span>
-              </td>
+                <td v-show="!f.anexo" :rowspan="f.rowspan">
+                  <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.segredo" :disabled="f.protocolado" @change="selecionarSegredo(f, f.segredo)">
+                    <option disabled hidden selected value="">[Selecionar]</option>
+                    <option :value="0">0. Sem Sigilo</option>
+                    <option v-if="f.sigilo >= 1" :value="1">1. Segredo de Justiça</option>
+                    <option v-if="f.sigilo >= 2" :value="2">2. Sigiloso Interno</option>
+                    <option v-if="f.sigilo >= 3" :value="3">3. Sigiloso Interno</option>
+                    <option v-if="f.sigilo >= 4" :value="4">4. Sigiloso Interno</option>
+                    <option v-if="f.sigilo >= 5" :value="5">5. Restrito Juiz</option>
+                  </select>
+                  <span v-if="!editando">{{f.segredo ? 'Sim' : 'Não'}}</span>
+                </td>
 
-              <td v-show="!f.anexo" :rowspan="f.rowspan">
-                <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.encerraprazos" :disabled="f.protocolado" @change="selecionarEncerraPrazos(f, f.encerraprazos)">
-                  <option disabled hidden selected value="">[Selecionar]</option>
-                  <option :value="false">Não</option>
-                  <option v-if="f.identencerraprazos" :value="true">Sim</option>
-                </select>
-                <span v-if="!editando">{{f.encerraprazos ? 'Sim' : 'Não'}}</span>
-              </td>
+                <td v-show="!f.anexo" :rowspan="f.rowspan">
+                  <select style="min-width: 4em;" v-if="editando" class="form-control mr-sm-2" v-model="f.encerraprazos" :disabled="f.protocolado" @change="selecionarEncerraPrazos(f, f.encerraprazos)">
+                    <option disabled hidden selected value="">[Selecionar]</option>
+                    <option :value="false">Não</option>
+                    <option v-if="f.identencerraprazos" :value="true">Sim</option>
+                  </select>
+                  <span v-if="!editando">{{f.encerraprazos ? 'Sim' : 'Não'}}</span>
+                </td>
 
-              <td>
-                <a @click="view(doc)">
-                  <a :href="$http.options.root + '/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                <td>
+                  <a @click="view(doc)">
+                    <a :href="$http.options.root + '/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                    </a>
                   </a>
-                </a>
-              </td>
+                </td>
 
-              <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
-                <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
-                <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
-                <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
-                <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
-              </td>
+                <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
+                  <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
+                  <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
+                  <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
+                  <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
+                </td>
 
-              <td align="center" v-if="editando">
-                <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <td align="center" v-if="editando">
+                  <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">&#x274C;</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -133,24 +135,26 @@
     <div class="row" v-if="mostrarQuantidadePorData &amp;&amp; dataDeProtocolo === undefined">
       <div class="col col-12" v-if="quantidadePorData.length > 0">
         <div class="protocolos-header">Petição(ões) Intercorrente(s) Protocolada(s) Recentemente</div>
-        <table class="table table-striped mb-0 table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Data</th>
-              <th style="text-align: right;">Quantidade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="p in quantidadePorData">
-              <td>
-                <span v-html="p.dataFormatada"></span>
-              </td>
-              <td style="text-align: right;">
-                <a href="" @click.prevent="carregarResumo(p.data)">{{p.quantidade}}</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead class="thead-dark">
+              <tr>
+                <th>Data</th>
+                <th style="text-align: right;">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="p in quantidadePorData">
+                <td>
+                  <span v-html="p.dataFormatada"></span>
+                </td>
+                <td style="text-align: right;">
+                  <a href="" @click.prevent="carregarResumo(p.data)">{{p.quantidade}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col col-sm-12" v-if="quantidadePorData.length == 0">
         <p class="alert alert-warning">
@@ -173,32 +177,34 @@
           Filtrar:
           <input type="text" v-model="filtroProtocolo"></input>
         </div>
-        <table class="table table-striped mb-0 table-protocolo table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Processo</th>
-              <th>Classe</th>
-              <th>Data/Hora</th>
-              <th>Protocolo</th>
-              <th>Sistema/Órgão</th>
-              <th>Unidade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="r in resumoPorDataFiltrado">
-              <td>
-                <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processo}}</router-link>
-              </td>
-              <td>{{r.classe}}</td>
-              <td>
-                <span v-html="r.dataprotocoloFormatada"></span>
-              </td>
-              <td>{{r.protocolo}}</td>
-              <td>{{$parent.test.properties['balcaovirtual.' + r.sistema + '.name']}}</td>
-              <td>{{r.unidade}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0 table-protocolo">
+            <thead class="thead-dark">
+              <tr>
+                <th>Processo</th>
+                <th>Classe</th>
+                <th>Data/Hora</th>
+                <th>Protocolo</th>
+                <th>Sistema/Órgão</th>
+                <th>Unidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="r in resumoPorDataFiltrado">
+                <td>
+                  <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processo}}</router-link>
+                </td>
+                <td>{{r.classe}}</td>
+                <td>
+                  <span v-html="r.dataprotocoloFormatada"></span>
+                </td>
+                <td>{{r.protocolo}}</td>
+                <td>{{$parent.test.properties['balcaovirtual.' + r.sistema + '.name']}}</td>
+                <td>{{r.unidade}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
         <button type="button" @click="voltarParaQuantidade()" v-if="dataDeProtocolo !== undefined" class="btn btn-success d-print-none">Voltar</button>

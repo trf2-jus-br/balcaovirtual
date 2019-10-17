@@ -86,55 +86,57 @@
 
       <div class="row" v-if="arquivos.length > 0">
         <div class="col-sm-12 col-md-12">
-          <table class="table table-peticao table-responsive table-full-width mb-0">
-            <thead class="thead-inverse">
-              <tr>
-                <th>Tipo</th>
-                <th>Descrição</th>
-                <th>Arquivo</th>
-                <th>Status</th>
-                <th v-if="editando" style="text-align: center"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
-                <td v-if="!editando">{{localizar(f.tipo, tipospeca)}}</td>
-                <td v-if="editando">
-                  <select class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate="'required'">
-                    <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
-                    <option disabled hidden selected value=""> [Selecionar]</option>
-                  </select>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-peticao table-full-width mb-0">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Tipo</th>
+                  <th>Descrição</th>
+                  <th>Arquivo</th>
+                  <th>Status</th>
+                  <th v-if="editando" style="text-align: center"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
+                  <td v-if="!editando">{{localizar(f.tipo, tipospeca)}}</td>
+                  <td v-if="editando">
+                    <select class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate="'required'">
+                      <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
+                      <option disabled hidden selected value=""> [Selecionar]</option>
+                    </select>
+                  </td>
 
-                <td>
-                  <span v-if="!editando">{{f.nome}}</span>
-                  <div v-if="editando" class="input-group">
-                    <input type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
-                  </div>
-                </td>
+                  <td>
+                    <span v-if="!editando">{{f.nome}}</span>
+                    <div v-if="editando" class="input-group">
+                      <input type="text" class="form-control" style="min-width: 16em;" placeholder="Descrição" v-model="f.nome" @input="alterarArquivo(f)" :disabled="f.bloq || f.protocolado">
+                    </div>
+                  </td>
 
-                <td>
-                  <a @click="view(doc)">
-                    <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                  <td>
+                    <a @click="view(doc)">
+                      <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{f.nome}}</span>
+                      </a>
                     </a>
-                  </a>
-                </td>
+                  </td>
 
-                <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
-                  <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
-                  <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
-                  <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
-                  <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
-                </td>
+                  <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
+                    <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{f.file.progress.toFixed(1)}}%</span>
+                    <span :class="{green: f.protocolado}" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{f.status}}</span>
+                    <span v-show="f.errormsg" :class="{red: true}">{{f.errormsg}}</span>
+                    <span v-show="f.$error">{{f.$error}} {{f.$errorParam}}</span>
+                  </td>
 
-                <td v-if="editando" align="right">
-                  <a href="" @click.prevent="removerArquivo(f)">
-                    <span class="fa fa-remove icone-em-linha"></span>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td v-if="editando" align="right">
+                    <a href="" @click.prevent="removerArquivo(f)">
+                      <span class="fa fa-remove icone-em-linha"></span>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div v-if="faltaTeorDaPeticao" class="invalid-feedback" style="display: block">É necessário informar o teor da petição</div>
         </div>
       </div>
@@ -213,60 +215,62 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <table class="table table-peticao table-responsive table-full-width" :disabled="!sistema">
-            <thead class="thead-inverse" @click="validar()">
-              <tr>
-                <th>Polo</th>
-                <th>Tipo</th>
-                <th>Documento</th>
-                <th>Nome</th>
-                <th v-if="editando" style="text-align: center"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(p, index) in partes">
-                <td v-if="!editando">{{localizar(p.polo, polos)}}</td>
-                <td v-if="editando">
-                  <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
-                    <option disabled hidden selected value="">[Selecionar]</option>
-                    <option v-for="polo in polos" :value="polo.id">{{poloNome(polo.nome)}}</option>
-                  </select>
-                </td>
-                <td v-if="!editando">{{localizar(p.tipopessoa, tipospessoa)}}</td>
-                <td v-if="editando">
-                  <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
-                    <option disabled hidden selected value="">[Selecionar]</option>
-                    <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.nome}}</option>
-                  </select>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-peticao table-full-width" :disabled="!sistema">
+              <thead class="thead-dark" @click="validar()">
+                <tr>
+                  <th>Polo</th>
+                  <th>Tipo</th>
+                  <th>Documento</th>
+                  <th>Nome</th>
+                  <th v-if="editando" style="text-align: center"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(p, index) in partes">
+                  <td v-if="!editando">{{localizar(p.polo, polos)}}</td>
+                  <td v-if="editando">
+                    <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
+                      <option disabled hidden selected value="">[Selecionar]</option>
+                      <option v-for="polo in polos" :value="polo.id">{{poloNome(polo.nome)}}</option>
+                    </select>
+                  </td>
+                  <td v-if="!editando">{{localizar(p.tipopessoa, tipospessoa)}}</td>
+                  <td v-if="editando">
+                    <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
+                      <option disabled hidden selected value="">[Selecionar]</option>
+                      <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{tipopessoa.nome}}</option>
+                    </select>
+                  </td>
 
-                <td v-if="!editando">{{p.documento}}</td>
-                <td v-if="editando" :colspan="p.tipopessoa == '3' ? 2 : 1">
-                  <my-input v-if="p.tipopessoa == '1'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
+                  <td v-if="!editando">{{p.documento}}</td>
+                  <td v-if="editando" :colspan="p.tipopessoa == '3' ? 2 : 1">
+                    <my-input v-if="p.tipopessoa == '1'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
 
-                  <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
+                    <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
 
-                  <select :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
-                    <option disabled selected hidden :value="undefined">[Selecionar]</option>
-                    <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
-                  </select>
+                    <select :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
+                      <option disabled selected hidden :value="undefined">[Selecionar]</option>
+                      <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
+                    </select>
 
-                  <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
-                </td>
+                    <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
+                  </td>
 
-                <td v-if="!editando">{{p.nome}}</td>
-                <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
-                  <my-input :disabled="!sistema" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
-                </td>
+                  <td v-if="!editando">{{p.nome}}</td>
+                  <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
+                    <my-input :disabled="!sistema" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
+                  </td>
 
-                <td v-if="editando" align="right">
-                  <a href="" @click.prevent="removerParte(p)">
-                    <span class="fa fa-remove icone-em-linha"></span>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td v-if="editando" align="right">
+                    <a href="" @click.prevent="removerParte(p)">
+                      <span class="fa fa-remove icone-em-linha"></span>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

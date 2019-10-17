@@ -54,162 +54,164 @@
           <div class="protocolos-header">
             Intimações/Citações Encontradas
           </div>
-          <table class="table table-sm table-striped mb-0 table-protocolo table-responsive">
-            <thead class="thead-inverse">
-              <tr>
-                <th>
-                  <a @click="sort('dataconfirmacao')">
-                    Data da Confirmação
-                    <span v-show="orderByField == 'dataconfirmacao'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('usuarioconfirmacao')">
-                    Usuário
-                    <span v-show="orderByField == 'usuarioconfirmacao'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('dataaviso')">
-                    Data do Cadastro
-                    <span v-show="orderByField == 'dataaviso'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>Prazo</th>
-                <th>
-                  <a @click="sort('datalimiteintimacaoautomatica')">
-                    Data Limite Int. Aut.
-                    <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('tipo')">
-                    Tipo
-                    <span v-show="orderByField == 'tipo'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('eventointimacao')">
-                    Evento
-                    <span v-show="orderByField == 'eventointimacao'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('motivointimacao')">
-                    Motivo
-                    <span v-show="orderByField == 'motivointimacao'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('processoFormatado')">
-                    Processo
-                    <span v-show="orderByField == 'processoFormatado'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('assuntoNome')">
-                    Assunto
-                    <span v-show="orderByField == 'assuntoNome'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('orgao')">
-                    Órgão
-                    <span v-show="orderByField == 'orgao'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th>
-                  <a @click="sort('unidade')">
-                    Unidade
-                    <span v-show="orderByField == 'unidade'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th v-if="false">
-                  <a @click="sort('unidadetipo')">
-                    Tipo da Unidade
-                    <span v-show="orderByField == 'unidadetipo'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th v-if="false">
-                  <a @click="sort('localidade')">
-                    Localidade
-                    <span v-show="orderByField == 'localidade'">
-                      <span v-show="!reverseSort">&#8679;</span>
-                      <span v-show="reverseSort">&#8681;</span>
-                    </span>
-                  </a>
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="r in filtrados">
-                <td>
-                  <span v-html="r.dataconfirmacaoFormatada"></span>
-                </td>
-                <td>
-                  <span v-html="r.usuarioconfirmacao"></span>
-                </td>
-                <td>
-                  <span v-html="r.dataavisoFormatada"></span>
-                </td>
-                <td>{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
-                <td>
-                  <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
-                </td>
-                <td>{{r.tipo}}</td>
-                <td>{{r.eventointimacao}}</td>
-                <td>{{r.motivointimacao}}</td>
-                <td>
-                  <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processoFormatado}}</router-link>
-                </td>
-                <td>{{r.assuntoNome}}</td>
-                <td>{{r.orgao}}</td>
-                <td :title="r.unidadenome">{{r.unidade}}</td>
-                <td v-if="false">{{r.unidadetipo}}</td>
-                <td v-if="false">{{r.localidade}}</td>
-                <td align="right">
-                  <button type="button" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">Ver</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped mb-0 table-protocolo">
+              <thead class="thead-dark">
+                <tr>
+                  <th>
+                    <a @click="sort('dataconfirmacao')">
+                      Data da Confirmação
+                      <span v-show="orderByField == 'dataconfirmacao'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('usuarioconfirmacao')">
+                      Usuário
+                      <span v-show="orderByField == 'usuarioconfirmacao'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('dataaviso')">
+                      Data do Cadastro
+                      <span v-show="orderByField == 'dataaviso'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>Prazo</th>
+                  <th>
+                    <a @click="sort('datalimiteintimacaoautomatica')">
+                      Data Limite Int. Aut.
+                      <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('tipo')">
+                      Tipo
+                      <span v-show="orderByField == 'tipo'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('eventointimacao')">
+                      Evento
+                      <span v-show="orderByField == 'eventointimacao'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('motivointimacao')">
+                      Motivo
+                      <span v-show="orderByField == 'motivointimacao'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('processoFormatado')">
+                      Processo
+                      <span v-show="orderByField == 'processoFormatado'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('assuntoNome')">
+                      Assunto
+                      <span v-show="orderByField == 'assuntoNome'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('orgao')">
+                      Órgão
+                      <span v-show="orderByField == 'orgao'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th>
+                    <a @click="sort('unidade')">
+                      Unidade
+                      <span v-show="orderByField == 'unidade'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th v-if="false">
+                    <a @click="sort('unidadetipo')">
+                      Tipo da Unidade
+                      <span v-show="orderByField == 'unidadetipo'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th v-if="false">
+                    <a @click="sort('localidade')">
+                      Localidade
+                      <span v-show="orderByField == 'localidade'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="r in filtrados">
+                  <td>
+                    <span v-html="r.dataconfirmacaoFormatada"></span>
+                  </td>
+                  <td>
+                    <span v-html="r.usuarioconfirmacao"></span>
+                  </td>
+                  <td>
+                    <span v-html="r.dataavisoFormatada"></span>
+                  </td>
+                  <td>{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
+                  <td>
+                    <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
+                  </td>
+                  <td>{{r.tipo}}</td>
+                  <td>{{r.eventointimacao}}</td>
+                  <td>{{r.motivointimacao}}</td>
+                  <td>
+                    <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processoFormatado}}</router-link>
+                  </td>
+                  <td>{{r.assuntoNome}}</td>
+                  <td>{{r.orgao}}</td>
+                  <td :title="r.unidadenome">{{r.unidade}}</td>
+                  <td v-if="false">{{r.unidadetipo}}</td>
+                  <td v-if="false">{{r.localidade}}</td>
+                  <td align="right">
+                    <button type="button" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">Ver</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">

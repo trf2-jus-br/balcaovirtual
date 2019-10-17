@@ -30,36 +30,38 @@
         <h4 class="mt-3 mb-3">Identificação do Usuário nos Sistemas</h4>
       </div>
       <div class="col col-12">
-        <table class="table table-striped mb-0 table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Sistema/Órgão</th>
-              <th>Origem</th>
-              <th>Perfil</th>
-              <th>Unidade</th>
-              <th>Entidade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="u in $parent.jwt.user">
-              <td>
-                <span :title="'Sigla do Sistema: ' + u.sistema">{{$parent.test.properties['balcaovirtual.' + u.sistema + '.name']}}</span>
-              </td>
-              <td>
-                <span :title="'ID Usuário: ' + u.ieusu">{{u.origin === 'int' ? 'interno' : 'externo'}}</span>
-              </td>
-              <td>
-                <span>{{u.perfil}}</span>
-              </td>
-              <td>
-                <span :title="'ID Unidade: ' + u.ieunidade">{{u.unidade}}</span>
-              </td>
-              <td>
-                <span :title="'ID Entidade: ' + u.ieentidade">{{u.entidade}}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead class="thead-dark">
+              <tr>
+                <th>Sistema/Órgão</th>
+                <th>Origem</th>
+                <th>Perfil</th>
+                <th>Unidade</th>
+                <th>Entidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="u in $parent.jwt.user">
+                <td>
+                  <span :title="'Sigla do Sistema: ' + u.sistema">{{$parent.test.properties['balcaovirtual.' + u.sistema + '.name']}}</span>
+                </td>
+                <td>
+                  <span :title="'ID Usuário: ' + u.ieusu">{{u.origin === 'int' ? 'interno' : 'externo'}}</span>
+                </td>
+                <td>
+                  <span>{{u.perfil}}</span>
+                </td>
+                <td>
+                  <span :title="'ID Unidade: ' + u.ieunidade">{{u.unidade}}</span>
+                </td>
+                <td>
+                  <span :title="'ID Entidade: ' + u.ieentidade">{{u.entidade}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -71,38 +73,40 @@
     <!-- QUANTIDADE POR DATA -->
     <div class="row">
       <div class="col col-12">
-        <table class="table table-striped mb-0 table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Sistema/Órgão</th>
-              <th>API</th>
-              <th>MNI</th>
-              <th>Assijus</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="s in $parent.sistemas">
-              <td>
-                <span :title="'Identificador: ' + s">{{$parent.test.properties['balcaovirtual.' + s + '.name']}}</span>
-              </td>
-              <td>
-                <span v-bind:class="classeDoTeste(apis, s)">
-                  {{mensagemDoTeste(apis, s)}}
-                </span>
-              </td>
-              <td>
-                <span v-bind:class="classeDoTeste(mnis, s)">
-                  {{mensagemDoTeste(mnis, s)}}
-                </span>
-              </td>
-              <td>
-                <span v-bind:class="classeDoTeste(assijuss, s)">
-                  {{mensagemDoTeste(assijuss, s)}}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead class="thead-dark">
+              <tr>
+                <th>Sistema/Órgão</th>
+                <th>API</th>
+                <th>MNI</th>
+                <th>Assijus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in $parent.sistemas">
+                <td>
+                  <span :title="'Identificador: ' + s">{{$parent.test.properties['balcaovirtual.' + s + '.name']}}</span>
+                </td>
+                <td>
+                  <span v-bind:class="classeDoTeste(apis, s)">
+                    {{mensagemDoTeste(apis, s)}}
+                  </span>
+                </td>
+                <td>
+                  <span v-bind:class="classeDoTeste(mnis, s)">
+                    {{mensagemDoTeste(mnis, s)}}
+                  </span>
+                </td>
+                <td>
+                  <span v-bind:class="classeDoTeste(assijuss, s)">
+                    {{mensagemDoTeste(assijuss, s)}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

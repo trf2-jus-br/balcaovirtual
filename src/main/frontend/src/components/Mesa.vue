@@ -50,7 +50,7 @@
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
         <table class="table table-striped table-sm">
-          <thead class="thead-inverse">
+          <thead class="thead-dark">
             <tr>
               <th style="text-align: center">
                 <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>

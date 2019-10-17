@@ -65,66 +65,68 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th style="text-align: center">
-                <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
-              </th>
-              <th>Processo</th>
-              <th>Último Movimento</th>
-              <th>Sistema/Órgão</th>
-              <th>Unidade</th>
-              <th>Suporte</th>
-              <th>Acesso</th>
-              <th>Status</th>
-              <th style="text-align: center"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="p in filtrados">
-              <td style="text-align: center">
-                <input type="checkbox" v-model="p.checked" :disabled="p.disabled"></input>
-              </td>
-              <td>
-                <span class=" unbreakable">
-                  <router-link :to="{name: 'Processo', params: {numero: p.numero}, query: {avisos: $parent.cAvisos}}" target="_blank">{{p.numeroFormatado}}</router-link>
-                </span>
-              </td>
-              <td>
-                <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
-              </td>
-              <td><span :title="'Sigla do Sistema: ' + p.sistema">{{$parent.test.properties['balcaovirtual.' + p.sistema + '.name']}}</span></td>
-              <td>{{p.unidade}}</td>
-              <td>{{p.digitalFormatado}}</td>
-              <td>{{p.acesso}}</td>
-              <td class="status-td">
-                <span v-if="p.state=='ready'">Preparado</span>
-                <span v-if="p.state=='set'">Solicitado</span>
-                <span v-if="p.state=='go'">Iniciado</span>
-                <span v-if="p.state=='in_progress' &amp;&amp; p.perc===undefined">Aguardando...</span>
-                <span v-if="p.state=='in_progress' &amp;&amp; p.perc !==undefined">{{p.perc}}%</span>
-                <span class="green" v-if="p.state=='complete'">Baixado</span>
-                <span v-if="p.errormsg" :class="{red: true}">{{p.errormsg}}
-                </span>
-              </td>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+              <tr>
+                <th style="text-align: center">
+                  <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
+                </th>
+                <th>Processo</th>
+                <th>Último Movimento</th>
+                <th>Sistema/Órgão</th>
+                <th>Unidade</th>
+                <th>Suporte</th>
+                <th>Acesso</th>
+                <th>Status</th>
+                <th style="text-align: center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="p in filtrados">
+                <td style="text-align: center">
+                  <input type="checkbox" v-model="p.checked" :disabled="p.disabled"></input>
+                </td>
+                <td>
+                  <span class=" unbreakable">
+                    <router-link :to="{name: 'Processo', params: {numero: p.numero}, query: {avisos: $parent.cAvisos}}" target="_blank">{{p.numeroFormatado}}</router-link>
+                  </span>
+                </td>
+                <td>
+                  <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
+                </td>
+                <td><span :title="'Sigla do Sistema: ' + p.sistema">{{$parent.test.properties['balcaovirtual.' + p.sistema + '.name']}}</span></td>
+                <td>{{p.unidade}}</td>
+                <td>{{p.digitalFormatado}}</td>
+                <td>{{p.acesso}}</td>
+                <td class="status-td">
+                  <span v-if="p.state=='ready'">Preparado</span>
+                  <span v-if="p.state=='set'">Solicitado</span>
+                  <span v-if="p.state=='go'">Iniciado</span>
+                  <span v-if="p.state=='in_progress' &amp;&amp; p.perc===undefined">Aguardando...</span>
+                  <span v-if="p.state=='in_progress' &amp;&amp; p.perc !==undefined">{{p.perc}}%</span>
+                  <span class="green" v-if="p.state=='complete'">Baixado</span>
+                  <span v-if="p.errormsg" :class="{red: true}">{{p.errormsg}}
+                  </span>
+                </td>
 
-              <td align="right">
-                <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
-                  <span class="fa fa-star-o icone-em-linha"></span>
-                </a>
-                <a v-if="p.favorito" href="" @click.prevent="sinalizar(p, {favorito: false})">
-                  <span class="fa fa-star icone-em-linha"></span>
-                </a>
-                <template v-if="pasta !== 'favorito'">
-                  <a href="" @click.prevent="remover(p)">
-                    <span class="fa fa-remove icone-em-linha"></span>
+                <td align="right">
+                  <a v-if="!p.favorito" href="" @click.prevent="sinalizar(p, {favorito: true})">
+                    <span class="fa fa-star-o icone-em-linha"></span>
                   </a>
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <a v-if="p.favorito" href="" @click.prevent="sinalizar(p, {favorito: false})">
+                    <span class="fa fa-star icone-em-linha"></span>
+                  </a>
+                  <template v-if="pasta !== 'favorito'">
+                    <a href="" @click.prevent="remover(p)">
+                      <span class="fa fa-remove icone-em-linha"></span>
+                    </a>
+                  </template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="row">

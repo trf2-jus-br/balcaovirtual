@@ -24,41 +24,43 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm table-responsive">
-          <thead class="thead-inverse">
-            <tr>
-              <th>Sigla</th>
-              <th>Nome</th>
-              <th>Descrição</th>
-              <th>Modalidade</th>
-              <th>Quantidade de Processos</th>
-              <th style="text-align: center"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="f in filtrados">
-              <td>{{f.sigla}}</td>
-              <td>{{f.nome}}</td>
-              <td>{{f.descricao}}</td>
-              <td>{{f.idestilo}}</td>
-              <td>{{f.quantidade}}
-                <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
-                </span>
-              </td>
-              <td align="right">
-                <a href="" @click.prevent="acrescentar(f)">
-                  <span class="fa fa-plus icone-em-linha"></span>
-                </a>
-                <a v-if="f.quantidade > 0" href="" @click.prevent="subtrair(f)">
-                  <span class="fa fa-minus icone-em-linha"></span>
-                </a>
-                <a v-if="f.quantidade > 0" href="" @click.prevent="editar(f)">
-                  <span class="fa fa-pencil icone-em-linha"></span>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+              <tr>
+                <th>Sigla</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Modalidade</th>
+                <th>Quantidade de Processos</th>
+                <th style="text-align: center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="f in filtrados">
+                <td>{{f.sigla}}</td>
+                <td>{{f.nome}}</td>
+                <td>{{f.descricao}}</td>
+                <td>{{f.idestilo}}</td>
+                <td>{{f.quantidade}}
+                  <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
+                  </span>
+                </td>
+                <td align="right">
+                  <a href="" @click.prevent="acrescentar(f)">
+                    <span class="fa fa-plus icone-em-linha"></span>
+                  </a>
+                  <a v-if="f.quantidade > 0" href="" @click.prevent="subtrair(f)">
+                    <span class="fa fa-minus icone-em-linha"></span>
+                  </a>
+                  <a v-if="f.quantidade > 0" href="" @click.prevent="editar(f)">
+                    <span class="fa fa-pencil icone-em-linha"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista"></processo-multiplos>
