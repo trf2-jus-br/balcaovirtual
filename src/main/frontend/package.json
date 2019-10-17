@@ -19,7 +19,7 @@
     "awesome-mask": "^0.5.4",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.0.0-beta",
-    "bootstrap-vue": "^1.0.0-beta.5",
+    "bootstrap-vue": "^2.0.4",
     "debounce": "^1.0.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",

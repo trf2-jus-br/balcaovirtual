@@ -181,7 +181,7 @@
           </div>
 
           <!-- PARTES -->
-          <div v-bind:class="{row: true, 'd-print-block': !$parent.settings.mostrarPartes}">
+          <div v-bind:class="{row: true, 'd-none d-print-block': !$parent.settings.mostrarPartes}">
             <div class="col col-sm-12">
               <div class="card mb-3 border-primary">
                 <div class="card-header">
@@ -283,7 +283,7 @@
           </div>
 
           <!-- QUADRO SUBSTITUTO PARA A IMPRESSAO -->
-          <div class="row d-print-block">
+          <div class="row d-none d-print-block">
             <div class="col col-sm-12">
               <div class="card mb-3 border-success">
                 <div class="card-header">Dados Principais</div>
@@ -439,7 +439,8 @@
                 <thead class="thead-inverse">
                   <tr>
                     <th>Data/Hora</th>
-                    <th>Movimento</th>
+                    <th v-if="sistema &amp;&amp; sistema.includes('.eproc')" class="text-right">#</th>
+                    <th>{{(sistema && sistema.includes('.eproc')) ? 'Evento' : 'Movimento'}}</th>
                     <th>Peça</th>
                     <th style="text-align: right">Página Inicial</th>
                     <th style="text-align: right">Página Final</th>
@@ -451,6 +452,7 @@
                       <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan">
                         <span v-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span>
                       </td>
+                      <td v-if="sistema && sistema.includes('.eproc') && movdoc.rowspan && !movdoc.hidemov" class="text-right">{{movdoc.mov.identificadorMovimento}}</td>
                       <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
                       <template v-if="movdoc.doc">
                         <td>

@@ -18,7 +18,7 @@
             </div>
           </template>
 
-          <template slot="clip-uploader-body" scope="props">
+          <template slot="clip-uploader-body" slot-scope="props">
             <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
               <div class="alert alert-danger mb-0">
                 <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:

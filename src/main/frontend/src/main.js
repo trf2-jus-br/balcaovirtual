@@ -16,7 +16,7 @@ import VueResource from 'vue-resource'
 import VueClip from 'vue-clip'
 import VeeValidate, { Validator } from 'vee-validate'
 import ptBR from 'vee-validate/dist/locale/pt_BR'
-import BootstrapVue from 'bootstrap-vue'
+import BootstrapVue, { ModalPlugin } from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 import { Bus } from './bl/bus.js'
@@ -58,6 +58,7 @@ Vue.use(VueResource)
 Vue.use(VueClip)
 Vue.use(VeeValidate, { locale: 'pt_BR' })
 Vue.use(BootstrapVue)
+Vue.use(ModalPlugin)
 Vue.use(CKEditor)
 Vue.use(VueTheMask)
 

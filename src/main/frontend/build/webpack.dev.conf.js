@@ -24,7 +24,7 @@ module.exports = merge(baseWebpackConfig, {
       // 'process.env': config.dev.env,
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
-        API_URL: JSON.stringify('http://csis-trf-10.corp.jfrj.gov.br:8080/balcaovirtual/api/v1')
+        API_URL: JSON.stringify('http://localhost:8080/balcaovirtual/api/v1')
       }
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage

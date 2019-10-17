@@ -59,7 +59,7 @@
               </div>
             </template>
 
-            <template slot="clip-uploader-body" scope="props">
+            <template slot="clip-uploader-body" slot-scope="props">
               <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
                 <div class="alert alert-danger mb-0">
                   <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:
@@ -181,9 +181,12 @@
             <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
           </div>
 
-          <div class="form-check col-md-3">
-            <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="tutelaantecipada"> Tutela Liminar/Antecipada
-            </label>
+          <div class="col col-md-3">
+            <div class="form-check">
+              <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="tutelaantecipada" id="checkTutelaAntecipada">
+              <label class="form-check-label" for="checkTutelaAntecipada">  Tutela Liminar/Antecipada
+              </label>
+            </div>
           </div>
           <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
             <label class="form-check-label"> <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="nivelsigilo"> Segredo de Justiça
