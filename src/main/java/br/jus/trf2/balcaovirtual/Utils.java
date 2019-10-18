@@ -11,6 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallStatus;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
@@ -330,6 +331,8 @@ public class Utils {
 	// c:\OpenSSL-Win64\bin\google.crt
 	//
 	public static boolean verifyCaptcha(String token) throws Exception {
+		if (token == null)
+			throw new PresentableException("Captcha não pode ser nulo");
 		VerifyCaptchaRequest q = new VerifyCaptchaRequest();
 		q.secret = SwaggerServlet.getProperty("recaptcha.secret.key");
 		q.response = token;

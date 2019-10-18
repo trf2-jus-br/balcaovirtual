@@ -29,18 +29,18 @@
 
     <div>
       <form class="row justify-content-center">
-        <div class="col col-sm-12 col-md-6" v-if="!avancada">
+        <div class="col col-sm-12 col-md-6">
           <div class="jumbotron d-block mx-auto pt-5 pb-5">
             <p v-if="errormsg" class="alert alert-danger" role="alert">{{errormsg}}</p>
             <div>
               <div class="row">
                 <div class="col">
                   <div class="form-group">
-                    <label for="orgao">Órgão</label>
-                    <select class="form-control" id="orgao" v-model="orgao">
-                      <option value="br.jus.trf2">TRF2</option>
-                      <option value="br.jus.jfrj">JFRJ</option>
-                      <option value="br.jus.jfes">JFES</option>
+                    <label for="sistema">Órgão</label>
+                    <select class="form-control" id="sistema" v-model="sistema">
+                      <option value="br.jus.trf2.apolo">TRF2</option>
+                      <option value="br.jus.jfrj.apolo">JFRJ</option>
+                      <option value="br.jus.jfes.apolo">JFES</option>
                     </select>
                   </div>
                 </div>
@@ -72,9 +72,9 @@
               </div>
               <div class="row pt-3">
                 <div class="col" v-if="$parent.test.properties">
-                  <invisible-recaptcha ref="captcha" v-if="!$parent.jwt" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
-                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || numero === undefined || numero.trim() === ''" badge="bottomleft">
-                      Emitir
+                  <invisible-recaptcha ref="captcha" v-if="this.$parent.test && this.$parent.test.properties" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
+                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || errors.any()" badge="bottomleft">
+                      {{pasta === 'emitir' ? 'Emitir' : pasta === 'autenticar' ? 'Autenticar' : 'Reimprimir'}}
                   </invisible-recaptcha>
                   <button v-if="$parent.jwt" :disabled="numero === undefined || numero.trim() === ''" @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">{{pasta == 'emitir' ? 'Emitir' : pasta == 'autenticar' ? 'Autenticar' : 'Reimprimir'}}</button>
                 </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import ProcessoBL from '../bl/processo.js'
+import UtilsBL from '../bl/utils.js'
 import InvisibleRecaptcha from 'vue-invisible-recaptcha'
 
 export default {
@@ -107,19 +107,12 @@ export default {
   data () {
     return {
       pasta: 'emitir',
-      orgao: 'br.jus.jfrj',
+      sistema: 'br.jus.jfrj.apolo',
       recaptchaLoading: false,
       errormsg: undefined,
-      avancada: false,
       numero: undefined,
       requisitante: undefined,
-      cpfcnpj: undefined,
-      procurador: undefined,
-      numeroOriginario: undefined,
-      baixados: undefined,
-      parte: undefined,
-      oab: undefined,
-      inquerito: undefined
+      cpfcnpj: undefined
     }
   },
 
@@ -133,34 +126,39 @@ export default {
   computed: {
     sitekey: function() {
       if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties['balcaovirtual.recaptcha.site.key']
-      return 'waiting...'
+      return 'undefined'
     }
   },
 
   methods: {
     consultar: function (recaptchaToken) {
       this.recaptchaLoading = false
-      this.mostrarProcesso(this.numero, recaptchaToken)
+      if (this.pasta === 'emitir') this.emitir(recaptchaToken)
+      if (this.pasta === 'autenticar') this.autenticar(recaptchaToken)
+      if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
     },
-    mostrarProcesso: function (numero, recaptchaToken, token) {
-      var n = ProcessoBL.somenteNumeros(this.numero)
-      if (n === '') return
-      this.$http.get('processo/' + n + '/validar' + (recaptchaToken ? '?captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
+    obterToken: function (recaptchaToken, token, cont) {
+      this.$http.get('certidao/obter-token' + '?sistema=' + this.sistema + '&requisitante=' + UtilsBL.somenteNumeros(this.requisitante) + '&cpfcnpj=' + UtilsBL.somenteNumeros(this.cpfcnpj) + '&numero=' + UtilsBL.somenteNumeros(this.numero) + (recaptchaToken ? '&captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
-          var p = (response.data.list && response.data.list.length === 1) ? response.data.list[0] : {}
-          if (p.unidade && !p.usuarioautorizado) {
-            this.errormsg = 'Processo em segredo de justiça. (' + p.unidade + ')'
+          var token = response.data.token
+          if (!token) {
+            this.errormsg = 'Não foi possível acessar o módulo de certidões'
             return
           }
-          if (!p.numero) {
-            this.errormsg = `Processo "${this.numero}" não encontrado`
-            return
-          }
-          this.$router.push({ name: 'Processo', params: { numero: p.numero, token: response.data.token, validar: p } })
+          cont(token)
         },
         error => {
-          this.errormsg = error.data.errormsg || `Erro obtendo informações sobre o processo "${this.numero}"`
+          this.errormsg = error.data.errormsg || 'Erro processando certidão'
         })
+    },
+    emitir: function (recaptchaToken, token) {
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Emitir Certidão', params: {requisitante: UtilsBL.somenteNumeros(this.requisitante), cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj)}, query: {token: token} }))
+    },
+    autenticar: function (recaptchaToken, token) {
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Autenticar Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {token: token} }))
+    },
+    reimprimir: function (recaptchaToken, token) {
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Reimprimir Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {token: token} }))
     },
     captchaValidate: function() {
       this.recaptchaLoading = true

@@ -383,6 +383,36 @@ parameters:
     description: senha do reCaptcha
     required: false
     type: string
+  requisitantequery:
+    name: requisitante
+    in: query
+    description: requisitante de certidao
+    required: false
+    type: string
+  requisitante:
+    name: requisitante
+    in: path
+    description: requisitante de certidao
+    required: true
+    type: string
+  cpfcnpjquery:
+    name: cpfcnpj
+    in: query
+    description: cpf ou cnpj de certidão
+    required: false
+    type: string
+  cpfcnpj:
+    name: cpfcnpj
+    in: path
+    description: cpf ou cnpj de certidão
+    required: true
+    type: string
+  numeroquery:
+    name: numero
+    in: query
+    description: número de certidão
+    required: false
+    type: string
 
 
 ################################################################################
@@ -1497,6 +1527,107 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /certidao/obter-token:
+    get:
+      description: Obter token para acessar certidão
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/requisitantequery"
+        - $ref: "#/parameters/cpfcnpjquery"
+        - $ref: "#/parameters/numeroquery"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/captchaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              token:
+                $ref: "#/definitions/Token"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /certidao/emitir/{requisitante}/{cpfcnpj}:
+    post:
+      description: Obter token para acessar certidão
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/requisitante"
+        - $ref: "#/parameters/cpfcnpj"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              numero:
+                $ref: "#/definitions/Numero"
+              tipo:
+                $ref: "#/definitions/TipoDeCertidao"
+              html:
+                $ref: "#/definitions/Html"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /certidao/autenticar/{numero}/{cpfcnpj}:
+    get:
+      description: Obter token para acessar certidão
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/cpfcnpj"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              numero:
+                $ref: "#/definitions/Numero"
+              tipo:
+                $ref: "#/definitions/TipoDeCertidao"
+              html:
+                $ref: "#/definitions/Html"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /certidao/reimprimir/{numero}/{cpfcnpj}:
+    get:
+      description: Obter token para acessar certidão
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/cpfcnpj"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              numero:
+                $ref: "#/definitions/Numero"
+              tipo:
+                $ref: "#/definitions/TipoDeCertidao"
+              html:
+                $ref: "#/definitions/Html"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
 
 ################################################################################
 #                                     Definitions                              #
@@ -1952,6 +2083,16 @@ definitions:
       nome:
         type: string
         description: Nome do tipo de documento
+
+  Html:
+    description: Conteúdo em HTML
+    type: string
+    example: <p>testando...</p>
+
+  TipoDeCertidao:
+    description: Tipo da certidão
+    type: string
+    example: NADA_CONSTA
 
   Error:
     type: object

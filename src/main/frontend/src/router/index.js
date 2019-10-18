@@ -6,6 +6,7 @@ import ProcessoLista from '@/components/ProcessoLista'
 import PeticaoInicial from '@/components/PeticaoInicial'
 import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
 import ConsultaCertidao from '@/components/ConsultaCertidao'
+import Certidao from '@/components/Certidao'
 import AvisoLista from '@/components/AvisoLista'
 import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
 import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
@@ -59,9 +60,24 @@ export default new Router({
       component: ProcessoLista
     },
     {
-      path: '/consulta-certidao',
-      name: 'Certidão',
+      path: '/consultar-certidao',
+      name: 'Consultar Certidão',
       component: ConsultaCertidao
+    },
+    {
+      path: '/emitir-certidao/:requisitante/:cpfcnpj',
+      name: 'Emitir Certidão',
+      component: Certidao
+    },
+    {
+      path: '/autenticar-certidao/:numero/:cpfcnpj',
+      name: 'Autenticar Certidão',
+      component: Certidao
+    },
+    {
+      path: '/reimprimir-certidao/:numero/:cpfcnpj',
+      name: 'Reimprimir Certidão',
+      component: Certidao
     },
     {
       path: '/etiqueta-lista',

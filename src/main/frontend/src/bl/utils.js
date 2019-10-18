@@ -230,5 +230,10 @@ export default {
       if (s.startsWith(arguments[i])) return true
     }
     return false
+  },
+
+  somenteNumeros: function (s) {
+    if (s === undefined) return
+    return s.replace(/\D/g, '')
   }
 }

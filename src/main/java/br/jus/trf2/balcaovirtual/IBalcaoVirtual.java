@@ -261,6 +261,12 @@ public interface IBalcaoVirtual {
 		public String nome;
 	}
 
+	public class Html implements ISwaggerModel {
+	}
+
+	public class TipoDeCertidao implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String errormsg;
 	}
@@ -457,10 +463,10 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
+
 		public Long contentlength;
 		public InputStream inputstream;
-		public Map<String, List<String>> headerFields;
-
+		private Map<String, List<String>> headerFields;
 		public String getContenttype() {
 			return contenttype;
 		}
@@ -485,11 +491,13 @@ public interface IBalcaoVirtual {
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
-		public Map<String, List<String>> getHeaderFields() {
-			return headerFields;
-		}
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
+		}
+		@Override
+		public Map<String, List<String>> getHeaderFields() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -808,10 +816,10 @@ public interface IBalcaoVirtual {
 	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
+
 		public Long contentlength;
 		public InputStream inputstream;
-		public Map<String, List<String>> headerFields;
-
+		private Map<String, List<String>> headerFields;
 		public String getContenttype() {
 			return contenttype;
 		}
@@ -836,11 +844,13 @@ public interface IBalcaoVirtual {
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
-		public Map<String, List<String>> getHeaderFields() {
-			return headerFields;
-		}
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
+		}
+		@Override
+		public Map<String, List<String>> getHeaderFields() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -855,10 +865,10 @@ public interface IBalcaoVirtual {
 	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
+
 		public Long contentlength;
 		public InputStream inputstream;
-		public Map<String, List<String>> headerFields;
-
+		private Map<String, List<String>> headerFields;
 		public String getContenttype() {
 			return contenttype;
 		}
@@ -883,11 +893,13 @@ public interface IBalcaoVirtual {
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
-		public Map<String, List<String>> getHeaderFields() {
-			return headerFields;
-		}
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
+		}
+		@Override
+		public Map<String, List<String>> getHeaderFields() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -1044,10 +1056,10 @@ public interface IBalcaoVirtual {
 	public class RecursoArquivoGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "text/xml";
 		public String contentdisposition = "attachment";
+
 		public Long contentlength;
 		public InputStream inputstream;
-		public Map<String, List<String>> headerFields;
-
+		private Map<String, List<String>> headerFields;
 		public String getContenttype() {
 			return contenttype;
 		}
@@ -1069,19 +1081,87 @@ public interface IBalcaoVirtual {
 		public InputStream getInputstream() {
 			return inputstream;
 		}
-		public void setInputstream(InputStream inputstream) {
-			this.inputstream = inputstream;
-		}
-		public Map<String, List<String>> getHeaderFields() {
-			return headerFields;
-		}
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
 		}
-	}
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
+		@Override
+		public Map<String, List<String>> getHeaderFields() {
+			// TODO Auto-generated method stub
+			return null;
+		}	}
 
 	public interface IRecursoArquivoGet extends ISwaggerMethod {
 		public void run(RecursoArquivoGetRequest req, RecursoArquivoGetResponse resp) throws Exception;
+	}
+
+	public class CertidaoObterTokenGetRequest implements ISwaggerRequest {
+		public String requisitante;
+		public String cpfcnpj;
+		public String numero;
+		public String sistema;
+		public String captcha;
+	}
+
+	public class CertidaoObterTokenGetResponse implements ISwaggerResponse {
+		public String token;
+	}
+
+	public interface ICertidaoObterTokenGet extends ISwaggerMethod {
+		public void run(CertidaoObterTokenGetRequest req, CertidaoObterTokenGetResponse resp) throws Exception;
+	}
+
+	public class CertidaoEmitirRequisitanteCpfcnpjPostRequest implements ISwaggerRequest {
+		public String requisitante;
+		public String cpfcnpj;
+		public String sistema;
+		public String token;
+	}
+
+	public class CertidaoEmitirRequisitanteCpfcnpjPostResponse implements ISwaggerResponse {
+		public String numero;
+		public String tipo;
+		public String html;
+	}
+
+	public interface ICertidaoEmitirRequisitanteCpfcnpjPost extends ISwaggerMethod {
+		public void run(CertidaoEmitirRequisitanteCpfcnpjPostRequest req, CertidaoEmitirRequisitanteCpfcnpjPostResponse resp) throws Exception;
+	}
+
+	public class CertidaoAutenticarNumeroCpfcnpjGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String cpfcnpj;
+		public String sistema;
+		public String token;
+	}
+
+	public class CertidaoAutenticarNumeroCpfcnpjGetResponse implements ISwaggerResponse {
+		public String numero;
+		public String tipo;
+		public String html;
+	}
+
+	public interface ICertidaoAutenticarNumeroCpfcnpjGet extends ISwaggerMethod {
+		public void run(CertidaoAutenticarNumeroCpfcnpjGetRequest req, CertidaoAutenticarNumeroCpfcnpjGetResponse resp) throws Exception;
+	}
+
+	public class CertidaoReimprimirNumeroCpfcnpjGetRequest implements ISwaggerRequest {
+		public String numero;
+		public String cpfcnpj;
+		public String sistema;
+		public String token;
+	}
+
+	public class CertidaoReimprimirNumeroCpfcnpjGetResponse implements ISwaggerResponse {
+		public String numero;
+		public String tipo;
+		public String html;
+	}
+
+	public interface ICertidaoReimprimirNumeroCpfcnpjGet extends ISwaggerMethod {
+		public void run(CertidaoReimprimirNumeroCpfcnpjGetRequest req, CertidaoReimprimirNumeroCpfcnpjGetResponse resp) throws Exception;
 	}
 
 }
