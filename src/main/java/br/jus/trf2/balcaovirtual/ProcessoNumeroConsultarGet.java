@@ -2,12 +2,15 @@ package br.jus.trf2.balcaovirtual;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerServlet;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -51,6 +54,9 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		if (req.sistema.contains(".eproc"))
 			json = enhanceEproc(usuario, req.sistema, req.numero, json);
 
+		if (req.sistema.contains(".apolo"))
+			json = enhanceApolo(usuario, req.sistema, req.numero, json);
+
 		byte[] ba = json.getBytes(StandardCharsets.UTF_8);
 		resp.inputstream = new ByteArrayInputStream(ba);
 		resp.contentlength = (long) ba.length;
@@ -76,6 +82,33 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		JsonObject op = e.getAsJsonObject().getAsJsonObject("value").getAsJsonObject("dadosBasicos")
 				.getAsJsonObject("outroParametro");
 		op.addProperty("nomeMagistrado", r.magistrado);
+		json = e.toString();
+		return json;
+	}
+
+	private String enhanceApolo(String usuario, String sistema, String numero, String json) throws Exception {
+		if (!Utils.isConsultaPublica(usuario))
+			return json;
+		JsonParser parser = new JsonParser();
+		JsonElement e = parser.parse(json);
+		JsonArray docs = e.getAsJsonObject().getAsJsonObject("value").getAsJsonArray("documento");
+		Map<String, JsonElement> toRemove = new HashMap<>();
+		for (JsonElement el : docs) {
+			JsonObject doc = el.getAsJsonObject();
+			if (doc.get("nivelSigilo").getAsInt() > 0)
+				toRemove.put(doc.get("idDocumento").getAsString(), el);
+		}
+		for (JsonElement el : toRemove.values())
+			docs.remove(el);
+		JsonArray movs = e.getAsJsonObject().getAsJsonObject("value").getAsJsonArray("movimento");
+		for (JsonElement el : movs) {
+			JsonObject mov = el.getAsJsonObject();
+			if (mov.get("idDocumentoVInculado") != null) {
+				JsonArray vincs = mov.get("idDocumentoVInculado").getAsJsonArray();
+				if (vincs == null)
+					continue;
+			}
+		}
 		json = e.toString();
 		return json;
 	}

@@ -34,9 +34,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
+import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -157,10 +157,10 @@ public class SoapMNI {
 	}
 
 	private static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
-//		if (sistema.contains(".eproc") && idConsultante.equals(SwaggerServlet.getProperty("public.username"))) {
-//			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
-//			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
-//		}
+		if (sistema.contains(".eproc") && Utils.isConsultaPublica(idConsultante)) {
+			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
+			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
+		}
 		return senhaConsultante;
 	}
 
@@ -236,6 +236,11 @@ public class SoapMNI {
 				mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
+
+		if (sistema.contains(".apolo") && Utils.isConsultaPublica(idConsultante)
+				&& processo.value.getDocumento().get(0).getNivelSigilo() > 0)
+			throw new PresentableUnloggedException("Documento sigiloso não pode ser visulizado em consulta pública");
+
 		return processo.value.getDocumento().get(0).getConteudo();
 	}
 

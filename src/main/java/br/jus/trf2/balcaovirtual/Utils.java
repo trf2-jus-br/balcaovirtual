@@ -129,8 +129,7 @@ public class Utils {
 	/**
 	 * Remove os acentos da string
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcento(String acentuado) {
@@ -353,4 +352,9 @@ public class Utils {
 		}
 		return l;
 	}
+
+	public static boolean isConsultaPublica(String idConsultante) {
+		return idConsultante.equalsIgnoreCase(SwaggerServlet.getProperty("public.username"));
+	}
+
 }
