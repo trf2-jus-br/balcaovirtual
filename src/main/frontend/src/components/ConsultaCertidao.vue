@@ -76,7 +76,6 @@
                       class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || errors.any()" badge="bottomleft">
                       {{pasta === 'emitir' ? 'Emitir' : pasta === 'autenticar' ? 'Autenticar' : 'Reimprimir'}}
                   </invisible-recaptcha>
-                  <button v-if="$parent.jwt" :disabled="numero === undefined || numero.trim() === ''" @click.prevent="mostrarProcesso(numero)" class="btn btn-primary float-right">{{pasta == 'emitir' ? 'Emitir' : pasta == 'autenticar' ? 'Autenticar' : 'Reimprimir'}}</button>
                 </div>
               </div>
             </div>
