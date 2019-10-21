@@ -92,6 +92,8 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		JsonParser parser = new JsonParser();
 		JsonElement e = parser.parse(json);
 		JsonArray docs = e.getAsJsonObject().getAsJsonObject("value").getAsJsonArray("documento");
+		if (docs == null)
+			return json;
 		Map<String, JsonElement> toRemove = new HashMap<>();
 		for (JsonElement el : docs) {
 			JsonObject doc = el.getAsJsonObject();
@@ -103,10 +105,18 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		JsonArray movs = e.getAsJsonObject().getAsJsonObject("value").getAsJsonArray("movimento");
 		for (JsonElement el : movs) {
 			JsonObject mov = el.getAsJsonObject();
-			if (mov.get("idDocumentoVInculado") != null) {
-				JsonArray vincs = mov.get("idDocumentoVInculado").getAsJsonArray();
+			if (mov.get("idDocumentoVinculado") != null) {
+				JsonArray vincs = mov.get("idDocumentoVinculado").getAsJsonArray();
 				if (vincs == null)
 					continue;
+				for (int i = 0; i<vincs.size(); i++) {
+					if (toRemove.containsKey(vincs.get(i).getAsString())) {
+						vincs.remove(i);
+						i--;
+					}
+				}
+				if (vincs.size() == 0)
+					mov.remove("idDocumentoVinculado");
 			}
 		}
 		json = e.toString();
