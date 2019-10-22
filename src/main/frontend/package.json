@@ -18,7 +18,7 @@
     "@ckeditor/ckeditor5-vue": "^1.0.0",
     "awesome-mask": "^0.5.4",
     "babel-polyfill": "^6.26.0",
-    "bootstrap": "^4.0.0-beta",
+    "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
     "debounce": "^1.0.2",
     "font-awesome": "^4.7.0",

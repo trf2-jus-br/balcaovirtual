@@ -4,7 +4,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Consulta Processual {{$parent.jwt ? '' : 'Pública'}}</h4>
+        <h4 class="text-center mt-3 mb-3">Certidões</h4>
       </div>
     </div>
 
