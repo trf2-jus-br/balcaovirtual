@@ -148,6 +148,9 @@ public class SoapMNI {
 				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
+		
+		if (Utils.isConsultaPublica(idConsultante) && processo.value.getDadosBasicos().getNivelSigilo() > 0)
+			throw new PresentableUnloggedException("Processo não disponível para consulta pública");
 
 		Type collectionType = new TypeToken<List<TipoParametro>>() {
 		}.getType();
