@@ -18,6 +18,17 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
+	public static final String CERT_INI = "<!--CERT_INI-->";
+	public static final String CERT_FIM = "<!--CERT_FIM-->";
+	public static final String REQ_INI = "<!--REQ_INI-->";
+	public static final String REQ_FIM = "<!--REQ_FIM-->";
+	public static final String ERROR_MESSAGE = "Mensagem-De-Erro";
+	public static final String RESULT_KIND = "Tipo-De-Resultado";
+	public static final String CERT_NUMBER = "Numero-Da-Certidao";
+	public static final String NAME = "Nome-Da-Parte";
+	public static final String QS = "QS";
+	public static final String POST_PARAMS = "PostParams";
+
 	// public static String getOrgaos() {
 	// try {
 	// return SwaggerUtils.getProperty("orgaos",

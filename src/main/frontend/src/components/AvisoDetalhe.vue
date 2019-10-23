@@ -3,7 +3,7 @@
     <div class="row" v-if="errormsg !== undefined">
       <div class="col col-sm-12">
         <p class="alert alert-danger">
-          <strong>Erro!</strong> {{errormsg}}
+          {{errormsg}}
         </p>
       </div>
     </div>

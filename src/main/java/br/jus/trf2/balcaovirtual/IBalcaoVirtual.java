@@ -1124,10 +1124,32 @@ public interface IBalcaoVirtual {
 		public String numero;
 		public String tipo;
 		public String html;
+		public String nome;
+		public String qs;
+		public String params;
 	}
 
 	public interface ICertidaoEmitirRequisitanteCpfcnpjPost extends ISwaggerMethod {
 		public void run(CertidaoEmitirRequisitanteCpfcnpjPostRequest req, CertidaoEmitirRequisitanteCpfcnpjPostResponse resp) throws Exception;
+	}
+
+	public class CertidaoRequererRequisitanteCpfcnpjPostRequest implements ISwaggerRequest {
+		public String requisitante;
+		public String cpfcnpj;
+		public String sistema;
+		public String token;
+		public String nome;
+		public String params;
+	}
+
+	public class CertidaoRequererRequisitanteCpfcnpjPostResponse implements ISwaggerResponse {
+		public String numero;
+		public String tipo;
+		public String html;
+	}
+
+	public interface ICertidaoRequererRequisitanteCpfcnpjPost extends ISwaggerMethod {
+		public void run(CertidaoRequererRequisitanteCpfcnpjPostRequest req, CertidaoRequererRequisitanteCpfcnpjPostResponse resp) throws Exception;
 	}
 
 	public class CertidaoAutenticarNumeroCpfcnpjGetRequest implements ISwaggerRequest {

@@ -5,7 +5,7 @@
       <div class="row pt-5" v-if="errormsg">
         <div class="col col-sm-12">
           <p class="alert alert-danger">
-            <strong>Erro!</strong> {{errormsg}}
+            {{errormsg}}
           </p>
         </div>
       </div>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div v-if="!errormsg &amp;&amp; numero">
+      <div v-if="!errormsg &amp;&amp; (numero || html)">
         <div class="row">
           <div class="col-md-12">
             <h4 class="text-center mt-3 mb-3">
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="row no-gutters mt-2">
+        <div v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'" class="row no-gutters mt-2">
           <div class="col col-auto ml-auto mb-3">
             <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
               <span class="fa fa-print"></span>
@@ -35,9 +35,28 @@
           </div>
         </div>
 
-        <div class="row" v-if="true">
+        <div class="row" v-if="tipo == 'REQUERER'">
           <div class="col col-sm-12">
-            <p class="alert alert-warning" role="alert" v-html="html">
+            <p class="alert alert-warning" role="alert">
+              <span v-html="html"></span>
+              <br/>
+              
+             <button type="button" @click="requerer()" id="requerer" class="btn btn-warning mt-3 mb-3">Requerer</button>
+            </p>
+
+          </div>
+        </div>
+
+        <div class="row" v-if="tipo == 'REQUERIDO'">
+          <div class="col col-sm-12">
+            <p class="alert alert-info" role="alert" v-html="html">
+            </p>
+          </div>
+        </div>
+
+        <div class="row" v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'">
+          <div class="col col-sm-12">
+            <p :class="{alert: true, 'alert-success': tipo == 'NEGATIVO', 'alert-danger': tipo == 'POSITIVA'}" role="alert" v-html="html">
             </p>
           </div>
         </div>
@@ -63,8 +82,11 @@ export default {
       numero: this.$route.params.numero,
       cpfcnpj: this.$route.params.cpfcnpj,
       sistema: this.$route.params.sistema,
-      html: undefined,
       tipo: undefined,
+      html: undefined,
+      nome: undefined,
+      qs: undefined,
+      params: undefined,
       errormsg: undefined,
       warningmsg: undefined,
       certidao: undefined
@@ -72,7 +94,24 @@ export default {
   },
   methods: {
     emitir: function() {
-      this.$http.post('certidao/emitir/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token).then(
+      this.$http.post('certidao/emitir/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token, { block: true }).then(
+        response => {
+          this.tipo = response.data.tipo
+          this.numero = response.data.numero
+          this.html = response.data.html
+          this.nome = response.data.nome
+          this.qs = response.data.qs
+          this.params = response.data.params
+        },
+        error => {
+          this.errormsg =
+            error.data.errormsg
+        }
+      )
+    },
+
+    requerer: function() {
+      this.$http.post('certidao/requerer/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token + '&nome=' + encodeURIComponent(this.nome) + '&params=' + this.params, { block: true }).then(
         response => {
           this.tipo = response.data.tipo
           this.numero = response.data.numero
@@ -80,7 +119,7 @@ export default {
         },
         error => {
           this.errormsg =
-            'Não foi possível emitir a certidao: ' + error.data.errormsg
+            error.data.errormsg
         }
       )
     },

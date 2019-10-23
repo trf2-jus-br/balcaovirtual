@@ -377,6 +377,18 @@ parameters:
     description: token de autorização
     required: false
     type: string
+  nomequery:
+    name: nome
+    in: query
+    description: nome da parte
+    required: false
+    type: string
+  paramsquery:
+    name: params
+    in: query
+    description: parâmetros adicionais
+    required: false
+    type: string
   captchaquery:
     name: captcha
     in: query
@@ -1571,6 +1583,40 @@ paths:
                 $ref: "#/definitions/TipoDeCertidao"
               html:
                 $ref: "#/definitions/Html"
+              nome:
+                $ref: "#/definitions/Nome"
+              qs:
+                $ref: "#/definitions/Qs"
+              params:
+                $ref: "#/definitions/Params"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /certidao/requerer/{requisitante}/{cpfcnpj}:
+    post:
+      description: Obter token para acessar certidão
+      tags: [recursos]
+      parameters:
+        - $ref: "#/parameters/requisitante"
+        - $ref: "#/parameters/cpfcnpj"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/tokenquery"
+        - $ref: "#/parameters/nomequery"
+        - $ref: "#/parameters/paramsquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              numero:
+                $ref: "#/definitions/Numero"
+              tipo:
+                $ref: "#/definitions/TipoDeCertidao"
+              html:
+                $ref: "#/definitions/Html"
         500:
           description: Error ocurred
           schema:
@@ -2088,6 +2134,21 @@ definitions:
     description: Conteúdo em HTML
     type: string
     example: <p>testando...</p>
+
+  Nome:
+    description: Nome da Parte
+    type: string
+    example: Renato
+
+  Qs:
+    description: Query String
+    type: string
+    example: 
+
+  Params:
+    description: Post Params
+    type: string
+    example: 
 
   TipoDeCertidao:
     description: Tipo da certidão

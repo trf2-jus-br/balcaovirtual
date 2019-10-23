@@ -5,7 +5,7 @@
       <div class="row pt-5" v-if="errormsg">
         <div class="col col-sm-12">
           <p class="alert alert-danger">
-            <strong>Erro!</strong> {{errormsg}}
+            {{errormsg}}
           </p>
         </div>
       </div>
@@ -454,7 +454,7 @@
                           <span v-html="formatDDMMYYYHHMM(movdoc.mov.dataHora)"></span>
                         </td>
                         <td v-if="sistema && sistema.includes('.eproc') && movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" class="text-right">{{movdoc.mov.identificadorMovimento}}</td>
-                        <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}">{{movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''}}</td>
+                        <td v-if="movdoc.rowspan && !movdoc.hidemov" :rowspan="movdoc.rowspan" v-bind:class="{'text-success-dark': movdoc.doc.exibirTexto !== undefined}" v-html="movdoc.mov.movimentoLocal ? movdoc.mov.movimentoLocal.descricao : ''"></td>
                         <template v-if="movdoc.doc">
                           <td>
                             <p class="mb-0" v-if="movdoc.doc.idDocumento">
@@ -591,7 +591,7 @@ export default {
       Bus.$emit('block', 20, 30)
       this.$http.get('processo/' + this.numero + '/validar' + (this.token ? '?token=' + this.token : '')).then(
         response => {
-          if (response.data.list && response.data.list.length > 0) this.aplicarValidar(response.data.list[0], cont)
+          if (response.data.list && response.data.list.length > 0) this.aplicarValidar(response.data, cont)
           Bus.$emit('release')
         },
         error => {
@@ -606,7 +606,8 @@ export default {
     },
 
     aplicarValidar: function(data, cont) {
-      this.sistema = data.sistema
+      var p = data.list[0]
+      this.sistema = p.sistema
       this.dataValidacao = UtilsBL.formatJSDDMMYYYYHHMM(data.datavalidacao)
 
       if (this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema]) {
