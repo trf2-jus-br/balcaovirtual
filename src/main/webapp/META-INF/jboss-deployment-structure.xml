@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2"
+<jboss-deployment-structure
+	xmlns="urn:jboss:deployment-structure:1.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<deployment>
 		<dependencies>
@@ -8,6 +9,11 @@
 			<module name="org.javassist" />
 			<module name="org.infinispan" />
 			<module name="org.hibernate.commons-annotations" />
+			<system export="true">
+				<paths>
+					<path name="org/w3c/dom/css" />
+				</paths>
+			</system>
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>
