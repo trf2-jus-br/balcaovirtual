@@ -95,5 +95,12 @@ export default {
     const regex = /^[A-Z]{2}[0-9]{6}$/
     if (regex.exec(oab) !== null) return true
     return false
+  },
+
+  validarCertidao: function (s) {
+    const regex = /^[0-9]{4}\.[0-9]{8}$/
+    if (regex.exec(s) !== null) return true
+    return false
   }
+
 }

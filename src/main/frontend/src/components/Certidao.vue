@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div class="row" v-if="tipo == 'REQUERIDO'">
+        <div class="row" v-if="tipo == 'REQUERIDO' || tipo == 'AUTENTICADO'">
           <div class="col col-sm-12">
             <p class="alert alert-info" role="alert" v-html="html">
             </p>
@@ -81,7 +81,7 @@ export default {
       requisitante: this.$route.params.requisitante,
       numero: this.$route.params.numero,
       cpfcnpj: this.$route.params.cpfcnpj,
-      sistema: this.$route.params.sistema,
+      sistema: this.$route.params.sistema ? this.$route.params.sistema : this.$route.query.sistema,
       tipo: undefined,
       html: undefined,
       nome: undefined,
@@ -132,8 +132,7 @@ export default {
           this.html = response.data.html
         },
         error => {
-          this.errormsg =
-            'Não foi possível autenticar a certidao: ' + error.data.errormsg
+          this.errormsg = error.data.errormsg
         }
       )
     },
@@ -147,7 +146,7 @@ export default {
         },
         error => {
           this.errormsg =
-            'Não foi possível reimprimir a certidao: ' + error.data.errormsg
+            error.data.errormsg
         }
       )
     },

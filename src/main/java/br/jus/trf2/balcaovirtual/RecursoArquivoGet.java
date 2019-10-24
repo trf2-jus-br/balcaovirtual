@@ -26,7 +26,7 @@ public class RecursoArquivoGet implements IRecursoArquivoGet {
 		}
 		InputStream is = this.getClass().getResourceAsStream(req.arquivo);
 		String sSwagger = SwaggerUtils.convertStreamToString(is);
-		sSwagger = sSwagger.replace("http://localhost:8080/balcaovirtual", SwaggerServlet.getProperty("base.url"));
+		sSwagger = sSwagger.replace("http://localhost:8080/balcaovirtual", Utils.getBaseUrl());
 		byte[] ab = sSwagger.getBytes();
 		resp.contentlength = (long) ab.length;
 		resp.contentdisposition = "inline;filename=" + req.arquivo;

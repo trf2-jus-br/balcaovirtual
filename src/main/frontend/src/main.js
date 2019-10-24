@@ -49,6 +49,11 @@ VeeValidate.Validator.extend('oab', {
   validate: ValidacaoBL.validarOAB
 })
 
+VeeValidate.Validator.extend('cert', {
+  getMessage: field => 'Número da certidão inválido.',
+  validate: ValidacaoBL.validarCertidao
+})
+
 ptBR.messages.cpf = field => 'CPF ' + field + ' inválido.'
 ptBR.messages.cnpj = field => 'CNPJ ' + field + ' inválido.'
 ptBR.messages.oab = field => 'OAB ' + field + ' inválido.'

@@ -34,30 +34,9 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 
 		if (r.headerFields.containsKey(Utils.RESULT_KIND)) {
 			resp.tipo = r.headerFields.get(Utils.RESULT_KIND).get(0);
-
-			switch (resp.tipo) {
-			case "NEGATIVO":
-				if (!resp.html.contains(Utils.CERT_INI) || !resp.html.contains(Utils.CERT_FIM))
-					throw new PresentableException(
-							"Não foi possível obter a certidão negativa, por favor tente novamente em alguns minutos.");
-				if (resp.html.contains(Utils.CERT_INI))
-					resp.html = resp.html.substring(resp.html.indexOf(Utils.CERT_INI) + Utils.CERT_INI.length());
-				if (resp.html.contains(Utils.CERT_FIM))
-					resp.html = resp.html.substring(0, resp.html.indexOf(Utils.CERT_FIM));
-				resp.html = resp.html.replaceAll(" width=\"[0-9]+\"", " width=\"100%\"");
-				break;
-			case "REQUERER":
-				if (!resp.html.contains(Utils.REQ_INI) || !resp.html.contains(Utils.REQ_FIM))
-					throw new PresentableException(
-							"Não foi possível obter dados para requerer a certidão, por favor tente novamente em alguns minutos.");
-				if (resp.html.contains(Utils.REQ_INI))
-					resp.html = resp.html.substring(resp.html.indexOf(Utils.REQ_INI) + Utils.REQ_INI.length());
-				if (resp.html.contains(Utils.REQ_FIM))
-					resp.html = resp.html.substring(0, resp.html.indexOf(Utils.REQ_FIM));
-				resp.html = resp.html.replaceAll(" width=\"[0-9]+\"", " width=\"100%\"");
-				break;
-			}
+			resp.html = Utils.obterHtml(resp.html, resp.tipo);
 		}
+
 		if (r.headerFields.containsKey(Utils.CERT_NUMBER))
 			resp.numero = r.headerFields.get(Utils.CERT_NUMBER).get(0);
 

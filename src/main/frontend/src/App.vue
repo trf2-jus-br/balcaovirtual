@@ -195,6 +195,20 @@ export default {
           }
         }
 
+        if (this.test.properties['balcaovirtual.cert.systems']) {
+          this.nomesSistemasCertificadores = ''
+          a = this.test.properties['balcaovirtual.cert.systems'].split(',')
+          this.sistemasCertificadores = []
+          for (i = 0; i < a.length; i++) {
+            this.sistemasCertificadores.push(a[i])
+            if (i > 0) {
+              if (i === a.length - 1) this.nomesSistemasCertificadores += ' e '
+              else this.nomesSistemasCertificadores += ', '
+            }
+            this.nomesSistemasCertificadores += this.test.properties['balcaovirtual.' + a[i] + '.cert.name']
+          }
+        }
+
         if (this.test.properties['balcaovirtual.wootric.token'] &&
           this.test.properties['balcaovirtual.wootric.token'] !== '[undefined]' &&
           this.jwt) {
@@ -216,6 +230,7 @@ export default {
       test: { properties: {} },
       nomesSistemas: undefined,
       sistemas: undefined,
+      sistemasCertificadores: undefined,
       errormsg: undefined,
       settings: {
         timeline: undefined,

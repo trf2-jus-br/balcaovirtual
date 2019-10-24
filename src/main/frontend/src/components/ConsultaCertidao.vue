@@ -12,15 +12,15 @@
       <div class="col-sm-auto mb-3">
         <div class="btn-group">
           <label class="btn" :class="{'active btn-primary': pasta === 'emitir',  'btn-outline-primary': pasta !== 'emitir'}">
-            <input v-show="false" type="radio" v-model="pasta" value="emitir" autocomplete="off">
+            <input v-show="false" type="radio" v-model="pasta" value="emitir" autocomplete="off" @change="$validator.validateAll()">
             <span class="fa fa-plus"></span> Emitir
           </label>
           <label class="btn btn-outline-primary" :class="{'active btn-primary': pasta === 'autenticar', 'btn-outline-primary': pasta !== 'autenticar'}">
-            <input v-show="false" type="radio" v-model="pasta" value="autenticar" autocomplete="off">
+            <input v-show="false" type="radio" v-model="pasta" value="autenticar" autocomplete="off" @change="$validator.validateAll()">
             <span class="fa fa-check"></span> Consultar Autenticidade
           </label>
           <label class="btn btn-outline-primary" :class="{'active btn-primary': pasta === 'reimprimir', 'btn-outline-primary': pasta !== 'reimprimir'}">
-            <input v-show="false" type="radio" v-model="pasta" value="reimprimir" autocomplete="off">
+            <input v-show="false" type="radio" v-model="pasta" value="reimprimir" autocomplete="off" @change="$validator.validateAll()">
             <span class="fa fa-print"></span> Imprimir Certidão Já Requerida
           </label>
         </div>
@@ -36,12 +36,7 @@
               <div class="row">
                 <div class="col">
                   <div class="form-group">
-                    <label for="sistema">Órgão</label>
-                    <select class="form-control" id="sistema" v-model="sistema">
-                      <option value="br.jus.trf2.apolo">TRF2</option>
-                      <option value="br.jus.jfrj.apolo">JFRJ</option>
-                      <option value="br.jus.jfes.apolo">JFES</option>
-                    </select>
+                    <my-select name="sistema" label="Órgão" v-model="sistema" :list="sistemas" :edit="true" v-validate="'required'" :error="errors.first('sistema')"></my-select>
                   </div>
                 </div>
               </div>
@@ -49,7 +44,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="requisitante">CPF do Requisitante</label>
-                    <my-input name="requisitante" v-model="requisitante" themask="###.###.###-##" v-validate="'required|cpf'" :error="errors.first('requisitante')"></my-input>
+                    <my-input name="requisitante" v-model="requisitante" themask="###.###.###-##" v-validate="pasta == 'emitir' ? 'required|cpf' : ''" :error="errors.first('requisitante')"></my-input>
                   </div>
                 </div>
               </div>
@@ -57,7 +52,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="numero">Número da Certidão</label>
-                    <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" autofocus>
+                    <my-input name="numero" v-model="numero" themask="####.########" v-validate="pasta != 'emitir' ? 'required|cert' : ''" :error="errors.first('numero')"></my-input>
                   </div>
                 </div>
               </div>
@@ -73,7 +68,7 @@
               <div class="row pt-3">
                 <div class="col" v-if="$parent.test.properties">
                   <invisible-recaptcha ref="captcha" v-if="this.$parent.test && this.$parent.test.properties" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
-                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || errors.any()" badge="bottomleft">
+                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="!camposPreenchidos || recaptchaLoading || errors.any()" badge="bottomleft">
                       {{pasta === 'emitir' ? 'Emitir' : pasta === 'autenticar' ? 'Autenticar' : 'Reimprimir'}}
                   </invisible-recaptcha>
                 </div>
@@ -126,15 +121,36 @@ export default {
     sitekey: function() {
       if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties['balcaovirtual.recaptcha.site.key']
       return 'undefined'
+    },
+    sistemas: function() {
+      if (!this.$parent.sistemasCertificadores) return []
+      var a = []
+      for (var i = 0; i < this.$parent.sistemasCertificadores.length; i++) {
+        a.push({id: this.$parent.sistemasCertificadores[i], nome: this.$parent.test.properties['balcaovirtual.' + this.$parent.sistemasCertificadores[i] + '.cert.name']})
+      }
+      return a
+    },
+    camposPreenchidos: function() {
+      if (this.pasta === 'emitir') return !!this.requisitante && !!this.cpfcnpj
+      if (this.pasta === 'autenticar') return !!this.numero && !!this.cpfcnpj
+      if (this.pasta === 'reimprimir') return !!this.numero && !!this.cpfcnpj
+      return false
     }
   },
 
   methods: {
     consultar: function (recaptchaToken) {
       this.recaptchaLoading = false
-      if (this.pasta === 'emitir') this.emitir(recaptchaToken)
-      if (this.pasta === 'autenticar') this.autenticar(recaptchaToken)
-      if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
+      this.$validator.validateAll().then((result) => {
+        if (!result) {
+          // this.errormsg = 'Por favor, verifique o preenchimento dos campos marcados em vermelho e repita a operação.'
+          return
+        } else {
+          if (this.pasta === 'emitir') this.emitir(recaptchaToken)
+          if (this.pasta === 'autenticar') this.autenticar(recaptchaToken)
+          if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
+        }
+      })
     },
     obterToken: function (recaptchaToken, token, cont) {
       this.$http.get('certidao/obter-token' + '?sistema=' + this.sistema + '&requisitante=' + UtilsBL.somenteNumeros(this.requisitante) + '&cpfcnpj=' + UtilsBL.somenteNumeros(this.cpfcnpj) + '&numero=' + UtilsBL.somenteNumeros(this.numero) + (recaptchaToken ? '&captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
@@ -151,13 +167,13 @@ export default {
         })
     },
     emitir: function (recaptchaToken, token) {
-      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Emitir Certidão', params: {requisitante: UtilsBL.somenteNumeros(this.requisitante), cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj)}, query: {token: token} }))
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Emitir Certidão', params: {requisitante: UtilsBL.somenteNumeros(this.requisitante), cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj)}, query: {sistema: this.sistema, token: token} }))
     },
     autenticar: function (recaptchaToken, token) {
-      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Autenticar Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {token: token} }))
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Autenticar Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {sistema: this.sistema, token: token} }))
     },
     reimprimir: function (recaptchaToken, token) {
-      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Reimprimir Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {token: token} }))
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Reimprimir Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {sistema: this.sistema, token: token} }))
     },
     captchaValidate: function() {
       this.recaptchaLoading = true

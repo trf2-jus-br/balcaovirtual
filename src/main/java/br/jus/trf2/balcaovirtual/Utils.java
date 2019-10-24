@@ -18,10 +18,8 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class Utils {
-	public static final String CERT_INI = "<!--CERT_INI-->";
-	public static final String CERT_FIM = "<!--CERT_FIM-->";
-	public static final String REQ_INI = "<!--REQ_INI-->";
-	public static final String REQ_FIM = "<!--REQ_FIM-->";
+	public static final String HTML_START = "<!--HTML-START-->";
+	public static final String HTML_END = "<!--HTML-END-->";
 	public static final String ERROR_MESSAGE = "Mensagem-De-Erro";
 	public static final String RESULT_KIND = "Tipo-De-Resultado";
 	public static final String CERT_NUMBER = "Numero-Da-Certidao";
@@ -39,6 +37,10 @@ public class Utils {
 	// }
 	//
 	// }
+
+	public static String getBaseUrl() {
+		return SwaggerServlet.getProperty("base.url");
+	}
 
 	public static String[] getSystems() {
 		String systems = SwaggerServlet.getProperty("systems");
@@ -79,6 +81,14 @@ public class Utils {
 
 	public static String getApiUrl(String system) {
 		return SwaggerServlet.getProperty(system + ".api.url");
+	}
+
+	public static String getCertApiPassword(String system) {
+		return SwaggerServlet.getProperty(system + ".cert.api.password");
+	}
+
+	public static String getCertApiUrl(String system) {
+		return SwaggerServlet.getProperty(system + ".cert.api.url");
 	}
 
 	public static String getAssijusUrl(String system) {
@@ -366,6 +376,40 @@ public class Utils {
 
 	public static boolean isConsultaPublica(String idConsultante) {
 		return idConsultante.equalsIgnoreCase(SwaggerServlet.getProperty("public.username"));
+	}
+
+	public static String limparHtml(String s, String tipoDeConteudo) throws PresentableException {
+		if (!s.contains(Utils.HTML_START) || !s.contains(Utils.HTML_END))
+			throw new PresentableException(
+					"Não foi possível obter " + tipoDeConteudo + ", por favor tente novamente em alguns minutos.");
+		if (s.contains(Utils.HTML_START))
+			s = s.substring(s.indexOf(Utils.HTML_START) + Utils.HTML_START.length());
+		if (s.contains(Utils.HTML_END))
+			s = s.substring(0, s.indexOf(Utils.HTML_END));
+		s = s.replaceAll(" width=\"[0-9]+\"", " width=\"100%\"");
+		s = s.replaceAll("src=\"./imagens/brasao-apolo.jpg\"", "src=\"" + getBaseUrl() + "/assets/brasao-260x260.png\"");
+		return s;
+	}
+
+	public static String obterHtml(String s, String tipo) throws PresentableException {
+		switch (tipo) {
+		case "AUTENTICADO":
+			s = limparHtml(s, "dados de autenticidade certidão");
+			break;
+		case "POSITIVO":
+			s = limparHtml(s, "a certidão");
+			break;
+		case "NEGATIVO":
+			s = limparHtml(s, "a certidão negativa");
+			break;
+		case "REQUERIDO":
+			s = limparHtml(s, "dados do requerimento da certidão");
+			break;
+		case "REQUERER":
+			s = limparHtml(s, "dados para requerer a certidão");
+			break;
+		}
+		return s;
 	}
 
 }

@@ -29,6 +29,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		setActionPackage("br.jus.trf2.balcaovirtual");
 
 		addPublicProperty("systems");
+		addPublicProperty("cert.systems", null);
 		addPublicProperty("env");
 		addPublicProperty("wootric.token", null);
 		addPublicProperty("base.url", "http://localhost:8080/balcaovirtual");
@@ -61,9 +62,13 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			addPublicProperty(s.toLowerCase() + ".cota.tipo");
 		}
 
-		// addPublicProperty("assijus.endpoint");
-		// addPublicProperty("assijus.system.expedientes");
-		// addPublicProperty("assijus.system.movimentos");
+		if (getProperty("cert.systems") != null) {
+			for (String s : getProperty("cert.systems").split(",")) {
+				addPublicProperty(s.toLowerCase() + ".cert.name");
+				addRestrictedProperty(s.toLowerCase() + ".cert.api.url");
+				addRestrictedProperty(s.toLowerCase() + ".cert.api.password");
+			}
+		}
 
 		addPrivateProperty("jwt.secret");
 		addRestrictedProperty("upload.dir.final");
