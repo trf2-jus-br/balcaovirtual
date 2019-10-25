@@ -47,6 +47,7 @@
     </div>
 
     <template v-if="sistemasCarregados &amp;&amp; sistemas.length > 0">
+      <validation-observer v-slot="{ invalid }">
       <div class="row pb-4" v-show="arquivos.length == 0">
         <div class="col-md-12">
           <vue-clip ref="clip" :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
@@ -99,14 +100,9 @@
               </thead>
               <tbody>
                 <tr v-for="(f, index) in arquivos" :class="{odd: f.odd}">
-                  <td v-if="!editando">{{localizar(f.tipo, tipospeca)}}</td>
-                  <td v-if="editando">
-                    <select class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)" :name="'tipopeca[' + index +']'" :class="{ 'is-invalid': errors.has('tipopeca[' + index +']') }" v-validate="'required'">
-                      <option v-for="tipo in tipospeca" :value="tipo.id">{{tipo.nome}}</option>
-                      <option disabled hidden selected value=""> [Selecionar]</option>
-                    </select>
+                  <td>
+                    <my-select :disabled="f.protocolado || !sistema" :name="'tipopeca[' + index +']'" v-model="f.tipo" :list="tipospeca" @change="selecionarTipo(f, f.tipo)" :edit="editando" validate="required"></my-select>
                   </td>
-
                   <td>
                     <span v-if="!editando">{{f.nome}}</span>
                     <div v-if="editando" class="input-group">
@@ -149,37 +145,33 @@
       <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
         <div class="row">
           <div class="form-group col-md-4">
-            <my-select name="sistema" label="Sistema" v-model="sistema" :list="sistemas" @change="selecionarSistema" :edit="editando" v-validate="'required'" :error="errors.first('sistema')"></my-select>
+            <my-select name="sistema" label="Sistema" v-model="sistema" :list="sistemas" @change="selecionarSistema" :edit="editando" validate="required"></my-select>
           </div>
           <div class="form-group col-md-4">
-            <my-select :disabled="localidades.length == 0" name="localidade" label="Localidade" v-model="localidade" :list="localidades" @change="selecionarLocalidade" :edit="editando" v-validate="'required'" :error="errors.first('localidade')"></my-select>
+            <my-select :disabled="localidades.length == 0" name="localidade" label="Localidade" v-model="localidade" :list="localidades" @change="selecionarLocalidade" :edit="editando" validate="required"></my-select>
           </div>
           <div class="form-group col-md-4">
-            <my-select :disabled="especialidades.length == 0" name="especialidade" label="Especialidade" v-model="especialidade" :list="especialidades" @change="selecionarEspecialidade" :edit="editando" v-validate="'required'" :error="errors.first('especialidade')"></my-select>
+            <my-select :disabled="especialidades.length == 0" name="especialidade" label="Especialidade" v-model="especialidade" :list="especialidades" @change="selecionarEspecialidade" :edit="editando" validate="required"></my-select>
           </div>
           <div class="form-group col-md-4">
-            <my-select :disabled="classes.length == 0" name="classe" label="Classe" v-model="classe" :list="classes" @change="selecionarClasse" :edit="editando" v-validate="'required'" :error="errors.first('classe')"></my-select>
-          </div>
-
-          <div class="form-group col-md-4">
-            <my-select :disabled="assuntos.length == 0" name="assunto" label="Assunto Principal" v-model="assunto" :list="assuntos" @change="selecionarAssunto" :edit="editando" v-validate="'required'" :error="errors.first('assunto')"></my-select>
+            <my-select :disabled="classes.length == 0" name="classe" label="Classe" v-model="classe" :list="classes" @change="selecionarClasse" :edit="editando" validate="required"></my-select>
           </div>
 
           <div class="form-group col-md-4">
-            <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" v-validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''" :error="errors.first('valorcausa')"></my-input>
+            <my-select :disabled="assuntos.length == 0" name="assunto" label="Assunto Principal" v-model="assunto" :list="assuntos" @change="selecionarAssunto" :edit="editando" validate="required"></my-select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <my-input :disabled="!classe" name="valorcausa" label="Valor da Causa (R$)" v-model="valorcausa" :edit="editando" placeholder="0,00" mask="money" :validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''"></my-input>
           </div>
 
           <div class="form-group col-md-6" v-if="ef">
-            <label for="cda">CDA</label>
-            <div v-if="!editando">{{cda}}</div>
-            <input v-if="editando" type="text" class="form-control" :class="{ 'is-invalid': errors.has('cda') }" v-model="cda" name="cda" placeholder="" />
+            <my-input name="cda" label="CDA" v-model="cda" :edit="editando"></my-input>
             <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
           </div>
 
           <div class="form-group col-md-6" v-if="ef">
-            <label for="pa">Processo Administrativo</label>
-            <div v-if="!editando">{{pa}}</div>
-            <input v-if="editando" type="text" class="form-control" :class="{ 'is-invalid': errors.has('pa') }" v-model="pa" name="pa" placeholder="" />
+            <my-input name="pa" label="Processo Administrativo" v-model="pa" :edit="editando"></my-input>
             <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
           </div>
 
@@ -245,21 +237,15 @@
 
                   <td v-if="!editando">{{p.documento}}</td>
                   <td v-if="editando" :colspan="p.tipopessoa == '3' ? 2 : 1">
-                    <my-input v-if="p.tipopessoa == '1'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @change="alterouCpf(p)" v-validate="'required|cpf'" :error="errors.first('documento[' + index +']')"></my-input>
-
-                    <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="CNPJ" v-if="p.tipopessoa == '2'" v-validate="'required|cnpj'" v-mask="'99.999.999/9999-99'" @change="alterouCnpj(p)" />
-
-                    <select :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="Entidade" v-if="p.tipopessoa == '3'" v-validate="'required'" @change="alterouEntidade(p)">
-                      <option disabled selected hidden :value="undefined">[Selecionar]</option>
-                      <option v-for="l in entidadesFiltradas" :value="l.documento">{{l.nome}}</option>
-                    </select>
-
-                    <input type="text" :disabled="!sistema" class="form-control mr-sm-2" :class="{ 'is-invalid': errors.has('documento[' + index +']') }" v-model="p.documento" :name="'documento[' + index +']'" placeholder="OAB" v-if="p.tipopessoa == '4'" v-validate="'required|oab'" v-mask="'AA999999'" @change="alterouOab(p)" v-on:blur="fixOab(p)"/>
+                    <my-input v-if="p.tipopessoa == '1'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CPF" mask="999.999.999-99" @valid="validCpf(p)" @invalid="$set(p, 'nome')" validate="required|cpf"></my-input>
+                    <my-input v-if="p.tipopessoa == '2'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="CNPJ" mask="99.999.999/9999-99" @valid="validCnpj(p)" @invalid="$set(p, 'nome')" validate="required|cnpj"></my-input>
+                    <my-select v-if="p.tipopessoa == '3'" :disabled="!sistema" :name="'id[' + index +']'" v-model="p.id" :edit="editando" @change="alterouEntidade(p)" validate="required" :list="entidadesFiltradas"></my-select>
+                    <my-input v-if="p.tipopessoa == '4'" :disabled="!sistema" :name="'documento[' + index +']'" v-model="p.documento" :edit="editando" placeholder="OAB" mask="AA999999"  @valid="validOab(p)" @invalid="$set(p, 'nome')" v-on:blur="fixOab(p)" validate="required|oab"></my-input>
                   </td>
 
                   <td v-if="!editando">{{p.nome}}</td>
                   <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
-                    <my-input :disabled="!sistema" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" v-validate="'required'" :error="errors.first('nome[' + index +']')"></my-input>
+                    <my-input :disabled="!sistema" :name="'nome[' + index +']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" validate="required"></my-input>
                   </td>
 
                   <td v-if="editando" align="right">
@@ -276,7 +262,7 @@
 
       <div class="row align-items-center d-print-none">
         <div v-if="editando" class="col-sm-12">
-          <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || faltaTeorDaPeticao || !isAllValid() || errors.any()" class="btn btn-primary float-right d-print-none">Protocolar</button>
+          <button type="button " @click="peticionar()" id="prosseguir" :disabled="arquivos.length==0 || faltaTeorDaPeticao || !isAllValid() || invalid" class="btn btn-primary float-right d-print-none">Protocolar</button>
         </div>
 
         <template v-if="!editando">
@@ -296,6 +282,7 @@
           </div>
         </template>
       </div>
+    </validation-observer>
     </template>
   </div>
 </template>
@@ -307,7 +294,6 @@ import UtilsBL from '../bl/utils.js'
 import CnjClasseBL from '../bl/cnj-classe.js'
 import { Bus } from '../bl/bus.js'
 import AwesomeMask from 'awesome-mask'
-import ValidacaoBL from '../bl/validacao.js'
 import MySelect from './MySelect'
 import MyInput from './MyInput'
 
@@ -319,7 +305,7 @@ const polos = [{
   nome: 'Passivo'
 }]
 
-const partes = [{ polo: 1, tipopessoa: '1', documento: undefined, nome: undefined }, { polo: 2, tipopessoa: '1', documento: undefined, nome: undefined }]
+const partesConst = [{ polo: 1, tipopessoa: '1', documento: undefined, nome: undefined }, { polo: 2, tipopessoa: '1', documento: undefined, nome: undefined }]
 
 const tipospeca = [{
   id: 1,
@@ -376,7 +362,7 @@ export default {
       invalidFiles: [],
 
       polos: polos,
-      partes: JSON.parse(JSON.stringify(partes)),
+      partes: JSON.parse(JSON.stringify(partesConst)),
       tipospeca: tipospeca,
       tipospessoa: tipospessoa,
 
@@ -720,12 +706,15 @@ export default {
     },
 
     selecionarTipoPessoa: function (parte, tipoPessoa) {
+      this.$set(parte, 'id')
+      this.$set(parte, 'nome')
+      this.$set(parte, 'documento')
       this.ordenarPartes()
       this.validar()
     },
 
     validar: function () {
-      this.$nextTick(() => this.$validator.validateAll())
+//      this.$nextTick(() => this.$validator.validateAll())
     },
 
     ordenarPartes: function () {
@@ -740,48 +729,29 @@ export default {
       })
     },
 
-    alterouCpf: function(parte) {
+    validCpf: function(parte) {
+      console.log(parte)
       var cpf = ProcessoBL.somenteNumeros(parte.documento)
-      if (!cpf || !ValidacaoBL.validarCPF(cpf)) {
-        parte.nome = undefined
-        this.validar()
-        return
-      }
       this.$http.get('config/pessoa-fisica/' + cpf + '?sistema=' + this.sistema, { block: true }).then(response => {
-        parte.nome = response.data.nome
-        this.validar()
+        this.$set(parte, 'nome', response.data.nome)
       }, error => UtilsBL.errormsg(error, this))
     },
 
-    alterouCnpj: function(parte) {
+    validCnpj: function(parte) {
       var cnpj = ProcessoBL.somenteNumeros(parte.documento)
-      if (!cnpj || !ValidacaoBL.validarCNPJ(cnpj)) {
-        parte.nome = undefined
-        this.validar()
-        return
-      }
       this.$http.get('config/pessoa-juridica/' + cnpj + '?sistema=' + this.sistema, { block: true }).then(response => {
-        parte.nome = response.data.nome
-        this.validar()
+        this.$set(parte, 'nome', response.data.nome)
       }, error => UtilsBL.errormsg(error, this))
     },
 
     alterouOab: function(parte) {
       var oab = parte.documento
-
       if (oab) {
         oab = oab.toUpperCase()
-        parte.documento = oab
-      }
-
-      if (!oab || !ValidacaoBL.validarOAB(oab)) {
-        parte.nome = undefined
-        this.validar()
-        return
+        this.$set(parte, 'documento', oab)
       }
       this.$http.get('config/advogado/' + oab + '?sistema=' + this.sistema, { block: true }).then(response => {
-        parte.nome = response.data.nome
-        window.setTimeout(() => this.validar(), 100)
+        this.$set(parte, 'nome', response.data.nome)
       }, error => UtilsBL.errormsg(error, this))
     },
 
@@ -791,16 +761,17 @@ export default {
       if (oab.length < 6) return
       while (oab.length < 8) oab = oab.substring(0, 2) + '0' + oab.substring(2)
       this.$set(parte, 'documento', oab)
-      this.alterouOab(parte)
-      window.setTimeout(() => this.validar(), 100)
     },
 
     alterouEntidade: function(parte) {
-      parte.nome = undefined
+      console.log('alterou entidade')
+      this.$set(parte, 'nome')
+      this.$set(parte, 'documento')
       for (var i = 0; i < this.entidadesFiltradas.length; i++) {
         var e = this.entidadesFiltradas[i]
-        if (e.documento === parte.documento) {
-          parte.nome = e.nome
+        if (e.id === parte.id) {
+          this.$set(parte, 'nome', e.nome)
+          this.$set(parte, 'documento', e.documento)
         }
       }
       this.validar()
@@ -811,14 +782,15 @@ export default {
     //
     peticionar: function () {
       this.errormsg = undefined
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          this.errormsg = 'Por favor, verifique o preenchimento dos campos marcados em vermelho e repita a operação.'
-          return
-        } else {
-          this.peticionarEnviar()
-        }
-      })
+      this.peticionarEnviar()
+//      this.$validator.validateAll().then((result) => {
+//        if (!result) {
+//          this.errormsg = 'Por favor, verifique o preenchimento dos campos marcados em vermelho e repita a operação.'
+//          return
+//        } else {
+//          this.peticionarEnviar()
+//        }
+//      })
     },
 
     peticionarEnviar: function() {
@@ -885,7 +857,7 @@ export default {
         this.valorcausa = undefined
         this.cda = undefined
         this.pa = undefined
-        this.$set(this, 'partes', JSON.parse(JSON.stringify(partes)))
+        this.$set(this, 'partes', JSON.parse(JSON.stringify(partesConst)))
       }
       this.ordenarPartes()
       this.validar()

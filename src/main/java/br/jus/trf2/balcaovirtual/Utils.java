@@ -388,6 +388,10 @@ public class Utils {
 			s = s.substring(0, s.indexOf(Utils.HTML_END));
 		s = s.replaceAll(" width=\"[0-9]+\"", " width=\"100%\"");
 		s = s.replaceAll("src=\"./imagens/brasao-apolo.jpg\"", "src=\"" + getBaseUrl() + "/assets/brasao-260x260.png\"");
+		s = s.replaceAll("font-size: [0-9]+pt", "");
+		s = s.replaceAll(" face=\"Times New Roman\"", "");
+		s = s.replaceAll(" color=\"#[0-9]+\"", "");
+		
 		return s;
 	}
 

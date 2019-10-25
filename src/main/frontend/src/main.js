@@ -14,7 +14,7 @@ import 'bootstrap'
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueClip from 'vue-clip'
-import VeeValidate, { Validator } from 'vee-validate'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import ptBR from 'vee-validate/dist/locale/pt_BR'
 import BootstrapVue, { ModalPlugin } from 'bootstrap-vue'
 import App from './App'
@@ -29,46 +29,63 @@ import MyInput from './components/MyInput'
 import VueTheMask from 'vue-the-mask'
 // import {mask} from 'vue-the-mask'
 
-VeeValidate.Validator.extend('cpf', {
-  getMessage: field => 'CPF ' + field + ' inválido.',
+extend('email', {
+  message: field => 'Email inválido.',
+  validate: function (value) {
+    // eslint-disable-next-line
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(value))
+  }
+})
+
+extend('required', {
+  message: field => 'Campo obrigatório.',
+  validate: function(s) { return !!s },
+  computesRequired: true
+})
+
+extend('cpf', {
+  message: field => 'CPF inválido',
   validate: ValidacaoBL.validarCPF
 })
 
-VeeValidate.Validator.extend('cnpj', {
-  getMessage: field => 'CNPJ ' + field + ' inválido.',
+extend('cnpj', {
+  message: field => 'CNPJ inválido',
   validate: ValidacaoBL.validarCNPJ
 })
 
-VeeValidate.Validator.extend('cpfcnpj', {
-  getMessage: field => 'CPF/CNPJ ' + field + ' inválido.',
+extend('cpfcnpj', {
+  message: field => 'CPF/CNPJ inválido',
   validate: ValidacaoBL.validarCPFCNPJ
 })
 
-VeeValidate.Validator.extend('oab', {
-  getMessage: field => 'OAB ' + field + ' inválido.',
+extend('oab', {
+  message: field => 'OAB inválido',
   validate: ValidacaoBL.validarOAB
 })
 
-VeeValidate.Validator.extend('cert', {
-  getMessage: field => 'Número da certidão inválido.',
+extend('cert', {
+  message: field => 'Número de certidão inválido',
   validate: ValidacaoBL.validarCertidao
 })
 
-ptBR.messages.cpf = field => 'CPF ' + field + ' inválido.'
-ptBR.messages.cnpj = field => 'CNPJ ' + field + ' inválido.'
-ptBR.messages.oab = field => 'OAB ' + field + ' inválido.'
-Validator.localize('pt_BR', ptBR)
+ptBR.messages.cpf = field => 'CPF ' + field + ' inválido'
+ptBR.messages.cnpj = field => 'CNPJ ' + field + ' inválido'
+ptBR.messages.oab = field => 'OAB ' + field + ' inválido'
+// Validator.localize('pt_BR', ptBR)
 
 Vue.use(VueResource)
 Vue.use(VueClip)
-Vue.use(VeeValidate, { locale: 'pt_BR' })
+// Vue.use(VeeValidate)
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
 Vue.use(BootstrapVue)
 Vue.use(ModalPlugin)
 Vue.use(CKEditor)
 Vue.use(VueTheMask)
 
-Vue.component('my-select', MySelect)
-Vue.component('my-input', MyInput)
+Vue.component('my-select', MySelect, { inheritAttrs: false })
+Vue.component('my-input', MyInput, { inheritAttrs: false })
 // Vue.directive('themask', mask)
 Vue.directive('awemask', AwesomeMask)
 

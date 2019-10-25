@@ -28,6 +28,7 @@
     </div>
 
     <div>
+      <validation-observer v-slot="{ invalid }">
       <form class="row justify-content-center">
         <div class="col col-sm-12 col-md-6">
           <div class="jumbotron d-block mx-auto pt-5 pb-5">
@@ -36,7 +37,7 @@
               <div class="row">
                 <div class="col">
                   <div class="form-group">
-                    <my-select name="sistema" label="Órgão" v-model="sistema" :list="sistemas" :edit="true" v-validate="'required'" :error="errors.first('sistema')"></my-select>
+                    <my-select name="sistema" label="Órgão" v-model="sistema" :list="sistemas" :edit="true" validate="required"></my-select>
                   </div>
                 </div>
               </div>
@@ -44,7 +45,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="requisitante">CPF do Requisitante</label>
-                    <my-input name="requisitante" v-model="requisitante" themask="###.###.###-##" v-validate="pasta == 'emitir' ? 'required|cpf' : ''" :error="errors.first('requisitante')"></my-input>
+                    <my-input name="requisitante" v-model="requisitante" themask="###.###.###-##" :validate="pasta == 'emitir' ? 'required|cpf' : ''"></my-input>
                   </div>
                 </div>
               </div>
@@ -52,7 +53,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="numero">Número da Certidão</label>
-                    <my-input name="numero" v-model="numero" themask="####.########" v-validate="pasta != 'emitir' ? 'required|cert' : ''" :error="errors.first('numero')"></my-input>
+                    <my-input name="numero" v-model="numero" themask="####.########" :validate="pasta != 'emitir' ? 'required|cert' : ''"></my-input>
                   </div>
                 </div>
               </div>
@@ -61,14 +62,14 @@
                   <div class="form-group">
                     <label for="cpfcnpj">CPF/CNPJ da Certidão</label>
 
-                    <my-input name="cpfcnpj" v-model="cpfcnpj" :themask="['###.###.###-##', '##.###.###/####-##']" v-validate="'required|cpfcnpj'" :error="errors.first('cpfcnpj')"></my-input>
+                    <my-input name="cpfcnpj" v-model="cpfcnpj" :themask="['###.###.###-##', '##.###.###/####-##']" validate="required|cpfcnpj"></my-input>
                   </div>
                 </div>
               </div>
               <div class="row pt-3">
                 <div class="col" v-if="$parent.test.properties">
-                  <invisible-recaptcha ref="captcha" v-if="this.$parent.test && this.$parent.test.properties" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
-                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="!camposPreenchidos || recaptchaLoading || errors.any()" badge="bottomleft">
+                  <invisible-recaptcha ref="captcha" v-if="sitekey" :sitekey="sitekey" :validate="captchaValidate" :callback="consultar"
+                      class="btn btn-warning float-right" type="button" id="consultar" :disabled="recaptchaLoading || invalid" badge="bottomleft">
                       {{pasta === 'emitir' ? 'Emitir' : pasta === 'autenticar' ? 'Autenticar' : 'Reimprimir'}}
                   </invisible-recaptcha>
                 </div>
@@ -77,6 +78,7 @@
           </div>
         </div>
       </form>
+      </validation-observer>
     </div>
 
   </div>
@@ -129,28 +131,15 @@ export default {
         a.push({id: this.$parent.sistemasCertificadores[i], nome: this.$parent.test.properties['balcaovirtual.' + this.$parent.sistemasCertificadores[i] + '.cert.name']})
       }
       return a
-    },
-    camposPreenchidos: function() {
-      if (this.pasta === 'emitir') return !!this.requisitante && !!this.cpfcnpj
-      if (this.pasta === 'autenticar') return !!this.numero && !!this.cpfcnpj
-      if (this.pasta === 'reimprimir') return !!this.numero && !!this.cpfcnpj
-      return false
     }
   },
 
   methods: {
     consultar: function (recaptchaToken) {
       this.recaptchaLoading = false
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          // this.errormsg = 'Por favor, verifique o preenchimento dos campos marcados em vermelho e repita a operação.'
-          return
-        } else {
-          if (this.pasta === 'emitir') this.emitir(recaptchaToken)
-          if (this.pasta === 'autenticar') this.autenticar(recaptchaToken)
-          if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
-        }
-      })
+      if (this.pasta === 'emitir') this.emitir(recaptchaToken)
+      if (this.pasta === 'autenticar') this.autenticar(recaptchaToken)
+      if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
     },
     obterToken: function (recaptchaToken, token, cont) {
       this.$http.get('certidao/obter-token' + '?sistema=' + this.sistema + '&requisitante=' + UtilsBL.somenteNumeros(this.requisitante) + '&cpfcnpj=' + UtilsBL.somenteNumeros(this.cpfcnpj) + '&numero=' + UtilsBL.somenteNumeros(this.numero) + (recaptchaToken ? '&captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(

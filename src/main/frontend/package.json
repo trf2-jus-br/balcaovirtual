@@ -28,7 +28,7 @@
     "lodash.startcase": "^4.4.0",
     "popper.js": "^1.11.0",
     "typicons.font": "^2.0.9",
-    "vee-validate": "^2.0.0-rc.27",
+    "vee-validate": "^3.0.11",
     "vue": "^2.3.3",
     "vue-clip": "^1.0.0",
     "vue-invisible-recaptcha": "^0.2.1",

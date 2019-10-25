@@ -13,7 +13,7 @@
       <div class="row pt-5" v-if="warningmsg">
         <div class="col col-sm-12">
           <p class="alert alert-warning">
-            <strong>Atenção!</strong> {{warningmsg}}
+            {{warningmsg}}
           </p>
         </div>
       </div>
@@ -94,8 +94,10 @@ export default {
   },
   methods: {
     emitir: function() {
-      this.$http.post('certidao/emitir/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token, { block: true }).then(
+      this.warningmsg = 'Processando, aguarde...'
+      this.$http.post('certidao/emitir/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token, undefined, { block: true }).then(
         response => {
+          this.warningmsg = undefined
           this.tipo = response.data.tipo
           this.numero = response.data.numero
           this.html = response.data.html
@@ -104,6 +106,7 @@ export default {
           this.params = response.data.params
         },
         error => {
+          this.warningmsg = undefined
           this.errormsg =
             error.data.errormsg
         }
@@ -111,13 +114,16 @@ export default {
     },
 
     requerer: function() {
+      this.warningmsg = 'Processando, aguarde...'
       this.$http.post('certidao/requerer/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token + '&nome=' + encodeURIComponent(this.nome) + '&params=' + this.params, { block: true }).then(
         response => {
+          this.warningmsg = undefined
           this.tipo = response.data.tipo
           this.numero = response.data.numero
           this.html = response.data.html
         },
         error => {
+          this.warningmsg = undefined
           this.errormsg =
             error.data.errormsg
         }
@@ -125,26 +131,32 @@ export default {
     },
 
     autenticar: function() {
+      this.warningmsg = 'Processando, aguarde...'
       this.$http.get('certidao/autenticar/' + this.numero + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token).then(
         response => {
+          this.warningmsg = undefined
           this.tipo = response.data.tipo
           this.numero = response.data.numero
           this.html = response.data.html
         },
         error => {
+          this.warningmsg = undefined
           this.errormsg = error.data.errormsg
         }
       )
     },
 
     reimprimir: function() {
+      this.warningmsg = 'Processando, aguarde...'
       this.$http.get('certidao/reimprimir/' + this.numero + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token).then(
         response => {
+          this.warningmsg = undefined
           this.tipo = response.data.tipo
           this.numero = response.data.numero
           this.html = response.data.html
         },
         error => {
+          this.warningmsg = undefined
           this.errormsg =
             error.data.errormsg
         }

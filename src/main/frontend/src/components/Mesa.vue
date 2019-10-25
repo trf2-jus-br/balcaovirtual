@@ -2,7 +2,7 @@
   <div class="container-fluid content">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Minutas</h4>
+        <h4 class="text-center mt-3 mb-3">Minutas para Assinar</h4>
       </div>
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
@@ -12,10 +12,10 @@
     </div>
 
     <div class="row d-print-none">
-      <div class="col-sm-auto ml-1 mb-3">
+      <div v-if="false" class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
-          <div class="input-group-addon">
-            <span class="fa fa-map-marker"></span>
+          <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon"><span class="fa fa-map-marker"></span></div>
           </div>
           <select id="mesa" class="form-control" v-model="mesa" @change="selecionarMesa" name="mesa">
             <option disabled selected hidden :value="undefined">[Selecionar]</option>
@@ -25,8 +25,8 @@
       </div>
       <div class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
-          <div class="input-group-addon">
-            <span class="fa fa-search"></span>
+          <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon"><span class="fa fa-search"></span></div>
           </div>
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>

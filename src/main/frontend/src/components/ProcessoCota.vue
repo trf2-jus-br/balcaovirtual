@@ -1,43 +1,39 @@
 <template>
   <div>
-    <b-modal id="cota" ref="modal" v-model="showModal" title="Cota nos Autos" hide-header-close>
-      <form>
-        <div class="row">
-          <div class="form-group col col-sm-12">
-            <label class="control-label" for="texto" style="width: 100%">Texto</label>
-            <b-form-input type="text" list="lst_cotas" name="texto" id="texto" v-model="texto" class="form-control" aria-describedby="cotaHelp" :class="{'is-invalid': errors.has('texto') }" style="width: 100%" autofocus v-validate.initial="'required'"></b-form-input>
-            <datalist id="lst_cotas">
-              <option v-for="t in textos">{{t}}</option>
-            </datalist>
-            <span v-if="false" v-show="errors.has('texto')" class="help is-danger">{{ errors.first('texto') }}</span>
+    <validation-observer v-slot="{ invalid }">
+      <b-modal id="cota" ref="modal" v-model="showModal" title="Cota nos Autos" hide-header-close>
+        <form>
+          <div class="row">
+            <div class="form-group col col-sm-12">
+              <my-input label="Texto" id="texto" list="lst_cotas" name="texto" v-model="texto" validate="required" autofocus aria-describedby="cotaHelp"></my-input>
+              <datalist id="lst_cotas">
+                <option v-for="t in textos">{{t}}</option>
+              </datalist>
+            </div>
+            <div class="form-group col col-sm-6">
+              <my-input label="Cargo" id="cargo" name="cargo" v-model="cargo" validate="required"></my-input>
+            </div>
+            <div class="form-group col col-sm-6">
+              <my-input label="Órgão" id="empresa" name="empresa" v-model="empresa" validate="required"></my-input>
+            </div>
           </div>
-          <div class="form-group col col-sm-6">
-            <label class="control-label" for="cargo" style="width: 100%">Cargo</label>
-            <b-form-input type="text" name="cargo" id="cargo" v-model="cargo" class="form-control" :class="{'is-invalid': errors.has('cargo') }" autofocus v-validate.initial="'required'"></b-form-input>
-            <span v-if="false" v-show="errors.has('cargo')" class="help is-danger">{{ errors.first('cargo') }}</span>
-          </div>
-          <div class="form-group col col-sm-6">
-            <label class="control-label" for="empresa" style="width: 100%">Órgão</label>
-            <b-form-input type="text" name="empresa" id="empresa" v-model="empresa" class="form-control" :class="{'is-invalid': errors.has('empresa') }" autofocus v-validate.initial="'required'"></b-form-input>
-            <span v-if="false" v-show="errors.has('empresa')" class="help is-danger">{{ errors.first('empresa') }}</span>
-          </div>
+          <small id="cotaHelp" class="form-text text-muted">
+            <strong>Atenção</strong>! Ao clicar em prosseguir, o texto acima será convertido em um PDF e instantaneamente protocolado na forma de uma Petição Intercorrente. Por favor, verifique o texto antes de clicar em 'Prosseguir'.</small>
+          <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{errormsg}}</em>
+        </form>
+        <div style="width: 100%" slot="modal-footer">
+          <b-btn variant="outline-warning" @click="preview" :disabled="invalid">
+            Prever Cota
+          </b-btn>
+          <b-btn class="float-right ml-2" variant="primary" @click="save" :disabled="invalid">
+            Prosseguir
+          </b-btn>
+          <b-btn class="float-right" variant="secondary" @click="$refs.modal.hide(false)">
+            Cancelar
+          </b-btn>
         </div>
-        <small id="cotaHelp" class="form-text text-muted">
-          <strong>Atenção</strong>! Ao clicar em prosseguir, o texto acima será convertido em um PDF e instantaneamente protocolado na forma de uma Petição Intercorrente. Por favor, verifique o texto antes de clicar em 'Prosseguir'.</small>
-        <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{errormsg}}</em>
-      </form>
-      <div style="width: 100%" slot="modal-footer">
-        <b-btn variant="outline-warning" @click="preview" :disabled="errors.any()">
-          Prever Cota
-        </b-btn>
-        <b-btn class="float-right ml-2" variant="primary" @click="save" :disabled="errors.any()">
-          Prosseguir
-        </b-btn>
-        <b-btn class="float-right" variant="secondary" @click="$refs.modal.hide(false)">
-          Cancelar
-        </b-btn>
-      </div>
-    </b-modal>
+      </b-modal>
+    </validation-observer>
     <pdf-preview ref="pdfPreview" title="Pré-visualização da Cota" :src="previewUrl"></pdf-preview>
   </div>
 </template>

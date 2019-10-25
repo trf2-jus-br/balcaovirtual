@@ -20,6 +20,9 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{name:'Consulta Simples'}" tag="a" exact>Consulta</router-link>
                 </li>
+                <li v-if="test.properties['balcaovirtual.cert.systems']" class="nav-item">
+                  <router-link class="nav-link" active-class="active" :to="{name:'Consultar Certidão'}" tag="a" exact>Certidões</router-link>
+                </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Processos'}" tag="a" exact>Processos</router-link>
                 </li>

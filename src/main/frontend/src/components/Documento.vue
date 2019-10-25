@@ -38,7 +38,11 @@
                 <button @click="voltar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar
                 </button>
             </div>
-            <div class="col col-auto mr-1 mb-3">
+            <div class="col col-auto ml-1 mb-3">
+                <button @click="devolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
+                </button>
+            </div>
+            <div class="col col-auto ml-1 mb-3">
                 <button @click="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
                 </button>
             </div>

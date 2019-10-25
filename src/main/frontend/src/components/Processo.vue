@@ -81,7 +81,7 @@
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.ws.documental.url'] &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; $parent.jwt.company === 'pgfn.gov.br')">
+          <div class="col col-auto ml-1 mb-3" v-if="marcasativas && ($parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; $parent.jwt.company === 'pgfn.gov.br'))">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>
@@ -574,11 +574,13 @@ export default {
       proc: undefined,
       fixed: undefined,
       marcadores: [],
-      marcasativas: this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema],
       notas: false
     }
   },
   computed: {
+    marcasativas: function() {
+      return this.$parent.jwt && this.$parent.jwt.user && this.$parent.jwt.user[this.sistema]
+    },
     filtrados: function() {
       // Referência à this.modified é necessária para recalcular quando mostra o texto
       console.log('recalculando filtrados...', this.modified)

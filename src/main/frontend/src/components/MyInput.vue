@@ -2,17 +2,17 @@
   <div>
     <label v-if="label" :for="name">{{label}}</label>
     <div v-if="!edit">{{value}}</div>
-    <input type="text" v-if="edit &amp;&amp; themask" :id="name" class="form-control" 
-      :placeholder="placeholder" v-themask="themask != undefined ? themask : undefined" 
-      :disabled="disabled"
+    <validation-provider :rules="validate" :immediate="immediate" v-slot="{ errors }" ref="vp">
+      <input type="text" v-if="edit &amp;&amp; themask" :id="name" class="form-control" 
+      v-themask="themask != undefined ? themask : undefined" 
       v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-on:change="$emit('change', $event.target.value)" 
-      :name="name" :class="{ 'is-invalid': error }">
+      :name="name" :class="{ 'is-invalid': errors.length > 0 }" v-bind="$attrs">
     <input type="text" v-if="edit &amp;&amp; !themask" :id="name" class="form-control" 
-      :placeholder="placeholder" v-awemask="mask != undefined ? mask : ''"
-      :disabled="disabled"
+      v-awemask="mask != undefined ? mask : ''"
       v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-on:change="$emit('change', $event.target.value)" 
-      :name="name" :class="{ 'is-invalid': error }">
-    <div v-if="error" class="invalid-feedback">{{error}}</div>
+      :name="name" :class="{ 'is-invalid': errors.length > 0 }" v-bind="$attrs">
+    <div class="invalid-feedback">{{errors[0]}}</div>
+    </validation-provider>
   </div>
 </template>
 
@@ -21,17 +21,22 @@ import AwesomeMask from 'awesome-mask'
 import {mask} from 'vue-the-mask'
 
 export default {
+  mounted() {
+    this.$on('change', (val) => {
+      this.$refs.vp.validate().then((r) => this.$emit(r.valid ? 'valid' : 'invalid'))
+    })
+  },
   name: 'my-input',
   props: {
+    immediate: {type: Boolean, default: true},
     value: String,
     label: String,
     name: String,
-    placeholder: String,
     mask: String,
     themask: [String, Array],
     edit: {type: Boolean, default: true},
     error: String,
-    disabled: Boolean
+    validate: String
   },
   data() {
     return {}

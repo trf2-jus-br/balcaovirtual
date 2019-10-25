@@ -4,14 +4,10 @@
       <b-form>
         <div class="row">
           <div class="col col-md-2 form-group">
-            <label class="control-label" for="sigla" style="width: 100%">Sigla</label>
-            <b-form-input type="text" name="sigla" id="sigla" v-model="sigla" class="form-control" :class="{'is-invalid': errors.has('sigla') }" style="width: 100%" v-validate.initial="'required'"></b-form-input>
-            <span v-if="false" v-show="errors.has('sigla')" class="help is-danger">{{ errors.first('sigla') }}</span>
+            <my-input label="Sigla" name="sigla" id="sigla" v-model="sigla" validate="required"></my-input>
           </div>
           <div class="col col-md-6 form-group">
-            <label class="control-label" for="nome" style="width: 100%">Nome</label>
-            <b-form-input type="text" name="nome" id="nome" v-model="nome" class="form-control" :class="{'is-invalid': errors.has('nome') }" style="width: 100%" autofocus v-validate.initial="'required'"></b-form-input>
-            <span v-if="false" v-show="errors.has('nome')" class="help is-danger">{{ errors.first('nome') }}</span>
+            <my-input label="Nome" name="nome" id="nome" v-model="nome" class="form-control" autofocus validate="required"></my-input>
           </div>
           <div class="col col-md-4">
             <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>

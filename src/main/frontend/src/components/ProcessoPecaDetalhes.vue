@@ -1,52 +1,48 @@
 <template>
   <div>
-    <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
-      <b-form>
-        <div class="row">
-          <div class="col col-md-8 form-group">
-            <label class="control-label" for="texto" style="width: 100%">Marcador</label>
-            <b-form-input type="text" list="lst_userIdTypes" name="texto" id="texto" v-model="texto" class="form-control" :class="{'is-invalid': errors.has('texto') }" style="width: 100%" autofocus v-on:keyup.enter="$refs.processoPecaDetalhes.hide(true)" v-validate.initial="'required'"></b-form-input>
-            <datalist id="lst_userIdTypes">
-              <option v-for="m in marcadores">{{m}}</option>
-            </datalist>
-            <span v-if="false" v-show="errors.has('texto')" class="help is-danger">{{ errors.first('texto') }}</span>
+    <validation-observer v-slot="{ invalid }">
+      <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
+        <b-form>
+          <div class="row">
+            <div class="col col-md-8 form-group">
+              <my-input label="Marcador" list="lst_userIdTypes" id="texto" name="texto" v-model="texto" validate="required" autofocus v-on:keyup.enter="$refs.processoPecaDetalhes.hide(true)"></my-input>
+              <datalist id="lst_userIdTypes">
+                <option v-for="m in marcadores">{{m}}</option>
+              </datalist>
+            </div>
+            <div class="col col-md-4">
+              <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>
+              <b-form-select v-model="estilo" :options="estilosfiltrados" class="mb-3">
+              </b-form-select>
+            </div>
           </div>
-          <div class="col col-md-4">
-            <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>
-            <b-form-select v-model="estilo" :options="estilosfiltrados" class="mb-3">
-            </b-form-select>
+          <div class="form-check">
+            <input id="intervaloDePaginas" class="mt-3 mb-3" type="checkbox" v-model="intervalo" :disabled="pagmin === 0 || pagmax === 0" />
+            <label class="form-check-label pl-0" for="intervaloDePaginas">Intervalo de Páginas</label>
           </div>
+          <div class="row" v-if="intervalo">
+            <div class="col form-group">
+              <my-input label="Página Inicial" id="paginicial" name="paginicial" v-model="paginicial" :placeholder="pagmin" :validate="'between:' + pagmin + ',' + pagmax + '|required'" @change="validar()"></my-input>
+            </div>
+            <div class="col form-group">
+              <my-input label="Página Final" id="pagfinal" name="pagfinal" v-model="pagfinal" :placeholder="pagmax" :validate="'between:' + paginicial + ',' + pagmax + '|required'" @change="validar()"></my-input>
+            </div>
+          </div>
+          <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{errormsg}}</em>
+        </b-form>
+        <div style="width: 100%" slot="modal-footer">
+          <b-btn v-if="editando" variant="outline-danger" @click="remove">
+            Remover
+          </b-btn>
+          <b-btn class="float-right ml-2" variant="primary" @click="$refs.processoPecaDetalhes.hide(true)" :disabled="invalid">
+            Gravar
+          </b-btn>
+          <b-btn class="float-right" variant="secondary" @click="$refs.processoPecaDetalhes.hide(false)">
+            Cancelar
+          </b-btn>
         </div>
-        <div class="form-check">
-          <input id="intervaloDePaginas" class="mt-3 mb-3" type="checkbox" v-model="intervalo" :disabled="pagmin === 0 || pagmax === 0" />
-          <label class="form-check-label pl-0" for="intervaloDePaginas">Intervalo de Páginas</label>
-        </div>
-        <div class="row" v-show="intervalo">
-          <div class="col form-group">
-            <label class="control-label" for="paginicial" style="width: 100%">Página Inicial</label>
-            <b-form-input type="text" name="paginicial" id="paginicial" v-model="paginicial" class="form-control" :class="{'is-invalid': errors.has('paginicial') }" :placeholder="pagmin" style="width: 100%" v-validate.initial="'between:' + pagmin + ',' + pagmax + '|required'" @change="validar()"></b-form-input>
-            <span v-if="false" v-show="errors.has('paginicial')" class="help is-danger">{{ errors.first('paginicial') }}</span>
-          </div>
-          <div class="col form-group">
-            <label class="control-label" for="pagfinal" style="width: 100%">Página Final</label>
-            <b-form-input type="text" name="pagfinal" id="pagfinal" v-model="pagfinal" class="form-control" :class="{'is-invalid': errors.has('pagfinal') }" :placeholder="pagmax" style="width: 100%" v-validate.initial="'between:' + paginicial + ',' + pagmax + '|required'" @change="validar()"></b-form-input>
-            <span v-if="false" v-show="errors.has('pagfinal')" class="help is-danger">{{ errors.first('pagfinal') }}</span>
-          </div>
-        </div>
-        <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{errormsg}}</em>
-      </b-form>
-      <div style="width: 100%" slot="modal-footer">
-        <b-btn v-if="editando" variant="outline-danger" @click="remove">
-          Remover
-        </b-btn>
-        <b-btn class="float-right ml-2" variant="primary" @click="$refs.processoPecaDetalhes.hide(true)" :disabled="errors.any()">
-          Gravar
-        </b-btn>
-        <b-btn class="float-right" variant="secondary" @click="$refs.processoPecaDetalhes.hide(false)">
-          Cancelar
-        </b-btn>
-      </div>
-    </b-modal>
+      </b-modal>
+    </validation-observer>
   </div>
 </template>
 
@@ -138,9 +134,9 @@ export default {
       this.$refs.processoPecaDetalhes.hide(false)
     },
 
-    validar: function () {
-      this.$nextTick(() => this.$validator.validateAll())
-    },
+//    validar: function () {
+//      this.$nextTick(() => this.$validator.validateAll())
+//    },
 
     save: function (e) {
       // Close on Esc
@@ -149,12 +145,12 @@ export default {
       // Close on cancel
       if (!e.isOK) return
 
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          e.cancel()
-          return
-        }
-      })
+//      this.$validator.validateAll().then((result) => {
+//        if (!result) {
+//          e.cancel()
+//          return
+//        }
+//      })
 
       if ((this.texto || '') === '') {
         this.errormsg = 'Texto do marcador deve ser informado.'
