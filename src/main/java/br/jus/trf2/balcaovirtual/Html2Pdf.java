@@ -14,7 +14,19 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class Html2Pdf {
 	private static Logger logger = Logger.getLogger(Html2Pdf.class.getCanonicalName());
 
+	private String cleanHtmlJSoup(String html) {
+		if (html.startsWith("<?xml "))
+			return html;
+		final Document document = Jsoup.parse(html);
+		document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+		document.outputSettings().escapeMode(org.jsoup.nodes.Entities.EscapeMode.xhtml);
+		return document.html();
+	}
+
 	private String cleanHtml(String data) throws UnsupportedEncodingException {
+		if (data.startsWith("<?xml "))
+			return data;
+
 		System.err.println("transformando HTML em XHTML");
 		Tidy tidy = new Tidy();
 		tidy.setXHTML(true);
@@ -72,10 +84,11 @@ public class Html2Pdf {
 		return d.body().toString();
 	}
 
-	public byte[] converter(String sHtml) throws Exception {
+	public byte[] converter(String sHtml, boolean apenasBody) throws Exception {
 		System.err.println("iniciando a conversão");
 		String pagina = null;
-		pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
+		if (apenasBody)
+			pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
 		System.err.println("resource carregado");
 		if (sHtml != null && pagina != null) {
 			String prefix = pagina.substring(0, pagina.indexOf("<body>") + 6);
@@ -86,6 +99,7 @@ public class Html2Pdf {
 		} else {
 			sHtml = cleanHtml(sHtml);
 		}
+		System.err.println(sHtml);
 
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ITextRenderer renderer = new ITextRenderer();

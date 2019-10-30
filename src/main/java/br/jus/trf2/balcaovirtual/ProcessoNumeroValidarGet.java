@@ -102,6 +102,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 				pv.cdas = r.cdas;
 				if (r.dataultimomovimento != null)
 					pv.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
+				pv.autor = Texto.maiusculasEMinusculas(r.autor);
+				pv.reu = Texto.maiusculasEMinusculas(r.reu);
 				resp.list.add(pv);
 			}
 		}

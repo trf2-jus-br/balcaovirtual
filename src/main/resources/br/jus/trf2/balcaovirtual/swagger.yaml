@@ -1968,6 +1968,10 @@ definitions:
         $ref: "#/definitions/CDAs"
       dataultimomovimento:
         $ref: "#/definitions/DataUltimoMovimento"
+      autor:
+        $ref: "#/definitions/Nome"
+      reu:
+        $ref: "#/definitions/Nome"
 
 
   Marca:
@@ -2022,6 +2026,10 @@ definitions:
       numeroDoDocumento:
         type: string
       numeroDoProcesso:
+        type: string
+      autor:
+        type: string
+      reu:
         type: string
       descricao:
         type: string

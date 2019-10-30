@@ -73,6 +73,8 @@
                   <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
                 </th>
                 <th>Processo</th>
+                <th>Autor</th>
+                <th>Réu</th>
                 <th>Último Movimento</th>
                 <th>Sistema/Órgão</th>
                 <th>Unidade</th>
@@ -92,6 +94,8 @@
                     <router-link :to="{name: 'Processo', params: {numero: p.numero}, query: {avisos: $parent.cAvisos}}" target="_blank">{{p.numeroFormatado}}</router-link>
                   </span>
                 </td>
+                <td>{{p.autor}}</td>
+                <td>{{p.reu}}</td>
                 <td>
                   <span :class="{destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento)}" v-html="p.dataultimomovimentoFormatada"></span>
                 </td>

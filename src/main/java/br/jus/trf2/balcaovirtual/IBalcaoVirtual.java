@@ -174,6 +174,8 @@ public interface IBalcaoVirtual {
 		public Boolean baixado;
 		public String cdas;
 		public Date dataultimomovimento;
+		public String autor;
+		public String reu;
 	}
 
 	public class Marca implements ISwaggerModel {
@@ -201,6 +203,8 @@ public interface IBalcaoVirtual {
 		public String id;
 		public String numeroDoDocumento;
 		public String numeroDoProcesso;
+		public String autor;
+		public String reu;
 		public String descricao;
 		public String status;
 		public String descricaoDoStatus;

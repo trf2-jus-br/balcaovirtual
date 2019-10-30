@@ -7,20 +7,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.crivano.swaggerservlet.SwaggerServlet;
+import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.SwaggerServletDependency;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
-import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
 
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
+
+	public static ExecutorService executor = null;
 
 	@Override
 	public void initialize(ServletConfig config) throws ServletException {
@@ -50,6 +56,21 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			addRestrictedProperty("datasource.password", null);
 			addRestrictedProperty("datasource.name", "balcaovirtualds");
 		}
+
+		// Redis
+		//
+		addRestrictedProperty("redis.database", "10");
+		addPrivateProperty("redis.password", null);
+		addRestrictedProperty("redis.slave.port", "0");
+		addRestrictedProperty("redis.slave.host", null);
+		addRestrictedProperty("redis.master.host", "localhost");
+		addRestrictedProperty("redis.master.port", "6379");
+
+		SwaggerUtils.setCache(new MemCacheRedis());
+
+		// Threadpool
+		addPublicProperty("threadpool.size", "10");
+		executor = Executors.newFixedThreadPool(new Integer(SwaggerServlet.getProperty("threadpool.size")));
 
 		for (String s : getProperty("systems").split(",")) {
 			addPublicProperty(s.toLowerCase() + ".name");
@@ -223,6 +244,10 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public static <T> Future<T> submitToExecutor(Callable<T> task) {
+		return executor.submit(task);
 	}
 
 }

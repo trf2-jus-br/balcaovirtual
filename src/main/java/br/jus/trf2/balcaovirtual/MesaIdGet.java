@@ -53,11 +53,13 @@ public class MesaIdGet implements IMesaIdGet {
 				i.dataDeInclusao = a.dataDeInclusao;
 				i.id = a.id;
 				i.numeroDoProcesso = a.numeroDoProcesso;
+				i.autor = Texto.maiusculasEMinusculas(a.autor);
+				i.reu = Texto.maiusculasEMinusculas(a.reu);
 				i.numeroDoDocumento = a.numeroDoDocumento;
 				i.descricao = a.descricao;
 				i.status = a.status;
 				i.descricaoDoStatus = a.descricaoDoStatus;
-				i.tipoDoDocumento = a.tipoDoDocumento;
+				i.tipoDoDocumento = Texto.maiusculasEMinusculas(a.tipoDoDocumento);
 				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
 				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
 				i.conteudo = a.conteudo;

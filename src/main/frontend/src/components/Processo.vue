@@ -25,6 +25,7 @@
               Processo
               <span v-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
                 Digital</span>
+              <span v-if="sistema" v-html="$parent.test.properties['balcaovirtual.' + sistema + '.name']"></span>
               <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'">
                 Físico</span> {{proc.dadosBasicos.numero}}
               <a v-if="this.favorito !== undefined && !this.favorito" href="" @click.prevent="favoritar(true)">

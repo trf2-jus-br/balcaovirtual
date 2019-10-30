@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
 import javax.xml.namespace.QName;
@@ -167,7 +168,10 @@ public class SoapMNI {
 		return senhaConsultante;
 	}
 
+	static Map<String, ServicoIntercomunicacao222> map = new ConcurrentHashMap<>();
 	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
+		if (map.containsKey(sistema))
+			return map.get(sistema);
 		URL url = new URL(Utils.getMniWsdlUrl(sistema));
 		// ServicoIntercomunicacao222_Service service = new
 		// ServicoIntercomunicacao222_Service(url);
@@ -222,6 +226,7 @@ public class SoapMNI {
 
 		});
 		binding.setHandlerChain(handlerList);
+		map.put(sistema, client);
 		return client;
 	}
 

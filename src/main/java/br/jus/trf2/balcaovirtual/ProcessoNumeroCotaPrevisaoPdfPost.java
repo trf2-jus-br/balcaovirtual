@@ -40,7 +40,7 @@ public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPre
 		html += "<br/><p align=\"left\">" + nome + "<br/>" + cargo + "<br/>" + empresa + "</p>";
 		html += "</body></html>";
 
-		return new Html2Pdf().converter(html);
+		return new Html2Pdf().converter(html, true);
 	}
 
 	@Override

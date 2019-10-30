@@ -57,31 +57,35 @@
               </th>
               <th>Data</th>
               <th>Documento</th>
-              <th>Processo</th>
               <th>Tipo</th>
               <th>Responsável</th>
+              <th>Processo</th>
+              <th>Autor</th>
+              <th>Réu</th>
               <th>Sistema/Órgão</th>
               <th>Situação</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="f in filtrados">
-              <td style="text-align: center">
+              <td class="td-middle" style="text-align: center">
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
               </td>
-              <td>
+              <td class="td-middle">
               {{f.dataDeInclusaoFormatada}}
               </td>
-              <td>
+              <td class="td-middle">
                   <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f}}">{{f.numeroDoDocumento}}</router-link>
               </td>
+              <td class="td-middle">{{f.tipoDoDocumento}}</td>
+              <td class="td-middle"><span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{f.identificadorDoUsuarioQueIncluiu}}</span></td>
               <td class="td-middle">
                 <span class="unbreakable">
                   <router-link :to="{name: 'Processo', params: {numero: f.numeroDoProcesso}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processoFormatado}}</router-link>
                 </span>
               </td>
-              <td class="td-middle">{{f.tipoDoDocumento}}</td>
-              <td class="td-middle"><span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{f.identificadorDoUsuarioQueIncluiu}}</span></td>
+              <td class="td-middle">{{f.autor}}</td>
+              <td class="td-middle">{{f.reu}}</td>
               <td class="td-middle"><span :title="'Identificador: ' + f.sistema">{{$parent.test.properties['balcaovirtual.' + f.sistema + '.name']}}</span></td>
               <td class="td-middle">{{f.descricaoDoStatus}}
                 <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
@@ -195,6 +199,8 @@ export default {
         numeroDoDocumento: undefined,
         tipoDoDocumento: undefined,
         numeroDoProcesso: undefined,
+        autor: undefined,
+        reu: undefined,
         processoFormatado: undefined,
         descricaoDoStatus: undefined,
         identificadorDoUsuarioQueIncluiu: undefined,

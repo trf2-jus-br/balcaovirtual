@@ -1,10 +1,13 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
+import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfCopy;
@@ -149,6 +153,13 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 				resp.contentlength = (long) ab.length;
 				resp.inputstream = new ByteArrayInputStream(ab);
 			} else {
+//				String uuid = UUID.randomUUID().toString();
+//				BalcaoVirtualServlet
+//						.submitToExecutor(new ProcessoCompletoAsync(uuid, username, password, orgao, numProc));
+//
+//				if (true)
+//					return;
+
 				// Processo completo
 
 				// Consulta o processo para saber quais são os documentos a serem
@@ -174,12 +185,41 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 					byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, idDocumento);
 
 					ContentInfo info = contentInfoUtil.findMatch(ab);
-					if (!"application/pdf".equals(info.getMimeType())) {
-						String html = new String(ab, StandardCharsets.UTF_8);
-						if (html.toLowerCase().contains("charset=windows-1252"))
-							html = new String(ab, StandardCharsets.ISO_8859_1);
-						ab = new Html2Pdf().converter(html);
+
+					if (info.getMimeType().startsWith("application/xml")) {
+						final XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance()
+								.createXMLStreamReader(new ByteArrayInputStream(ab));
+						String fileEncoding = xmlStreamReader.getEncoding();
+						boolean fHtml = false;
+						while (xmlStreamReader.hasNext()) {
+							int eventType = xmlStreamReader.next();
+							if (eventType == XMLStreamConstants.START_ELEMENT) {
+								if (xmlStreamReader.getLocalName().equals("html"))
+									fHtml = true;
+								break;
+							}
+						}
+						xmlStreamReader.close();
+						if (fHtml) {
+							String html = new String(ab, fileEncoding);
+							System.out.println(html);
+							ab = new Html2Pdf().converter(html, false);
+							info = contentInfoUtil.findMimeTypeMatch("application/pdf");
+						}
 					}
+
+					if (info.getMimeType().startsWith("text/html")) {
+						String html = new String(ab, StandardCharsets.UTF_8);
+						if (html.toLowerCase().contains("charset=windows-1252")
+								|| html.toLowerCase().contains("iso-8859-1"))
+							html = new String(ab, StandardCharsets.ISO_8859_1);
+						System.out.println(html);
+						ab = new Html2Pdf().converter(html, false);
+						info = contentInfoUtil.findMimeTypeMatch("application/pdf");
+					}
+
+					if (!"application/pdf".equals(info.getMimeType()))
+						throw new PresentableException("Não foi possível obter um PDF. (" + info.getMimeType() + ")");
 
 					reader = new PdfReader(ab);
 					copy.addDocument(reader);
