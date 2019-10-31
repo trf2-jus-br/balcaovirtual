@@ -18,8 +18,8 @@ import com.google.gson.JsonParser;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroConsultarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroConsultarGetResponse;
 
 public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
@@ -31,7 +31,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 
 		Usuario u = null;
 		try {
-			u = SessionsCreatePost.assertUsuario();
+			u = AutenticarPost.assertUsuario();
 			UsuarioDetalhe detalhe = u.usuarios.get(req.sistema);
 			if (detalhe != null) {
 				usuario = u.usuario;

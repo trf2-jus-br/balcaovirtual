@@ -21,7 +21,7 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 	@Override
 	public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
 			throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		UsuarioUsernamePeticaoIntercorrenteListarGetRequest q = new UsuarioUsernamePeticaoIntercorrenteListarGetRequest();
@@ -35,7 +35,7 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 							q, UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));
 
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {

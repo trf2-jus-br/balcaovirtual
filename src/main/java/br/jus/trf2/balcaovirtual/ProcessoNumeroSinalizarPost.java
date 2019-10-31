@@ -4,14 +4,14 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroSinalizarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoNumeroSinalizarPost implements IProcessoNumeroSinalizarPost {
 
 	@Override
 	public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 
 		try (Dao dao = new Dao()) {
 			Sinal s = dao.obtemSinais(u.isInterno(), u.usuario, req.numero);

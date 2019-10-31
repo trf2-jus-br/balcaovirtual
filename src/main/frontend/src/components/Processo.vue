@@ -818,15 +818,17 @@ export default {
         .get('processo/' + this.numero + '/pdf?sistema=' + this.sistema + (this.token ? '&token=' + this.token : ''))
         .then(
           response => {
-            var jwt = response.data.jwt
-            window.open(
-              this.$http.options.root +
-                '/download/' +
-                jwt +
-                '/' +
-                this.numero +
-                '.pdf'
-            )
+            Bus.$emit('prgAsyncStart', 'PDF Completo', response.data.uuid, () => {
+              var jwt = response.data.jwt
+              window.open(
+                this.$http.options.root +
+                  '/download/' +
+                  jwt +
+                  '/' +
+                  this.numero +
+                  '.pdf'
+              )
+            })
             UtilsBL.logEvento(
               'consulta-processual',
               'mostrar pdf completo',

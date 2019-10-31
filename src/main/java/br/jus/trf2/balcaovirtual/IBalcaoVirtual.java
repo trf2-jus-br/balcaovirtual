@@ -289,18 +289,18 @@ public interface IBalcaoVirtual {
 		public void run(SugestaoPostRequest req, SugestaoPostResponse resp) throws Exception;
 	}
 
-	public class SessionsCreatePostRequest implements ISwaggerRequest {
+	public class AutenticarPostRequest implements ISwaggerRequest {
 		public String username;
 		public String password;
 	}
 
-	public class SessionsCreatePostResponse implements ISwaggerResponse {
+	public class AutenticarPostResponse implements ISwaggerResponse {
 		public String id_token;
 		public List<ListStatus> status;
 	}
 
-	public interface ISessionsCreatePost extends ISwaggerMethod {
-		public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception;
+	public interface IAutenticarPost extends ISwaggerMethod {
+		public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception;
 	}
 
 	public class ConfigEntidadesGetRequest implements ISwaggerRequest {
@@ -532,6 +532,7 @@ public interface IBalcaoVirtual {
 
 	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse {
 		public String jwt;
+		public String uuid;
 	}
 
 	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
@@ -809,6 +810,23 @@ public interface IBalcaoVirtual {
 
 	public interface IProcessoListarSinaisGet extends ISwaggerMethod {
 		public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception;
+	}
+
+	public class StatusChaveGetRequest implements ISwaggerRequest {
+		public String chave;
+	}
+
+	public class StatusChaveGetResponse implements ISwaggerResponse {
+		public String mensagem;
+		public Double indice;
+		public Double contador;
+		public Double bytes;
+		public String errormsg;
+		public String stacktrace;
+	}
+
+	public interface IStatusChaveGet extends ISwaggerMethod {
+		public void run(StatusChaveGetRequest req, StatusChaveGetResponse resp) throws Exception;
 	}
 
 	public class DownloadJwtFilenameGetRequest implements ISwaggerRequest {

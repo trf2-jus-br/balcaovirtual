@@ -5,14 +5,14 @@ import org.joda.time.LocalDateTime;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroAvisoIdReceberPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 
 public class ProcessoNumeroAvisoIdReceberPost implements IProcessoNumeroAvisoIdReceberPost {
 
 	@Override
 	public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp)
 			throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 
 		SoapMNI.consultarTeorComunicacao(u.usuario, u.senha, req.numero, req.id, req.sistema, resp);
 		resp.datarecebimento = LocalDateTime.now().toString("dd/MM/yyyy hh:mm");

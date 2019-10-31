@@ -25,7 +25,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
@@ -41,11 +41,11 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		} else if (isValidToken(req.token, req.numero)) {
 			resp.token = req.token;
 		} else
-			SessionsCreatePost.assertAuthorization();
+			AutenticarPost.assertAuthorization();
 
 		String usuario = null;
 		try {
-			Usuario u = SessionsCreatePost.assertUsuario();
+			Usuario u = AutenticarPost.assertUsuario();
 			usuario = u.usuario;
 		} catch (Exception e) {
 			usuario = SwaggerServlet.getProperty("public.username");

@@ -12,7 +12,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaDocumento;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdGetResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2DocumentosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameLocalIdMesaId2DocumentosGetResponse;
@@ -21,7 +21,7 @@ public class MesaIdGet implements IMesaIdGet {
 
 	@Override
 	public void run(MesaIdGetRequest req, MesaIdGetResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 		if (!u.isInterno())
 			throw new Exception("Mesas só podem ser acessadas por usuários internos");
 

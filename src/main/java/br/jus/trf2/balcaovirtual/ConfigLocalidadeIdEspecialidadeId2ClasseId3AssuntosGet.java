@@ -19,7 +19,7 @@ public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet
 	@Override
 	public void run(ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest req,
 			ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse resp) throws Exception {
-		SessionsCreatePost.assertAuthorization();
+		AutenticarPost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseId3AssuntoGetResponse>> future = SwaggerCall
 				.callAsync("obter classes", Utils.getApiPassword(req.sistema), "GET",

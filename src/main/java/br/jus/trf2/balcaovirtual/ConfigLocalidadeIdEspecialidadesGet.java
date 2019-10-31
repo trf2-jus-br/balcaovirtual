@@ -18,7 +18,7 @@ public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdE
 	@Override
 	public void run(ConfigLocalidadeIdEspecialidadesGetRequest req, ConfigLocalidadeIdEspecialidadesGetResponse resp)
 			throws Exception {
-		SessionsCreatePost.assertAuthorization();
+		AutenticarPost.assertAuthorization();
 
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse>> future = SwaggerCall.callAsync(
 				"obter especialidades", Utils.getApiPassword(req.sistema), "GET",

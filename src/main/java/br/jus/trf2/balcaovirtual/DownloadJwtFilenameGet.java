@@ -47,7 +47,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		String username = (String) map.get("username");
 		String password;
 		if (username != null)
-			password = SessionsCreatePost.decrypt((String) map.get("pwd"));
+			password = AutenticarPost.decrypt((String) map.get("pwd"));
 		else {
 			username = SwaggerServlet.getProperty("public.username");
 			password = SwaggerServlet.getProperty("public.password");
@@ -62,6 +62,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		String cargo = (String) map.get("cargo");
 		String empresa = (String) map.get("empresa");
 		String unidade = (String) map.get("unidade");
+		String uuid = (String) map.get("uuid");
 		String disposition = "attachment".equals(req.disposition) ? "attachment" : "inline";
 		if (!"download".equals(type))
 			throw new Exception("Tipo de token JWT inválido");
@@ -152,14 +153,15 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 				resp.contentlength = (long) ab.length;
 				resp.inputstream = new ByteArrayInputStream(ab);
-			} else {
-//				String uuid = UUID.randomUUID().toString();
-//				BalcaoVirtualServlet
-//						.submitToExecutor(new ProcessoCompletoAsync(uuid, username, password, orgao, numProc));
-//
-//				if (true)
-//					return;
+			} else if (uuid != null) {
+				String dirTemp = Utils.getDirTemp();
+				String bufName = dirTemp + "/" + numProc + "-completo-" + uuid + ".pdf";
 
+				resp.contentdisposition = disposition + ";filename=" + numProc + "-completo.pdf";
+				resp.contentlength = (long) new File(bufName).length();
+				resp.contenttype = "application/pdf";
+				resp.inputstream = new FileInputStream(bufName);
+			} else {
 				// Processo completo
 
 				// Consulta o processo para saber quais são os documentos a serem
@@ -250,7 +252,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 	public static String jwt(String origin, String username, String password, String nome, String orgao,
 			String processo, String documento, String arquivo, String texto, String cargo, String empresa,
-			String unidade) throws Exception {
+			String unidade, String uuid) throws Exception {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h
@@ -268,7 +270,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		if (username != null)
 			claims.put("username", username);
 		if (password != null)
-			claims.put("pwd", SessionsCreatePost.encrypt(password));
+			claims.put("pwd", AutenticarPost.encrypt(password));
 		if (nome != null)
 			claims.put("name", nome);
 		if (orgao != null)
@@ -287,6 +289,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			claims.put("empresa", empresa);
 		if (unidade != null)
 			claims.put("unidade", unidade);
+		if (uuid != null)
+			claims.put("uuid", uuid);
 		claims.put("typ", "download");
 
 		final String jwt = signer.sign(claims);

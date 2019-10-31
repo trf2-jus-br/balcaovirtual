@@ -19,7 +19,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 
 	@Override
 	public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
@@ -28,7 +28,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 							Utils.getApiUrl(system) + "/orgao-publico/listar?tipodedocumento=cnpj", null,
 							OrgaoPublicoListarGetResponse.class));
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {

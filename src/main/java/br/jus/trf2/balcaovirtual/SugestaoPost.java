@@ -10,7 +10,7 @@ public class SugestaoPost implements ISugestaoPost {
 
 	@Override
 	public void run(SugestaoPostRequest req, SugestaoPostResponse resp) throws Exception {
-		SessionsCreatePost.assertAuthorization();
+		AutenticarPost.assertAuthorization();
 		StringBuilder sb = new StringBuilder();
 		sb.append("Nome: ");
 		sb.append(req.nome);

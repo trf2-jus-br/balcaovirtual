@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoInicialProtocolarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.SoapMNI.PeticaoInicial;
 
 public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPost {
@@ -18,7 +18,7 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 	@Override
 	public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
 			throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 
 		Gson gson = new GsonBuilder().create();
 		Type type = new TypeToken<List<SoapMNI.Parte>>() {

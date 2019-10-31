@@ -21,7 +21,7 @@ import com.crivano.swaggerservlet.dependency.SwaggerServletDependency;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
@@ -66,7 +66,8 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addRestrictedProperty("redis.master.host", "localhost");
 		addRestrictedProperty("redis.master.port", "6379");
 
-		SwaggerUtils.setCache(new MemCacheRedis());
+		if (SwaggerServlet.getProperty("redis.password") != null)
+			SwaggerUtils.setCache(new MemCacheRedis());
 
 		// Threadpool
 		addPublicProperty("threadpool.size", "10");
@@ -239,7 +240,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 	@Override
 	public String getUser() {
 		try {
-			Usuario u = SessionsCreatePost.assertUsuario();
+			Usuario u = AutenticarPost.assertUsuario();
 			return u.usuario;
 		} catch (Exception e) {
 			return null;

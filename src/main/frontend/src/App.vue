@@ -70,6 +70,7 @@
       </div>
       <div id="app">
         <progressModal ref="progressModal"></progressModal>
+        <progressModalAsync ref="progressModalAsync"></progressModalAsync>
         <messageBox ref="messageBox"></messageBox>
 
         <top-progress ref="topProgress" :height="5" color="#000"></top-progress>
@@ -88,6 +89,7 @@ import UtilsBL from './bl/utils.js'
 import topProgress from './components/TopProgress'
 import { Bus } from './bl/bus.js'
 import ProgressModal from './components/ProgressModal'
+import ProgressModalAsync from './components/ProgressModalAsync'
 import MessageBox from './components/MessageBox'
 
 export default {
@@ -174,6 +176,12 @@ export default {
 
     Bus.$on('message', (title, message) => {
       this.$refs.messageBox.show(title, message)
+    })
+
+    var prgAsync = this.$refs.progressModalAsync
+
+    Bus.$on('prgAsyncStart', (title, key, callbackEnd) => {
+      prgAsync.start(title, key, callbackEnd)
     })
 
     this.token = AuthBL.getIdToken()
@@ -264,6 +272,7 @@ export default {
   components: {
     topProgress,
     'progressModal': ProgressModal,
+    'progressModalAsync': ProgressModalAsync,
     messageBox: MessageBox
   }
 }

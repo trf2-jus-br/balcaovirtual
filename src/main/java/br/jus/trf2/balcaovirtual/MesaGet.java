@@ -6,13 +6,13 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Mesa;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaGetResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 
 public class MesaGet implements IMesaGet {
 
 	@Override
 	public void run(MesaGetRequest req, MesaGetResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 		resp.list = new ArrayList<>();
 		Mesa m = new Mesa();
 		m.id = "assijus";

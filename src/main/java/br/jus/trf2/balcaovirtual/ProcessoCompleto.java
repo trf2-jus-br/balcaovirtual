@@ -3,7 +3,6 @@ package br.jus.trf2.balcaovirtual;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import javax.xml.stream.XMLInputFactory;
@@ -21,14 +20,14 @@ import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 
-public class ProcessoCompletoAsync implements Callable<String> {
+public class ProcessoCompleto implements Callable<String> {
 	private String uuid;
 	private String username;
 	private String password;
 	private String sistema;
 	private String numProc;
 
-	public ProcessoCompletoAsync(String filename, String username, String password, String sistema, String numProc) {
+	public ProcessoCompleto(String filename, String username, String password, String sistema, String numProc) {
 		super();
 		this.uuid = filename;
 		this.username = username;
@@ -40,6 +39,8 @@ public class ProcessoCompletoAsync implements Callable<String> {
 	@Override
 	public String call() throws Exception {
 		ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
+
+		Status.update(this.uuid, "Obtendo a lista de documentos", 0, 100, 0L);
 
 		// Consulta o processo para saber quais são os documentos a serem
 		// concatenados
@@ -58,11 +59,12 @@ public class ProcessoCompletoAsync implements Callable<String> {
 		document.open();
 		PdfReader reader;
 
-//		for (int i = 0; i < 2; i++) {
-//			byte[] ab = Files.readAllBytes(Paths.get("/Users/nato/Downloads/" + (i + 1) + ".html"));
-
+		long bytes = 0;
 		for (int i = 0; i < docs.length(); i++) {
 			String idDocumento = docs.getJSONObject(i).getString("idDocumento");
+
+			Status.update(this.uuid, "Agregando documento " + (i + 1) + "/" + docs.length(), i * 2 + 1,
+					docs.length() * 2 + 1, bytes);
 
 			byte[] ab = SoapMNI.obterPecaProcessual(username, password, sistema, numProc, idDocumento);
 
@@ -72,6 +74,10 @@ public class ProcessoCompletoAsync implements Callable<String> {
 			ContentInfo info = contentInfoUtil.findMatch(ab);
 
 			if (info.getMimeType().startsWith("application/xml")) {
+				Status.update(this.uuid,
+						"Convertendo documento " + (i + 1) + "/" + docs.length() + " de XHTML para PDF", i * 2 + 2,
+						docs.length() * 2 + 1, bytes);
+
 				final XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance()
 						.createXMLStreamReader(new ByteArrayInputStream(ab));
 				String fileEncoding = xmlStreamReader.getEncoding();
@@ -94,6 +100,8 @@ public class ProcessoCompletoAsync implements Callable<String> {
 			}
 
 			if (info.getMimeType().startsWith("text/html")) {
+				Status.update(this.uuid, "Convertendo " + (i + 1) + "/" + docs.length() + " de HTML para PDF",
+						i * 2 + 2, docs.length() * 2 + 1, bytes);
 				String html = new String(ab, StandardCharsets.UTF_8);
 				if (html.toLowerCase().contains("charset=windows-1252") || html.toLowerCase().contains("iso-8859-1"))
 					html = new String(ab, StandardCharsets.ISO_8859_1);
@@ -105,11 +113,16 @@ public class ProcessoCompletoAsync implements Callable<String> {
 			if (!"application/pdf".equals(info.getMimeType()))
 				throw new PresentableException("Não foi possível obter um PDF. (" + info.getMimeType() + ")");
 
+			bytes += ab.length;
+
 			reader = new PdfReader(ab);
 			copy.addDocument(reader);
 			reader.close();
 		}
 		document.close();
+
+		Status.update(this.uuid, "PDF completo gerado", docs.length() * 2 + 1, docs.length() * 2 + 1, bytes);
+
 		return bufName;
 	}
 

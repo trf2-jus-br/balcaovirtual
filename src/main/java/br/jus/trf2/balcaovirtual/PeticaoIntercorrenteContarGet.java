@@ -20,7 +20,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 	@Override
 	public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
 			throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
@@ -31,7 +31,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 							null, UsuarioUsernamePeticaoIntercorrenteContarGetResponse.class));
 
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {

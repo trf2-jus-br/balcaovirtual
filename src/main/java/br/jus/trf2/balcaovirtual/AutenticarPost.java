@@ -25,18 +25,18 @@ import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ISessionsCreatePost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SessionsCreatePostResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAutenticarPost;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostRequest;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetResponse;
 
-public class SessionsCreatePost implements ISessionsCreatePost {
-	private static final Logger log = LoggerFactory.getLogger(SessionsCreatePost.class);
+public class AutenticarPost implements IAutenticarPost {
+	private static final Logger log = LoggerFactory.getLogger(AutenticarPost.class);
 	public static final long TIMEOUT_MILLISECONDS = 15000;
 
 	@Override
-	public void run(SessionsCreatePostRequest req, SessionsCreatePostResponse resp) throws Exception {
+	public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception {
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
@@ -151,7 +151,7 @@ public class SessionsCreatePost implements ISessionsCreatePost {
 		u.nome = (String) jwt.get("name");
 		u.cpf = (String) jwt.get("cpf");
 		u.usuario = (String) jwt.get("username");
-		u.senha = SessionsCreatePost.decrypt((String) jwt.get("pwd"));
+		u.senha = AutenticarPost.decrypt((String) jwt.get("pwd"));
 		String users = (String) jwt.get("users");
 		if (users != null && users.length() > 0) {
 			u.usuarios = new HashMap<>();

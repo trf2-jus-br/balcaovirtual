@@ -19,8 +19,8 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 
 	@Override
 	public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		String authorization = AutenticarPost.assertAuthorization();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Date dtFim = Utils.parsearData(req.datafinal);
 		Date dtFimPlus1 = new Date(dtFim.getTime() + (1000 * 60 * 60 * 24));
@@ -38,7 +38,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 							null, UsuarioUsernameAvisoConfirmadoListarGetResponse.class));
 
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		resp.status = new ArrayList<>();

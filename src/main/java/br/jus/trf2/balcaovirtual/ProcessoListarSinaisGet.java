@@ -6,14 +6,14 @@ import java.util.List;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoListarSinaisGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoListarSinaisGetResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoListarSinaisGet implements IProcessoListarSinaisGet {
 
 	@Override
 	public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 
 		resp.list = new ArrayList<>();
 

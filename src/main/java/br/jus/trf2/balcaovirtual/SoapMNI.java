@@ -350,7 +350,7 @@ public class SoapMNI {
 
 	public static void consultarTeorComunicacao(String idConsultante, String senhaConsultante, String numProc,
 			String idAviso, String sistema, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");
@@ -426,7 +426,7 @@ public class SoapMNI {
 	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
 			String numProc, String tpDoc, int nvlSigilo, String cpfEncerraPrazos, String nomePdfs, byte pdf[])
 			throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");
@@ -541,7 +541,7 @@ public class SoapMNI {
 			String cdas, String pas, int nvlSigilo, boolean justicagratuita, boolean tutelaantecipada,
 			boolean prioridadeidoso, List<Parte> partes, String nomePdfs, String tpDocPdfs, String nomePoloAtivo,
 			String nomePoloPassivo) throws Exception {
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
 		String usuario = (String) jwt.get("username");

@@ -19,8 +19,8 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 
 	@Override
 	public void run(AvisoConfirmadoContarGetRequest req, AvisoConfirmadoContarGetResponse resp) throws Exception {
-		String authorization = SessionsCreatePost.assertAuthorization();
-		Map<String, Object> jwt = SessionsCreatePost.assertUsuarioAutorizado();
+		String authorization = AutenticarPost.assertAuthorization();
+		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
@@ -32,7 +32,7 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 							null, UsuarioUsernameAvisoConfirmadoContarGetResponse.class));
 
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, SessionsCreatePost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {

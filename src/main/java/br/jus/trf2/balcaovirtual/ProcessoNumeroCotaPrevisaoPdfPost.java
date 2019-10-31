@@ -6,16 +6,16 @@ import java.util.concurrent.ExecutionException;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaPrevisaoPdfPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 
 public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPrevisaoPdfPost {
 
 	@Override
 	public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
 			throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.senha, u.nome, req.sistema, req.numero, null, null,
-				req.texto, req.cargo, req.empresa, req.unidade);
+				req.texto, req.cargo, req.empresa, req.unidade, null);
 	}
 
 	public static byte[] criarPDF(String nome, String numero, String texto, String cargo, String empresa,

@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     login: function () {
-      this.$http.post('sessions/create', this.user, { block: true }).then(response => {
+      this.$http.post('autenticar', this.user, { block: true }).then(response => {
         this.$parent.$emit('updateLogged', response.data.id_token)
         this.$router.push({ name: 'Consulta Simples' })
       }, error => UtilsBL.errormsg(error, this))

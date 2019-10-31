@@ -11,7 +11,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigTipoPeticaoIntercorrente;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPeticaoIntercorrenteValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPeticaoIntercorrenteValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPeticaoIntercorrenteValidarGetResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.TipoPeticaoIntercorrente;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse;
 
@@ -20,8 +20,8 @@ public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNu
 	@Override
 	public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req,
 			ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception {
-		SessionsCreatePost.assertAuthorization();
-		Usuario u = SessionsCreatePost.assertUsuario();
+		AutenticarPost.assertAuthorization();
+		Usuario u = AutenticarPost.assertUsuario();
 		
 		if (u.usuarios.get(req.sistema) == null) 
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));

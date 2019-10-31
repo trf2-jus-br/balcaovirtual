@@ -13,7 +13,7 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoListarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoListarGet;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisosGetResponse;
@@ -22,7 +22,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 
 	@Override
 	public void run(AvisoListarGetRequest req, AvisoListarGetResponse resp) throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 
 		resp.list = new ArrayList<>();
 		resp.status = new ArrayList<>();

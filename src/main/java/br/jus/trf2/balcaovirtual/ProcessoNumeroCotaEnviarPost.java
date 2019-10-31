@@ -5,15 +5,15 @@ import com.crivano.swaggerservlet.SwaggerServlet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaEnviarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaEnviarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaEnviarPostResponse;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.Usuario;
-import br.jus.trf2.balcaovirtual.SessionsCreatePost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 
 public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPost {
 
 	@Override
 	public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp)
 			throws Exception {
-		Usuario u = SessionsCreatePost.assertUsuario();
+		Usuario u = AutenticarPost.assertUsuario();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,
 				req.unidade);
