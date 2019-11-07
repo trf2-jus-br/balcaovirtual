@@ -17,7 +17,7 @@ public class CertidaoReimprimirNumeroCpfcnpjGet implements ICertidaoReimprimirNu
 			throw new PresentableException("Token inválido");
 
 		FetchResponse r = CertidaoEmitirRequisitanteCpfcnpjPost.fetch(
-				Utils.getCertApiUrl(req.sistema) + "/crivano_cons_cert_lib.asp", Utils.getCertApiPassword(req.sistema), "POST",
+				Utils.getCertApiUrl(req.sistema) + "/bv_cons_cert_lib.asp", Utils.getCertApiPassword(req.sistema), "POST",
 				"Botao=Emitir&NumProt=" + req.numero + "&NumDocPess=" + req.cpfcnpj);
 
 		if (r.headerFields.containsKey(Utils.ERROR_MESSAGE))

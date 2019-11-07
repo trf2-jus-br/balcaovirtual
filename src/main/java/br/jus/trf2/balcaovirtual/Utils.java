@@ -83,14 +83,22 @@ public class Utils {
 		return SwaggerServlet.getProperty(system + ".api.url");
 	}
 
-	public static String getCertApiPassword(String system) {
-		return SwaggerServlet.getProperty(system + ".cert.api.password");
+	public static String getApiEprocUrl(String system) {
+		return SwaggerServlet.getProperty(system + ".api.eproc.url");
+	}
+
+	public static String getApiEprocPassword(String system) {
+		return SwaggerServlet.getProperty(system + ".api.eproc.password");
 	}
 
 	public static String getCertApiUrl(String system) {
 		return SwaggerServlet.getProperty(system + ".cert.api.url");
 	}
 
+	public static String getCertApiPassword(String system) {
+		return SwaggerServlet.getProperty(system + ".cert.api.password");
+	}
+	
 	public static String getAssijusUrl(String system) {
 		return SwaggerServlet.getProperty(system + ".assijus.url");
 	}
@@ -387,11 +395,12 @@ public class Utils {
 		if (s.contains(Utils.HTML_END))
 			s = s.substring(0, s.indexOf(Utils.HTML_END));
 		s = s.replaceAll(" width=\"[0-9]+\"", " width=\"100%\"");
-		s = s.replaceAll("src=\"./imagens/brasao-apolo.jpg\"", "src=\"" + getBaseUrl() + "/assets/brasao-260x260.png\"");
+		s = s.replaceAll("src=\"./imagens/brasao-apolo.jpg\"",
+				"src=\"" + getBaseUrl() + "/assets/brasao-260x260.png\"");
 		s = s.replaceAll("font-size: [0-9]+pt", "");
 		s = s.replaceAll(" face=\"Times New Roman\"", "");
 		s = s.replaceAll(" color=\"#[0-9]+\"", "");
-		
+
 		return s;
 	}
 

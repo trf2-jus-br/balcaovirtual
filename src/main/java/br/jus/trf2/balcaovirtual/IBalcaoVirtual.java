@@ -233,6 +233,15 @@ public interface IBalcaoVirtual {
 		public String stacktrace;
 	}
 
+	public class Status implements ISwaggerModel {
+		public String mensagem;
+		public Double indice;
+		public Double contador;
+		public Double bytes;
+		public String errormsg;
+		public String stacktrace;
+	}
+
 	public class Codigo implements ISwaggerModel {
 	}
 
@@ -266,6 +275,12 @@ public interface IBalcaoVirtual {
 	}
 
 	public class Html implements ISwaggerModel {
+	}
+
+	public class Qs implements ISwaggerModel {
+	}
+
+	public class Params implements ISwaggerModel {
 	}
 
 	public class TipoDeCertidao implements ISwaggerModel {
@@ -303,6 +318,23 @@ public interface IBalcaoVirtual {
 		public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception;
 	}
 
+	public class StatusChaveGetRequest implements ISwaggerRequest {
+		public String chave;
+	}
+
+	public class StatusChaveGetResponse implements ISwaggerResponse {
+		public String mensagem;
+		public Double indice;
+		public Double contador;
+		public Double bytes;
+		public String errormsg;
+		public String stacktrace;
+	}
+
+	public interface IStatusChaveGet extends ISwaggerMethod {
+		public void run(StatusChaveGetRequest req, StatusChaveGetResponse resp) throws Exception;
+	}
+
 	public class ConfigEntidadesGetRequest implements ISwaggerRequest {
 	}
 
@@ -334,7 +366,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IConfigTiposDocumentoPeticaoInicialGet extends ISwaggerMethod {
-		public void run(ConfigTiposDocumentoPeticaoInicialGetRequest req, ConfigTiposDocumentoPeticaoInicialGetResponse resp) throws Exception;
+		public void run(ConfigTiposDocumentoPeticaoInicialGetRequest req,
+				ConfigTiposDocumentoPeticaoInicialGetResponse resp) throws Exception;
 	}
 
 	public class ConfigLocalidadesGetRequest implements ISwaggerRequest {
@@ -359,7 +392,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IConfigLocalidadeIdEspecialidadesGet extends ISwaggerMethod {
-		public void run(ConfigLocalidadeIdEspecialidadesGetRequest req, ConfigLocalidadeIdEspecialidadesGetResponse resp) throws Exception;
+		public void run(ConfigLocalidadeIdEspecialidadesGetRequest req,
+				ConfigLocalidadeIdEspecialidadesGetResponse resp) throws Exception;
 	}
 
 	public class ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest implements ISwaggerRequest {
@@ -373,7 +407,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IConfigLocalidadeIdEspecialidadeId2ClassesGet extends ISwaggerMethod {
-		public void run(ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest req, ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception;
+		public void run(ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest req,
+				ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception;
 	}
 
 	public class ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest implements ISwaggerRequest {
@@ -388,7 +423,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGet extends ISwaggerMethod {
-		public void run(ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest req, ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse resp) throws Exception;
+		public void run(ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetRequest req,
+				ConfigLocalidadeIdEspecialidadeId2ClasseId3AssuntosGetResponse resp) throws Exception;
 	}
 
 	public class ConfigPessoaFisicaCpfGetRequest implements ISwaggerRequest {
@@ -422,7 +458,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IConfigPessoaJuridicaCnpjGet extends ISwaggerMethod {
-		public void run(ConfigPessoaJuridicaCnpjGetRequest req, ConfigPessoaJuridicaCnpjGetResponse resp) throws Exception;
+		public void run(ConfigPessoaJuridicaCnpjGetRequest req, ConfigPessoaJuridicaCnpjGetResponse resp)
+				throws Exception;
 	}
 
 	public class ConfigAdvogadoOabGetRequest implements ISwaggerRequest {
@@ -467,46 +504,54 @@ public interface IBalcaoVirtual {
 	public class ProcessoNumeroConsultarGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
-		private Map<String, List<String>> headerFields;
+		public Map<String, List<String>> headerFields;
+
 		public String getContenttype() {
 			return contenttype;
 		}
+
 		public void setContenttype(String contenttype) {
 			this.contenttype = contenttype;
 		}
+
 		public String getContentdisposition() {
 			return contentdisposition;
 		}
+
 		public void setContentdisposition(String contentdisposition) {
 			this.contentdisposition = contentdisposition;
 		}
+
 		public Long getContentlength() {
 			return contentlength;
 		}
+
 		public void setContentlength(Long contentlength) {
 			this.contentlength = contentlength;
 		}
+
 		public InputStream getInputstream() {
 			return inputstream;
 		}
+
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
-		}
-		@Override
-		public Map<String, List<String>> getHeaderFields() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 	}
 
 	public interface IProcessoNumeroConsultarGet extends ISwaggerMethod {
-		public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp) throws Exception;
+		public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroPecaIdPdfGetRequest implements ISwaggerRequest {
@@ -521,7 +566,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroPecaIdPdfGet extends ISwaggerMethod {
-		public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception;
+		public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroPdfGetRequest implements ISwaggerRequest {
@@ -531,8 +577,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public class ProcessoNumeroPdfGetResponse implements ISwaggerResponse {
-		public String jwt;
 		public String uuid;
+		public String jwt;
 	}
 
 	public interface IProcessoNumeroPdfGet extends ISwaggerMethod {
@@ -568,7 +614,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IPeticaoInicialProtocolarPost extends ISwaggerMethod {
-		public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp) throws Exception;
+		public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroPeticaoIntercorrenteValidarGetRequest implements ISwaggerRequest {
@@ -584,7 +631,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroPeticaoIntercorrenteValidarGet extends ISwaggerMethod {
-		public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req, ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception;
+		public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req,
+				ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception;
 	}
 
 	public class ProcessoNumeroPeticionarPostRequest implements ISwaggerRequest {
@@ -601,7 +649,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroPeticionarPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroCotaPrevisaoPdfPostRequest implements ISwaggerRequest {
@@ -619,7 +668,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroCotaPrevisaoPdfPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroCotaEnviarPostRequest implements ISwaggerRequest {
@@ -637,7 +687,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroCotaEnviarPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroAvisoIdReceberPostRequest implements ISwaggerRequest {
@@ -657,7 +708,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroAvisoIdReceberPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp)
+				throws Exception;
 	}
 
 	public class ClasseIdMarcadoresGetRequest implements ISwaggerRequest {
@@ -714,7 +766,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroPecaIdMarcaPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroNotaGetRequest implements ISwaggerRequest {
@@ -772,7 +825,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroNotaIdDelete extends ISwaggerMethod {
-		public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp) throws Exception;
+		public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroSinalizarPostRequest implements ISwaggerRequest {
@@ -786,7 +840,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IProcessoNumeroSinalizarPost extends ISwaggerMethod {
-		public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp) throws Exception;
+		public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp)
+				throws Exception;
 	}
 
 	public class ProcessoNumeroSinaisGetRequest implements ISwaggerRequest {
@@ -812,23 +867,6 @@ public interface IBalcaoVirtual {
 		public void run(ProcessoListarSinaisGetRequest req, ProcessoListarSinaisGetResponse resp) throws Exception;
 	}
 
-	public class StatusChaveGetRequest implements ISwaggerRequest {
-		public String chave;
-	}
-
-	public class StatusChaveGetResponse implements ISwaggerResponse {
-		public String mensagem;
-		public Double indice;
-		public Double contador;
-		public Double bytes;
-		public String errormsg;
-		public String stacktrace;
-	}
-
-	public interface IStatusChaveGet extends ISwaggerMethod {
-		public void run(StatusChaveGetRequest req, StatusChaveGetResponse resp) throws Exception;
-	}
-
 	public class DownloadJwtFilenameGetRequest implements ISwaggerRequest {
 		public String jwt;
 		public String filename;
@@ -838,41 +876,48 @@ public interface IBalcaoVirtual {
 	public class DownloadJwtFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
-		private Map<String, List<String>> headerFields;
+		public Map<String, List<String>> headerFields;
+
 		public String getContenttype() {
 			return contenttype;
 		}
+
 		public void setContenttype(String contenttype) {
 			this.contenttype = contenttype;
 		}
+
 		public String getContentdisposition() {
 			return contentdisposition;
 		}
+
 		public void setContentdisposition(String contentdisposition) {
 			this.contentdisposition = contentdisposition;
 		}
+
 		public Long getContentlength() {
 			return contentlength;
 		}
+
 		public void setContentlength(Long contentlength) {
 			this.contentlength = contentlength;
 		}
+
 		public InputStream getInputstream() {
 			return inputstream;
 		}
+
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
-		}
-		@Override
-		public Map<String, List<String>> getHeaderFields() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 	}
 
@@ -887,41 +932,48 @@ public interface IBalcaoVirtual {
 	public class ArquivoTemporarioPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "application/pdf";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
-		private Map<String, List<String>> headerFields;
+		public Map<String, List<String>> headerFields;
+
 		public String getContenttype() {
 			return contenttype;
 		}
+
 		public void setContenttype(String contenttype) {
 			this.contenttype = contenttype;
 		}
+
 		public String getContentdisposition() {
 			return contentdisposition;
 		}
+
 		public void setContentdisposition(String contentdisposition) {
 			this.contentdisposition = contentdisposition;
 		}
+
 		public Long getContentlength() {
 			return contentlength;
 		}
+
 		public void setContentlength(Long contentlength) {
 			this.contentlength = contentlength;
 		}
+
 		public InputStream getInputstream() {
 			return inputstream;
 		}
+
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
 		public void setHeaderFields(Map<String, List<String>> headerFields) {
 			this.headerFields = headerFields;
-		}
-		@Override
-		public Map<String, List<String>> getHeaderFields() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 	}
 
@@ -937,7 +989,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IPeticaoIntercorrenteContarGet extends ISwaggerMethod {
-		public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp) throws Exception;
+		public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
+				throws Exception;
 	}
 
 	public class PeticaoIntercorrenteListarGetRequest implements ISwaggerRequest {
@@ -949,7 +1002,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IPeticaoIntercorrenteListarGet extends ISwaggerMethod {
-		public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp) throws Exception;
+		public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
+				throws Exception;
 	}
 
 	public class AvisoListarGetRequest implements ISwaggerRequest {
@@ -1039,6 +1093,37 @@ public interface IBalcaoVirtual {
 		public void run(MesaIdGetRequest req, MesaIdGetResponse resp) throws Exception;
 	}
 
+	public class MesaIdDocumentoId2SalvarPostRequest implements ISwaggerRequest {
+		public String id;
+		public String id2;
+		public String sistema;
+		public String html;
+	}
+
+	public class MesaIdDocumentoId2SalvarPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IMesaIdDocumentoId2SalvarPost extends ISwaggerMethod {
+		public void run(MesaIdDocumentoId2SalvarPostRequest req, MesaIdDocumentoId2SalvarPostResponse resp)
+				throws Exception;
+	}
+
+	public class MesaIdDocumentoId2AssinarComSenhaPostRequest implements ISwaggerRequest {
+		public String id;
+		public String id2;
+		public String sistema;
+	}
+
+	public class MesaIdDocumentoId2AssinarComSenhaPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IMesaIdDocumentoId2AssinarComSenhaPost extends ISwaggerMethod {
+		public void run(MesaIdDocumentoId2AssinarComSenhaPostRequest req,
+				MesaIdDocumentoId2AssinarComSenhaPostResponse resp) throws Exception;
+	}
+
 	public class ClasseIdGetRequest implements ISwaggerRequest {
 		public String id;
 		public String sistema;
@@ -1078,42 +1163,50 @@ public interface IBalcaoVirtual {
 	public class RecursoArquivoGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
 		public String contenttype = "text/xml";
 		public String contentdisposition = "attachment";
-
 		public Long contentlength;
 		public InputStream inputstream;
-		private Map<String, List<String>> headerFields;
+		public Map<String, List<String>> headerFields;
+
 		public String getContenttype() {
 			return contenttype;
 		}
+
 		public void setContenttype(String contenttype) {
 			this.contenttype = contenttype;
 		}
+
 		public String getContentdisposition() {
 			return contentdisposition;
 		}
+
 		public void setContentdisposition(String contentdisposition) {
 			this.contentdisposition = contentdisposition;
 		}
+
 		public Long getContentlength() {
 			return contentlength;
 		}
+
 		public void setContentlength(Long contentlength) {
 			this.contentlength = contentlength;
 		}
+
 		public InputStream getInputstream() {
 			return inputstream;
 		}
-		public void setHeaderFields(Map<String, List<String>> headerFields) {
-			this.headerFields = headerFields;
-		}
+
 		public void setInputstream(InputStream inputstream) {
 			this.inputstream = inputstream;
 		}
-		@Override
+
 		public Map<String, List<String>> getHeaderFields() {
-			// TODO Auto-generated method stub
-			return null;
-		}	}
+			return headerFields;
+		}
+
+		public void setHeaderFields(Map<String, List<String>> headerFields) {
+			this.headerFields = headerFields;
+		}
+	}
 
 	public interface IRecursoArquivoGet extends ISwaggerMethod {
 		public void run(RecursoArquivoGetRequest req, RecursoArquivoGetResponse resp) throws Exception;
@@ -1152,7 +1245,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface ICertidaoEmitirRequisitanteCpfcnpjPost extends ISwaggerMethod {
-		public void run(CertidaoEmitirRequisitanteCpfcnpjPostRequest req, CertidaoEmitirRequisitanteCpfcnpjPostResponse resp) throws Exception;
+		public void run(CertidaoEmitirRequisitanteCpfcnpjPostRequest req,
+				CertidaoEmitirRequisitanteCpfcnpjPostResponse resp) throws Exception;
 	}
 
 	public class CertidaoRequererRequisitanteCpfcnpjPostRequest implements ISwaggerRequest {
@@ -1171,7 +1265,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface ICertidaoRequererRequisitanteCpfcnpjPost extends ISwaggerMethod {
-		public void run(CertidaoRequererRequisitanteCpfcnpjPostRequest req, CertidaoRequererRequisitanteCpfcnpjPostResponse resp) throws Exception;
+		public void run(CertidaoRequererRequisitanteCpfcnpjPostRequest req,
+				CertidaoRequererRequisitanteCpfcnpjPostResponse resp) throws Exception;
 	}
 
 	public class CertidaoAutenticarNumeroCpfcnpjGetRequest implements ISwaggerRequest {
@@ -1188,7 +1283,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface ICertidaoAutenticarNumeroCpfcnpjGet extends ISwaggerMethod {
-		public void run(CertidaoAutenticarNumeroCpfcnpjGetRequest req, CertidaoAutenticarNumeroCpfcnpjGetResponse resp) throws Exception;
+		public void run(CertidaoAutenticarNumeroCpfcnpjGetRequest req, CertidaoAutenticarNumeroCpfcnpjGetResponse resp)
+				throws Exception;
 	}
 
 	public class CertidaoReimprimirNumeroCpfcnpjGetRequest implements ISwaggerRequest {
@@ -1205,7 +1301,8 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface ICertidaoReimprimirNumeroCpfcnpjGet extends ISwaggerMethod {
-		public void run(CertidaoReimprimirNumeroCpfcnpjGetRequest req, CertidaoReimprimirNumeroCpfcnpjGetResponse resp) throws Exception;
+		public void run(CertidaoReimprimirNumeroCpfcnpjGetRequest req, CertidaoReimprimirNumeroCpfcnpjGetResponse resp)
+				throws Exception;
 	}
 
 }

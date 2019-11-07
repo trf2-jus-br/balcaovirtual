@@ -38,7 +38,7 @@
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Lista de Avisos'}" tag="a">Intimação/Citação<sup v-if="cAvisos &amp;&amp; cAvisos > 0"><span class="badge badge-pill badge-danger active-opacity">{{cAvisos}}</span></sup><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link>
                 </li>
-                <li class="nav-item" v-if="test.properties['balcaovirtual.env'] !== 'prod' &amp;&amp; jwt &amp;&amp; jwt.username &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; (jwt.origin === 'int' || jwt.origin === 'int/ext')">
                   <router-link class="nav-link" active-class="active" :to="{name:'Mesa'}" tag="a">Minutas</router-link>
                 </li>
                 <li class="nav-item">

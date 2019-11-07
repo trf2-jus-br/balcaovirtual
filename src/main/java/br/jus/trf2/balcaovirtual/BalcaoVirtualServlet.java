@@ -49,11 +49,11 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addRestrictedProperty("datasource.url", null);
 		if (getProperty("datasource.url") != null) {
 			addRestrictedProperty("datasource.username");
-			addRestrictedProperty("datasource.password");
+			addPrivateProperty("datasource.password");
 			addRestrictedProperty("datasource.name", null);
 		} else {
 			addRestrictedProperty("datasource.username", null);
-			addRestrictedProperty("datasource.password", null);
+			addPrivateProperty("datasource.password", null);
 			addRestrictedProperty("datasource.name", "balcaovirtualds");
 		}
 
@@ -76,11 +76,13 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		for (String s : getProperty("systems").split(",")) {
 			addPublicProperty(s.toLowerCase() + ".name");
 			addRestrictedProperty(s.toLowerCase() + ".api.url");
-			addRestrictedProperty(s.toLowerCase() + ".api.password", null);
+			addPrivateProperty(s.toLowerCase() + ".api.password", null);
+			if (s.toLowerCase().contains(".eproc")) {
+				addRestrictedProperty(s.toLowerCase() + ".api.eproc.url");
+				addPrivateProperty(s.toLowerCase() + ".api.eproc.password", null);
+			}
 			addRestrictedProperty(s.toLowerCase() + ".mni.url");
 			addRestrictedProperty(s.toLowerCase() + ".mni.endpoint");
-			addRestrictedProperty(s.toLowerCase() + ".assijus.url", null);
-			addPrivateProperty(s.toLowerCase() + ".assijus.password", null);
 			addPublicProperty(s.toLowerCase() + ".cota.tipo");
 		}
 
@@ -88,7 +90,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			for (String s : getProperty("cert.systems").split(",")) {
 				addPublicProperty(s.toLowerCase() + ".cert.name");
 				addRestrictedProperty(s.toLowerCase() + ".cert.api.url");
-				addRestrictedProperty(s.toLowerCase() + ".cert.api.password");
+				addPrivateProperty(s.toLowerCase() + ".cert.api.password");
 			}
 		}
 
@@ -187,23 +189,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 					return true;
 				}
 			});
-
-			if (Utils.getAssijusUrl(system) != null) {
-				addDependency(
-						new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-assijus", false, 0, 10000) {
-
-							@Override
-							public String getUrl() {
-								return Utils.getAssijusUrl(system);
-							}
-
-							@Override
-							public String getResponsable() {
-								return null;
-							}
-						});
-			}
-
 		}
 
 		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {

@@ -17,7 +17,7 @@ public class CertidaoAutenticarNumeroCpfcnpjGet implements ICertidaoAutenticarNu
 			throw new PresentableException("Token inválido");
 
 		FetchResponse r = CertidaoEmitirRequisitanteCpfcnpjPost.fetch(
-				Utils.getCertApiUrl(req.sistema) + "/crivano_consul_cert_neg.asp",
+				Utils.getCertApiUrl(req.sistema) + "/bv_consul_cert_neg.asp",
 				Utils.getCertApiPassword(req.sistema), "POST",
 				"Botao=Consultar&NumProt=" + req.numero + "&NumDocPess=" + req.cpfcnpj);
 

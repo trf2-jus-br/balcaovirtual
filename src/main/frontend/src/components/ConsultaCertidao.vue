@@ -41,7 +41,7 @@
                   </div>
                 </div>
               </div>
-              <div v-show="pasta == 'emitir'" class="row">
+              <div v-if="false" v-show="pasta == 'emitir'" class="row">
                 <div class="col">
                   <div class="form-group">
                     <label for="requisitante">CPF do Requisitante</label>
@@ -142,7 +142,7 @@ export default {
       if (this.pasta === 'reimprimir') this.reimprimir(recaptchaToken)
     },
     obterToken: function (recaptchaToken, token, cont) {
-      this.$http.get('certidao/obter-token' + '?sistema=' + this.sistema + '&requisitante=' + UtilsBL.somenteNumeros(this.requisitante) + '&cpfcnpj=' + UtilsBL.somenteNumeros(this.cpfcnpj) + '&numero=' + UtilsBL.somenteNumeros(this.numero) + (recaptchaToken ? '&captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
+      this.$http.get('certidao/obter-token' + '?sistema=' + this.sistema + '&requisitante=11111111111&cpfcnpj=' + UtilsBL.somenteNumeros(this.cpfcnpj) + '&numero=' + UtilsBL.somenteNumeros(this.numero) + (recaptchaToken ? '&captcha=' + recaptchaToken : '') + (token ? '?token=' + token : ''), { block: true, blockmin: 0, blockmax: 20 }).then(
         response => {
           var token = response.data.token
           if (!token) {
@@ -156,7 +156,7 @@ export default {
         })
     },
     emitir: function (recaptchaToken, token) {
-      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Emitir Certidão', params: {requisitante: UtilsBL.somenteNumeros(this.requisitante), cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj)}, query: {sistema: this.sistema, token: token} }))
+      this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Emitir Certidão', params: {requisitante: '11111111111', cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj)}, query: {sistema: this.sistema, token: token} }))
     },
     autenticar: function (recaptchaToken, token) {
       this.obterToken(recaptchaToken, token, (token) => this.$router.push({ name: 'Autenticar Certidão', params: {cpfcnpj: UtilsBL.somenteNumeros(this.cpfcnpj), numero: UtilsBL.somenteNumeros(this.numero)}, query: {sistema: this.sistema, token: token} }))

@@ -14,16 +14,19 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class Html2Pdf {
 	private static Logger logger = Logger.getLogger(Html2Pdf.class.getCanonicalName());
 
-	private String cleanHtmlJSoup(String html) {
+	static String cleanHtmlJSoup(String html, boolean fBodyOnly) {
 		if (html.startsWith("<?xml "))
 			return html;
 		final Document document = Jsoup.parse(html);
 		document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 		document.outputSettings().escapeMode(org.jsoup.nodes.Entities.EscapeMode.xhtml);
-		return document.html();
+		if (fBodyOnly)
+			return document.body().html();
+		else
+			return document.html();
 	}
 
-	private String cleanHtml(String data) throws UnsupportedEncodingException {
+	public String cleanHtml(String data) throws UnsupportedEncodingException {
 		if (data.startsWith("<?xml "))
 			return data;
 

@@ -24,7 +24,8 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 		if (!CertidaoObterTokenGet.isValidToken(req.token, null, req.requisitante, req.cpfcnpj))
 			throw new PresentableException("Token inválido");
 
-		FetchResponse r = fetch("http://10.13.1.6/Homologacao/certidao/crivano_emissao_cert.asp", "Teste123", "POST",
+		FetchResponse r = fetch(Utils.getCertApiUrl(req.sistema) + "/bv_emissao_cert.asp",
+				Utils.getCertApiPassword(req.sistema), "POST",
 				"Botao=Emitir&CPFReq=" + req.requisitante + "&NumDocPess=" + req.cpfcnpj);
 
 		if (r.headerFields.containsKey(Utils.ERROR_MESSAGE))

@@ -19,7 +19,7 @@ public class CertidaoRequererRequisitanteCpfcnpjPost implements ICertidaoRequere
 			throw new PresentableException("Token inválido");
 
 		FetchResponse r = CertidaoEmitirRequisitanteCpfcnpjPost.fetch(
-				Utils.getCertApiUrl(req.sistema) + "/crivano_conf_req_cert.asp", Utils.getCertApiPassword(req.sistema),
+				Utils.getCertApiUrl(req.sistema) + "/bv_conf_req_cert.asp", Utils.getCertApiPassword(req.sistema),
 				"POST", "Botao=Requerer&NumDocPessReq=" + req.requisitante + "&NumDoc=" + req.cpfcnpj + "&Nome="
 						+ URLEncoder.encode(req.nome, "ISO-8859-1"));
 

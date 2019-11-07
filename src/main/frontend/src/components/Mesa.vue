@@ -31,15 +31,15 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto ml-auto mb-3">
+      <div class="col-sm-auto ml-auto mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
         <button type="button" @click="assinarDocumentos()" class="btn btn-primary ml-1" title="">
-          <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp
+          <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
         </button>
       </div>
     </div>
 
-    <div class="row" v-if="filtrados.length == 0">
+    <div class="row" v-if="!carregando && filtrados.length == 0">
       <div class="col col-sm-12">
         <p class="alert alert-warning">
           <strong>Atenção!</strong> Nenhuma minuta encontrada.
@@ -122,7 +122,8 @@ export default {
       filtro: undefined,
       lista: [],
       todos: true,
-      errormsg: undefined
+      errormsg: undefined,
+      carregando: true
     }
   },
 
@@ -183,6 +184,7 @@ export default {
           for (var i = 0; i < list.length; i++) {
             this.lista.push(this.fixItem(list[i]))
           }
+          this.carregando = false
         },
         error => UtilsBL.errormsg(error, this)
       )

@@ -7,7 +7,7 @@ info:
 
 basePath: /balcaovirtual/api/v1
 schemes: [http,https]
-consumes: [application/json]
+consumes: [application/json,application/x-www-form-urlencoded]
 produces: [application/json]
 
 tags:
@@ -433,6 +433,12 @@ parameters:
     description: Chave que referencia um processo assíncrono
     required: true
     type: string
+  html:
+    name: html
+    in: formData
+    description: Html do documento para sobreescrever
+    type: string
+    required: true
 
 
 ################################################################################
@@ -494,7 +500,26 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Status"
+            type: object
+            properties:
+              mensagem:
+                type: string
+                description: Mensagem
+              indice:
+                type: number
+                description: Quantos passos já foram executados
+              contador:
+                type: number
+                description: Número total de passos a serem executados
+              bytes:
+                type: number
+                description: Tamanho total do payload até o momento
+              errormsg:
+                type: string
+                description: Mensagem de erro se houver
+              stacktrace:
+                type: string
+                description: Detalhamento do erro
         500:
           description: Error ocurred
           schema:
@@ -1485,6 +1510,49 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /mesa/{id}/documento/{id2}/salvar:
+    post:
+      description: Listar os documentos na mesa virtual
+      tags: [mesa]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/html"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /mesa/{id}/documento/{id2}/assinar-com-senha:
+    post:
+      description: Listar os documentos na mesa virtual
+      tags: [mesa]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
         500:
           description: Error ocurred
           schema:

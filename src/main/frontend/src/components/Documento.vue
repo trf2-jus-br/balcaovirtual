@@ -1,6 +1,6 @@
 <template>
 <div class="container content profile">
-    <div class="row" v-if="errormsg !== undefined">
+    <div class="row mt-3" v-if="errormsg !== undefined">
         <div class="col col-sm-12">
             <p class="alert alert-danger">
                 {{errormsg}}
@@ -38,7 +38,7 @@
                 <button @click="voltar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar
                 </button>
             </div>
-            <div class="col col-auto ml-1 mb-3">
+            <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
                 <button @click="devolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
                 </button>
             </div>
@@ -46,7 +46,7 @@
                 <button @click="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
                 </button>
             </div>
-            <div class="col col-auto ml-1 mb-3">
+            <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
                 <button @click="assinar()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
                 </button>
             </div>
@@ -109,6 +109,7 @@
 
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor.js'
+import UtilsBL from '../bl/utils.js'
 
 export default {
   data () {
@@ -135,9 +136,14 @@ export default {
     },
 
     salvar: function () {
-      this.editando = false
       this.$refs['conteudo'].querySelector('section[contenteditable=true]').innerHTML = this.buffer
-      this.documento.conteudo = this.$refs['conteudo'].innerHTML
+      this.$http.post('mesa/' + 'null' + '/documento/' + this.numero + '/salvar?sistema=' + this.documento.sistema, {
+        html: this.$refs['conteudo'].querySelector('article').outerHTML
+      }, { block: true }).then(response => {
+        this.editando = false
+        this.documento.conteudo = this.$refs['conteudo'].innerHTML
+        UtilsBL.logEvento('mesa', 'salvar', 'minuta')
+      }, error => UtilsBL.errormsg(error, this))
     },
 
     cancelar: function () {
