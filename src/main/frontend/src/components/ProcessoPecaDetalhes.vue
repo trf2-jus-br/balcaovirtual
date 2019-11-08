@@ -1,7 +1,7 @@
 <template>
   <div>
     <validation-observer v-slot="{ invalid }">
-      <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
+      <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc  @show="resetModal" @hidden="resetModal" @hide="hide">
         <b-form>
           <div class="row">
             <div class="col col-md-8 form-group">
@@ -34,10 +34,10 @@
           <b-btn v-if="editando" variant="outline-danger" @click="remove">
             Remover
           </b-btn>
-          <b-btn class="float-right ml-2" variant="primary" @click="$refs.processoPecaDetalhes.hide(true)" :disabled="invalid">
+          <b-btn class="float-right ml-2" variant="primary" @click="$refs.processoPecaDetalhes.hide('ok')" :disabled="invalid">
             Gravar
           </b-btn>
-          <b-btn class="float-right" variant="secondary" @click="$refs.processoPecaDetalhes.hide(false)">
+          <b-btn class="float-right" variant="secondary" @click="$refs.processoPecaDetalhes.hide('cancel')">
             Cancelar
           </b-btn>
         </div>
@@ -138,33 +138,27 @@ export default {
 //      this.$nextTick(() => this.$validator.validateAll())
 //    },
 
-    save: function (e) {
-      // Close on Esc
-      if (e.isOK === undefined) e.cancel()
+    resetModal: function () {
+      console.log('reset')
+    },
 
-      // Close on cancel
-      if (!e.isOK) return
+    hide: function (e) {
+      if (e.trigger === 'ok') {
+        if ((this.texto || '') === '') {
+          this.errormsg = 'Texto do marcador deve ser informado.'
+          e.preventDefault()
+          return
+        }
 
-//      this.$validator.validateAll().then((result) => {
-//        if (!result) {
-//          e.cancel()
-//          return
-//        }
-//      })
-
-      if ((this.texto || '') === '') {
-        this.errormsg = 'Texto do marcador deve ser informado.'
-        e.cancel()
-        return
+        console.log('emitindo')
+        this.$emit('ok', {
+          texto: this.texto,
+          idestilo: this.estilo,
+          intervalo: this.intervalo,
+          paginicial: this.paginicial !== 0 ? this.paginicial : undefined,
+          pagfinal: this.pagfinal !== 0 ? this.pagfinal : undefined
+        })
       }
-
-      this.$emit('ok', {
-        texto: this.texto,
-        idestilo: this.estilo,
-        intervalo: this.intervalo,
-        paginicial: this.paginicial !== 0 ? this.paginicial : undefined,
-        pagfinal: this.pagfinal !== 0 ? this.pagfinal : undefined
-      })
     }
   }
 }

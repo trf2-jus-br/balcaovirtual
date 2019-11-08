@@ -288,28 +288,60 @@ export default {
       return p
     },
 
+    validarEmLoteSilenciosamente2: function () {
+    },
+
     validarEmLoteSilenciosamente: function () {
       var a = this.processos.filter(function (item) {
         return !item.validado
       })
-      UtilsBL.quietBatch(a, (processo, cont) => {
-        this.$http.get('processo/' + processo.numero + '/validar').then(
+      // Prepara um mapa para aplicar os resultados
+      var map = {}
+      for (var i = 0; i < a.length; i++) {
+        map[a[i].numero] = a[i]
+      }
+      // Prepara um array onde cada elemento tem no máximo 50 números separados por vírgulas
+      var b = []
+      while (a.length > 0) {
+        console.log(a.length)
+        var l = a.splice(0, a.length > 50 ? 50 : a.length)
+        var numeros = []
+        for (var j = 0; j < l.length; j++) {
+          numeros.push(l[j].numero)
+        }
+        b.push(numeros.join(','))
+      }
+      UtilsBL.quietBatch(b, (processos, cont) => {
+        this.$http.get('processo/' + processos + '/validar').then(
           (response) => {
-            if (response.data.list && response.data.list.length > 0 && response.data.list[0].numero) {
-              UtilsBL.overrideProperties(processo, response.data.list[0])
-              processo.validado = true
-              this.fixProcesso(processo)
-            } else {
-              processo.checked = false
-              processo.disabled = true
-              processo.errormsg = 'Processo não encontrado'
+            // Prepara um outro mapa com a lista resultante
+            var map2 = {}
+            for (i = 0; i < response.data.list.length; i++) {
+              map2[response.data.list[i].numero] = response.data.list[i]
+            }
+            var l2 = processos.split(',')
+            for (i = 0; i < l2.length; i++) {
+              var processo = map[l2[i]]
+              if (map2[l2[i]]) {
+                UtilsBL.overrideProperties(processo, map2[l2[i]])
+                processo.validado = true
+                this.fixProcesso(processo)
+              } else {
+                processo.checked = false
+                processo.disabled = true
+                processo.errormsg = 'Processo não encontrado'
+              }
             }
             cont()
           },
           (error) => {
-            processo.checked = false
-            processo.disabled = true
-            processo.errormsg = error.data.errormsg
+            var l3 = processos.split(',')
+            for (i = 0; i < l3.length; i++) {
+              var processo = map[l3[i]]
+              processo.checked = false
+              processo.disabled = true
+              processo.errormsg = error.data.errormsg
+            }
             cont()
           })
       })
@@ -441,6 +473,7 @@ export default {
     },
 
     acrescentarProcessosNaLista: function (arr) {
+      console.log(arr)
       if (!arr || arr.length === 0) return
       this.pasta = 'inbox'
       for (var i = 0; i < arr.length; i++) {

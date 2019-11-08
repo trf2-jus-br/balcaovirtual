@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="processosMultiplos" v-model="showModal" title="Múltiplos Processos" close-title="Cancelar" ok-title="Prosseguir" hide-header-close @hide="save">
+    <b-modal id="processosMultiplos" v-model="showModal" title="Múltiplos Processos" close-title="Cancelar" ok-title="Prosseguir" hide-header-close @show="resetModal" @hidden="resetModal" @ok="handleOk">
       <form>
         <label class="control-label" for="processos" style="width: 100%">Números dos Processos </label>
         <textarea class="form-control" style="width: 100%" id="processos" aria-describedby="processosHelp" v-model="processos" placeholder="" rows="10" autofocus></textarea>
@@ -28,19 +28,22 @@ export default {
   methods: {
     show: function () {
       this.showModal = true
+    },
+
+    resetModal: function (e) {
       this.errormsg = undefined
     },
 
-    save: function (e) {
-      if (e.isOK === undefined) e.cancel()
-      if (!e.isOK) return
+    handleOk: function (e) {
+      console.log(e)
+      if (!e.trigger === 'ok') return
 
       var reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?$/
       var reSep = /(?:\s+|\s*(?:,|;)\s*)/
 
       if ((this.processos || '') === '') {
         this.errormsg = 'Números de processos devem ser informados.'
-        e.cancel()
+        e.preventDefault()
       }
 
       var arr = this.processos.split(reSep)
@@ -49,7 +52,7 @@ export default {
         var m = reProc.exec(arr[i])
         if (!m) {
           this.errormsg = 'Número de processo inválido: \'' + arr[i] + '\''
-          e.cancel()
+          e.preventDefault()
           return
         }
         arr[i] = ProcessoBL.formatarProcesso(arr[i])

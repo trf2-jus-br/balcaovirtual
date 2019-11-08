@@ -108,7 +108,7 @@ export default {
     Bus.$on('block', (min, max) => {
       if (this.blockCounter === 0) {
         this.$nextTick(function () {
-          if (this.blockCounter > 0) {
+          if (this.blockCounter > 0 && this.$refs.topProgress) {
             this.$refs.topProgress.start(min, max)
           }
         }, 200)
@@ -122,7 +122,7 @@ export default {
       if (this.blockCounter === 0) {
         this.loading = false
         this.$nextTick(function () {
-          if (this.blockCounter === 0) {
+          if (this.blockCounter === 0 && this.$refs.topProgress) {
             this.$refs.topProgress.done()
           }
         }, 200)
@@ -182,6 +182,10 @@ export default {
 
     Bus.$on('prgAsyncStart', (title, key, callbackEnd) => {
       prgAsync.start(title, key, callbackEnd)
+    })
+
+    Bus.$on('assinarComSenha', (documentos, username, password, cont) => {
+      this.assinarComSenhaEmLote(documentos, username, password, cont)
     })
 
     this.token = AuthBL.getIdToken()
@@ -262,11 +266,34 @@ export default {
     isTokenValid: function () {
       return this.token && !AuthBL.isTokenExpired(this.token)
     },
+
     logout: function () {
       AuthBL.logout()
       this.jwt = undefined
       this.$emit('updateLogged', undefined)
       this.$router.push({ name: 'Consulta Simples' })
+    },
+
+    assinarComSenha: function (d, lote) {
+      this.errormsg = undefined
+      Bus.$emit('prgCaption', 'Assinando ' + d.numeroDoDocumento)
+
+      this.$http.post('mesa/' + 'null' + '/documento/' + d.id + '/assinar-com-senha?sistema=' + d.sistema, {}, { block: !lote }).then(response => {
+        d.errormsg = undefined
+        d.status = 5
+        d.descricaoDoStatus = 'Assinada'
+        d.checked = false
+        UtilsBL.logEvento('assinatura em lote', 'assinado', 'assinado com senha')
+        Bus.$emit('prgNext')
+      }, error => {
+        if (lote) d.errormsg = error.data.errormsg
+        else Bus.$emit('message', 'Erro', error.data.errormsg)
+        Bus.$emit('prgNext')
+      })
+    },
+
+    assinarComSenhaEmLote: function (documentos, cont) {
+      Bus.$emit('prgStart', 'Assinando Com Senha', documentos.length, (i) => this.assinarComSenha(documentos[i], documentos.length !== 1), cont)
     }
   },
   components: {

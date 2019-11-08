@@ -94,10 +94,6 @@ export default {
       this.errormsg = undefined
     },
 
-    cancel: function (e) {
-      e.cancel()
-    },
-
     save: function () {
       if ((this.texto || '') === '') {
         this.errormsg = 'Texto deve ser informado.'

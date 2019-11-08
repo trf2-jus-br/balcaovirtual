@@ -31,8 +31,8 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto ml-auto mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
-        <button type="button" @click="assinarDocumentos()" class="btn btn-primary ml-1" title="">
+      <div class="col-sm-auto ml-auto mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' && (filtradosEMarcadosEAssinaveis||[]).length">
+        <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
         </button>
@@ -102,7 +102,7 @@
 <script>
 import UtilsBL from '../bl/utils.js'
 import ProcessoBL from '../bl/processo.js'
-// import { Bus } from '../bl/bus.js'
+import { Bus } from '../bl/bus.js'
 
 export default {
   components: {},
@@ -152,8 +152,8 @@ export default {
     },
 
     filtradosEMarcadosEAssinaveis: function() {
-      return this.filtrados.filter(function(item) {
-        return item.docid
+      return this.filtradosEMarcados.filter(function(item) {
+        return item.status === '4'
       })
     }
   },
@@ -330,26 +330,14 @@ export default {
         )
     },
 
+    assinarComSenhaEmLote: function() {
+      var a = this.filtradosEMarcadosEAssinaveis
+      // Bus.$emit('iniciarAssinaturaComSenha', a, this.carregarMesa)
+      Bus.$emit('assinarComSenha', a)
+    },
+
     editar: function() {
       this.$refs.etiqueta.show()
-    },
-
-    exibirProcessosMultiplos: function() {
-      this.$refs.processosMultiplos.show()
-    },
-
-    acrescentarProcessosNaLista: function(arr) {
-      if (!arr || arr.length === 0) return
-      this.pasta = 'inbox'
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] === '') continue
-        var p = this.fixProcesso({
-          numero: arr[i],
-          inbox: true
-        })
-        this.processos.push(p)
-      }
-      this.validarEmLoteSilenciosamente()
     }
   }
 }

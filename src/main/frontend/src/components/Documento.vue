@@ -46,8 +46,8 @@
                 <button @click="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
                 </button>
             </div>
-            <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
-                <button @click="assinar()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
+            <div class="col col-auto ml-1 mb-3">
+                <button @click="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
                 </button>
             </div>
         </div>
@@ -110,6 +110,7 @@
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor.js'
 import UtilsBL from '../bl/utils.js'
+import { Bus } from '../bl/bus.js'
 
 export default {
   data () {
@@ -150,8 +151,9 @@ export default {
       this.editando = false
     },
 
-    assinar: function () {
-      this.$router.go(-1)
+    assinarComSenha: function() {
+        // Bus.$emit('iniciarAssinaturaComSenha', [{codigo: this.numero, sigla: this.doc.sigla}], this.reler)
+      Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
     },
 
     imprimir: function () {
