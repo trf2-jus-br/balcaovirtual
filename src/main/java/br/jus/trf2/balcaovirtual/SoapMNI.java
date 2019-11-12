@@ -149,8 +149,9 @@ public class SoapMNI {
 				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
-		
-		if (Utils.isConsultaPublica(idConsultante) && processo.value.getDadosBasicos().getNivelSigilo() > 0)
+
+		if (Utils.isConsultaPublica(idConsultante) && processo.value.getDadosBasicos() != null
+				&& processo.value.getDadosBasicos().getNivelSigilo() > 0)
 			throw new PresentableUnloggedException("Processo não disponível para consulta pública");
 
 		Type collectionType = new TypeToken<List<TipoParametro>>() {
@@ -169,6 +170,7 @@ public class SoapMNI {
 	}
 
 	static Map<String, ServicoIntercomunicacao222> map = new ConcurrentHashMap<>();
+
 	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
 		if (map.containsKey(sistema))
 			return map.get(sistema);
@@ -247,7 +249,9 @@ public class SoapMNI {
 
 		if (sistema.contains(".apolo") && Utils.isConsultaPublica(idConsultante)
 				&& processo.value.getDocumento().get(0).getNivelSigilo() > 0)
-			throw new PresentableUnloggedException("Documento sigiloso (nível " + processo.value.getDocumento().get(0).getNivelSigilo() + ") não pode ser visulizado em consulta pública");
+			throw new PresentableUnloggedException(
+					"Documento sigiloso (nível " + processo.value.getDocumento().get(0).getNivelSigilo()
+							+ ") não pode ser visulizado em consulta pública");
 
 		return processo.value.getDocumento().get(0).getConteudo();
 	}

@@ -49,8 +49,8 @@ export default {
       this.$http.get('status/' + this.key).then(
         response => {
           var r = response.data
-          this.progressbarWidth = 100 * (r.indice / r.contador)
           this.progressbarCaption = r.mensagem
+          this.progressbarWidth = 100 * (r.indice / r.contador)
           this.bytes = r.bytes ? this.formatBytes(r.bytes) : undefined
           if (r.indice === r.contador) {
             this.showModal = false

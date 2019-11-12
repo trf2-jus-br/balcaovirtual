@@ -11,6 +11,8 @@ public class StatusChaveGet implements IStatusChaveGet {
 		Status as = Status.get(req.chave);
 		if (as == null)
 			return;
+		if (as.ex != null)
+			throw as.ex;
 		resp.mensagem = as.mensagem;
 		resp.indice = (double) as.indice;
 		resp.contador = (double) as.contador;
