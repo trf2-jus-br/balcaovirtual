@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.util.Random;
 import java.util.concurrent.Future;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
@@ -7,7 +8,6 @@ import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
-import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdDocumentoId2AssinarComSenhaPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdDocumentoId2AssinarComSenhaPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdDocumentoId2AssinarComSenhaPostResponse;
@@ -23,15 +23,21 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 			throw new Exception("Operação disponível apenas para o Eproc");
 
 		Usuario u = AutenticarPost.assertUsuario();
-		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
-
 		if (u.usuarios.get(req.sistema) == null)
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 
-		UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest q = new UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest();
+		if (!u.usuario.equalsIgnoreCase(req.username))
+			throw new PresentableUnloggedException("Login não confere");
 
+		if (!u.senha.equals(req.password)) {
+			Random r = new Random();
+			Thread.currentThread().sleep(2000 + r.nextInt(2000));
+			throw new PresentableUnloggedException("Senha não confere");
+		}
+
+		UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest q = new UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest();
 		Future<SwaggerAsyncResponse<UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse>> future = SwaggerCall
-				.callAsync("obter tipos de petição intercorrente", Utils.getApiEprocPassword(req.sistema), "POST",
+				.callAsync(getContext(), Utils.getApiEprocPassword(req.sistema), "POST",
 						Utils.getApiEprocUrl(req.sistema) + "/usuario/" + u.usuario + "/mesa/null/documento/" + req.id2
 								+ "/assinar-com-senha",
 						q, UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse.class);
@@ -46,7 +52,7 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 
 	@Override
 	public String getContext() {
-		return "enviar cota";
+		return "assinar minuta com senha";
 	}
 
 }

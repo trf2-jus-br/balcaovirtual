@@ -65,7 +65,7 @@
               Filtrar Movimentos
             </button>
           </div>
-          <div class="col col-auto mr-1 mb-3" v-if="filtro !== '#marca'">
+          <div class="col col-auto mr-1 mb-3" v-if="filtro !== '#marca' && $parent.jwt && $parent.jwt.user[sistema]">
             <button type="button" @click="filtrarMovimentos('#marca')" class="btn btn-secondary d-print-none">
               <span class="fa fa-filter"></span>
               Filtrar Marcas
@@ -82,7 +82,7 @@
               <span class="fa fa-print"></span>
               Imprimir</button>
           </div>
-          <div class="col col-auto ml-1 mb-3" v-if="marcasativas && ($parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; $parent.jwt.company === 'pgfn.gov.br'))">
+          <div class="col col-auto ml-1 mb-3" v-if="marcasativas && ($parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; ($parent.jwt.company === 'pgfn.gov.br' || $parent.jwt.company === 'dpu.gov.br')))">
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
               Enviar Cota</button>

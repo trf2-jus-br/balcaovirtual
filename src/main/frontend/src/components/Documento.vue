@@ -38,16 +38,16 @@
                 <button @click="voltar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar
                 </button>
             </div>
-            <div class="col col-auto ml-1 mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod'">
-                <button @click="devolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
+            <div class="col col-auto ml-1 mb-3">
+                <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
                 </button>
             </div>
             <div class="col col-auto ml-1 mb-3">
-                <button @click="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
+                <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
                 </button>
             </div>
             <div class="col col-auto ml-1 mb-3">
-                <button @click="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
+                <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
                 </button>
             </div>
         </div>
@@ -104,10 +104,12 @@
             </div>
         </div>
     </div>
+    <documento-devolver ref="documentoDevolver" @ok="devolver"></documento-devolver>
 </div>
 </template>
 
 <script>
+import DocumentoDevolver from './DocumentoDevolver'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor.js'
 import UtilsBL from '../bl/utils.js'
 import { Bus } from '../bl/bus.js'
@@ -147,18 +149,35 @@ export default {
       }, error => UtilsBL.errormsg(error, this))
     },
 
+    exibirDevolver: function () {
+      this.$refs.documentoDevolver.show()
+    },
+
+    devolver: function (lembrete) {
+      this.$http.post('mesa/' + 'null' + '/documento/' + this.numero + '/devolver?sistema=' + this.documento.sistema, {
+        lembrete: lembrete
+      }, { block: true }).then(response => {
+        UtilsBL.logEvento('mesa', 'devolver', 'minuta')
+        this.$router.go(-1)
+      }, error => UtilsBL.errormsg(error, this))
+    },
+
     cancelar: function () {
       this.editando = false
     },
 
     assinarComSenha: function() {
-        // Bus.$emit('iniciarAssinaturaComSenha', [{codigo: this.numero, sigla: this.doc.sigla}], this.reler)
-      Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
+      Bus.$emit('iniciarAssinaturaComSenha', [this.documento], () => { this.$router.go(-1) })
+      // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
     },
 
     imprimir: function () {
       window.print()
     }
+  },
+
+  components: {
+    DocumentoDevolver
   }
 }
 </script>

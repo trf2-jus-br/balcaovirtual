@@ -33,7 +33,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 		for (String system : Utils.getSystems()) {
 			if (!u.usuarios.containsKey(system) || !"ext".equals(u.usuarios.get(system).origem))
 				continue;
-			if (system.contains(".eproc")) {
+			if (system.contains(".eproc") && (req.mni == null || !req.mni)) {
 				UsuarioUsernameAvisosGetRequest q = new UsuarioUsernameAvisosGetRequest();
 				q.username = u.usuario;
 				mapp.put(system,

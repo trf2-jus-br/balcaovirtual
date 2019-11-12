@@ -3,11 +3,11 @@
     <label v-if="label" :for="name">{{label}}</label>
     <div v-if="!edit">{{value}}</div>
     <validation-provider :rules="validate" :immediate="immediate" v-slot="{ errors }" ref="vp">
-      <input type="text" v-if="edit &amp;&amp; themask" :id="name" class="form-control" 
+      <input :type="type" v-if="edit &amp;&amp; themask" :id="name" class="form-control" 
       v-themask="themask != undefined ? themask : undefined" 
       v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-on:change="$emit('change', $event.target.value)" 
       :name="name" :class="{ 'is-invalid': errors.length > 0 }" v-bind="$attrs">
-    <input type="text" v-if="edit &amp;&amp; !themask" :id="name" class="form-control" 
+    <input :type="type" v-if="edit &amp;&amp; !themask" :id="name" class="form-control" 
       v-awemask="mask != undefined ? mask : ''"
       v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-on:change="$emit('change', $event.target.value)" 
       :name="name" :class="{ 'is-invalid': errors.length > 0 }" v-bind="$attrs">
@@ -29,6 +29,7 @@ export default {
   name: 'my-input',
   props: {
     immediate: {type: Boolean, default: true},
+    type: {type: String, default: 'text'},
     value: String,
     label: String,
     name: String,

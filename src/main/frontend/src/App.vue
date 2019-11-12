@@ -72,6 +72,7 @@
         <progressModal ref="progressModal"></progressModal>
         <progressModalAsync ref="progressModalAsync"></progressModalAsync>
         <messageBox ref="messageBox"></messageBox>
+        <assinatura ref="assinatura" title="Assinatura"></assinatura>
 
         <top-progress ref="topProgress" :height="5" color="#000"></top-progress>
         <router-view></router-view>
@@ -91,6 +92,7 @@ import { Bus } from './bl/bus.js'
 import ProgressModal from './components/ProgressModal'
 import ProgressModalAsync from './components/ProgressModalAsync'
 import MessageBox from './components/MessageBox'
+import Assinatura from './components/Assinatura'
 
 export default {
   name: 'app',
@@ -184,6 +186,12 @@ export default {
       prgAsync.start(title, key, callbackEnd)
     })
 
+    Bus.$on('iniciarAssinaturaComSenha', (documentos, cont) => {
+      console.log('iniciando')
+      if (this.$refs.assinatura) this.$refs.assinatura.show(documentos, cont)
+      console.log('iniciando2')
+    })
+
     Bus.$on('assinarComSenha', (documentos, username, password, cont) => {
       this.assinarComSenhaEmLote(documentos, username, password, cont)
     })
@@ -274,11 +282,14 @@ export default {
       this.$router.push({ name: 'Consulta Simples' })
     },
 
-    assinarComSenha: function (d, lote) {
+    assinarComSenha: function (d, username, password, lote) {
       this.errormsg = undefined
       Bus.$emit('prgCaption', 'Assinando ' + d.numeroDoDocumento)
 
-      this.$http.post('mesa/' + 'null' + '/documento/' + d.id + '/assinar-com-senha?sistema=' + d.sistema, {}, { block: !lote }).then(response => {
+      this.$http.post('mesa/' + 'null' + '/documento/' + d.id + '/assinar-com-senha?sistema=' + d.sistema, {
+        username: username,
+        password: password
+      }, { block: !lote }).then(response => {
         d.errormsg = undefined
         d.status = 5
         d.descricaoDoStatus = 'Assinada'
@@ -292,14 +303,15 @@ export default {
       })
     },
 
-    assinarComSenhaEmLote: function (documentos, cont) {
-      Bus.$emit('prgStart', 'Assinando Com Senha', documentos.length, (i) => this.assinarComSenha(documentos[i], documentos.length !== 1), cont)
+    assinarComSenhaEmLote: function (documentos, username, password, cont) {
+      Bus.$emit('prgStart', 'Assinando Com Senha', documentos.length, (i) => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1), cont)
     }
   },
   components: {
     topProgress,
     'progressModal': ProgressModal,
     'progressModalAsync': ProgressModalAsync,
+    'assinatura': Assinatura,
     messageBox: MessageBox
   }
 }

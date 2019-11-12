@@ -10,9 +10,6 @@ import com.crivano.swaggerservlet.ISwaggerModel;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
 import com.crivano.swaggerservlet.ISwaggerResponseFile;
-import com.crivano.swaggerservlet.ISwaggerResponsePayload;
-
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Lembrete;
 
 public interface IBalcaoVirtual {
 	public class ConfigTipoPeticaoIntercorrente implements ISwaggerModel {
@@ -1007,6 +1004,7 @@ public interface IBalcaoVirtual {
 	}
 
 	public class AvisoListarGetRequest implements ISwaggerRequest {
+		public Boolean mni;
 	}
 
 	public class AvisoListarGetResponse implements ISwaggerResponse {
@@ -1113,6 +1111,8 @@ public interface IBalcaoVirtual {
 		public String id;
 		public String id2;
 		public String sistema;
+		public String username;
+		public String password;
 	}
 
 	public class MesaIdDocumentoId2AssinarComSenhaPostResponse implements ISwaggerResponse {
@@ -1122,6 +1122,22 @@ public interface IBalcaoVirtual {
 	public interface IMesaIdDocumentoId2AssinarComSenhaPost extends ISwaggerMethod {
 		public void run(MesaIdDocumentoId2AssinarComSenhaPostRequest req,
 				MesaIdDocumentoId2AssinarComSenhaPostResponse resp) throws Exception;
+	}
+
+	public class MesaIdDocumentoId2DevolverPostRequest implements ISwaggerRequest {
+		public String id;
+		public String id2;
+		public String sistema;
+		public String lembrete;
+	}
+
+	public class MesaIdDocumentoId2DevolverPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface IMesaIdDocumentoId2DevolverPost extends ISwaggerMethod {
+		public void run(MesaIdDocumentoId2DevolverPostRequest req, MesaIdDocumentoId2DevolverPostResponse resp)
+				throws Exception;
 	}
 
 	public class ClasseIdGetRequest implements ISwaggerRequest {

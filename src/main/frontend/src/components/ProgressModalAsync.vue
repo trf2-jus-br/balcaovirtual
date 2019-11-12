@@ -54,6 +54,7 @@ export default {
           this.bytes = r.bytes ? this.formatBytes(r.bytes) : undefined
           if (r.indice === r.contador) {
             this.showModal = false
+            this.progressbarWidth = 0
             this.callbackEnd(this.i)
           } else {
             setTimeout(() => { this.refresh() }, 2000)

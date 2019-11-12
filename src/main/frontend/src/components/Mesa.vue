@@ -332,8 +332,8 @@ export default {
 
     assinarComSenhaEmLote: function() {
       var a = this.filtradosEMarcadosEAssinaveis
-      // Bus.$emit('iniciarAssinaturaComSenha', a, this.carregarMesa)
-      Bus.$emit('assinarComSenha', a)
+      Bus.$emit('iniciarAssinaturaComSenha', a, this.carregarMesa)
+      // Bus.$emit('assinarComSenha', a)
     },
 
     editar: function() {

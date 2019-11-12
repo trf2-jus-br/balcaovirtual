@@ -439,6 +439,18 @@ parameters:
     description: Html do documento para sobreescrever
     type: string
     required: true
+  mniquery:
+    name: mni
+    in: query
+    description: forçar o uso do mni
+    required: false
+    type: boolean
+  lembrete:
+    name: lembrete
+    in: formData
+    description: Lembrete a ser usado na devolução de minuta
+    type: string
+    required: true
 
 
 ################################################################################
@@ -1362,7 +1374,8 @@ paths:
     get:
       description: Listar as intimações para o usuário logado
       tags: [aviso]
-      parameters: []
+      parameters: 
+        - $ref: "#/parameters/mniquery"
       responses:
         200:
           description: Successful response
@@ -1545,6 +1558,30 @@ paths:
         - $ref: "#/parameters/id"
         - $ref: "#/parameters/id2"
         - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/password"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /mesa/{id}/documento/{id2}/devolver:
+    post:
+      description: Devolver minuta com lembrete
+      tags: [mesa]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/id2"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/lembrete"
       responses:
         200:
           description: Successful response
