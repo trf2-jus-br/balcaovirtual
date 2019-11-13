@@ -12,7 +12,7 @@
                 </div>
                 <div class="col col-sm-12">
                     <small id="usernameHelp" class="form-text text-muted">
-                    <strong>Atenção</strong>! Ao clicar em 'Assinar', {{(documentos.length > 1 ? 'serão assinados ' + documentos.length + ' documentos': 'será assinado 1 documento')}}.</small>
+                    <strong>Atenção</strong>! Ao clicar em 'Assinar', {{(documentos && documentos.length > 1 ? 'serão assinados ' + documentos.length + ' documentos': 'será assinado 1 documento')}}.</small>
                 </div>
             </div>
         </form>
