@@ -161,6 +161,13 @@ export default {
               ? 'Digital'
               : fixed.processoVinculado[i].digital === 'F' ? 'Físico' : '?'
         }
+      } else if (p.dadosBasicos.processoVinculado) {
+        fixed.processoVinculado = p.dadosBasicos.processoVinculado
+        for (i = 0; i < fixed.processoVinculado.length; i++) {
+          fixed.processoVinculado[i].link = this.colocarLink(
+            fixed.processoVinculado[i].numeroProcesso
+          )
+        }
       }
       if (op.recurso) {
         fixed.recurso = this.arrayOfStringsToObjects(op.recurso, [

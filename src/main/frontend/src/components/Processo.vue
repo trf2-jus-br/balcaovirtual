@@ -253,7 +253,7 @@
                       <tbody>
                         <tr v-for="pv in fixed.processoVinculado">
                           <td style="padding-left: 20px">
-                            <span v-html="pv.link"></span> - {{pv.nomeClasse}} - {{pv.suporte}}</td>
+                            <span v-html="pv.link"></span><span v-if="pv.nomeClasse"> - {{pv.nomeClasse}}</span><span v-if="pv.suporte"> - {{pv.suporte}}</span></td>
                         </tr>
                       </tbody>
                     </table>

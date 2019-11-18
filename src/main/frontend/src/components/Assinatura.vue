@@ -36,7 +36,8 @@ export default {
       errormsg: undefined,
       username: undefined,
       password: undefined,
-      documentos: undefined
+      documentos: undefined,
+      invalid: undefined
     }
   },
 
