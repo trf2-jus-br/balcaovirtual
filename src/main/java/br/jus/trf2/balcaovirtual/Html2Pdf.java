@@ -111,8 +111,8 @@ public class Html2Pdf {
 			// ResourceLoaderUserAgent(renderer.getOutputDevice());
 			// callback.setSharedContext(renderer.getSharedContext());
 			// renderer.getSharedContext().setUserAgentCallback(callback);
-
-			renderer.setDocument(sHtml.getBytes(StandardCharsets.UTF_8));
+			
+			renderer.setDocumentFromString(sHtml);
 			renderer.layout();
 			renderer.createPDF(baos);
 			System.err.println("PDF gerado");
