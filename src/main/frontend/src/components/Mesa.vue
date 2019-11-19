@@ -31,7 +31,7 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto ml-auto mb-3" v-if="$parent.test.properties['balcaovirtual.env'] !== 'prod' && (filtradosEMarcadosEAssinaveis||[]).length">
+      <div class="col-sm-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis||[]).length">
         <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>

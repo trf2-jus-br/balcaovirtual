@@ -28,6 +28,7 @@ import MySelect from './components/MySelect'
 import MyInput from './components/MyInput'
 import VueTheMask from 'vue-the-mask'
 // import {mask} from 'vue-the-mask'
+import vSelectPage from 'v-selectpage'
 
 extend('email', {
   message: field => 'Email inválido.',
@@ -83,6 +84,7 @@ Vue.use(BootstrapVue)
 Vue.use(ModalPlugin)
 Vue.use(CKEditor)
 Vue.use(VueTheMask)
+Vue.use(vSelectPage, {language: 'pt_br', pagination: false})
 
 Vue.component('my-select', MySelect, { inheritAttrs: false })
 Vue.component('my-input', MyInput, { inheritAttrs: false })

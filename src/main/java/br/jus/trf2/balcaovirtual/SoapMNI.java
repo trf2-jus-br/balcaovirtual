@@ -347,6 +347,11 @@ public class SoapMNI {
 						i.motivointimacao = p.getValor();
 				}
 				i.localidade = a.getProcesso().getCodigoLocalidade();
+				TipoPessoa p = a.getDestinatario().getPessoa();
+				i.destinatarionome = p.getNome();
+				i.destinatariodocumento = p.getNumeroDocumentoPrincipal();
+				if (p.getTipoPessoa() != null)
+					i.destinatariotipo = p.getTipoPessoa().name();
 				list.add(i);
 			}
 		}

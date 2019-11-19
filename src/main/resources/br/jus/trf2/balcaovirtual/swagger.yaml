@@ -2054,6 +2054,12 @@ definitions:
         format: date-time
       usuarioconfirmacao:
         type: string
+      destinatariotipo:
+        type: string
+      destinatarionome:
+        type: string
+      destinatariodocumento:
+        type: string
 
   Processo:
     description: Processo
