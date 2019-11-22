@@ -43,6 +43,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addPrivateProperty("recaptcha.secret.key");
 		addRestrictedProperty("public.username");
 		addPrivateProperty("public.password");
+		addPrivateProperty("notificar.password", null);
 
 		addRestrictedProperty("username.restriction", null);
 

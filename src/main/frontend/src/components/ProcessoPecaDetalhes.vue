@@ -1,7 +1,7 @@
 <template>
   <div>
     <validation-observer v-slot="{ invalid }">
-      <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc  @show="resetModal" @hidden="resetModal" @hide="hide">
+      <b-modal ref="processoPecaDetalhes" id="processoPecaDetalhes" v-model="showModal" title="Marcar Páginas" cancel-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc  @show="resetModal" @hidden="resetModal" @hide="hide">
         <b-form>
           <div class="row">
             <div class="col col-md-8 form-group">

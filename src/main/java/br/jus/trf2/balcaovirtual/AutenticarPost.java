@@ -97,7 +97,7 @@ public class AutenticarPost implements IAutenticarPost {
 
 		if (usuarios == null)
 			throw new SwaggerAuthorizationException(
-					"Nenhum usuário localizado na base com esse identificador. Base" + (systems.length == 1 ? "" : "s")
+					"Credenciais rejeitadas. Base" + (systems.length == 1 ? "" : "s")
 							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
 					mcr.status);
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
@@ -188,7 +188,7 @@ public class AutenticarPost implements IAutenticarPost {
 		return verify(authorization);
 	}
 
-	private static String getAuthorizationHeader() throws SwaggerAuthorizationException {
+	static String getAuthorizationHeader() throws SwaggerAuthorizationException {
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
 		if (authorization == null)
 			throw new SwaggerAuthorizationException("Authorization header is missing");

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal ref="etiqueta" id="etiqueta" title="Etiqueta" close-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
+    <b-modal ref="etiqueta" id="etiqueta" title="Etiqueta" cancel-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
       <b-form>
         <div class="row">
           <div class="col col-md-2 form-group">

@@ -51,6 +51,12 @@ export default {
       decoded.email !== null ? decoded.email.split('@')[1] : undefined
     decoded.isInterno = (sistema) => decoded.user[sistema] ? decoded.user[sistema].origin === 'int' : false
     decoded.isExterno = (sistema) => decoded.user[sistema] ? decoded.user[sistema].origin === 'ext' : false
+    decoded.isMagistrado = () => {
+      for (var sistema in decoded.user) {
+        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === 'magistrado') return true
+      }
+      return false
+    }
     return decoded
   },
 

@@ -57,7 +57,7 @@
         </div>
 
         <p>O Balcão Virtual foi desenvolvido em 2017 pela Coordenadoria de Inovação (CINOVA), parte da Secretaria de Tecnologia da Informação do Tribunal Regional Federal da 2ª Região, com a colaboração do Procurador Regional Substituto da Procuradoria Regional da Fazenda Nacional na 2ª Região, Dr. João Henrique Chauffaille Grognet.</p>
-        <p>Contamos com o patrocínio e o apoio do Dr. Manuel Rolim, Juiz Federal Titular da 6ª Vara Federal de Execução Fiscal da Justiça Federal de Primeira Instância no Rio de Janeiro - JFRJ.</p>
+        <p>Contamos com o patrocínio e o apoio do Dr. Manuel Rolim Campbell Penna, Juiz Federal Titular da 6ª Vara Federal de Execução Fiscal da Justiça Federal de Primeira Instância no Rio de Janeiro - JFRJ.</p>
         <p>Operações específicas para magistrados, como a edição e assinatura de minutas, foram acrescentadas com a colaboração do Juiz Federal Dr. Mauro Lopes da JFRJ.</p>
         <p>Atualmente é mantido pelas Coordenadorias de Sistemas Administrativos e Processuais (COSADM e COINTP).</p>
 

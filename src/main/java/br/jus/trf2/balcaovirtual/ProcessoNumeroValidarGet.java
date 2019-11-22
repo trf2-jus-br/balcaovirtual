@@ -14,6 +14,7 @@ import java.util.Set;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
+import com.auth0.jwt.internal.org.apache.commons.lang3.StringUtils;
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerCall;
@@ -21,11 +22,11 @@ import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
@@ -56,13 +57,18 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			throw new PresentableException(
 					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
+		validar(usuario, numeros, resp);
+	}
+
+	public static void validar(String usuario, String[] numeros, ProcessoNumeroValidarGetResponse resp)
+			throws Exception, PresentableException {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			UsuarioUsernameProcessoNumerosGetRequest q = new UsuarioUsernameProcessoNumerosGetRequest();
-			q.numeros = req.numero;
+			q.numeros = StringUtils.join(numeros, ",");
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
-							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + "/processo/" + req.numero, null,
+							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + "/processo/" + q.numeros, null,
 							UsuarioUsernameProcessoNumerosGetResponse.class));
 
 		}

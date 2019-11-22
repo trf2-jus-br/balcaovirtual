@@ -936,6 +936,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/ConfigTipoPeticaoIntercorrente"
+              avisos:
+                type: array
+                items:
+                  $ref: "#/definitions/ConfigAvisoPeticaoIntercorrente"
         500:
           description: Error ocurred
           schema:
@@ -1300,6 +1304,26 @@ paths:
             Content-Disposition:
               type: string
               description: attachment
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /notificar:
+    post:
+      description: Notifica usuários
+      tags: [utils]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Status"
         500:
           description: Error ocurred
           schema:
@@ -1820,6 +1844,18 @@ definitions:
         type: string
       sistema:
         type: string
+
+  ConfigAvisoPeticaoIntercorrente:
+    description: Tipo de petição intercorrente
+    type: object
+    properties:
+      id:
+        type: string
+      evento:
+        type: string
+      data:
+        type: string
+        format: date-time
 
   Entidade:
     description: Entidade

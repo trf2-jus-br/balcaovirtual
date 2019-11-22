@@ -433,7 +433,7 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
-			String numProc, String tpDoc, int nvlSigilo, String cpfEncerraPrazos, String nomePdfs, byte pdf[])
+			String numProc, String tpDoc, int nvlSigilo, String encerraPrazos, String nomePdfs, byte pdf[])
 			throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
@@ -482,11 +482,11 @@ public class SoapMNI {
 		Holder<List<TipoParametro>> parametro = new Holder<>();
 
 		ArrayList<TipoParametro> parametros = new ArrayList<TipoParametro>();
-		if (cpfEncerraPrazos != null) {
-			String[] ieps = cpfEncerraPrazos.split(",");
+		if (encerraPrazos != null) {
+			String[] ieps = encerraPrazos.split(",");
 			for (String iep : ieps) {
 				TipoParametro identEncerraPrazos = new TipoParametro();
-				identEncerraPrazos.setNome("identEncerraPrazos");
+				identEncerraPrazos.setNome("identificadorComunicacao");
 				identEncerraPrazos.setValor(iep);
 				parametros.add(identEncerraPrazos);
 			}

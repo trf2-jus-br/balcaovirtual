@@ -4,14 +4,16 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import br.jus.trf2.balcaovirtual.model.Nota;
-import br.jus.trf2.balcaovirtual.model.Sistema;
 import br.jus.trf2.balcaovirtual.model.Processo;
 import br.jus.trf2.balcaovirtual.model.Sinal;
+import br.jus.trf2.balcaovirtual.model.Sistema;
 import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 
 public class Dao implements Closeable {
@@ -82,6 +84,24 @@ public class Dao implements Closeable {
 		if (r == null || r.size() == 0)
 			return null;
 		return r.get(0);
+	}
+
+	public List<String> obtemUsuariosParaNotificar() {
+		List<String> r = (List<String>) em.createNamedQuery("Sinal.findUsuario").getResultList();
+		return r;
+	}
+
+	public Map<String, Date> obtemProcessosDoUsuarioParaNotificar(String usuario) {
+		List<Object[]> r = (List<Object[]>) em.createNamedQuery("Sinal.findProcessosDoUsuarioParaNotificar")
+				.setParameter("usuario", usuario).getResultList();
+		if (r == null || r.size() == 0)
+			return null;
+
+		Map<String, Date> map = new TreeMap<>();
+		for (Object[] a : r)
+			map.put((String) a[0], (Date) a[1]);
+
+		return map;
 	}
 
 	public void beginTransaction() {

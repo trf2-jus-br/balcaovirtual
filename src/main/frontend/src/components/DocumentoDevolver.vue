@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="documentoDevolver" v-model="showModal" title="Devolver Minuta" close-title="Cancelar" ok-title="Devolver" hide-header-close @show="resetModal" @hidden="resetModal" @ok="handleOk">
+    <b-modal id="documentoDevolver" v-model="showModal" title="Devolver Minuta" cancel-title="Cancelar" ok-title="Devolver" hide-header-close @show="resetModal" @hidden="resetModal" @ok="handleOk">
       <form>
         <my-input label="Lembrete (opcional)" id="lembrete" name="lembrete" v-model="lembrete" aria-describedby="lembreteHelp" autofocus v-on:keyup.enter="$handleOk"></my-input>
       </form>

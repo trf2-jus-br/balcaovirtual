@@ -19,8 +19,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sinal")
 @NamedQueries({
-		// findUsuario
-		@NamedQuery(name = "Sinal.findUsuario", query = "select s from Sinal s where s.sinaCdUsu = :usuario and s.sinaLgInterno = :interno and (s.sinaLgFavorito <> 0 or s.sinaDfRecente is not null) order by s.sinaDfRecente desc"),
+	// findUsuariosParaNotificar
+	@NamedQuery(name = "Sinal.findUsuariosParaNotificar", query = "select distinct s.sinaCdUsu from Sinal order by s.sinaCdUsu"),
+
+	// findProcessosDoUsuarioParaNotificar
+	@NamedQuery(name = "Sinal.findProcessosDoUsuarioParaNotificar", query = "select distinct s.sinaCdProc proc, max(sinaDfRecente) data from Sinal s where s.sinaCdUsu = :usuario and (s.sinaLgFavorito <> 0) order by s.sinaCdProc desc"),
+
+	// findUsuario
+	@NamedQuery(name = "Sinal.findUsuario", query = "select s from Sinal s where s.sinaCdUsu = :usuario and s.sinaLgInterno = :interno and (s.sinaLgFavorito <> 0 or s.sinaDfRecente is not null) order by s.sinaDfRecente desc"),
 
 		// findUsuarioNumero
 		@NamedQuery(name = "Sinal.findUsuarioNumero", query = "select s from Sinal s where s.sinaCdProc = :numero and s.sinaCdUsu = :usuario and s.sinaLgInterno = :interno") })

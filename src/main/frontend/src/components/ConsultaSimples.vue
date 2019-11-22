@@ -11,7 +11,7 @@
     <div>
       <form class="row justify-content-center">
         <div class="col col-sm-12 col-md-6" v-if="!avancada">
-          <div class="jumbotron d-block mx-auto pt-5 pb-5">
+          <div class="jumbotron d-block mx-auto pt-5 pb-5 mb-3">
             <p v-if="errormsg" class="alert alert-danger" role="alert">{{errormsg}}</p>
             <div>
               <div class="row">
@@ -35,6 +35,7 @@
             </div>
           </div>
         </div>
+        <div class="col-12 text-center text-muted" v-if="!$parent.jwt">Para acessar peças restritas é necessário fazer o <router-link :to="{name:'Login'}" tag="a">login</router-link>.</div>
         <div v-if="avancada">
           <div class="row">
             <div class="col col-sm-12 alert alert-info alert-dismissible fade show" role="alert">

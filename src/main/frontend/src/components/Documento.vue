@@ -68,7 +68,7 @@
                     <div class="card-body">
                         <p class="card-text">
                             Processo:
-                            <router-link :to="{name: 'Processo', params: {numero: documento.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{documento.processoFormatado}}</router-link>
+                            <router-link :to="{name: 'Processo', params: {numero: documento.numeroDoProcesso}, query: {avisos: $parent.cAvisos}}" target="_blank">{{documento.processoFormatado}}</router-link>
                             <br>Cadastro:
                             <span v-html="documento.dataDeInclusaoFormatada"></span>
                             <br>Responsável: {{documento.nomeDoUsuarioQueIncluiu}}

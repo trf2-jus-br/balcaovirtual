@@ -42,7 +42,8 @@ export default {
     login: function () {
       this.$http.post('autenticar', this.user, { block: true }).then(response => {
         this.$parent.$emit('updateLogged', response.data.id_token)
-        this.$router.push({ name: 'Consulta Simples' })
+        if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: 'Mesa' })
+        else this.$router.push({ name: 'Consulta Simples' })
       }, error => UtilsBL.errormsg(error, this))
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <validation-observer v-slot="{ invalid }">
-        <b-modal id="cota" ref="modal" v-model="showModal" title="Assinatura com Senha" close-title="Cancelar" ok-title="Assinar" :ok-disabled="invalid" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+        <b-modal id="cota" ref="modal" v-model="showModal" title="Assinatura com Senha" cancel-title="Cancelar" ok-title="Assinar" :ok-disabled="invalid" @show="resetModal" @hidden="resetModal" @ok="handleOk">
         <form>
             <div class="row">
                 <div class="form-group col col-sm-6">

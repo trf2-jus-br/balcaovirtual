@@ -18,6 +18,12 @@ public interface IBalcaoVirtual {
 		public String sistema;
 	}
 
+	public class ConfigAvisoPeticaoIntercorrente implements ISwaggerModel {
+		public String id;
+		public String evento;
+		public Date data;
+	}
+
 	public class Entidade implements ISwaggerModel {
 		public String sistema;
 		public String id;
@@ -148,6 +154,9 @@ public interface IBalcaoVirtual {
 		public String assunto;
 		public Date dataconfirmacao;
 		public String usuarioconfirmacao;
+		public String destinatariotipo;
+		public String destinatarionome;
+		public String destinatariodocumento;
 	}
 
 	public class Processo implements ISwaggerModel {
@@ -625,6 +634,7 @@ public interface IBalcaoVirtual {
 		public Double sigilo;
 		public Boolean parte;
 		public List<ConfigTipoPeticaoIntercorrente> tipos;
+		public List<ConfigAvisoPeticaoIntercorrente> avisos;
 	}
 
 	public interface IProcessoNumeroPeticaoIntercorrenteValidarGet extends ISwaggerMethod {
@@ -920,6 +930,17 @@ public interface IBalcaoVirtual {
 
 	public interface IDownloadJwtFilenameGet extends ISwaggerMethod {
 		public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception;
+	}
+
+	public class NotificarPostRequest implements ISwaggerRequest {
+	}
+
+	public class NotificarPostResponse implements ISwaggerResponse {
+		public List<Status> list;
+	}
+
+	public interface INotificarPost extends ISwaggerMethod {
+		public void run(NotificarPostRequest req, NotificarPostResponse resp) throws Exception;
 	}
 
 	public class ArquivoTemporarioPdfGetRequest implements ISwaggerRequest {

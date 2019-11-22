@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="processosMultiplos" v-model="showModal" title="Múltiplos Processos" close-title="Cancelar" ok-title="Prosseguir" hide-header-close @show="resetModal" @hidden="resetModal" @ok="handleOk">
+    <b-modal id="processosMultiplos" v-model="showModal" title="Múltiplos Processos" cancel-title="Cancelar" ok-title="Prosseguir" hide-header-close @show="resetModal" @hidden="resetModal" @ok="handleOk">
       <form>
         <label class="control-label" for="processos" style="width: 100%">Números dos Processos </label>
         <textarea class="form-control" style="width: 100%" id="processos" aria-describedby="processosHelp" v-model="processos" placeholder="" rows="10" autofocus></textarea>
