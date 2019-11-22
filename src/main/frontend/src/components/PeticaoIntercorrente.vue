@@ -234,11 +234,12 @@ export default {
   mounted () {
     // Carragar a lista de avisos pendentes
     if (this.avisos === undefined) {
-      this.$nextTick(
+      this.$nextTick(() => {
+        console.log('Will load avisos')
         this.$http.get('aviso/listar?mni=true', { block: true }).then(response => {
           this.fixAvisos(response.data)
         }, error => UtilsBL.errormsg(error, this))
-      )
+      })
     }
   },
 

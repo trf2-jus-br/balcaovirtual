@@ -20,6 +20,7 @@ export default {
   // Get and store id_token in local storage
   setIdToken: function (idToken) {
     localStorage.setItem(ID_TOKEN_KEY, idToken)
+    console.log('Setting authorization header')
     Vue.http.headers.common['Authorization'] = 'Bearer ' + idToken
   },
 
