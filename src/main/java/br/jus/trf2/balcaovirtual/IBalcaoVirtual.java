@@ -217,6 +217,7 @@ public interface IBalcaoVirtual {
 		public String tipoDoDocumento;
 		public String identificadorDoUsuarioQueIncluiu;
 		public String nomeDoUsuarioQueIncluiu;
+		public String siglaDaUnidade;
 		public String conteudo;
 		public List<Lembrete> lembretes;
 	}

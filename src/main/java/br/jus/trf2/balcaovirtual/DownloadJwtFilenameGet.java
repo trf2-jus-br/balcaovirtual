@@ -244,7 +244,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 	public static Map<String, Object> verify(String jwt) throws InvalidKeyException, NoSuchAlgorithmException,
 			IllegalStateException, SignatureException, IOException, JWTVerifyException {
-		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
+		final JWTVerifier verifier = new JWTVerifier(Utils.getApiPassword());
 		Map<String, Object> map;
 		map = verifier.verify(jwt);
 		return map;
@@ -258,7 +258,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		// token expires in 10min or 12h
 		final long exp = iat + (documento != null ? 10 * 60L : 12 * 60 * 60L);
 
-		final JWTSigner signer = new JWTSigner(Utils.getJwtSecret());
+		final JWTSigner signer = new JWTSigner(Utils.getApiPassword());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
 		if (issuer != null)
 			claims.put("iss", issuer);

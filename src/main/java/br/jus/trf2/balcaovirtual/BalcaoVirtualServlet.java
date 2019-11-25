@@ -96,6 +96,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		}
 
 		addPrivateProperty("jwt.secret");
+		addPrivateProperty("api.secret");
 		addRestrictedProperty("upload.dir.final");
 		addRestrictedProperty("upload.dir.temp");
 

@@ -106,7 +106,7 @@ public class AutenticarPost implements IAutenticarPost {
 	}
 
 	private static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
-		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
+		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtPassword());
 		Map<String, Object> map;
 		try {
 			map = verifier.verify(jwt);
@@ -210,7 +210,7 @@ public class AutenticarPost implements IAutenticarPost {
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		final long exp = iat + 18 * 60 * 60L; // token expires in 18 hours
 
-		final JWTSigner signer = new JWTSigner(Utils.getJwtSecret());
+		final JWTSigner signer = new JWTSigner(Utils.getJwtPassword());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
 		if (issuer != null)
 			claims.put("iss", issuer);
@@ -231,7 +231,7 @@ public class AutenticarPost implements IAutenticarPost {
 	}
 
 	public static String encrypt(String text) throws Exception {
-		String key = Utils.getJwtSecret().substring(0, 16); // 128 bit key
+		String key = Utils.getJwtPassword().substring(0, 16); // 128 bit key
 		// Create key and cipher
 		Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
 		Cipher cipher = Cipher.getInstance("AES");
@@ -243,7 +243,7 @@ public class AutenticarPost implements IAutenticarPost {
 
 	public static String decrypt(String text) throws Exception {
 		byte[] ab = SwaggerUtils.base64Decode(text);
-		String key = Utils.getJwtSecret().substring(0, 16); // 128 bit key
+		String key = Utils.getJwtPassword().substring(0, 16); // 128 bit key
 		// Create key and cipher
 		Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
 		Cipher cipher = Cipher.getInstance("AES");

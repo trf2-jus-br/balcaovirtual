@@ -139,8 +139,12 @@ public class Utils {
 		return "trf2.jus.br";
 	}
 
-	public static String getJwtSecret() {
+	public static String getJwtPassword() {
 		return SwaggerServlet.getProperty("jwt.secret");
+	}
+
+	public static String getApiPassword() {
+		return SwaggerServlet.getProperty("api.secret");
 	}
 
 	public static String getAssijusEndpoint() {

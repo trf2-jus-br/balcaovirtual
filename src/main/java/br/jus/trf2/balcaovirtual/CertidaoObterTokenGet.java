@@ -32,7 +32,7 @@ public class CertidaoObterTokenGet implements ICertidaoObterTokenGet {
 
 	public static Map<String, Object> verify(String jwt) throws InvalidKeyException, NoSuchAlgorithmException,
 			IllegalStateException, SignatureException, IOException, JWTVerifyException {
-		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtSecret());
+		final JWTVerifier verifier = new JWTVerifier(Utils.getApiPassword());
 		Map<String, Object> map;
 		map = verifier.verify(jwt);
 		return map;
@@ -44,7 +44,7 @@ public class CertidaoObterTokenGet implements ICertidaoObterTokenGet {
 		// token expires in 12h
 		final long exp = iat + 12 * 60 * 60L;
 
-		final JWTSigner signer = new JWTSigner(Utils.getJwtSecret());
+		final JWTSigner signer = new JWTSigner(Utils.getApiPassword());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
 		if (issuer != null)
 			claims.put("iss", issuer);

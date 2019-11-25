@@ -62,6 +62,7 @@
               <th>Processo</th>
               <th>Autor</th>
               <th>Réu</th>
+              <th>Unidade</th>
               <th>Sistema/Órgão</th>
               <th>Situação</th>
             </tr>
@@ -86,6 +87,7 @@
               </td>
               <td class="td-middle">{{f.autor}}</td>
               <td class="td-middle">{{f.reu}}</td>
+              <td class="td-middle">{{f.siglaDaUnidade}}</td>
               <td class="td-middle"><span :title="'Identificador: ' + f.sistema">{{$parent.test.properties['balcaovirtual.' + f.sistema + '.name']}}</span></td>
               <td class="td-middle">{{f.descricaoDoStatus}}
                 <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}

@@ -2216,6 +2216,8 @@ definitions:
         type: string
       nomeDoUsuarioQueIncluiu:
         type: string
+      siglaDaUnidade:
+        type: string
       conteudo:
         type: string
       lembretes:

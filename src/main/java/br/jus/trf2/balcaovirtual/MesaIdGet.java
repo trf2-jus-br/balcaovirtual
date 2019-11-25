@@ -62,6 +62,7 @@ public class MesaIdGet implements IMesaIdGet {
 				i.tipoDoDocumento = Texto.maiusculasEMinusculas(a.tipoDoDocumento);
 				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
 				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
+				i.siglaDaUnidade = a.siglaDaUnidade;
 				i.conteudo = a.conteudo;
 				i.sistema = system;
 				if (a.lembretes != null) {
