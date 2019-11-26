@@ -34,11 +34,16 @@
 
     <div v-show="!editando">
         <div class="row no-gutters mt-2">
-            <div class="col col-auto mr-auto mb-3">
-                <button @click="voltar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar
-                </button>
+            <div class="col col-auto mb-3">
+                <router-link :to="{name: 'Mesa', params: {manter: true}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar</router-link>
             </div>
-            <div class="col col-auto ml-1 mb-3">
+            <div class="col col-auto mb-3">
+                <router-link :disabled="!anteriorDocumento" :to="{name: 'Documento', params: {numero: (anteriorDocumento||{}).id, documento: anteriorDocumento, lista: this.lista}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-up"></span> Anterior</router-link>
+            </div>
+            <div class="col col-auto mb-3">
+                <router-link :disabled="!proximoDocumento" :to="{name: 'Documento', params: {numero: (proximoDocumento||{}).id, documento: proximoDocumento, lista: this.lista}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-down"></span> Próximo</router-link>
+            </div>
+            <div class="col col-auto ml-auto mb-3">
                 <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
                 </button>
             </div>
@@ -117,14 +122,30 @@ import { Bus } from '../bl/bus.js'
 export default {
   data () {
     return {
-      documento: this.$route.params.documento,
       numero: this.$route.params.numero,
+      documento: this.$route.params.documento,
+      lista: this.$route.params.lista,
       errormsg: undefined,
       editor: ClassicEditor,
       editorData: '<p>Content of the editor.</p>',
       editorConfig: {},
       buffer: undefined,
       editando: false
+    }
+  },
+  computed: {
+    indice: function () {
+      for (var i = 0; i < this.lista.length; i++) {
+        if (this.documento === this.lista[i]) return i
+      }
+    },
+    proximoDocumento: function () {
+      if (this.indice >= this.lista.length - 1) return
+      return this.lista[this.indice + 1]
+    },
+    anteriorDocumento: function () {
+      if (this.indice === 0) return
+      return this.lista[this.indice - 1]
     }
   },
   methods: {
@@ -140,7 +161,7 @@ export default {
 
     salvar: function () {
       this.$refs['conteudo'].querySelector('section[contenteditable=true]').innerHTML = this.buffer
-      this.$http.post('mesa/' + 'null' + '/documento/' + this.numero + '/salvar?sistema=' + this.documento.sistema, {
+      this.$http.post('mesa/' + 'null' + '/documento/' + this.documento.id + '/salvar?sistema=' + this.documento.sistema, {
         html: this.$refs['conteudo'].querySelector('article').outerHTML
       }, { block: true }).then(response => {
         this.editando = false
@@ -154,7 +175,7 @@ export default {
     },
 
     devolver: function (lembrete) {
-      this.$http.post('mesa/' + 'null' + '/documento/' + this.numero + '/devolver?sistema=' + this.documento.sistema, {
+      this.$http.post('mesa/' + 'null' + '/documento/' + this.documento.id + '/devolver?sistema=' + this.documento.sistema, {
         lembrete: lembrete
       }, { block: true }).then(response => {
         UtilsBL.logEvento('mesa', 'devolver', 'minuta')

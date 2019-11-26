@@ -76,7 +76,7 @@
               {{f.dataDeInclusaoFormatada}}
               </td>
               <td class="td-middle">
-                  <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f}}">{{f.numeroDoDocumento}}</router-link>
+                  <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f, lista: filtrados}}">{{f.numeroDoDocumento}}</router-link>
               </td>
               <td class="td-middle">{{f.tipoDoDocumento}}</td>
               <td class="td-middle"><span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{f.identificadorDoUsuarioQueIncluiu}}</span></td>
@@ -111,6 +111,8 @@ export default {
 
   mounted() {
     this.errormsg = undefined
+
+    if (this.$route.params.manter) return
 
     setTimeout(() => {
       this.carregarMesas()

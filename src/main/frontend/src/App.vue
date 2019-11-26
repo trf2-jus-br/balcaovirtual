@@ -75,7 +75,9 @@
         <assinatura ref="assinatura" title="Assinatura"></assinatura>
 
         <top-progress ref="topProgress" :height="5" color="#000"></top-progress>
-        <router-view></router-view>
+        <keep-alive include="mesa">
+          <router-view :key="$route.fullPath"></router-view>
+        </keep-alive>
       </div>
     </div>
     <div class="foot">
