@@ -69,15 +69,26 @@
         <!--=== End Header ===-->
       </div>
       <div id="app">
+        <div v-if="updateAvailable" class="container mt-3">
+          <p class="alert alert-warning">Uma nova versão está disponível, clique <a @click.prevent="atualizar" href="" style="text-decoration: underline; color:blue;">aqui</a> para atualizar.</p>
+        </div>
+        <div v-if="!updateAvailable && !notificacoesAtivas && jwt" class="container mt-3">
+          <p class="alert alert-warning">Para receber atualizações de seus processos favoritos, por favor, clique <a @click.prevent="habilitarNotificacoes" href="" style="text-decoration: underline; color:blue;">aqui</a> e permita o envio de notificações.</p>
+        </div>
         <progressModal ref="progressModal"></progressModal>
         <progressModalAsync ref="progressModalAsync"></progressModalAsync>
         <messageBox ref="messageBox"></messageBox>
         <assinatura ref="assinatura" title="Assinatura"></assinatura>
 
         <top-progress ref="topProgress" :height="5" color="#000"></top-progress>
-        <keep-alive include="mesa">
-          <router-view :key="$route.fullPath"></router-view>
-        </keep-alive>
+        <transition :name="transitionName" mode="out-in">
+          <keep-alive include="mesa">
+            <router-view :key="$route.fullPath"></router-view>
+          </keep-alive>
+        </transition>
+        <div v-if="notificacoesBloqueadas && jwt" class="container mt-3">
+          <p class="alert alert-warning">Não estamos conseguindo enviar notificações para você. Por favor, desbloqueie o recebimento de notificações e clique <a @click.prevent="atualizar" href="" style="text-decoration: underline; color:blue;">aqui</a> para tentarmos novamente.</p>
+        </div>
       </div>
     </div>
     <div class="foot">
@@ -95,18 +106,37 @@ import ProgressModal from './components/ProgressModal'
 import ProgressModalAsync from './components/ProgressModalAsync'
 import MessageBox from './components/MessageBox'
 import Assinatura from './components/Assinatura'
+import { initializeFirebase } from './bl/push.js'
+import { register } from 'register-service-worker'
+import firebase from 'firebase/app'
 
 export default {
   name: 'app',
   mounted () {
     UtilsBL.overrideProperties(this.settings, JSON.parse(localStorage.getItem('bv-settings')) || {})
     this.$router.beforeEach((to, from, next) => {
+      this.transitionName = to.params.transitionName
       next()
       if (to.meta && to.meta.title) {
         document.title = to.meta.title(to)
       } else {
         document.title = 'Balcão Virtual - ' + to.name
       }
+    })
+
+    Bus.$on('update-available', () => {
+      this.updateAvailable = true
+      console.log('update-available')
+    })
+
+    Bus.$on('notification-permission-granted', (token) => {
+      console.log('notification-permisson-granted')
+      this.incluirToken(token)
+    })
+
+    Bus.$on('notification-permission-denied', (token) => {
+      console.log('notification-permisson-denied')
+      this.notificacoesBloqueadas = true
     })
 
     Bus.$on('block', (min, max) => {
@@ -142,6 +172,7 @@ export default {
         // $rootScope.updateLogged();
         // $state.go('consulta-processual');
         if (this.jwt) {
+          this.inicializarNotificoes()
           if (this.$route.query.avisos) {
             this.cAvisos = this.$route.query.avisos
             this.avisos = undefined
@@ -245,9 +276,25 @@ export default {
           }
           window.wootric('run')
         }
+
+        this.inicializarNotificoes()
       }, error => UtilsBL.errormsg(error, this))
     })
+
+    try {
+      this.registerServiceWorker()
+    } catch (e) {
+      console.log(e)
+    }
+
+    try {
+      if (localStorage.getItem('bv-notificacoes-ativas')) this.notificacoesAtivas = true
+      this.registerMessagingServiceWorker()
+    } catch (e) {
+      console.log(e)
+    }
   },
+
   data () {
     return {
       blockCounter: 0,
@@ -269,7 +316,16 @@ export default {
       token: undefined,
       jwt: undefined,
       avisos: undefined,
-      cAvisos: undefined
+      cAvisos: undefined,
+
+      updateAvailable: false,
+      notificacoesBloqueadas: false,
+      notificacoesAtivas: false,
+      notificacoesToken: undefined,
+      messagingServiceWorkerRegistration: undefined,
+      nofificacoesInicializadas: false,
+
+      transitionName: 'none'
     }
   },
   computed: {
@@ -302,6 +358,7 @@ export default {
         d.status = 5
         d.descricaoDoStatus = 'Assinada'
         d.checked = false
+        d.disabled = true
         UtilsBL.logEvento('assinatura em lote', 'assinado', 'assinado com senha')
         Bus.$emit('prgNext')
       }, error => {
@@ -313,6 +370,102 @@ export default {
 
     assinarComSenhaEmLote: function (documentos, username, password, cont) {
       Bus.$emit('prgStart', 'Assinando Com Senha', documentos.length, (i) => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1), cont)
+    },
+
+    atualizar: function() {
+      window.location.reload()
+    },
+
+    habilitarNotificacoes: function() {
+      console.log('teste')
+      localStorage.setItem('bv-notificacoes-ativas', JSON.stringify(true))
+      this.notificacoesAtivas = true
+      this.nofificacoesInicializadas = true
+      this.inicializarNotificoes()
+    },
+
+    incluirToken: function(token) {
+      this.notificacoesToken = token
+      this.$http.post('notificacao/incluir-token?token=' + encodeURIComponent(token)).then(response => {
+        if (response.status === 200 && response.data.status === 'OK') {
+          Bus.$emit('message', 'Sucesso', 'Notificações ativas. Muito obrigado!')
+          UtilsBL.logEvento('notificacao', 'notificacao-ativa')
+        }
+      }, error => {
+        Bus.$emit('message', 'Erro', error.data.errormsg)
+      })
+    },
+
+    registerMessagingServiceWorker: function() {
+      var self = this
+      register('static/firebase-messaging-sw.js', {
+        registrationOptions: { scope: 'static/' },
+        ready (registration) {
+          console.log('Messaging service worker is active.')
+        },
+        registered (registration) {
+          console.log('Messaging service worker has been registered.')
+          self.messagingServiceWorkerRegistration = registration
+          self.inicializarNotificoes()
+        },
+        cached (registration) {
+          console.log('Messaging content has been cached for offline use.')
+        },
+        updatefound (registration) {
+          console.log('Messaging new content is downloading.')
+        },
+        updated (registration) {
+          console.log('Messaging new content is available; please refresh.')
+        },
+        offline () {
+          console.log('Messaging reports: No internet connection found. App is running in offline mode.')
+        },
+        error (error) {
+          console.error('Error during messaging service worker registration:', error)
+        }
+      })
+    },
+
+    inicializarNotificoes: function () {
+      if (this.notificacoesAtivas && this.jwt && this.test && this.messagingServiceWorkerRegistration) {
+        if (!firebase.apps.length) {
+          initializeFirebase(this.messagingServiceWorkerRegistration, this.test.properties)
+        } else if (this.notificacoesToken) {
+          this.incluirToken(this.notificacoesToken)
+        }
+      }
+    },
+
+    registerServiceWorker: function () {
+      try {
+        register('./service-worker.js', {
+          registrationOptions: { scope: '/balcaovirtual/' },
+          ready (registration) {
+            console.log('Service worker is active.')
+          },
+          registered (registration) {
+            console.log('Service worker has been registered.')
+          },
+          cached (registration) {
+            console.log('Content has been cached for offline use.')
+          },
+          updatefound (registration) {
+            console.log('New content is downloading.')
+          },
+          updated (registration) {
+            console.log('New content is available; please refresh.')
+            Bus.$emit('update-available')
+          },
+          offline () {
+            console.log('No internet connection found. App is running in offline mode.')
+          },
+          error (error) {
+            console.error('Error during service worker registration:', error)
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   components: {
@@ -634,4 +787,29 @@ em.invalid {
 A.active .active-opacity {
   opacity: 1.0 !important;
 }
+
+
+
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition-duration: 0.3s;
+  transition-property: height, opacity, transform;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+  overflow: hidden;
+}
+
+.slide-left-enter,
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate(10em, 0);
+}
+
+.slide-left-leave-active,
+.slide-right-enter {
+  opacity: 0;
+  transform: translate(-10em, 0);
+}
+
 </style>

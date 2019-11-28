@@ -43,7 +43,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addPrivateProperty("recaptcha.secret.key");
 		addRestrictedProperty("public.username");
 		addPrivateProperty("public.password");
-		addPrivateProperty("notificar.password", null);
 
 		addRestrictedProperty("username.restriction", null);
 
@@ -69,6 +68,21 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		if (SwaggerServlet.getProperty("redis.password") != null)
 			SwaggerUtils.setCache(new MemCacheRedis());
+
+		// Notificações
+		addPrivateProperty("notificar.password", null);
+		addPublicProperty("notificar.titulo", null);
+		addPublicProperty("notificar.url", null);
+
+		// Firebase
+		addPublicProperty("firebase.api.key", null);
+		addPublicProperty("firebase.auth.domain", null);
+		addPublicProperty("firebase.database.url", null);
+		addPublicProperty("firebase.project.id", null);
+		addPublicProperty("firebase.storage.bucket", null);
+		addPublicProperty("firebase.messaging.sender.id", null);
+		addPublicProperty("firebase.app.id", null);
+		addPrivateProperty("firebase.server.key", null);
 
 		// Threadpool
 		addPublicProperty("threadpool.size", "10");

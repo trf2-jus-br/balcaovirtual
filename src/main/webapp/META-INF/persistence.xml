@@ -16,6 +16,7 @@
 		<class>br.jus.trf2.balcaovirtual.model.Sinal</class>
 		<class>br.jus.trf2.balcaovirtual.model.TipoMarca</class>
 		<class>br.jus.trf2.balcaovirtual.model.TipoMarcaItem</class>
+		<class>br.jus.trf2.balcaovirtual.model.Notificacao</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

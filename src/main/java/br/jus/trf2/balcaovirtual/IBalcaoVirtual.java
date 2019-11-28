@@ -293,6 +293,9 @@ public interface IBalcaoVirtual {
 	public class TipoDeCertidao implements ISwaggerModel {
 	}
 
+	public class Ok implements ISwaggerModel {
+	}
+
 	public class Error implements ISwaggerModel {
 		public String errormsg;
 	}
@@ -1340,6 +1343,19 @@ public interface IBalcaoVirtual {
 
 	public interface ICertidaoReimprimirNumeroCpfcnpjGet extends ISwaggerMethod {
 		public void run(CertidaoReimprimirNumeroCpfcnpjGetRequest req, CertidaoReimprimirNumeroCpfcnpjGetResponse resp)
+				throws Exception;
+	}
+
+	public class NotificacaoIncluirTokenPostRequest implements ISwaggerRequest {
+		public String token;
+	}
+
+	public class NotificacaoIncluirTokenPostResponse implements ISwaggerResponse {
+		public String status;
+	}
+
+	public interface INotificacaoIncluirTokenPost extends ISwaggerMethod {
+		public void run(NotificacaoIncluirTokenPostRequest req, NotificacaoIncluirTokenPostResponse resp)
 				throws Exception;
 	}
 

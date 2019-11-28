@@ -2,6 +2,7 @@ package br.jus.trf2.balcaovirtual;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import br.jus.trf2.balcaovirtual.model.Nota;
+import br.jus.trf2.balcaovirtual.model.Notificacao;
 import br.jus.trf2.balcaovirtual.model.Processo;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 import br.jus.trf2.balcaovirtual.model.Sistema;
@@ -87,7 +89,35 @@ public class Dao implements Closeable {
 	}
 
 	public List<String> obtemUsuariosParaNotificar() {
-		List<String> r = (List<String>) em.createNamedQuery("Sinal.findUsuario").getResultList();
+		List<String> r = (List<String>) em.createNamedQuery("Notificacao.findUsuariosParaNotificar").getResultList();
+		return r;
+	}
+
+	public List<String> obtemTokensDoUsuarioParaNotificar(String usuario) {
+		List<String> r = (List<String>) em.createNamedQuery("Notificacao.findTokensDoUsuarioParaNotificar")
+				.setParameter("usuario", usuario).getResultList();
+		if (r == null || r.size() == 0)
+			return null;
+
+		List<String> l = new ArrayList<>();
+		for (String a : r)
+			l.add(a);
+
+		return l;
+	}
+
+	public void removerTokenParaNotificar(String token) {
+		Notificacao r = obtemTokenParaNotificar(token);
+		if (r == null)
+			return;
+		this.remove(r);
+	}
+
+	public Notificacao obtemTokenParaNotificar(String token) {
+		Notificacao r = (Notificacao) em.createNamedQuery("Notificacao.findTokenParaNotificar")
+				.setParameter("token", token).getSingleResult();
+		if (r == null)
+			return null;
 		return r;
 	}
 
@@ -132,6 +162,7 @@ public class Dao implements Closeable {
 		if (!em.getTransaction().isActive())
 			beginTransaction();
 		this.em.remove(o);
+		this.em.flush();
 	}
 
 	@Override

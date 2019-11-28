@@ -146,5 +146,9 @@ export default new Router({
       path: '*',
       redirect: '/'
     }
-  ]
+  ],
+
+  scrollBehavior (to, from, savedPosition) {
+    if (to.name === 'Documento') return { x: 0, y: 0 }
+  }
 })

@@ -19,6 +19,8 @@ public class NotificarPost implements INotificarPost {
 		if (!property.equals(auth))
 			throw new PresentableException(
 					"Não foram informadas credenciais confiáveis para iniciar procedimento de notificação");
+		Status.update(Notificar.NOTIFICACAO_STATUS, "Aguardando na fila de tarefas", 0, 100, 0L);
+		BalcaoVirtualServlet.submitToExecutor(new Notificar());
 	}
 
 	@Override

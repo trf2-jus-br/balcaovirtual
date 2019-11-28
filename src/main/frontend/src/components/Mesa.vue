@@ -2,7 +2,7 @@
   <div class="container-fluid content">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Minutas para Assinar</h4>
+        <h4 class="text-center mt-3 mb-3">Minutas para Conferir e Assinar</h4>
       </div>
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
@@ -31,7 +31,11 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
         </div>
       </div>
-      <div class="col-sm-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis||[]).length">
+      <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis||[]).length">
+        <button type="button" @click="revisar()" class="btn btn-success ml-1" title="">
+          <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
+          <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
+        </button>
         <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
@@ -49,19 +53,19 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm">
+        <table class="table table-striped table-sm table-responsive">
           <thead class="thead-dark">
             <tr>
               <th style="text-align: center">
                 <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
               </th>
-              <th>Data</th>
               <th>Documento</th>
               <th>Tipo</th>
               <th>Responsável</th>
               <th>Processo</th>
               <th>Autor</th>
               <th>Réu</th>
+              <th>Data</th>
               <th>Unidade</th>
               <th>Sistema/Órgão</th>
               <th>Situação</th>
@@ -71,9 +75,6 @@
             <tr v-for="f in filtrados">
               <td class="td-middle" style="text-align: center">
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
-              </td>
-              <td class="td-middle">
-              {{f.dataDeInclusaoFormatada}}
               </td>
               <td class="td-middle">
                   <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f, lista: filtrados}}">{{f.numeroDoDocumento}}</router-link>
@@ -87,6 +88,9 @@
               </td>
               <td class="td-middle">{{f.autor}}</td>
               <td class="td-middle">{{f.reu}}</td>
+              <td class="td-middle">
+              {{f.dataDeInclusaoFormatada}}
+              </td>
               <td class="td-middle">{{f.siglaDaUnidade}}</td>
               <td class="td-middle"><span :title="'Identificador: ' + f.sistema">{{$parent.test.properties['balcaovirtual.' + f.sistema + '.name']}}</span></td>
               <td class="td-middle">{{f.descricaoDoStatus}}
@@ -157,7 +161,7 @@ export default {
 
     filtradosEMarcadosEAssinaveis: function() {
       return this.filtradosEMarcados.filter(function(item) {
-        return item.status === '4'
+        return item.status === '4' || item.status === '2'
       })
     }
   },
@@ -236,7 +240,7 @@ export default {
       var docs = this.filtrados
       for (var i = 0; i < docs.length; i++) {
         var doc = docs[i]
-        doc.checked = this.todos
+        if (!doc.disabled) doc.checked = this.todos
       }
     },
 
@@ -334,10 +338,24 @@ export default {
         )
     },
 
+    revisar: function() {
+      var a = this.filtradosEMarcadosEAssinaveis
+      this.$router.push({name: 'Documento', params: {numero: (a[0]).id, documento: a[0], lista: a}})
+    },
+
     assinarComSenhaEmLote: function() {
       var a = this.filtradosEMarcadosEAssinaveis
-      Bus.$emit('iniciarAssinaturaComSenha', a, this.carregarMesa)
+      Bus.$emit('iniciarAssinaturaComSenha', a, this.removerDocumentosDesabilitados)
       // Bus.$emit('assinarComSenha', a)
+    },
+
+    removerDocumentosDesabilitados: function() {
+      console.log(this.lista)
+      var a = this.lista.filter(function(item) {
+        return !item.disabled
+      })
+      this.$set(this, 'lista', a)
+      console.log(this.lista)
     },
 
     editar: function() {

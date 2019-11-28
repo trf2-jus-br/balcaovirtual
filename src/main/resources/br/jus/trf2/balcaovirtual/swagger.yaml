@@ -1829,6 +1829,24 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /notificacao/incluir-token:
+    post:
+      description: Incluir um token de notificação para o usuário corrente
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: "#/definitions/Ok"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
 
 ################################################################################
 #                                     Definitions                              #
@@ -2354,6 +2372,10 @@ definitions:
     description: Tipo da certidão
     type: string
     example: NADA_CONSTA
+    
+  Ok:
+    description: Status de retorno
+    type: string
 
   Error:
     type: object

@@ -33,32 +33,19 @@
     </div>
 
     <div v-show="!editando">
-        <div class="row no-gutters mt-2">
-            <div class="col col-auto mb-3">
-                <router-link :to="{name: 'Mesa', params: {manter: true}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Voltar</router-link>
-            </div>
-            <div class="col col-auto mb-3">
-                <router-link :disabled="!anteriorDocumento" :to="{name: 'Documento', params: {numero: (anteriorDocumento||{}).id, documento: anteriorDocumento, lista: this.lista}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-up"></span> Anterior</router-link>
-            </div>
-            <div class="col col-auto mb-3">
-                <router-link :disabled="!proximoDocumento" :to="{name: 'Documento', params: {numero: (proximoDocumento||{}).id, documento: proximoDocumento, lista: this.lista}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-down"></span> Próximo</router-link>
-            </div>
-            <div class="col col-auto ml-auto mb-3">
-                <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
-                </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3">
-                <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
-                </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3">
-                <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
-                </button>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col col-lg-8">
+              <div class="row no-gutters mt-2">
+                <div class="col col-auto mb-3">
+                    <router-link :to="{name: 'Mesa', params: {manter: false}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-times"></span> Voltar</router-link>
+                </div>
+                <div class="col col-auto mb-3">
+                    <router-link :disabled="!anteriorDocumento" :to="{name: 'Documento', params: {numero: (anteriorDocumento||{}).id, documento: anteriorDocumento, lista: this.lista, transitionName: 'slide-right'}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Anterior</router-link>
+                </div>
+                <div class="col col-auto mb-3">
+                    <router-link :disabled="!proximoDocumento" :to="{name: 'Documento', params: {numero: (proximoDocumento||{}).id, documento: proximoDocumento, lista: this.lista, transitionName: 'slide-left'}}" tag="button" class="btn btn-light d-print-none"><span class="fa fa-arrow-right"></span> Próximo</router-link>
+                </div>
+              </div>
                 <div class="card mb-3">
                     <div class="card-body alert-warning">
                         <p ref="conteudo" class="card-text" v-html="documento.conteudo"></p>
@@ -66,6 +53,22 @@
                 </div>
             </div>
             <div class="col col-lg-4">
+              <div class="row no-gutters mt-2">
+                <div class="col col-auto ml-auto mb-3 d-none d-lg-block">
+                </div>
+                <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+                    <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver
+                    </button>
+                </div>
+                <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+                    <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar
+                    </button>
+                </div>
+                <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+                    <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar
+                    </button>
+                </div>
+              </div>
                 <div class="card mb-3">
                     <div class="card-header">
                         Detalhes
@@ -179,7 +182,11 @@ export default {
         lembrete: lembrete
       }, { block: true }).then(response => {
         UtilsBL.logEvento('mesa', 'devolver', 'minuta')
-        this.$router.go(-1)
+        this.documento.status = 7
+        this.documento.descricaoDoStatus = 'Devolvida'
+        this.documento.checked = false
+        this.documento.disabled = true
+        this.exibeProximoDocumento()
       }, error => UtilsBL.errormsg(error, this))
     },
 
@@ -188,8 +195,16 @@ export default {
     },
 
     assinarComSenha: function() {
-      Bus.$emit('iniciarAssinaturaComSenha', [this.documento], () => { this.$router.go(-1) })
+      Bus.$emit('iniciarAssinaturaComSenha', [this.documento], this.exibeProximoDocumento)
       // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
+    },
+
+    exibeProximoDocumento: function() {
+      if (this.proximoDocumento) {
+        this.$router.push({name: 'Documento', params: {numero: (this.proximoDocumento).id, documento: this.proximoDocumento, lista: this.lista, transitionName: 'slide-left'}})
+      } else {
+        this.$router.push({name: 'Mesa', params: {manter: false}})
+      }
     },
 
     imprimir: function () {
