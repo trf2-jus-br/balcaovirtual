@@ -60,12 +60,16 @@
             </p>
           </div>
         </div>
+
+        <div ref="conteudo" class="d-none" v-html="html"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import he from 'he'
+
 export default {
   name: 'certidao',
   mounted() {
@@ -163,8 +167,43 @@ export default {
       )
     },
 
-    imprimir: function() {
+    imprimir_old: function() {
       window.print()
+    },
+
+    imprimir: function(disposition) {
+      var form = document.createElement('form')
+      form.action = process.env.API_URL + '/imprimir/certidao.pdf'
+      form.method = 'POST'
+      // form.target = '_blank'
+      form.style.display = 'none'
+      form.acceptCharset = 'UTF-8'
+
+      var h = document.createElement('input')
+      h.type = 'text'
+      h.name = 'html'
+      h.value = he.encode(this.$refs['conteudo'].innerHTML, {allowUnsafeSymbols: true, useNamedReferences: true})
+
+      var d = document.createElement('input')
+      d.type = 'text'
+      d.name = 'disposition'
+      d.value = disposition === 'attachment' ? '?disposition=attachment' : '?disposition=inline'
+
+      console.log(this.html)
+
+      var submit = document.createElement('input')
+      submit.type = 'submit'
+      submit.id = 'submitView'
+
+      form.appendChild(h)
+      form.appendChild(d)
+      form.appendChild(submit)
+      document.body.appendChild(form)
+
+      /* global $ */
+      $('#submitView').click()
+
+      document.body.removeChild(form)
     }
   }
 }

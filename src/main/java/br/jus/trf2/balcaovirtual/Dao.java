@@ -114,11 +114,15 @@ public class Dao implements Closeable {
 	}
 
 	public Notificacao obtemTokenParaNotificar(String token) {
-		Notificacao r = (Notificacao) em.createNamedQuery("Notificacao.findTokenParaNotificar")
-				.setParameter("token", token).getSingleResult();
-		if (r == null)
+		try {
+			Notificacao r = (Notificacao) em.createNamedQuery("Notificacao.findTokenParaNotificar")
+					.setParameter("token", token).getSingleResult();
+			if (r == null)
+				return null;
+			return r;
+		} catch (NoResultException ex) {
 			return null;
-		return r;
+		}
 	}
 
 	public Map<String, Date> obtemProcessosDoUsuarioParaNotificar(String usuario) {

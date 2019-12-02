@@ -94,8 +94,8 @@ public class Html2Pdf {
 			pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
 		System.err.println("resource carregado");
 		if (sHtml != null && pagina != null) {
-			String prefix = pagina.substring(0, pagina.indexOf("<body>") + 6);
-			String sufix = pagina.substring(pagina.indexOf("</body>"));
+			String prefix = pagina.substring(0, pagina.indexOf("<body>"));
+			String sufix = pagina.substring(pagina.indexOf("</body>") + 7);
 
 			sHtml = cleanHtml(prefix + extraiBody(sHtml) + sufix);
 			System.err.println("HTML calculado");
@@ -111,7 +111,7 @@ public class Html2Pdf {
 			// ResourceLoaderUserAgent(renderer.getOutputDevice());
 			// callback.setSharedContext(renderer.getSharedContext());
 			// renderer.getSharedContext().setUserAgentCallback(callback);
-			
+
 			renderer.setDocumentFromString(sHtml);
 			renderer.layout();
 			renderer.createPDF(baos);
@@ -120,4 +120,44 @@ public class Html2Pdf {
 			return baos.toByteArray();
 		}
 	}
+
+	public byte[] converterJsoup(String sHtml, boolean apenasBody) throws Exception {
+		System.err.println("iniciando a conversão");
+		String pagina = null;
+		sHtml = sHtml.replace("<u=\"\">", ">");
+		sHtml = sHtml.replace(" <u><b>", "><b>");
+
+		if (apenasBody)
+			pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
+		System.err.println("resource carregado");
+		if (sHtml != null && pagina != null) {
+			String prefix = pagina.substring(0, pagina.indexOf("<body>"));
+			String sufix = pagina.substring(pagina.indexOf("</body>") + 7);
+
+			sHtml = prefix + extraiBody(sHtml) + sufix;
+			
+			sHtml = cleanHtmlJSoup(sHtml, false);
+			System.err.println("HTML calculado");
+		} else {
+			sHtml = cleanHtml(sHtml);
+		}
+		System.err.println(sHtml);
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ITextRenderer renderer = new ITextRenderer();
+			// Habilitar para carregar recursos externos
+			// ResourceLoaderUserAgent callback = new
+			// ResourceLoaderUserAgent(renderer.getOutputDevice());
+			// callback.setSharedContext(renderer.getSharedContext());
+			// renderer.getSharedContext().setUserAgentCallback(callback);
+
+			renderer.setDocumentFromString(sHtml);
+			renderer.layout();
+			renderer.createPDF(baos);
+			System.err.println("PDF gerado");
+
+			return baos.toByteArray();
+		}
+	}
+
 }

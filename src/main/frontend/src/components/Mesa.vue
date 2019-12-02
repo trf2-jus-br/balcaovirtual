@@ -244,64 +244,6 @@ export default {
       }
     },
 
-    mostrarDocumento: function(item, disposition) {
-      var form = document.createElement('form')
-      form.action =
-        this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
-        '/api/v1/view' +
-        (disposition === 'attachment' ? '?disposition=attachment' : '')
-      form.method = 'POST'
-      form.target = '_blank'
-      form.style.display = 'none'
-
-      var cpf = document.createElement('input')
-      cpf.type = 'text'
-      cpf.name = 'cpf'
-      cpf.value = (this.$parent.jwt || {}).cpf
-
-      var system = document.createElement('input')
-      system.type = 'text'
-      system.name = 'system'
-      system.value = item.docsystem
-
-      var docid = document.createElement('input')
-      docid.type = 'text'
-      docid.name = 'id'
-      docid.value = item.docid
-
-      var docsecret = document.createElement('input')
-      docsecret.type = 'text'
-      docsecret.name = 'secret'
-      docsecret.value = item.docsecret
-
-      var submit = document.createElement('input')
-      submit.type = 'submit'
-      submit.id = 'submitView'
-
-      form.appendChild(cpf)
-      form.appendChild(system)
-      form.appendChild(docid)
-      form.appendChild(docsecret)
-      form.appendChild(submit)
-      document.body.appendChild(form)
-
-      /* global $ */
-      $('#submitView').click()
-
-      document.body.removeChild(form)
-    },
-
-    criarAssinavel: function(item) {
-      return {
-        id: item.docid,
-        system: item.docsystem,
-        code: item.numeroDoDocumento,
-        descr: item.docdescr,
-        kind: item.dockind,
-        origin: 'Balcão Virtual'
-      }
-    },
-
     assinarDocumento: function(item) {
       this.chamarAssijus([this.criarAssinavel(item)])
     },
