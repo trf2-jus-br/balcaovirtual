@@ -175,6 +175,11 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addDependency(
 				new FileSystemWriteDependency("upload.dir.final", getProperty("upload.dir.final"), false, 0, 10000));
 
+		if (getProperty("notificar.titulo") != null) {
+			addDependency(new HttpGetDependency("fcm.googleapis.com", "https://fcm.googleapis.com/fcm/send", false, 0,
+					10000));
+		}
+
 		for (final String system : Utils.getSystems()) {
 			String systemSlug = system.replace(".", "-");
 			addDependency(new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-api", false, 0, 10000) {
