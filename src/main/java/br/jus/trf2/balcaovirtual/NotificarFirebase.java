@@ -53,7 +53,7 @@ public class NotificarFirebase {
 		String notification_key;
 	}
 
-	public static int enviarNotificacao(Dao dao, List<String> tokens, String title, String message, String clickAction)
+	public static int enviarNotificacao(Dao dao, List<String> tokens, String title, String message, String clickAction, String icon)
 			throws Exception {
 		Gson gson = new GsonBuilder().create();
 
@@ -62,6 +62,7 @@ public class NotificarFirebase {
 		nb.notification.title = title;
 		nb.notification.body = message;
 		nb.notification.click_action = clickAction;
+		nb.notification.icon = icon;
 		for (String t : tokens) {
 			nb.registration_ids.add(t);
 		}

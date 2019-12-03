@@ -71,18 +71,20 @@ public class Notificar implements Callable<String> {
 		int c = 0;
 		for (ProcessoValido pv : list) {
 			Date dt = processos.get(pv.numero);
-			if (dt != null && dt.before(pv.dataultimomovimento))
+			if (dt == null || dt.before(pv.dataultimomovimento))
 				c++;
 		}
 		if (c == 0)
 			return;
-		String body = usuario + " possui " + c + " processos favoritos com movimentos novos.";
+		String body = usuario + " possui " + c
+				+ (c > 1 ? " processos favoritos com movimentos novos." : " processo favorito com movimentos novos.");
 		SwaggerUtils.log(Notificar.class).info(body);
 
 		String titulo = SwaggerServlet.getProperty("notificar.titulo");
 		if (titulo != null) {
 			String clickAction = SwaggerServlet.getProperty("notificar.url");
-			int sucessos = NotificarFirebase.enviarNotificacao(dao, tokens, titulo, body, clickAction);
+			String icon = SwaggerServlet.getProperty("base.url") + "/assets/icon-256x256.png";
+			int sucessos = NotificarFirebase.enviarNotificacao(dao, tokens, titulo, body, clickAction, icon);
 			SwaggerUtils.log(Notificar.class)
 					.info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações enviadas."));
 		}
