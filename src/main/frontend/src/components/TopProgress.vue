@@ -1,43 +1,47 @@
 <template>
-  <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-bind:css="false">
+  <transition
+    v-on:before-enter="beforeEnter"
+    v-on:enter="enter"
+    v-on:after-enter="afterEnter"
+    v-bind:css="false"
+  >
     <div class="top-progress" :style="barStyle" v-if="show || ended">
-      <div class="peg" :style="pegStyle">
-      </div>
+      <div class="peg" :style="pegStyle"></div>
     </div>
   </transition>
 </template>
 
 <script>
-function clamp (n, min, max) {
+function clamp(n, min, max) {
   if (n < min) {
-    return min
+    return min;
   }
   if (n > max) {
-    return max
+    return max;
   }
-  return n
+  return n;
 }
 
 let queue = (() => {
-  let pending = []
+  let pending = [];
 
-  function next () {
-    let fn = pending.shift()
+  function next() {
+    let fn = pending.shift();
     if (fn) {
-      fn(next)
+      fn(next);
     }
   }
 
   return fn => {
-    pending.push(fn)
+    pending.push(fn);
     if (pending.length === 1) {
-      next()
+      next();
     }
-  }
-})()
+  };
+})();
 
 export default {
-  data () {
+  data() {
     return {
       error: false,
       show: false,
@@ -48,7 +52,7 @@ export default {
       ended: false,
       min: 0,
       max: 100
-    }
+    };
   },
 
   props: {
@@ -59,12 +63,12 @@ export default {
 
     color: {
       type: String,
-      default: '#29d'
+      default: "#29d"
     },
 
     errorColor: {
       type: String,
-      default: '#f44336'
+      default: "#f44336"
     },
 
     trickle: {
@@ -79,7 +83,7 @@ export default {
 
     easing: {
       type: String,
-      default: 'linear'
+      default: "linear"
     },
 
     height: {
@@ -104,178 +108,183 @@ export default {
   },
 
   computed: {
-    progressColor () {
-      return this.error ? this.errorColor : this.color
+    progressColor() {
+      return this.error ? this.errorColor : this.color;
     },
 
-    isStarted () {
-      return typeof this.status === 'number'
+    isStarted() {
+      return typeof this.status === "number";
     },
 
-    barStyle () {
+    barStyle() {
       return {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        right: '0',
-        width: `${this.ended ? this.max : this.min + this.progress * (this.max - this.min) / 100}%`,
+        position: "fixed",
+        top: "0",
+        left: "0",
+        right: "0",
+        width: `${
+          this.ended
+            ? this.max
+            : this.min + (this.progress * (this.max - this.min)) / 100
+        }%`,
         height: `${this.height}px`,
         backgroundColor: this.progressColor,
         transition: `all ${this.speed}ms ${this.easing}`,
         opacity: `${this.opacity}`,
         zIndex: `${this.zIndex}`
-      }
+      };
     },
 
-    pegStyle () {
+    pegStyle() {
       return {
-        display: 'block',
-        position: 'absolute',
-        right: '0',
-        width: '100px',
-        height: '100%',
-        opacity: (this.progress || this.ended) ? '1' : '0',
+        display: "block",
+        position: "absolute",
+        right: "0",
+        width: "100px",
+        height: "100%",
+        opacity: this.progress || this.ended ? "1" : "0",
         boxShadow: `0 0 10px ${this.progressColor}, 0 0 5px ${this.progressColor}`,
-        transform: 'rotate(3deg) translate(0px, -4px)'
-      }
+        transform: "rotate(3deg) translate(0px, -4px)"
+      };
     }
   },
 
   methods: {
-    beforeEnter (el) {
-      this.opacity = 0
-      this.progress = 0
-      this.width = 0
+    beforeEnter(el) {
+      this.opacity = 0;
+      this.progress = 0;
+      this.width = 0;
     },
 
-    enter (el, done) {
-      this.opacity = 1
-      done()
+    enter(el, done) {
+      this.opacity = 1;
+      done();
     },
 
-    afterEnter (el) {
-      this._runStart()
+    afterEnter(el) {
+      this._runStart();
     },
 
-    _work () {
+    _work() {
       setTimeout(() => {
         if (!this.isStarted || this.isPaused) {
-          return
+          return;
         }
-        this.increase()
-        this._work()
-      }, this.trickleSpeed)
+        this.increase();
+        this._work();
+      }, this.trickleSpeed);
     },
 
-    _runStart () {
-      this.status = (this.progress === 100 ? null : this.progress)
+    _runStart() {
+      this.status = this.progress === 100 ? null : this.progress;
 
       if (this.trickle) {
-        this._work()
+        this._work();
       }
     },
 
-    start (min, max) {
-      if (!min) min = 0
-      if (!max) max = 100
+    start(min, max) {
+      if (!min) min = 0;
+      if (!max) max = 100;
 
-      this.min = min
-      this.max = max
+      this.min = min;
+      this.max = max;
 
-      this.ended = false
-      this.isPaused = false
-      this.progress = 0
+      this.ended = false;
+      this.isPaused = false;
+      this.progress = 0;
 
       if (this.show) {
-        this._runStart()
+        this._runStart();
       } else {
-        this.show = true
+        this.show = true;
       }
     },
 
-    set (amount) {
-      this.isPaused = false
+    set(amount) {
+      this.isPaused = false;
 
-      let o
+      let o;
       if (this.isStarted) {
-        o = amount < this.progress
-          ? clamp(amount, 0, 100)
-          : clamp(amount, this.minimum, 100)
+        o =
+          amount < this.progress
+            ? clamp(amount, 0, 100)
+            : clamp(amount, this.minimum, 100);
       } else {
-        o = 0
+        o = 0;
       }
 
       if (o === 100) {
-        this.show = false
-        this.error = false
-        this.ended = true
+        this.show = false;
+        this.error = false;
+        this.ended = true;
         setTimeout(() => {
-          this.ended = false
-        }, 250)
-        return
+          this.ended = false;
+        }, 250);
+        return;
       }
 
-      this.status = (o === 100 ? null : o)
+      this.status = o === 100 ? null : o;
 
       queue(next => {
-        this.progress = o
+        this.progress = o;
         if (o === 100) {
           setTimeout(() => {
-            this.opacity = 0
+            this.opacity = 0;
             setTimeout(() => {
-              this.show = false
-              this.error = false
-              next()
-            }, this.speed)
-          }, this.speed)
+              this.show = false;
+              this.error = false;
+              next();
+            }, this.speed);
+          }, this.speed);
         } else {
-          setTimeout(next, this.speed)
+          setTimeout(next, this.speed);
         }
-      })
+      });
     },
 
-    increase (amount) {
-      let o = this.progress
+    increase(amount) {
+      let o = this.progress;
 
-      if (o < 100 && typeof amount !== 'number') {
+      if (o < 100 && typeof amount !== "number") {
         if (o >= 0 && o < 25) {
-          amount = Math.random() * 3 + 3
+          amount = Math.random() * 3 + 3;
         } else if (o >= 25 && o < 50) {
-          amount = Math.random() * 3
+          amount = Math.random() * 3;
         } else if (o >= 50 && o < 85) {
-          amount = Math.random() * 2
+          amount = Math.random() * 2;
         } else if (o >= 85 && o < 99) {
-          amount = 0.5
+          amount = 0.5;
         } else {
-          amount = 0
+          amount = 0;
         }
       }
-      this.set(clamp(o + amount, 0, this.maximum))
+      this.set(clamp(o + amount, 0, this.maximum));
     },
 
-    decrease (amount) {
+    decrease(amount) {
       if (this.progress === 0) {
-        return
+        return;
       }
-      this.increase(-amount)
+      this.increase(-amount);
     },
 
-    done () {
-      this.set(100)
+    done() {
+      this.set(100);
     },
 
-    getProgress () {
-      return this.status ? this.progress : 0
+    getProgress() {
+      return this.status ? this.progress : 0;
     },
 
-    pause () {
-      this.isPaused = true
+    pause() {
+      this.isPaused = true;
     },
 
-    fail () {
-      this.error = true
-      this.done()
+    fail() {
+      this.error = true;
+      this.done();
     }
   }
-}
+};
 </script>

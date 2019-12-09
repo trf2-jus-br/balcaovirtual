@@ -1,154 +1,152 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import ConsultaSimples from '@/components/ConsultaSimples'
-import Processo from '@/components/Processo'
-import ProcessoLista from '@/components/ProcessoLista'
-import PeticaoInicial from '@/components/PeticaoInicial'
-import PeticaoIntercorrente from '@/components/PeticaoIntercorrente'
-import ConsultaCertidao from '@/components/ConsultaCertidao'
-import Certidao from '@/components/Certidao'
-import AvisoLista from '@/components/AvisoLista'
-import AvisoConfirmadoRecentes from '@/components/AvisoConfirmadoRecentes'
-import AvisoConfirmadoLista from '@/components/AvisoConfirmadoLista'
-import EtiquetaLista from '@/components/EtiquetaLista'
-import Mesa from '@/components/Mesa'
-import Documento from '@/components/Documento'
-import Login from '@/components/Login'
-import Sugestoes from '@/components/Sugestoes'
-import Sobre from '@/components/Sobre'
-import Status from '@/components/Status'
-import ProcessoBL from '../bl/processo.js'
+import Vue from "vue";
+import Router from "vue-router";
+import ConsultaSimples from "@/components/ConsultaSimples";
+import Processo from "@/components/Processo";
+import ProcessoLista from "@/components/ProcessoLista";
+import PeticaoInicial from "@/components/PeticaoInicial";
+import PeticaoIntercorrente from "@/components/PeticaoIntercorrente";
+import ConsultaCertidao from "@/components/ConsultaCertidao";
+import Certidao from "@/components/Certidao";
+import AvisoLista from "@/components/AvisoLista";
+import AvisoConfirmadoRecentes from "@/components/AvisoConfirmadoRecentes";
+import AvisoConfirmadoLista from "@/components/AvisoConfirmadoLista";
+import EtiquetaLista from "@/components/EtiquetaLista";
+import Mesa from "@/components/Mesa";
+import Documento from "@/components/Documento";
+import Login from "@/components/Login";
+import Sugestoes from "@/components/Sugestoes";
+import Sobre from "@/components/Sobre";
+import Status from "@/components/Status";
+import ProcessoBL from "../bl/processo.js";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/login',
-      name: 'Login',
+      path: "/login",
+      name: "Login",
       component: Login
     },
     {
-      path: '/',
-      name: 'Consulta Simples',
+      path: "/",
+      name: "Consulta Simples",
       component: ConsultaSimples
     },
     {
-      path: '/consultar/:numero',
-      name: 'Consultar',
+      path: "/consultar/:numero",
+      name: "Consultar",
       component: ConsultaSimples
     },
     {
-      path: '/processo/:numero',
-      name: 'Processo',
+      path: "/processo/:numero",
+      name: "Processo",
       component: Processo,
       meta: {
         title: route => {
           return (
-            'Processo ' +
+            "Processo " +
             ProcessoBL.formatarProcesso(
               ProcessoBL.somenteNumeros(route.params.numero)
             ) +
-            '..'
-          )
+            ".."
+          );
         }
       }
     },
     {
-      path: '/processo-lista',
-      name: 'Lista de Processos',
+      path: "/processo-lista",
+      name: "Lista de Processos",
       component: ProcessoLista
     },
     {
-      path: '/consultar-certidao',
-      name: 'Consultar Certidão',
+      path: "/consultar-certidao",
+      name: "Consultar Certidão",
       component: ConsultaCertidao
     },
     {
-      path: '/emitir-certidao/:requisitante/:cpfcnpj',
-      name: 'Emitir Certidão',
+      path: "/emitir-certidao/:requisitante/:cpfcnpj",
+      name: "Emitir Certidão",
       component: Certidao
     },
     {
-      path: '/autenticar-certidao/:numero/:cpfcnpj',
-      name: 'Autenticar Certidão',
+      path: "/autenticar-certidao/:numero/:cpfcnpj",
+      name: "Autenticar Certidão",
       component: Certidao
     },
     {
-      path: '/reimprimir-certidao/:numero/:cpfcnpj',
-      name: 'Reimprimir Certidão',
+      path: "/reimprimir-certidao/:numero/:cpfcnpj",
+      name: "Reimprimir Certidão",
       component: Certidao
     },
     {
-      path: '/etiqueta-lista',
-      name: 'Lista de Etiquetas',
+      path: "/etiqueta-lista",
+      name: "Lista de Etiquetas",
       component: EtiquetaLista
     },
     {
-      path: '/peticao-inicial',
-      name: 'Petição Inicial',
+      path: "/peticao-inicial",
+      name: "Petição Inicial",
       component: PeticaoInicial
     },
     {
-      path: '/peticao-intercorrente',
-      name: 'Petição Intercorrente',
+      path: "/peticao-intercorrente",
+      name: "Petição Intercorrente",
       component: PeticaoIntercorrente
     },
     {
-      path: '/aviso-lista',
-      name: 'Lista de Avisos',
+      path: "/aviso-lista",
+      name: "Lista de Avisos",
       component: AvisoLista
     },
     {
-      path: '/mesa',
-      name: 'Mesa',
+      path: "/mesa",
+      name: "Mesa",
       component: Mesa
     },
     {
-      path: '/documento/:numero',
-      name: 'Documento',
+      path: "/documento/:numero",
+      name: "Documento",
       component: Documento,
       meta: {
         title: route => {
-          return (
-            'Documento ' + route.params.numero + '..'
-          )
+          return "Documento " + route.params.numero + "..";
         }
       }
     },
     {
-      path: '/aviso-confirmado-recentes',
-      name: 'Avisos Confirmados Recentemente',
+      path: "/aviso-confirmado-recentes",
+      name: "Avisos Confirmados Recentemente",
       component: AvisoConfirmadoRecentes
     },
     {
       path:
-        '/aviso-confirmado-lista/:dataInicial/:dataFinal/:porConfirmacao/:porOmissao/:doGrupo',
-      name: 'Lista de Avisos Confirmados',
+        "/aviso-confirmado-lista/:dataInicial/:dataFinal/:porConfirmacao/:porOmissao/:doGrupo",
+      name: "Lista de Avisos Confirmados",
       component: AvisoConfirmadoLista
     },
     {
-      path: '/sugestoes',
-      name: 'Sugestões',
+      path: "/sugestoes",
+      name: "Sugestões",
       component: Sugestoes
     },
     {
-      path: '/status',
-      name: 'Status',
+      path: "/status",
+      name: "Status",
       component: Status
     },
     {
-      path: '/sobre',
-      name: 'Sobre',
+      path: "/sobre",
+      name: "Sobre",
       component: Sobre
     },
     {
-      path: '*',
-      redirect: '/'
+      path: "*",
+      redirect: "/"
     }
   ],
 
-  scrollBehavior (to, from, savedPosition) {
-    if (to.name === 'Documento') return { x: 0, y: 0 }
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name === "Documento") return { x: 0, y: 0 };
   }
-})
+});

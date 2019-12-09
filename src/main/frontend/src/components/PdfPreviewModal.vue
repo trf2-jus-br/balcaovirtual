@@ -8,23 +8,23 @@
 
 <script>
 export default {
-  name: 'pdf-preview',
+  name: "pdf-preview",
 
-  props: ['title', 'src'],
+  props: ["title", "src"],
 
-  data () {
-    return {}
+  data() {
+    return {};
   },
 
   methods: {
-    show: function () {
-      this.$refs.modal.show(true)
-      this.errormsg = undefined
+    show: function() {
+      this.$refs.modal.show(true);
+      this.errormsg = undefined;
     },
 
-    hide: function () {
-      this.$refs.modal.hide(true)
+    hide: function() {
+      this.$refs.modal.hide(true);
     }
   }
-}
+};
 </script>

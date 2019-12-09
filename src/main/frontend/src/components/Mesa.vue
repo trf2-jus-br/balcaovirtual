@@ -6,7 +6,7 @@
       </div>
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
-          {{errormsg}}
+          {{ errormsg }}
         </p>
       </div>
     </div>
@@ -15,30 +15,65 @@
       <div v-if="false" class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
           <div class="input-group-prepend">
-            <div class="input-group-text" id="btnGroupAddon"><span class="fa fa-map-marker"></span></div>
+            <div class="input-group-text" id="btnGroupAddon">
+              <span class="fa fa-map-marker"></span>
+            </div>
           </div>
-          <select id="mesa" class="form-control" v-model="mesa" @change="selecionarMesa" name="mesa">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="i in mesas" :value="i">{{i.nome}}</option>
+          <select
+            id="mesa"
+            class="form-control"
+            v-model="mesa"
+            @change="selecionarMesa"
+            name="mesa"
+          >
+            <option disabled selected hidden :value="undefined"
+              >[Selecionar]</option
+            >
+            <option v-for="i in mesas" :value="i">{{ i.nome }}</option>
           </select>
         </div>
       </div>
       <div class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
           <div class="input-group-prepend">
-            <div class="input-group-text" id="btnGroupAddon"><span class="fa fa-search"></span></div>
+            <div class="input-group-text" id="btnGroupAddon">
+              <span class="fa fa-search"></span>
+            </div>
           </div>
-          <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Filtrar"
+            v-model="filtro"
+            ng-model-options="{ debounce: 200 }"
+          />
         </div>
       </div>
-      <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis||[]).length">
-        <button type="button" @click="revisar()" class="btn btn-success ml-1" title="">
+      <div
+        class="col-auto ml-auto mb-3"
+        v-if="(filtradosEMarcadosEAssinaveis || []).length"
+      >
+        <button
+          type="button"
+          @click="revisar()"
+          class="btn btn-success ml-1"
+          title=""
+        >
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
+          <span class="badge badge-pill badge-warning">{{
+            filtradosEMarcadosEAssinaveis.length
+          }}</span>
         </button>
-        <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
+        <button
+          type="button"
+          @click="assinarComSenhaEmLote()"
+          class="btn btn-primary ml-1"
+          title=""
+        >
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{filtradosEMarcadosEAssinaveis.length}}</span>
+          <span class="badge badge-pill badge-warning">{{
+            filtradosEMarcadosEAssinaveis.length
+          }}</span>
         </button>
       </div>
     </div>
@@ -57,7 +92,13 @@
           <thead class="thead-dark">
             <tr>
               <th style="text-align: center">
-                <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()"></input>
+                <input
+                  type="checkbox"
+                  id="progress_checkall"
+                  name="progress_checkall"
+                  v-model="todos"
+                  @change="marcarTodos()"
+                />
               </th>
               <th>Documento</th>
               <th>Tipo</th>
@@ -74,27 +115,57 @@
           <tbody>
             <tr v-for="f in filtrados">
               <td class="td-middle" style="text-align: center">
-                <input type="checkbox" v-model="f.checked" :disabled="f.disabled"></input>
+                <input
+                  type="checkbox"
+                  v-model="f.checked"
+                  :disabled="f.disabled"
+                />
               </td>
               <td class="td-middle">
-                  <router-link :to="{name: 'Documento', params: {numero: f.id, documento: f, lista: filtrados}}">{{f.numeroDoDocumento}}</router-link>
+                <router-link
+                  :to="{
+                    name: 'Documento',
+                    params: { numero: f.id, documento: f, lista: filtrados }
+                  }"
+                  >{{ f.numeroDoDocumento }}</router-link
+                >
               </td>
-              <td class="td-middle">{{f.tipoDoDocumento}}</td>
-              <td class="td-middle"><span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{f.identificadorDoUsuarioQueIncluiu}}</span></td>
+              <td class="td-middle">{{ f.tipoDoDocumento }}</td>
+              <td class="td-middle">
+                <span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{
+                  f.identificadorDoUsuarioQueIncluiu
+                }}</span>
+              </td>
               <td class="td-middle">
                 <span class="unbreakable">
-                  <router-link :to="{name: 'Processo', params: {numero: f.numeroDoProcesso}, query: {avisos: $parent.cAvisos}}" target="_blank">{{f.processoFormatado}}</router-link>
+                  <router-link
+                    :to="{
+                      name: 'Processo',
+                      params: { numero: f.numeroDoProcesso },
+                      query: { avisos: $parent.cAvisos }
+                    }"
+                    target="_blank"
+                    >{{ f.processoFormatado }}</router-link
+                  >
                 </span>
               </td>
-              <td class="td-middle">{{f.autor}}</td>
-              <td class="td-middle">{{f.reu}}</td>
+              <td class="td-middle">{{ f.autor }}</td>
+              <td class="td-middle">{{ f.reu }}</td>
               <td class="td-middle">
-              {{f.dataDeInclusaoFormatada}}
+                {{ f.dataDeInclusaoFormatada }}
               </td>
-              <td class="td-middle">{{f.siglaDaUnidade}}</td>
-              <td class="td-middle"><span :title="'Identificador: ' + f.sistema">{{$parent.test.properties['balcaovirtual.' + f.sistema + '.name']}}</span></td>
-              <td class="td-middle">{{f.descricaoDoStatus}}
-                <span v-if="f.errormsg" :class="{red: true}">Erro {{f.errormsg}}
+              <td class="td-middle">{{ f.siglaDaUnidade }}</td>
+              <td class="td-middle">
+                <span :title="'Identificador: ' + f.sistema">{{
+                  $parent.test.properties[
+                    "balcaovirtual." + f.sistema + ".name"
+                  ]
+                }}</span>
+              </td>
+              <td class="td-middle">
+                {{ f.descricaoDoStatus }}
+                <span v-if="f.errormsg" :class="{ red: true }"
+                  >Erro {{ f.errormsg }}
                 </span>
               </td>
             </tr>
@@ -106,21 +177,21 @@
 </template>
 
 <script>
-import UtilsBL from '../bl/utils.js'
-import ProcessoBL from '../bl/processo.js'
-import { Bus } from '../bl/bus.js'
+import UtilsBL from "../bl/utils.js";
+import ProcessoBL from "../bl/processo.js";
+import { Bus } from "../bl/bus.js";
 
 export default {
   components: {},
 
   mounted() {
-    this.errormsg = undefined
+    this.errormsg = undefined;
 
-    if (this.$route.params.manter) return
+    if (this.$route.params.manter) return;
 
     setTimeout(() => {
-      this.carregarMesas()
-    })
+      this.carregarMesas();
+    });
   },
 
   data() {
@@ -132,70 +203,70 @@ export default {
       todos: true,
       errormsg: undefined,
       carregando: true
-    }
+    };
   },
 
   computed: {
     filtrados: function() {
-      var a = this.lista
-      a = UtilsBL.filtrarPorSubstring(a, this.filtro)
-      var procnum, procline
+      var a = this.lista;
+      a = UtilsBL.filtrarPorSubstring(a, this.filtro);
+      var procnum, procline;
       for (var i = 0; i < a.length; i++) {
         if (procnum !== a[i].numeroDoProcesso) {
-          procnum = a[i].numeroDoProcesso
-          procline = i
-          a[i].rows = 1
+          procnum = a[i].numeroDoProcesso;
+          procline = i;
+          a[i].rows = 1;
         } else {
-          a[procline].rows++
-          a[i].rows = 0
+          a[procline].rows++;
+          a[i].rows = 0;
         }
       }
-      return a
+      return a;
     },
 
     filtradosEMarcados: function() {
       return this.filtrados.filter(function(item) {
-        return item.checked
-      })
+        return item.checked;
+      });
     },
 
     filtradosEMarcadosEAssinaveis: function() {
       return this.filtradosEMarcados.filter(function(item) {
-        return item.status === '4' || item.status === '2'
-      })
+        return item.status === "4" || item.status === "2";
+      });
     }
   },
 
   methods: {
     carregarMesas: function() {
-      this.$http.get('mesa', { block: true }).then(
+      this.$http.get("mesa", { block: true }).then(
         response => {
-          var list = response.data.list
+          var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
-            var m = list[i]
-            this.mesas.push({ id: m.id, nome: m.nome })
+            var m = list[i];
+            this.mesas.push({ id: m.id, nome: m.nome });
           }
           if (this.mesas.length > 0) {
-            this.mesa = this.mesas[0]
-            this.selecionarMesa()
+            this.mesa = this.mesas[0];
+            this.selecionarMesa();
           }
         },
         error => UtilsBL.errormsg(error, this)
-      )
+      );
     },
 
     selecionarMesa: function() {
-      this.$http.get('mesa/' + this.mesa.id, { block: true }).then(
+      this.$http.get("mesa/" + this.mesa.id, { block: true }).then(
         response => {
-          this.lista.length = 0
-          var list = response.data.list
+          this.lista.length = 0;
+          var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
-            this.lista.push(this.fixItem(list[i]))
+            this.lista.push(this.fixItem(list[i]));
           }
-          this.carregando = false
+          this.carregando = false;
         },
         error => UtilsBL.errormsg(error, this)
-      )
+      );
     },
 
     fixItem: function(item) {
@@ -219,92 +290,103 @@ export default {
         sistema: undefined,
         lembretes: undefined,
         errormsg: undefined
-      })
+      });
       if (item.numeroDoProcesso !== undefined) {
-        item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso)
+        item.processoFormatado = ProcessoBL.formatarProcesso(
+          item.numeroDoProcesso
+        );
       }
       if (item.dataDeInclusao !== undefined) {
         item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
           item.dataDeInclusao
-        )
+        );
       }
       if (item.lembretes) {
         for (var i = 0; i < item.lembretes.length; i++) {
-          item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao)
+          item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
+            item.lembretes[i].dataDeInclusao
+          );
         }
       }
-      return item
+      return item;
     },
 
     marcarTodos: function() {
-      var docs = this.filtrados
+      var docs = this.filtrados;
       for (var i = 0; i < docs.length; i++) {
-        var doc = docs[i]
-        if (!doc.disabled) doc.checked = this.todos
+        var doc = docs[i];
+        if (!doc.disabled) doc.checked = this.todos;
       }
     },
 
     assinarDocumento: function(item) {
-      this.chamarAssijus([this.criarAssinavel(item)])
+      this.chamarAssijus([this.criarAssinavel(item)]);
     },
 
     assinarDocumentos: function() {
-      var list = []
+      var list = [];
       for (var i = 0; i < this.filtradosEMarcadosEAssinaveis.length; i++) {
-        list.push(this.criarAssinavel(this.filtradosEMarcadosEAssinaveis[i]))
+        list.push(this.criarAssinavel(this.filtradosEMarcadosEAssinaveis[i]));
       }
-      if (list.length > 0) this.chamarAssijus(list)
+      if (list.length > 0) this.chamarAssijus(list);
     },
 
     chamarAssijus: function(list) {
-      var json = JSON.stringify({ list: list })
+      var json = JSON.stringify({ list: list });
       this.$http
         .post(
-          this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
-            '/api/v1/store',
+          this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+            "/api/v1/store",
           { payload: json },
           { block: true }
         )
         .then(
           response => {
-            var callback = window.location.href + ''
-            console.log(callback)
+            var callback = window.location.href + "";
+            console.log(callback);
             window.location.href =
-              this.$parent.test.properties['balcaovirtual.assijus.endpoint'] +
-              '/?endpointautostart=true&endpointlistkey=' +
+              this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+              "/?endpointautostart=true&endpointlistkey=" +
               response.data.key +
-              '&endpointcallback=' +
-              encodeURI(callback).replace('#', '__hashsign__')
+              "&endpointcallback=" +
+              encodeURI(callback).replace("#", "__hashsign__");
           },
           error => UtilsBL.errormsg(error, this)
-        )
+        );
     },
 
     revisar: function() {
-      var a = this.filtradosEMarcadosEAssinaveis
-      this.$router.push({name: 'Documento', params: {numero: (a[0]).id, documento: a[0], lista: a}})
+      var a = this.filtradosEMarcadosEAssinaveis;
+      this.$router.push({
+        name: "Documento",
+        params: { numero: a[0].id, documento: a[0], lista: a }
+      });
     },
 
     assinarComSenhaEmLote: function() {
-      var a = this.filtradosEMarcadosEAssinaveis
-      Bus.$emit('iniciarAssinaturaComSenha', a, this.removerDocumentosDesabilitados)
+      var a = this.filtradosEMarcadosEAssinaveis;
+      Bus.$emit(
+        "iniciarAssinaturaComSenha",
+        a,
+        this.removerDocumentosDesabilitados
+      );
       // Bus.$emit('assinarComSenha', a)
     },
 
     removerDocumentosDesabilitados: function() {
-      console.log(this.lista)
+      console.log(this.lista);
       var a = this.lista.filter(function(item) {
-        return !item.disabled
-      })
-      this.$set(this, 'lista', a)
-      console.log(this.lista)
+        return !item.disabled;
+      });
+      this.$set(this, "lista", a);
+      console.log(this.lista);
     },
 
     editar: function() {
-      this.$refs.etiqueta.show()
+      this.$refs.etiqueta.show();
     }
   }
-}
+};
 </script>
 
 <style scoped>

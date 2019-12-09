@@ -2,12 +2,14 @@
   <div class="container-fluid content">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">Intimações/Citações Confirmadas Recentemente</h4>
+        <h4 class="text-center mt-3 mb-3">
+          Intimações/Citações Confirmadas Recentemente
+        </h4>
       </div>
 
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
-          {{errormsg}}
+          {{ errormsg }}
         </p>
       </div>
     </div>
@@ -20,8 +22,12 @@
             <thead class="thead-dark">
               <tr>
                 <th rowspan="2">Data</th>
-                <th style="text-align: center;" colspan="2">Quantidade do Usuário</th>
-                <th style="text-align: center;" colspan="2">Quantidade do Grupo</th>
+                <th style="text-align: center;" colspan="2">
+                  Quantidade do Usuário
+                </th>
+                <th style="text-align: center;" colspan="2">
+                  Quantidade do Grupo
+                </th>
               </tr>
               <tr>
                 <th style="text-align: center;">Confirmação Manual</th>
@@ -36,25 +42,45 @@
                   <span v-html="p.data"></span>
                 </td>
                 <td style="text-align: center;">
-                  <a href="" @click.prevent="listar(p.data, true, false, false)">{{p.quantidadedousuarioporconfirmacao}}</a>
+                  <a
+                    href=""
+                    @click.prevent="listar(p.data, true, false, false)"
+                    >{{ p.quantidadedousuarioporconfirmacao }}</a
+                  >
                 </td>
                 <td style="text-align: center;">
-                  <a href="" @click.prevent="listar(p.data, false, true, false)">{{p.quantidadedousuarioporomissao}}</a>
+                  <a
+                    href=""
+                    @click.prevent="listar(p.data, false, true, false)"
+                    >{{ p.quantidadedousuarioporomissao }}</a
+                  >
                 </td>
                 <td style="text-align: center;">
-                  <a href="" @click.prevent="listar(p.data, true, false, true)">{{p.quantidadedogrupoporconfirmacao}}</a>
+                  <a
+                    href=""
+                    @click.prevent="listar(p.data, true, false, true)"
+                    >{{ p.quantidadedogrupoporconfirmacao }}</a
+                  >
                 </td>
                 <td style="text-align: center;">
-                  <a href="" @click.prevent="listar(p.data, false, true, true)">{{p.quantidadedogrupoporomissao}}</a>
+                  <a
+                    href=""
+                    @click.prevent="listar(p.data, false, true, true)"
+                    >{{ p.quantidadedogrupoporomissao }}</a
+                  >
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="col col-sm-12" v-if="!errormsg &amp;&amp; quantidadePorData.length == 0">
+      <div
+        class="col col-sm-12"
+        v-if="!errormsg &amp;&amp; quantidadePorData.length == 0"
+      >
         <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma intimação/citação confirmada nos últimos 7 dias.
+          <strong>Atenção!</strong> Nenhuma intimação/citação confirmada nos
+          últimos 7 dias.
         </p>
       </div>
     </div>
@@ -62,37 +88,37 @@
 </template>
 
 <script>
-import UtilsBL from '../bl/utils.js'
+import UtilsBL from "../bl/utils.js";
 
 export default {
-  name: 'aviso-confirmado-recentes',
+  name: "aviso-confirmado-recentes",
 
   mounted() {
     this.$nextTick(() => {
-      this.$http.get('aviso-confirmado/contar', { block: true }).then(
+      this.$http.get("aviso-confirmado/contar", { block: true }).then(
         response => {
           for (var i = 0; i < response.data.list.length; i++) {
-            var qd = response.data.list[i]
+            var qd = response.data.list[i];
             // qd.dataFormatada = UtilsBL.formatDDMMYYYY(qd.data)
-            this.quantidadePorData.push(qd)
+            this.quantidadePorData.push(qd);
           }
         },
         error => UtilsBL.errormsg(error, this)
-      )
-    })
+      );
+    });
   },
 
   data() {
     return {
       quantidadePorData: [],
       errormsg: undefined
-    }
+    };
   },
 
   methods: {
     listar: function(data, porConfirmacao, porOmissao, doGrupo) {
       this.$router.push({
-        name: 'Lista de Avisos Confirmados',
+        name: "Lista de Avisos Confirmados",
         params: {
           dataInicial: data,
           dataFinal: data,
@@ -100,14 +126,14 @@ export default {
           porOmissao: porOmissao,
           doGrupo: doGrupo
         }
-      })
+      });
     },
 
     imprimir: function() {
-      window.print()
+      window.print();
     }
   }
-}
+};
 </script>
 
 <style scoped>

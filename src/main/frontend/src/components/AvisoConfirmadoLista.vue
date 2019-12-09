@@ -3,7 +3,9 @@
     <template v-if="!aviso">
       <div class="row">
         <div class="col-md-12">
-          <h4 class="text-center mt-3 mb-3">Consulta de Intimações/Citações Confirmadas</h4>
+          <h4 class="text-center mt-3 mb-3">
+            Consulta de Intimações/Citações Confirmadas
+          </h4>
         </div>
       </div>
 
@@ -11,15 +13,32 @@
         <div class="row mb-3 justify-content-center">
           <div class="form-groupx col-sm-auto">
             <label for="dataInicial">Data Inicial</label>
-            <input id="dataInicial" type="text" class="form-control" placeholder="DD/MM/AAAA" v-model="dataInicial">
+            <input
+              id="dataInicial"
+              type="text"
+              class="form-control"
+              placeholder="DD/MM/AAAA"
+              v-model="dataInicial"
+            />
           </div>
           <div class="form-groupx col-sm-auto">
             <label for="dataFinal">Data Final</label>
-            <input id="dataFinal" type="text" class="form-control" placeholder="DD/MM/AAAA" v-model="dataFinal">
+            <input
+              id="dataFinal"
+              type="text"
+              class="form-control"
+              placeholder="DD/MM/AAAA"
+              v-model="dataFinal"
+            />
           </div>
           <div class="form-groupx col-md-auto">
             <label for="abrangencia">Abrangência</label>
-            <select id="abrangencia" class="form-control" v-model="doGrupo" name="abrangencia">
+            <select
+              id="abrangencia"
+              class="form-control"
+              v-model="doGrupo"
+              name="abrangencia"
+            >
               <option :value="false">Do Usuário</option>
               <option :value="true">Do Grupo</option>
             </select>
@@ -27,17 +46,42 @@
           <div class="form-groupx col-sm-auto">
             <label for="dataFinal" class="mb-0">Tipo de Confirmação</label>
             <div>
-              <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porConfirmacao"> Manual
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  v-model="porConfirmacao"
+                />
+                Manual
               </label>
             </div>
             <div>
-              <label class="form-check-label"> <input type="checkbox" class="form-check-input" v-model="porOmissao"> Automática
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  v-model="porOmissao"
+                />
+                Automática
               </label>
             </div>
           </div>
           <div class="col-sm-auto">
             <label for="pesquisar">&nbsp;</label>
-            <button id="pesquisar" class="btn btn-primary btn-block" data-style="expand-left" @click="pesquisar(dataInicial, dataFinal, porConfirmacao, porOmissao, doGrupo)">
+            <button
+              id="pesquisar"
+              class="btn btn-primary btn-block"
+              data-style="expand-left"
+              @click="
+                pesquisar(
+                  dataInicial,
+                  dataFinal,
+                  porConfirmacao,
+                  porOmissao,
+                  doGrupo
+                )
+              "
+            >
               Pesquisar
             </button>
           </div>
@@ -49,7 +93,7 @@
         <div class="col col-sm-12">
           <div class="float-right pb-2">
             Filtrar:
-            <input type="text" v-model="filtro"></input>
+            <input type="text" v-model="filtro" />
           </div>
           <div class="protocolos-header">
             Intimações/Citações Encontradas
@@ -89,7 +133,9 @@
                   <th>
                     <a @click="sort('datalimiteintimacaoautomatica')">
                       Data Limite Int. Aut.
-                      <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
+                      <span
+                        v-show="orderByField == 'datalimiteintimacaoautomatica'"
+                      >
                         <span v-show="!reverseSort">&#8679;</span>
                         <span v-show="reverseSort">&#8681;</span>
                       </span>
@@ -180,7 +226,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="r in filtrados">
+                <tr v-for="r in filtrados" :key="r.id">
                   <td>
                     <span v-html="r.dataconfirmacaoFormatada"></span>
                   </td>
@@ -190,23 +236,42 @@
                   <td>
                     <span v-html="r.dataavisoFormatada"></span>
                   </td>
-                  <td>{{r.numeroprazo}} {{r.tipoprazo}} {{r.multiplicadorprazo}}</td>
                   <td>
-                    <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
+                    {{ r.numeroprazo }} {{ r.tipoprazo }}
+                    {{ r.multiplicadorprazo }}
                   </td>
-                  <td>{{r.tipo}}</td>
-                  <td>{{r.eventointimacao}}</td>
-                  <td>{{r.motivointimacao}}</td>
                   <td>
-                    <router-link :to="{name: 'Processo', params: {numero: r.processo}, query: {avisos: $parent.cAvisos}}" target="_blank">{{r.processoFormatado}}</router-link>
+                    <span
+                      v-html="r.datalimiteintimacaoautomaticaFormatada"
+                    ></span>
                   </td>
-                  <td>{{r.assuntoNome}}</td>
-                  <td>{{r.orgao}}</td>
-                  <td :title="r.unidadenome">{{r.unidade}}</td>
-                  <td v-if="false">{{r.unidadetipo}}</td>
-                  <td v-if="false">{{r.localidade}}</td>
+                  <td>{{ r.tipo }}</td>
+                  <td>{{ r.eventointimacao }}</td>
+                  <td>{{ r.motivointimacao }}</td>
+                  <td>
+                    <router-link
+                      :to="{
+                        name: 'Processo',
+                        params: { numero: r.processo },
+                        query: { avisos: $parent.cAvisos }
+                      }"
+                      target="_blank"
+                      >{{ r.processoFormatado }}</router-link
+                    >
+                  </td>
+                  <td>{{ r.assuntoNome }}</td>
+                  <td>{{ r.orgao }}</td>
+                  <td :title="r.unidadenome">{{ r.unidade }}</td>
+                  <td v-if="false">{{ r.unidadetipo }}</td>
+                  <td v-if="false">{{ r.localidade }}</td>
                   <td align="right">
-                    <button type="button" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">Ver</button>
+                    <button
+                      type="button"
+                      @click="exibirAviso(r)"
+                      class="btn btn-sm btn-success d-print-none"
+                    >
+                      Ver
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -215,32 +280,44 @@
         </div>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button type="button" @click="imprimir()" id="imprimir" v-if="filtrados.length > 0" class="btn btn-info float-right ml-3 d-print-none">Imprimir</button>
+        <button
+          type="button"
+          @click="imprimir()"
+          id="imprimir"
+          v-if="filtrados.length > 0"
+          class="btn btn-info float-right ml-3 d-print-none"
+        >
+          Imprimir
+        </button>
       </div>
     </template>
 
-    <aviso-detalhe v-if="aviso" :aviso="aviso" @voltar="aviso = undefined"></aviso-detalhe>
+    <aviso-detalhe
+      v-if="aviso"
+      :aviso="aviso"
+      @voltar="aviso = undefined"
+    ></aviso-detalhe>
   </div>
 </template>
 
 <script>
-import UtilsBL from '../bl/utils.js'
-import ProcessoBL from '../bl/processo.js'
-import CnjAssuntoBL from '../bl/cnj-assunto.js'
-import { Bus } from '../bl/bus.js'
-import AvisoDetalhe from './AvisoDetalhe'
+import UtilsBL from "../bl/utils.js";
+import ProcessoBL from "../bl/processo.js";
+import CnjAssuntoBL from "../bl/cnj-assunto.js";
+import { Bus } from "../bl/bus.js";
+import AvisoDetalhe from "./AvisoDetalhe";
 
 export default {
-  name: 'aviso-confirmado-lista',
+  name: "aviso-confirmado-lista",
 
   components: {
-    'aviso-detalhe': AvisoDetalhe
+    "aviso-detalhe": AvisoDetalhe
   },
 
   mounted() {
     this.$nextTick(() => {
-      if (this.dataInicial && this.dataFinal) this.carregarLista()
-    })
+      if (this.dataInicial && this.dataFinal) this.carregarLista();
+    });
   },
 
   data() {
@@ -252,56 +329,56 @@ export default {
       doGrupo: this.$route.params.doGrupo,
       avisos: [],
       aviso: undefined,
-      orderByField: 'dataconfirmacao',
+      orderByField: "dataconfirmacao",
       reverseSort: false,
       filtro: undefined
-    }
+    };
   },
 
   computed: {
     filtrados: function() {
-      console.log('recalculando filtrados...', this.modified)
-      var a = this.avisos
-      a = UtilsBL.filtrarPorSubstring(a, this.filtro)
+      console.log("recalculando filtrados...", this.modified);
+      var a = this.avisos;
+      a = UtilsBL.filtrarPorSubstring(a, this.filtro);
 
       a.sort((x, y) => {
         if (x[this.orderByField] !== y[this.orderByField]) {
-          var r = 0
+          var r = 0;
           if (
             x[this.orderByField] === undefined &&
             y[this.orderByField] !== undefined
           ) {
-            r = -1
+            r = -1;
           } else if (
             x[this.orderByField] !== undefined &&
             y[this.orderByField] === undefined
           ) {
-            r = 1
-          } else r = x[this.orderByField] < y[this.orderByField] ? -1 : 1
-          if (!this.reverseSort) r = -r
-          return r
+            r = 1;
+          } else r = x[this.orderByField] < y[this.orderByField] ? -1 : 1;
+          if (!this.reverseSort) r = -r;
+          return r;
         }
-        return 0
-      })
+        return 0;
+      });
 
-      return a
+      return a;
     }
   },
 
   methods: {
     carregarLista: function() {
-      var i
+      var i;
       this.$http
         .get(
-          'aviso-confirmado/listar?datainicial=' +
+          "aviso-confirmado/listar?datainicial=" +
             this.dataInicial +
-            '&datafinal=' +
+            "&datafinal=" +
             this.dataFinal +
-            '&confirmacao=' +
+            "&confirmacao=" +
             this.porConfirmacao +
-            '&omissao=' +
+            "&omissao=" +
             this.porOmissao +
-            '&grupo=' +
+            "&grupo=" +
             this.doGrupo,
           { block: true }
         )
@@ -309,46 +386,46 @@ export default {
           response => {
             for (i = 0; i < response.data.status.length; i++) {
               if (response.data.status[i].errormsg) {
-                if (this.errormsg === undefined) this.errormsg = ''
-                else this.errormsg += '; '
+                if (this.errormsg === undefined) this.errormsg = "";
+                else this.errormsg += "; ";
                 this.errormsg +=
                   response.data.status[i].system +
-                  ': ' +
-                  response.data.status[i].errormsg
+                  ": " +
+                  response.data.status[i].errormsg;
               }
             }
 
             if (response.data.list) {
-              this.$set(this, 'avisos', [])
+              this.$set(this, "avisos", []);
               for (i = 0; i < response.data.list.length; i++) {
-                var aviso = response.data.list[i]
-                aviso.errormsg = undefined
+                var aviso = response.data.list[i];
+                aviso.errormsg = undefined;
                 aviso.processoFormatado = ProcessoBL.formatarProcesso(
                   aviso.processo
-                )
+                );
                 aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
                   aviso.dataaviso
-                )
+                );
                 aviso.dataconfirmacaoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
                   aviso.dataconfirmacao
-                )
+                );
                 aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
                   aviso.datalimiteintimacaoautomatica
-                )
+                );
                 aviso.datarecebimento = aviso.dataconfirmacaoFormatada.replace(
-                  '&nbsp;',
-                  ' '
-                )
-                aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto)
-                aviso.teor = ProcessoBL.formatarTexto(aviso.teor)
-                this.avisos.push(aviso)
+                  "&nbsp;",
+                  " "
+                );
+                aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto);
+                aviso.teor = ProcessoBL.formatarTexto(aviso.teor);
+                this.avisos.push(aviso);
               }
             }
           },
           error => {
-            Bus.$emit('message', 'Erro', error.data.errormsg)
+            Bus.$emit("message", "Erro", error.data.errormsg);
           }
-        )
+        );
     },
 
     pesquisar: function(
@@ -359,7 +436,7 @@ export default {
       doGrupo
     ) {
       this.$router.push({
-        name: 'Lista de Avisos Confirmados',
+        name: "Lista de Avisos Confirmados",
         params: {
           dataInicial: dataInicial,
           dataFinal: dataFinal,
@@ -367,28 +444,28 @@ export default {
           porOmissao: porOmissao,
           doGrupo: doGrupo
         }
-      })
-      this.carregarLista()
+      });
+      this.carregarLista();
     },
 
     sort: function(field) {
       if (field !== this.orderByField) {
-        this.orderByField = field
-        this.reverseSort = true
+        this.orderByField = field;
+        this.reverseSort = true;
       } else {
-        this.reverseSort = !this.reverseSort
+        this.reverseSort = !this.reverseSort;
       }
     },
 
     exibirAviso: function(aviso) {
-      this.aviso = aviso
+      this.aviso = aviso;
     },
 
     imprimir: function() {
-      window.print()
+      window.print();
     }
   }
-}
+};
 </script>
 
 <style scoped>

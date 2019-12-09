@@ -4,19 +4,40 @@
       <div class="col col-sm-12 col-md-6">
         <div class="jumbotron d-block mx-auto">
           <h2 class="text-center pb-3">Autenticação</h2>
-          <p v-if="errormsg" class="alert alert-danger" role="alert">{{errormsg}}</p>
+          <p v-if="errormsg" class="alert alert-danger" role="alert">
+            {{ errormsg }}
+          </p>
           <form role="form">
             <div class="form-group">
               <label for="username">Usuário</label>
-              <input type="text" class="form-control" v-model="user.username" id="username" placeholder="Username" autocorrect="off" autocapitalize="none">
+              <input
+                type="text"
+                class="form-control"
+                v-model="user.username"
+                id="username"
+                placeholder="Username"
+                autocorrect="off"
+                autocapitalize="none"
+              />
             </div>
             <div class="form-group">
               <label for="password">Senha</label>
-              <input type="password" class="form-control" id="password" v-model="user.password" placeholder="Password">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                v-model="user.password"
+                placeholder="Password"
+              />
             </div>
             <div class="row pt-3">
               <div class="col">
-                <button class="btn btn-primary d-block mx-auto" @click.prevent="login()">Enviar</button>
+                <button
+                  class="btn btn-primary d-block mx-auto"
+                  @click.prevent="login()"
+                >
+                  Enviar
+                </button>
               </div>
             </div>
           </form>
@@ -28,28 +49,30 @@
 </template>
 
 <script>
-import UtilsBL from '../bl/utils.js'
+import UtilsBL from "../bl/utils.js";
 
 export default {
-  name: 'login',
-  data () {
+  name: "login",
+  data() {
     return {
       errormsg: undefined,
       user: {}
-    }
+    };
   },
   methods: {
-    login: function () {
-      this.$http.post('autenticar', this.user, { block: true }).then(response => {
-        this.$parent.$emit('updateLogged', response.data.id_token)
-        if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: 'Mesa' })
-        else this.$router.push({ name: 'Consulta Simples' })
-      }, error => UtilsBL.errormsg(error, this))
+    login: function() {
+      this.$http.post("autenticar", this.user, { block: true }).then(
+        response => {
+          this.$parent.$emit("updateLogged", response.data.id_token);
+          if (this.$parent.jwt.isMagistrado())
+            this.$router.push({ name: "Mesa" });
+          else this.$router.push({ name: "Consulta Simples" });
+        },
+        error => UtilsBL.errormsg(error, this)
+      );
     }
   }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

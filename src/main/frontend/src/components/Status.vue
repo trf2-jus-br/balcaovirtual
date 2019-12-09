@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
-          {{errormsg}}
+          {{ errormsg }}
         </p>
       </div>
 
@@ -14,13 +14,32 @@
 
     <div class="row" v-if="$parent.jwt">
       <div class="form-group col-md-4">
-          <my-input :disabled="true" name="nome" label="Nome" v-model="$parent.jwt.name" :edit="true"></my-input>
-        </div>
-      <div class="form-group col-md-4">
-        <my-input :disabled="true" name="cpf" v-model="$parent.jwt.cpf" label="CPF" :edit="true" mask="999.999.999-99"></my-input>
+        <my-input
+          :disabled="true"
+          name="nome"
+          label="Nome"
+          v-model="$parent.jwt.name"
+          :edit="true"
+        ></my-input>
       </div>
       <div class="form-group col-md-4">
-        <my-input :disabled="true" name="email" v-model="$parent.jwt.email" label="E-mail" :edit="true"></my-input>
+        <my-input
+          :disabled="true"
+          name="cpf"
+          v-model="$parent.jwt.cpf"
+          label="CPF"
+          :edit="true"
+          mask="999.999.999-99"
+        ></my-input>
+      </div>
+      <div class="form-group col-md-4">
+        <my-input
+          :disabled="true"
+          name="email"
+          v-model="$parent.jwt.email"
+          label="E-mail"
+          :edit="true"
+        ></my-input>
       </div>
     </div>
 
@@ -42,21 +61,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="u in $parent.jwt.user">
+              <tr v-for="u in $parent.jwt.user" :key="u.id">
                 <td>
-                  <span :title="'Sigla do Sistema: ' + u.sistema">{{$parent.test.properties['balcaovirtual.' + u.sistema + '.name']}}</span>
+                  <span :title="'Sigla do Sistema: ' + u.sistema">{{
+                    $parent.test.properties[
+                      "balcaovirtual." + u.sistema + ".name"
+                    ]
+                  }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Usuário: ' + u.ieusu">{{u.origin === 'int' ? 'interno' : 'externo'}}</span>
+                  <span :title="'ID Usuário: ' + u.ieusu">{{
+                    u.origin === "int" ? "interno" : "externo"
+                  }}</span>
                 </td>
                 <td>
-                  <span>{{u.perfil}}</span>
+                  <span>{{ u.perfil }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Unidade: ' + u.ieunidade">{{u.unidade}}</span>
+                  <span :title="'ID Unidade: ' + u.ieunidade">{{
+                    u.unidade
+                  }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Entidade: ' + u.ieentidade">{{u.entidade}}</span>
+                  <span :title="'ID Entidade: ' + u.ieentidade">{{
+                    u.entidade
+                  }}</span>
                 </td>
               </tr>
             </tbody>
@@ -80,27 +109,23 @@
                 <th>Sistema/Órgão</th>
                 <th>API</th>
                 <th>MNI</th>
-                <th>Assijus</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="s in $parent.sistemas">
+              <tr v-for="s in $parent.sistemas" :key="s.id">
                 <td>
-                  <span :title="'Identificador: ' + s">{{$parent.test.properties['balcaovirtual.' + s + '.name']}}</span>
+                  <span :title="'Identificador: ' + s">{{
+                    $parent.test.properties["balcaovirtual." + s + ".name"]
+                  }}</span>
                 </td>
                 <td>
                   <span v-bind:class="classeDoTeste(apis, s)">
-                    {{mensagemDoTeste(apis, s)}}
+                    {{ mensagemDoTeste(apis, s) }}
                   </span>
                 </td>
                 <td>
                   <span v-bind:class="classeDoTeste(mnis, s)">
-                    {{mensagemDoTeste(mnis, s)}}
-                  </span>
-                </td>
-                <td>
-                  <span v-bind:class="classeDoTeste(assijuss, s)">
-                    {{mensagemDoTeste(assijuss, s)}}
+                    {{ mensagemDoTeste(mnis, s) }}
                   </span>
                 </td>
               </tr>
@@ -113,22 +138,22 @@
 </template>
 
 <script>
-import UtilsBL from '../bl/utils.js'
-import MyInput from './MyInput'
+import UtilsBL from "../bl/utils.js";
+import MyInput from "./MyInput";
 
 export default {
-  name: 'aviso-confirmado-recentes',
+  name: "aviso-confirmado-recentes",
 
   mounted() {
     this.$nextTick(() => {
-      this.$http.get('test', { block: false }).then(
+      this.$http.get("test", { block: false }).then(
         response => this.processaRespostaDoTeste(response),
         error => {
-          if (error.status === 503) this.processaRespostaDoTeste(error)
-          else UtilsBL.errormsg(error, this)
+          if (error.status === 503) this.processaRespostaDoTeste(error);
+          else UtilsBL.errormsg(error, this);
         }
-      )
-    })
+      );
+    });
   },
 
   data() {
@@ -136,33 +161,33 @@ export default {
       test: undefined,
       apis: {},
       mnis: {},
-      assijuss: {},
       errormsg: undefined
-    }
+    };
   },
 
   methods: {
     classeDoTeste: function(v, s) {
-      if (v === undefined || v[s] === undefined) return ''
-      if (v[s].available) return 'text-success'
-      else return 'text-danger'
+      if (v === undefined || v[s] === undefined) return "";
+      if (v[s].available) return "text-success";
+      else return "text-danger";
     },
 
     mensagemDoTeste: function(v, s) {
-      if (v === undefined || v[s] === undefined) return 'Testando...'
-      if (v[s].available) return 'OK!'
-      else return v[s].errormsg
+      if (v === undefined || v[s] === undefined) return "Testando...";
+      if (v[s].available) return "OK!";
+      else return v[s].errormsg;
     },
 
     processaRespostaDoTeste: function(response) {
-      var dependencies = response.data.dependencies
+      var dependencies = response.data.dependencies;
       for (var i = 0; i < this.$parent.sistemas.length; i++) {
-        var sistema = this.$parent.sistemas[i]
-        var sistemaSlug = sistema.replace(/\./g, '-')
+        var sistema = this.$parent.sistemas[i];
+        var sistemaSlug = sistema.replace(/\./g, "-");
         for (var j = 0; j < dependencies.length; j++) {
-          if (dependencies[j].service === sistemaSlug + '-api') this.$set(this.apis, sistema, dependencies[j])
-          else if (dependencies[j].service === sistemaSlug + '-mni') this.$set(this.mnis, sistema, dependencies[j])
-          else if (dependencies[j].service === sistemaSlug + '-assijus') this.$set(this.assijuss, sistema, dependencies[j])
+          if (dependencies[j].service === sistemaSlug + "-api")
+            this.$set(this.apis, sistema, dependencies[j]);
+          else if (dependencies[j].service === sistemaSlug + "-mni")
+            this.$set(this.mnis, sistema, dependencies[j]);
         }
       }
     }
@@ -171,7 +196,7 @@ export default {
   components: {
     MyInput
   }
-}
+};
 </script>
 
 <style scoped>

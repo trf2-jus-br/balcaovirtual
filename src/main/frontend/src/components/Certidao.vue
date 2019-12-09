@@ -5,7 +5,7 @@
       <div class="row pt-5" v-if="errormsg">
         <div class="col col-sm-12">
           <p class="alert alert-danger">
-            {{errormsg}}
+            {{ errormsg }}
           </p>
         </div>
       </div>
@@ -13,7 +13,7 @@
       <div class="row pt-5" v-if="warningmsg">
         <div class="col col-sm-12">
           <p class="alert alert-warning">
-            {{warningmsg}}
+            {{ warningmsg }}
           </p>
         </div>
       </div>
@@ -21,17 +21,24 @@
       <div v-if="!errormsg &amp;&amp; (numero || html)">
         <div class="row">
           <div class="col-md-12">
-            <h4 class="text-center mt-3 mb-3">
-              Certidão {{numero}}
-            </h4>
+            <h4 class="text-center mt-3 mb-3">Certidão {{ numero }}</h4>
           </div>
         </div>
 
-        <div v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'" class="row no-gutters mt-2">
+        <div
+          v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'"
+          class="row no-gutters mt-2"
+        >
           <div class="col col-auto ml-auto mb-3">
-            <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
+            <button
+              type="button"
+              @click="imprimir()"
+              id="imprimir"
+              class="btn btn-info d-print-none"
+            >
               <span class="fa fa-print"></span>
-              Imprimir</button>
+              Imprimir
+            </button>
           </div>
         </div>
 
@@ -39,25 +46,37 @@
           <div class="col col-sm-12">
             <p class="alert alert-warning" role="alert">
               <span v-html="html"></span>
-              <br/>
-              
-             <button type="button" @click="requerer()" id="requerer" class="btn btn-warning mt-3 mb-3">Requerer</button>
-            </p>
+              <br />
 
+              <button
+                type="button"
+                @click="requerer()"
+                id="requerer"
+                class="btn btn-warning mt-3 mb-3"
+              >
+                Requerer
+              </button>
+            </p>
           </div>
         </div>
 
         <div class="row" v-if="tipo == 'REQUERIDO' || tipo == 'AUTENTICADO'">
           <div class="col col-sm-12">
-            <p class="alert alert-info" role="alert" v-html="html">
-            </p>
+            <p class="alert alert-info" role="alert" v-html="html"></p>
           </div>
         </div>
 
         <div class="row" v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'">
           <div class="col col-sm-12">
-            <p :class="{alert: true, 'alert-success': tipo == 'NEGATIVO', 'alert-danger': tipo == 'POSITIVA'}" role="alert" v-html="html">
-            </p>
+            <p
+              :class="{
+                alert: true,
+                'alert-success': tipo == 'NEGATIVO',
+                'alert-danger': tipo == 'POSITIVA'
+              }"
+              role="alert"
+              v-html="html"
+            ></p>
           </div>
         </div>
 
@@ -68,24 +87,28 @@
 </template>
 
 <script>
-import he from 'he'
+import he from "he";
 
 export default {
-  name: 'certidao',
+  name: "certidao",
   mounted() {
     this.$nextTick(function() {
-      if (this.$route.name === 'Emitir Certidão') this.emitir()
-      if (this.$route.name === 'Autenticar Certidão') this.autenticar()
-      if (this.$route.name === 'Reimprimir Certidão') this.reimprimir()
-    })
+      if (this.$route.name === "Emitir Certidão") this.emitir();
+      if (this.$route.name === "Autenticar Certidão") this.autenticar();
+      if (this.$route.name === "Reimprimir Certidão") this.reimprimir();
+    });
   },
   data() {
     return {
-      token: this.$route.params.token ? this.$route.params.token : this.$route.query.token,
+      token: this.$route.params.token
+        ? this.$route.params.token
+        : this.$route.query.token,
       requisitante: this.$route.params.requisitante,
       numero: this.$route.params.numero,
       cpfcnpj: this.$route.params.cpfcnpj,
-      sistema: this.$route.params.sistema ? this.$route.params.sistema : this.$route.query.sistema,
+      sistema: this.$route.params.sistema
+        ? this.$route.params.sistema
+        : this.$route.query.sistema,
       tipo: undefined,
       html: undefined,
       nome: undefined,
@@ -94,121 +117,174 @@ export default {
       errormsg: undefined,
       warningmsg: undefined,
       certidao: undefined
-    }
+    };
   },
   methods: {
     emitir: function() {
-      this.warningmsg = 'Processando, aguarde...'
-      this.$http.post('certidao/emitir/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token, undefined, { block: true }).then(
-        response => {
-          this.warningmsg = undefined
-          this.tipo = response.data.tipo
-          this.numero = response.data.numero
-          this.html = response.data.html
-          this.nome = response.data.nome
-          this.qs = response.data.qs
-          this.params = response.data.params
-        },
-        error => {
-          this.warningmsg = undefined
-          this.errormsg =
-            error.data.errormsg
-        }
-      )
+      this.warningmsg = "Processando, aguarde...";
+      this.$http
+        .post(
+          "certidao/emitir/" +
+            this.requisitante +
+            "/" +
+            this.cpfcnpj +
+            "?sistema=" +
+            this.sistema +
+            "&token=" +
+            this.token,
+          undefined,
+          { block: true }
+        )
+        .then(
+          response => {
+            this.warningmsg = undefined;
+            this.tipo = response.data.tipo;
+            this.numero = response.data.numero;
+            this.html = response.data.html;
+            this.nome = response.data.nome;
+            this.qs = response.data.qs;
+            this.params = response.data.params;
+          },
+          error => {
+            this.warningmsg = undefined;
+            this.errormsg = error.data.errormsg;
+          }
+        );
     },
 
     requerer: function() {
-      this.warningmsg = 'Processando, aguarde...'
-      this.$http.post('certidao/requerer/' + this.requisitante + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token + '&nome=' + encodeURIComponent(this.nome) + '&params=' + this.params, { block: true }).then(
-        response => {
-          this.warningmsg = undefined
-          this.tipo = response.data.tipo
-          this.numero = response.data.numero
-          this.html = response.data.html
-        },
-        error => {
-          this.warningmsg = undefined
-          this.errormsg =
-            error.data.errormsg
-        }
-      )
+      this.warningmsg = "Processando, aguarde...";
+      this.$http
+        .post(
+          "certidao/requerer/" +
+            this.requisitante +
+            "/" +
+            this.cpfcnpj +
+            "?sistema=" +
+            this.sistema +
+            "&token=" +
+            this.token +
+            "&nome=" +
+            encodeURIComponent(this.nome) +
+            "&params=" +
+            this.params,
+          { block: true }
+        )
+        .then(
+          response => {
+            this.warningmsg = undefined;
+            this.tipo = response.data.tipo;
+            this.numero = response.data.numero;
+            this.html = response.data.html;
+          },
+          error => {
+            this.warningmsg = undefined;
+            this.errormsg = error.data.errormsg;
+          }
+        );
     },
 
     autenticar: function() {
-      this.warningmsg = 'Processando, aguarde...'
-      this.$http.get('certidao/autenticar/' + this.numero + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token).then(
-        response => {
-          this.warningmsg = undefined
-          this.tipo = response.data.tipo
-          this.numero = response.data.numero
-          this.html = response.data.html
-        },
-        error => {
-          this.warningmsg = undefined
-          this.errormsg = error.data.errormsg
-        }
-      )
+      this.warningmsg = "Processando, aguarde...";
+      this.$http
+        .get(
+          "certidao/autenticar/" +
+            this.numero +
+            "/" +
+            this.cpfcnpj +
+            "?sistema=" +
+            this.sistema +
+            "&token=" +
+            this.token
+        )
+        .then(
+          response => {
+            this.warningmsg = undefined;
+            this.tipo = response.data.tipo;
+            this.numero = response.data.numero;
+            this.html = response.data.html;
+          },
+          error => {
+            this.warningmsg = undefined;
+            this.errormsg = error.data.errormsg;
+          }
+        );
     },
 
     reimprimir: function() {
-      this.warningmsg = 'Processando, aguarde...'
-      this.$http.get('certidao/reimprimir/' + this.numero + '/' + this.cpfcnpj + '?sistema=' + this.sistema + '&token=' + this.token).then(
-        response => {
-          this.warningmsg = undefined
-          this.tipo = response.data.tipo
-          this.numero = response.data.numero
-          this.html = response.data.html
-        },
-        error => {
-          this.warningmsg = undefined
-          this.errormsg =
-            error.data.errormsg
-        }
-      )
+      this.warningmsg = "Processando, aguarde...";
+      this.$http
+        .get(
+          "certidao/reimprimir/" +
+            this.numero +
+            "/" +
+            this.cpfcnpj +
+            "?sistema=" +
+            this.sistema +
+            "&token=" +
+            this.token
+        )
+        .then(
+          response => {
+            this.warningmsg = undefined;
+            this.tipo = response.data.tipo;
+            this.numero = response.data.numero;
+            this.html = response.data.html;
+          },
+          error => {
+            this.warningmsg = undefined;
+            this.errormsg = error.data.errormsg;
+          }
+        );
     },
 
     imprimir_old: function() {
-      window.print()
+      window.print();
     },
 
     imprimir: function(disposition) {
-      var form = document.createElement('form')
-      form.action = process.env.API_URL + '/imprimir/certidao.pdf'
-      form.method = 'POST'
+      var form = document.createElement("form");
+      form.action = process.env.VUE_APP_API_URL + "/imprimir/certidao.pdf";
+      form.method = "POST";
       // form.target = '_blank'
-      form.style.display = 'none'
-      form.acceptCharset = 'UTF-8'
+      form.style.display = "none";
+      form.acceptCharset = "UTF-8";
 
-      var h = document.createElement('input')
-      h.type = 'text'
-      h.name = 'html'
-      h.value = he.encode(this.$refs['conteudo'].innerHTML, {allowUnsafeSymbols: true, useNamedReferences: true})
+      var h = document.createElement("input");
+      h.type = "text";
+      h.name = "html";
+      h.value = he.encode(this.$refs["conteudo"].innerHTML, {
+        allowUnsafeSymbols: true,
+        useNamedReferences: true
+      });
 
-      var d = document.createElement('input')
-      d.type = 'text'
-      d.name = 'disposition'
-      d.value = disposition === 'attachment' ? '?disposition=attachment' : '?disposition=inline'
+      var d = document.createElement("input");
+      d.type = "text";
+      d.name = "disposition";
+      d.value =
+        disposition === "attachment"
+          ? "?disposition=attachment"
+          : "?disposition=inline";
 
-      console.log(this.html)
+      console.log(this.html);
 
-      var submit = document.createElement('input')
-      submit.type = 'submit'
-      submit.id = 'submitView'
+      var submit = document.createElement("input");
+      submit.type = "submit";
+      submit.id = "submitView";
 
-      form.appendChild(h)
-      form.appendChild(d)
-      form.appendChild(submit)
-      document.body.appendChild(form)
+      form.appendChild(h);
+      form.appendChild(d);
+      form.appendChild(submit);
+      document.body.appendChild(form);
 
       /* global $ */
-      $('#submitView').click()
+      $("#submitView").click();
 
-      document.body.removeChild(form)
+      document.body.removeChild(form);
     }
   }
-}
+};
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
-</style>
+<style scoped></style>
