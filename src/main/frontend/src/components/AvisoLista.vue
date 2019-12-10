@@ -322,7 +322,8 @@
                       ]
                     }}</span>
                   </td>
-                  <td :title="r.unidadenome">{{ r.unidade }}</td>
+                  <td v-if="!r.sistema.includes('.apolo')" :title="r.unidadenome">{{ r.unidade }}</td>
+                  <td v-if="r.sistema.includes('.apolo')" :title="r.unidade">{{ r.unidadenome }}</td>
                   <td v-if="false">{{ r.unidadetipo }}</td>
                   <td v-if="false">{{ r.localidade }}</td>
                   <td class="status-td" v-if="exibirStatus">

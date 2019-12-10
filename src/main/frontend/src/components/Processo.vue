@@ -447,7 +447,7 @@
                       <tbody>
                         <tr v-for="pv in fixed.processoVinculado" :key="pv.id">
                           <td style="padding-left: 20px">
-                            <span v-html="pv.link"></span
+                            <span v-html="(!$parent.jwt || !$parent.jwt.user[sistema]) ? pv.link.replace('/processo/', '/consultar/') : pv.link"></span
                             ><span v-if="pv.nomeClasse">
                               - {{ pv.nomeClasse }}</span
                             ><span v-if="pv.suporte"> - {{ pv.suporte }}</span>
@@ -478,7 +478,7 @@
                       <tbody>
                         <tr v-for="pv in fixed.recurso" :key="pv.id">
                           <td style="padding-left: 20px">
-                            <span v-html="pv.link"></span> -
+                            <span v-html="(!$parent.jwt || !$parent.jwt.user[sistema]) ? pv.link.replace('/processo/', '/consultar/') : pv.link"></span> -
                             {{ pv.nomeClasse }} - {{ pv.suporte }}
                           </td>
                         </tr>
