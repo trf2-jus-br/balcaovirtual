@@ -144,6 +144,11 @@ public class AutenticarPost implements IAutenticarPost {
 
 	public static Usuario assertUsuario() throws Exception {
 		Map<String, Object> jwt = assertUsuarioAutorizado();
+		Usuario u = usuarioFromJwtMap(jwt);
+		return u;
+	}
+
+	public static Usuario usuarioFromJwtMap(Map<String, Object> jwt) throws Exception {
 		Usuario u = new Usuario();
 
 		u.origem = (String) jwt.get("origin");

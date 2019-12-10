@@ -27,6 +27,7 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfCopy;
@@ -35,6 +36,8 @@ import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
@@ -44,14 +47,26 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 	@Override
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
-		String username = (String) map.get("username");
-		String password;
-		if (username != null)
-			password = AutenticarPost.decrypt((String) map.get("pwd"));
-		else {
-			username = SwaggerServlet.getProperty("public.username");
-			password = SwaggerServlet.getProperty("public.password");
+		String usuario = null;
+		String senha = null;
+
+		Usuario u = null;
+		try {
+			u = AutenticarPost.usuarioFromJwtMap(map);
+			String sistema = (String) map.get("orgao");
+			UsuarioDetalhe detalhe = u.usuarios.get(sistema);
+			if (detalhe != null) {
+				usuario = u.usuario;
+				senha = u.senha;
+			}
+		} catch (Exception ex) {
 		}
+
+		if (usuario == null) {
+			usuario = SwaggerServlet.getProperty("public.username");
+			senha = SwaggerServlet.getProperty("public.password");
+		}
+
 		String name = (String) map.get("name");
 		String file = (String) map.get("file");
 		String numProc = (String) map.get("proc");
@@ -124,7 +139,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 				byte[] ab = null;
 				// Peça Processual
-				ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
+				ab = SoapMNI.obterPecaProcessual(usuario, senha, orgao, numProc, numDoc);
 
 				ContentInfo info = contentInfoUtil.findMatch(ab);
 				resp.contenttype = info.getMimeType();
@@ -166,7 +181,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 				// Consulta o processo para saber quais são os documentos a serem
 				// concatenados
-				String json = SoapMNI.consultarProcesso(username, password, orgao, numProc, false, false, true);
+				String json = SoapMNI.consultarProcesso(usuario, senha, orgao, numProc, false, false, true);
 
 				JSONObject proc = new JSONObject(json).getJSONObject("value");
 				JSONArray docs = proc.getJSONArray("documento");
@@ -184,7 +199,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 				for (int i = 0; i < docs.length(); i++) {
 					String idDocumento = docs.getJSONObject(i).getString("idDocumento");
 
-					byte[] ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, idDocumento);
+					byte[] ab = SoapMNI.obterPecaProcessual(usuario, senha, orgao, numProc, idDocumento);
 
 					ContentInfo info = contentInfoUtil.findMatch(ab);
 
