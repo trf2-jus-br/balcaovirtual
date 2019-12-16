@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -127,8 +128,9 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		class HttpGetDependency extends TestableDependency {
 			String testsite;
 
-			HttpGetDependency(String service, String testsite, boolean partial, long msMin, long msMax) {
-				super("rest", service, partial, msMin, msMax);
+			HttpGetDependency(String category, String service, String testsite, boolean partial, long msMin,
+					long msMax) {
+				super(category, service, partial, msMin, msMax);
 				this.testsite = testsite;
 			}
 
@@ -175,14 +177,17 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addDependency(
 				new FileSystemWriteDependency("upload.dir.final", getProperty("upload.dir.final"), false, 0, 10000));
 
+		addDependency(new HttpGetDependency("rest", "www.google.com/recaptcha",
+				"https://www.google.com/recaptcha/api/siteverify", false, 0, 10000));
+
 		if (getProperty("notificar.titulo") != null) {
-			addDependency(new HttpGetDependency("fcm.googleapis.com", "https://fcm.googleapis.com/fcm/send", false, 0,
-					10000));
+			addDependency(new HttpGetDependency("rest", "fcm.googleapis.com", "https://fcm.googleapis.com/fcm/send",
+					false, 0, 10000));
 		}
 
 		for (final String system : Utils.getSystems()) {
 			String systemSlug = system.replace(".", "-");
-			addDependency(new SwaggerServletDependency(system.toLowerCase(), systemSlug + "-api", false, 0, 10000) {
+			addDependency(new SwaggerServletDependency(system, systemSlug + "-api", false, 0, 10000) {
 
 				@Override
 				public String getUrl() {
@@ -196,7 +201,23 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 			});
 
-			addDependency(new TestableDependency(system.toLowerCase(), systemSlug + "-mni", false, 0, 10000) {
+			if (system.contains(".eproc")) {
+				addDependency(new SwaggerServletDependency(system, systemSlug + "-php-api", false, 0, 10000) {
+
+					@Override
+					public String getUrl() {
+						return Utils.getApiEprocUrl(system);
+					}
+
+					@Override
+					public String getResponsable() {
+						return null;
+					}
+
+				});
+			}
+
+			addDependency(new TestableDependency(system, systemSlug + "-mni", false, 0, 10000) {
 
 				@Override
 				public String getUrl() {
@@ -210,6 +231,17 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 					return true;
 				}
 			});
+		}
+
+		if (getProperty("cert.systems") != null) {
+			for (String s : getProperty("cert.systems").split(",")) {
+				String systemSlug = s.replace(".", "-");
+				addPublicProperty(s.toLowerCase() + ".cert.name");
+				addRestrictedProperty(s.toLowerCase() + ".cert.api.url");
+				addPrivateProperty(s.toLowerCase() + ".cert.api.password");
+				addDependency(new HttpGetDependency(s, systemSlug + "-cert-api",
+						getProperty(s.toLowerCase() + ".cert.api.url"), false, 0, 10000));
+			}
 		}
 
 		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
@@ -230,6 +262,26 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				return false;
 			}
 		});
+
+		if (SwaggerServlet.getProperty("redis.password") != null)
+			addDependency(new TestableDependency("cache", "redis", false, 0, 10000) {
+
+				@Override
+				public String getUrl() {
+					return "redis://" + MemCacheRedis.getMasterHost() + ":" + MemCacheRedis.getMasterPort() + "/"
+							+ MemCacheRedis.getDatabase() + " (" + "redis://" + MemCacheRedis.getSlaveHost() + ":"
+							+ MemCacheRedis.getSlavePort() + "/" + MemCacheRedis.getDatabase() + ")";
+				}
+
+				@Override
+				public boolean test() throws Exception {
+					String uuid = UUID.randomUUID().toString();
+					MemCacheRedis mc = new MemCacheRedis();
+					mc.store("test", uuid.getBytes());
+					String uuid2 = new String(mc.retrieve("test"));
+					return uuid.equals(uuid2);
+				}
+			});
 
 	}
 
