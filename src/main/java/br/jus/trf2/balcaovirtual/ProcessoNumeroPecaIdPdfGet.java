@@ -20,7 +20,10 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 			u = AutenticarPost.assertUsuario();
 			usuario = u.usuario;
 			senha = u.senha;
-			origem = u.origem;
+			if (u.usuarios.get(req.sistema) != null)
+				origem = u.usuarios.get(req.sistema).origem;
+			else
+				origem = "pub";
 		}
 		resp.jwt = DownloadJwtFilenameGet.jwt(origem, usuario, senha, null, req.sistema, req.numero, req.id, null, null,
 				null, null, null, null);
