@@ -37,7 +37,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 			UsuarioDetalhe detalhe = u.usuarios.get(req.sistema);
 			if (detalhe != null) {
 				usuario = u.usuario;
-				senha = u.senha;
+				senha = u.getSenha();
 			}
 		} catch (Exception ex) {
 		}

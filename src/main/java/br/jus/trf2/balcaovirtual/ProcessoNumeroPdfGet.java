@@ -27,7 +27,7 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 			UsuarioDetalhe detalhe = u.usuarios.get(req.sistema);
 			if (detalhe != null) {
 				usuario = u.usuario;
-				senha = u.senha;
+				senha = u.getSenha();
 				origem = detalhe.origem;
 			}
 		} catch (Exception ex) {
@@ -46,7 +46,7 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 		resp.uuid = UUID.randomUUID().toString();
 		Status.update(resp.uuid, "Aguardando na fila de tarefas", 0, 100, 0L);
 		BalcaoVirtualServlet.submitToExecutor(new ProcessoCompleto(resp.uuid, usuario, senha, req.sistema, req.numero));
-		resp.jwt = DownloadJwtFilenameGet.jwt(origem, usuario, senha, null, req.sistema, req.numero, null, null, null,
+		resp.jwt = DownloadJwtFilenameGet.jwt(origem, usuario, null, req.sistema, req.numero, null, null, null,
 				null, null, null, resp.uuid);
 	}
 

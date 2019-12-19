@@ -14,7 +14,7 @@ public class ProcessoNumeroAvisoIdReceberPost implements IProcessoNumeroAvisoIdR
 			throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
-		SoapMNI.consultarTeorComunicacao(u.usuario, u.senha, req.numero, req.id, req.sistema, resp);
+		SoapMNI.consultarTeorComunicacao(u.usuario, u.getSenha(), req.numero, req.id, req.sistema, resp);
 		resp.datarecebimento = LocalDateTime.now().toString("dd/MM/yyyy hh:mm");
 	}
 

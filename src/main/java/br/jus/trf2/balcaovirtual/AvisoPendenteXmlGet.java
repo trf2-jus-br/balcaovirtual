@@ -14,7 +14,7 @@ public class AvisoPendenteXmlGet implements IAvisoPendenteXmlGet {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.isInterno())
 			throw new PresentableUnloggedException("Exportação XML de avisos disponível apenas para usuários externos");
-		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.senha, u.usuario, null, null, null, null,
+		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, null, null, null, null,
 				"avisos-pendentes.xml", null, null, null, null, null);
 	}
 

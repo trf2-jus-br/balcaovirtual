@@ -47,7 +47,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		String origin = (String) map.get("origin");
 		String password;
 		if (username != null && !"pub".equals(origin))
-			password = AutenticarPost.decrypt((String) map.get("pwd"));
+			password = AutenticarPost.Usuario.getSenha(username);
 		else {
 			username = SwaggerServlet.getProperty("public.username");
 			password = SwaggerServlet.getProperty("public.password");
@@ -251,7 +251,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		return map;
 	}
 
-	public static String jwt(String origin, String username, String password, String nome, String orgao,
+	public static String jwt(String origin, String username, String nome, String orgao,
 			String processo, String documento, String arquivo, String texto, String cargo, String empresa,
 			String unidade, String uuid) throws Exception {
 		final String issuer = Utils.getJwtIssuer();
@@ -270,8 +270,6 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 			claims.put("origin", origin);
 		if (username != null)
 			claims.put("username", username);
-		if (password != null)
-			claims.put("pwd", AutenticarPost.encrypt(password));
 		if (nome != null)
 			claims.put("name", nome);
 		if (orgao != null)

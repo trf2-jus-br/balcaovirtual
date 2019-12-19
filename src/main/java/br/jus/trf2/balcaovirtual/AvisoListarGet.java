@@ -53,7 +53,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 
 		// Carrega avisos via MNI
 		for (String system : mniSystems)
-			SoapMNI.consultarAvisosPendentes(system, u.usuario, u.senha, resp.list, resp.status);
+			SoapMNI.consultarAvisosPendentes(system, u.usuario, u.getSenha(), resp.list, resp.status);
 
 		// Retoma a carga de avisos do Eproc
 		if (mapp.size() > 0) {

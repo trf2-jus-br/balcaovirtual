@@ -20,7 +20,7 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 
 		String tipo = SwaggerServlet.getProperty(req.sistema.toLowerCase() + ".cota.tipo");
 
-		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero, tipo,
+		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.getSenha(), req.sistema, req.numero, tipo,
 				Integer.parseInt(req.nivelsigilo), null, null, pdf);
 		resp.status = mensagem;
 	}

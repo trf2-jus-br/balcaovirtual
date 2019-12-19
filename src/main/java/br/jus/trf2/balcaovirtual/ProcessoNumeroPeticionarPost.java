@@ -12,7 +12,7 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 			throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
-		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero,
+		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.getSenha(), req.sistema, req.numero,
 				req.tipopeticao, Integer.parseInt(req.nivelsigilo), req.encerraprazos, req.pdfs, null);
 		resp.status = mensagem;
 	}

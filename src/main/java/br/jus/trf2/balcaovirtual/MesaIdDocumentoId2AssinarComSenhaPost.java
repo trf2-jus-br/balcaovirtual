@@ -29,9 +29,9 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 		if (!u.usuario.equalsIgnoreCase(req.username))
 			throw new PresentableUnloggedException("Login não confere");
 
-		if (!u.senha.equals(req.password)) {
+		if (!u.getSenha().equals(req.password)) {
 			Random r = new Random();
-			Thread.currentThread().sleep(2000 + r.nextInt(2000));
+			Thread.sleep(2000 + r.nextInt(2000));
 			throw new PresentableUnloggedException("Senha não confere");
 		}
 

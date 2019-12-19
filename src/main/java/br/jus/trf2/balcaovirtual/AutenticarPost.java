@@ -13,9 +13,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
@@ -37,7 +34,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRespon
 
 @AcessoPublico
 public class AutenticarPost implements IAutenticarPost {
-	private static final Logger log = LoggerFactory.getLogger(AutenticarPost.class);
 	public static final long TIMEOUT_MILLISECONDS = 15000;
 	public static final String JWT_AUTH_COOKIE_NAME = SwaggerServlet.getProperty("cookie.name");
 	public static final String JWT_AUTH_COOKIE_DOMAIN = SwaggerServlet.getProperty("cookie.domain");
@@ -112,12 +108,14 @@ public class AutenticarPost implements IAutenticarPost {
 			throw new SwaggerAuthorizationException("Credenciais rejeitadas. Base" + (systems.length == 1 ? "" : "s")
 					+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
 					mcr.status);
-		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
+		String jwt = jwt(origem, req.username, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
 
 		Cookie cookie = buildCookie(jwt);
 		SwaggerServlet.getHttpServletResponse().addCookie(cookie);
+
+		Usuario.setSenha(req.username, req.password);
 	}
 
 	public static class UsuarioDetalhe {
@@ -131,18 +129,33 @@ public class AutenticarPost implements IAutenticarPost {
 	}
 
 	public static class Usuario {
+		final static String USUARIO_PREFIXO_SENHA = "bv-pwd-";
 		String origem;
 		String email;
 		String nome;
 		String usuario;
 		String cpf;
-		String senha;
 
 		Map<String, UsuarioDetalhe> usuarios;
 		public String stringDeUsuarios;
 
 		boolean isInterno() {
 			return origem != null && origem.startsWith("int");
+		}
+
+		String getSenha() throws Exception {
+			return getSenha(usuario);
+		}
+
+		public static void setSenha(String usuario, String senha) throws Exception {
+			SwaggerUtils.memCacheStore(USUARIO_PREFIXO_SENHA + usuario.toLowerCase(), encrypt(senha).getBytes());
+		}
+
+		public static String getSenha(String usuario) throws Exception {
+			byte[] ab = SwaggerUtils.memCacheRetrieve(USUARIO_PREFIXO_SENHA + usuario.toLowerCase());
+			if (ab == null)
+				throw new SwaggerAuthorizationException();
+			return decrypt(new String(ab));
 		}
 	}
 
@@ -160,7 +173,6 @@ public class AutenticarPost implements IAutenticarPost {
 		u.nome = (String) jwt.get("name");
 		u.cpf = (String) jwt.get("cpf");
 		u.usuario = (String) jwt.get("username");
-		u.senha = AutenticarPost.decrypt((String) jwt.get("pwd"));
 		String users = (String) jwt.get("users");
 		u.stringDeUsuarios = users;
 		if (users != null && users.length() > 0) {
@@ -238,11 +250,11 @@ public class AutenticarPost implements IAutenticarPost {
 
 	public static String renew() throws Exception {
 		Usuario u = assertUsuario();
-		return jwt(u.origem, u.usuario, u.senha, u.cpf, u.nome, u.email, u.stringDeUsuarios);
+		return jwt(u.origem, u.usuario, u.cpf, u.nome, u.email, u.stringDeUsuarios);
 	}
 
-	private static String jwt(String origin, String username, String password, String cpf, String name, String email,
-			String users) throws Exception {
+	private static String jwt(String origin, String username, String cpf, String name, String email, String users)
+			throws Exception {
 		final String issuer = Utils.getJwtIssuer();
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
@@ -258,7 +270,6 @@ public class AutenticarPost implements IAutenticarPost {
 		if (origin != null)
 			claims.put("origin", origin);
 		claims.put("username", username);
-		claims.put("pwd", encrypt(password));
 		claims.put("cpf", cpf);
 		claims.put("name", name);
 		claims.put("email", email);
@@ -273,7 +284,7 @@ public class AutenticarPost implements IAutenticarPost {
 		cookie.setPath("/");
 		if (JWT_AUTH_COOKIE_DOMAIN != null)
 			cookie.setDomain(JWT_AUTH_COOKIE_DOMAIN);
-		
+
 		cookie.setMaxAge(JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S);
 
 		// cookie.setSecure(true);
