@@ -12,7 +12,6 @@ public class MesaGet implements IMesaGet {
 
 	@Override
 	public void run(MesaGetRequest req, MesaGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
 		resp.list = new ArrayList<>();
 		Mesa m = new Mesa();
 		m.id = "assijus";

@@ -18,7 +18,7 @@ public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPo
 	@Override
 	public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
 			throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		Gson gson = new GsonBuilder().create();
 		Type type = new TypeToken<List<SoapMNI.Parte>>() {

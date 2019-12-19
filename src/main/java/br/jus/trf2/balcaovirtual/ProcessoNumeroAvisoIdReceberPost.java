@@ -12,7 +12,7 @@ public class ProcessoNumeroAvisoIdReceberPost implements IProcessoNumeroAvisoIdR
 	@Override
 	public void run(ProcessoNumeroAvisoIdReceberPostRequest req, ProcessoNumeroAvisoIdReceberPostResponse resp)
 			throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		SoapMNI.consultarTeorComunicacao(u.usuario, u.senha, req.numero, req.id, req.sistema, resp);
 		resp.datarecebimento = LocalDateTime.now().toString("dd/MM/yyyy hh:mm");

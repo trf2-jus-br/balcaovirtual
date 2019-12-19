@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +16,10 @@ import java.util.concurrent.Future;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 
+import com.auth0.jwt.JWTVerifyException;
+import com.crivano.swaggerservlet.SwaggerContext;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.SwaggerServletDependency;
@@ -23,6 +27,10 @@ import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.util.AcessoInvalidoException;
+import br.jus.trf2.balcaovirtual.util.AcessoProibidoException;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
+import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
@@ -44,6 +52,15 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addPrivateProperty("recaptcha.secret.key");
 		addRestrictedProperty("public.username");
 		addPrivateProperty("public.password");
+
+		addPrivateProperty("jwt.secret");
+		addPrivateProperty("api.secret");
+
+		addPublicProperty("jwt.issuer", "bv");
+		addPublicProperty("cookie.name", "bv-jwt");
+		addPublicProperty("cookie.domain", null);
+		addPublicProperty("cookie.expire.seconds", Long.toString(20 * 60L)); // Expira em 20min
+		addPublicProperty("cookie.renew.seconds", Long.toString(15 * 60L)); // Renova 15min antes de expirar
 
 		addRestrictedProperty("username.restriction", null);
 
@@ -110,8 +127,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			}
 		}
 
-		addPrivateProperty("jwt.secret");
-		addPrivateProperty("api.secret");
 		addRestrictedProperty("upload.dir.final");
 		addRestrictedProperty("upload.dir.temp");
 
@@ -245,6 +260,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		}
 
 		addDependency(new TestableDependency("database", "balcaovirtualds", false, 0, 10000) {
+
 			@Override
 			public String getUrl() {
 				return getProperty("datasource.name");
@@ -307,6 +323,50 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 	public static <T> Future<T> submitToExecutor(Callable<T> task) {
 		return executor.submit(task);
+	}
+
+	private final static ThreadLocal<Usuario> principal = new ThreadLocal<>();
+
+	@Override
+	public void invoke(SwaggerContext context) throws Exception {
+		try {
+			if (!context.getAction().getClass().isAnnotationPresent(AcessoPublico.class)) {
+				try {
+					principal.set(AutenticarPost.assertUsuario());
+				} catch (Exception e) {
+					if (!context.getAction().getClass().isAnnotationPresent(AcessoPublicoEPrivado.class))
+						throw e;
+				}
+				if (principal.get() != null) {
+					Map<String, Object> decodedToken = AutenticarPost.assertUsuarioAutorizado();
+					final long now = System.currentTimeMillis() / 1000L;
+					if ((Integer) decodedToken.get("exp") < now + AutenticarPost.JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S) {
+						// Seria bom incluir o attributo HttpOnly
+						String tokenNew = AutenticarPost.renew();
+						Cookie cookie = AutenticarPost.buildCookie(tokenNew);
+						context.getResponse().addCookie(cookie);
+					}
+				}
+			}
+			super.invoke(context);
+		} catch (AcessoProibidoException e) {
+			AutenticarPost.informarProibido(context.getResponse(), e);
+			return;
+		} catch (JWTVerifyException e) {
+			if ("jwt expired".equals(e.getMessage()))
+				AutenticarPost.informarNaoAutenticado(context.getResponse(), e);
+			else
+				throw new RuntimeException(e);
+		} catch (AcessoInvalidoException e) {
+			AutenticarPost.informarNaoAutenticado(context.getResponse(), e);
+			return;
+		} finally {
+			principal.remove();
+		}
+	}
+
+	public static Usuario getPrincipal() {
+		return principal.get();
 	}
 
 }

@@ -7,7 +7,9 @@ import br.jus.trf2.balcaovirtual.CertidaoEmitirRequisitanteCpfcnpjPost.FetchResp
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoAutenticarNumeroCpfcnpjGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoAutenticarNumeroCpfcnpjGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoAutenticarNumeroCpfcnpjGet;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class CertidaoAutenticarNumeroCpfcnpjGet implements ICertidaoAutenticarNumeroCpfcnpjGet {
 
 	@Override

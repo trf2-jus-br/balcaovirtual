@@ -13,7 +13,6 @@ public class ClasseIdMarcadoresGet implements IClasseIdMarcadoresGet {
 
 	@Override
 	public void run(ClasseIdMarcadoresGetRequest req, ClasseIdMarcadoresGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
 		resp.list = new ArrayList<>();
 
 		try (Dao dao = new Dao()) {

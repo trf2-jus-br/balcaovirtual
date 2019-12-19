@@ -11,7 +11,7 @@ public class AvisoConfirmadoXmlGet implements IAvisoConfirmadoXmlGet {
 
 	@Override
 	public void run(AvisoConfirmadoXmlGetRequest req, AvisoConfirmadoXmlGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.isInterno())
 			throw new PresentableUnloggedException(
 					"Exportação XML de avisos confirmados disponível apenas para usuários externos");

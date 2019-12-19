@@ -15,7 +15,9 @@ import com.crivano.swaggerservlet.PresentableUnloggedException;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoObterTokenGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoObterTokenGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoObterTokenGet;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class CertidaoObterTokenGet implements ICertidaoObterTokenGet {
 
 	@Override

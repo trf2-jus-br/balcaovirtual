@@ -1,10 +1,12 @@
 package br.jus.trf2.balcaovirtual;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdPdfGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetResponse;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 
 	@Override
@@ -16,8 +18,7 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 		if (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero)) {
 			origem = "pub";
 		} else {
-			Usuario u;
-			u = AutenticarPost.assertUsuario();
+			Usuario u = BalcaoVirtualServlet.getPrincipal();
 			usuario = u.usuario;
 			senha = u.senha;
 			if (u.usuarios.get(req.sistema) != null)

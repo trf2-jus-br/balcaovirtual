@@ -19,7 +19,7 @@ public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarca
 	@Override
 	public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
 			throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)

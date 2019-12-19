@@ -19,7 +19,6 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 
 	@Override
 	public void run(AvisoConfirmadoContarGetRequest req, AvisoConfirmadoContarGetResponse resp) throws Exception {
-		String authorization = AutenticarPost.assertAuthorization();
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();

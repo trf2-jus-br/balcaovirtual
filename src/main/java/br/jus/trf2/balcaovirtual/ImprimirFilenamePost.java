@@ -5,7 +5,9 @@ import java.io.ByteArrayInputStream;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IImprimirFilenamePost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenamePostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenamePostResponse;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class ImprimirFilenamePost implements IImprimirFilenamePost {
 
 	@Override

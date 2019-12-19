@@ -10,11 +10,10 @@ public class ProcessoNumeroPeticionarPost implements IProcessoNumeroPeticionarPo
 	@Override
 	public void run(ProcessoNumeroPeticionarPostRequest req, ProcessoNumeroPeticionarPostResponse resp)
 			throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.senha, req.sistema, req.numero,
-				req.tipopeticao, Integer.parseInt(req.nivelsigilo), req.encerraprazos,
-				req.pdfs, null);
+				req.tipopeticao, Integer.parseInt(req.nivelsigilo), req.encerraprazos, req.pdfs, null);
 		resp.status = mensagem;
 	}
 

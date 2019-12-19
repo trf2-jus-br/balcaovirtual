@@ -22,8 +22,7 @@ public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNu
 	@Override
 	public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req,
 			ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		if (u.usuarios.get(req.sistema) == null)
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +25,28 @@ import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
+import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAutenticarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAutenticarPost;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetResponse;
 
+@AcessoPublico
 public class AutenticarPost implements IAutenticarPost {
 	private static final Logger log = LoggerFactory.getLogger(AutenticarPost.class);
 	public static final long TIMEOUT_MILLISECONDS = 15000;
+	public static final String JWT_AUTH_COOKIE_NAME = SwaggerServlet.getProperty("cookie.name");
+	public static final String JWT_AUTH_COOKIE_DOMAIN = SwaggerServlet.getProperty("cookie.domain");
+	// Se 8h é a duração, informar 60 * 60 * 8
+	public static final int JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S = Integer
+			.valueOf(SwaggerServlet.getProperty("cookie.expire.seconds"));
+	// renova automaticamente X segundos antes de expirar
+	public static final int JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S = Integer
+			.valueOf(SwaggerServlet.getProperty("cookie.renew.seconds"));
 
 	@Override
 	public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception {
@@ -96,25 +109,15 @@ public class AutenticarPost implements IAutenticarPost {
 		}
 
 		if (usuarios == null)
-			throw new SwaggerAuthorizationException(
-					"Credenciais rejeitadas. Base" + (systems.length == 1 ? "" : "s")
-							+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
+			throw new SwaggerAuthorizationException("Credenciais rejeitadas. Base" + (systems.length == 1 ? "" : "s")
+					+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
 					mcr.status);
 		String jwt = jwt(origem, req.username, req.password, cpf, nome, email, usuarios);
 		verify(jwt);
 		resp.id_token = jwt;
-	}
 
-	private static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
-		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtPassword());
-		Map<String, Object> map;
-		try {
-			map = verifier.verify(jwt);
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
-				| IOException | JWTVerifyException e) {
-			throw new SwaggerAuthorizationException(e);
-		}
-		return map;
+		Cookie cookie = buildCookie(jwt);
+		SwaggerServlet.getHttpServletResponse().addCookie(cookie);
 	}
 
 	public static class UsuarioDetalhe {
@@ -136,6 +139,7 @@ public class AutenticarPost implements IAutenticarPost {
 		String senha;
 
 		Map<String, UsuarioDetalhe> usuarios;
+		public String stringDeUsuarios;
 
 		boolean isInterno() {
 			return origem != null && origem.startsWith("int");
@@ -158,6 +162,7 @@ public class AutenticarPost implements IAutenticarPost {
 		u.usuario = (String) jwt.get("username");
 		u.senha = AutenticarPost.decrypt((String) jwt.get("pwd"));
 		String users = (String) jwt.get("users");
+		u.stringDeUsuarios = users;
 		if (users != null && users.length() > 0) {
 			u.usuarios = new HashMap<>();
 			for (String s : users.split(";")) {
@@ -193,19 +198,47 @@ public class AutenticarPost implements IAutenticarPost {
 		return verify(authorization);
 	}
 
-	static String getAuthorizationHeader() throws SwaggerAuthorizationException {
+	public static String assertAuthorization() throws SwaggerAuthorizationException {
+		String authorization = getAuthorizationHeader();
+		verify(authorization);
+		return authorization;
+	}
+
+	public static String getAuthorizationHeader() throws SwaggerAuthorizationException {
 		String authorization = BalcaoVirtualServlet.getHttpServletRequest().getHeader("Authorization");
+
+		if (authorization == null) {
+			Cookie[] cookies = SwaggerServlet.getHttpServletRequest().getCookies();
+			if (cookies != null) {
+				for (Cookie c : cookies) {
+					if (JWT_AUTH_COOKIE_NAME.equals(c.getName()))
+						authorization = c.getValue();
+				}
+			}
+		}
+
 		if (authorization == null)
-			throw new SwaggerAuthorizationException("Authorization header is missing");
+			throw new SwaggerAuthorizationException("Authorization header or cookie is missing");
 		if (authorization.startsWith("Bearer "))
 			authorization = authorization.substring(7);
 		return authorization;
 	}
 
-	public static String assertAuthorization() throws SwaggerAuthorizationException {
-		String authorization = getAuthorizationHeader();
-		verify(authorization);
-		return authorization;
+	public static Map<String, Object> verify(String jwt) throws SwaggerAuthorizationException {
+		final JWTVerifier verifier = new JWTVerifier(Utils.getJwtPassword());
+		Map<String, Object> map;
+		try {
+			map = verifier.verify(jwt);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
+				| IOException | JWTVerifyException e) {
+			throw new SwaggerAuthorizationException(e);
+		}
+		return map;
+	}
+
+	public static String renew() throws Exception {
+		Usuario u = assertUsuario();
+		return jwt(u.origem, u.usuario, u.senha, u.cpf, u.nome, u.email, u.stringDeUsuarios);
 	}
 
 	private static String jwt(String origin, String username, String password, String cpf, String name, String email,
@@ -213,7 +246,7 @@ public class AutenticarPost implements IAutenticarPost {
 		final String issuer = Utils.getJwtIssuer();
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-		final long exp = iat + 18 * 60 * 60L; // token expires in 18 hours
+		final long exp = iat + JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S; // token expires in 18 hours
 
 		final JWTSigner signer = new JWTSigner(Utils.getJwtPassword());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
@@ -233,6 +266,49 @@ public class AutenticarPost implements IAutenticarPost {
 
 		final String jwt = signer.sign(claims);
 		return jwt;
+	}
+
+	public static Cookie buildCookie(String tokenNew) {
+		Cookie cookie = new Cookie(JWT_AUTH_COOKIE_NAME, tokenNew);
+		cookie.setPath("/");
+		if (JWT_AUTH_COOKIE_DOMAIN != null)
+			cookie.setDomain(JWT_AUTH_COOKIE_DOMAIN);
+		
+		cookie.setMaxAge(JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S);
+
+		// cookie.setSecure(true);
+		return cookie;
+	}
+
+	public static Cookie buildEraseCookie() {
+		Cookie cookie = new Cookie(JWT_AUTH_COOKIE_NAME, "");
+		cookie.setPath("/");
+		if (JWT_AUTH_COOKIE_DOMAIN != null)
+			cookie.setDomain(JWT_AUTH_COOKIE_DOMAIN);
+
+		cookie.setMaxAge(0);
+		return cookie;
+	}
+
+	public static void informarNaoAutenticado(HttpServletResponse resp, Exception e) throws IOException {
+		String mensagem = "Não foi possível autenticar o usuário, se não quiser perder o trabalho, use uma outra janela do navegador para entrar no sistema e fazer um novo login, depois volte nessa página e clique no botão de atualizar: ";
+		if (e.getCause() == null)
+			mensagem += e.getLocalizedMessage();
+		else
+			mensagem += e.getCause().getLocalizedMessage();
+		resp.setStatus(401); // 401 Unauthorized - authentication is required
+								// and has failed or has not yet been provided.
+		resp.getWriter().write(mensagem);
+	}
+
+	public static void informarProibido(HttpServletResponse resp, Exception e) throws IOException {
+		String mensagem = e.getCause() != null ? e.getCause().getLocalizedMessage() : e.getLocalizedMessage();
+		resp.setStatus(403); // 403 Forbidden - The request was valid, but the
+								// server is refusing action. The user might not
+								// have the necessary permissions for a
+								// resource, or may need an account of some sort
+		resp.getWriter().write(mensagem);
+		return;
 	}
 
 	public static String encrypt(String text) throws Exception {

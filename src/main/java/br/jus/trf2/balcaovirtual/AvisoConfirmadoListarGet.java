@@ -19,7 +19,6 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 
 	@Override
 	public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception {
-		String authorization = AutenticarPost.assertAuthorization();
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Date dtFim = Utils.parsearData(req.datafinal);

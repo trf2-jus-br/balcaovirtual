@@ -14,8 +14,6 @@ public class ConfigPessoaFisicaCpfGet implements IConfigPessoaFisicaCpfGet {
 
 	@Override
 	public void run(ConfigPessoaFisicaCpfGetRequest req, ConfigPessoaFisicaCpfGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
 				"obter pessoa física", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/pessoa-fisica/" + req.cpf, null,

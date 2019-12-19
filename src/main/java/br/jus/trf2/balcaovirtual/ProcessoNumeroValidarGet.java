@@ -27,10 +27,12 @@ import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
+import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetRequest;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
 
+@AcessoPublicoEPrivado
 public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 	@Override

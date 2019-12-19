@@ -105,6 +105,7 @@ Vue.config.productionTip = false;
 
 console.log(process.env.VUE_APP_API_URL);
 Vue.http.options.root = process.env.VUE_APP_API_URL;
+Vue.http.options.credentials = true;
 
 /* eslint-disable no-new */
 new Vue({

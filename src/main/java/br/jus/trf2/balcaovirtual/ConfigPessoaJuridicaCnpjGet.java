@@ -14,8 +14,6 @@ public class ConfigPessoaJuridicaCnpjGet implements IConfigPessoaJuridicaCnpjGet
 
 	@Override
 	public void run(ConfigPessoaJuridicaCnpjGetRequest req, ConfigPessoaJuridicaCnpjGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<PessoaJuridicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
 				"obter pessoa jurídica", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/pessoa-juridica/" + req.cnpj, null,

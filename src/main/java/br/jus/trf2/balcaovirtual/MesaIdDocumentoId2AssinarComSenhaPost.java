@@ -22,7 +22,7 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 		if (!req.sistema.contains(".eproc"))
 			throw new Exception("Operação disponível apenas para o Eproc");
 
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.usuarios.get(req.sistema) == null)
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 

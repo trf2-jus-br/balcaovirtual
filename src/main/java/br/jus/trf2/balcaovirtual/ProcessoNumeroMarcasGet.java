@@ -17,7 +17,7 @@ import br.jus.trf2.balcaovirtual.model.Processo;
 public class ProcessoNumeroMarcasGet implements IProcessoNumeroMarcasGet {
 	@Override
 	public void run(ProcessoNumeroMarcasGetRequest req, ProcessoNumeroMarcasGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());

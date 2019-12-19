@@ -1,4 +1,3 @@
-import Vue from "vue";
 import decode from "jwt-decode";
 
 const ID_TOKEN_KEY = "bv-jwt";
@@ -8,20 +7,32 @@ export default {
     this.clearIdToken();
   },
 
+  getCookie: function(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  },
+
   getIdToken: function() {
-    return localStorage.getItem(ID_TOKEN_KEY);
+    return this.getCookie(ID_TOKEN_KEY);
   },
 
   clearIdToken: function() {
-    localStorage.removeItem(ID_TOKEN_KEY);
-    Vue.http.headers.common["Authorization"] = undefined;
+    document.cookie = ID_TOKEN_KEY + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   },
 
   // Get and store id_token in local storage
   setIdToken: function(idToken) {
-    localStorage.setItem(ID_TOKEN_KEY, idToken);
-    console.log("Setting authorization header");
-    Vue.http.headers.common["Authorization"] = "Bearer " + idToken;
   },
 
   isLoggedIn: function() {

@@ -8,6 +8,7 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoIntercorrenteContarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetResponse;
@@ -20,14 +21,14 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 	@Override
 	public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
 			throws Exception {
-		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente", Utils.getApiPassword(system), "GET",
-							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
-									+ "/peticao-intercorrente/contar?dias=7",
+					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente",
+							Utils.getApiPassword(system), "GET",
+							Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/peticao-intercorrente/contar?dias=7",
 							null, UsuarioUsernamePeticaoIntercorrenteContarGetResponse.class));
 
 		}

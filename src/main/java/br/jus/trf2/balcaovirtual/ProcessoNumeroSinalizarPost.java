@@ -1,17 +1,17 @@
 package br.jus.trf2.balcaovirtual;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroSinalizarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinalizarPostResponse;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoNumeroSinalizarPost implements IProcessoNumeroSinalizarPost {
 
 	@Override
 	public void run(ProcessoNumeroSinalizarPostRequest req, ProcessoNumeroSinalizarPostResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		try (Dao dao = new Dao()) {
 			Sinal s = dao.obtemSinais(u.isInterno(), u.usuario, req.numero);

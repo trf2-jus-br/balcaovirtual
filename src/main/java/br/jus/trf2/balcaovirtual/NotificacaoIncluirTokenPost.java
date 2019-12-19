@@ -1,7 +1,5 @@
 package br.jus.trf2.balcaovirtual;
 
-import java.util.List;
-
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.INotificacaoIncluirTokenPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.NotificacaoIncluirTokenPostRequest;
@@ -12,7 +10,7 @@ public class NotificacaoIncluirTokenPost implements INotificacaoIncluirTokenPost
 
 	@Override
 	public void run(NotificacaoIncluirTokenPostRequest req, NotificacaoIncluirTokenPostResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		try (Dao dao = new Dao()) {
 			Notificacao n = dao.obtemTokenParaNotificar(req.token);

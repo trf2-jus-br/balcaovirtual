@@ -12,7 +12,7 @@ public class ConfigSistemasGet implements IConfigSistemasGet {
 
 	@Override
 	public void run(ConfigSistemasGetRequest req, ConfigSistemasGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		resp.list = new ArrayList<>();
 

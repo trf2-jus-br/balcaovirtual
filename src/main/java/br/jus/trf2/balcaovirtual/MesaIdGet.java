@@ -21,7 +21,7 @@ public class MesaIdGet implements IMesaIdGet {
 
 	@Override
 	public void run(MesaIdGetRequest req, MesaIdGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (!u.isInterno())
 			throw new Exception("Mesas só podem ser acessadas por usuários internos");
 

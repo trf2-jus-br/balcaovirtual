@@ -11,7 +11,7 @@ public class ProcessoNumeroSinaisGet implements IProcessoNumeroSinaisGet {
 
 	@Override
 	public void run(ProcessoNumeroSinaisGetRequest req, ProcessoNumeroSinaisGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		try (Dao dao = new Dao()) {
 			Sinal s = dao.obtemSinais(u.isInterno(), u.usuario, req.numero);

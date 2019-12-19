@@ -354,13 +354,15 @@ export default {
           } else {
             // Carragar a lista de avisos pendentes
             this.$nextTick(function() {
-              this.$http.get("aviso/listar", { block: false }).then(
-                response => {
-                  this.avisos = response.data;
-                  this.cAvisos = this.avisos.list.length;
-                },
-                error => console.log("Erro carregando avisos", error)
-              );
+              this.$http
+                .get("aviso/listar", { block: false })
+                .then(
+                  response => {
+                    this.avisos = response.data;
+                    this.cAvisos = this.avisos.list.length;
+                  },
+                  error => console.log("Erro carregando avisos", error)
+                );
             });
           }
         }

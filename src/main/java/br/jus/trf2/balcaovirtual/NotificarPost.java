@@ -6,7 +6,9 @@ import com.crivano.swaggerservlet.SwaggerServlet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.INotificarPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.NotificarPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.NotificarPostResponse;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class NotificarPost implements INotificarPost {
 
 	@Override

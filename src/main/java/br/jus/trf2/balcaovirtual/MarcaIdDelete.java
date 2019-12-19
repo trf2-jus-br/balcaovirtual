@@ -9,8 +9,6 @@ public class MarcaIdDelete implements IMarcaIdDelete {
 
 	@Override
 	public void run(MarcaIdDeleteRequest req, MarcaIdDeleteResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		try (Dao dao = new Dao()) {
 			Marca marca = dao.find(Marca.class, Long.valueOf(req.id));
 			if (marca == null)

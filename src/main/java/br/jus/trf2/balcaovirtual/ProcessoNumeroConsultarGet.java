@@ -15,13 +15,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroConsultarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetResponse;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
-import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroConsultarGetResponse;
 
+@AcessoPublicoEPrivado
 public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 
 	@Override
@@ -109,7 +111,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 				JsonArray vincs = mov.get("idDocumentoVinculado").getAsJsonArray();
 				if (vincs == null)
 					continue;
-				for (int i = 0; i<vincs.size(); i++) {
+				for (int i = 0; i < vincs.size(); i++) {
 					if (toRemove.containsKey(vincs.get(i).getAsString())) {
 						vincs.remove(i);
 						i--;

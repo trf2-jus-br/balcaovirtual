@@ -14,8 +14,6 @@ public class ConfigAdvogadoOabGet implements IConfigAdvogadoOabGet {
 
 	@Override
 	public void run(ConfigAdvogadoOabGetRequest req, ConfigAdvogadoOabGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<AdvogadoDocumentoGetResponse>> future = SwaggerCall.callAsync("obter advogado",
 				Utils.getApiPassword(req.sistema), "GET", Utils.getApiUrl(req.sistema) + "/advogado/" + req.oab, null,
 				AdvogadoDocumentoGetResponse.class);

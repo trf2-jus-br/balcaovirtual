@@ -14,7 +14,7 @@ public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 
 	@Override
 	public void run(ProcessoNumeroNotaIdPutRequest req, ProcessoNumeroNotaIdPutResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
 		if (ud == null)

@@ -136,7 +136,7 @@ public class Utils {
 	}
 
 	public static String getJwtIssuer() {
-		return "trf2.jus.br";
+		return SwaggerServlet.getProperty("jwt.issuer");
 	}
 
 	public static String getJwtPassword() {

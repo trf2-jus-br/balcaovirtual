@@ -15,7 +15,9 @@ import com.crivano.swaggerservlet.SwaggerError;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoEmitirRequisitanteCpfcnpjPostRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoEmitirRequisitanteCpfcnpjPostResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoEmitirRequisitanteCpfcnpjPost;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirRequisitanteCpfcnpjPost {
 
 	@Override

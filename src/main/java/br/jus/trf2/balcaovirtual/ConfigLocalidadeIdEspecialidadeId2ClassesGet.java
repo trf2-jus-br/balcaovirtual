@@ -18,8 +18,6 @@ public class ConfigLocalidadeIdEspecialidadeId2ClassesGet implements IConfigLoca
 	@Override
 	public void run(ConfigLocalidadeIdEspecialidadeId2ClassesGetRequest req,
 			ConfigLocalidadeIdEspecialidadeId2ClassesGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeId2ClasseGetResponse>> future = SwaggerCall.callAsync(
 				"obter classes", Utils.getApiPassword(req.sistema), "GET", Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade/"
 						+ req.id2 + "/classe",

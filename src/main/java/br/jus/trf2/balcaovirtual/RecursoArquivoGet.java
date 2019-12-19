@@ -3,13 +3,14 @@ package br.jus.trf2.balcaovirtual;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IRecursoArquivoGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.RecursoArquivoGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.RecursoArquivoGetResponse;
+import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
+@AcessoPublico
 public class RecursoArquivoGet implements IRecursoArquivoGet {
 
 	@Override

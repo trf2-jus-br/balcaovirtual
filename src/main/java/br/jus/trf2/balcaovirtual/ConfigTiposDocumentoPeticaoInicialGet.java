@@ -9,7 +9,6 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigTiposDocumentoPeticaoInicialGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigTiposDocumentoPeticaoInicialGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigTiposDocumentoPeticaoInicialGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Localidade;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.TipoDocumentoPeticaoInicial;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IdNome;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeGetResponse;
@@ -19,8 +18,6 @@ public class ConfigTiposDocumentoPeticaoInicialGet implements IConfigTiposDocume
 	@Override
 	public void run(ConfigTiposDocumentoPeticaoInicialGetRequest req,
 			ConfigTiposDocumentoPeticaoInicialGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync(
 				"obter tipos de documento para petição inicial", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/peticao/inicial/tipos-documento", null, LocalidadeGetResponse.class);

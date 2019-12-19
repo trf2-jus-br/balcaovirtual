@@ -22,7 +22,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 
 	@Override
 	public void run(AvisoListarGetRequest req, AvisoListarGetResponse resp) throws Exception {
-		Usuario u = AutenticarPost.assertUsuario();
+		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		resp.list = new ArrayList<>();
 		resp.status = new ArrayList<>();

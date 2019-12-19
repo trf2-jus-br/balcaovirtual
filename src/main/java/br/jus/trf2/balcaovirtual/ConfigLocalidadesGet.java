@@ -17,8 +17,6 @@ public class ConfigLocalidadesGet implements IConfigLocalidadesGet {
 
 	@Override
 	public void run(ConfigLocalidadesGetRequest req, ConfigLocalidadesGetResponse resp) throws Exception {
-		AutenticarPost.assertAuthorization();
-
 		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync("obter localidades",
 				Utils.getApiPassword(req.sistema), "GET", Utils.getApiUrl(req.sistema) + "/localidade", null,
 				LocalidadeGetResponse.class);
