@@ -338,6 +338,12 @@ export default {
       }
     });
 
+    Bus.$on("unathorized", () => {
+      this.jwt = undefined;
+      router.push({ name: "Login" });
+    });
+
+
     this.$on("updateLogged", token => {
       this.cAvisos = undefined;
       this.avisos = undefined;

@@ -116,7 +116,7 @@ new Vue({
       // continue to next interceptor
       next(function(response) {
         if (request.block) Bus.$emit("release");
-        if (response.status === 401) router.push({ name: "Login" });
+        if (response.status === 401) Bus.$emit("unauthorized");
       });
     });
   },
