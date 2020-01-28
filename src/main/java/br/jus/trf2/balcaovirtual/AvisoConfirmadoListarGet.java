@@ -38,6 +38,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
+		resp.status = Utils.getStatus(mcr);
 
 		resp.list = new ArrayList<>();
 		resp.status = new ArrayList<>();

@@ -33,6 +33,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
+		resp.status = Utils.getStatus(mcr);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {

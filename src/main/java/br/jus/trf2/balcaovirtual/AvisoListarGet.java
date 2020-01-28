@@ -48,9 +48,10 @@ public class AvisoListarGet implements IAvisoListarGet {
 
 		// Inicia a carga de avisos do Eproc
 		SwaggerMultipleCallResult mcr = null;
-		if (mapp.size() > 0)
+		if (mapp.size() > 0) {
 			mcr = SwaggerCall.callMultiple(mapp, 15000);
-
+			resp.status = Utils.getStatus(mcr);
+		}
 		// Carrega avisos via MNI
 		for (String system : mniSystems)
 			SoapMNI.consultarAvisosPendentes(system, u.usuario, u.getSenha(), resp.list, resp.status);

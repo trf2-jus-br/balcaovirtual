@@ -350,6 +350,7 @@ public interface IBalcaoVirtual {
 
 	public class ConfigEntidadesGetResponse implements ISwaggerResponse {
 		public List<Entidade> list;
+		public List<ListStatus> status;
 	}
 
 	public interface IConfigEntidadesGet extends ISwaggerMethod {
@@ -1066,6 +1067,7 @@ public interface IBalcaoVirtual {
 
 	public class PeticaoIntercorrenteContarGetResponse implements ISwaggerResponse {
 		public List<QuantidadePorData> list;
+		public List<ListStatus> status;
 	}
 
 	public interface IPeticaoIntercorrenteContarGet extends ISwaggerMethod {
@@ -1079,6 +1081,7 @@ public interface IBalcaoVirtual {
 
 	public class PeticaoIntercorrenteListarGetResponse implements ISwaggerResponse {
 		public List<PeticaoIntercorrenteResumo> list;
+		public List<ListStatus> status;
 	}
 
 	public interface IPeticaoIntercorrenteListarGet extends ISwaggerMethod {
@@ -1115,6 +1118,7 @@ public interface IBalcaoVirtual {
 
 	public class AvisoConfirmadoContarGetResponse implements ISwaggerResponse {
 		public List<QuantidadeConfirmadaPorData> list;
+		public List<ListStatus> status;
 	}
 
 	public interface IAvisoConfirmadoContarGet extends ISwaggerMethod {

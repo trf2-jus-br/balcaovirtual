@@ -277,8 +277,10 @@ export default {
       form.appendChild(submit);
       document.body.appendChild(form);
 
-      /* global $ */
-      $("#submitView").click();
+      var el = document.getElementById("submitView");
+      var evObj = document.createEvent("Events");
+      evObj.initEvent("click", true, false);
+      el.dispatchEvent(evObj);
 
       document.body.removeChild(form);
     }

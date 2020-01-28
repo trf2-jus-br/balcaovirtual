@@ -551,6 +551,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/Entidade"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:
@@ -1393,6 +1397,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/QuantidadePorData"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:
@@ -1414,6 +1422,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/PeticaoIntercorrenteResumo"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:
@@ -1478,6 +1490,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/definitions/QuantidadeConfirmadaPorData"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
         500:
           description: Error ocurred
           schema:
