@@ -7,10 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Duration;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 
 import com.auth0.jwt.JWTVerifyException;
-import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerContext;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
@@ -35,10 +31,6 @@ import br.jus.trf2.balcaovirtual.util.AcessoInvalidoException;
 import br.jus.trf2.balcaovirtual.util.AcessoProibidoException;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
-import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
-import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
-import es.moki.ratelimitj.redis.request.RedisRateLimiterFactory;
-import io.lettuce.core.RedisClient;
 
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
@@ -94,10 +86,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		if (SwaggerServlet.getProperty("redis.password") != null)
 			SwaggerUtils.setCache(new MemCacheRedis());
-		
-		// Rate Limit
-		addPublicProperty("rate.limit.duration.in.seconds", "60");
-		addPublicProperty("rate.limit.max.requests", null);
 
 		// Notificações
 		addPrivateProperty("notificar.password", null);
@@ -339,26 +327,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 	private final static ThreadLocal<Usuario> principal = new ThreadLocal<>();
 
-	private void assertRateLimit(String username) throws Exception {
-		if (getProperty("redis.password") == null || getProperty("rate.limit.duration.in.seconds") == null
-				|| getProperty("rate.limit.max.requests") == null)
-			return;
-		RedisRateLimiterFactory factory = new RedisRateLimiterFactory(
-				RedisClient.create("redis://" + getProperty("redis.password") + "@" + getProperty("redis.master.host")
-						+ ":" + getProperty("redis.master.port") + "/" + getProperty("redis.database")));
-
-		// 50 request per minute, per key
-		Set<RequestLimitRule> rules = Collections.singleton(
-				RequestLimitRule.of(Duration.ofSeconds(Integer.valueOf(getProperty("rate.limit.duration.in.seconds"))),
-						Integer.valueOf(getProperty("rate.limit.max.requests"))));
-		RequestRateLimiter requestRateLimiter = factory.getInstance(rules);
-
-		boolean overLimit = requestRateLimiter.overLimitWhenIncremented("bv-rate-" + username.toLowerCase());
-		if (overLimit)
-			throw new PresentableException("Acima do limite de requisições por minuto");
-
-	}
-
 	@Override
 	public void invoke(SwaggerContext context) throws Exception {
 		try {
@@ -370,7 +338,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 						throw e;
 				}
 				if (principal.get() != null) {
-					assertRateLimit(principal.get().usuario);
 					Map<String, Object> decodedToken = AutenticarPost.assertUsuarioAutorizado();
 					final long now = System.currentTimeMillis() / 1000L;
 					if ((Integer) decodedToken.get("exp") < now + AutenticarPost.JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S) {
