@@ -57,7 +57,7 @@
                   >
                 </li>
                 <li
-                  v-if="test.properties['balcaovirtual.cert.systems']"
+                  v-if="test.properties['balcaovirtual.env'] === 'desenv' &amp;&amp; test.properties['balcaovirtual.cert.systems']"
                   class="nav-item"
                 >
                   <router-link
@@ -281,6 +281,7 @@ import Assinatura from "./components/Assinatura";
 import { initializeFirebase } from "./bl/push.js";
 import { register } from "register-service-worker";
 import firebase from "firebase/app";
+import router from "./router";
 
 export default {
   name: "app",

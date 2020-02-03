@@ -653,6 +653,7 @@ public interface IBalcaoVirtual {
 		public String tipopeticao;
 		public String nivelsigilo;
 		public String encerraprazos;
+		public String observacoes;
 		public String pdfs;
 	}
 

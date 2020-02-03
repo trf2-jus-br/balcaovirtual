@@ -97,6 +97,12 @@ parameters:
     description: Informa se a petição intercorrente deve encerrar prazos abertos para a parte em questão
     type: string
     required: true
+  observacoes:
+    name: observacoes
+    in: formData
+    description: Observações a respeito do documento que está sendo protocolado
+    type: string
+    required: false
   tutelaantecipada:
     name: tutelaantecipada
     in: formData
@@ -959,6 +965,7 @@ paths:
         - $ref: "#/parameters/tipopeticao"
         - $ref: "#/parameters/nivelsigilo"
         - $ref: "#/parameters/encerraprazos"
+        - $ref: "#/parameters/observacoes"
         - $ref: "#/parameters/pdfs"
       responses:
         200:

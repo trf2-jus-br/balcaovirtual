@@ -53,6 +53,7 @@
                 <th>Tipo</th>
                 <th>Segredo</th>
                 <th>Encerra Prazos</th>
+                <th v-show="mostrarColunaObs">Observações</th>
                 <th>Arquivo</th>
                 <th>Status</th>
                 <th style="text-align: center" v-if="editando"></th>
@@ -128,21 +129,21 @@
                     <option disabled hidden selected value=""
                       >[Selecionar]</option
                     >
-                    <option :value="0">0. Sem Sigilo</option>
+                    <option :value="0">Sem Sigilo (Nível 0)</option>
                     <option v-if="f.sigilo >= 1" :value="1"
-                      >1. Segredo de Justiça</option
+                      >Segredo de Justiça (Nível 1)</option
                     >
                     <option v-if="f.sigilo >= 2" :value="2"
-                      >2. Sigiloso Interno</option
+                      >Sigiloso (Interno Nível 2)</option
                     >
                     <option v-if="f.sigilo >= 3" :value="3"
-                      >3. Sigiloso Interno</option
+                      >Sigiloso (Interno Nível 3)</option
                     >
                     <option v-if="f.sigilo >= 4" :value="4"
-                      >4. Sigiloso Interno</option
+                      >Sigiloso (Interno Nível 4)</option
                     >
                     <option v-if="f.sigilo >= 5" :value="5"
-                      >5. Restrito Juiz</option
+                      >Sigiloso (Interno Nível 5)</option
                     >
                   </select>
                   <span v-if="!editando">{{ f.segredo ? "Sim" : "Não" }}</span>
@@ -186,6 +187,23 @@
                   <span v-if="!editando">{{
                     f.encerraprazos ? "Sim" : "Não"
                   }}</span>
+                </td>
+
+                <td v-show="!f.anexo && mostrarColunaObs" :rowspan="f.rowspan">
+                  <div v-if="editando && f.sistema && f.sistema.includes('.eproc')" class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      style="min-width: 6em;"
+                      placeholder=""
+                      maxlength="200"
+                      v-model="f.observacoes"
+                      :disabled="f.protocolado"
+                    />
+                  </div>
+                  <span v-if="!editando">
+                    {{f.observacoes}}
+                  </span>
                 </td>
 
                 <td>
@@ -520,6 +538,14 @@ export default {
         if (this.arquivos[i].errormsg) a.push(this.arquivos[i]);
       }
       return a;
+    },
+
+    mostrarColunaObs: function() {
+      var a = [];
+      for (var i = 0; i < this.arquivos.length; i++) {
+        if (this.arquivos[i].sistema && this.arquivos[i].sistema.includes('.eproc')) return true;
+      }
+      return false;
     }
   },
 
@@ -562,6 +588,7 @@ export default {
 
     addedFileProxy: function(file) {
       var proc = ProcessoBL.formatarProcesso(file.name);
+      var obs = ProcessoBL.formatarObservacoes(file.name);
 
       this.arquivos.push({
         file: file,
@@ -581,7 +608,8 @@ export default {
         encerraprazos: undefined,
         identencerraprazos: undefined,
         sigilo: undefined,
-        parte: undefined
+        parte: undefined,
+        observacoes: obs
       });
     },
 
@@ -747,6 +775,7 @@ export default {
             tipopeticao: item.arq.tipo,
             nivelsigilo: item.arq.segredo,
             encerraprazos: encerraprazos,
+            observacoes: item.arq.observacoes,
             pdfs: item.pdfs
           }
         )

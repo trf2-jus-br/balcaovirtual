@@ -1,6 +1,9 @@
 import UtilsBL from "./utils.js";
 import CnjClasseBL from "./cnj-classe.js";
 
+const regexFormatarProcesso = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?/;
+const regexFormatarObservacoes = /^.+!([^.]+).*$/;
+
 export default {
   modalidadePoloProcessual: {
     AT: "Pólo Ativo",
@@ -380,14 +383,20 @@ export default {
     if (s === undefined) return;
     return s.replace(/\D/g, "");
   },
-  regexFormatarProcesso: /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?/,
   formatarProcesso: function(filename) {
-    var m = this.regexFormatarProcesso.exec(filename);
+    var m = regexFormatarProcesso.exec(filename);
     if (!m) return;
     var s =
-      m[1] + "-" + m[2] + "." + m[3] + "." + m[4] + "." + m[5] + "." + m[6];
+    m[1] + "-" + m[2] + "." + m[3] + "." + m[4] + "." + m[5] + "." + m[6];
     if (m[7]) s += "/" + m[7];
     return s;
+  },
+  formatarObservacoes: function(filename) {
+    console.log("Obs: arquivo " + filename);
+    var m = regexFormatarObservacoes.exec(filename);
+    if (!m) return;
+    console.log("Obs: " + m[1]);
+    return m[1];
   },
   arrayToString: function(a) {
     if (!Array.isArray(a)) return a;

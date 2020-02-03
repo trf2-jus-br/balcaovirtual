@@ -433,7 +433,7 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
-			String numProc, String tpDoc, int nvlSigilo, String encerraPrazos, String nomePdfs, byte pdf[])
+			String numProc, String tpDoc, int nvlSigilo, String encerraPrazos, String observacoes, String nomePdfs, byte pdf[])
 			throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
@@ -459,6 +459,14 @@ public class SoapMNI {
 				Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 				byte[] data = Files.readAllBytes(path);
 				doc.setConteudo(data);
+				
+				if (observacoes != null) {
+					TipoParametro obs = new TipoParametro();
+					obs.setNome("ObsDocumento");
+					obs.setValor(Texto.removeAcento(observacoes));
+					doc.getOutroParametro().add(obs);
+				}
+				
 				l.add(doc);
 			}
 		}
@@ -496,7 +504,7 @@ public class SoapMNI {
 			abrirPrazoAutomaticamente.setValor("true");
 			parametros.add(abrirPrazoAutomaticamente);
 		}
-
+		
 		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio, parametros,
 				sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
 		if (!sucesso.value)
