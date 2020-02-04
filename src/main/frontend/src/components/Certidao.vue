@@ -266,8 +266,6 @@ export default {
           ? "?disposition=attachment"
           : "?disposition=inline";
 
-      console.log(this.html);
-
       var submit = document.createElement("input");
       submit.type = "submit";
       submit.id = "submitView";
@@ -275,13 +273,9 @@ export default {
       form.appendChild(h);
       form.appendChild(d);
       form.appendChild(submit);
+
       document.body.appendChild(form);
-
-      var el = document.getElementById("submitView");
-      var evObj = document.createEvent("Events");
-      evObj.initEvent("click", true, false);
-      el.dispatchEvent(evObj);
-
+      form.submit();
       document.body.removeChild(form);
     }
   }
