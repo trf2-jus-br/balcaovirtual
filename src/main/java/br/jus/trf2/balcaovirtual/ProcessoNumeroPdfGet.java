@@ -10,9 +10,9 @@ import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPdfGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPdfGetRequest;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPdfGetResponse;
-import br.jus.trf2.balcaovirtual.util.AcessoPublico;
+import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 
-@AcessoPublico
+@AcessoPublicoEPrivado
 public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 
 	@Override
