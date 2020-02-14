@@ -125,6 +125,9 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 				byte[] ab = null;
 				// Peça Processual
+				username = SoapMNI.preprocessarId(username, password, orgao);
+				password = SoapMNI.preprocessarSenha(username, password, orgao);
+
 				ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
 
 				ContentInfo info = contentInfoUtil.findMatch(ab);

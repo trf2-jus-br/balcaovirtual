@@ -37,6 +37,7 @@ import org.w3c.dom.Node;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
@@ -144,7 +145,6 @@ public class SoapMNI {
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
 
-		senhaConsultante = preprocessarSenha(idConsultante, senhaConsultante, sistema);
 		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, movimentos, cabecalho, documentos,
 				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
@@ -160,8 +160,19 @@ public class SoapMNI {
 				.setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
 		return gson.toJson(processo);
 	}
+	
+	
+	public static String preprocessarId(String idConsultante, String senhaConsultante, String sistema) throws SwaggerAuthorizationException {
+		if (sistema.contains(".apolo") && !Utils.isConsultaPublica(idConsultante)) {
+			return AutenticarPost.assertAuthorization();
+		}
+		return idConsultante;
+	}
 
-	private static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
+	public static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
+		if (sistema.contains(".apolo") && !Utils.isConsultaPublica(idConsultante)) {
+			return null;
+		}
 		if (sistema.contains(".eproc") && Utils.isConsultaPublica(idConsultante)) {
 			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
 			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
@@ -241,7 +252,6 @@ public class SoapMNI {
 		List<String> l = new ArrayList<>();
 		l.add(documento);
 
-		senhaConsultante = preprocessarSenha(idConsultante, senhaConsultante, sistema);
 		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, false, false, false, l, sucesso,
 				mensagem, processo);
 		if (!sucesso.value)

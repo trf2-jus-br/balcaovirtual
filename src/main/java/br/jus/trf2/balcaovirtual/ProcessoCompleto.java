@@ -12,10 +12,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.auth0.jwt.internal.org.bouncycastle.asn1.ocsp.Request;
 import com.crivano.swaggerservlet.PresentableException;
-import com.crivano.swaggerservlet.SwaggerServlet;
-import com.crivano.swaggerservlet.SwaggerUtils;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
@@ -78,6 +75,9 @@ public class ProcessoCompleto implements Callable<String> {
 
 //			byte[] ab = downloadUrl(new URL(
 //					"http://balcaovirtualc.trf2.jus.br/balcaovirtual/api/v1/download/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzI0NTgzNTgsIm9yZ2FvIjoiYnIuanVzLmpmcmouZXByb2MiLCJpc3MiOiJ0cmYyLmp1cy5iciIsIm9yaWdpbiI6InB1YiIsImRvYyI6IjUxMTU2NTg4MjU3Mzg0NDAzMDc2NzIwOTQwODc4NSIsInR5cCI6ImRvd25sb2FkIiwiaWF0IjoxNTcyNDU3NzU4LCJwcm9jIjoiNTAwODgyMzczMjAxODQwMjUxMDEifQ.CoZKjDUABJwaZ1MSGu642dTybszZzscV6N7FxzBBOo0/50088237320184025101-peca-511565882573844030767209408785.pdf"));
+
+				if (ab == null)
+					continue;
 
 				ContentInfo info = contentInfoUtil.findMatch(ab);
 

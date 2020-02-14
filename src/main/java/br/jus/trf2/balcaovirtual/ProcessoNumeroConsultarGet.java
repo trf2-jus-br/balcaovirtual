@@ -51,6 +51,8 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 			throw new PresentableUnloggedException("Usuário não possui login válido no sistema "
 					+ Utils.getName(req.sistema) + " e também não passou pelo captcha");
 
+		usuario = SoapMNI.preprocessarId(usuario, senha, req.sistema);
+		senha = SoapMNI.preprocessarSenha(usuario, senha, req.sistema);
 		String json = SoapMNI.consultarProcesso(usuario, senha, req.sistema, req.numero, true, true, true);
 
 		if (req.sistema.contains(".eproc"))
