@@ -1,17 +1,20 @@
 package br.jus.trf2.balcaovirtual;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallStatus;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
@@ -98,7 +101,7 @@ public class Utils {
 	public static String getCertApiPassword(String system) {
 		return SwaggerServlet.getProperty(system + ".cert.api.password");
 	}
-	
+
 	public static String getAssijusUrl(String system) {
 		return SwaggerServlet.getProperty(system + ".assijus.url");
 	}
@@ -427,6 +430,28 @@ public class Utils {
 			break;
 		}
 		return s;
+	}
+
+	public static String preprocessarId(String idConsultante, String senhaConsultante, String sistema, String origem)
+			throws SwaggerAuthorizationException {
+		if (sistema.contains(".apolo") && origem != null && origem.contains("int")
+				&& !Utils.isConsultaPublica(idConsultante)) {
+			return AutenticarPost.assertAuthorization();
+		}
+		return idConsultante;
+	}
+
+	public static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema,
+			String origem) {
+		if (sistema.contains(".apolo") && origem != null && origem.contains("int")
+				&& !Utils.isConsultaPublica(idConsultante)) {
+			return null;
+		}
+		if (sistema.contains(".eproc") && Utils.isConsultaPublica(idConsultante)) {
+			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
+			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
+		}
+		return senhaConsultante;
 	}
 
 }

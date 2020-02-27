@@ -48,8 +48,8 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 
 		resp.jwt = DownloadJwtFilenameGet.jwt(origem, usuario, null, req.sistema, req.numero, null, null, null, null,
 				null, null, resp.uuid);
-		usuario = SoapMNI.preprocessarId(usuario, senha, req.sistema);
-		senha = SoapMNI.preprocessarSenha(usuario, senha, req.sistema);
+		usuario = Utils.preprocessarId(usuario, senha, req.sistema, origem);
+		senha = Utils.preprocessarSenha(usuario, senha, req.sistema, origem);
 		BalcaoVirtualServlet.submitToExecutor(new ProcessoCompleto(resp.uuid, usuario, senha, req.sistema, req.numero));
 	}
 

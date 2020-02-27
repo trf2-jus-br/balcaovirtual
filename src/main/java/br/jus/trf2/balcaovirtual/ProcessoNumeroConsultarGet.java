@@ -30,6 +30,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 	public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp) throws Exception {
 		String usuario = null;
 		String senha = null;
+		String origem = null;
 
 		Usuario u = null;
 		try {
@@ -38,6 +39,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 			if (detalhe != null) {
 				usuario = u.usuario;
 				senha = u.getSenha();
+				origem = detalhe.origem;
 			}
 		} catch (Exception ex) {
 		}
@@ -45,14 +47,15 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		if (usuario == null && (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero) || u != null)) {
 			usuario = SwaggerServlet.getProperty("public.username");
 			senha = SwaggerServlet.getProperty("public.password");
+			origem = "pub";
 		}
 
 		if (usuario == null)
 			throw new PresentableUnloggedException("Usuário não possui login válido no sistema "
 					+ Utils.getName(req.sistema) + " e também não passou pelo captcha");
 
-		usuario = SoapMNI.preprocessarId(usuario, senha, req.sistema);
-		senha = SoapMNI.preprocessarSenha(usuario, senha, req.sistema);
+		usuario = Utils.preprocessarId(usuario, senha, req.sistema, origem);
+		senha = Utils.preprocessarSenha(usuario, senha, req.sistema, origem);
 		String json = SoapMNI.consultarProcesso(usuario, senha, req.sistema, req.numero, true, true, true);
 
 		if (req.sistema.contains(".eproc"))

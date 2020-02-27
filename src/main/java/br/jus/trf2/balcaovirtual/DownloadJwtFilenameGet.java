@@ -125,8 +125,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 				byte[] ab = null;
 				// Peça Processual
-				username = SoapMNI.preprocessarId(username, password, orgao);
-				password = SoapMNI.preprocessarSenha(username, password, orgao);
+				username = Utils.preprocessarId(username, password, orgao, origin);
+				password = Utils.preprocessarSenha(username, password, orgao, origin);
 
 				ab = SoapMNI.obterPecaProcessual(username, password, orgao, numProc, numDoc);
 
@@ -254,9 +254,9 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		return map;
 	}
 
-	public static String jwt(String origin, String username, String nome, String orgao,
-			String processo, String documento, String arquivo, String texto, String cargo, String empresa,
-			String unidade, String uuid) throws Exception {
+	public static String jwt(String origin, String username, String nome, String orgao, String processo,
+			String documento, String arquivo, String texto, String cargo, String empresa, String unidade, String uuid)
+			throws Exception {
 		final String issuer = Utils.getJwtIssuer();
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
 		// token expires in 10min or 12h

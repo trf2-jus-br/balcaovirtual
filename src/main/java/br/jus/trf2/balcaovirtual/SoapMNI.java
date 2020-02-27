@@ -161,25 +161,6 @@ public class SoapMNI {
 		return gson.toJson(processo);
 	}
 	
-	
-	public static String preprocessarId(String idConsultante, String senhaConsultante, String sistema) throws SwaggerAuthorizationException {
-		if (sistema.contains(".apolo") && !Utils.isConsultaPublica(idConsultante)) {
-			return AutenticarPost.assertAuthorization();
-		}
-		return idConsultante;
-	}
-
-	public static String preprocessarSenha(String idConsultante, String senhaConsultante, String sistema) {
-		if (sistema.contains(".apolo") && !Utils.isConsultaPublica(idConsultante)) {
-			return null;
-		}
-		if (sistema.contains(".eproc") && Utils.isConsultaPublica(idConsultante)) {
-			String s = LocalDate.now().toString("dd-MM-YYYY") + senhaConsultante;
-			return Utils.bytesToHex(Utils.calcSha256(s.getBytes(StandardCharsets.US_ASCII))).toLowerCase();
-		}
-		return senhaConsultante;
-	}
-
 	static Map<String, ServicoIntercomunicacao222> map = new ConcurrentHashMap<>();
 
 	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
