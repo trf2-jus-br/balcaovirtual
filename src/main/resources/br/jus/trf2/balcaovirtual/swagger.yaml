@@ -1345,6 +1345,29 @@ paths:
           schema:
             $ref: "#/definitions/Error"
             
+  /imprimir/{filename}:
+    get:
+      description: Gera um PDF a partir de um HTML informado
+      tags: [utils]
+      parameters:
+        - $ref: "#/parameters/filename"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: application/pdf
+            Content-Disposition:
+              type: string
+              description: attachment
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
   /notificar:
     post:
       description: Notifica usuários

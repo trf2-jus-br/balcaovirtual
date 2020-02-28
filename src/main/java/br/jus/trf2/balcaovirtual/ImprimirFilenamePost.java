@@ -18,6 +18,8 @@ public class ImprimirFilenamePost implements IImprimirFilenamePost {
 		resp.contentlength = (long) ab.length;
 		resp.contenttype = "application/pdf";
 		resp.inputstream = new ByteArrayInputStream(ab);
+
+		ImprimirFilenameGet.armazenarPdfEmCache(req.filename, null, req.html, req.disposition);
 	}
 
 	@Override

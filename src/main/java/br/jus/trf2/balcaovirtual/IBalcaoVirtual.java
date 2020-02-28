@@ -996,6 +996,62 @@ public interface IBalcaoVirtual {
 		public void run(ImprimirFilenamePostRequest req, ImprimirFilenamePostResponse resp) throws Exception;
 	}
 
+	public class ImprimirFilenameGetRequest implements ISwaggerRequest {
+		public String filename;
+	}
+
+	public class ImprimirFilenameGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/pdf";
+		public String contentdisposition = "attachment";
+		public Long contentlength;
+		public InputStream inputstream;
+		public Map<String, List<String>> headerFields;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
+		public void setHeaderFields(Map<String, List<String>> headerFields) {
+			this.headerFields = headerFields;
+		}
+	}
+
+	public interface IImprimirFilenameGet extends ISwaggerMethod {
+		public void run(ImprimirFilenameGetRequest req, ImprimirFilenameGetResponse resp) throws Exception;
+	}
+
 	public class NotificarPostRequest implements ISwaggerRequest {
 	}
 

@@ -178,7 +178,7 @@ export default {
   data() {
     return {
       pasta: "emitir",
-      sistema: "br.jus.jfrj.apolo",
+      sistema: undefined,
       recaptchaLoading: false,
       errormsg: undefined,
       numero: undefined,

@@ -243,40 +243,38 @@ export default {
     },
 
     imprimir: function(disposition) {
-      var form = document.createElement("form");
-      form.action = process.env.VUE_APP_API_URL + "/imprimir/certidao.pdf";
-      form.method = "POST";
-      // form.target = '_blank'
-      form.style.display = "none";
-      form.acceptCharset = "UTF-8";
-
-      var h = document.createElement("input");
-      h.type = "text";
-      h.name = "html";
-      h.value = he.encode(this.$refs["conteudo"].innerHTML, {
-        allowUnsafeSymbols: true,
-        useNamedReferences: true
-      });
-
-      var d = document.createElement("input");
-      d.type = "text";
-      d.name = "disposition";
-      d.value =
-        disposition === "attachment"
-          ? "?disposition=attachment"
-          : "?disposition=inline";
-
-      var submit = document.createElement("input");
-      submit.type = "submit";
-      submit.id = "submitView";
-
-      form.appendChild(h);
-      form.appendChild(d);
-      form.appendChild(submit);
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
+      var filename = (this.numero + "-" + this.cpfcnpj + "-" + this.sistema).replace(/\./g, "-");
+      filename = "certidao-" + filename + ".pdf";
+      this.$http
+        .post(
+          "imprimir/" + filename,
+          {
+            html: he.encode(this.$refs["conteudo"].innerHTML, {
+              allowUnsafeSymbols: true,
+              useNamedReferences: true
+            }),
+            disposition:
+              disposition === "attachment"
+                ? "?disposition=attachment"
+                : "?disposition=inline"
+          },
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            block: true
+          }
+        )
+        .then(
+          response => {
+            window.location =
+              process.env.VUE_APP_API_URL + "/imprimir/" + filename;
+          },
+          error => {
+            this.warningmsg = undefined;
+            this.errormsg = error.data.errormsg;
+          }
+        );
     }
   }
 };
