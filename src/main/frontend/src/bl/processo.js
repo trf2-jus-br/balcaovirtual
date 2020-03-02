@@ -151,7 +151,7 @@ export default {
         p.dadosBasicos.valorCausa > 0
       ) {
         fixed.valorCausa =
-          "R$ " + UtilsBL.formatMoney(p.dadosBasicos.valorCausa, 2, ",", ".");
+          "R$ " + UtilsBL.formatMoney(p.dadosBasicos.valorCausa, 2);
       }
       fixed.dataAjuizamento = UtilsBL.formatDDMMYYYYHHMM(
         p.dadosBasicos.dataAjuizamento

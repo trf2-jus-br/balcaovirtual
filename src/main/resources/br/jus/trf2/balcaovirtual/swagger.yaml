@@ -830,6 +830,27 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /processo/{numero}/informacoes-adicionais:
+    get:
+      description: Obter informações adicionais de um processo
+      tags: [consulta]
+      parameters:
+        - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              cdas:
+                type: array
+                items:
+                  $ref: "#/definitions/CDA"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /processo/{numero}/peca/{id}/pdf:
     get:
       description: Obter o PDF de uma peça processual para visualização
@@ -852,7 +873,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-
+  
   /processo/{numero}/pdf:
     get:
       description: Obter o PDF completo de um processo para visualização
@@ -877,7 +898,7 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-
+  
   /peticao-inicial/protocolar:
     post:
       description: Protocolar petição inicial
@@ -1344,8 +1365,6 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-            
-  /imprimir/{filename}:
     get:
       description: Gera um PDF a partir de um HTML informado
       tags: [utils]
@@ -2235,7 +2254,33 @@ definitions:
       reu:
         $ref: "#/definitions/Nome"
 
-
+  CDA:
+    description: CDA
+    type: object
+    properties:
+      numero:
+        type: string
+      processoadministrativo:
+        type: string
+      status:
+        type: string
+      grupo:
+        type: string
+      codigotributo:
+        type: string
+      tributo:
+        type: string
+      valor:
+        type: number
+      valorufir:
+        type: number
+      dataorigem:
+        type: string
+        format: date-time
+      datainclusao:
+        type: string
+        format: date-time
+        
   Marca:
     description: Marca
     type: object

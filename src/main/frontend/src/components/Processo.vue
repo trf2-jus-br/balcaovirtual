@@ -327,6 +327,24 @@
                       >
                     </b>
                   </p>
+                  <p
+                    class="card-text"
+                    v-if="
+                      fixed.informacoesAdicionais.cdas &&
+                        fixed.informacoesAdicionais.cdas.length
+                    "
+                  >
+                    <small>{{ fixed.informacoesAdicionais.cdas.length }} CDAs</small>
+                    <br />
+                    <b>
+                      <a
+                        href=""
+                        @click.prevent="mostrarDadosComplementares(true)"
+                      >
+                        R$ {{ valorTotalCDAs }}</a
+                      >
+                    </b>
+                  </p>
                   <a
                     v-if="!$parent.settings.mostrarDadosComplementares"
                     class="card-link float-right"
@@ -674,6 +692,40 @@
                       <p v-for="ass in proc.dadosBasicos.assunto" :key="ass.id">
                         {{ ass.descricaoCompleta }}
                       </p>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    v-if="
+                      fixed.informacoesAdicionais &&
+                        fixed.informacoesAdicionais.cdas
+                    "
+                  >
+                    <div class="col col-sm-12">
+                      <label>CDAs</label>
+                      <table class="table table-sm table-striped">
+                        <thead>
+                          <tr>
+                            <th>Número</th>
+                            <th>Status</th>
+                            <th>Tributo</th>
+                            <th>Data de Atualização</th>
+                            <th class="text-right">Valor</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="cda in fixed.informacoesAdicionais.cdas"
+                            :key="cda.numero"
+                          >
+                            <td>{{ cda.numero }}</td>
+                            <td>{{ cda.status }}</td>
+                            <td>{{ cda.tributo }}</td>
+                            <td v-html="cda.datainclusaoFormatada"></td>
+                            <td class="text-right">{{ cda.valorFormatado }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -1050,6 +1102,21 @@ export default {
       console.log("recalculando filtrados...", this.modified);
       var a = ProcessoBL.filtrar(this.fixed.movdoc, this.filtro);
       return a;
+    },
+    valorTotalCDAs: function() {
+      if (
+        !this.fixed ||
+        !this.fixed.informacoesAdicionais ||
+        !this.fixed.informacoesAdicionais.cdas ||
+        this.fixed.informacoesAdicionais.cdas.length === 0
+      )
+        return undefined;
+      var v = 0;
+      for (var i = 0; i < this.fixed.informacoesAdicionais.cdas.length; i++) {
+        if (this.fixed.informacoesAdicionais.cdas[i].valor)
+          v += this.fixed.informacoesAdicionais.cdas[i].valor;
+      }
+      return UtilsBL.formatMoney(v);
     }
   },
   methods: {
@@ -1137,6 +1204,8 @@ export default {
               if (this.$parent.jwt) {
                 this.getMarcadores();
                 this.getMarcas();
+                if (this.sistema.includes(".eproc"))
+                  this.getInformacoesAdicionais();
                 this.$http
                   .post("processo/" + this.numero + "/sinalizar", {
                     recente: true
@@ -1212,6 +1281,46 @@ export default {
               this.marcasativas = false;
               return;
             }
+            UtilsBL.errormsg(error, this);
+          }
+        );
+    },
+    getInformacoesAdicionais: function() {
+      // Carregar informações adicionais
+      this.$http
+        .get(
+          "processo/" +
+            this.numero +
+            "/informacoes-adicionais?sistema=" +
+            this.sistema
+        )
+        .then(
+          response => {
+            this.$set(this.fixed, "informacoesAdicionais", response.data);
+            if (
+              this.fixed.informacoesAdicionais &&
+              this.fixed.informacoesAdicionais.cdas
+            ) {
+              for (
+                var i = 0;
+                i < this.fixed.informacoesAdicionais.cdas.length;
+                i++
+              ) {
+                var cda = this.fixed.informacoesAdicionais.cdas[i];
+                this.$set(
+                  this.fixed.informacoesAdicionais.cdas[i],
+                  "datainclusaoFormatada",
+                  UtilsBL.formatJSDDMMYYYYHHMM(cda.datainclusao)
+                );
+                this.$set(
+                  this.fixed.informacoesAdicionais.cdas[i],
+                  "valorFormatado",
+                  UtilsBL.formatMoney(cda.valor)
+                );
+              }
+            }
+          },
+          error => {
             UtilsBL.errormsg(error, this);
           }
         );
