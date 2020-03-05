@@ -330,7 +330,8 @@
                   <p
                     class="card-text"
                     v-if="
-                      fixed.informacoesAdicionais.cdas &&
+                      fixed.informacoesAdicionais &&
+                        fixed.informacoesAdicionais.cdas &&
                         fixed.informacoesAdicionais.cdas.length
                     "
                   >
