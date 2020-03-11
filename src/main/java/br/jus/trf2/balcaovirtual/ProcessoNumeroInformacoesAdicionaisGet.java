@@ -27,7 +27,8 @@ public class ProcessoNumeroInformacoesAdicionaisGet implements IProcessoNumeroIn
 			throw new PresentableException("Usuário não possui identificador e unidade");
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
-		if (!u.isInterno() && "prod".equals(SwaggerServlet.getProperty("env")) && (u.email == null || !u.email.endsWith("@pgfn.gov.br")))
+		if (!u.isInterno() && "prod".equals(SwaggerServlet.getProperty("env"))
+				&& (u.email == null || !u.email.endsWith("@pgfn.gov.br")))
 			return;
 
 		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse>> future = SwaggerCall
@@ -42,19 +43,21 @@ public class ProcessoNumeroInformacoesAdicionaisGet implements IProcessoNumeroIn
 				.getResp();
 
 		resp.cdas = new ArrayList<>();
-		for (br.jus.trf2.sistemaprocessual.ISistemaProcessual.CDA cda : r.cdas) {
-			br.jus.trf2.balcaovirtual.IBalcaoVirtual.CDA o = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.CDA();
-			o.numero = cda.numero;
-			o.processoadministrativo = cda.processoadministrativo;
-			o.status = cda.status;
-			o.grupo = cda.grupo;
-			o.codigotributo = cda.codigotributo;
-			o.tributo = cda.tributo;
-			o.valor = cda.valor;
-			o.valorufir = cda.valorufir;
-			o.dataorigem = cda.dataorigem;
-			o.datainclusao = cda.datainclusao;
-			resp.cdas.add(o);
+		if (r.cdas != null) {
+			for (br.jus.trf2.sistemaprocessual.ISistemaProcessual.CDA cda : r.cdas) {
+				br.jus.trf2.balcaovirtual.IBalcaoVirtual.CDA o = new br.jus.trf2.balcaovirtual.IBalcaoVirtual.CDA();
+				o.numero = cda.numero;
+				o.processoadministrativo = cda.processoadministrativo;
+				o.status = cda.status;
+				o.grupo = cda.grupo;
+				o.codigotributo = cda.codigotributo;
+				o.tributo = cda.tributo;
+				o.valor = cda.valor;
+				o.valorufir = cda.valorufir;
+				o.dataorigem = cda.dataorigem;
+				o.datainclusao = cda.datainclusao;
+				resp.cdas.add(o);
+			}
 		}
 	}
 
