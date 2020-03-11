@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import UtilsBL from "../bl/utils.js";
+
 export default {
   name: "progressBarAsync",
 
@@ -69,7 +71,7 @@ export default {
           var r = response.data;
           this.progressbarCaption = r.mensagem;
           this.progressbarWidth = 100 * (r.indice / r.contador);
-          this.bytes = r.bytes ? this.formatBytes(r.bytes) : undefined;
+          this.bytes = r.bytes ? UtilsBL.formatBytes(r.bytes) : undefined;
           if (r.indice === r.contador) {
             this.showModal = false;
             this.progressbarWidth = 0;
@@ -85,17 +87,6 @@ export default {
             error.data.errormsg || "Erro obtendo informações de status";
         }
       );
-    },
-
-    formatBytes: function(bytes, decimals = 2) {
-      if (bytes === 0) return "0 Bytes";
-      const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      const f = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-      const r = ("" + f).replace(".", ",");
-      return r + " " + sizes[i];
     }
   }
 };

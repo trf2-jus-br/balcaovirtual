@@ -201,6 +201,10 @@
                 <td>{{ p.digitalFormatado }}</td>
                 <td>{{ p.acesso }}</td>
                 <td class="status-td">
+                  <span v-if="p.state == 'building'">
+                    {{ p.status }}
+                    <span v-if="p.bytes">- {{ p.bytes }}</span>
+                  </span>
                   <span v-if="p.state == 'ready'">Preparado</span>
                   <span v-if="p.state == 'set'">Solicitado</span>
                   <span v-if="p.state == 'go'">Iniciado</span>
@@ -402,6 +406,9 @@ export default {
         state: undefined,
         errormsg: undefined,
         perc: undefined,
+        bytes: undefined,
+        status: undefined,
+        uuid: undefined,
         inbox: undefined,
         favorito: undefined,
         recente: undefined
@@ -518,7 +525,9 @@ export default {
               this.$nextTick(() => this.obterJwt(processos, i + 1));
             else this.$nextTick(this.continuarBaixando);
             processos[i].jwt = response.data.jwt;
-            processos[i].state = "ready";
+            processos[i].uuid = response.data.uuid;
+            processos[i].state = "building";
+            processos[i].errormsg = undefined;
           },
           error => {
             if (i + 1 < processos.length) this.obterJwt(processos, i + 1);
@@ -527,22 +536,55 @@ export default {
         );
     },
 
+    continuarBaixando: function() {
+      if (this.baixando() === 0) return;
+      this.baixarProximo();
+      this.atualizar();
+      this.atualizarStatusDeConstrucao();
+      setTimeout(this.continuarBaixando, 1000);
+    },
+
     baixando: function() {
       var c = 0;
       var processos = this.filtradosEMarcados;
       for (var i = 0; i < processos.length; i++) {
         if (
           processos[i].jwt &&
-          ["set", "go", "in_progress"].indexOf(processos[i].state) >= 0
+          ["building", "ready", "set", "go", "in_progress"].indexOf(
+            processos[i].state
+          ) >= 0
         )
           c++;
       }
       return c;
     },
 
-    continuarBaixando: function() {
-      if (this.baixando() === 0 && !this.baixarProximo()) return;
-      this.atualizar();
+    atualizarStatusDeConstrucao: function() {
+      var processos = this.filtradosEMarcados;
+      for (var i = 0; i < processos.length; i++) {
+        if (processos[i].jwt && processos[i].state === "building") {
+          this.atualizarStatusDeConstrucaoDeProcesso(processos[i]);
+        }
+      }
+    },
+
+    atualizarStatusDeConstrucaoDeProcesso: function(processo) {
+      this.$http.get("status/" + processo.uuid).then(
+        response => {
+          var r = response.data;
+          processo.status = r.mensagem;
+          processo.progressbarWidth = 100 * (r.indice / r.contador);
+          processo.bytes = r.bytes ? UtilsBL.formatBytes(r.bytes) : undefined;
+          if (r.indice === r.contador) {
+            processo.state = "ready";
+          }
+        },
+        error => {
+          processo.state = "error";
+          processo.errormsg =
+            error.data.errormsg || "Erro obtendo informações de status";
+        }
+      );
     },
 
     atualizar: function() {
@@ -552,7 +594,6 @@ export default {
           command: "updates"
         },
         response => {
-          setTimeout(this.continuarBaixando, 500);
           if (!response) return;
           if (response.success) {
             var updates = response.data;
@@ -568,7 +609,13 @@ export default {
     },
 
     atualizarProcesso: function(update) {
+      console.log("AtualizarProcessoL update");
+      console.log(update);
+      console.log("AtualizarProcesso: map");
+      console.log(this.map);
       var processo = this.map[update.id];
+      console.log("AtualizarProcessoL processo");
+      console.log(processo);
       if (update.state && update.state.current)
         processo.state = update.state.current;
       if (update.error) processo.errormsg = update.error.current;
@@ -576,8 +623,10 @@ export default {
         processo.perc = Math.round((update.received / update.total) * 100);
       if (update.state && update.state.current !== "in_progress")
         delete processo.perc;
-      if (update.state && update.state.current === "complete")
+      if (update.state && update.state.current === "complete") {
         processo.checked = false;
+        processo.state = "complete";
+      }
     },
 
     baixarProximo: function() {

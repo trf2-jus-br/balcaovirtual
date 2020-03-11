@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/firebase-messaging-sw.js"
   },
   {
-    "revision": "ab45227e2a4570c0b13f70dcca43aa95",
+    "revision": "c63f1165cd20465c23549645fe65860b",
     "url": "/balcaovirtual/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/robots.txt"
   },
   {
-    "revision": "0d4cca24dec73f67c3e5",
-    "url": "/balcaovirtual/static/css/app.e298d056.css"
+    "revision": "2a1fdcef85b41ca3f2ca",
+    "url": "/balcaovirtual/static/css/app.37d476fa.css"
   },
   {
     "revision": "20da5841bdb94c5b02a5",
@@ -56,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/static/img/users.00ce4bf4.png"
   },
   {
-    "revision": "0d4cca24dec73f67c3e5",
-    "url": "/balcaovirtual/static/js/app.a26b31e6.js"
+    "revision": "2a1fdcef85b41ca3f2ca",
+    "url": "/balcaovirtual/static/js/app.e17dd8cf.js"
   },
   {
     "revision": "20da5841bdb94c5b02a5",

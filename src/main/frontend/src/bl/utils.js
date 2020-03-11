@@ -236,5 +236,16 @@ export default {
   somenteNumeros: function(s) {
     if (s === undefined) return;
     return s.replace(/\D/g, "");
+  },
+
+  formatBytes: function(bytes, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const f = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+    const r = ("" + f).replace(".", ",");
+    return r + " " + sizes[i];
   }
 };
