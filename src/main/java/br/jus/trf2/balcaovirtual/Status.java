@@ -22,7 +22,7 @@ public class Status implements Serializable {
 		as.indice = index;
 		as.contador = count;
 		as.bytes = bytes;
-		SwaggerUtils.log(Status.class).info(message + " (" + index + "/" + count + ")");
+		// SwaggerUtils.log(Status.class).info(message + " (" + index + "/" + count + ")");
 		return update(key, as);
 	}
 

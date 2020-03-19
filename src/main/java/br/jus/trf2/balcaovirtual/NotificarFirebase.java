@@ -88,7 +88,7 @@ public class NotificarFirebase {
 						case "InvalidRegistration":
 						case "NotRegistered":
 							dao.removerTokenParaNotificar(tokens.get(i));
-							SwaggerUtils.log(NotificarFirebase.class).info("Removido o token: " + tokens.get(i));
+							// SwaggerUtils.log(NotificarFirebase.class).info("Removido o token: " + tokens.get(i));
 							removidos++;
 							break;
 						}

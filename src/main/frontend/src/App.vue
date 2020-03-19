@@ -184,7 +184,7 @@
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <span>{{ jwt.username }}</span>
+                    <span>{{ ident }}</span>
                   </a>
                   <div
                     class="dropdown-menu logout"
@@ -534,6 +534,20 @@ export default {
         this.jwt.username &&
         (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
       return f;
+    },
+
+    ident: function() {
+      if (!this.jwt) return;
+      if (!this.jwt.user) return this.jwt.username;
+      var a = [];
+      for (var prop in this.jwt.user) {
+        if (this.jwt.user.hasOwnProperty(prop)) {
+          a.push(this.test.properties["balcaovirtual." + prop + ".name"]);
+        }
+      }
+      if (a.length === 0) return this.jwt.username;
+      if (a.length === 1) return this.jwt.username + " - " + a[0];
+      return this.jwt.username + " - " + a[0] + "+" + (a.length - 1);
     }
   },
   methods: {

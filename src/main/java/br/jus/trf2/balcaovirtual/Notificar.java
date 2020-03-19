@@ -78,15 +78,15 @@ public class Notificar implements Callable<String> {
 			return;
 		String body = usuario + " possui " + c
 				+ (c > 1 ? " processos favoritos com movimentos novos." : " processo favorito com movimentos novos.");
-		SwaggerUtils.log(Notificar.class).info(body);
+		// SwaggerUtils.log(Notificar.class).info(body);
 
 		String titulo = SwaggerServlet.getProperty("notificar.titulo");
 		if (titulo != null) {
 			String clickAction = SwaggerServlet.getProperty("notificar.url");
 			String icon = SwaggerServlet.getProperty("base.url") + "/assets/icon-256x256.png";
 			int sucessos = NotificarFirebase.enviarNotificacao(dao, tokens, titulo, body, clickAction, icon);
-			SwaggerUtils.log(Notificar.class)
-					.info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações enviadas."));
+			// SwaggerUtils.log(Notificar.class)
+			// 		.info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações enviadas."));
 		}
 	}
 

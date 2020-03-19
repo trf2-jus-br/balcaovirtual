@@ -200,10 +200,11 @@ public class Correio {
 		tr.sendMessage(msg, msg.getAllRecipients());
 		tr.close();
 
-		log.info("Email enviado para " + Arrays.asList(destSet).toString() + "[" + assunto + "]");
-		log.debug("Detalhes do e-mail enviado:" + "\nAssunto: " + assunto + "\nDe: " + remetente + "\nPara: "
-				+ Arrays.asList(destinatarios).toString() + "\nTexto: "
-				+ (conteudoHTML == null ? conteudo : conteudoHTML));
+		// log.info("Email enviado para " + Arrays.asList(destSet).toString() + "[" +
+		// assunto + "]");
+//		log.debug("Detalhes do e-mail enviado:" + "\nAssunto: " + assunto + "\nDe: " + remetente + "\nPara: "
+//				+ Arrays.asList(destinatarios).toString() + "\nTexto: "
+//				+ (conteudoHTML == null ? conteudo : conteudoHTML));
 	}
 
 }

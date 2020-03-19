@@ -194,7 +194,7 @@ public class SoapMNI {
 				if (outboundProperty.booleanValue()) {
 					try {
 						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
-						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
+						// SwaggerUtils.log(this.getClass()).info(getNodeString(body));
 						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
 							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
@@ -521,7 +521,7 @@ public class SoapMNI {
 		}
 
 		SwaggerUtils.log(SoapMNI.class)
-				.warn("*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: "
+				.debug("*** Processo: " + numProcFormated + " Petição Intercorrente protocolada: "
 						+ protocoloRecebimento.value + " Por: " + usuario + " Email: " + email
 						+ (sent ? "" : " (email não enviado)"));
 
