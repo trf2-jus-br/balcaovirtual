@@ -143,7 +143,7 @@
                     >Minutas</router-link
                   >
                 </li>
-                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
+                <li class="nav-item" v-if="mesaAtiva">
                   <router-link
                     class="nav-link"
                     active-class="active"
