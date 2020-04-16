@@ -66,7 +66,7 @@ public class ProcessoCompleto implements Callable<String> {
 
 			long bytes = 0;
 			for (int i = 0; i < docs.length(); i++) {
-				String idDocumento = docs.getJSONObject(i).getString("idDocumento");
+				String idDocumento = docs.getJSONObject(docs.length() - i - 1).getString("idDocumento");
 
 				this.status = Status.update(this.uuid, "Agregando documento " + (i + 1) + "/" + docs.length(),
 						i * 2 + 1, docs.length() * 2 + 1, bytes);
