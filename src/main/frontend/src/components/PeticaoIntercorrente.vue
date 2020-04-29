@@ -458,18 +458,20 @@ export default {
   mounted() {
     // Carragar a lista de avisos pendentes
     if (this.avisos === undefined) {
-      if (this.$parent.cAvisos !== undefined && this.$parent.cAvisos > 0) {
-        this.$nextTick(() => {
-          console.log("Will load avisos");
+      if (this.$parent.avisos) {
+        console.log("pegando do pai");
+        this.fixAvisos(this.$parent.avisos);
+      } else {
+        this.$nextTick(function() {
           this.$http.get("aviso/listar?mni=true", { block: true }).then(
             response => {
               this.fixAvisos(response.data);
+              this.$parent.avisos = response.data;
+              this.$parent.cAvisos = response.data.list.length;
             },
             error => UtilsBL.errormsg(error, this)
           );
         });
-      } else {
-        this.avisos = [];
       }
     }
   },
@@ -541,7 +543,7 @@ export default {
     },
 
     mostrarColunaObs: function() {
-      var a = [];
+      // var a = [];
       for (var i = 0; i < this.arquivos.length; i++) {
         if (this.arquivos[i].sistema && this.arquivos[i].sistema.includes('.eproc')) return true;
       }
