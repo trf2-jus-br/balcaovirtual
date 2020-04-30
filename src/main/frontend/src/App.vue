@@ -348,6 +348,7 @@ export default {
     this.$on("updateLogged", token => {
       this.cAvisos = undefined;
       this.avisos = undefined;
+      this.avisosMNI = undefined;
       if (token) {
         AuthBL.setIdToken(token);
         this.jwt = AuthBL.decodeToken(token);
@@ -358,6 +359,7 @@ export default {
           if (this.$route.query.avisos) {
             this.cAvisos = this.$route.query.avisos;
             this.avisos = undefined;
+            this.avisosMNI = undefined;
           } else {
             // Carragar a lista de avisos pendentes
             this.$nextTick(function() {
@@ -367,6 +369,7 @@ export default {
                   response => {
                     this.avisos = response.data;
                     this.cAvisos = this.avisos.list.length;
+                    this.avisosMNI = undefined;
                   },
                   error => console.log("Erro carregando avisos", error)
                 );
@@ -516,6 +519,7 @@ export default {
       jwt: undefined,
       avisos: undefined,
       cAvisos: undefined,
+      avisosMNI: undefined,
 
       updateAvailable: false,
       notificacoesBloqueadas: false,
