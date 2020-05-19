@@ -173,19 +173,30 @@
 
                   <th>
                     <a @click="sort('dataaviso')">
-                      Data do Cadastro
+                      Data Cadastro
                       <span v-show="orderByField == 'dataaviso'">
                         <span v-show="!reverseSort">&#8679;</span>
                         <span v-show="reverseSort">&#8681;</span>
                       </span>
                     </a>
                   </th>
-                  <th v-if="exibirPrazo">Prazo</th>
                   <th v-if="exibirDataLimite">
                     <a @click="sort('datalimiteintimacaoautomatica')">
                       Data Limite Int. Aut.
                       <span
                         v-show="orderByField == 'datalimiteintimacaoautomatica'"
+                      >
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
+                  <th v-if="exibirPrazo">Prazo</th>
+                  <th v-if="exibirDataFinalPrazo">
+                    <a @click="sort('datafinalprazo')">
+                      Data Fim Prazo
+                      <span
+                        v-show="orderByField == 'datafinalprazo'"
                       >
                         <span v-show="!reverseSort">&#8679;</span>
                         <span v-show="reverseSort">&#8681;</span>
@@ -291,13 +302,18 @@
                   <td>
                     <span v-html="r.dataavisoFormatada"></span>
                   </td>
+                  <td v-if="exibirDataLimite">
+                    <span
+                      v-html="r.datalimiteintimacaoautomaticaFormatada"
+                    ></span>
+                  </td>
                   <td v-if="exibirPrazo">
                     {{ r.numeroprazo }} {{ r.tipoprazo }}
                     {{ r.multiplicadorprazo }}
                   </td>
-                  <td v-if="exibirDataLimite">
+                  <td v-if="exibirDataFinalPrazo">
                     <span
-                      v-html="r.datalimiteintimacaoautomaticaFormatada"
+                      v-html="r.datafinalprazoFormatada"
                     ></span>
                   </td>
                   <td v-if="exibirTipo">{{ r.tipo }}</td>
@@ -497,8 +513,15 @@ export default {
     },
 
     exibirDataLimite: function() {
+      // for (var i = 0; i < this.filtrados.length; i++) {
+      //   if (this.filtrados[i].datalimiteintimacaoautomatica) return true;
+      // }
+      return false;
+    },
+
+    exibirDataFinalPrazo: function() {
       for (var i = 0; i < this.filtrados.length; i++) {
-        if (this.filtrados[i].datalimiteintimacaoautomatica) return true;
+        if (this.filtrados[i].datafinalprazo) return true;
       }
       return false;
     },
@@ -572,8 +595,11 @@ export default {
           aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
             aviso.dataaviso
           );
-          aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
+          aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYY(
             aviso.datalimiteintimacaoautomatica
+          );
+          aviso.datafinalprazoFormatada = UtilsBL.formatJSDDMMYYYY(
+            aviso.datafinalprazo
           );
           aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto);
           aAvisos.push(aviso);

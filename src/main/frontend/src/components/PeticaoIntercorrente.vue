@@ -458,22 +458,14 @@ export default {
   mounted() {
     // Carragar a lista de avisos pendentes
     if (this.avisos === undefined) {
-      if (this.$parent.avisos && this.$parent.avisosMNI) {
-        console.log("pegando do pai");
-        this.fixAvisos(this.$parent.avisos);
-      } else {
-        this.$nextTick(function() {
-          this.$http.get("aviso/listar?mni=true", { block: true }).then(
-            response => {
-              this.fixAvisos(response.data);
-              this.$parent.avisos = response.data;
-              this.$parent.cAvisos = response.data.list.length;
-              this.$parent.avisosMNI = true;
-            },
-            error => UtilsBL.errormsg(error, this)
-          );
-        });
-      }
+      this.$nextTick(function() {
+        this.$http.get("aviso/listar?mni=true", { block: true }).then(
+          response => {
+            this.fixAvisos(response.data);
+          },
+          error => UtilsBL.errormsg(error, this)
+        );
+      });
     }
   },
 

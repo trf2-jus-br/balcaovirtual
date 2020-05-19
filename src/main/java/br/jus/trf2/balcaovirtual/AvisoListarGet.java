@@ -80,6 +80,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 					i.tipoprazo = a.tipoPrazo;
 					i.multiplicadorprazo = a.multiplicadorPrazo;
 					i.datalimiteintimacaoautomatica = a.dataLimiteIntimacaoAutomatica;
+					i.datafinalprazo = a.dataFinalPrazo;
 					i.assunto = a.assunto;
 					resp.list.add(i);
 				}

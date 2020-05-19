@@ -1,6 +1,7 @@
 package br.jus.trf2.balcaovirtual;
 
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -157,6 +158,7 @@ public interface IBalcaoVirtual {
 		public String destinatariotipo;
 		public String destinatarionome;
 		public String destinatariodocumento;
+		public Date datafinalprazo;
 	}
 
 	public class Processo implements ISwaggerModel {
