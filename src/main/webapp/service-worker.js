@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/balcaovirtual/precache-manifest.f5754c975fa4850307f1280d8fd09fb9.js"
+  "/balcaovirtual/precache-manifest.3a072899b4b16875839aaaa4836e58d8.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "balcaovirtual-frontend"});
