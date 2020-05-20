@@ -157,6 +157,7 @@ public interface ServicoIntercomunicacao222 {
      * @param sucesso
      * @param aviso
      * @param idRepresentado
+     * @param outroParametro
      * @param idConsultante
      */
     @WebMethod(action = "http://www.cnj.jus.br/servico-intercomunicacao-2.2.2/consultarAvisosPendentes")
@@ -171,6 +172,8 @@ public interface ServicoIntercomunicacao222 {
         String senhaConsultante,
         @WebParam(name = "dataReferencia", targetNamespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2")
         String dataReferencia,
+        @WebParam(name = "parametros", targetNamespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2")
+        List<TipoParametro> parametros,
         @WebParam(name = "sucesso", targetNamespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", mode = WebParam.Mode.OUT)
         Holder<Boolean> sucesso,
         @WebParam(name = "mensagem", targetNamespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", mode = WebParam.Mode.OUT)

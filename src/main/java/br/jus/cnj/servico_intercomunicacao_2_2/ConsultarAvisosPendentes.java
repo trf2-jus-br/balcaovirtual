@@ -1,11 +1,16 @@
 
 package br.jus.cnj.servico_intercomunicacao_2_2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import br.jus.cnj.intercomunicacao_2_2.TipoParametro;
 
 
 /**
@@ -35,7 +40,8 @@ import javax.xml.bind.annotation.XmlType;
     "idRepresentado",
     "idConsultante",
     "senhaConsultante",
-    "dataReferencia"
+    "dataReferencia", 
+    "parametros"
 })
 @XmlRootElement(name = "consultarAvisosPendentes")
 public class ConsultarAvisosPendentes {
@@ -48,6 +54,8 @@ public class ConsultarAvisosPendentes {
     protected String senhaConsultante;
     @XmlElement(namespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2")
     protected String dataReferencia;
+    @XmlElement(namespace = "http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", nillable = true)
+    protected List<TipoParametro> parametros;
 
     /**
      * Gets the value of the idRepresentado property.
@@ -143,6 +151,13 @@ public class ConsultarAvisosPendentes {
      */
     public void setDataReferencia(String value) {
         this.dataReferencia = value;
+    }
+    
+    public List<TipoParametro> getParametros() {
+        if (parametros == null) {
+            parametros = new ArrayList<TipoParametro>();
+        }
+        return this.parametros;
     }
 
 }

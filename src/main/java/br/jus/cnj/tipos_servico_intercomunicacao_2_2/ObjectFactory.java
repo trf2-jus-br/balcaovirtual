@@ -59,6 +59,7 @@ public class ObjectFactory {
     private final static QName _Documento_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "documento");
     private final static QName _Mensagem_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "mensagem");
     private final static QName _DataReferencia_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "dataReferencia");
+    private final static QName _OutroParametro_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "outroParametro");
     private final static QName _Parametro_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "parametro");
     private final static QName _Processo_QNAME = new QName("http://www.cnj.jus.br/tipos-servico-intercomunicacao-2.2.2", "processo");
 

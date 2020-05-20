@@ -194,13 +194,18 @@ public class SoapMNI {
 				if (outboundProperty.booleanValue()) {
 					try {
 						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
-						// SwaggerUtils.log(this.getClass()).info(getNodeString(body));
+						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
 						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
 							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
 								documento1.setElementQName(new QName("documento"));
 							}
+							if ("consultarAvisosPendentes".equals(body.getLocalName()) && "parametros".equals(body.getChildNodes().item(i).getNodeName())) {
+								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
+								documento1.setElementQName(new QName("outroParametro"));
+							}
 						}
+						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
 					} catch (SOAPException e) {
 						e.printStackTrace();
 					}
@@ -260,8 +265,14 @@ public class SoapMNI {
 		Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
+		
+		List<TipoParametro> outroParametro = new ArrayList<>();
+		TipoParametro todosPrazos = new TipoParametro();
+		todosPrazos.setNome("todosPrazos");
+		todosPrazos.setValor("true");
+		outroParametro.add(todosPrazos);
 		try {
-			client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, sucesso, mensagem, aviso);
+			client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, outroParametro, sucesso, mensagem, aviso);
 			if (!sucesso.value)
 				throw new Exception(mensagem.value);
 		} catch (Exception ex) {
