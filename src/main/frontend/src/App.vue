@@ -91,7 +91,7 @@
                 </li>
                 <li
                   class="nav-item"
-                  v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')"
+                  v-if="peticaoInicialAtiva"
                 >
                   <router-link
                     class="nav-link"
@@ -538,6 +538,23 @@ export default {
         this.jwt.username &&
         (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
       return f;
+    },
+
+    peticaoInicialAtiva: function() {
+      if (!this.jwt || !this.jwt.username) return false;
+      for (var prop in this.jwt.user) {
+        if (this.jwt.user.hasOwnProperty(prop)) {
+          var u = this.jwt.user[prop];
+          if (
+            u.sistema &&
+            u.sistema.includes("eproc") &&
+            u.origin &&
+            u.origin == "ext"
+          )
+            return true;
+        }
+      }
+      return false;
     },
 
     ident: function() {
