@@ -194,7 +194,7 @@ public class SoapMNI {
 				if (outboundProperty.booleanValue()) {
 					try {
 						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
-						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
+						//SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
 						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
 							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
@@ -205,9 +205,9 @@ public class SoapMNI {
 								documento1.setElementQName(new QName("outroParametro"));
 							}
 						}
-						SwaggerUtils.log(this.getClass()).info(getNodeString(body));
+						//SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
 					} catch (SOAPException e) {
-						e.printStackTrace();
+						SwaggerUtils.log(this.getClass()).error(e.getMessage());
 					}
 				}
 
@@ -429,7 +429,7 @@ public class SoapMNI {
 			}
 		}
 
-		SwaggerUtils.log(SoapMNI.class).warn("*** Processo: " + numProcFormated + " Aviso confirmado: " + resp.idaviso
+		SwaggerUtils.log(SoapMNI.class).debug("Processo: " + numProcFormated + " Aviso confirmado: " + resp.idaviso
 				+ " Por: " + usuario + " Email: " + email + (sent ? "" : " (email não enviado)"));
 
 	}
@@ -799,7 +799,7 @@ public class SoapMNI {
 		}
 
 		SwaggerUtils.log(SoapMNI.class)
-				.warn("*** Processo: " + numProcFormatado + " Petição Inicial protocolada: "
+				.debug("*** Processo: " + numProcFormatado + " Petição Inicial protocolada: "
 						+ protocoloRecebimento.value + " Por: " + usuario + " Email: " + email
 						+ (sent ? "" : " (email não enviado)"));
 
