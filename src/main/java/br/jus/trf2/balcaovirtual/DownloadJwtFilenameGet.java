@@ -49,8 +49,8 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 		if (username != null && !"pub".equals(origin))
 			password = AutenticarPost.Usuario.getSenha(username);
 		else {
-			username = SwaggerServlet.getProperty("public.username");
-			password = SwaggerServlet.getProperty("public.password");
+			username = BalcaoVirtualServlet.INSTANCE.getProperty("public.username");
+			password = BalcaoVirtualServlet.INSTANCE.getProperty("public.password");
 		}
 
 		String name = (String) map.get("name");

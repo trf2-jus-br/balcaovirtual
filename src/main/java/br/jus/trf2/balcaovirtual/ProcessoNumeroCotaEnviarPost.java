@@ -18,7 +18,7 @@ public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPo
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,
 				req.unidade);
 
-		String tipo = SwaggerServlet.getProperty(req.sistema.toLowerCase() + ".cota.tipo");
+		String tipo = BalcaoVirtualServlet.INSTANCE.getProperty(req.sistema.toLowerCase() + ".cota.tipo");
 
 		String mensagem = SoapMNI.enviarPeticaoIntercorrente(u.usuario, u.getSenha(), req.sistema, req.numero, tipo,
 				Integer.parseInt(req.nivelsigilo), null, null, null, pdf);

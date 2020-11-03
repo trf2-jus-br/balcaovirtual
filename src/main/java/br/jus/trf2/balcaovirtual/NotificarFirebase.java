@@ -70,7 +70,7 @@ public class NotificarFirebase {
 //		nb.to = tokens.get(0);
 		String body = gson.toJson(nb);
 
-		byte[] resp = fetch("key=" + SwaggerServlet.getProperty("firebase.server.key"),
+		byte[] resp = fetch("key=" + BalcaoVirtualServlet.INSTANCE.getProperty("firebase.server.key"),
 				"https://fcm.googleapis.com/fcm/send", "POST", "application/json",
 				body.getBytes(StandardCharsets.UTF_8));
 

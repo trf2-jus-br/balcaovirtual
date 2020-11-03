@@ -14,7 +14,7 @@ public class NotificarPost implements INotificarPost {
 	@Override
 	public void run(NotificarPostRequest req, NotificarPostResponse resp) throws Exception {
 		String auth = AutenticarPost.getAuthorizationHeader();
-		String property = SwaggerServlet.getProperty("notificar.password");
+		String property = BalcaoVirtualServlet.INSTANCE.getProperty("notificar.password");
 		if (property == null)
 			throw new PresentableException(
 					"Senha para habilitar notificações não foi configurada no parâmetro balcaovirtual.notificar.password");

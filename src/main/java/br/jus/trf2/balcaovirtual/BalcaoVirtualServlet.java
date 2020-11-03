@@ -35,10 +35,20 @@ import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 public class BalcaoVirtualServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
 
+	public static final long TIMEOUT_MILLISECONDS = 15000;
+	public static  String JWT_AUTH_COOKIE_NAME;
+	public static  String JWT_AUTH_COOKIE_DOMAIN;
+	// Se 8h é a duração, informar 60 * 60 * 8
+	public static  int JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S;
+	// renova automaticamente X segundos antes de expirar
+	public static  int JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S;
+
+	static BalcaoVirtualServlet INSTANCE = null;
 	public static ExecutorService executor = null;
 
 	@Override
 	public void initialize(ServletConfig config) throws ServletException {
+		INSTANCE = this;
 		setAPI(IBalcaoVirtual.class);
 
 		setActionPackage("br.jus.trf2.balcaovirtual");
@@ -84,7 +94,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 		addRestrictedProperty("redis.master.host", "localhost");
 		addRestrictedProperty("redis.master.port", "6379");
 
-		if (SwaggerServlet.getProperty("redis.password") != null)
+		if (BalcaoVirtualServlet.INSTANCE.getProperty("redis.password") != null)
 			SwaggerUtils.setCache(new MemCacheRedis());
 
 		// Notificações
@@ -104,7 +114,8 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 
 		// Threadpool
 		addPublicProperty("threadpool.size", "10");
-		executor = Executors.newFixedThreadPool(new Integer(SwaggerServlet.getProperty("threadpool.size")));
+		executor = Executors
+				.newFixedThreadPool(new Integer(BalcaoVirtualServlet.INSTANCE.getProperty("threadpool.size")));
 
 		for (String s : getProperty("systems").split(",")) {
 			addPublicProperty(s.toLowerCase() + ".name");
@@ -209,11 +220,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 					return Utils.getApiUrl(system);
 				}
 
-				@Override
-				public String getResponsable() {
-					return null;
-				}
-
 			});
 
 			if (system.contains(".eproc")) {
@@ -222,11 +228,6 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 					@Override
 					public String getUrl() {
 						return Utils.getApiEprocUrl(system);
-					}
-
-					@Override
-					public String getResponsable() {
-						return null;
 					}
 
 				});
@@ -279,7 +280,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			}
 		});
 
-		if (SwaggerServlet.getProperty("redis.password") != null)
+		if (BalcaoVirtualServlet.INSTANCE.getProperty("redis.password") != null)
 			addDependency(new TestableDependency("cache", "redis", false, 0, 10000) {
 
 				@Override
@@ -299,11 +300,16 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				}
 			});
 
+		JWT_AUTH_COOKIE_NAME = getProperty("cookie.name");
+		JWT_AUTH_COOKIE_DOMAIN = getProperty("cookie.domain");
+		JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S = Integer.valueOf(getProperty("cookie.expire.seconds"));
+		JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S = Integer.valueOf(getProperty("cookie.renew.seconds"));
+
 	}
 
 	@Override
-	public int errorCode(Exception e) {
-		return e.getMessage() == null || !e.getMessage().endsWith("(Alerta)") ? super.errorCode(e) : 400;
+	public int errorStatus(Exception e) {
+		return e.getMessage() == null || !e.getMessage().endsWith("(Alerta)") ? super.errorStatus(e) : 400;
 	}
 
 	@Override
@@ -340,7 +346,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 				if (principal.get() != null) {
 					Map<String, Object> decodedToken = AutenticarPost.assertUsuarioAutorizado();
 					final long now = System.currentTimeMillis() / 1000L;
-					if ((Integer) decodedToken.get("exp") < now + AutenticarPost.JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S) {
+					if ((Integer) decodedToken.get("exp") < now + JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S) {
 						// Seria bom incluir o attributo HttpOnly
 						String tokenNew = AutenticarPost.renew();
 						Cookie cookie = AutenticarPost.buildCookie(tokenNew);

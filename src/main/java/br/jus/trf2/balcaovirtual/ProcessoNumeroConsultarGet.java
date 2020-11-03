@@ -45,8 +45,8 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		}
 
 		if (usuario == null && (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero) || u != null)) {
-			usuario = SwaggerServlet.getProperty("public.username");
-			senha = SwaggerServlet.getProperty("public.password");
+			usuario = BalcaoVirtualServlet.INSTANCE.getProperty("public.username");
+			senha = BalcaoVirtualServlet.INSTANCE.getProperty("public.password");
 			origem = "pub";
 		}
 

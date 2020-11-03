@@ -80,10 +80,10 @@ public class Notificar implements Callable<String> {
 				+ (c > 1 ? " processos favoritos com movimentos novos." : " processo favorito com movimentos novos.");
 		// SwaggerUtils.log(Notificar.class).info(body);
 
-		String titulo = SwaggerServlet.getProperty("notificar.titulo");
+		String titulo = BalcaoVirtualServlet.INSTANCE.getProperty("notificar.titulo");
 		if (titulo != null) {
-			String clickAction = SwaggerServlet.getProperty("notificar.url");
-			String icon = SwaggerServlet.getProperty("base.url") + "/assets/icon-256x256.png";
+			String clickAction = BalcaoVirtualServlet.INSTANCE.getProperty("notificar.url");
+			String icon = BalcaoVirtualServlet.INSTANCE.getProperty("base.url") + "/assets/icon-256x256.png";
 			int sucessos = NotificarFirebase.enviarNotificacao(dao, tokens, titulo, body, clickAction, icon);
 			// SwaggerUtils.log(Notificar.class)
 			// 		.info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações enviadas."));

@@ -42,11 +42,11 @@ public class Utils {
 	// }
 
 	public static String getBaseUrl() {
-		return SwaggerServlet.getProperty("base.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("base.url");
 	}
 
 	public static String[] getSystems() {
-		String systems = SwaggerServlet.getProperty("systems");
+		String systems = BalcaoVirtualServlet.INSTANCE.getProperty("systems");
 		if (systems == null)
 			return null;
 		return systems.split(",");
@@ -54,7 +54,7 @@ public class Utils {
 
 	public static String getName(String system) {
 		try {
-			return SwaggerServlet.getProperty(system.toLowerCase() + ".name");
+			return BalcaoVirtualServlet.INSTANCE.getProperty(system.toLowerCase() + ".name");
 		} catch (Exception e) {
 			throw new RuntimeException("Erro de configuração", e);
 		}
@@ -65,7 +65,7 @@ public class Utils {
 		String[] systems = getSystems();
 		int i = 0;
 		for (String system : systems) {
-			String name = SwaggerServlet.getProperty(system.toLowerCase() + ".name");
+			String name = BalcaoVirtualServlet.INSTANCE.getProperty(system.toLowerCase() + ".name");
 			if (i == 0)
 				s = "";
 			else if (i == systems.length - 1)
@@ -79,87 +79,87 @@ public class Utils {
 	}
 
 	public static String getApiPassword(String system) {
-		return SwaggerServlet.getProperty(system + ".api.password");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.password");
 	}
 
 	public static String getApiUrl(String system) {
-		return SwaggerServlet.getProperty(system + ".api.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.url");
 	}
 
 	public static String getApiEprocUrl(String system) {
-		return SwaggerServlet.getProperty(system + ".api.eproc.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.eproc.url");
 	}
 
 	public static String getApiEprocPassword(String system) {
-		return SwaggerServlet.getProperty(system + ".api.eproc.password");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.eproc.password");
 	}
 
 	public static String getCertApiUrl(String system) {
-		return SwaggerServlet.getProperty(system + ".cert.api.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".cert.api.url");
 	}
 
 	public static String getCertApiPassword(String system) {
-		return SwaggerServlet.getProperty(system + ".cert.api.password");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".cert.api.password");
 	}
 
 	public static String getAssijusUrl(String system) {
-		return SwaggerServlet.getProperty(system + ".assijus.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".assijus.url");
 	}
 
 	public static String getAssijusPassword(String system) {
-		return SwaggerServlet.getProperty(system + ".assijus.password");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".assijus.password");
 	}
 
 	public static String getMniWsdlUrl(String system) {
-		return SwaggerServlet.getProperty(system + ".mni.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".mni.url");
 
 	}
 
 	public static String getMniWsdlEndpoint(String system) {
-		return SwaggerServlet.getProperty(system + ".mni.endpoint");
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".mni.endpoint");
 
 	}
 
 	public static String getWsDocumentalUrl() {
-		return SwaggerServlet.getProperty("ws.documental.url");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("ws.documental.url");
 
 	}
 
 	public static String getDirTemp() {
-		return SwaggerServlet.getProperty("upload.dir.temp");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("upload.dir.temp");
 	}
 
 	public static String getDirFinal() {
-		return SwaggerServlet.getProperty("upload.dir.final");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("upload.dir.final");
 	}
 
 	public static String getUsuariosRestritos() {
-		return SwaggerServlet.getProperty("username.restriction");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("username.restriction");
 
 	}
 
 	public static String getJwtIssuer() {
-		return SwaggerServlet.getProperty("jwt.issuer");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("jwt.issuer");
 	}
 
 	public static String getJwtPassword() {
-		return SwaggerServlet.getProperty("jwt.secret");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("jwt.secret");
 	}
 
 	public static String getApiPassword() {
-		return SwaggerServlet.getProperty("api.secret");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("api.secret");
 	}
 
 	public static String getAssijusEndpoint() {
-		return SwaggerServlet.getProperty("assijus.endpoint");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("assijus.endpoint");
 	}
 
 	public static String getAssijusSystemMovimentos() {
-		return SwaggerServlet.getProperty("assijus.system.movimentos");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("assijus.system.movimentos");
 	}
 
 	public static String getAssijusSystemExpedientes() {
-		return SwaggerServlet.getProperty("assijus.system.expedientes");
+		return BalcaoVirtualServlet.INSTANCE.getProperty("assijus.system.expedientes");
 	}
 
 	/**
@@ -369,7 +369,7 @@ public class Utils {
 		if (token == null)
 			throw new PresentableException("Captcha não pode ser nulo");
 		VerifyCaptchaRequest q = new VerifyCaptchaRequest();
-		q.secret = SwaggerServlet.getProperty("recaptcha.secret.key");
+		q.secret = BalcaoVirtualServlet.INSTANCE.getProperty("recaptcha.secret.key");
 		q.response = token;
 		q.remoteip = SwaggerServlet.getHttpServletRequest().getRemoteAddr();
 		VerifyCaptchaResponse r = SwaggerCall.doHTTP(null, "https://www.google.com/recaptcha/api/siteverify", "GET", q,
@@ -390,7 +390,7 @@ public class Utils {
 	}
 
 	public static boolean isConsultaPublica(String idConsultante) {
-		return idConsultante.equalsIgnoreCase(SwaggerServlet.getProperty("public.username"));
+		return idConsultante.equalsIgnoreCase(BalcaoVirtualServlet.INSTANCE.getProperty("public.username"));
 	}
 
 	public static String limparHtml(String s, String tipoDeConteudo) throws PresentableException {

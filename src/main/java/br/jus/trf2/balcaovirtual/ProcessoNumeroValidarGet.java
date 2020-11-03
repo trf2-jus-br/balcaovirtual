@@ -51,7 +51,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			Usuario u = AutenticarPost.assertUsuario();
 			usuario = u.usuario;
 		} catch (Exception e) {
-			usuario = SwaggerServlet.getProperty("public.username");
+			usuario = BalcaoVirtualServlet.INSTANCE.getProperty("public.username");
 		}
 
 		String[] numeros = req.numero.split(",");

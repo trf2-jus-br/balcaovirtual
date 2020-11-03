@@ -27,7 +27,7 @@ public class ProcessoNumeroInformacoesAdicionaisGet implements IProcessoNumeroIn
 			throw new PresentableException("Usuário não possui identificador e unidade");
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 
-		if (!u.isInterno() && "prod".equals(SwaggerServlet.getProperty("env"))
+		if (!u.isInterno() && "prod".equals(BalcaoVirtualServlet.INSTANCE.getProperty("env"))
 				&& (u.email == null || !u.email.endsWith("@pgfn.gov.br")))
 			return;
 

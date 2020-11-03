@@ -34,15 +34,6 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRespon
 
 @AcessoPublico
 public class AutenticarPost implements IAutenticarPost {
-	public static final long TIMEOUT_MILLISECONDS = 15000;
-	public static final String JWT_AUTH_COOKIE_NAME = SwaggerServlet.getProperty("cookie.name");
-	public static final String JWT_AUTH_COOKIE_DOMAIN = SwaggerServlet.getProperty("cookie.domain");
-	// Se 8h é a duração, informar 60 * 60 * 8
-	public static final int JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S = Integer
-			.valueOf(SwaggerServlet.getProperty("cookie.expire.seconds"));
-	// renova automaticamente X segundos antes de expirar
-	public static final int JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S = Integer
-			.valueOf(SwaggerServlet.getProperty("cookie.renew.seconds"));
 
 	@Override
 	public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception {
@@ -69,7 +60,7 @@ public class AutenticarPost implements IAutenticarPost {
 
 		}
 
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
 		resp.status = Utils.getStatus(mcr);
 
 		String origem = null;
@@ -223,7 +214,7 @@ public class AutenticarPost implements IAutenticarPost {
 			Cookie[] cookies = SwaggerServlet.getHttpServletRequest().getCookies();
 			if (cookies != null) {
 				for (Cookie c : cookies) {
-					if (JWT_AUTH_COOKIE_NAME.equals(c.getName()))
+					if (BalcaoVirtualServlet.JWT_AUTH_COOKIE_NAME.equals(c.getName()))
 						authorization = c.getValue();
 				}
 			}
@@ -258,7 +249,7 @@ public class AutenticarPost implements IAutenticarPost {
 		final String issuer = Utils.getJwtIssuer();
 
 		final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-		final long exp = iat + JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S; // token expires in 18 hours
+		final long exp = iat + BalcaoVirtualServlet.JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S; // token expires in 18 hours
 
 		final JWTSigner signer = new JWTSigner(Utils.getJwtPassword());
 		final HashMap<String, Object> claims = new HashMap<String, Object>();
@@ -280,22 +271,22 @@ public class AutenticarPost implements IAutenticarPost {
 	}
 
 	public static Cookie buildCookie(String tokenNew) {
-		Cookie cookie = new Cookie(JWT_AUTH_COOKIE_NAME, tokenNew);
+		Cookie cookie = new Cookie(BalcaoVirtualServlet.JWT_AUTH_COOKIE_NAME, tokenNew);
 		cookie.setPath("/");
-		if (JWT_AUTH_COOKIE_DOMAIN != null)
-			cookie.setDomain(JWT_AUTH_COOKIE_DOMAIN);
+		if (BalcaoVirtualServlet.JWT_AUTH_COOKIE_DOMAIN != null)
+			cookie.setDomain(BalcaoVirtualServlet.JWT_AUTH_COOKIE_DOMAIN);
 
-		cookie.setMaxAge(JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S);
+		cookie.setMaxAge(BalcaoVirtualServlet.JWT_AUTH_COOKIE_TIME_TO_EXPIRE_IN_S);
 
 		// cookie.setSecure(true);
 		return cookie;
 	}
 
 	public static Cookie buildEraseCookie() {
-		Cookie cookie = new Cookie(JWT_AUTH_COOKIE_NAME, "");
+		Cookie cookie = new Cookie(BalcaoVirtualServlet.JWT_AUTH_COOKIE_NAME, "");
 		cookie.setPath("/");
-		if (JWT_AUTH_COOKIE_DOMAIN != null)
-			cookie.setDomain(JWT_AUTH_COOKIE_DOMAIN);
+		if (BalcaoVirtualServlet.JWT_AUTH_COOKIE_DOMAIN != null)
+			cookie.setDomain(BalcaoVirtualServlet.JWT_AUTH_COOKIE_DOMAIN);
 
 		cookie.setMaxAge(0);
 		return cookie;

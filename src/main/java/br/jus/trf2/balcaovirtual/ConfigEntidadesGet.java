@@ -26,7 +26,7 @@ public class ConfigEntidadesGet implements IConfigEntidadesGet {
 							Utils.getApiUrl(system) + "/orgao-publico/listar?tipodedocumento=cnpj", null,
 							OrgaoPublicoListarGetResponse.class));
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, AutenticarPost.TIMEOUT_MILLISECONDS);
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
 		resp.status = Utils.getStatus(mcr);
 
 		resp.list = new ArrayList<>();

@@ -17,7 +17,7 @@ public class SugestaoPost implements ISugestaoPost {
 		sb.append(req.email);
 		sb.append("\n\nMensagem: ");
 		sb.append(req.mensagem);
-		Correio.enviar(SwaggerServlet.getProperty("smtp.destinatario"), SwaggerServlet.getProperty("smtp.assunto"),
+		Correio.enviar(BalcaoVirtualServlet.INSTANCE.getProperty("smtp.destinatario"), BalcaoVirtualServlet.INSTANCE.getProperty("smtp.assunto"),
 				sb.toString(), null, null, null);
 	}
 

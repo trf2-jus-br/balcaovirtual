@@ -59,7 +59,7 @@ public class Correio {
 			String nomeArquivo, String tipoArquivo, byte[] conteudoArquivo) throws Exception {
 		final String[] to = { destinatario };
 
-		Correio.enviar(SwaggerServlet.getProperty("smtp.remetente"), to, assunto, conteudo, null, nomeArquivo,
+		Correio.enviar(BalcaoVirtualServlet.INSTANCE.getProperty("smtp.remetente"), to, assunto, conteudo, null, nomeArquivo,
 				tipoArquivo, conteudoArquivo);
 	}
 
@@ -68,8 +68,8 @@ public class Correio {
 			byte[] conteudoArquivo) throws Exception {
 
 		List<String> listaServidoresEmail = new ArrayList<String>();
-		listaServidoresEmail.add(SwaggerServlet.getProperty("smtp.host"));
-		String host2 = SwaggerServlet.getProperty("smtp.host.alt");
+		listaServidoresEmail.add(BalcaoVirtualServlet.INSTANCE.getProperty("smtp.host"));
+		String host2 = BalcaoVirtualServlet.INSTANCE.getProperty("smtp.host.alt");
 		if (host2 != null)
 			listaServidoresEmail.add(host2);
 
@@ -110,10 +110,10 @@ public class Correio {
 		// mostra os passos do envio da mensagem e o
 		// recebimento da mensagem do servidor no console.
 		Session session = null;
-		if (Boolean.valueOf(SwaggerServlet.getProperty("smtp.auth"))) {
+		if (Boolean.valueOf(BalcaoVirtualServlet.INSTANCE.getProperty("smtp.auth"))) {
 			props.put("mail.smtp.auth", "true");
-			final String usuario = SwaggerServlet.getProperty("smtp.auth.usuario");
-			final String senha = SwaggerServlet.getProperty("smtp.auth.senha");
+			final String usuario = BalcaoVirtualServlet.INSTANCE.getProperty("smtp.auth.usuario");
+			final String senha = BalcaoVirtualServlet.INSTANCE.getProperty("smtp.auth.senha");
 			session = Session.getInstance(props, new Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(usuario, senha);
@@ -195,7 +195,7 @@ public class Correio {
 		// Transport.send(msg);
 
 		Transport tr = new SMTPTransport(session, null);
-		tr.connect(servidorEmail, Integer.valueOf(SwaggerServlet.getProperty("smtp.porta")), null, null);
+		tr.connect(servidorEmail, Integer.valueOf(BalcaoVirtualServlet.INSTANCE.getProperty("smtp.porta")), null, null);
 		msg.saveChanges(); // don't forget this
 		tr.sendMessage(msg, msg.getAllRecipients());
 		tr.close();
