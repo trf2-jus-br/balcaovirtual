@@ -3,6 +3,8 @@ package br.jus.trf2.balcaovirtual;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.xml.stream.XMLInputFactory;
@@ -44,15 +46,26 @@ public class ProcessoCompleto implements Callable<String> {
 		String bufName = null;
 
 		try {
-
 			this.status = Status.update(this.uuid, "Obtendo a lista de documentos", 0, 100, 0L);
+
+			boolean fEproc = sistema.contains(".eproc");
 
 			// Consulta o processo para saber quais são os documentos a serem
 			// concatenados
-			String json = SoapMNI.consultarProcesso(username, password, sistema, numProc, false, false, true);
+			String json = SoapMNI.consultarProcesso(username, password, sistema, numProc, false, fEproc, true);
 
 			JSONObject proc = new JSONObject(json).getJSONObject("value");
 			JSONArray docs = proc.getJSONArray("documento");
+
+			// Cria um mapa de movimentos para facilitar a criação das páginas de separação
+			Map<String, JSONObject> movs = new HashMap<>();
+			if (fEproc) {
+				JSONArray movimentos = proc.getJSONArray("movimento");
+				for (int i = 0; i < movimentos.length(); i++) {
+					JSONObject mov = movimentos.getJSONObject(i);
+					movs.put(mov.getString("identificadorMovimento"), mov);
+				}
+			}
 
 			// Cria um documento em diretório temporário para agregar os
 			// diversos PDFs
@@ -66,11 +79,61 @@ public class ProcessoCompleto implements Callable<String> {
 
 			long bytes = 0;
 			for (int i = 0; i < docs.length(); i++) {
-				String idDocumento;
-				if (sistema.contains("eproc"))
-					idDocumento = docs.getJSONObject(docs.length() - i - 1).getString("idDocumento");
-				else
-					idDocumento = docs.getJSONObject(i).getString("idDocumento");
+				String idDocumento = null;
+
+				JSONObject doc;
+				if (fEproc) {
+					doc = docs.getJSONObject(docs.length() - i - 1);
+					String movimento = doc.getString("movimento");
+					String dataHora = Utils
+							.formatarDataHoraMinutoSegundo(Utils.parsearApoloDataHoraMinuto(doc.getString("dataHora")));
+
+					String usuario = null;
+					String descricao = null;
+					if (movs.containsKey(movimento)) {
+						JSONObject mov = movs.get(movimento);
+						if (mov != null) {
+							JSONArray complementos = mov.getJSONArray("complemento");
+							if (complementos != null) {
+								for (int j = 0; j < complementos.length(); j++) {
+									String complemento = complementos.getString(j);
+									if (complemento != null && complemento.startsWith("Movimentado por: ")) {
+										usuario = complemento.replace("Movimentado por: ", "");
+									}
+								}
+							}
+							if (mov.getJSONObject("movimentoLocal") != null)
+								descricao = mov.getJSONObject("movimentoLocal").getString("descricao");
+						}
+					}
+
+					String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {} @page {size: a4 portrait; margin-left: 2cm; margin-right: 2cm; margin-top: 2cm; margin-bottom: 2cm;background-color: lightyellow;}</style></head><body style=\"background-color: lightyellow;\">";
+					// String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {background-color: lightyellow; @page{size: a4 portrait; margin-left:0cm; padding-right: 3cm; margin-top: 3cm; margin-bottom: 3cm;}}</style></head><body style=\"background-color: lightyellow;\">";
+					html += "<p align=\"center\"><b>";
+					html += i == 0 ? "CAPA DO PROCESSO" : "PÁGINA DE SEPARAÇÃO";
+					html += "</b><br/><i>(Gerada automaticamente pelo Balcão Virtual.)</i><br/><br/><br/><br/><br/></p>";
+					if (i == 0)
+						html += "<h1 style=\"text-align: center;\">Processo N&ordm; " + Utils.formatarNumeroProcesso(numProc) + "</h1>";
+					html += "<br/><br/><br/><h2 style=\"text-align: center;\">Evento " + movimento;
+					html += "</h2><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
+					html += "<p>Data: " + dataHora + "</p>";
+					html += "<p>Número do Processo: " + Utils.formatarNumeroProcesso(numProc) + "</p>";
+					if (movimento != null)
+						html += "<p>Número do Evento: " + movimento + "</p>";
+					if (usuario != null)
+						html += "<p>Usuário: " + usuario + "</p>";
+					if (descricao != null)
+						html += "<p>Descrição do Evento: " + descricao + "</p>";
+					html += "</body></html>";
+
+					byte[] abSep = new Html2Pdf().converter(html, false);
+					bytes += abSep.length;
+					reader = new PdfReader(abSep);
+					copy.addDocument(reader);
+					reader.close();
+				} else
+					doc = docs.getJSONObject(i);
+				idDocumento = doc.getString("idDocumento");
 
 				this.status = Status.update(this.uuid, "Agregando documento " + (i + 1) + "/" + docs.length(),
 						i * 2 + 1, docs.length() * 2 + 1, bytes);
