@@ -4,11 +4,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/firebase-messaging-sw.js"
   },
   {
-    "revision": "13c1738c16ec8df9d17532016d759fff",
+    "revision": "f125f30ac85abcb1660957c7d94b275a",
     "url": "/balcaovirtual/index.html"
   },
   {
-    "revision": "911b8b8b1e45001b98e20e34eefae6cd",
+    "revision": "1561d6a5b57cad717d9b8b559d8a043f",
     "url": "/balcaovirtual/manifest.json"
   },
   {
@@ -16,12 +16,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/robots.txt"
   },
   {
-    "revision": "33b8a8f9ed3b712d11d9",
-    "url": "/balcaovirtual/static/css/app.bce852a6.css"
+    "revision": "e9dcb961387dcc117db3",
+    "url": "/balcaovirtual/static/css/app.ce40a435.css"
   },
   {
-    "revision": "20da5841bdb94c5b02a5",
-    "url": "/balcaovirtual/static/css/chunk-vendors.30efb6ae.css"
+    "revision": "e847f523b1b7307b0d8c",
+    "url": "/balcaovirtual/static/css/chunk-vendors.180b96f0.css"
   },
   {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
@@ -56,11 +56,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/balcaovirtual/static/img/users.00ce4bf4.png"
   },
   {
-    "revision": "33b8a8f9ed3b712d11d9",
-    "url": "/balcaovirtual/static/js/app.00a7963f.js"
+    "revision": "e9dcb961387dcc117db3",
+    "url": "/balcaovirtual/static/js/app.98e09582.js"
   },
   {
-    "revision": "20da5841bdb94c5b02a5",
-    "url": "/balcaovirtual/static/js/chunk-vendors.e7189629.js"
+    "revision": "e847f523b1b7307b0d8c",
+    "url": "/balcaovirtual/static/js/chunk-vendors.22bdc660.js"
   }
 ]);
