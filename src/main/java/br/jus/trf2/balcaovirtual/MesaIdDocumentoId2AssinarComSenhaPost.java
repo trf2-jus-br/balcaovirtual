@@ -48,6 +48,7 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 				.getResp();
 
 		resp.status = r.status;
+		resp.mensagem = r.errormsg;
 	}
 
 	@Override

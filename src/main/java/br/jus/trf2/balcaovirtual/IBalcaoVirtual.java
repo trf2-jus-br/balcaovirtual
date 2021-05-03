@@ -1225,6 +1225,7 @@ public interface IBalcaoVirtual {
 
 	public class MesaIdDocumentoId2AssinarComSenhaPostResponse implements ISwaggerResponse {
 		public String status;
+		public String mensagem;
 	}
 
 	public interface IMesaIdDocumentoId2AssinarComSenhaPost extends ISwaggerMethod {
