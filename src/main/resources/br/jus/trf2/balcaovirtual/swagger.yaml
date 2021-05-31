@@ -1682,6 +1682,8 @@ paths:
             properties:
               status:
                 type: string
+              mensagem:
+                type: string
         500:
           description: Error ocurred
           schema:
