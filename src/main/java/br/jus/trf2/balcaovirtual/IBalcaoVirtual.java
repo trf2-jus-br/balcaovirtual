@@ -1341,6 +1341,31 @@ public interface IBalcaoVirtual {
 		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
 	}
 
+	public interface IPadraoIdGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public PadraoItem padrao;
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
+	public interface IPadraoIdPut extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+			public String html;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public PadraoItem padrao;
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
 	public interface IPadraoIdDelete extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String id;

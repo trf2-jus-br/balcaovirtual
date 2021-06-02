@@ -46,8 +46,7 @@ export default {
     "26": "Procedimentos Especiais|1107||",
     "27": "Procedimentos Especiais de Jurisdição Contenciosa|26||",
     "28": "Anulação e Substituição de Títulos ao Portador|27|Autor|Réu",
-    "29":
-      "Apreensão e Depósito de Coisa Vendida com Reserva de Domínio|27|Autor|Réu",
+    "29": "Apreensão e Depósito de Coisa Vendida com Reserva de Domínio|27|Autor|Réu",
     "30": "Arrolamento Comum|27|Requerente|Requerido",
     "31": "Arrolamento Sumário|27|Requerente|Requerido",
     "32": "Consignação em Pagamento|27|Autor|Réu",
@@ -76,8 +75,7 @@ export default {
     "59": "Organização e Fiscalização de Fundação|50|Requerente|Interessado",
     "60": "Separação Consensual|50|Requerentes|",
     "61": "Tutela e Curatela -  Nomeação|50|Requerente|Interessado",
-    "62":
-      "Procedimentos Regidos por Outros Códigos, Leis Esparsas e Regimentos|26||",
+    "62": "Procedimentos Regidos por Outros Códigos, Leis Esparsas e Regimentos|26||",
     "63": "Ação Civil Coletiva|62|Autor|Réu",
     "64": "Ação Civil de Improbidade Administrativa|62|Autor|Réu",
     "65": "Ação Civil Pública|62|Autor|Réu",
@@ -96,8 +94,7 @@ export default {
     "85": "Compromisso Arbitral|62|Autor|Réu",
     "86": "Consignatória de Aluguéis|62|Autor|Réu",
     "87": "Conversão de Separação Judicial em Divórcio|62|Requerente|Requerido",
-    "88":
-      "Correição Parcial ou Reclamação Correicional|1198|Corrigente|Corrigido",
+    "88": "Correição Parcial ou Reclamação Correicional|1198|Corrigente|Corrigido",
     "89": "Depósito da Lei 8. 866/94|62|Autor|Réu",
     "90": "Desapropriação|62|Autor|Réu",
     "91": "Desapropriação Imóvel Rural por Interesse Social|62|Autor|Réu",
@@ -111,8 +108,7 @@ export default {
     "99": "Divórcio Litigioso|62|Requerente|Requerido",
     "100": "Dúvida|62|Requerente|Interessado",
     "107": "Expropriação da Lei 8.257/91|62|Expropriante|Expropriado",
-    "108":
-      "Falência de Empresários, Sociedades Empresáriais, Microempresas e Empresas de Pequeno Porte|62|Autor|Réu",
+    "108": "Falência de Empresários, Sociedades Empresáriais, Microempresas e Empresas de Pequeno Porte|62|Autor|Réu",
     "110": "Habeas Data|62|Impetrante|Impetrado",
     "111": "Habilitação de Crédito|62|Requerente|Requerido",
     "112": "Homologação de Transação Extrajudicial|62|Requerentes|Requerentes",
@@ -133,8 +129,7 @@ export default {
     "135": "Relatório Falimentar|62|Relatante|",
     "136": "Remição do Imóvel Hipotecado|62|Autor|Réu",
     "137": "Renovatória de Locação|62|Autor|Réu",
-    "138":
-      "Restituição de Coisa ou Dinheiro na Falência do Devedor Empresário|62|Requerente|Requerido",
+    "138": "Restituição de Coisa ou Dinheiro na Falência do Devedor Empresário|62|Requerente|Requerido",
     "140": "Revisional de Aluguel|62|Autor|Réu",
     "141": "Separação Litigiosa|62|Autor|Réu",
     "142": "Sonegados|62|Autor|Réu",
@@ -145,8 +140,7 @@ export default {
     "151": "Liquidação por Arbitramento|150|Autor|Réu",
     "152": "Liquidação de Sentença pelo Procedimento Comum|150|Autor|Réu",
     "153": "Liquidação Provisória por Arbitramento|150|Requerente|Requerido",
-    "154":
-      "Liquidação Provisória de Sentença pelo Procedimento Comum|150|Requerente|Requerido",
+    "154": "Liquidação Provisória de Sentença pelo Procedimento Comum|150|Requerente|Requerido",
     "155": "Procedimento de Cumprimento de Sentença/Decisão|1106||",
     "156": "Cumprimento de sentença|155|Exequente|Executado",
     "157": "Cumprimento Provisório de Sentença|155|Exequente|Executado",
@@ -154,8 +148,7 @@ export default {
     "159": "Execução de Título Extrajudicial|158|Exequente|Executado",
     "165": "Insolvência Civil|158|Autor|Réu",
     "166": "Insolvência Requerida pelo Credor|165|Exequente|Executado",
-    "167":
-      "Insolvência Requerida pelo Devedor ou pelo Espólio|165|Exequente|Executado",
+    "167": "Insolvência Requerida pelo Devedor ou pelo Espólio|165|Exequente|Executado",
     "169": "Embargos|158||",
     "170": "Embargos à Adjudicação|169|Embargante|Embargado",
     "171": "Embargos à Arrematação|169|Embargante|Embargado",
@@ -185,8 +178,7 @@ export default {
     "200": "Agravos|197||",
     "202": "Agravo de Instrumento|200|Agravante|Agravado",
     "203": "Agravo de Instrumento em Recurso Especial|200|Agravante|Agravado",
-    "204":
-      "Agravo de Instrumento em Recurso Extraordinário|200|Agravante|Agravado",
+    "204": "Agravo de Instrumento em Recurso Extraordinário|200|Agravante|Agravado",
     "206": "Agravo Regimental|200|Agravante|Agravado",
     "207": "Embargos|197||",
     "208": "Embargos Infringentes|207|Embargante|Embargado",
@@ -196,15 +188,13 @@ export default {
     "213": "Recurso Especial|197|Recorrente|Recorrido",
     "214": "Outros Procedimentos|2||",
     "215": "Incidentes|214|Requerente|Requerido",
-    "216":
-      "Incidente De Arguição de Inconstitucionalidade|215|Arguinte|Arguído",
+    "216": "Incidente De Arguição de Inconstitucionalidade|215|Arguinte|Arguído",
     "218": "Assistência Judiciária|215||",
     "221": "Conflito de competência|215|Suscitante|Suscitado",
     "224": "Exceções|215||",
     "228": "Exibição de Documento ou Coisa|215|Autor|Réu",
     "229": "Impugnação ao Cumprimento de Sentença|155||",
-    "230":
-      "Impugnação ao Pedido de Assistência Litisconsorcial ou Simples|215|Impugnante|Impugnado",
+    "230": "Impugnação ao Pedido de Assistência Litisconsorcial ou Simples|215|Impugnante|Impugnado",
     "231": "Impugnação ao Valor da Causa|215|Impugnante|Impugnado",
     "232": "Incidente de Falsidade|215|Autor|Réu",
     "233": "Incidente de Uniformização de Jurisprudência|215|Suscitante|",
@@ -227,14 +217,11 @@ export default {
     "269": "Medidas Preparatórias|268||",
     "270": "Notícia-Crime|269|Noticiante|Noticiado",
     "271": "Representação Criminal|277||",
-    "272":
-      "Representação Criminal/Notícia de Crime|271|Representante/Noticiante|Representado",
-    "273":
-      "Pedido de Arquivamento em Representação Criminal|271|Representante|Representado",
+    "272": "Representação Criminal/Notícia de Crime|271|Representante/Noticiante|Representado",
+    "273": "Pedido de Arquivamento em Representação Criminal|271|Representante|Representado",
     "274": "Interpelações|269||",
     "275": "Notificação para Explicações|274|Notificante|Notificado",
-    "276":
-      "Notificação para Explicações (Lei de Imprensa)|274|Notificante|Notificado",
+    "276": "Notificação para Explicações (Lei de Imprensa)|274|Notificante|Notificado",
     "277": "Procedimentos Investigatórios|268||",
     "278": "Termo Circunstanciado|277|Autoridade|Autor do Fato",
     "279": "Inquérito Policial|277|Autor|Investigado",
@@ -245,8 +232,7 @@ export default {
     "284": "Processo Especial|268||",
     "285": "Processo Especial do Código de Processo Penal|284||",
     "287": "Crimes de Responsabilidade dos Funcionários Públicos|285|Autor|Réu",
-    "288":
-      "Crimes de Calúnia, Injúria e Difamação de Competência do Juiz Singular|285|Autor|Réu",
+    "288": "Crimes de Calúnia, Injúria e Difamação de Competência do Juiz Singular|285|Autor|Réu",
     "289": "Crimes Contra a Propriedade Imaterial|285|Autor|Réu",
     "290": "Processo Sumário (Detenção)|285|Autor|Réu",
     "291": "Restauração de Autos|285|Autor|Réu",
@@ -255,11 +241,9 @@ export default {
     "294": "Crimes Contra a Propriedade Industrial|292|Autor|Réu",
     "295": "Crimes Contra a Propriedade Intelectual|292|Autor|Réu",
     "297": "Crimes de Imprensa|292|Querelante|Querelado",
-    "299":
-      "Procedimento do Juizado Especial Criminal - Sumariíssimo|292|Autor|Réu",
+    "299": "Procedimento do Juizado Especial Criminal - Sumariíssimo|292|Autor|Réu",
     "300": "Procedimento Especial da Lei Antitóxicos|292|Autor|Réu",
-    "302":
-      "Procedimento Especial dos Crimes de Abuso de Autoridade|292|Autor|Réu",
+    "302": "Procedimento Especial dos Crimes de Abuso de Autoridade|292|Autor|Réu",
     "303": "Medidas Garantidoras|268||",
     "304": "Liberdade|303||",
     "305": "Liberdade Provisória com ou sem fiança|304|Requerente|Requerido",
@@ -267,15 +251,12 @@ export default {
     "307": "Habeas Corpus|303|Impetrante|Impetrado",
     "308": "Medidas Cautelares|268||",
     "309": "Pedido de Busca e Apreensão Criminal|308|Requerente|Acusado",
-    "310":
-      "Pedido de Quebra de Sigilo de Dados e/ou Telefônico|308|Requerente|Acusado",
-    "311":
-      "Medidas Investigatórias Sobre Organizações Criminosas|308|Autoridade|Investigado",
+    "310": "Pedido de Quebra de Sigilo de Dados e/ou Telefônico|308|Requerente|Acusado",
+    "311": "Medidas Investigatórias Sobre Organizações Criminosas|308|Autoridade|Investigado",
     "312": "Pedido de Prisão|308||",
     "313": "Pedido de Prisão Preventiva|312|Requerente|Acusado",
     "314": "Pedido de Prisão Temporária|312|Requerente|Acusado",
-    "315":
-      "Pedido de Prisão/ Liberdade Vigiada para Fins de Expulsão|312|Requerente|Acusado",
+    "315": "Pedido de Prisão/ Liberdade Vigiada para Fins de Expulsão|312|Requerente|Acusado",
     "316": "Questões e Processos Incidentes|268||",
     "317": "Exceções|316||",
     "318": "Exceção de Suspeição|317|Excipiente|Excepto",
@@ -321,11 +302,9 @@ export default {
     "427": "Remessa Necessária|412|Juízo Recorrente|Recorrido",
     "428": "Revisão Criminal|412|Requerente|Requerido",
     "432": "Desaforamento de Julgamento|331|Autor|Réu",
-    "433":
-      "Incidente de Uniformização de Jurisprudência|331|Parte Autora|Parte Ré",
+    "433": "Incidente de Uniformização de Jurisprudência|331|Parte Autora|Parte Ré",
     "436": "Procedimento do Juizado Especial Cível|1107|Autor|Réu",
-    "457":
-      "Pedido de Uniformização de Interpretação de Lei|215|Parte Autora|Parte Ré",
+    "457": "Pedido de Uniformização de Interpretação de Lei|215|Parte Autora|Parte Ré",
     "460": "Recurso Inominado|197|Recorrente|Recorrido",
     "547": "JUIZADOS DA INFÂNCIA E DA JUVENTUDE|||",
     "976": "Ação Anulatória de Cláusulas Convencionais|1067|Autor|Réu",
@@ -338,28 +317,21 @@ export default {
     "991": "Execução de Termo de Ajuste de Conduta|1068|Exequente|Executado",
     "992": "Execução de Termo de Conciliação de CCP|1068|Exequente|Executado",
     "993": "Execução de Certidão de Crédito Judicial|1068|Exequente|Executado",
-    "994":
-      "Execução Provisória em Autos Suplementares|1068|Exequente|Executado",
+    "994": "Execução Provisória em Autos Suplementares|1068|Exequente|Executado",
     "1000": "Agravo|1209|Agravante|Agravado",
-    "1001":
-      "Agravo de Instrumento em Agravo de Petição|1209|Agravante|Agravado",
-    "1002":
-      "Agravo de Instrumento em Recurso de Revista|1209|Agravante|Agravado",
-    "1003":
-      "Agravo de Instrumento em Recurso Ordinário|1209|Agravante|Agravado",
+    "1001": "Agravo de Instrumento em Agravo de Petição|1209|Agravante|Agravado",
+    "1002": "Agravo de Instrumento em Recurso de Revista|1209|Agravante|Agravado",
+    "1003": "Agravo de Instrumento em Recurso Ordinário|1209|Agravante|Agravado",
     "1004": "Agravo de Petição|1209|Agravante|Agravado",
     "1005": "Agravo Regimental|1209|Agravante|Agravado",
     "1006": "Embargos|1071|Embargante|Embargado",
     "1007": "Embargos Infringentes|1071|Embargante|Embargado",
     "1008": "Recurso de Revista|1071|Recorrente|Recorrido",
     "1009": "Recurso Ordinário|1071|Recorrente|Recorrido",
-    "1013":
-      "Agravo de Instrumento em Recurso de Habeas Corpus|5|Agravante|Agravado",
-    "1015":
-      "Embargos de Divergência em Recurso de Mandado de Segurança|5|Embargante|Embargado",
+    "1013": "Agravo de Instrumento em Recurso de Habeas Corpus|5|Agravante|Agravado",
+    "1015": "Embargos de Divergência em Recurso de Mandado de Segurança|5|Embargante|Embargado",
     "1016": "Embargos em Agravo de Instrumento|5|Embargante|Embargado",
-    "1017":
-      "Embargos à Execução em Mandado de Segurança|5|Embargante|Embargado",
+    "1017": "Embargos à Execução em Mandado de Segurança|5|Embargante|Embargado",
     "1018": "Embargos à Execução em Ação Recisoria|5|Embargante|Embargado",
     "1019": "Embargos à Execução em Medida Cautelar|5|Embargante|Embargado",
     "1020": "Execução em Ação Rescisória|5|Exeqüente|Executado",
@@ -384,10 +356,8 @@ export default {
     "1040": "Requisição de Pequeno Valor|5|Requerente|Requerido",
     "1042": "Inquérito|5|Autor|Investigado",
     "1044": "Agravo de Instrumento|5|Agravante|Agravado",
-    "1045":
-      "Agravo de Instrumento em Recurso Extraordinário|5|Agravante|Agravado",
-    "1046":
-      "Agravo de Instrumento em Recurso de Mandado de Segurança|5|Agravante|Agravado",
+    "1045": "Agravo de Instrumento em Recurso Extraordinário|5|Agravante|Agravado",
+    "1046": "Agravo de Instrumento em Recurso de Mandado de Segurança|5|Agravante|Agravado",
     "1047": "Carta Rogatória|5|Rogante|Rogado",
     "1049": "Habeas Data|5|Impetrante|Impetrado",
     "1053": "Conflito de Atribuição|5|Autor|Réu",
@@ -408,16 +378,13 @@ export default {
     "1112": "Execução de Alimentos|1111|Exequente|Executado",
     "1114": "Execução Contra a Fazenda Pública|1111|Exequente|Executado",
     "1116": "Execução Fiscal|158|Exequente|Executado",
-    "1117":
-      "Execução Hipotecária do Sistema Financeiro da Habitação|158|Exequente|Executado",
+    "1117": "Execução Hipotecária do Sistema Financeiro da Habitação|158|Exequente|Executado",
     "1118": "Embargos à Execução Fiscal|169|Exequente|Executado",
     "1122": "Tutela e Curatela - Remoção e Dispensa|50|Requerente|Requerido",
     "1124": "Justificação de Dinheiro a Risco|62|Requerente|Requerido",
     "1125": "Ação Trabalhista - Rito Sumaríssimo|1067|RECLAMANTE|RECLAMADO",
-    "1126":
-      "Ação Trabalhista - Rito Sumário (Alçada)|1067|RECLAMANTE|RECLAMADO",
-    "1137":
-      "Embargos de Divergência em Recurso Especial|5|Embargante|Embargado",
+    "1126": "Ação Trabalhista - Rito Sumário (Alçada)|1067|RECLAMANTE|RECLAMADO",
+    "1137": "Embargos de Divergência em Recurso Especial|5|Embargante|Embargado",
     "1145": "Conflito de Competência|1070|Suscitante|Suscitado",
     "1178": "Incidente de Arguição de Inconstitucionalidade|331||",
     "1198": "PROCEDIMENTOS ADMINISTRATIVOS||Requerente|Requerido",
@@ -429,26 +396,21 @@ export default {
     "1231": "Exceção de Suspeição|224|excipiente|excepto",
     "1232": "Exceção de Incompetência|224||",
     "1233": "Efeito Suspensivo|175|Requerente|Requerido",
-    "1262":
-      "Processo Administrativo Disciplinar em face de Servidor|1198|Processante|Processado",
-    "1264":
-      "Processo Administrativo Disciplinar em face de Magistrado|1198|Processante|Processado",
+    "1262": "Processo Administrativo Disciplinar em face de Servidor|1198|Processante|Processado",
+    "1264": "Processo Administrativo Disciplinar em face de Magistrado|1198|Processante|Processado",
     "1265": "Precatório|1198|Requerente|Requerido",
     "1266": "Requisição de Pequeno Valor|1198|Requerente|Requerido",
     "1267": "Recurso de Multa|1071|Recorrente|Recorrido",
-    "1268":
-      "Medidas Protetivas de urgência (Lei Maria da Penha)|308|Requerente|Requerido",
+    "1268": "Medidas Protetivas de urgência (Lei Maria da Penha)|308|Requerente|Requerido",
     "1269": "Habeas Corpus|62||",
     "1271": "Recurso de Medida Cautelar|197|Recorrente|Recorrido",
     "1283": "Superveniência de doença mental|406|Requerente|Requerido",
     "1284": "Unificação de penas|406|Requerente|",
     "1285": "Conflito de atribuição|215||",
-    "1288":
-      "Transferência entre estabelecimentos penais|406|Requerente|Requerido",
+    "1288": "Transferência entre estabelecimentos penais|406|Requerente|Requerido",
     "1289": "Outras medidas provisionais|175||",
     "1291": "Reabilitação|331||",
-    "1294":
-      "Outros procedimentos de jurisdição voluntária|50|Requerente|Requerido",
+    "1294": "Outros procedimentos de jurisdição voluntária|50|Requerente|Requerido",
     "1295": "Alvará Judicial|50||",
     "1296": "Declaratória de Constitucionalidade|62|Requerente|Requerido",
     "1297": "Intervenção em Município|62|Requerente|Requerido",
@@ -457,8 +419,7 @@ export default {
     "1301": "Reclamação Disciplinar|1198|Reclamente|Reclamado",
     "1303": "Correição Extraordinária|1198|Corrigente|Corrigido",
     "1304": "Inspeção|1198||",
-    "1306":
-      "Recurso em Processo Administrativo Disciplinar em face de Servidor|1198|Recorrente|Recorrido",
+    "1306": "Recurso em Processo Administrativo Disciplinar em face de Servidor|1198|Recorrente|Recorrido",
     "1307": "Correição Ordinária|1198|Corrigente|Corrigido",
     "1308": "Sindicância|1198|Sindicante|Sindicado",
     "1310": "SUPREMO TRIBUNAL FEDERAL|||",
@@ -539,20 +500,14 @@ export default {
     "1385": "Seção Cível|547||",
     "1386": "Processo de Conhecimento|1385||",
     "1389": "Ação de Alimentos|1386|Requerente|Requerido",
-    "1390":
-      "Revisão Judicial de Decisão do Conselho Tutelar|1386|Requerente|Requerido",
-    "1391":
-      "Apuração de Irregularidades em Entidades de Atendimento|1386|Requerente|Requerido",
-    "1392":
-      "Apuração de Infração Administrativa às Normas de Proteção à Criança ou Adolescente|1386|Requerente|Requerido",
+    "1390": "Revisão Judicial de Decisão do Conselho Tutelar|1386|Requerente|Requerido",
+    "1391": "Apuração de Irregularidades em Entidades de Atendimento|1386|Requerente|Requerido",
+    "1392": "Apuração de Infração Administrativa às Normas de Proteção à Criança ou Adolescente|1386|Requerente|Requerido",
     "1396": "Tutela|1386|Requerente|Requerido",
-    "1399":
-      "Tutela c/c Destituição do Poder Familiar|1386|Requerente|Requerido",
+    "1399": "Tutela c/c Destituição do Poder Familiar|1386|Requerente|Requerido",
     "1401": "Adoção|1386|Requerente|Requerido",
-    "1412":
-      "Adoção c/c Destituição do Poder Familiar|1386|Requerente|Requerido",
-    "1414":
-      "Suprimento de Capacidade ou de Consentimento para Casar|1386|Requerente|Requerido",
+    "1412": "Adoção c/c Destituição do Poder Familiar|1386|Requerente|Requerido",
+    "1414": "Suprimento de Capacidade ou de Consentimento para Casar|1386|Requerente|Requerido",
     "1415": "Emancipação|1386|Requerente|",
     "1417": "Regularização de Registro Civil|1386|Requerente|Requerido",
     "1420": "Guarda|1386||",
@@ -561,8 +516,7 @@ export default {
     "1426": "Perda ou Suspensão do Poder Familiar|1386|Requerente|Requerido",
     "1430": "Processo de Execução|1385||",
     "1432": "Execução de Alimentos|1430|Exequente|Executado",
-    "1434":
-      "Medidas de Proteção à Criança e Adolescente|1430|Requerente|Requerido",
+    "1434": "Medidas de Proteção à Criança e Adolescente|1430|Requerente|Requerido",
     "1435": "Execução de Multa|1430|Exequente|Executado",
     "1436": "Processos Cautelares|1385||",
     "1438": "Busca e Apreensão|1436|Requerente|Requerido",
@@ -574,8 +528,7 @@ export default {
     "1460": "Procedimentos Investigatórios|1459|Autoridade|Adolescente",
     "1461": "Auto de Apreensão em Flagrante|1460|Autoridade|Adolescente",
     "1462": "Relatório de Investigações|1460|Autoridade|Adolescente",
-    "1463":
-      "Boletim de Ocorrência Circunstanciada|1460|Autoridade|Autor do Fato",
+    "1463": "Boletim de Ocorrência Circunstanciada|1460|Autoridade|Autor do Fato",
     "1464": "Processo de Apuração de Ato Infracional|1459|Autor|Adolescente",
     "1465": "Execução de Medidas Sócio-Educativas|1459|Requerente|Adolescente",
     "1466": "Internação com Atividades Externas|1465|Requerente|Adolescente",
@@ -651,8 +604,7 @@ export default {
     "10980": "Cumprimento Provisório de Decisão|155|Exequente|Executado",
     "10981": "Impugnação ao Cumprimento  de Decisão|155|Impugnante|Impugnado",
     "11026": "Petição|1385|Requerente|Requerido",
-    "11027":
-      "Reexame Necessário / Recurso Ordinário|1071|Juízo Recorrente|Recorrido",
+    "11027": "Reexame Necessário / Recurso Ordinário|1071|Juízo Recorrente|Recorrido",
     "11028": "PROCESSO MILITAR|||",
     "11029": "PROCEDIMENTOS ESPECIAIS PREVISTOS EM LEIS ESPARSAS|11028||",
     "11030": "PROCESSO CRIMINAL|11028||",
@@ -660,8 +612,7 @@ export default {
     "11032": "Procedimentos Investigatórios|11030||",
     "11033": "Recursos|11030||",
     "11034": "Conselho de Justificação|11029||",
-    "11035":
-      "Representação p/ Declaração de Indignidade/Incompatibilidade|11029||",
+    "11035": "Representação p/ Declaração de Indignidade/Incompatibilidade|11029||",
     "11036": "Representação p/ Perda da Graduação|11029||",
     "11037": "Ação Penal Militar - Procedimento Ordinário|11030|Autor|Réu",
     "11038": "Embargos em Ação Penal Militar|11033||",
@@ -673,14 +624,11 @@ export default {
     "11044": "Insubmissão|11031|Autor|Réu",
     "11045": "Deserção de Oficial|11043||",
     "11046": "Deserção de Praça|11043||",
-    "11099":
-      "PROCEDIMENTOS PRÉ-PROCESSUAIS DE RESOLUÇÃO CONSENSUAL DE CONFLITOS|||",
+    "11099": "PROCEDIMENTOS PRÉ-PROCESSUAIS DE RESOLUÇÃO CONSENSUAL DE CONFLITOS|||",
     "11397": "Extinção das obrigações do falido|62||",
-    "11398":
-      "Recurso em sentido estrito/Recurso ex officio|412|Recorrente|Recorrido",
+    "11398": "Recurso em sentido estrito/Recurso ex officio|412|Recorrente|Recorrido",
     "11399": "Execução de Medida de Segurança|385||",
-    "11400":
-      "Agravo de Instrumento em Recurso Ordinário para o STF|1209|Agravante|Agravado",
+    "11400": "Agravo de Instrumento em Recurso Ordinário para o STF|1209|Agravante|Agravado",
     "11427": "PROCESSO ELEITORAL|||",
     "11525": "Processos Cíveis-Eleitorais|11427||",
     "11526": "Ação de Impugnação de Mandato Eletivo|11525|Autor|Réu",
@@ -692,11 +640,9 @@ export default {
     "11532": "Registro de Candidatura|11529|Requerente|",
     "11533": "Recurso contra Expedição de Diploma|11529|Recorrente|Recorrido",
     "11534": "Procedimentos Relativos a Partidos Políticos|11427||",
-    "11535":
-      "Cancelamento de Registro de Partido Político|11534|Requerente|Requerido",
+    "11535": "Cancelamento de Registro de Partido Político|11534|Requerente|Requerido",
     "11536": "Propaganda Partidária|11534|Interessado|",
-    "11537":
-      "Registro de Órgão de Partido Político em Formação|11534|Requerente|",
+    "11537": "Registro de Órgão de Partido Político em Formação|11534|Requerente|",
     "11538": "Registro de Comitê Financeiro|11529|Requerente|",
     "11539": "Registro de Partido Político|11534|Requerente|",
     "11540": "Procedimentos Administrativos da Justiça Eleitoral|11427||",
@@ -721,10 +667,8 @@ export default {
     "11790": "Impugnação de Assistência Judiciária|331||",
     "11791": "Pedido de Uniformização de Interpretação de Lei|331||",
     "11793": "Justificação Criminal|308|Requerente|Requerido",
-    "11794":
-      "Restituição de Coisas Apreendidas - Infracional|1459|Requerente|Requerido",
-    "11798":
-      "Processo de Aplicação de Medida de Segurança Por Fato Não Criminoso|285|Requerente|Requerido",
+    "11794": "Restituição de Coisas Apreendidas - Infracional|1459|Requerente|Requerido",
+    "11798": "Processo de Aplicação de Medida de Segurança Por Fato Não Criminoso|285|Requerente|Requerido",
     "11799": "Instrução Provisória de Insubmissão|11032|Requerente|Requerido",
     "11800": "Instrução Provisória de Deserção|11032|Requerente|Requerido",
     "11875": "Reclamação Pré-processual|11099|Reclamante|Reclamado",
@@ -732,22 +676,17 @@ export default {
     "11881": "Agravo em Recurso Especial|5|Agravante|Agravado",
     "11882": "Recurso de Revista com Agravo|1071|Agravante|Agravado",
     "11886": "Recurso Ordinário - Rito Sumaríssimo|1071||",
-    "11887":
-      "Acompanhamento de Cumprimento de Decisão|1198|Requerente|Requerido",
+    "11887": "Acompanhamento de Cumprimento de Decisão|1198|Requerente|Requerido",
     "11888": "Ato Normativo|1198|Requerente|Requerido",
     "11889": "Nota Técnica|1198|Requerente|Requerido",
-    "11890":
-      "Parecer de Mérito sobre Anteprojeto de Lei|1198|Requerente|Requerido",
-    "11891":
-      "Procedimento de Controle Administrativo|1198|Requerente|Requerido",
+    "11890": "Parecer de Mérito sobre Anteprojeto de Lei|1198|Requerente|Requerido",
+    "11891": "Procedimento de Controle Administrativo|1198|Requerente|Requerido",
     "11892": "Revisão Disciplinar|1198|Requerente|Requerido",
     "11893": "Reclamação para Garantia das Decisões|1198|Requerente|Requerido",
-    "11894":
-      "Procedimento de Competência de Comissão|1198|Requerente|Requerido",
+    "11894": "Procedimento de Competência de Comissão|1198|Requerente|Requerido",
     "11953": "Arguição de Suspeição e de Impedimento|1198|Arguinte|Arguído",
     "11955": "Cautelar Inominada Criminal|308|Requerente|Requerido",
-    "11956":
-      "Embargos de Divergência em Agravo em Recurso Especial|5|Embargante|Embargado",
+    "11956": "Embargos de Divergência em Agravo em Recurso Especial|5|Embargante|Embargado",
     "11957": "Remição de Pena|406|Requerente|Requerido",
     "11976": "Pedido de Busca e Apreensão Infracional|1460||",
     "12057": "Reexame Necessário|11547||",
@@ -759,8 +698,7 @@ export default {
     "12071": "Procedimentos Cautelares|1459||",
     "12072": "Busca e Apreensão|12071||",
     "12073": "Internação Provisória|12071||",
-    "12074":
-      "Pedido De Desinternação/Reavaliação/Substituição/Suspensão da Medida|12071||",
+    "12074": "Pedido De Desinternação/Reavaliação/Substituição/Suspensão da Medida|12071||",
     "12075": "Procedimento Conciliatório|215|REQUERENTE|REQUERIDO",
     "12076": "Restabelecimento do Poder Familiar|1386|Requerente|Requerido",
     "12077": "Homologação em Acordo de Colaboração Premiada|331||",
@@ -771,21 +709,15 @@ export default {
     "12082": "Carta Arbitral|257|Requerente|Requerido",
     "12083": "Tutela Antecipada Antecedente|175|requerente|requerido",
     "12084": "Tutela Cautelar Antecedente|175|requerente|requerido",
-    "12085":
-      "Incidente de Resolução de Demandas Repetitivas|215|Suscitante|Suscitado",
+    "12085": "Incidente de Resolução de Demandas Repetitivas|215|Suscitante|Suscitado",
     "12086": "Dissolução Parcial de Sociedade|27|autor|réu",
     "12087": "Incidente de Assunção de Competência|215|suscitante|suscitado",
-    "12088":
-      "Liquidação Provisória de Sentença pelo Procedimento Comum|150|autor|réu",
-    "12089":
-      "Renovação de Permanência em Estabelecimento Penal Federal|406|Requerente|Requerido",
-    "12117":
-      "Suspensão em Incidente de Resolução de Demandas Repetitivas|1310||",
+    "12088": "Liquidação Provisória de Sentença pelo Procedimento Comum|150|autor|réu",
+    "12089": "Renovação de Permanência em Estabelecimento Penal Federal|406|Requerente|Requerido",
+    "12117": "Suspensão em Incidente de Resolução de Demandas Repetitivas|1310||",
     "12118": "Suspensão em Incidente de Resolução de Demandas Repetitivas|5||",
-    "12119":
-      "Incidente de Desconsideração de Personalidade Jurídica|215|Suscitante|Suscitado",
-    "12120":
-      "Agravo em Execução de Medidas Sócio-Educativas|1459|Agravante|Agravado",
+    "12119": "Incidente de Desconsideração de Personalidade Jurídica|215|Suscitante|Suscitado",
+    "12120": "Agravo em Execução de Medidas Sócio-Educativas|1459|Agravante|Agravado",
     "12121": "Auto de Prisão|277|Autoridade|Acusado",
     "12122": "Reclamação Criminal|292|Reclamante|Reclamação",
     "12123": "Roteiro de Pena|406|Autoridade|Executado",
@@ -794,10 +726,8 @@ export default {
     "12126": "Regressão de Regime|406|Autoridade|Executado",
     "12127": "Remição|406|Autoridade|Execução",
     "12128": "Livramento Condicional|406|Autoridade|Executado",
-    "12129":
-      "Outros Incidentes de Execução Iniciados de Ofício|406|Autoridade|Executado",
-    "12132":
-      "Incidente de Julgamento de Recurso de Revista e de Embargos Repetitivos|1070|Requerente|Requerido",
+    "12129": "Outros Incidentes de Execução Iniciados de Ofício|406|Autoridade|Executado",
+    "12132": "Incidente de Julgamento de Recurso de Revista e de Embargos Repetitivos|1070|Requerente|Requerido",
     "12133": "Tutela Provisória|2|Requerente|Requerido",
     "12134": "Tutela Cautelar Antecedente|12133|Requerente|Requerido",
     "12135": "Tutela Antecipada Antecedente|12133|Requerente|Requerido",

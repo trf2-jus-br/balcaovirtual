@@ -12,6 +12,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.crivano</groupId>
+			<artifactId>jregexie</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
 			<groupId>br.jus.trf2.sistemaprocessual</groupId>
 			<artifactId>sistemaprocessual-api</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
@@ -66,9 +72,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.1.0</version>
 			<scope>test</scope>
 		</dependency>
 

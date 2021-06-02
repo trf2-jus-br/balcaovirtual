@@ -3,7 +3,9 @@ package br.jus.trf2.balcaovirtual;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 
 import com.crivano.swaggerservlet.PresentableException;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
@@ -74,8 +77,8 @@ public class ProcessoCompleto implements Callable<String> {
 			FileOutputStream buf = new FileOutputStream(bufName);
 			Document document = new Document();
 			PdfCopy copy = new PdfSmartCopy(document, buf);
+			copy.setPageSize(PageSize.A4);
 			document.open();
-			PdfReader reader;
 
 			long bytes = 0;
 			for (int i = 0; i < docs.length(); i++) {
@@ -107,13 +110,19 @@ public class ProcessoCompleto implements Callable<String> {
 						}
 					}
 
-					String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {} @page {size: a4 portrait; margin-left: 2cm; margin-right: 2cm; margin-top: 2cm; margin-bottom: 2cm;background-color: lightyellow;}</style></head><body style=\"background-color: lightyellow;\">";
-					// String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {background-color: lightyellow; @page{size: a4 portrait; margin-left:0cm; padding-right: 3cm; margin-top: 3cm; margin-bottom: 3cm;}}</style></head><body style=\"background-color: lightyellow;\">";
+//					String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {} @page {size: a4 portrait; margin-left: 2cm; margin-right: 2cm; margin-top: 2cm; margin-bottom: 2cm;background-color: lightyellow;}</style></head><body style=\"background-color: lightyellow;\">";
+					String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style type=\"text/css\">@media print {} @page {margin-left: 2cm; margin-right: 2cm; margin-top: 2cm; margin-bottom: 2cm;background-color: lightyellow;}</style></head><body style=\"background-color: lightyellow;\">";
+					// String html = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><style
+					// type=\"text/css\">@media print {background-color: lightyellow; @page{size: a4
+					// portrait; margin-left:0cm; padding-right: 3cm; margin-top: 3cm;
+					// margin-bottom: 3cm;}}</style></head><body style=\"background-color:
+					// lightyellow;\">";
 					html += "<p align=\"center\"><b>";
 					html += i == 0 ? "CAPA DO PROCESSO" : "PÁGINA DE SEPARAÇÃO";
 					html += "</b><br/><i>(Gerada automaticamente pelo Balcão Virtual.)</i><br/><br/><br/><br/><br/></p>";
 					if (i == 0)
-						html += "<h1 style=\"text-align: center;\">Processo N&ordm; " + Utils.formatarNumeroProcesso(numProc) + "</h1>";
+						html += "<h1 style=\"text-align: center;\">Processo N&ordm; "
+								+ Utils.formatarNumeroProcesso(numProc) + "</h1>";
 					html += "<br/><br/><br/><h2 style=\"text-align: center;\">Evento " + movimento;
 					html += "</h2><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
 					html += "<p>Data: " + dataHora + "</p>";
@@ -128,7 +137,7 @@ public class ProcessoCompleto implements Callable<String> {
 
 					byte[] abSep = new Html2Pdf().converter(html, false);
 					bytes += abSep.length;
-					reader = new PdfReader(abSep);
+					PdfReader reader = new PdfReader(abSep);
 					copy.addDocument(reader);
 					reader.close();
 				} else
@@ -149,6 +158,7 @@ public class ProcessoCompleto implements Callable<String> {
 				ContentInfo info = contentInfoUtil.findMatch(ab);
 
 				if (info.getMimeType().startsWith("application/xml")) {
+//					System.out.println("xml");
 					this.status = Status.update(this.uuid,
 							"Convertendo documento " + (i + 1) + "/" + docs.length() + " de XHTML para PDF", i * 2 + 2,
 							docs.length() * 2 + 1, bytes);
@@ -168,13 +178,12 @@ public class ProcessoCompleto implements Callable<String> {
 					xmlStreamReader.close();
 					if (fHtml) {
 						String html = new String(ab, fileEncoding);
-						System.out.println(html);
+//						System.out.println(html);
 						ab = new Html2Pdf().converter(html, false);
 						info = contentInfoUtil.findMimeTypeMatch("application/pdf");
 					}
-				}
-
-				if (info.getMimeType().startsWith("text/html")) {
+				} else if (info.getMimeType().startsWith("text/html")) {
+//					System.out.println("html");
 					this.status = Status.update(this.uuid,
 							"Convertendo " + (i + 1) + "/" + docs.length() + " de HTML para PDF", i * 2 + 2,
 							docs.length() * 2 + 1, bytes);
@@ -182,17 +191,23 @@ public class ProcessoCompleto implements Callable<String> {
 					if (html.toLowerCase().contains("charset=windows-1252")
 							|| html.toLowerCase().contains("iso-8859-1"))
 						html = new String(ab, StandardCharsets.ISO_8859_1);
-					System.out.println(html);
+
+					// Removendo comentários no tag <style> do html que estavam desativados usando
+					// <!-- -->, o que inclusive não está correto. Isso ocasionava um erro que
+					// produzia uma página em branco no PDF completo.
+					html = html.replaceAll("(?s)\\<!--.*?--\\>", "");
+
+//					System.out.println(html);
 					ab = new Html2Pdf().converter(html, false);
 					info = contentInfoUtil.findMimeTypeMatch("application/pdf");
-				}
-
-				if (!"application/pdf".equals(info.getMimeType()))
+				} else if ("application/pdf".equals(info.getMimeType())) {
+//					System.out.println("pdf");
+				} else
 					throw new PresentableException("Não foi possível obter um PDF. (" + info.getMimeType() + ")");
 
 				bytes += ab.length;
 
-				reader = new PdfReader(ab);
+				PdfReader reader = new PdfReader(ab);
 				copy.addDocument(reader);
 				reader.close();
 			}
@@ -200,7 +215,9 @@ public class ProcessoCompleto implements Callable<String> {
 
 			this.status = Status.update(this.uuid, "PDF completo gerado", docs.length() * 2 + 1, docs.length() * 2 + 1,
 					bytes);
-		} catch (Exception ex) {
+		} catch (
+
+		Exception ex) {
 			this.status.ex = ex;
 			Status.update(this.uuid, this.status);
 		}

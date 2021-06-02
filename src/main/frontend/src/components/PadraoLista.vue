@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <div class="row mb-3 d-print-none" v-show="lista &amp;&amp; lista.length > 0">
+      <div v-if="false" class="row mb-3 d-print-none" v-show="lista &amp;&amp; lista.length > 0">
         <div class="col-sm-2">
           <div class="input-group">
             <div class="input-group-addon">&#128269;</div>
@@ -35,17 +35,26 @@
       <div class="row" v-show="lista &amp;&amp; lista.length > 0">
         <div
           :class="{
-            col: true
+            col: true,
           }"
         >
           <div class="table-responsive">
             <table class="table table-sm table-striped mb-0 table-protocolo">
               <thead class="thead-dark">
                 <tr>
-                  <th class="d-print-none" style="text-align: center">
+                  <th v-if="false" class="d-print-none" style="text-align: center">
                     <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()" />
                   </th>
 
+                  <th>
+                    <a @click="sort('id')">
+                      Código
+                      <span v-show="orderByField == 'id'">
+                        <span v-show="!reverseSort">&#8679;</span>
+                        <span v-show="reverseSort">&#8681;</span>
+                      </span>
+                    </a>
+                  </th>
                   <th>
                     <a @click="sort('dataDeInclusao')">
                       Data Inclusão
@@ -57,7 +66,7 @@
                   </th>
                   <th>
                     <a @click="sort('conteudo')">
-                      Evento
+                      Conteúdo
                       <span v-show="orderByField == 'conteudo'">
                         <span v-show="!reverseSort">&#8679;</span>
                         <span v-show="reverseSort">&#8681;</span>
@@ -69,8 +78,11 @@
               </thead>
               <tbody>
                 <tr v-for="r in filtrados" :key="r.id">
-                  <td class="d-print-none" style="text-align: center">
+                  <td v-if="false" class="d-print-none" style="text-align: center">
                     <input type="checkbox" value="true" v-model="r.checked" :disabled="r.disabled" class="chk-assinar" />
+                  </td>
+                  <td>
+                    <span v-html="r.id"></span>
                   </td>
                   <td>
                     <span v-html="r.dataDeInclusaoFormatada"></span>
@@ -79,7 +91,10 @@
                     <span v-html="r.conteudo"></span>
                   </td>
                   <td align="right">
-                    <router-link :to="{ name: 'Padrao', params: { numero: r.id, conteudo: r.conteudo } }" class="btn btn-sm btn-primary d-print-none">
+                    <router-link
+                      :to="{ name: 'Padrao', params: { numero: r.id, conteudo: r.conteudo } }"
+                      class="btn btn-sm btn-primary d-print-none"
+                    >
                       Editar
                     </router-link>
                     <button type="button" @click="remover(r)" class="btn btn-sm btn-success d-print-none ml-1">
@@ -111,10 +126,10 @@ export default {
     // Carragar a lista de avisos pendentes
     this.$nextTick(function() {
       this.$http.get("padrao", { block: true }).then(
-        response => {
+        (response) => {
           this.fixPadroes(response.data);
         },
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     });
   },
@@ -127,7 +142,7 @@ export default {
       outlineAtivo: false,
       filtro: undefined,
       errormsg: undefined,
-      lista: undefined
+      lista: undefined,
     };
   },
   computed: {
@@ -162,7 +177,7 @@ export default {
       return this.filtrados.filter(function(item) {
         return item.idaviso;
       });
-    }
+    },
   },
   methods: {
     fixPadroes: function(data) {
@@ -192,18 +207,9 @@ export default {
     remover: function(o) {
       this.$http.delete("padrao/" + o.id, { block: true }).then(
         () => {
-          this.lista = this.lista.filter(i => i !== o);
+          this.lista = this.lista.filter((i) => i !== o);
         },
-        error => UtilsBL.errormsg(error, this)
-      );
-    },
-
-    salvar: function() {
-      var el = this.$refs["conteudo"].querySelector("section[data-bv_edit=true]");
-      this.buffer = el.innerHTML;
-      this.$http.post("padrao", { html: this.documento.conteudo }, { block: true }).then(
-        () => {},
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     },
 
@@ -217,13 +223,13 @@ export default {
 
     confirmarEmLote: function() {
       var a = this.filtradosEMarcadosEConfirmaveis;
-      Bus.$emit("prgStart", "Confirmando Intimações/Citações", a.length, i => this.confirmarAviso(a[i], true));
+      Bus.$emit("prgStart", "Confirmando Intimações/Citações", a.length, (i) => this.confirmarAviso(a[i], true));
     },
 
     imprimir: function() {
       window.print();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -260,5 +266,9 @@ export default {
 
 .card-text-descr {
   margin-bottom: 0;
+}
+
+article {
+  border: 1px solid black;
 }
 </style>

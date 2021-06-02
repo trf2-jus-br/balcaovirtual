@@ -10,10 +10,10 @@ export default {
   getCookie: function(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    var ca = decodedCookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
-      while (c.charAt(0) == ' ') {
+      while (c.charAt(0) == " ") {
         c = c.substring(1);
       }
       if (c.indexOf(name) == 0) {
@@ -32,8 +32,7 @@ export default {
   },
 
   // Get and store id_token in local storage
-  setIdToken: function(idToken) {
-  },
+  setIdToken: function(idToken) {},
 
   isLoggedIn: function() {
     const idToken = this.getIdToken();
@@ -59,19 +58,12 @@ export default {
         };
       }
     }
-    decoded.company =
-      decoded.email !== null ? decoded.email.split("@")[1] : undefined;
-    decoded.isInterno = sistema =>
-      decoded.user[sistema] ? decoded.user[sistema].origin === "int" : false;
-    decoded.isExterno = sistema =>
-      decoded.user[sistema] ? decoded.user[sistema].origin === "ext" : false;
+    decoded.company = decoded.email !== null ? decoded.email.split("@")[1] : undefined;
+    decoded.isInterno = sistema => (decoded.user[sistema] ? decoded.user[sistema].origin === "int" : false);
+    decoded.isExterno = sistema => (decoded.user[sistema] ? decoded.user[sistema].origin === "ext" : false);
     decoded.isMagistrado = () => {
       for (var sistema in decoded.user) {
-        if (
-          decoded.user.hasOwnProperty(sistema) &&
-          decoded.user[sistema].perfil === "magistrado"
-        )
-          return true;
+        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado") return true;
       }
       return false;
     };

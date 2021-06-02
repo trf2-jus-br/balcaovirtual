@@ -1,22 +1,16 @@
 <template>
-  <div class="container-fluid content profile" v-if="documento">
-    <div class="row mt-3" v-if="errormsg !== undefined">
-      <div class="col col-sm-12">
-        <p class="alert alert-danger">
-          {{ errormsg }}
-        </p>
-      </div>
-    </div>
-
+  <div class="container-fluid content profile">
     <div class="row mt-3 mb-3">
       <div class="col-md-12">
-        <h4 class="text-center mb-0">{{ numero }}</h4>
+        <h4 class="text-center mb-0">Padrão {{ numero }}</h4>
       </div>
     </div>
 
     <div class="row no-gutters mt-2">
       <div class="col col-auto mr-auto mb-3">
-        <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Cancelar</button>
+        <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none">
+          <span class="fa fa-arrow-left"></span> Cancelar
+        </button>
       </div>
       <div class="col col-auto mr-1 mb-3">
         <button @click="salvar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Salvar</button>
@@ -34,42 +28,49 @@
 import UtilsBL from "../bl/utils.js";
 
 export default {
-  mounted() {},
+  name: "padrao",
+  mounted() {
+    if (this.numero)
+      this.$nextTick(function() {
+        this.$http.get("padrao/" + this.numero, { block: true }).then(
+          (response) => {
+            this.buffer = response.data.padrao.conteudo;
+          },
+          (error) => UtilsBL.errormsg(error, this)
+        );
+      });
+  },
   data() {
     return {
       numero: this.$route.params.numero,
-      conteudo: this.preprocess(this.$route.params.conteudo)
+      buffer: undefined,
     };
   },
   computed: {},
   methods: {
-    preprocess: function(s) {
-      if (!s) return;
-      console.log(s);
-      return s.replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"').replace(/&#x2013;/g, "-");
-    },
-
     salvar: function() {
       this.buffer = this.$refs["editarea"].innerHTML;
-      this.$refs["conteudo"].querySelector("section[data-bv_edit=true]").innerHTML = this.buffer;
       this.$http
         .post(
-          "mesa/" + "null" + "/documento/" + this.documento.id + "/salvar?sistema=" + this.documento.sistema,
+          "padrao",
           {
-            html: this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML)
+            id: this.numero,
+            html: this.buffer,
           },
           { block: true }
         )
         .then(
-          response => {
-            this.editando = false;
-            this.documento.conteudo = this.$refs["conteudo"].innerHTML;
-            UtilsBL.logEvento("mesa", "salvar", "minuta");
+          (response) => {
+            UtilsBL.logEvento("padrao", "salvar");
+            this.$router.back();
           },
-          error => UtilsBL.errormsg(error, this)
+          (error) => UtilsBL.errormsg(error, this)
         );
-    }
-  }
+    },
+    cancelar() {
+      this.$router.back();
+    },
+  },
 };
 </script>
 <style>
@@ -219,10 +220,6 @@ export default {
 
 .dispositivo {
   color: #0000ff;
-}
-
-section[contenteditable="true"] {
-  background-color: white;
 }
 
 .bveditor {

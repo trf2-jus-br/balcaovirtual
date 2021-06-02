@@ -144,8 +144,7 @@ export default {
     "3407": "Crimes contra a inviolabilidade de correspondência|287",
     "3408": "Violação de correspondência|3407",
     "3409": "Sonegação ou destruição de correspondência|3407",
-    "3410":
-      "Violação de comunicação telegráfica, radioelétrica ou telefônica|3407",
+    "3410": "Violação de comunicação telegráfica, radioelétrica ou telefônica|3407",
     "3411": "Violação de Correspondência comercial|3407",
     "3412": "Crimes contra a inviolabilidade de segredo|287",
     "3413": "Divulgação de segredo|3412",
@@ -172,30 +171,23 @@ export default {
     "3434": "Fraude à execução|3415",
     "3435": "Receptação|3415",
     "3436": "Apropriação indébita|3415",
-    "3437":
-      "Apropriação de Coisa Havida por Erro, Caso Fortuito ou Força da Natureza|3415",
+    "3437": "Apropriação de Coisa Havida por Erro, Caso Fortuito ou Força da Natureza|3415",
     "3438": "Crimes contra a Propriedade Industrial|3603",
     "3442": "Crimes contra a Propriedade Intelectual|287",
     "3443": "Violação de direito autoral|3442",
     "3445": "Crimes contra a Organização do Trabalho|287",
     "3446": "Atentado contra a liberdade de trabalho|3445",
-    "3447":
-      "Atentado contra a liberdade de contrato de trabalho e boicotagem violenta|3445",
+    "3447": "Atentado contra a liberdade de contrato de trabalho e boicotagem violenta|3445",
     "3448": "Atentado contra a liberdade de associação|3445",
-    "3449":
-      "Paralisação de trabalho, seguida de violência ou perturbação da ordem|3445",
+    "3449": "Paralisação de trabalho, seguida de violência ou perturbação da ordem|3445",
     "3450": "Paralisação de trabalho de interesse coletivo|3445",
-    "3451":
-      "Invasão de estabelecimento industrial, comercial ou agrícola. Sabotagem|3445",
+    "3451": "Invasão de estabelecimento industrial, comercial ou agrícola. Sabotagem|3445",
     "3452": "Frustração de direitos assegurados por lei trabalhista|3445",
-    "3453":
-      "Exercício de atividade com infração de decisão administrativa|3445",
+    "3453": "Exercício de atividade com infração de decisão administrativa|3445",
     "3454": "Aliciamento para fins de emigração|3445",
-    "3455":
-      "Aliciamento de trabalhadores de um local para outro do território nacional|3445",
+    "3455": "Aliciamento de trabalhadores de um local para outro do território nacional|3445",
     "3456": "Frustração de lei sobre a nacionalização do trabalho|3445",
-    "3457":
-      "Crimes contra o sentimento religioso e contra o respeito aos mortos|287",
+    "3457": "Crimes contra o sentimento religioso e contra o respeito aos mortos|287",
     "3458": "Destruição / Subração / Ocultação de Cadáver|3457",
     "3459": "Impedimento ou Perturbação de Cerimônia Funerária|3457",
     "3460": "Vilipêndio a Cadáver|3457",
@@ -224,8 +216,7 @@ export default {
     "3486": "Registro de Nascimento Inexistente|3484",
     "3487": "Sonegação do Estado de Filiação|3484",
     "3488": "Crime contra o Pátrio-Poder e Tutela|3472",
-    "3489":
-      "Induzimento a Fuga, Entrega Arbitrária ou Sonegação de Incapazes|3488",
+    "3489": "Induzimento a Fuga, Entrega Arbitrária ou Sonegação de Incapazes|3488",
     "3490": "Subtração de Incapazes|3488",
     "3491": "Crimes contra a Incolumidade Pública|287",
     "3492": "Incêndio|3491",
@@ -233,28 +224,23 @@ export default {
     "3494": "Uso de gás tóxico ou asfixiante|3491",
     "3495": "Inundação / Perigo de Inundação|3491",
     "3496": "Desabamento ou desmoronamento|3491",
-    "3497":
-      "Subtração, ocultação ou inutilização de material de salvamento|3491",
+    "3497": "Subtração, ocultação ou inutilização de material de salvamento|3491",
     "3498": "Difusão de doença ou praga|3491",
     "3500": "Desastre ferroviário / Perigo de Desastre Ferroviário|3491",
     "3501": "Atentado contra a segurança de transporte público|3491",
     "3502": "Arremesso de projétil|3491",
     "3503": "Atentado contra a segurança de serviços de utilidade pública|3491",
-    "3504":
-      "Interrupção /perturbação de serviços telegráficos/telefônicos|3491",
+    "3504": "Interrupção /perturbação de serviços telegráficos/telefônicos|3491",
     "3505": "Epidemia|3491",
     "3506": "Emprego de Processo Proibido/Substância não permitida|3491",
     "3507": "Invólucro ou recipiente com falsa indicação|3491",
-    "3508":
-      "Falsificação / Corrupção / Adulteração / Alteração de produto destinado a fins terapêuticos ou medicinais|3491",
+    "3508": "Falsificação / Corrupção / Adulteração / Alteração de produto destinado a fins terapêuticos ou medicinais|3491",
     "3509": "Exercício Ilegal da Medicina, Arte Dentária ou Farmacêutica|3491",
     "3510": "Charlatanismo|3491",
     "3511": "Corrupção ou Poluição de Água Potável|3491",
     "3512": "Curandeirismo|3491",
-    "3513":
-      "Envenenamento de Água Potável / Substância Alimentícia ou Medicinal|3491",
-    "3514":
-      "Falsificação / Corrupção / Adulteração / Alteração de Substância ou Produtos Alimentícios|3491",
+    "3513": "Envenenamento de Água Potável / Substância Alimentícia ou Medicinal|3491",
+    "3514": "Falsificação / Corrupção / Adulteração / Alteração de Substância ou Produtos Alimentícios|3491",
     "3515": "Infração de Medida Sanitária Preventiva|3491",
     "3516": "Omissão de Notificação de Doença|3491",
     "3517": "Outras Substâncias Nocivas a Saúde Pública|3491",
@@ -277,14 +263,12 @@ export default {
     "3538": "Reprodução ou adulteração de selo ou peça filatélica|3523",
     "3539": "Uso de documento falso|3523",
     "3540": "Supressão de documento|3523",
-    "3541":
-      "Falsificação do sinal empregado no contraste de metal precioso ou na fiscalização alfandegária, ou para outros fins|3523",
+    "3541": "Falsificação do sinal empregado no contraste de metal precioso ou na fiscalização alfandegária, ou para outros fins|3523",
     "3542": "Falsa identidade|3523",
     "3543": "Fraude de lei sobre estrangeiros|3523",
     "3545": "Petrechos de Falsificação de Papéis Públicos|3523",
     "3546": "Adulteração de Sinal Identificador de Veículo Automotor|3523",
-    "3547":
-      "Crimes Praticados por Funcionários Públicos Contra a Administração em Geral|287",
+    "3547": "Crimes Praticados por Funcionários Públicos Contra a Administração em Geral|287",
     "3548": "Peculato|3547",
     "3550": "Peculato mediante erro de outrem|3547",
     "3551": "Extravio, sonegação ou inutilização de livro ou documento|3547",
@@ -331,11 +315,9 @@ export default {
     "3592": "Sonegação de papel ou objeto de valor probatório|5874",
     "3593": "Exploração de prestígio|5874",
     "3594": "Violência ou fraude em arrematação judicial|5874",
-    "3595":
-      "Desobediência a decisão judicial sobre perda ou suspensão de direitos|5874",
+    "3595": "Desobediência a decisão judicial sobre perda ou suspensão de direitos|5874",
     "3596": "Inserção de dados falsos em sistema de informações|3547",
-    "3597":
-      "Modificação ou alteração não autorizada de sistema de informações|3547",
+    "3597": "Modificação ou alteração não autorizada de sistema de informações|3547",
     "3598": "Sonegação de contribuição previdenciária|5872",
     "3603": "Crimes Previstos na Legislação Extravagante|287",
     "3604": "Crimes de Responsabilidade|3603",
@@ -345,8 +327,7 @@ export default {
     "3608": "Tráfico de Drogas e Condutas Afins|3607",
     "3609": "Responsabilidade Criminal por Danos Nucleares|3603",
     "3610": "Crimes contra o Serviço Postal e o Serviço de Telegrama|3603",
-    "3611":
-      "Crimes contra a Segurança Nacional, a Ordem Política e Social|3603",
+    "3611": "Crimes contra a Segurança Nacional, a Ordem Política e Social|3603",
     "3612": "Crimes contra o Sistema Financeiro Nacional|3603",
     "3613": "Crimes Resultante de Preconceito de Raça ou de Cor|3603",
     "3614": "Crimes contra a Ordem Tributária|3603",
@@ -360,11 +341,9 @@ export default {
     "3622": "Agrotóxicos|3618",
     "3623": "Atividades Nucleares|3618",
     "3624": "Caça|3618",
-    "3626":
-      "Liberação ou Descarte de OGM (Organismo Geneticamente Modificado)|3618",
+    "3626": "Liberação ou Descarte de OGM (Organismo Geneticamente Modificado)|3618",
     "3627": "Pesca|3618",
-    "3628":
-      "Crimes de &quot;Lavagem&quot; ou Ocultação de Bens, Direitos ou Valores|3603",
+    "3628": "Crimes de &quot;Lavagem&quot; ou Ocultação de Bens, Direitos ou Valores|3603",
     "3629": "Crimes contra as Telecomunicações|3603",
     "3630": "Crimes Previstos na Lei de Estrangeiros|3603",
     "3631": "Crimes de Tortura|3603",
@@ -378,8 +357,7 @@ export default {
     "3642": "Crimes da Lei de licitações|3603",
     "3643": "Crimes da Lei de remoção de órgãos e tecidos|3603",
     "3647": "Crimes praticados contra os índios e a cultura indígena|3603",
-    "3650":
-      "Recusa, retardamento ou omissão de dados técnicos indispensáveis à propositura de Ação Civil Pública|3603",
+    "3650": "Recusa, retardamento ou omissão de dados técnicos indispensáveis à propositura de Ação Civil Pública|3603",
     "3651": "Crimes Agrários|3603",
     "3653": "Crimes relacionados à Comissão Parlamentar de Inquérito|3603",
     "3654": "Crimes Eleitorais|3603",
@@ -471,8 +449,7 @@ export default {
     "4998": "Autofalência|4993",
     "5000": "Concurso de Credores|4993",
     "5001": "Liquidação|4993",
-    "5003":
-      "Revogação de atos praticados em prejuízo de credores e da massa|4993",
+    "5003": "Revogação de atos praticados em prejuízo de credores e da massa|4993",
     "5009": "Mercado de Capitais|9616",
     "5010": "Bolsa de Valores|5009",
     "5193": "Engajamento e Profissionais Marítimos|7783",
@@ -508,8 +485,7 @@ export default {
     "5558": "Privilegiada|3385",
     "5560": "Decorrente de Violência Doméstica|3385",
     "5564": "Furto Privilegiado|3415",
-    "5565":
-      "Furto de Veículo Automotor a ser Transportado para outro Estado ou Exterior|3415",
+    "5565": "Furto de Veículo Automotor a ser Transportado para outro Estado ou Exterior|3415",
     "5566": "Roubo Majorado|3415",
     "5567": "Latrocínio|3415",
     "5568": "Extorsão mediante Seqüestro Seguida de Morte|3415",
@@ -562,10 +538,8 @@ export default {
     "5842": "Abuso de Incapazes|3415",
     "5843": "Induzimento à Especulação|3415",
     "5844": "Fraude no Comércio|3415",
-    "5845":
-      "Fraudes e Abusos na Fundação ou Administração de Sociedade por Ações|3415",
-    "5846":
-      "Emissão Irregular de Conhecimento de Depósito ou &quot;Warrant&quot;|3415",
+    "5845": "Fraudes e Abusos na Fundação ou Administração de Sociedade por Ações|3415",
+    "5846": "Emissão Irregular de Conhecimento de Depósito ou &quot;Warrant&quot;|3415",
     "5847": "Receptação Qualificada|3415",
     "5850": "Posse Sexual Mediante Fraude|3463",
     "5851": "Assédio Sexual|3463",
@@ -574,18 +548,14 @@ export default {
     "5854": "Rufianismo|3463",
     "5855": "Tráfico Internacional de Pessoas|3463",
     "5856": "Tráfico Interno de Pessoas|3463",
-    "5862":
-      "Fabrico / Fornecimento / Aquisição / Posse ou Transporte de Explosivos ou Gás Tóxico ou Asfixiante|3491",
+    "5862": "Fabrico / Fornecimento / Aquisição / Posse ou Transporte de Explosivos ou Gás Tóxico ou Asfixiante|3491",
     "5865": "Crime Culposo|287",
-    "5866":
-      "Venda de Produtos ou Substância nas Condições dos Artigos 274 e 275|3491",
+    "5866": "Venda de Produtos ou Substância nas Condições dos Artigos 274 e 275|3491",
     "5867": "Medicamento em Desacordo com Receita Médica|3491",
     "5869": "Incitação ao Crime|3520",
     "5870": "Apologia de Crime ou Criminoso|3520",
-    "5872":
-      "Crimes Praticados por Particular Contra a Administração em Geral|287",
-    "5873":
-      "Crimes Praticados por Particular Contra a Administração Pública Estrangeira|287",
+    "5872": "Crimes Praticados por Particular Contra a Administração em Geral|287",
+    "5873": "Crimes Praticados por Particular Contra a Administração Pública Estrangeira|287",
     "5874": "Crimes Contra a Administração da Justiça|287",
     "5875": "Crimes Contra as Finanças Públicas|287",
     "5876": "Corrupção Ativa em Transação Comercial Internacional|5873",
@@ -593,32 +563,26 @@ export default {
     "5878": "Crimes contra Patente de Invenção|3438",
     "5879": "Crimes contra os Desenhos Industriais|3438",
     "5880": "Crimes contra as Marcas|3438",
-    "5881":
-      "Crimes Cometidos por Meio de Marca, Título de Estabelecimento e Sinal de Propaganda|3438",
+    "5881": "Crimes Cometidos por Meio de Marca, Título de Estabelecimento e Sinal de Propaganda|3438",
     "5882": "Crimes contra Indicações Geeográficas e Demais Indicações|3438",
     "5883": "Crimes de Concorrência Desleal|3438",
     "5885": "Posse de Drogas para Consumo Pessoal|3607",
-    "5893":
-      "Crime Contra a Administração da Justiça - Lei da Ação de Alimentos|3603",
-    "5894":
-      "Fabricação de Objeto Destinado a Produção de Drogas e Condutas Afins|3607",
+    "5893": "Crime Contra a Administração da Justiça - Lei da Ação de Alimentos|3603",
+    "5894": "Fabricação de Objeto Destinado a Produção de Drogas e Condutas Afins|3607",
     "5895": "Indução, Instigação ou Auxílio ao Uso de Drogas|3607",
     "5896": "Oferecimento de Drogas para Consumo Conjunto|3607",
     "5897": "Associação para a Produção e Tráfico e Condutas Afins|3607",
     "5898": "Financiamento ou Custeio de Produção ou Tráfico de Drogas|3607",
-    "5899":
-      "Colaboração com Grupo, Organização ou Associação Destinados à Produção ou Tráfico de Drogas|3607",
+    "5899": "Colaboração com Grupo, Organização ou Associação Destinados à Produção ou Tráfico de Drogas|3607",
     "5900": "Prescrição Culposa de Drogas|3607",
     "5901": "Condução de Embarcação ou Aeronave sob Efeito de Drogas|3607",
     "5903": "Contratação de Operação de Crédito|5875",
     "5904": "Inscrição de Despesas Não Empenhadas|5875",
-    "5905":
-      "Assunção de Obrigação no Último Ano do Mandato ou Legislatura|5875",
+    "5905": "Assunção de Obrigação no Último Ano do Mandato ou Legislatura|5875",
     "5906": "Ordenação de Despesa Não Autorizada|5875",
     "5907": "Prestação de Garantia Graciosa|5875",
     "5908": "Não Cancelamento de Restos a Pagar|5875",
-    "5909":
-      "Aumento de Despesa com Pessoal no Último Ano do Mandato ou Legislatura|5875",
+    "5909": "Aumento de Despesa com Pessoal no Último Ano do Mandato ou Legislatura|5875",
     "5910": "Oferta Pública ou Colocação de Títulos no Mercado|5875",
     "5911": "Perigo de Contágio Venéreo|3388",
     "5913": "Limitações ao Poder de Tributar|14",
@@ -639,10 +603,8 @@ export default {
     "5928": "Incidência sobre 13° Salário|5917",
     "5929": "Incidência sobre Função Comissionada|5917",
     "5930": "Incidência sobre Hora Extra|5917",
-    "5931":
-      "Incidência decorrente de Desligamento de Plano de Previdência Privada|5917",
-    "5932":
-      "Incidência decorrente de Liquidação de Entidade de Previdência Privada|5917",
+    "5931": "Incidência decorrente de Desligamento de Plano de Previdência Privada|5917",
+    "5932": "Incidência decorrente de Liquidação de Entidade de Previdência Privada|5917",
     "5933": "IRPJ/Imposto de Renda de Pessoa Jurídica|5916",
     "5934": "Microempresa|5933",
     "5935": "Demonstrações Financeiras (DCTF)|5933",
@@ -658,15 +620,13 @@ export default {
     "5945": "IPI/ Imposto sobre Produtos Industrializados|5916",
     "5946": "ICMS/ Imposto sobre Circulação de Mercadorias|5916",
     "5947": "ICMS/Importação|5946",
-    "5948":
-      "IOC/IOF Imposto sobre operações de crédito, câmbio e seguro, ou relativas a títulos ou valores mobiliários|5916",
+    "5948": "IOC/IOF Imposto sobre operações de crédito, câmbio e seguro, ou relativas a títulos ou valores mobiliários|5916",
     "5949": "Incidência sobre Ações de Companhias Abertas|5948",
     "5950": "ITR/ Imposto Territorial Rural|5916",
     "5951": "ISS/ Imposto sobre Serviços|5916",
     "5952": "IPTU/ Imposto Predial e Territorial Urbano|5916",
     "5953": "IPVA - Imposto Sobre Propriedade de Veículos Automotores|5916",
-    "5954":
-      "ITBI - Imposto de Transmissão Intervivos de Bens Móveis e Imóveis|5916",
+    "5954": "ITBI - Imposto de Transmissão Intervivos de Bens Móveis e Imóveis|5916",
     "5955": "ITCD - Imposto de Transmissão Causa Mortis|5916",
     "5956": "Taxas|14",
     "5957": "Federais|5956",
@@ -692,11 +652,9 @@ export default {
     "5977": "Energia Elétrica|5973",
     "5978": "Obrigação Tributária|14",
     "5979": "Responsabilidade tributária|5978",
-    "5980":
-      "Responsabilidade Tributária do Sócio-Gerente / Diretor / Representante|5979",
+    "5980": "Responsabilidade Tributária do Sócio-Gerente / Diretor / Representante|5979",
     "5981": "Substituição Tributária|5979",
-    "5982":
-      "DIMOB/Declaração de Informações sobre Atividades Imobilíárias|5978",
+    "5982": "DIMOB/Declaração de Informações sobre Atividades Imobilíárias|5978",
     "5983": "CNPJ/Cadastro Nacional de Pessoas Jurídicas|5978",
     "5984": "CPF/Cadastro de Pessoas Físicas|5978",
     "5985": "Obrigação Acessória|5978",
@@ -715,8 +673,7 @@ export default {
     "5998": "Lançamento|5986",
     "5999": "CND/Certidão Negativa de Débito|5986",
     "6000": "Expedição de CND|5999",
-    "6001":
-      "Expedição de Certidão Positiva de Débito com Efeito de Negativa|5999",
+    "6001": "Expedição de Certidão Positiva de Débito com Efeito de Negativa|5999",
     "6002": "Certificado de Regularidade - FGTS|5999",
     "6003": "Incentivos fiscais|5986",
     "6004": "Anulação de Débito Fiscal|5986",
@@ -738,8 +695,7 @@ export default {
     "6020": "Arrolamento de Bens|6018",
     "6021": "Procedimentos Fiscais|14",
     "6022": "Sigilo Fiscal|6021",
-    "6023":
-      "Utilização de Dados Relativos à CPMF para Fins de Fiscalização|6022",
+    "6023": "Utilização de Dados Relativos à CPMF para Fins de Fiscalização|6022",
     "6024": "Liberação de mercadorias|6021",
     "6025": "Levantamento de depósito|6021",
     "6026": "Cadastro de Inadimplentes - CADIN|6021",
@@ -777,8 +733,7 @@ export default {
     "6058": "Indenização Trabalhista|6048",
     "6059": "Reembolso auxílio-creche|6048",
     "6060": "Contribuição sobre a folha de salários|6048",
-    "6061":
-      "Devolução de contribuições previdenciárias pagas além do teto|6048",
+    "6061": "Devolução de contribuições previdenciárias pagas além do teto|6048",
     "6062": "1/3 de férias|6048",
     "6063": "Auxílio-Alimentação|6048",
     "6064": "Custeio de Assistência Médica|6048",
@@ -787,23 +742,18 @@ export default {
     "6067": "Nota Fiscal ou Fatura|6048",
     "6068": "Salário-Maternidade|6048",
     "6069": "Contribuição sobre Nota Fiscal de Execução de Serviços|6048",
-    "6070":
-      "Contribuição de Autônomos, Empresários (Pró-labore) e Facultativos|6048",
+    "6070": "Contribuição de Autônomos, Empresários (Pró-labore) e Facultativos|6048",
     "6071": "Contribuições Especiais|6031",
     "6072": "FNT/Fundo Nacional de Telecomunicações|6071",
     "6073": "ATP/Adicional de Tarifa Portuária|6071",
-    "6074":
-      "AITP/Adicional de Indenização do Trabalhador Portuário Avulso|6071",
+    "6074": "AITP/Adicional de Indenização do Trabalhador Portuário Avulso|6071",
     "6075": "Adicional de Tarifa Aeroportuária|6071",
     "6076": "AFRMM/Adicional ao Frete para Renovação da Marinha Mercante|6071",
-    "6077":
-      "FUNDEF/Fundo de Manutenção e Desenvolvimento do Ensino Fundamental e de Valorização do Magistério|6071",
+    "6077": "FUNDEF/Fundo de Manutenção e Desenvolvimento do Ensino Fundamental e de Valorização do Magistério|6071",
     "6078": "Seguro Apagão (Lei 10.438/02)|6071",
-    "6079":
-      "Contribuição sobre licença de uso ou transferência de tecnologia|6071",
+    "6079": "Contribuição sobre licença de uso ou transferência de tecnologia|6071",
     "6080": "Contribuição de Intervenção no Domínio Econômico (CIDE)|6071",
-    "6081":
-      "FUNDAF/Fundo Especial de Desenvolvimento e Aperfeiçoamento das Atividades de Fiscalização|6071",
+    "6081": "FUNDAF/Fundo Especial de Desenvolvimento e Aperfeiçoamento das Atividades de Fiscalização|6071",
     "6082": "FUSEX/FUNSA/FUSMA/Fundo de Saúde das Forças Armadas|6071",
     "6083": "Contribuição de Iluminação Pública|6071",
     "6084": "IUEE/Imposto Único sobre Energia Elétrica|6071",
@@ -843,12 +793,9 @@ export default {
     "6118": "Aposentadoria por Tempo de Contribuição (Art. 55/6)|6094",
     "6119": "RMI - Renda Mensal Inicial, Reajustes e Revisões Específicas|195",
     "6120": "RMI - Renda Mensal Inicial|6119",
-    "6121":
-      "RMI pelo art. 202 CF/88 (média dos 36 últimos salários-de-contribuição)|6120",
-    "6122":
-      "RMI pelo art. 1º da Lei 6.423/77 - índices de atualização dos 24 1ºs salários-de-contribuição, anteriores aos 12 últimos)|6120",
-    "6123":
-      "RMI pela equivalência entre Salário-de-Benefício e Salário-de-Contribuição|6120",
+    "6121": "RMI pelo art. 202 CF/88 (média dos 36 últimos salários-de-contribuição)|6120",
+    "6122": "RMI pelo art. 1º da Lei 6.423/77 - índices de atualização dos 24 1ºs salários-de-contribuição, anteriores aos 12 últimos)|6120",
+    "6123": "RMI pela equivalência entre Salário-de-Benefício e Salário-de-Contribuição|6120",
     "6124": "RMI sem incidência de Teto Limitador|6120",
     "6125": "RMI da pensão de dependente de ex-combatente|6120",
     "6126": "Benefício mínimo a partir da CF/88 (art. 201, § 2º CF/88)|6120",
@@ -857,13 +804,11 @@ export default {
     "6129": "RMI cuja salário-de-benefício supera menor valor teto|6120",
     "6130": "Escala de Salário-Base|6120",
     "6131": "Contribuição sobre vinte salários mínimos|6120",
-    "6132":
-      "Cálculo do Benefício de acordo com a Sistemática anterior à Lei 9.876/99|6120",
+    "6132": "Cálculo do Benefício de acordo com a Sistemática anterior à Lei 9.876/99|6120",
     "6133": "IRSM de Fevereiro de 1994(39,67%)|6120",
     "6134": "Alteração do coeficiente de cálculo de pensão|6120",
     "6135": "Alteração do coeficiente de cálculo do benefício|6120",
-    "6136":
-      "Cálculo do benefício de segurado especial de acordo com a Lei 9.876/99|6120",
+    "6136": "Cálculo do benefício de segurado especial de acordo com a Lei 9.876/99|6120",
     "6137": "Cálculo do fator previdenciário - Lei 9.876/99|6120",
     "6138": "Reajustes e Revisões Específicos|6119",
     "6139": "Reajuste pela Súmula 260 do TFR|6138",
@@ -874,15 +819,12 @@ export default {
     "6144": "Salário Mínimo de Ncz$ 120,00 para junho/89|6138",
     "6145": "Reajuste de 147%|6138",
     "6146": "Reajustamento pelo IGP-DI|6138",
-    "6147":
-      "Aplicação de coeficiente de cálculo diverso do fixado na Lei n.º 8.213/91|6138",
+    "6147": "Aplicação de coeficiente de cálculo diverso do fixado na Lei n.º 8.213/91|6138",
     "6148": "Reajuste aplicado ao salário mínimo em setembro/94|6138",
-    "6149":
-      "Sistemática de conversão dos benefícios previdenciários em URVs|6138",
+    "6149": "Sistemática de conversão dos benefícios previdenciários em URVs|6138",
     "6150": "Reajustamento pelo INPC|6138",
     "6151": "Art. 144 da Lei 8.213/91 e/ou diferenças decorrentes|6138",
-    "6152":
-      "Gratificação Natalina a partir da CF/88 (Art. 201, § 6º CF/88)|6138",
+    "6152": "Gratificação Natalina a partir da CF/88 (Art. 201, § 6º CF/88)|6138",
     "6153": "Abono da Lei 8.178/91|6138",
     "6154": "Índice de 4,02% da Lei 8.222/91|6138",
     "6155": "Desconto do DL 1.910/81|6138",
@@ -911,10 +853,8 @@ export default {
     "6179": "Conversão|6173",
     "6181": "Tempo de serviço|195",
     "6182": "Averbação/Cômputo/Conversão de tempo de serviço especial|6181",
-    "6183":
-      "Averbação/Cômputo de tempo de serviço de segurado especial (regime de economia familiar)|6181",
-    "6184":
-      "Averbação/Cômputo de tempo de serviço  rural (empregado/empregador)|6181",
+    "6183": "Averbação/Cômputo de tempo de serviço de segurado especial (regime de economia familiar)|6181",
+    "6184": "Averbação/Cômputo de tempo de serviço  rural (empregado/empregador)|6181",
     "6185": "Averbação/Cômputo do tempo de serviço como aluno aprendiz|6181",
     "6186": "Averbação/Cômputo do tempo de serviço militar|6181",
     "6187": "Averbação/Cômputo de tempo de serviço de empregado doméstico|6181",
@@ -1057,8 +997,7 @@ export default {
     "7911": "Por Remição|7896",
     "7912": "Por Terceiro Prejudicado|7896",
     "7925": "Registro de Óbito após prazo legal|7725",
-    "7926":
-      "Registro de Nascimento de Filho de Brasileiro Nascido no Exterior|7725",
+    "7926": "Registro de Nascimento de Filho de Brasileiro Nascido no Exterior|7725",
     "7928": "Liberdade Provisória|1209",
     "7929": "Prisão em flagrante|1209",
     "7935": "Perempção|4263",
@@ -1254,10 +1193,8 @@ export default {
     "9665": "Violação de domicílio (art. 150)|9664",
     "9666": "Contra a inviolabilidade de correspondência|9634",
     "9667": "Violação de correspondência (art. 151, caput)|9666",
-    "9668":
-      "Sonegação ou destruição de correspondência (art. 151, § 1º, I)|9666",
-    "9669":
-      "Violação de comunicação telegráfica, radioelétrica ou telefônica (art. 151, § 1º, II, III e IV)|9666",
+    "9668": "Sonegação ou destruição de correspondência (art. 151, § 1º, I)|9666",
+    "9669": "Violação de comunicação telegráfica, radioelétrica ou telefônica (art. 151, § 1º, II, III e IV)|9666",
     "9670": "Violação de Correspondência comercial (art. 152)|9666",
     "9671": "Contra a inviolabilidade de segredo|9634",
     "9672": "Divulgação de segredo (art. 153)|9671",
@@ -1274,24 +1211,19 @@ export default {
     "9683": "Usurpação de águas (art. 161, § 1º, I)|9674",
     "9684": "Esbulho possessório (art. 161, § 1º, II)|9674",
     "9685": "Dano (art. 163)|9674",
-    "9686":
-      "Introdução ou abandono de animais em propriedade alheia (art. 164)|9674",
-    "9687":
-      "Dano em coisa de valor artístico, arqueológico ou histórico (art. 165)|9674",
+    "9686": "Introdução ou abandono de animais em propriedade alheia (art. 164)|9674",
+    "9687": "Dano em coisa de valor artístico, arqueológico ou histórico (art. 165)|9674",
     "9688": "Alteração de local especialmente protegido (art. 166)|9674",
-    "9689":
-      "Apropriação indébita Previdenciária (art. 168-A e Lei 8.212/91)|9674",
+    "9689": "Apropriação indébita Previdenciária (art. 168-A e Lei 8.212/91)|9674",
     "9690": "Estelionato|9674",
     "9691": "Estelionato Majorado (art. 171, § 3º)|9674",
     "9692": "Outras fraudes|9674",
     "9693": "Fraude à execução (art. 179)|9674",
     "9694": "Receptação|9674",
     "9695": "Apropriação indébita (art. 168, caput)|9674",
-    "9696":
-      "Apropriação de Coisa Havida por Erro, Caso Fortuito ou Força da Natureza (art.169)|9674",
+    "9696": "Apropriação de Coisa Havida por Erro, Caso Fortuito ou Força da Natureza (art.169)|9674",
     "9697": "Furto Privilegiado|9674",
-    "9698":
-      "Furto de Veículo Automotor a ser Transportado para outro Estado ou Exterior|9674",
+    "9698": "Furto de Veículo Automotor a ser Transportado para outro Estado ou Exterior|9674",
     "9699": "Roubo Majorado|9674",
     "9700": "Latrocínio|9674",
     "9701": "Extorsão mediante Seqüestro Seguida de Morte|9674",
@@ -1310,32 +1242,23 @@ export default {
     "9714": "Abuso de Incapazes|9674",
     "9715": "Induzimento à Especulação|9674",
     "9716": "Fraude no Comércio|9674",
-    "9717":
-      "Fraudes e Abusos na Fundação ou Administração de Sociedade por Ações|9674",
-    "9718":
-      "Emissão Irregular de Conhecimento de Depósito ou &quot;Warrant&quot;|9674",
+    "9717": "Fraudes e Abusos na Fundação ou Administração de Sociedade por Ações|9674",
+    "9718": "Emissão Irregular de Conhecimento de Depósito ou &quot;Warrant&quot;|9674",
     "9719": "Receptação Qualificada|9674",
     "9720": "Contra a Propriedade Intelectual|9634",
     "9721": "Violação de direito autoral|9720",
     "9722": "Contra a Organização do Trabalho|9634",
     "9723": "Atentado contra a liberdade de trabalho (art. 197)|9722",
-    "9724":
-      "Atentado contra a liberdade de contrato de trabalho e boicotagem violenta (art. 198)|9722",
+    "9724": "Atentado contra a liberdade de contrato de trabalho e boicotagem violenta (art. 198)|9722",
     "9725": "Atentado contra a liberdade de associação (art. 199)|9722",
-    "9726":
-      "Paralisação de trabalho, seguida de violência ou perturbação da ordem (art. 200)|9722",
+    "9726": "Paralisação de trabalho, seguida de violência ou perturbação da ordem (art. 200)|9722",
     "9727": "Paralisação de trabalho de interesse coletivo (art. 201)|9722",
-    "9728":
-      "Invasão de estabelecimento industrial, comercial ou agrícola. Sabotagem (art. 202)|9722",
-    "9729":
-      "Frustração de direitos assegurados por lei trabalhista (art. 203)|9722",
-    "9730":
-      "Exercício de atividade com infração de decisão administrativa (art. 205)|9722",
+    "9728": "Invasão de estabelecimento industrial, comercial ou agrícola. Sabotagem (art. 202)|9722",
+    "9729": "Frustração de direitos assegurados por lei trabalhista (art. 203)|9722",
+    "9730": "Exercício de atividade com infração de decisão administrativa (art. 205)|9722",
     "9731": "Aliciamento para fins de emigração (art. 206)|9722",
-    "9732":
-      "Aliciamento de trabalhadores de um local para outro do território nacional (art. 207)|9722",
-    "9733":
-      "Frustração de lei sobre a nacionalização do trabalho (art. 204)|9722",
+    "9732": "Aliciamento de trabalhadores de um local para outro do território nacional (art. 207)|9722",
+    "9733": "Frustração de lei sobre a nacionalização do trabalho (art. 204)|9722",
     "9734": "Contra o sentimento religioso e contra o respeito aos mortos|9634",
     "9735": "Destruição / Subração / Ocultação de Cadáver|9734",
     "9736": "Impedimento ou Perturbação de Cerimônia Funerária (Art. 209)|9734",
@@ -1343,8 +1266,7 @@ export default {
     "9738": "Violação a Sepultura (Art. 210)|9734",
     "9739": "Ultraje / Impedimento ou Perturbação de Culto Religioso|9734",
     "9740": "Contra a dignidade sexual|9634",
-    "9741":
-      "Tráfico Internacional de Pessoa para Fim de Exploração Sexual|9740",
+    "9741": "Tráfico Internacional de Pessoa para Fim de Exploração Sexual|9740",
     "9742": "Estupro|9740",
     "9743": "Atentado Violento ao Pudor|9740",
     "9744": "Atentado ao Pudor Mediante Fraude|9740",
@@ -1374,8 +1296,7 @@ export default {
     "9768": "Registro de Nascimento Inexistente (Art. 241)|9766",
     "9769": "Sonegação do Estado de Filiação (Art. 243)|9766",
     "9770": "Crime contra o Pátrio-Poder e Tutela|9755",
-    "9771":
-      "Induzimento a Fuga, Entrega Arbitrária ou Sonegação de Incapazes (Art. 248)|9770",
+    "9771": "Induzimento a Fuga, Entrega Arbitrária ou Sonegação de Incapazes (Art. 248)|9770",
     "9772": "Subtração de Incapazes (Art. 249)|9770",
     "9773": "Contra a Incolumidade Pública|9634",
     "9774": "Incêndio|9773",
@@ -1383,38 +1304,29 @@ export default {
     "9776": "Uso de gás tóxico ou asfixiante|9773",
     "9777": "Inundação / Perigo de Inundação|9773",
     "9778": "Desabamento ou desmoronamento (art. 256)|9773",
-    "9779":
-      "Subtração, ocultação ou inutilização de material de salvamento (art. 257)|9773",
+    "9779": "Subtração, ocultação ou inutilização de material de salvamento (art. 257)|9773",
     "9780": "Difusão de doença ou praga (art. 259)|9773",
     "9781": "Desastre ferroviário / Perigo de Desastre Ferroviário|9773",
     "9782": "Atentado contra a segurança de transporte público|9773",
     "9783": "Arremesso de projétil|9773",
-    "9784":
-      "Atentado contra a segurança de serviços de utilidade pública (art. 265)|9773",
-    "9785":
-      "Interrupção /perturbação de serviços telegráficos/telefônicos (art. 266)|9773",
+    "9784": "Atentado contra a segurança de serviços de utilidade pública (art. 265)|9773",
+    "9785": "Interrupção /perturbação de serviços telegráficos/telefônicos (art. 266)|9773",
     "9786": "Epidemia (art. 267)|9773",
     "9787": "Emprego de Processo Proibido/Substância não permitida|9773",
     "9788": "Invólucro ou recipiente com falsa indicação (art. 275)|9773",
-    "9789":
-      "Falsificação / Corrupção / Adulteração / Alteração de produto destinado a fins terapêuticos ou medicinais|9773",
-    "9790":
-      "Exercício Ilegal da Medicina, Arte Dentária ou Farmacêutica (art. 282)|9773",
+    "9789": "Falsificação / Corrupção / Adulteração / Alteração de produto destinado a fins terapêuticos ou medicinais|9773",
+    "9790": "Exercício Ilegal da Medicina, Arte Dentária ou Farmacêutica (art. 282)|9773",
     "9791": "Charlatanismo (Art. 283)|9773",
     "9792": "Corrupção ou Poluição de Água Potável (Art. 271)|9773",
     "9793": "Curandeirismo (Art. 284)|9773",
-    "9794":
-      "Envenenamento de Água Potável / Substância Alimentícia ou Medicinal (Art. 270)|9773",
-    "9795":
-      "Falsificação / Corrupção / Adulteração / Alteração de Substância ou Produtos Alimentícios|9773",
+    "9794": "Envenenamento de Água Potável / Substância Alimentícia ou Medicinal (Art. 270)|9773",
+    "9795": "Falsificação / Corrupção / Adulteração / Alteração de Substância ou Produtos Alimentícios|9773",
     "9796": "Infração de Medida Sanitária Preventiva (Art. 268)|9773",
     "9797": "Omissão de Notificação de Doença (Art. 269)|9773",
     "9798": "Outras Substâncias Nocivas a Saúde Pública (Art. 278)|9773",
     "9799": "Substância Destinada à Falsificação (Art. 277)|9773",
-    "9800":
-      "Fabrico / Fornecimento / Aquisição / Posse ou Transporte de Explosivos ou Gás Tóxico ou Asfixiante|9773",
-    "9801":
-      "Venda de Produtos ou Substância nas Condições dos Artigos 274 e 275|9773",
+    "9800": "Fabrico / Fornecimento / Aquisição / Posse ou Transporte de Explosivos ou Gás Tóxico ou Asfixiante|9773",
+    "9801": "Venda de Produtos ou Substância nas Condições dos Artigos 274 e 275|9773",
     "9802": "Medicamento em Desacordo com Receita Médica|9773",
     "9803": "Contra a Paz Pública|9634",
     "9804": "Quadrilha ou Bando (art. 288)|9803",
@@ -1433,22 +1345,18 @@ export default {
     "9817": "Certidão ou atestado ideologicamente falso (art. 301, caput)|9807",
     "9818": "Falsidade material de atestado ou certidão (art. 301, § 1º)|9807",
     "9819": "Falsidade de atestado médico (art. 302)|9807",
-    "9820":
-      "Reprodução ou adulteração de selo ou peça filatélica (art. 303)|9807",
+    "9820": "Reprodução ou adulteração de selo ou peça filatélica (art. 303)|9807",
     "9821": "Uso de documento falso (art. 304)|9807",
     "9822": "Supressão de documento (art. 305)|9807",
-    "9823":
-      "Falsificação do sinal empregado no contraste de metal precioso ou na fiscalização alfandegária, ou para outros fins (art. 306)|9807",
+    "9823": "Falsificação do sinal empregado no contraste de metal precioso ou na fiscalização alfandegária, ou para outros fins (art. 306)|9807",
     "9824": "Falsa identidade|9807",
     "9825": "Fraude de lei sobre estrangeiros|9807",
     "9826": "Petrechos de Falsificação de Papéis Públicos|9807",
     "9827": "Adulteração de Sinal Identificador de Veículo Automotor|9807",
-    "9828":
-      "Praticados por Funcionários Públicos Contra a Administração em Geral|9634",
+    "9828": "Praticados por Funcionários Públicos Contra a Administração em Geral|9634",
     "9829": "Peculato (art. 312, caput e § 1º)|9828",
     "9830": "Peculato mediante erro de outrem (art. 313)|9828",
-    "9831":
-      "Extravio, sonegação ou inutilização de livro ou documento (art. 314)|9828",
+    "9831": "Extravio, sonegação ou inutilização de livro ou documento (art. 314)|9828",
     "9832": "Emprego irregular de verbas ou rendas públicas (art. 315)|9828",
     "9833": "Concussão (art. 316, caput)|9828",
     "9834": "Excesso de exação (art. 316, §§ 1º e 2º)|9828",
@@ -1459,21 +1367,17 @@ export default {
     "9839": "Advocacia administrativa (art. 321)|9828",
     "9840": "Violência arbitrária (art. 322)|9828",
     "9841": "Abandono de função (art. 323)|9828",
-    "9842":
-      "Exercício funcional ilegalmente antecipado ou prolongado (art. 324)|9828",
+    "9842": "Exercício funcional ilegalmente antecipado ou prolongado (art. 324)|9828",
     "9843": "Violação do sigilo funcional (art. 325)|9828",
     "9844": "Violação do sigilo de proposta de concorrência (art. 326)|9828",
-    "9845":
-      "Inserção de dados falsos em sistema de informações (art. 313-A)|9828",
-    "9846":
-      "Modificação ou alteração não autorizada de sistema de informações (art. 313-B)|9828",
+    "9845": "Inserção de dados falsos em sistema de informações (art. 313-A)|9828",
+    "9846": "Modificação ou alteração não autorizada de sistema de informações (art. 313-B)|9828",
     "9847": "Previstos na Legislação Extravagante|9634",
     "9848": "Contra a Propriedade Industrial|9847",
     "9849": "Contra Patente de Invenção|9848",
     "9850": "Contra os Desenhos Industriais|9848",
     "9851": "Contra as Marcas|9848",
-    "9852":
-      "Cometidos por Meio de Marca, Título de Estabelecimento e Sinal de Propaganda|9848",
+    "9852": "Cometidos por Meio de Marca, Título de Estabelecimento e Sinal de Propaganda|9848",
     "9853": "Contra Indicações Geográficas e Demais Indicações|9848",
     "9854": "De Concorrência Desleal|9848",
     "9855": "de Responsabilidade|9847",
@@ -1482,14 +1386,12 @@ export default {
     "9858": "De Tráfico Ilícito e Uso Indevido de Drogas|9847",
     "9859": "Tráfico de Drogas e Condutas Afins|9858",
     "9860": "Posse de Drogas para Consumo Pessoal|9858",
-    "9861":
-      "Fabricação de Objeto Destinado a Produção de Drogas e Condutas Afins|9858",
+    "9861": "Fabricação de Objeto Destinado a Produção de Drogas e Condutas Afins|9858",
     "9862": "Indução, Instigação ou Auxílio ao Uso de Drogas|9858",
     "9863": "Oferecimento de Drogas para Consumo Conjunto|9858",
     "9864": "Associação para a Produção e Tráfico e Condutas Afins|9858",
     "9865": "Financiamento ou Custeio de Produção ou Tráfico de Drogas|9858",
-    "9866":
-      "Colaboração com Grupo, Organização ou Associação Destinados à Produção ou Tráfico de Drogas|9858",
+    "9866": "Colaboração com Grupo, Organização ou Associação Destinados à Produção ou Tráfico de Drogas|9858",
     "9867": "Prescrição Culposa de Drogas|9858",
     "9868": "Condução de Embarcação ou Aeronave sob Efeito de Drogas|9858",
     "9869": "Responsabilidade Criminal por Danos Nucleares|9847",
@@ -1509,10 +1411,8 @@ export default {
     "9883": "Atividades Nucleares (Lei 6.453/77)|9878",
     "9884": "Caça (Lei nº 5.197/67)|9878",
     "9886": "Genética (Lei nº 8.974/95)|9878",
-    "9887":
-      "Pesca (Lei nº 5.197/67, Lei nº 7.643/87, Lei 7.679/88, DL 221/67)|9878",
-    "9888":
-      "De &quot;Lavagem&quot; ou Ocultação de Bens, Direitos ou Valores|9847",
+    "9887": "Pesca (Lei nº 5.197/67, Lei nº 7.643/87, Lei 7.679/88, DL 221/67)|9878",
+    "9888": "De &quot;Lavagem&quot; ou Ocultação de Bens, Direitos ou Valores|9847",
     "9889": "Contra as Telecomunicações|9847",
     "9890": "Previstos na Lei de Estrangeiros|9847",
     "9891": "De Tortura|9847",
@@ -1526,8 +1426,7 @@ export default {
     "9899": "Da Lei de licitações|9847",
     "9900": "Da Lei de remoção de órgãos e tecidos|9847",
     "9901": "Praticados contra os índios e a cultura indígena|9847",
-    "9903":
-      "Recusa, retardamento ou omissão de dados técnicos indispensáveis à propositura de Ação Civil Pública|9847",
+    "9903": "Recusa, retardamento ou omissão de dados técnicos indispensáveis à propositura de Ação Civil Pública|9847",
     "9904": "Agrários|9847",
     "9905": "Relacionados à Comissão Parlamentar de Inquérito|9847",
     "9906": "Eleitorais|9847",
@@ -1546,18 +1445,14 @@ export default {
     "9919": "Resistência (art. 329)|9917",
     "9920": "Tráfico de influência (art. 332)|9917",
     "9921": "Corrupção ativa (art. 333)|9917",
-    "9922":
-      "Impedimento, perturbação ou fraude de concorrência (art. 335)|9917",
+    "9922": "Impedimento, perturbação ou fraude de concorrência (art. 335)|9917",
     "9923": "Inutilização de edital ou de sinal (art. 336)|9917",
-    "9924":
-      "Subtração ou inutilização de livro ou documento (art. 337, caput)|9917",
+    "9924": "Subtração ou inutilização de livro ou documento (art. 337, caput)|9917",
     "9925": "Desobediência (art. 330)|9917",
     "9926": "Desacato (art. 331)|9917",
     "9927": "Contrabando ou descaminho (art. 334)|9917",
-    "9928":
-      "Sonegação de contribuição previdenciária (art. 337-A e Lei 8.212/91)|9917",
-    "9929":
-      "Praticados por Particular Contra a Administração Pública Estrangeira|9634",
+    "9928": "Sonegação de contribuição previdenciária (art. 337-A e Lei 8.212/91)|9917",
+    "9929": "Praticados por Particular Contra a Administração Pública Estrangeira|9634",
     "9930": "Corrupção Ativa em Transação Comercial Internacional|9929",
     "9931": "Tráfico de Influência em Transação Comercial Internacional|9929",
     "9932": "Contra a Administração da Justiça|9634",
@@ -1581,18 +1476,15 @@ export default {
     "9950": "Sonegação de papel ou objeto de valor probatório|9932",
     "9951": "Exploração de prestígio|9932",
     "9952": "Violência ou fraude em arrematação judicial|9932",
-    "9953":
-      "Desobediência a decisão judicial sobre perda ou suspensão de direitos|9932",
+    "9953": "Desobediência a decisão judicial sobre perda ou suspensão de direitos|9932",
     "9955": "Contra as Finanças Públicas|9634",
     "9956": "Contratação de Operação de Crédito|9955",
     "9957": "Inscrição de Despesas Não Empenhadas|9955",
-    "9958":
-      "Assunção de Obrigação no Último Ano do Mandato ou Legislatura|9955",
+    "9958": "Assunção de Obrigação no Último Ano do Mandato ou Legislatura|9955",
     "9959": "Ordenação de Despesa Não Autorizada|9955",
     "9960": "Prestação de Garantia Graciosa|9955",
     "9961": "Não Cancelamento de Restos a Pagar|9955",
-    "9962":
-      "Aumento de Despesa com Pessoal no Último Ano do Mandato ou Legislatura|9955",
+    "9962": "Aumento de Despesa com Pessoal no Último Ano do Mandato ou Legislatura|9955",
     "9963": "Oferta Pública ou Colocação de Títulos no Mercado|9955",
     "9964": "Seção Cível|9633",
     "9965": "Abandono Material|9964",
@@ -1627,16 +1519,14 @@ export default {
     "10000": "Declaração de Trânsito Aduaneiro|9998",
     "10001": "Comercialização sem Restrições de Produtos Industrializados|9998",
     "10002": "Comercialização sem Restrições de Gêneros Alimentícios|9998",
-    "10003":
-      "Comercialização e/ou Utilização sem Restrições de Medicamentos|9998",
+    "10003": "Comercialização e/ou Utilização sem Restrições de Medicamentos|9998",
     "10004": "Funcionamento de Comércio de Derivados de Petróleo|9998",
     "10005": "Registro de Empresa|9998",
     "10006": "Funcionamento de Estabelecimentos Empresariais|9998",
     "10007": "Registro / Porte de arma de fogo|9998",
     "10008": "Registro de Aeronave|9998",
     "10009": "Inquérito / Processo / Recurso Administrativo|9997",
-    "10010":
-      "Ato Lesivo ao Patrimônio Artístico, Estético, Histórico ou Turístico|9997",
+    "10010": "Ato Lesivo ao Patrimônio Artístico, Estético, Histórico ou Turístico|9997",
     "10011": "Improbidade Administrativa|9997",
     "10012": "Dano ao Erário|10011",
     "10013": "Enriquecimento ilícito|10011",
@@ -1646,8 +1536,7 @@ export default {
     "10017": "Exportação/Vedações|10015",
     "10018": "Inspeção Sanitária de Origem Animal|10015",
     "10019": "Segurança e Medicina do Trabalho|10015",
-    "10020":
-      "Registro de Trabalho Portuário/Órgão de Gestão de Mão-de-Obra|9997",
+    "10020": "Registro de Trabalho Portuário/Órgão de Gestão de Mão-de-Obra|9997",
     "10021": "Registro de Marcas, Patentes ou Invenções|9997",
     "10022": "Infração Administrativa|9997",
     "10023": "Multas e demais Sanções|10022",
@@ -1670,8 +1559,7 @@ export default {
     "10040": "Currículo Escolar|10029",
     "10041": "Ingresso no Curso Superior|10029",
     "10042": "Jubilamento de Aluno|10029",
-    "10043":
-      "Criação e/ou Autorização para funcionamento de Curso Superior|10029",
+    "10043": "Criação e/ou Autorização para funcionamento de Curso Superior|10029",
     "10044": "Omissão de Entrega de Notas|10029",
     "10045": "Diplomas/Certificado de Conclusão do Curso|10029",
     "10046": "Financiamento Privado da Educação e/ou Pesquisa|10029",
@@ -1696,8 +1584,7 @@ export default {
     "10065": "Repasse de Verbas do SUS|10064",
     "10066": "Reajuste da Tabela do SUS|10064",
     "10067": "Convênio Médico com o SUS|10064",
-    "10069":
-      "Tratamento Médico-Hospitalar e/ou Fornecimento de Medicamentos|10064",
+    "10069": "Tratamento Médico-Hospitalar e/ou Fornecimento de Medicamentos|10064",
     "10070": "Ressarcimento ao SUS|10064",
     "10071": "Genética / Células Tronco|10064",
     "10072": "Sistema Nacional do Desporto|10028",
@@ -1718,8 +1605,7 @@ export default {
     "10087": "Defensoria Pública|10028",
     "10088": "Domínio Público|9985",
     "10089": "Bens Públicos|10088",
-    "10090":
-      "Locação / Permissão / Concessão / Autorização / Cessão de Uso|10089",
+    "10090": "Locação / Permissão / Concessão / Autorização / Cessão de Uso|10089",
     "10091": "Terreno de Marinha|10089",
     "10092": "Taxa de Ocupação|10089",
     "10093": "Foro / Laudêmio|10089",
@@ -1909,8 +1795,7 @@ export default {
     "10280": "Demissão ou Exoneração|10279",
     "10281": "Advertência|10279",
     "10282": "Suspensão|10279",
-    "10283":
-      "Responsabilidade Civil do Servidor Público / Indenização ao Erário|10279",
+    "10283": "Responsabilidade Civil do Servidor Público / Indenização ao Erário|10279",
     "10286": "Programa de Desligamento Voluntário (PDV)|10219",
     "10287": "Jornada de Trabalho|10219",
     "10288": "Sistema Remuneratório e Benefícios|10219",
@@ -1932,8 +1817,7 @@ export default {
     "10304": "Auxílio-Alimentação|10288",
     "10305": "Gratificações de Atividade|10288",
     "10306": "Auxílio-transporte|10288",
-    "10307":
-      "Revisão Geral Anual (Mora do Executivo - inciso X, art. 37, CF 1988)|10288",
+    "10307": "Revisão Geral Anual (Mora do Executivo - inciso X, art. 37, CF 1988)|10288",
     "10308": "Adicional de Serviço Noturno|10288",
     "10309": "Adicional de Produtividade|10288",
     "10310": "Gratificação Natalina/13º salário|10288",
@@ -2010,8 +1894,7 @@ export default {
     "10384": "Condições Especiais para Prestação de Prova|10370",
     "10385": "Licitações|9985",
     "10386": "Modalidade / Limite / Dispensa / Inexigibilidade|10385",
-    "10387":
-      "Habilitação / Registro Cadastral / Julgamento / Homologação|10385",
+    "10387": "Habilitação / Registro Cadastral / Julgamento / Homologação|10385",
     "10388": "Edital|10385",
     "10389": "Revogação|10385",
     "10390": "Sanções Administrativas|10385",
@@ -2124,8 +2007,7 @@ export default {
     "10509": "Exposição ou Abandono de Recém Nascido|3388",
     "10512": "Responsabilidade Civil do Militar - Indenização ao Erário|10363",
     "10514": "Utilização de Embrião Humano em Desacordo com a Legislação|3618",
-    "10515":
-      "Prática de engenharia genética em célula germinal, zigoto ou embrião humanos|3618",
+    "10515": "Prática de engenharia genética em célula germinal, zigoto ou embrião humanos|3618",
     "10516": "Clonagem Humana|3618",
     "10523": "Despenalização / Descriminalização|5885",
     "10527": "Livros / Jornais / Periódicos|5914",
@@ -2233,8 +2115,7 @@ export default {
     "10653": "Competência da Justiça Federal|8829",
     "10654": "Competência da Justiça Estadual|8829",
     "10655": "Honorários Advocatícios|8874",
-    "10656":
-      "Honorários Advocatícios em Execução Contra a Fazenda Pública|8874",
+    "10656": "Honorários Advocatícios em Execução Contra a Fazenda Pública|8874",
     "10657": "Honorários Advocatícios em FGTS|8874",
     "10658": "Custas|8874",
     "10659": "Suspeição|8884",
@@ -2288,11 +2169,9 @@ export default {
     "10714": "Gratificação-Prêmio|10667",
     "10715": "Gratificação Complementar de Vencimento|10667",
     "10718": "Gratificações Por Atividades Específicas|10288",
-    "10719":
-      "Gratificação de Desempenho de Atividade Técnico Administrativa - GDATA|10718",
+    "10719": "Gratificação de Desempenho de Atividade Técnico Administrativa - GDATA|10718",
     "10720": "Gratificação de Desempenho de Atividade Tributária - GDAT|10718",
-    "10721":
-      "Gratificação de Desempenho de Atividade de Fiscalização Agropecuária - GDAFA|10718",
+    "10721": "Gratificação de Desempenho de Atividade de Fiscalização Agropecuária - GDAFA|10718",
     "10722": "Gratificação de Desempenho de Atividade Jurídica - GDAJ|10718",
     "10723": "Gratificação de Atividade - GATA|10718",
     "10724": "Gratificação de Incentivo à Docência - GID|10718",
@@ -2356,8 +2235,7 @@ export default {
     "10786": "Prestação de contas|10768",
     "10787": "Pesquisa eleitoral|10768",
     "10788": "Abuso do poder econômico|10768",
-    "10789":
-      "Abuso do poder político (uso indevido dos meios de comunicação)|10768",
+    "10789": "Abuso do poder político (uso indevido dos meios de comunicação)|10768",
     "10790": "Uso de bem público|10768",
     "10791": "Sistema eletrônico de votação|10769",
     "10792": "Sigilo na votação|10769",
@@ -2422,22 +2300,18 @@ export default {
     "10854": "Auditores Fiscais|10695",
     "10855": "Comissão de Permanência|7691",
     "10856": "Prescrição por Médico não vinculado ao SUS|10069",
-    "10857":
-      "Gratificação de Desempenho de Atividade de Seguridade Social e do Trabalho - GDASST|10718",
-    "10858":
-      "Gratificação de Desempenho de Atividade de Ciência e Tecnologia - GDACT|10718",
+    "10857": "Gratificação de Desempenho de Atividade de Seguridade Social e do Trabalho - GDASST|10718",
+    "10858": "Gratificação de Desempenho de Atividade de Ciência e Tecnologia - GDACT|10718",
     "10859": "Alimentos|10573",
     "10860": "Depositário Infiel|10573",
     "10861": "Alienação Fiduciária|10573",
-    "10862":
-      "Proibição de Privilégio Fiscal às Empresas Públicas e Sociedades de Economia Mista|10146",
+    "10862": "Proibição de Privilégio Fiscal às Empresas Públicas e Sociedades de Economia Mista|10146",
     "10863": "Legitimidade para propositura de Ação Civil Pública|10736",
     "10864": "Crimes Hediondos|10635",
     "10865": "Cerceamento de Defesa|4264",
     "10866": "Ausência de Publicidade|4264",
     "10867": "Ausência de Fundamentação|4264",
-    "10868":
-      "Criação / Extinção / Reestruturação de Orgãos ou Cargos Públicos|10157",
+    "10868": "Criação / Extinção / Reestruturação de Orgãos ou Cargos Públicos|10157",
     "10869": "Parcela Incontroversa|10672",
     "10870": "Cancelamento / Duplicidade de CPF|9992",
     "10871": "Não Cumulatividade|5945",
@@ -2459,8 +2333,7 @@ export default {
     "10889": "Efeitos da Declaração de Inconstitucionalidade|10645",
     "10890": "Vício Formal do Julgamento|4264",
     "10891": "Habeas Corpus - Cabimento|1209",
-    "10892":
-      "Medicamento / Tratamento / Cirurgia de Eficácia não comprovada|10069",
+    "10892": "Medicamento / Tratamento / Cirurgia de Eficácia não comprovada|10069",
     "10893": "Base de Cálculo|10302",
     "10894": "Abuso de Poder|9997",
     "10897": "Competência dos Juizados Especiais|4291",
@@ -2514,40 +2387,28 @@ export default {
     "10957": "Repasse de Verbas Públicas|10954",
     "10958": "Crédito Suplementar|10954",
     "10959": "Exclusão - Receitas Transferidas a outras Pessoas Jurídicas|6008",
-    "10982":
-      '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|3547',
-    "10983":
-      '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|5872',
-    "10984":
-      '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|5873',
-    "10985":
-      "Crimes contra a Ordem Tributária praticado por Funcionário Público|3603",
+    "10982": '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|3547',
+    "10983": '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|5872',
+    "10984": '"Lavagem" ou Ocultação de Bens, Direitos ou Valores Oriundos de Corrupção|5873',
+    "10985": "Crimes contra a Ordem Tributária praticado por Funcionário Público|3603",
     "10986": "Crime contra a administração ambiental|3618",
     "10987": "Tráfico Ilícito de Drogas praticado por Funcionário Público|3607",
     "10988": "Má gestão|5875",
     "10989": "Má -gestão praticada por Prefeitos e Vereadores|10988",
     "10990": "Má-gestão praticada por Prefeitos e Vereadores|5875",
     "10991": "Corrupção Praticada por Prefeitos e Vereadores|5875",
-    "10992":
-      "Adulteração de Sinal Identificador de Veículo Automotor por Funcionário Público|3523",
-    "10993":
-      "Petrechos de Falsificação de Papéis Públicos por Funcionário Público|3523",
-    "10994":
-      "Petrechos para falsificação de moeda por Funcionário Público|3523",
+    "10992": "Adulteração de Sinal Identificador de Veículo Automotor por Funcionário Público|3523",
+    "10993": "Petrechos de Falsificação de Papéis Públicos por Funcionário Público|3523",
+    "10994": "Petrechos para falsificação de moeda por Funcionário Público|3523",
     "10995": "Falsidade ideológica praticada por Funcionário Público|3523",
-    "10996":
-      "Falsificação de documento Público praticado por Funcionário Público|3523",
-    "10997":
-      "Falsificação de documento público praticada por Funcionário Público|10996",
-    "10998":
-      "Falsificação de documento Público praticada por Funcionário Público|3523",
+    "10996": "Falsificação de documento Público praticado por Funcionário Público|3523",
+    "10997": "Falsificação de documento público praticada por Funcionário Público|10996",
+    "10998": "Falsificação de documento Público praticada por Funcionário Público|3523",
     "10999": "Conversão em Agravo Retido|9045",
     "11000": "Cobrança de Aluguéis - Sem despejo|9593",
     "11001": "Consignação de Chaves|9593",
-    "11004":
-      "Falsificação do Selo ou Sinal Público Praticado por Funcionário Público|3523",
-    "11005":
-      "Falsificação de Papéis Públicos Praticado por Funcionário Público|3523",
+    "11004": "Falsificação do Selo ou Sinal Público Praticado por Funcionário Público|3523",
+    "11005": "Falsificação de Papéis Públicos Praticado por Funcionário Público|3523",
     "11006": "Crime de Desvio e/ou Circulação de Moeda Não Autorizada|3523",
     "11007": "Crime de Moeda Falsa Praticado por Funcionário Público|3523",
     "11047": "Competência da Justiça Militar da União|8829",
@@ -2566,8 +2427,7 @@ export default {
     "11060": "Exílio local|11057",
     "11061": "Interdição de estabecimento  ou associação|11057",
     "11062": "Proibição de frequentar determinados locais|11057",
-    "11063":
-      "Suspensão do exercício do posto, graduação, cargo ou função|11057",
+    "11063": "Suspensão do exercício do posto, graduação, cargo ou função|11057",
     "11064": "Representação do Corregedor|11051",
     "11065": "Requerimento da Parte|11051",
     "11066": "Nulidade|11050",
@@ -2697,14 +2557,12 @@ export default {
     "11190": "Inundação|11180",
     "11191": "Perigo de inundação|11180",
     "11192": "Perigo resultante de violação de regra de trânsito|11180",
-    "11193":
-      "Subtração, ocultação ou inutilização de material de socorro|11180",
+    "11193": "Subtração, ocultação ou inutilização de material de socorro|11180",
     "11194": "Arremesso de projétil|11179",
     "11195": "Atentado contra serviço de utilidade militar|11179",
     "11196": "Atentado contra transporte|11179",
     "11197": "Atentado contra viatura ou outro meio de transporte|11179",
-    "11198":
-      "Interrupção ou perturbação de serviço ou meio de comunicação|11179",
+    "11198": "Interrupção ou perturbação de serviço ou meio de comunicação|11179",
     "11199": "Perigo de desastre ferroviário|11179",
     "11200": "Corrupção ou poluição de água potável|11178",
     "11201": "Envenenamento com perigo extensivo|11178",
@@ -2713,24 +2571,18 @@ export default {
     "11204": "Fornecimento de substancia nociva|11178",
     "11205": "Omissão de notificação de doença|11178",
     "11206": "Receita Ilegal|11178",
-    "11207":
-      "Tráfico, posse ou uso de entorpecente ou substância de efeito similar|11178",
+    "11207": "Tráfico, posse ou uso de entorpecente ou substância de efeito similar|11178",
     "11208": "Atos de jurisdição indevida|11076",
-    "11209":
-      "Consecução de notícia, informação ou documento para fim de espionagem|11076",
-    "11210":
-      "Desenho ou levantamento de plano ou planta de local militar|11076",
-    "11211":
-      "Entendimento para empenhar o Brasil à neutralidade ou à guerra|11076",
-    "11212":
-      "Entendimento para gerar conflito ou divergência com o Brasil|11076",
+    "11209": "Consecução de notícia, informação ou documento para fim de espionagem|11076",
+    "11210": "Desenho ou levantamento de plano ou planta de local militar|11076",
+    "11211": "Entendimento para empenhar o Brasil à neutralidade ou à guerra|11076",
+    "11212": "Entendimento para gerar conflito ou divergência com o Brasil|11076",
     "11213": "Hostilidade contra país estrangeiro|11076",
     "11214": "Hostilidade qualificada pelo resultado|11076",
     "11215": "Penetração com o fim de espionagem|11076",
     "11216": "Provocação a país estrangeiro|11076",
     "11217": "Revelação de notícia, informação ou documento|11076",
-    "11218":
-      "Revelação de notícia, informação ou documento, com o fim de espionagem militar|11076",
+    "11218": "Revelação de notícia, informação ou documento, com o fim de espionagem militar|11076",
     "11219": "Sobrevôo em local interdito|11076",
     "11220": "Tentativa contra a soberania do Brasil|11076",
     "11221": "Turbação de objeto ou documento|11076",
@@ -2796,10 +2648,8 @@ export default {
     "11281": "Operação militar sem ordem superior|11273",
     "11282": "Ordem arbitrária de invasão|11273",
     "11283": "Rigor excessivo|11273",
-    "11284":
-      "Uso indevido de uniforme, distintivo ou insígnia militar por qualquer pessoa|11273",
-    "11285":
-      "Uso indevido por militar de uniforme, distintivo ou insígnia|11273",
+    "11284": "Uso indevido de uniforme, distintivo ou insígnia militar por qualquer pessoa|11273",
+    "11285": "Uso indevido por militar de uniforme, distintivo ou insígnia|11273",
     "11286": "Violência contra inferior|11273",
     "11287": "Resistência mediante ameaça ou violência|11272",
     "11288": "Conspiração|11271",
@@ -2819,15 +2669,13 @@ export default {
     "11302": "Apologia de fato criminoso ou do seu autor|11268",
     "11303": "Incitamento|11268",
     "11304": "Despojamento desprezível|11267",
-    "11305":
-      "Desrespeito a comandante, oficial-general ou oficial de serviço|11267",
+    "11305": "Desrespeito a comandante, oficial-general ou oficial de serviço|11267",
     "11306": "Desrespeito a símbolo nacional|11267",
     "11307": "Desrespeito a superior|11267",
     "11308": "Concussão, Excesso de Exação e Desvio|11073",
     "11309": "Corrupção|11073",
     "11310": "Crimes contra o dever funcional|11073",
-    "11311":
-      "Crimes praticados por particular contra a Administração Militar|11073",
+    "11311": "Crimes praticados por particular contra a Administração Militar|11073",
     "11312": "Desacato e da Desobediência|11073",
     "11313": "Falsidade|11073",
     "11314": "Peculato|11073",
@@ -2860,15 +2708,13 @@ export default {
     "11341": "Extravio, sonegação ou inutilização de livro ou documento|11310",
     "11342": "Inobservancia de lei, regulamento ou instrução|11310",
     "11343": "Não inclusão de nome em lista|11310",
-    "11344":
-      "Obstáculo à hasta pública, concorrência ou tomada de preços|11310",
+    "11344": "Obstáculo à hasta pública, concorrência ou tomada de preços|11310",
     "11345": "Patrocínio indébito|11310",
     "11346": "Prevaricação|11310",
     "11347": "Violação de sigilo de proposta de concorrência|11310",
     "11348": "Violação de sigilo funcional|11310",
     "11349": "Violação do dever funcional com o fim de lucro|11310",
-    "11350":
-      "Violação ou divulgação indevida de correspondência ou comunicação|11310",
+    "11350": "Violação ou divulgação indevida de correspondência ou comunicação|11310",
     "11351": "Violência arbitrária|11310",
     "11352": "Corrupção ativa|11309",
     "11353": "Corrupção passiva|11309",
@@ -2883,8 +2729,7 @@ export default {
     "11362": "Denunciação caluniosa|11072",
     "11363": "Desacato|11072",
     "11364": "Desobediência a decisão judicial|11072",
-    "11365":
-      "Desobediência a decisão sobre perda ou suspensão de atividade ou direito|11072",
+    "11365": "Desobediência a decisão sobre perda ou suspensão de atividade ou direito|11072",
     "11366": "Exploração de prestígio|11072",
     "11367": "Falso testemunho ou falsa perícia|11072",
     "11368": "Favorecimento pessoal|11072",
@@ -2905,84 +2750,56 @@ export default {
     "11414": "Crime/contravenção decorrente de conflito fundiário coletivo|287",
     "11416": "Violação sexual mediante fraude|3463",
     "11417": "Estupro de vulnerável|3463",
-    "11418":
-      "Satisfação de lascívia mediante presença de criança ou adolescente|3463",
-    "11419":
-      "Favorecimento da prostituição ou outra forma de exploração sexual de vulnerável|3463",
-    "11420":
-      "Favorecimento da prostituição ou outra forma de exploração sexual|3463",
-    "11421":
-      "Tráfico internacional de pessoa para fim de exploração sexual|3463",
+    "11418": "Satisfação de lascívia mediante presença de criança ou adolescente|3463",
+    "11419": "Favorecimento da prostituição ou outra forma de exploração sexual de vulnerável|3463",
+    "11420": "Favorecimento da prostituição ou outra forma de exploração sexual|3463",
+    "11421": "Tráfico internacional de pessoa para fim de exploração sexual|3463",
     "11422": "Tráfico interno de pessoa para fim de exploração sexual|3463",
     "11428": "DIREITO ELEITORAL|",
     "11429": "Crimes Eleitorais|11428",
-    "11430":
-      "Crimes contra a Organização Administrativa da Justiça Eleitoral|11429",
+    "11430": "Crimes contra a Organização Administrativa da Justiça Eleitoral|11429",
     "11431": "Intervenção Indevida de Autoridade Junto à Mesa Receptora|11430",
     "11432": "Não Observância de Chamamento de Eleitores para Votar|11430",
     "11433": "Práticas Irregulares que Determinam a Anulação da Votação|11430",
-    "11434":
-      "Votação de Eleitor na Seção Eleitoral na qual Não Está Inscrito ou Autorizado a Votar|11430",
-    "11435":
-      "Contagem de Votos de Eleitores em Relação aos quais Houve Impugnação|11430",
-    "11436":
-      "Fabricação, Aquisição, Fornecimento, Subtração ou Guarda de Materiais de Uso da Justiça Eleitoral|11430",
+    "11434": "Votação de Eleitor na Seção Eleitoral na qual Não Está Inscrito ou Autorizado a Votar|11430",
+    "11435": "Contagem de Votos de Eleitores em Relação aos quais Houve Impugnação|11430",
+    "11436": "Fabricação, Aquisição, Fornecimento, Subtração ou Guarda de Materiais de Uso da Justiça Eleitoral|11430",
     "11437": "Crimes contra o Serviço da Justiça Eleitoral|11429",
     "11438": "Inscrição Fraudulenta|11437",
-    "11439":
-      "Induzimento à Inscrição de Eleitor em Infração às Normas Legais|11437",
+    "11439": "Induzimento à Inscrição de Eleitor em Infração às Normas Legais|11437",
     "11440": "Inscrição Fraudulenta Efetivada pelo Juiz|11437",
     "11441": "Negativa ou Retardamento de Inscrição sem Fundamento Legal|11437",
     "11442": "Perturbação ou Impedimento de Alistamento|11437",
     "11443": "Promoção de Desordem nos Trabalhos Eleitorais|11437",
-    "11444":
-      "Majoração de Preços de Utilidade e Serviços Necessários à Realização das Eleições|11437",
-    "11445":
-      "Ocultação, Sonegação ou Recusa de Fornecimento de Utilidades, Alimentos e Transporte no Dia da Eleição|11437",
-    "11446":
-      "Retardamento ou Não-Publicação de Decisões, Citações ou Intimações da Justiça Eleitoral|11437",
-    "11447":
-      "Não-Apresentação de Denúncia ou Não Execução de Sentença Penal Condenatória no Prazo Legal|11437",
-    "11448":
-      "Não Cumprimento, pela Autoridade Judiciária, do Dever de Representar Contra o Órgão do Ministério que Não Oferece Denúncia no Prazo Legal|11437",
+    "11444": "Majoração de Preços de Utilidade e Serviços Necessários à Realização das Eleições|11437",
+    "11445": "Ocultação, Sonegação ou Recusa de Fornecimento de Utilidades, Alimentos e Transporte no Dia da Eleição|11437",
+    "11446": "Retardamento ou Não-Publicação de Decisões, Citações ou Intimações da Justiça Eleitoral|11437",
+    "11447": "Não-Apresentação de Denúncia ou Não Execução de Sentença Penal Condenatória no Prazo Legal|11437",
+    "11448": "Não Cumprimento, pela Autoridade Judiciária, do Dever de Representar Contra o Órgão do Ministério que Não Oferece Denúncia no Prazo Legal|11437",
     "11449": "Recusa ou Abandono do Serviço Eleitoral|11437",
-    "11450":
-      "Não Cumprimento dos Deveres Impostos pelo Código Eleitoral à Autoridade Judiciária e aos Funcionários da Justiça Eleitoral|11437",
-    "11451":
-      "Utilização de Prédios ou Serviços de Repartições Públicas para Beneficiar Partido ou Organização de Caráter Político|11437",
+    "11450": "Não Cumprimento dos Deveres Impostos pelo Código Eleitoral à Autoridade Judiciária e aos Funcionários da Justiça Eleitoral|11437",
+    "11451": "Utilização de Prédios ou Serviços de Repartições Públicas para Beneficiar Partido ou Organização de Caráter Político|11437",
     "11452": "Desobediência a Ordens ou Instruções da Justiça Eleitoral|11437",
-    "11453":
-      "Descumprimento do Dever de Informar o Número, Espécie e Lotação de Veículos e Embarcações|11437",
+    "11453": "Descumprimento do Dever de Informar o Número, Espécie e Lotação de Veículos e Embarcações|11437",
     "11454": "Desatendimento à Requisição de Veículo ou Embarcação|11437",
-    "11455":
-      "Descumprimento da Proibição de Fornecimento de Transporte ou Refeições a Eleitores|11437",
+    "11455": "Descumprimento da Proibição de Fornecimento de Transporte ou Refeições a Eleitores|11437",
     "11456": "Estupro de Vulnerável|9740",
-    "11457":
-      "Favorecimento de Prostituição ou Outra Forma de Exploração Sexual|9740",
-    "11458":
-      "Favorecimento de Prostituição ou Outra Forma de Exploração Sexual de Vulnerável|9740",
-    "11459":
-      "Satisfação de Lascívia Mediante Presença de Criança ou Adolescente|9740",
+    "11457": "Favorecimento de Prostituição ou Outra Forma de Exploração Sexual|9740",
+    "11458": "Favorecimento de Prostituição ou Outra Forma de Exploração Sexual de Vulnerável|9740",
+    "11459": "Satisfação de Lascívia Mediante Presença de Criança ou Adolescente|9740",
     "11460": "Tráfico Interno de Pessoa para Fim de Exploração Sexual|9740",
     "11461": "Violação Sexual Mediante Fraude|9740",
-    "11464":
-      "Obstamento do Transporte e Fornecimento de Alimentos a Eleitores pela Justiça Eleitoral|11437",
-    "11465":
-      "Utilização de Veículos e Embarcações Públicas em Campanha Eleitoral|11437",
+    "11464": "Obstamento do Transporte e Fornecimento de Alimentos a Eleitores pela Justiça Eleitoral|11437",
+    "11465": "Utilização de Veículos e Embarcações Públicas em Campanha Eleitoral|11437",
     "11466": "Dano a Equipamento Eleitoral|11437",
     "11467": "Crimes contra a Fé Pública Eleitoral|11429",
     "11468": "Omissão na Expedição de Boletim de Apuração|11467",
-    "11469":
-      "Omissão no Recolhimento das Cédulas Apuradas, no Fechamento e Lacração da Urna|11467",
-    "11470":
-      "Alteração do Resultado de Votação nos Mapas ou Boletins de Apuração|11467",
-    "11471":
-      "Omissão no Recebimento e Registro de Protestos, bem como, de sua Remessa à Instância Superior|11467",
-    "11472":
-      "Falsificação ou Alteração de Documento Público para Fins Eleitorais|11467",
+    "11469": "Omissão no Recolhimento das Cédulas Apuradas, no Fechamento e Lacração da Urna|11467",
+    "11470": "Alteração do Resultado de Votação nos Mapas ou Boletins de Apuração|11467",
+    "11471": "Omissão no Recebimento e Registro de Protestos, bem como, de sua Remessa à Instância Superior|11467",
+    "11472": "Falsificação ou Alteração de Documento Público para Fins Eleitorais|11467",
     "11473": "Falsidade Ideológica|11467",
-    "11474":
-      "Reconhecimento Indevido de Firma ou Letras para Fins Eleitorais|11467",
+    "11474": "Reconhecimento Indevido de Firma ou Letras para Fins Eleitorais|11467",
     "11475": "Uso de Documento Falso para Fins Eleitorais|11467",
     "11476": "Obtenção de Documento Falso para Fins Eleitorais|11467",
     "11477": "Omissão da Entrega do Boletim de Urna|11467",
@@ -2999,36 +2816,26 @@ export default {
     "11488": "Injúria Eleitoral Violenta|11482",
     "11489": "Inutilização, Alteração ou Perturbação de Propaganda|11482",
     "11490": "Impedimento do Exercício da Propaganda|11482",
-    "11491":
-      "Utilização de Organização Comercial para Propaganda ou Aliciamento de Eleitores|11482",
+    "11491": "Utilização de Organização Comercial para Propaganda ou Aliciamento de Eleitores|11482",
     "11492": "Realização de Propaganda Eleitoral em Língua Estrangeira|11482",
-    "11493":
-      "Participação de Pessoa Não Detentora de Direitos Políticos em Atividades Partidárias e de Propaganda Eleitoral|11482",
-    "11494":
-      "Autorização de Transmissão de Pessoa Não Detentora de Direitos Políticos em Atividades Partidárias e de Propaganda Eleitoral|11482",
+    "11493": "Participação de Pessoa Não Detentora de Direitos Políticos em Atividades Partidárias e de Propaganda Eleitoral|11482",
+    "11494": "Autorização de Transmissão de Pessoa Não Detentora de Direitos Políticos em Atividades Partidárias e de Propaganda Eleitoral|11482",
     "11495": "Pesquisa Fraudulenta|11482",
-    "11496":
-      "Uso, na Propaganda Eleitoral, de Símbolo de Órgãos de Governo|11482",
+    "11496": "Uso, na Propaganda Eleitoral, de Símbolo de Órgãos de Governo|11482",
     "11497": "Crimes contra o Sigilo ou o Exercício do Voto|11429",
-    "11498":
-      "Retenção de Título Eleitoral ou do Comprovante de Alistamento Eleitoral|11497",
+    "11498": "Retenção de Título Eleitoral ou do Comprovante de Alistamento Eleitoral|11497",
     "11499": "Impedimento ou Embaraço ao Exercício do Sufrágio|11497",
-    "11500":
-      "Prisão ou Detenção do Eleitor, Membro de Mesa Receptora, Fiscal, Delegado de Partido ou Candidato, Fora das Hipóteses Legais Permitidas|11497",
+    "11500": "Prisão ou Detenção do Eleitor, Membro de Mesa Receptora, Fiscal, Delegado de Partido ou Candidato, Fora das Hipóteses Legais Permitidas|11497",
     "11501": "Corrupção Eleitoral|11497",
     "11502": "Coação Visando a Obtenção de Voto ou a sua Abstenção|11497",
-    "11503":
-      "Violência ou Grave Ameaça Visando a Obtenção de Voto ou a sua Abstenção|11497",
-    "11504":
-      "Concentração de Eleitores para Embaraçar ou Fraudar o Exercício do Voto|11497",
-    "11505":
-      "Fornecimento ao Eleitor de Cédula Oficial Já Assinalada ou Marcada|11497",
+    "11503": "Violência ou Grave Ameaça Visando a Obtenção de Voto ou a sua Abstenção|11497",
+    "11504": "Concentração de Eleitores para Embaraçar ou Fraudar o Exercício do Voto|11497",
+    "11505": "Fornecimento ao Eleitor de Cédula Oficial Já Assinalada ou Marcada|11497",
     "11506": "Fornecimento de Cédula Eleitoral Rubricada a Destempo|11497",
     "11507": "Votação Múltipla ou Realizada em Lugar de Outrem|11497",
     "11508": "Violação do Sigilo do Voto|11497",
     "11509": "Violação do Sigilo da Urna ou dos Invólucros|11497",
-    "11510":
-      "Destruição, Supressão ou Ocultação de Urna Contendo Votos ou Documentos Eleitorais|11497",
+    "11510": "Destruição, Supressão ou Ocultação de Urna Contendo Votos ou Documentos Eleitorais|11497",
     "11511": "Destruição de Relação de Candidatos|11497",
     "11512": "Uso Proibido de Alto-Falantes|11497",
     "11513": "Arregimentação de Eleitor ou Boca de Urna|11497",
@@ -3038,14 +2845,11 @@ export default {
     "11517": "Crimes contra os Partidos Políticos|11429",
     "11518": "Subscrição de Mais de Uma Ficha de Filiação Partidária|11517",
     "11519": "Inscrição Simultânea em Dois ou Mais Partidos|11517",
-    "11520":
-      "Coleta de Assinatura em Mais de Uma Ficha de Registro Partidário|11517",
+    "11520": "Coleta de Assinatura em Mais de Uma Ficha de Registro Partidário|11517",
     "11521": "Preterição à Prioridade Postal|11517",
     "11522": "Arguição de Ineligibilidade Temerária ou de Má-Fé|11517",
-    "11523":
-      "Não-Acesso dos Partidos aos Dados Relativos às Pesquisas Eleitorais|11517",
-    "11524":
-      "Irregularidades dos Dados Publicados em Pesquisas Eleitorais|11517",
+    "11523": "Não-Acesso dos Partidos aos Dados Relativos às Pesquisas Eleitorais|11517",
+    "11524": "Irregularidades dos Dados Publicados em Pesquisas Eleitorais|11517",
     "11557": "Administração da Justiça Eleitoral|11428",
     "11558": "Conduta Vedada a Agente Público|11557",
     "11559": "Improbidade Administrativa|11557",
@@ -3060,8 +2864,7 @@ export default {
     "11568": "Remoção de Servidor|11566",
     "11569": "Requisição|11566",
     "11570": "Requisição de Servidor|11569",
-    "11571":
-      "Requisição de Servidor - Renovação de Requisição de Servidor|11569",
+    "11571": "Requisição de Servidor - Renovação de Requisição de Servidor|11569",
     "11572": "Minuta de Resolução|11557",
     "11573": "Requisição de Força Federal|11557",
     "11574": "Alistamento Eleitoral|11428",
@@ -3077,30 +2880,25 @@ export default {
     "11584": "Candidatos|11583",
     "11585": "Condição de Elegibilidade|11584",
     "11586": "Condição de Elegibilidade - Alistamento Eleitoral|11585",
-    "11587":
-      "Condição de Elegibilidade - Domicílio Eleitoral na Circunscrição|11585",
+    "11587": "Condição de Elegibilidade - Domicílio Eleitoral na Circunscrição|11585",
     "11588": "Condição de Elegibilidade - Idade Mínima|11585",
     "11589": "Condição de Elegibilidade - Filiação Partidária|11585",
     "11590": "Condição de Elegibilidade - Nacionalidade Brasileira|11585",
-    "11591":
-      "Condição de Elegibilidade - Pleno Exercício dos Direitos Políticos|11585",
+    "11591": "Condição de Elegibilidade - Pleno Exercício dos Direitos Políticos|11585",
     "11592": "Condição de Elegibilidade - Quitação Eleitoral|11585",
     "11593": "Direito de Resposta|11584",
     "11594": "Identificação Numérica de Candidato|11584",
     "11595": "Inelegibilidade|11584",
     "11596": "Inelegibilidade - Abuso do Poder Econômico ou Político|11595",
     "11597": "Inelegibilidade - Analfabetismo|11595",
-    "11598":
-      "Inelegibilidade - Condenação Criminal Transitada em Julgado|11595",
-    "11599":
-      "Inelegibilidade - Declaração de Indignidade ou de Incompatibilidade com o Oficialato|11595",
+    "11598": "Inelegibilidade - Condenação Criminal Transitada em Julgado|11595",
+    "11599": "Inelegibilidade - Declaração de Indignidade ou de Incompatibilidade com o Oficialato|11595",
     "11600": "Inelegibilidade - Desincompatibilização|11595",
     "11601": "Inelegibilidade - Inalistável|11595",
     "11602": "Inelegibilidade - Parentesco|11595",
     "11603": "Inelegibilidade - Reeleição|11595",
     "11604": "Inelegibilidade - Rejeição de Contas Públicas|11595",
-    "11605":
-      "Inelegibilidade - Representação ou Ação de Investigação Judicial Eleitoral Jugada Procedente pela Justiça Eleitoral|11595",
+    "11605": "Inelegibilidade - Representação ou Ação de Investigação Judicial Eleitoral Jugada Procedente pela Justiça Eleitoral|11595",
     "11606": "Inelegibilidade - Terceiro Mandato|11595",
     "11607": "Inelegibilidade - Vida Pregressa|11595",
     "11608": "Inelegibilidade - Vínculo Afetivo|11595",
@@ -3112,25 +2910,17 @@ export default {
     "11614": "Prestação de Contas - De Candidato|11584",
     "11615": "Registro de Candidatura|11584",
     "11616": "Impugnação ao Registro de Candidatura|11615",
-    "11617":
-      "Registro de Candidatura - Preenchimento de Vaga Remanescente|11615",
+    "11617": "Registro de Candidatura - Preenchimento de Vaga Remanescente|11615",
     "11618": "Registro de Candidatura - RRC - Candidato|11615",
     "11619": "Registro de Candidatura - RRCI - Candidato Individual|11615",
     "11620": "Registro de Candidatura - Substituição de Candidato|11615",
-    "11621":
-      "Registro de Candidatura - Substituição de Candidato - Por Cancelamento de Registro|11620",
-    "11622":
-      "Registro de Candidatura - Substituição de Candidato - Por Cassação de Registro|11620",
-    "11623":
-      "Registro de Candidatura - Substituição de Candidato - Por Expulsão Partidária|11620",
-    "11624":
-      "Registro de Candidatura - Substituição de Candidato - Por Falecimento|11620",
-    "11625":
-      "Registro de Candidatura - Substituição de Candidato - Por Indeferimento de Registro|11620",
-    "11626":
-      "Registro de Candidatura - Substituição de Candidato - Por Ineligibilidade|11620",
-    "11627":
-      "Registro de Candidatura - Substituição de Candidato - Por Renúncia|11620",
+    "11621": "Registro de Candidatura - Substituição de Candidato - Por Cancelamento de Registro|11620",
+    "11622": "Registro de Candidatura - Substituição de Candidato - Por Cassação de Registro|11620",
+    "11623": "Registro de Candidatura - Substituição de Candidato - Por Expulsão Partidária|11620",
+    "11624": "Registro de Candidatura - Substituição de Candidato - Por Falecimento|11620",
+    "11625": "Registro de Candidatura - Substituição de Candidato - Por Indeferimento de Registro|11620",
+    "11626": "Registro de Candidatura - Substituição de Candidato - Por Ineligibilidade|11620",
+    "11627": "Registro de Candidatura - Substituição de Candidato - Por Renúncia|11620",
     "11628": "Cargos|11583",
     "11629": "Cargo - Deputado Distrital|11628",
     "11630": "Cargo - Deputado Estadual|11628",
@@ -3152,68 +2942,43 @@ export default {
     "11646": "Eleições - Eleição Proporcional|11583",
     "11647": "Eleições - Eleição Suplementar|11583",
     "11648": "Pesquisa Eleitoral|11583",
-    "11649":
-      "Pesquisa Eleitoral - Divulgação de Pesquisa Eleitoral Fraudulenta|11648",
-    "11650":
-      "Pesquisa Eleitoral - Divulgação de Pesquisa Eleitoral Sem Prévio Registro|11648",
+    "11649": "Pesquisa Eleitoral - Divulgação de Pesquisa Eleitoral Fraudulenta|11648",
+    "11650": "Pesquisa Eleitoral - Divulgação de Pesquisa Eleitoral Sem Prévio Registro|11648",
     "11651": "Pesquisa Eleitoral - Registro de Pesquisa Eleitoral|11648",
     "11652": "Propaganda Política - Propaganda Eleitoral|11583",
     "11653": "Propaganda Política - Propaganda Eleitoral - Adesivo|11652",
-    "11654":
-      "Propaganda Política - Propaganda Eleitoral - Alto-falante/Amplificador de Som|11652",
-    "11655":
-      "Propaganda Política - Propaganda Eleitoral - Banner/Cartaz/Faixa|11652",
-    "11656":
-      "Propaganda Política - Propaganda Eleitoral - Bem Particular|11652",
-    "11657":
-      "Propaganda Política - Propaganda Eleitoral - Bem Particular de Uso Comum|11652",
+    "11654": "Propaganda Política - Propaganda Eleitoral - Alto-falante/Amplificador de Som|11652",
+    "11655": "Propaganda Política - Propaganda Eleitoral - Banner/Cartaz/Faixa|11652",
+    "11656": "Propaganda Política - Propaganda Eleitoral - Bem Particular|11652",
+    "11657": "Propaganda Política - Propaganda Eleitoral - Bem Particular de Uso Comum|11652",
     "11658": "Propaganda Política - Propaganda Eleitoral - Bem Público|11652",
     "11659": "Propaganda Política - Propaganda Eleitoral - Bem Tombado|11652",
     "11660": "Propaganda Política - Propaganda Eleitoral - Boca de Urna|11652",
     "11661": "Propaganda Política - Propaganda Eleitoral - Cavalete|11652",
-    "11662":
-      "Propaganda Política - Propaganda Eleitoral - Comício/Showmício|11652",
-    "11663":
-      "Propaganda Política - Propaganda Eleitoral - Conduta Vedada a Emissora de Rádio/Televisão na Programação Normal|11652",
-    "11664":
-      "Propaganda Política - Propaganda Eleitoral - Confecção, Utilização ou Distribuição de Brinde|11652",
-    "11665":
-      "Propaganda Política - Propaganda Eleitoral - Contrariedade à Lei de Postura Municipal|11652",
-    "11666":
-      "Propaganda Política - Propaganda Eleitoral - Debate Político|11652",
-    "11667":
-      "Propaganda Política - Propaganda Eleitoral - Extemporânea/Antecipada|11652",
-    "11668":
-      "Propaganda Política - Propaganda Eleitoral - Folhetos/Volantes/Santinhos/Impressos|11652",
-    "11669":
-      "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito|11652",
-    "11670":
-      "Propaganda Política - Propaganda Eleitoral - Distribuição de Tempo de Propaganda|11669",
-    "11671":
-      "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito/Inserções de Propaganda|11669",
-    "11672":
-      "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito/Programa em Bloco|11669",
+    "11662": "Propaganda Política - Propaganda Eleitoral - Comício/Showmício|11652",
+    "11663": "Propaganda Política - Propaganda Eleitoral - Conduta Vedada a Emissora de Rádio/Televisão na Programação Normal|11652",
+    "11664": "Propaganda Política - Propaganda Eleitoral - Confecção, Utilização ou Distribuição de Brinde|11652",
+    "11665": "Propaganda Política - Propaganda Eleitoral - Contrariedade à Lei de Postura Municipal|11652",
+    "11666": "Propaganda Política - Propaganda Eleitoral - Debate Político|11652",
+    "11667": "Propaganda Política - Propaganda Eleitoral - Extemporânea/Antecipada|11652",
+    "11668": "Propaganda Política - Propaganda Eleitoral - Folhetos/Volantes/Santinhos/Impressos|11652",
+    "11669": "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito|11652",
+    "11670": "Propaganda Política - Propaganda Eleitoral - Distribuição de Tempo de Propaganda|11669",
+    "11671": "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito/Inserções de Propaganda|11669",
+    "11672": "Propaganda Política - Propaganda Eleitoral - Horário Eleitoral Gratuito/Programa em Bloco|11669",
     "11673": "Propaganda Política - Propaganda Eleitoral - Rádio|11669",
-    "11674":
-      "Propaganda Política - Propaganda Eleitoral - Rádio Comunitária|11669",
+    "11674": "Propaganda Política - Propaganda Eleitoral - Rádio Comunitária|11669",
     "11675": "Propaganda Política - Propaganda Eleitoral - Televisão|11669",
-    "11676":
-      "Propaganda Política - Propaganda Eleitoral - Invasão de Horário Destinado a Outro Cargo/Partido/Coligação|11669",
-    "11677":
-      "Propaganda Política - Propaganda Eleitoral - Imprensa Escrita - Jornal/Revista/Tabloide|11652",
-    "11678":
-      "Propaganda Política - Propaganda Eleitoral - Inobservância do Limite Legal|11652",
+    "11676": "Propaganda Política - Propaganda Eleitoral - Invasão de Horário Destinado a Outro Cargo/Partido/Coligação|11669",
+    "11677": "Propaganda Política - Propaganda Eleitoral - Imprensa Escrita - Jornal/Revista/Tabloide|11652",
+    "11678": "Propaganda Política - Propaganda Eleitoral - Inobservância do Limite Legal|11652",
     "11679": "Propaganda Política - Propaganda Eleitoral - Internet|11652",
-    "11680":
-      "Propaganda Política - Propaganda Eleitoral - Omissão de Informações Obrigatórias|11652",
+    "11680": "Propaganda Política - Propaganda Eleitoral - Omissão de Informações Obrigatórias|11652",
     "11681": "Propaganda Política - Propaganda Eleitoral - Outdoors|11652",
-    "11682":
-      "Propaganda Política - Propaganda Eleitoral - Pintura em Muro|11652",
-    "11683":
-      "Propaganda Política - Propaganda Eleitoral - Truncagem, Montagem, Utilização de Gravação Externa, Computação Gráfica, Desenho Animado ou Efeito Especial|11652",
+    "11682": "Propaganda Política - Propaganda Eleitoral - Pintura em Muro|11652",
+    "11683": "Propaganda Política - Propaganda Eleitoral - Truncagem, Montagem, Utilização de Gravação Externa, Computação Gráfica, Desenho Animado ou Efeito Especial|11652",
     "11684": "Recursos Financeiros de Campanha Eleitoral|11583",
-    "11685":
-      "Captação ou Gasto Ilícito de Recursos Financeiros de Campanha Eleitoral|11684",
+    "11685": "Captação ou Gasto Ilícito de Recursos Financeiros de Campanha Eleitoral|11684",
     "11686": "Comitê Financeiro|11684",
     "11687": "Prestação de Contas - De Comitê Financeiro|11686",
     "11688": "Registro de Comitê Financeiro|11686",
@@ -3255,8 +3020,7 @@ export default {
     "11724": "Diplomação|11428",
     "11725": "Direitos Políticos|11428",
     "11726": "Direitos Políticos - Perda dos Direitos Políticos|11725",
-    "11727":
-      "Direitos Políticos - Restabelecimento dos Direitos Políticos|11725",
+    "11727": "Direitos Políticos - Restabelecimento dos Direitos Políticos|11725",
     "11728": "Direitos Políticos - Suspensão de Direitos Políticos|11725",
     "11729": "Execução|11428",
     "11730": "Execução - De Astreintes|11729",
@@ -3277,8 +3041,7 @@ export default {
     "11745": "Exceção - De Pré-Executividade|11739",
     "11746": "Exceção - De Suspeição|11739",
     "11747": "Partidos Políticos|11428",
-    "11748":
-      "Alteração Estatutária de Partido Político em Matéria Administrativa|11747",
+    "11748": "Alteração Estatutária de Partido Político em Matéria Administrativa|11747",
     "11749": "Coligação Partidária|11747",
     "11750": "Coligação Partidária - Majoritária|11749",
     "11751": "Coligação Partidária - Majoritária e Proporcional|11749",
@@ -3317,8 +3080,7 @@ export default {
     "11784": "Oitiva|11781",
     "11785": "Diligências|11781",
     "11786": "Atos executórios|11781",
-    "11797":
-      "Entrada de aparelho telefônico de comunicação móvel em estabelecimento prisional|5874",
+    "11797": "Entrada de aparelho telefônico de comunicação móvel em estabelecimento prisional|5874",
     "11802": "Ordem Urbanística|9985",
     "11803": "CONSELHOS|9985",
     "11804": "Programas de Arrendamento Residencial  PAR|4839",
@@ -3372,8 +3134,7 @@ export default {
     "11854": "Saúde Mental|10064",
     "11855": "Controle Social e Conselhos de Saúde|10064",
     "11856": "Hospitais e Outras Unidades de Saúde|10064",
-    "11857":
-      "Doação e Transplante de Órgãos; Tecidos e Partes do Corpo Humano|10064",
+    "11857": "Doação e Transplante de Órgãos; Tecidos e Partes do Corpo Humano|10064",
     "11858": "Recebimento de bolsa de estudos|10288",
     "11860": "Produto Impróprio|7771",
     "11861": "Combustíveis e derivados|7771",
@@ -3392,8 +3153,7 @@ export default {
     "11874": "Responsabilidade fiscal|9985",
     "11883": "Tratamento Médico-Hospitalar|10064",
     "11884": "Fornecimento de Medicamentos|10064",
-    "11885":
-      "Unidade de terapia intensiva (UTI) ou unidade de cuidados intensivos (UCI)|11883",
+    "11885": "Unidade de terapia intensiva (UTI) ou unidade de cuidados intensivos (UCI)|11883",
     "11895": "Crimes Previstos no Estatuto do Torcedor|3603",
     "11896": "Previstos no Estatuto do Torcedor|9847",
     "11897": "Crédito Especial|10954",
@@ -3438,16 +3198,13 @@ export default {
     "11936": "Cessão|10220",
     "11937": "Desvio de Função|10220",
     "11938": "Provimento de Cargos|10220",
-    "11939":
-      "Entrada de aparelho telefônico de comunicação móvel em estabelecimento prisional|9932",
+    "11939": "Entrada de aparelho telefônico de comunicação móvel em estabelecimento prisional|9932",
     "11940": "Inclusão do 13º salário (gratificação natalina) no PBC|6127",
     "11941": "Art. 26 da Lei 8.870/1994|6120",
     "11942": "Art. 29, § 5º, da Lei 8.213/1991|6120",
     "11943": "Art. 29, II, da Lei 8.213/1991|6120",
-    "11944":
-      "Alteração do teto máximo para o valor do benefício previdenciário do RGPS (EC 20 e 41)|6120",
-    "11945":
-      "Revisão do valor do benefício no primeiro reajuste após a concessão (Art. 21, § 3º, da Lei 8.880/1994)|6149",
+    "11944": "Alteração do teto máximo para o valor do benefício previdenciário do RGPS (EC 20 e 41)|6120",
+    "11945": "Revisão do valor do benefício no primeiro reajuste após a concessão (Art. 21, § 3º, da Lei 8.880/1994)|6149",
     "11946": "Deficiente|6114",
     "11947": "Idoso|6114",
     "11948": "Inspeção|10015",
@@ -3493,13 +3250,10 @@ export default {
     "11995": "Internação Involuntária|11854",
     "11996": "Encaminhamento aos pais ou responsável|11818",
     "11997": "Orientação e acompanhamento temporário|11818",
-    "11998":
-      "Matrícula e frequência obrigatória em escola oficial de ensino fundamental|11818",
+    "11998": "Matrícula e frequência obrigatória em escola oficial de ensino fundamental|11818",
     "11999": "Inclusão em programa de auxílio à família|11818",
-    "12000":
-      "Requisição de tratamento médico, psicológico ou psiquiátrico, em regime hospitalar ou ambulatorial|11818",
-    "12001":
-      "Inclusão em programa de auzílio, orientação e tratamento a alcoólatras e toxicômanos|11818",
+    "12000": "Requisição de tratamento médico, psicológico ou psiquiátrico, em regime hospitalar ou ambulatorial|11818",
+    "12001": "Inclusão em programa de auzílio, orientação e tratamento a alcoólatras e toxicômanos|11818",
     "12002": "Acolhimento institucional|11818",
     "12003": "Inclusão em programa de acolhimento familiar|11818",
     "12004": "Colocação em família substituta|11818",
@@ -3509,24 +3263,16 @@ export default {
     "12008": "Crimes da Lei do Planejamento Familiar|3603",
     "12009": "Roubo qualificado|9674",
     "12010": "Da Lei do Planejamento Familiar|9847",
-    "12011":
-      "Crimes Sobre Produção, Comércio e Transporte Clandestino de Açúcar e Álcool|3603",
-    "12012":
-      "Sobre Produção, Comércio e Transporte Clandestino de Açúcar e Álcool|9847",
-    "12013":
-      "Crime Relacionado à Exportação de Bens Sensíveis e Serviços Diretamente Relacionados|3603",
-    "12014":
-      "Relacionado à Exportação de Bens Sensíveis e Serviços Diretamente Relacionados|9847",
+    "12011": "Crimes Sobre Produção, Comércio e Transporte Clandestino de Açúcar e Álcool|3603",
+    "12012": "Sobre Produção, Comércio e Transporte Clandestino de Açúcar e Álcool|9847",
+    "12013": "Crime Relacionado à Exportação de Bens Sensíveis e Serviços Diretamente Relacionados|3603",
+    "12014": "Relacionado à Exportação de Bens Sensíveis e Serviços Diretamente Relacionados|9847",
     "12015": "Crime da Lei Sobre Permissão de Lavra Garimpeira|3603",
     "12016": "da Lei Sobre Permissão de Lavra Garimpeira|9847",
-    "12017":
-      "Crimes da Lei que Proíbe Práticas Discriminatórias para Efeitos Trabalhistas|3603",
-    "12018":
-      "Da Lei que Proíbe Práticas Discriminatórias para Efeitos Trabalhistas|9847",
-    "12019":
-      "Crimes da Lei de Proteção à Propriedade Intelectual de Programa de Computador|3603",
-    "12020":
-      "Da Lei de Proteção à Propriedade Intelectual de Programa de Computador|9847",
+    "12017": "Crimes da Lei que Proíbe Práticas Discriminatórias para Efeitos Trabalhistas|3603",
+    "12018": "Da Lei que Proíbe Práticas Discriminatórias para Efeitos Trabalhistas|9847",
+    "12019": "Crimes da Lei de Proteção à Propriedade Intelectual de Programa de Computador|3603",
+    "12020": "Da Lei de Proteção à Propriedade Intelectual de Programa de Computador|9847",
     "12021": "Crimes da Lei de Locação de Imóveis Urbanos|3603",
     "12022": "Da Lei de Locação de Imóveis Urbanos|9847",
     "12023": "Crimes da Lei Geral da Copa|3603",
@@ -3535,8 +3281,7 @@ export default {
     "12026": "Estatuto do Torcedor|9847",
     "12027": "Composição Civil|4263",
     "12030": "Internação|10688",
-    "12031":
-      "Desapropriação para Regularização de Comunidade Quilombola / Dec. 4887/2003|10120",
+    "12031": "Desapropriação para Regularização de Comunidade Quilombola / Dec. 4887/2003|10120",
     "12042": "Análise de Crédito|7779",
     "12043": "Registro de Candidatura %u2013 DRAP|11619",
     "12044": "Registro de Candidatura - DRAP Partido/Coligação|11615",
@@ -3552,15 +3297,13 @@ export default {
     "12054": "Impugnação - Sistema Eletrônico de Votação|12049",
     "12055": "Impugnação - Transferência de Domicílio Eleitoral|12049",
     "12056": "Impugnação - Voto por Cédula|12049",
-    "12062":
-      "Captação ou Gasto Ilícito de Recursos Financeiros de Campanha Eleitoral|11716",
+    "12062": "Captação ou Gasto Ilícito de Recursos Financeiros de Campanha Eleitoral|11716",
     "12063": "Conduta Vedada ao Agente Público|11716",
     "12064": "Meios Processuais|11428",
     "12069": "Prestação de Contas - de Partido Político|11747",
     "12090": "Perda ou Modificação de Guarda|9964",
     "12091": "Feminicídio|3369",
-    "12130":
-      "Homicídio Agravado pela Prática de  Extermínio de Seres Humanos|3369",
+    "12130": "Homicídio Agravado pela Prática de  Extermínio de Seres Humanos|3369",
     "12131": "Homicídio Agravado pelo Extermínio de Seres Humanos|9635",
     "12152": "Revisão de Tutela Antecipada Antecedente|8826"
   }

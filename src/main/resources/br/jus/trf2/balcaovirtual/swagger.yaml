@@ -1715,7 +1715,7 @@ paths:
 
   /padrao:
     get:
-      description: Obter documentos em mesa virtual
+      description: Obter lista de padrões do usuário corrente
       tags: [padrao]
       parameters: []
       responses:
@@ -1733,7 +1733,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     post:
-      description: Obter documentos em mesa virtual
+      description: Acrescentar um padrão
       tags: [padrao]
       parameters:
         - $ref: "#/parameters/id"
@@ -1751,8 +1751,41 @@ paths:
             $ref: "#/definitions/Error"
 
   /padrao/{id}:
+    get:
+      description: Obter um padrão específico pela id
+      tags: [padrao]
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              padrao:
+                $ref: "#/definitions/PadraoItem"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      description: Alterar um padrão
+      tags: [padrao]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/html"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              padrao:
+                $ref: "#/definitions/PadraoItem"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
     delete:
-      description: Obter documentos em mesa virtual
+      description: Excluir um padrão
       tags: [padrao]
       parameters:
         - $ref: "#/parameters/id"

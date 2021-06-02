@@ -74,6 +74,7 @@
               <th>Unidade</th>
               <th>Sistema/Órgão</th>
               <th>Situação</th>
+              <th>Padrão</th>
             </tr>
           </thead>
           <tbody>
@@ -85,7 +86,7 @@
                 <router-link
                   :to="{
                     name: 'Documento',
-                    params: { numero: f.id, documento: f, lista: filtrados }
+                    params: { numero: f.id, documento: f, lista: filtrados },
                   }"
                   >{{ f.numeroDoDocumento }}</router-link
                 >
@@ -100,7 +101,7 @@
                     :to="{
                       name: 'Processo',
                       params: { numero: f.numeroDoProcesso },
-                      query: { avisos: $parent.cAvisos }
+                      query: { avisos: $parent.cAvisos },
                     }"
                     target="_blank"
                     >{{ f.processoFormatado }}</router-link
@@ -119,6 +120,13 @@
               <td class="td-middle">
                 {{ f.descricaoDoStatus }}
                 <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
+              </td>
+              <td class="td-middle text-right">
+                <router-link
+                  :to="{ name: 'Padrao', params: { numero: f.idPadrao } }"
+                  v-if="f.similaridade"
+                  v-html="(f.similaridade * 100).toFixed(0) + '%'"
+                ></router-link>
               </td>
             </tr>
           </tbody>
@@ -154,7 +162,7 @@ export default {
       lista: [],
       todos: true,
       errormsg: undefined,
-      carregando: true
+      carregando: true,
     };
   },
 
@@ -186,13 +194,13 @@ export default {
       return this.filtradosEMarcados.filter(function(item) {
         return item.status === "4" || item.status === "2";
       });
-    }
+    },
   },
 
   methods: {
     carregarMesas: function() {
       this.$http.get("mesa", { block: true }).then(
-        response => {
+        (response) => {
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
             var m = list[i];
@@ -203,13 +211,13 @@ export default {
             this.selecionarMesa();
           }
         },
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     },
 
     selecionarMesa: function() {
       this.$http.get("mesa/" + this.mesa.id, { block: true }).then(
-        response => {
+        (response) => {
           this.lista.length = 0;
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
@@ -217,7 +225,7 @@ export default {
           }
           this.carregando = false;
         },
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     },
 
@@ -241,7 +249,7 @@ export default {
         conteudo: undefined,
         sistema: undefined,
         lembretes: undefined,
-        errormsg: undefined
+        errormsg: undefined,
       });
       if (item.numeroDoProcesso !== undefined) {
         item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
@@ -279,26 +287,28 @@ export default {
 
     chamarAssijus: function(list) {
       var json = JSON.stringify({ list: list });
-      this.$http.post(this.$parent.test.properties["balcaovirtual.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true }).then(
-        response => {
-          var callback = window.location.href + "";
-          console.log(callback);
-          window.location.href =
-            this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
-            "/?endpointautostart=true&endpointlistkey=" +
-            response.data.key +
-            "&endpointcallback=" +
-            encodeURI(callback).replace("#", "__hashsign__");
-        },
-        error => UtilsBL.errormsg(error, this)
-      );
+      this.$http
+        .post(this.$parent.test.properties["balcaovirtual.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true })
+        .then(
+          (response) => {
+            var callback = window.location.href + "";
+            console.log(callback);
+            window.location.href =
+              this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+              "/?endpointautostart=true&endpointlistkey=" +
+              response.data.key +
+              "&endpointcallback=" +
+              encodeURI(callback).replace("#", "__hashsign__");
+          },
+          (error) => UtilsBL.errormsg(error, this)
+        );
     },
 
     revisar: function() {
       var a = this.filtradosEMarcadosEAssinaveis;
       this.$router.push({
         name: "Documento",
-        params: { numero: a[0].id, documento: a[0], lista: a }
+        params: { numero: a[0].id, documento: a[0], lista: a },
       });
     },
 
@@ -319,8 +329,8 @@ export default {
 
     editar: function() {
       this.$refs.etiqueta.show();
-    }
-  }
+    },
+  },
 };
 </script>
 

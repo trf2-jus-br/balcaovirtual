@@ -17,7 +17,9 @@
     <div v-show="editando">
       <div class="row no-gutters mt-2">
         <div class="col col-auto mr-auto mb-3">
-          <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Cancelar</button>
+          <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none">
+            <span class="fa fa-arrow-left"></span> Cancelar
+          </button>
         </div>
         <div class="col col-auto mr-1 mb-3">
           <button @click="salvar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Salvar</button>
@@ -35,7 +37,9 @@
         <div class="col col-lg-8">
           <div class="row no-gutters mt-2">
             <div class="col col-auto mb-3">
-              <router-link :to="{ name: 'Mesa', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"><span class="fa fa-times"></span> Voltar</router-link>
+              <router-link :to="{ name: 'Mesa', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
+                ><span class="fa fa-times"></span> Voltar</router-link
+              >
             </div>
             <div class="col col-auto mb-3">
               <router-link
@@ -46,8 +50,8 @@
                     numero: (anteriorDocumento || {}).id,
                     documento: anteriorDocumento,
                     lista: this.lista,
-                    transitionName: 'slide-right'
-                  }
+                    transitionName: 'slide-right',
+                  },
                 }"
                 tag="button"
                 class="btn btn-light d-print-none"
@@ -63,8 +67,8 @@
                     numero: (proximoDocumento || {}).id,
                     documento: proximoDocumento,
                     lista: this.lista,
-                    transitionName: 'slide-left'
-                  }
+                    transitionName: 'slide-left',
+                  },
                 }"
                 tag="button"
                 class="btn btn-light d-print-none"
@@ -72,7 +76,12 @@
               >
             </div>
           </div>
-          <div class="card mb-3">
+          <div class="card mb-3" v-if="diferencas">
+            <div class="card-body alert-success">
+              <p class="card-text" v-html="diferencas"></p>
+            </div>
+          </div>
+          <div class="card mb-3" v-else>
             <div class="card-body alert-warning">
               <p ref="conteudo" class="card-text" v-html="conteudo"></p>
             </div>
@@ -82,16 +91,24 @@
           <div class="row no-gutters mt-2">
             <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none"><span class="fa fa-plus"></span> Padrão</button>
+              <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none">
+                <span class="fa fa-plus"></span> Padrão
+              </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver</button>
+              <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none">
+                <span class="fa fa-comment"></span> Devolver
+              </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar</button>
+              <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none">
+                <span class="fa fa-pencil"></span> Editar
+              </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar</button>
+              <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none">
+                <span class="fa fa-certificate"></span> Assinar
+              </button>
             </div>
           </div>
           <div class="card mb-3">
@@ -105,7 +122,7 @@
                   :to="{
                     name: 'Processo',
                     params: { numero: documento.numeroDoProcesso },
-                    query: { avisos: $parent.cAvisos }
+                    query: { avisos: $parent.cAvisos },
                   }"
                   target="_blank"
                   >{{ documento.processoFormatado }}</router-link
@@ -160,9 +177,10 @@ export default {
       numero: this.$route.params.numero,
       documento: this.$route.params.documento,
       conteudo: this.preprocess(this.$route.params.documento.conteudo),
+      diferencas: this.preprocess(this.$route.params.documento.diferencas),
       lista: this.$route.params.lista,
       editando: false,
-      errormsg: undefined
+      errormsg: undefined,
     };
   },
   computed: {
@@ -180,13 +198,16 @@ export default {
     anteriorDocumento: function() {
       if (this.indice === 0) return;
       return this.lista[this.indice - 1];
-    }
+    },
   },
   methods: {
     preprocess: function(s) {
       if (!s) return;
       console.log(s);
-      return s.replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"').replace(/&#x2013;/g, "-");
+      return s
+        .replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"')
+        .replace('contenteditable="true"', 'contentEditable="false" data-bv_edit="true"')
+        .replace(/&#x2013;/g, "-");
     },
     posprocess: function(s) {
       if (!s) return;
@@ -201,7 +222,7 @@ export default {
       this.buffer = el.innerHTML;
       this.$http.post("padrao", { html: this.documento.conteudo }, { block: true }).then(
         () => {},
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     },
 
@@ -220,17 +241,17 @@ export default {
         .post(
           "mesa/" + "null" + "/documento/" + this.documento.id + "/salvar?sistema=" + this.documento.sistema,
           {
-            html: this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML)
+            html: this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML),
           },
           { block: true }
         )
         .then(
-          response => {
+          (response) => {
             this.editando = false;
             this.documento.conteudo = this.$refs["conteudo"].innerHTML;
             UtilsBL.logEvento("mesa", "salvar", "minuta");
           },
-          error => UtilsBL.errormsg(error, this)
+          (error) => UtilsBL.errormsg(error, this)
         );
     },
 
@@ -243,12 +264,12 @@ export default {
         .post(
           "mesa/" + "null" + "/documento/" + this.documento.id + "/devolver?sistema=" + this.documento.sistema,
           {
-            lembrete: lembrete
+            lembrete: lembrete,
           },
           { block: true }
         )
         .then(
-          response => {
+          (response) => {
             UtilsBL.logEvento("mesa", "devolver", "minuta");
             this.documento.status = 7;
             this.documento.descricaoDoStatus = "Devolvida";
@@ -256,7 +277,7 @@ export default {
             this.documento.disabled = true;
             this.exibeProximoDocumento();
           },
-          error => UtilsBL.errormsg(error, this)
+          (error) => UtilsBL.errormsg(error, this)
         );
     },
 
@@ -277,8 +298,8 @@ export default {
             numero: this.proximoDocumento.id,
             documento: this.proximoDocumento,
             lista: this.lista,
-            transitionName: "slide-left"
-          }
+            transitionName: "slide-left",
+          },
         });
       } else {
         this.$router.push({ name: "Mesa", params: { manter: false } });
@@ -287,12 +308,12 @@ export default {
 
     imprimir: function() {
       window.print();
-    }
+    },
   },
 
   components: {
-    DocumentoDevolver
-  }
+    DocumentoDevolver,
+  },
 };
 </script>
 <style>
@@ -451,5 +472,21 @@ section[contenteditable="true"] {
 .bveditor {
   border: 1px solid black;
   padding: 1em;
+}
+
+.editOldInline {
+  text-decoration: line-through;
+  color: rgb(155, 153, 153);
+  background-color: rgb(253, 203, 203);
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+}
+
+.editNewInline {
+  font-weight: bold;
+  color: white;
+  background-color: green;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 </style>

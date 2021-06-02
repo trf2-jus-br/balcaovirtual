@@ -3,24 +3,13 @@ import { event } from "vue-analytics";
 export default {
   formatDDMMYYYY: function(s) {
     if (!s) return;
-    return (
-      s.substring(8, 10) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4)
-    );
+    return s.substring(8, 10) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
   },
 
   formatDDMMYYYYHHMM: function(s) {
     if (s === undefined) return;
 
-    var r =
-      s.substring(6, 8) +
-      "/" +
-      s.substring(4, 6) +
-      "/" +
-      s.substring(0, 4) +
-      " " +
-      s.substring(8, 10) +
-      ":" +
-      s.substring(10, 12);
+    var r = s.substring(6, 8) + "/" + s.substring(4, 6) + "/" + s.substring(0, 4) + " " + s.substring(8, 10) + ":" + s.substring(10, 12);
     r = r.replace(" ", "&nbsp;");
     return r;
   },
@@ -28,38 +17,19 @@ export default {
   convertString2DateYYYYMMDDHHMM: function(s) {
     if (s === undefined) return;
 
-    var r =
-      s.substring(0, 4) +
-      "-" +
-      s.substring(4, 6) +
-      "-" +
-      s.substring(6, 8) +
-      "T" +
-      s.substring(8, 10) +
-      ":" +
-      s.substring(10, 12);
+    var r = s.substring(0, 4) + "-" + s.substring(4, 6) + "-" + s.substring(6, 8) + "T" + s.substring(8, 10) + ":" + s.substring(10, 12);
     return new Date(r);
   },
 
   formatJSDDMMYYYYHHMM: function(s) {
     if (!s) return;
-    var r =
-      s.substring(8, 10) +
-      "/" +
-      s.substring(5, 7) +
-      "/" +
-      s.substring(0, 4) +
-      "&nbsp;" +
-      s.substring(11, 13) +
-      ":" +
-      s.substring(14, 16);
+    var r = s.substring(8, 10) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4) + "&nbsp;" + s.substring(11, 13) + ":" + s.substring(14, 16);
     return r;
   },
 
   formatJSDDMMYYYY: function(s) {
     if (!s) return;
-    var r =
-      s.substring(8, 10) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
+    var r = s.substring(8, 10) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
     return r;
   },
 
@@ -68,11 +38,7 @@ export default {
       return s;
     }
     var subString = s.substr(0, n - 1);
-    return (
-      (useWordBoundary
-        ? subString.substr(0, subString.lastIndexOf(" "))
-        : subString) + "&hellip;"
-    );
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + "&hellip;";
   },
   arrayMove: function(a, oldIndex, newIndex) {
     if (newIndex >= a.length) {
@@ -159,11 +125,7 @@ export default {
 
   errormsg: function(error, component) {
     component.errormsg = error.data.errormsg;
-    if (
-      component.errormsg === undefined &&
-      error.statusText &&
-      error.statusText !== ""
-    ) {
+    if (component.errormsg === undefined && error.statusText && error.statusText !== "") {
       component.errormsg = error.statusText;
     }
     if (component.errormsg === undefined) {

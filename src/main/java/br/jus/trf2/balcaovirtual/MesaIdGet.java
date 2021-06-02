@@ -2,6 +2,7 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.crivano.swaggerservlet.SwaggerCall;
@@ -11,8 +12,13 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaDocumento;
+import br.jus.trf2.balcaovirtual.model.Padrao;
+import br.jus.trf2.balcaovirtual.util.Markdown;
+import br.jus.trf2.balcaovirtual.util.PadraoUtils.Minuta;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameLocalIdMesaId2DocumentosGet;
+import info.debatty.java.stringsimilarity.SorensenDice;
+import info.debatty.java.stringsimilarity.interfaces.NormalizedStringSimilarity;
 
 public class MesaIdGet implements IMesaIdGet {
 
@@ -76,6 +82,55 @@ public class MesaIdGet implements IMesaIdGet {
 				}
 				resp.list.add(i);
 			}
+		}
+
+		// Pipeline para minuta-padrão
+		if (resp.list.size() == 0)
+			return;
+
+		// Carregar padrões
+		List<Minuta> padroes = new ArrayList<>();
+		try (Dao dao = new Dao()) {
+			List<Padrao> l = dao.obtemPadroes(u.usuario);
+			for (Padrao i : l) {
+				padroes.add(new Minuta(i.getPadrId().toString(), i.getPadrTxConteudo()));
+			}
+		}
+		if (padroes.size() == 0)
+			return;
+
+		// Carregar Minutas
+		List<Minuta> minutas = new ArrayList<>();
+		for (MesaDocumento m : resp.list) {
+			if (m.conteudo == null || m.conteudo.trim().isEmpty())
+				continue;
+			minutas.add(new Minuta(m));
+		}
+
+		// Processar similaridade
+		NormalizedStringSimilarity metric = new SorensenDice();
+		for (Minuta minuta : minutas) {
+			for (Minuta padrao : padroes) {
+				double coef = metric.similarity(minuta.markdownSimplificado, padrao.markdownSimplificado);
+
+				if (coef > 0.75d) {
+					if (minuta.similaridade == 0d || minuta.similaridade < coef) {
+						minuta.padrao = padrao;
+						minuta.similaridade = coef;
+					}
+				}
+			}
+		}
+
+		for (Minuta minuta : minutas) {
+			if (minuta.padrao == null)
+				continue;
+			minuta.calcularDiff();
+			minuta.doc.similaridade = minuta.similaridade;
+			minuta.doc.diferencas = minuta.htmlDiff;
+			minuta.doc.idPadrao = minuta.padrao.id;
+			System.out.println(minuta.markdownDiff);
+			System.out.println(minuta.similaridade + " -> " + minuta.markdownSimplificado);
 		}
 	}
 

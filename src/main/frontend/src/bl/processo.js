@@ -21,11 +21,7 @@ export default {
     p.dadosBasicos.numero = this.formatarProcesso(p.dadosBasicos.numero);
 
     for (i = 0; i < p.dadosBasicos.polo.length; i++) {
-      p.dadosBasicos.polo[
-        i
-      ].modalidadePoloProcessual = this.modalidadePoloProcessual[
-        p.dadosBasicos.polo[i].polo
-      ];
+      p.dadosBasicos.polo[i].modalidadePoloProcessual = this.modalidadePoloProcessual[p.dadosBasicos.polo[i].polo];
       if (p.dadosBasicos.polo[i].polo === "AT") {
         fixed.partesAtivas = p.dadosBasicos.polo[i].parte;
       }
@@ -44,18 +40,13 @@ export default {
 
         // Formatar os textos
         if (doc.outroParametro && doc.outroParametro.textoMovimento) {
-          doc.outroParametro.textoMovimento = this.formatarTexto(
-            doc.outroParametro.textoMovimento
-          );
+          doc.outroParametro.textoMovimento = this.formatarTexto(doc.outroParametro.textoMovimento);
         }
 
         if (p.movimento) {
           for (j = 0; j < p.movimento.length; j++) {
             var mov = p.movimento[j];
-            if (
-              mov.hasOwnProperty("idDocumentoVinculado") &&
-              mov.idDocumentoVinculado.includes(doc.idDocumento)
-            ) {
+            if (mov.hasOwnProperty("idDocumentoVinculado") && mov.idDocumentoVinculado.includes(doc.idDocumento)) {
               if (!mov.documento) mov.documento = [];
               mov.documento.unshift(doc);
               f = true;
@@ -84,24 +75,11 @@ export default {
       fixed.movdoc = [];
       for (j = 0; j < p.movimento.length; j++) {
         mov = p.movimento[j];
-        if (
-          mov.complemento &&
-          mov.movimentoLocal &&
-          mov.movimentoLocal.descricao
-        ) {
+        if (mov.complemento && mov.movimentoLocal && mov.movimentoLocal.descricao) {
           for (k = 0; k < mov.complemento.length; k++) {
-            if (
-              UtilsBL.startsWith(
-                mov.complemento[k],
-                "Movimentado por:",
-                "Responsável:"
-              )
-            )
-              continue;
+            if (UtilsBL.startsWith(mov.complemento[k], "Movimentado por:", "Responsável:")) continue;
             if (mov.movimentoLocal.descricao !== mov.complemento[k]) {
-              if (
-                mov.complemento[k].indexOf(mov.movimentoLocal.descricao) === 0
-              ) {
+              if (mov.complemento[k].indexOf(mov.movimentoLocal.descricao) === 0) {
                 mov.movimentoLocal.descricao = mov.complemento[k];
               } else mov.movimentoLocal.descricao += " - " + mov.complemento[k];
             }
@@ -146,72 +124,38 @@ export default {
 
       this.fixMovDoc(fixed.movdoc);
 
-      if (
-        typeof p.dadosBasicos.valorCausa === "number" &&
-        p.dadosBasicos.valorCausa > 0
-      ) {
-        fixed.valorCausa =
-          "R$ " + UtilsBL.formatMoney(p.dadosBasicos.valorCausa, 2);
+      if (typeof p.dadosBasicos.valorCausa === "number" && p.dadosBasicos.valorCausa > 0) {
+        fixed.valorCausa = "R$ " + UtilsBL.formatMoney(p.dadosBasicos.valorCausa, 2);
       }
-      fixed.dataAjuizamento = UtilsBL.formatDDMMYYYYHHMM(
-        p.dadosBasicos.dataAjuizamento
-      );
+      fixed.dataAjuizamento = UtilsBL.formatDDMMYYYYHHMM(p.dadosBasicos.dataAjuizamento);
 
       var op = p.dadosBasicos.outroParametro;
       if (op.processoVinculado) {
-        fixed.processoVinculado = this.arrayOfStringsToObjects(
-          op.processoVinculado,
-          ["numero", "cnjClasse", "descrClasse", "digital"]
-        );
+        fixed.processoVinculado = this.arrayOfStringsToObjects(op.processoVinculado, ["numero", "cnjClasse", "descrClasse", "digital"]);
         for (i = 0; i < fixed.processoVinculado.length; i++) {
-          fixed.processoVinculado[i].link = this.colocarLink(
-            fixed.processoVinculado[i].numero
-          );
-          fixed.processoVinculado[i].nomeClasse = CnjClasseBL.nome(
-            fixed.processoVinculado[i].cnjClasse
-          );
-          fixed.processoVinculado[i].suporte =
-            fixed.processoVinculado[i].digital === "E"
-              ? "Digital"
-              : fixed.processoVinculado[i].digital === "F"
-              ? "Físico"
-              : "?";
+          fixed.processoVinculado[i].link = this.colocarLink(fixed.processoVinculado[i].numero);
+          fixed.processoVinculado[i].nomeClasse = CnjClasseBL.nome(fixed.processoVinculado[i].cnjClasse);
+          fixed.processoVinculado[i].suporte = fixed.processoVinculado[i].digital === "E" ? "Digital" : fixed.processoVinculado[i].digital === "F" ? "Físico" : "?";
         }
       } else if (p.dadosBasicos.processoVinculado) {
         fixed.processoVinculado = p.dadosBasicos.processoVinculado;
         for (i = 0; i < fixed.processoVinculado.length; i++) {
-          fixed.processoVinculado[i].link = this.colocarLink(
-            fixed.processoVinculado[i].numeroProcesso
-          );
+          fixed.processoVinculado[i].link = this.colocarLink(fixed.processoVinculado[i].numeroProcesso);
         }
       }
       if (op.recurso) {
-        fixed.recurso = this.arrayOfStringsToObjects(op.recurso, [
-          "numero",
-          "cnjClasse",
-          "descrClasse",
-          "digital"
-        ]);
+        fixed.recurso = this.arrayOfStringsToObjects(op.recurso, ["numero", "cnjClasse", "descrClasse", "digital"]);
         for (i = 0; i < fixed.recurso.length; i++) {
           fixed.recurso[i].link = this.colocarLink(fixed.recurso[i].numero);
-          fixed.recurso[i].nomeClasse = CnjClasseBL.nome(
-            fixed.recurso[i].cnjClasse
-          );
-          fixed.recurso[i].suporte =
-            fixed.recurso[i].digital === "E"
-              ? "Digital"
-              : fixed.recurso[i].digital === "F"
-              ? "Físico"
-              : "?";
+          fixed.recurso[i].nomeClasse = CnjClasseBL.nome(fixed.recurso[i].cnjClasse);
+          fixed.recurso[i].suporte = fixed.recurso[i].digital === "E" ? "Digital" : fixed.recurso[i].digital === "F" ? "Físico" : "?";
         }
       }
       if (op.processoOriginario) {
         op.processoOriginario = this.colocarLink(op.processoOriginario);
       }
       if (op.peticaoPendenteJuntada) {
-        op.peticaoPendenteJuntada = this.arrayToString(
-          op.peticaoPendenteJuntada
-        );
+        op.peticaoPendenteJuntada = this.arrayToString(op.peticaoPendenteJuntada);
       }
 
       if (op.numProcAdm) op.numProcAdm = this.arrayToString(op.numProcAdm);
@@ -221,18 +165,12 @@ export default {
       }
       if (op.informacoesParte) {
         var map = {};
-        var inf = this.arrayOfStringsToObjects(op.informacoesParte, [
-          "nome",
-          "tipoAtuacao",
-          "documento"
-        ]);
+        var inf = this.arrayOfStringsToObjects(op.informacoesParte, ["nome", "tipoAtuacao", "documento"]);
         for (i = 0; i < inf.length; i++) map[inf[i].nome] = inf[i];
         for (i = 0; i < p.dadosBasicos.polo.length; i++) {
           for (j = 0; j < p.dadosBasicos.polo[i].parte.length; j++) {
-            p.dadosBasicos.polo[i].parte[j].tipoAtuacao =
-              map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].tipoAtuacao;
-            p.dadosBasicos.polo[i].parte[j].documento =
-              map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].documento;
+            p.dadosBasicos.polo[i].parte[j].tipoAtuacao = map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].tipoAtuacao;
+            p.dadosBasicos.polo[i].parte[j].documento = map[p.dadosBasicos.polo[i].parte[j].pessoa.nome].documento;
           }
         }
       }
@@ -255,10 +193,7 @@ export default {
           // que o que está fora de posição
           for (var j = 0; j < i; j++) {
             var md = a[j];
-            if (
-              md.doc.idDocumento &&
-              Number(md.doc.idDocumento) < Number(movdoc.doc.idDocumento)
-            ) {
+            if (md.doc.idDocumento && Number(md.doc.idDocumento) < Number(movdoc.doc.idDocumento)) {
               UtilsBL.arrayMove(a, i, j);
               break;
             }
@@ -282,10 +217,7 @@ export default {
         fs = [];
         for (i = 0; i < a.length; i++) {
           for (k = 0; k < ff.length; k++) {
-            if (
-              (ff[k] === "#marca" && a[i].marca && a[i].marca.length > 0) ||
-              (a[i].mov && a[i].mov.tipo && a[i].mov.tipo.includes(ff[k]))
-            ) {
+            if ((ff[k] === "#marca" && a[i].marca && a[i].marca.length > 0) || (a[i].mov && a[i].mov.tipo && a[i].mov.tipo.includes(ff[k]))) {
               fs.push(a[i]);
               break;
             }
@@ -344,11 +276,7 @@ export default {
             break;
           }
         }
-        if (
-          movdoc[j].rowspan &&
-          j < md.length - 1 &&
-          movdoc[j + 1].rowspan === undefined
-        ) {
+        if (movdoc[j].rowspan && j < md.length - 1 && movdoc[j + 1].rowspan === undefined) {
           movdoc[j].rowspan += f ? 1 : -1;
         }
         doc.exibirTexto = f;
@@ -360,12 +288,7 @@ export default {
     if (s) s = s.replace(" e ", ", ");
     var a = s.split(", ");
     for (var i = 0; i < a.length; i++) {
-      a[i] =
-        '<a href="#/processo/' +
-        a[i] +
-        '" target="_blank">' +
-        this.formatarProcesso(a[i]) +
-        "</a>";
+      a[i] = '<a href="#/processo/' + a[i] + '" target="_blank">' + this.formatarProcesso(a[i]) + "</a>";
     }
     return a.join(", ");
   },
@@ -386,8 +309,7 @@ export default {
   formatarProcesso: function(filename) {
     var m = regexFormatarProcesso.exec(filename);
     if (!m) return;
-    var s =
-    m[1] + "-" + m[2] + "." + m[3] + "." + m[4] + "." + m[5] + "." + m[6];
+    var s = m[1] + "-" + m[2] + "." + m[3] + "." + m[4] + "." + m[5] + "." + m[6];
     if (m[7]) s += "/" + m[7];
     return s;
   },

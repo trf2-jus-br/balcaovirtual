@@ -4,12 +4,18 @@ module.exports = {
         node: true
     },
     rules: {
-        "prettier/prettier": ["warn", {
-            "printWidth": 180,
-        }],
-        "no-unused-vars": ["error", {
-            args: "none"
-        }],
+        "prettier/prettier": [
+            "none",
+            {
+                printWidth: 180
+            }
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                args: "none"
+            }
+        ],
         "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
         "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
         "vue/require-v-for-key": "off"

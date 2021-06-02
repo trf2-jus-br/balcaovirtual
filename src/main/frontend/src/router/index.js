@@ -18,12 +18,13 @@ import Sugestoes from "@/components/Sugestoes";
 import Sobre from "@/components/Sobre";
 import Status from "@/components/Status";
 import ProcessoBL from "../bl/processo.js";
+import PadraoLista from "@/components/PadraoLista";
+import Padrao from "@/components/Padrao";
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: "/login",
       name: "Login",
       component: Login
@@ -44,13 +45,7 @@ export default new Router({
       component: Processo,
       meta: {
         title: route => {
-          return (
-            "Processo " +
-            ProcessoBL.formatarProcesso(
-              ProcessoBL.somenteNumeros(route.params.numero)
-            ) +
-            ".."
-          );
+          return "Processo " + ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(route.params.numero)) + "..";
         }
       }
     },
@@ -115,13 +110,27 @@ export default new Router({
       }
     },
     {
+      path: "/padrao-lista",
+      name: "Lista de Padrões",
+      component: PadraoLista
+    },
+    {
+      path: "/padrao/:numero",
+      name: "Padrao",
+      component: Padrao,
+      meta: {
+        title: route => {
+          return "Padrao " + route.params.numero + "..";
+        }
+      }
+    },
+    {
       path: "/aviso-confirmado-recentes",
       name: "Avisos Confirmados Recentemente",
       component: AvisoConfirmadoRecentes
     },
     {
-      path:
-        "/aviso-confirmado-lista/:dataInicial/:dataFinal/:porConfirmacao/:porOmissao/:doGrupo",
+      path: "/aviso-confirmado-lista/:dataInicial/:dataFinal/:porConfirmacao/:porOmissao/:doGrupo",
       name: "Lista de Avisos Confirmados",
       component: AvisoConfirmadoLista
     },
@@ -147,6 +156,9 @@ export default new Router({
   ],
 
   scrollBehavior(to, from, savedPosition) {
-    if (to.name === "Documento") return { x: 0, y: 0 };
+    if (to.name === "Documento") return {
+      x: 0,
+      y: 0
+    };
   }
 });
