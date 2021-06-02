@@ -39,12 +39,7 @@
 
     <div class="row d-print-none">
       <div class="col-sm-12 mt-3">
-        <button
-          type="button"
-          @click="imprimir()"
-          id="imprimir"
-          class="btn btn-info float-right"
-        >
+        <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info float-right">
           Imprimir
         </button>
         <button type="button" @click="voltar()" class="btn btn-success">
@@ -57,8 +52,7 @@
       <div class="col col-sm-12">
         <hr class="mt-5 mb-1" />
         <p class="text-center">
-          As informações aqui contidas não produzem efeitos legais. Somente a
-          publicação no D.O. tem validade para contagem de prazos.
+          As informações aqui contidas não produzem efeitos legais. Somente a publicação no D.O. tem validade para contagem de prazos.
           <br />Consulta realizada em: {{ aviso.datarecebimento }}.
         </p>
       </div>

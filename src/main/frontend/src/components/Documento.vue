@@ -1,5 +1,5 @@
 <template>
-  <div class="container content profile">
+  <div class="container-fluid content profile" v-if="documento">
     <div class="row mt-3" v-if="errormsg !== undefined">
       <div class="col col-sm-12">
         <p class="alert alert-danger">
@@ -10,42 +10,22 @@
 
     <div class="row mt-3 mb-3">
       <div class="col-md-12">
-        <h4 class="text-center mb-0">
-          {{ documento.tipoDoDocumento }} {{ documento.numeroDoDocumento }}
-        </h4>
+        <h4 class="text-center mb-0" v-if="documento">{{ documento.tipoDoDocumento }} {{ documento.numeroDoDocumento }}</h4>
       </div>
     </div>
 
     <div v-show="editando">
       <div class="row no-gutters mt-2">
         <div class="col col-auto mr-auto mb-3">
-          <button
-            @click="cancelar()"
-            type="button"
-            id="download"
-            class="btn btn-light d-print-none"
-          >
-            <span class="fa fa-arrow-left"></span> Cancelar
-          </button>
+          <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none"><span class="fa fa-arrow-left"></span> Cancelar</button>
         </div>
         <div class="col col-auto mr-1 mb-3">
-          <button
-            @click="salvar()"
-            type="button"
-            class="btn btn-primary d-print-none"
-          >
-            <span class="fa fa-pencil"></span> Salvar
-          </button>
+          <button @click="salvar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Salvar</button>
         </div>
       </div>
       <div class="row" v-if="editando">
         <div class="col col-12">
-          <div
-            ref="editarea"
-            class="bveditor"
-            contenteditable="true"
-            v-html="buffer"
-          ></div>
+          <div ref="editarea" class="bveditor" contenteditable="true" v-html="buffer"></div>
         </div>
       </div>
     </div>
@@ -55,12 +35,7 @@
         <div class="col col-lg-8">
           <div class="row no-gutters mt-2">
             <div class="col col-auto mb-3">
-              <router-link
-                :to="{ name: 'Mesa', params: { manter: false } }"
-                tag="button"
-                class="btn btn-light d-print-none"
-                ><span class="fa fa-times"></span> Voltar</router-link
-              >
+              <router-link :to="{ name: 'Mesa', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"><span class="fa fa-times"></span> Voltar</router-link>
             </div>
             <div class="col col-auto mb-3">
               <router-link
@@ -107,31 +82,16 @@
           <div class="row no-gutters mt-2">
             <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button
-                @click.prevent="exibirDevolver()"
-                type="button"
-                class="btn btn-info d-print-none"
-              >
-                <span class="fa fa-comment"></span> Devolver
-              </button>
+              <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none"><span class="fa fa-plus"></span> Padrão</button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button
-                @click.prevent="editar()"
-                type="button"
-                class="btn btn-primary d-print-none"
-              >
-                <span class="fa fa-pencil"></span> Editar
-              </button>
+              <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none"><span class="fa fa-comment"></span> Devolver</button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button
-                @click.prevent="assinarComSenha()"
-                type="button"
-                class="btn btn-success d-print-none"
-              >
-                <span class="fa fa-certificate"></span> Assinar
-              </button>
+              <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Editar</button>
+            </div>
+            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+              <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none"><span class="fa fa-certificate"></span> Assinar</button>
             </div>
           </div>
           <div class="card mb-3">
@@ -152,8 +112,7 @@
                 >
                 <br />Cadastro:
                 <span v-html="documento.dataDeInclusaoFormatada"></span>
-                <br />Responsável: {{ documento.nomeDoUsuarioQueIncluiu }}
-                <br />Status: {{ documento.descricaoDoStatus }}
+                <br />Responsável: {{ documento.nomeDoUsuarioQueIncluiu }} <br />Status: {{ documento.descricaoDoStatus }}
               </p>
             </div>
           </div>
@@ -172,10 +131,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      v-for="lembrete in documento.lembretes"
-                      :key="lembrete.id"
-                    >
+                    <tr v-for="lembrete in documento.lembretes" :key="lembrete.id">
                       <th scope="row">{{ lembrete.conteudo }}</th>
                       <td>{{ lembrete.identificadorDoUsuario }}</td>
                       <td>{{ lembrete.dataDeInclusaoFormatada }}</td>
@@ -188,10 +144,7 @@
         </div>
       </div>
     </div>
-    <documento-devolver
-      ref="documentoDevolver"
-      @ok="devolver"
-    ></documento-devolver>
+    <documento-devolver ref="documentoDevolver" @ok="devolver"></documento-devolver>
   </div>
 </template>
 
@@ -214,9 +167,10 @@ export default {
   },
   computed: {
     indice: function() {
-      for (var i = 0; i < this.lista.length; i++) {
-        if (this.documento === this.lista[i]) return i;
-      }
+      if (this.lista)
+        for (var i = 0; i < this.lista.length; i++) {
+          if (this.documento === this.lista[i]) return i;
+        }
       return 0;
     },
     proximoDocumento: function() {
@@ -230,28 +184,29 @@ export default {
   },
   methods: {
     preprocess: function(s) {
+      if (!s) return;
       console.log(s);
-      return s
-        .replace(
-          'contentEditable="true"',
-          'contentEditable="false" data-bv_edit="true"'
-        )
-        .replace(/&#x2013;/g, "-");
+      return s.replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"').replace(/&#x2013;/g, "-");
     },
     posprocess: function(s) {
-      return s.replace(
-        'contentEditable="false" data-bv_edit="true"',
-        'contentEditable="true"'
-      );
+      if (!s) return;
+      return s.replace('contentEditable="false" data-bv_edit="true"', 'contentEditable="true"');
     },
     voltar: function() {
       this.$router.go(-1);
     },
 
-    editar: function() {
-      var el = this.$refs["conteudo"].querySelector(
-        "section[data-bv_edit=true]"
+    adicionarPadrao: function() {
+      var el = this.$refs["conteudo"].querySelector("section[data-bv_edit=true]");
+      this.buffer = el.innerHTML;
+      this.$http.post("padrao", { html: this.documento.conteudo }, { block: true }).then(
+        () => {},
+        error => UtilsBL.errormsg(error, this)
       );
+    },
+
+    editar: function() {
+      var el = this.$refs["conteudo"].querySelector("section[data-bv_edit=true]");
       // el.setAttribute("contenteditable", "true")
       this.buffer = el.innerHTML;
       // this.buffer = this.documento.conteudo
@@ -260,21 +215,12 @@ export default {
 
     salvar: function() {
       this.buffer = this.$refs["editarea"].innerHTML;
-      this.$refs["conteudo"].querySelector(
-        "section[data-bv_edit=true]"
-      ).innerHTML = this.buffer;
+      this.$refs["conteudo"].querySelector("section[data-bv_edit=true]").innerHTML = this.buffer;
       this.$http
         .post(
-          "mesa/" +
-            "null" +
-            "/documento/" +
-            this.documento.id +
-            "/salvar?sistema=" +
-            this.documento.sistema,
+          "mesa/" + "null" + "/documento/" + this.documento.id + "/salvar?sistema=" + this.documento.sistema,
           {
-            html: this.posprocess(
-              this.$refs["conteudo"].querySelector("article").outerHTML
-            )
+            html: this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML)
           },
           { block: true }
         )
@@ -295,12 +241,7 @@ export default {
     devolver: function(lembrete) {
       this.$http
         .post(
-          "mesa/" +
-            "null" +
-            "/documento/" +
-            this.documento.id +
-            "/devolver?sistema=" +
-            this.documento.sistema,
+          "mesa/" + "null" + "/documento/" + this.documento.id + "/devolver?sistema=" + this.documento.sistema,
           {
             lembrete: lembrete
           },
@@ -324,11 +265,7 @@ export default {
     },
 
     assinarComSenha: function() {
-      Bus.$emit(
-        "iniciarAssinaturaComSenha",
-        [this.documento],
-        this.exibeProximoDocumento
-      );
+      Bus.$emit("iniciarAssinaturaComSenha", [this.documento], this.exibeProximoDocumento);
       // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
     },
 

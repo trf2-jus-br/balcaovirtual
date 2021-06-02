@@ -1,15 +1,13 @@
 package br.jus.trf2.balcaovirtual;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IStatusChaveGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.StatusChaveGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.StatusChaveGetResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
 @AcessoPublico
 public class StatusChaveGet implements IStatusChaveGet {
 
 	@Override
-	public void run(StatusChaveGetRequest req, StatusChaveGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Status as = Status.get(req.chave);
 		if (as == null)
 			return;

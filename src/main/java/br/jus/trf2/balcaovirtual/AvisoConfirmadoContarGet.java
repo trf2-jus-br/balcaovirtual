@@ -8,17 +8,15 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoContarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoContarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoConfirmadoContarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.QuantidadeConfirmadaPorData;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameAvisoConfirmadoContarGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.QuantidadeConfirmada;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisoConfirmadoContarGetResponse;
 
 public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 
 	@Override
-	public void run(AvisoConfirmadoContarGetRequest req, AvisoConfirmadoContarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
@@ -28,7 +26,7 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + jwt.get("username")
 									+ "/aviso-confirmado/contar?dias=100",
-							null, UsuarioUsernameAvisoConfirmadoContarGetResponse.class));
+							null, IUsuarioUsernameAvisoConfirmadoContarGet.Response.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
@@ -36,7 +34,7 @@ public class AvisoConfirmadoContarGet implements IAvisoConfirmadoContarGet {
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernameAvisoConfirmadoContarGetResponse r = (UsuarioUsernameAvisoConfirmadoContarGetResponse) mcr.responses
+			IUsuarioUsernameAvisoConfirmadoContarGet.Response r = (IUsuarioUsernameAvisoConfirmadoContarGet.Response) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (QuantidadeConfirmada i : r.list) {

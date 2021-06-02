@@ -3,8 +3,6 @@ package br.jus.trf2.balcaovirtual;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ClasseIdMarcadoresGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IClasseIdMarcadoresGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Marcador;
 import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
@@ -12,7 +10,7 @@ import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 public class ClasseIdMarcadoresGet implements IClasseIdMarcadoresGet {
 
 	@Override
-	public void run(ClasseIdMarcadoresGetRequest req, ClasseIdMarcadoresGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		resp.list = new ArrayList<>();
 
 		try (Dao dao = new Dao()) {

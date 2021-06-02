@@ -2,12 +2,7 @@
   <div>
     <label v-if="label" :for="name">{{ label }}</label>
     <div v-if="!edit">{{ value }}</div>
-    <validation-provider
-      :rules="validate"
-      :immediate="immediate"
-      v-slot="{ errors }"
-      ref="vp"
-    >
+    <validation-provider :rules="validate" :immediate="immediate" v-slot="{ errors }" ref="vp">
       <input
         :type="type"
         v-if="edit &amp;&amp; themask"
@@ -46,9 +41,7 @@ import { mask } from "vue-the-mask";
 export default {
   mounted() {
     this.$on("change", val => {
-      this.$refs.vp
-        .validate()
-        .then(r => this.$emit(r.valid ? "valid" : "invalid"));
+      this.$refs.vp.validate().then(r => this.$emit(r.valid ? "valid" : "invalid"));
     });
   },
   name: "my-input",

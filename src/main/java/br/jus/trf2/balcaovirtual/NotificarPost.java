@@ -1,18 +1,15 @@
 package br.jus.trf2.balcaovirtual;
 
 import com.crivano.swaggerservlet.PresentableException;
-import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.INotificarPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.NotificarPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.NotificarPostResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
 @AcessoPublico
 public class NotificarPost implements INotificarPost {
 
 	@Override
-	public void run(NotificarPostRequest req, NotificarPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		String auth = AutenticarPost.getAuthorizationHeader();
 		String property = BalcaoVirtualServlet.INSTANCE.getProperty("notificar.password");
 		if (property == null)

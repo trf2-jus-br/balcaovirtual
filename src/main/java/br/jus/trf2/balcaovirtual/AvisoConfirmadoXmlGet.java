@@ -3,14 +3,12 @@ package br.jus.trf2.balcaovirtual;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoXmlGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoXmlGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoConfirmadoXmlGet;
 
 public class AvisoConfirmadoXmlGet implements IAvisoConfirmadoXmlGet {
 
 	@Override
-	public void run(AvisoConfirmadoXmlGetRequest req, AvisoConfirmadoXmlGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.isInterno())
 			throw new PresentableUnloggedException(

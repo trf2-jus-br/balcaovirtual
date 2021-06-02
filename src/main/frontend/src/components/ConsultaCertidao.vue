@@ -17,13 +17,7 @@
               'btn-outline-primary': pasta !== 'emitir'
             }"
           >
-            <input
-              v-show="false"
-              type="radio"
-              v-model="pasta"
-              value="emitir"
-              autocomplete="off"
-            />
+            <input v-show="false" type="radio" v-model="pasta" value="emitir" autocomplete="off" />
             <span class="fa fa-plus"></span> Emitir
           </label>
           <label
@@ -33,13 +27,7 @@
               'btn-outline-primary': pasta !== 'autenticar'
             }"
           >
-            <input
-              v-show="false"
-              type="radio"
-              v-model="pasta"
-              value="autenticar"
-              autocomplete="off"
-            />
+            <input v-show="false" type="radio" v-model="pasta" value="autenticar" autocomplete="off" />
             <span class="fa fa-check"></span> Consultar Autenticidade
           </label>
           <label
@@ -49,13 +37,7 @@
               'btn-outline-primary': pasta !== 'reimprimir'
             }"
           >
-            <input
-              v-show="false"
-              type="radio"
-              v-model="pasta"
-              value="reimprimir"
-              autocomplete="off"
-            />
+            <input v-show="false" type="radio" v-model="pasta" value="reimprimir" autocomplete="off" />
             <span class="fa fa-print"></span> Imprimir Certidão Já Requerida
           </label>
         </div>
@@ -74,14 +56,7 @@
                 <div class="row">
                   <div class="col">
                     <div class="form-group">
-                      <my-select
-                        name="sistema"
-                        label="Órgão"
-                        v-model="sistema"
-                        :list="sistemas"
-                        :edit="true"
-                        validate="required"
-                      ></my-select>
+                      <my-select name="sistema" label="Órgão" v-model="sistema" :list="sistemas" :edit="true" validate="required"></my-select>
                     </div>
                   </div>
                 </div>
@@ -89,12 +64,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="requisitante">CPF do Requisitante</label>
-                      <my-input
-                        name="requisitante"
-                        v-model="requisitante"
-                        themask="###.###.###-##"
-                        :validate="pasta == 'emitir' ? 'required|cpf' : ''"
-                      ></my-input>
+                      <my-input name="requisitante" v-model="requisitante" themask="###.###.###-##" :validate="pasta == 'emitir' ? 'required|cpf' : ''"></my-input>
                     </div>
                   </div>
                 </div>
@@ -102,12 +72,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="numero">Número da Certidão</label>
-                      <my-input
-                        name="numero"
-                        v-model="numero"
-                        themask="####.########"
-                        :validate="pasta != 'emitir' ? 'required|cert' : ''"
-                      ></my-input>
+                      <my-input name="numero" v-model="numero" themask="####.########" :validate="pasta != 'emitir' ? 'required|cert' : ''"></my-input>
                     </div>
                   </div>
                 </div>
@@ -116,12 +81,7 @@
                     <div class="form-group">
                       <label for="cpfcnpj">CPF/CNPJ da Certidão</label>
 
-                      <my-input
-                        name="cpfcnpj"
-                        v-model="cpfcnpj"
-                        :themask="['###.###.###-##', '##.###.###/####-##']"
-                        validate="required|cpfcnpj"
-                      ></my-input>
+                      <my-input name="cpfcnpj" v-model="cpfcnpj" :themask="['###.###.###-##', '##.###.###/####-##']" validate="required|cpfcnpj"></my-input>
                     </div>
                   </div>
                 </div>
@@ -139,13 +99,7 @@
                       :disabled="recaptchaLoading || invalid"
                       badge="bottomleft"
                     >
-                      {{
-                        pasta === "emitir"
-                          ? "Emitir"
-                          : pasta === "autenticar"
-                          ? "Autenticar"
-                          : "Reimprimir"
-                      }}
+                      {{ pasta === "emitir" ? "Emitir" : pasta === "autenticar" ? "Autenticar" : "Reimprimir" }}
                     </invisible-recaptcha>
                   </div>
                 </div>
@@ -169,8 +123,7 @@ export default {
     if (this.$route.params.numero) {
       this.numero = this.$route.params.numero;
       if (this.$parent.jwt) this.mostrarProcesso(this.numero);
-      else if (this.$route.query.token)
-        this.mostrarProcesso(this.numero, undefined, this.$route.query.token);
+      else if (this.$route.query.token) this.mostrarProcesso(this.numero, undefined, this.$route.query.token);
       else this.fire(this.$refs.captcha);
     }
   },
@@ -196,8 +149,7 @@ export default {
 
   computed: {
     sitekey: function() {
-      if (this.$parent.test && this.$parent.test.properties)
-        return this.$parent.test.properties["balcaovirtual.recaptcha.site.key"];
+      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties["balcaovirtual.recaptcha.site.key"];
       return "undefined";
     },
     sistemas: function() {
@@ -206,11 +158,7 @@ export default {
       for (var i = 0; i < this.$parent.sistemasCertificadores.length; i++) {
         a.push({
           id: this.$parent.sistemasCertificadores[i],
-          nome: this.$parent.test.properties[
-            "balcaovirtual." +
-              this.$parent.sistemasCertificadores[i] +
-              ".cert.name"
-          ]
+          nome: this.$parent.test.properties["balcaovirtual." + this.$parent.sistemasCertificadores[i] + ".cert.name"]
         });
       }
       return a;

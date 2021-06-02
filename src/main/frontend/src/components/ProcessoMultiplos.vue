@@ -12,30 +12,13 @@
       @ok="handleOk"
     >
       <form>
-        <label class="control-label" for="processos" style="width: 100%"
-          >Números dos Processos
-        </label>
-        <textarea
-          class="form-control"
-          style="width: 100%"
-          id="processos"
-          aria-describedby="processosHelp"
-          v-model="processos"
-          placeholder=""
-          rows="10"
-          autofocus
-        ></textarea>
+        <label class="control-label" for="processos" style="width: 100%">Números dos Processos </label>
+        <textarea class="form-control" style="width: 100%" id="processos" aria-describedby="processosHelp" v-model="processos" placeholder="" rows="10" autofocus></textarea>
         <small id="processosHelp" class="form-text text-muted"
-          >Informe os números dos processos separados por vírgula ou quebra de
-          linha. Os números podem incluir pontos e traços ou podem ser
-          representados apenas por seus algarismos.</small
+          >Informe os números dos processos separados por vírgula ou quebra de linha. Os números podem incluir pontos e traços ou podem ser representados apenas por seus
+          algarismos.</small
         >
-        <em
-          v-if="errormsg &amp;&amp; errormsg !== ''"
-          for="processos"
-          class="invalid"
-          >{{ errormsg }}</em
-        >
+        <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{ errormsg }}</em>
       </form>
     </b-modal>
   </div>

@@ -25,18 +25,15 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AutenticarPostResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAutenticarPost;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameGet;
 
 @AcessoPublico
 public class AutenticarPost implements IAutenticarPost {
 
 	@Override
-	public void run(AutenticarPostRequest req, AutenticarPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
 			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
@@ -53,10 +50,10 @@ public class AutenticarPost implements IAutenticarPost {
 		for (String system : systems) {
 			String urlsys = Utils.getApiUrl(system);
 
-			UsuarioUsernameGetRequest q = new UsuarioUsernameGetRequest();
+			IUsuarioUsernameGet.Request q = new IUsuarioUsernameGet.Request();
 			q.username = req.username;
 			mapp.put(system, new SwaggerCallParameters(system + "-autenticar-usuário", authorization, "GET",
-					urlsys + "/usuario/" + req.username, q, UsuarioUsernameGetResponse.class));
+					urlsys + "/usuario/" + req.username, q, IUsuarioUsernameGet.Response.class));
 
 		}
 
@@ -69,7 +66,7 @@ public class AutenticarPost implements IAutenticarPost {
 		String nome = null;
 		String email = null;
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernameGetResponse u = (UsuarioUsernameGetResponse) mcr.responses.get(system);
+			IUsuarioUsernameGet.Response u = (IUsuarioUsernameGet.Response) mcr.responses.get(system);
 			if (u.codusu == null)
 				continue;
 			if (origem == null)

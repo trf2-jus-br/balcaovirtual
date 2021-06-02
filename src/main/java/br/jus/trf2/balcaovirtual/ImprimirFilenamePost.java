@@ -3,15 +3,13 @@ package br.jus.trf2.balcaovirtual;
 import java.io.ByteArrayInputStream;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IImprimirFilenamePost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenamePostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenamePostResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
 @AcessoPublico
 public class ImprimirFilenamePost implements IImprimirFilenamePost {
 
 	@Override
-	public void run(ImprimirFilenamePostRequest req, ImprimirFilenamePostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		byte[] ab = new Html2Pdf().converterJsoup(req.html, false);
 
 		resp.contentdisposition = req.disposition + ";filename=" + req.filename;

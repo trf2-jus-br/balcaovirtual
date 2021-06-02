@@ -6,8 +6,6 @@ import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.CertidaoEmitirRequisitanteCpfcnpjPost.FetchResponse;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoRequererRequisitanteCpfcnpjPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoRequererRequisitanteCpfcnpjPostResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoRequererRequisitanteCpfcnpjPost;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
@@ -15,8 +13,7 @@ import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 public class CertidaoRequererRequisitanteCpfcnpjPost implements ICertidaoRequererRequisitanteCpfcnpjPost {
 
 	@Override
-	public void run(CertidaoRequererRequisitanteCpfcnpjPostRequest req,
-			CertidaoRequererRequisitanteCpfcnpjPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (!CertidaoObterTokenGet.isValidToken(req.token, null, req.requisitante, req.cpfcnpj))
 			throw new PresentableException("Token inválido");
 

@@ -25,17 +25,9 @@
           </div>
         </div>
 
-        <div
-          v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'"
-          class="row no-gutters mt-2"
-        >
+        <div v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'" class="row no-gutters mt-2">
           <div class="col col-auto ml-auto mb-3">
-            <button
-              type="button"
-              @click="imprimir()"
-              id="imprimir"
-              class="btn btn-info d-print-none"
-            >
+            <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
               <span class="fa fa-print"></span>
               Imprimir
             </button>
@@ -48,12 +40,7 @@
               <span v-html="html"></span>
               <br />
 
-              <button
-                type="button"
-                @click="requerer()"
-                id="requerer"
-                class="btn btn-warning mt-3 mb-3"
-              >
+              <button type="button" @click="requerer()" id="requerer" class="btn btn-warning mt-3 mb-3">
                 Requerer
               </button>
             </p>
@@ -100,15 +87,11 @@ export default {
   },
   data() {
     return {
-      token: this.$route.params.token
-        ? this.$route.params.token
-        : this.$route.query.token,
+      token: this.$route.params.token ? this.$route.params.token : this.$route.query.token,
       requisitante: this.$route.params.requisitante,
       numero: this.$route.params.numero,
       cpfcnpj: this.$route.params.cpfcnpj,
-      sistema: this.$route.params.sistema
-        ? this.$route.params.sistema
-        : this.$route.query.sistema,
+      sistema: this.$route.params.sistema ? this.$route.params.sistema : this.$route.query.sistema,
       tipo: undefined,
       html: undefined,
       nome: undefined,
@@ -122,34 +105,21 @@ export default {
   methods: {
     emitir: function() {
       this.warningmsg = "Processando, aguarde...";
-      this.$http
-        .post(
-          "certidao/emitir/" +
-            this.requisitante +
-            "/" +
-            this.cpfcnpj +
-            "?sistema=" +
-            this.sistema +
-            "&token=" +
-            this.token,
-          undefined,
-          { block: true }
-        )
-        .then(
-          response => {
-            this.warningmsg = undefined;
-            this.tipo = response.data.tipo;
-            this.numero = response.data.numero;
-            this.html = response.data.html;
-            this.nome = response.data.nome;
-            this.qs = response.data.qs;
-            this.params = response.data.params;
-          },
-          error => {
-            this.warningmsg = undefined;
-            this.errormsg = error.data.errormsg;
-          }
-        );
+      this.$http.post("certidao/emitir/" + this.requisitante + "/" + this.cpfcnpj + "?sistema=" + this.sistema + "&token=" + this.token, undefined, { block: true }).then(
+        response => {
+          this.warningmsg = undefined;
+          this.tipo = response.data.tipo;
+          this.numero = response.data.numero;
+          this.html = response.data.html;
+          this.nome = response.data.nome;
+          this.qs = response.data.qs;
+          this.params = response.data.params;
+        },
+        error => {
+          this.warningmsg = undefined;
+          this.errormsg = error.data.errormsg;
+        }
+      );
     },
 
     requerer: function() {
@@ -186,56 +156,34 @@ export default {
 
     autenticar: function() {
       this.warningmsg = "Processando, aguarde...";
-      this.$http
-        .get(
-          "certidao/autenticar/" +
-            this.numero +
-            "/" +
-            this.cpfcnpj +
-            "?sistema=" +
-            this.sistema +
-            "&token=" +
-            this.token
-        )
-        .then(
-          response => {
-            this.warningmsg = undefined;
-            this.tipo = response.data.tipo;
-            this.numero = response.data.numero;
-            this.html = response.data.html;
-          },
-          error => {
-            this.warningmsg = undefined;
-            this.errormsg = error.data.errormsg;
-          }
-        );
+      this.$http.get("certidao/autenticar/" + this.numero + "/" + this.cpfcnpj + "?sistema=" + this.sistema + "&token=" + this.token).then(
+        response => {
+          this.warningmsg = undefined;
+          this.tipo = response.data.tipo;
+          this.numero = response.data.numero;
+          this.html = response.data.html;
+        },
+        error => {
+          this.warningmsg = undefined;
+          this.errormsg = error.data.errormsg;
+        }
+      );
     },
 
     reimprimir: function() {
       this.warningmsg = "Processando, aguarde...";
-      this.$http
-        .get(
-          "certidao/reimprimir/" +
-            this.numero +
-            "/" +
-            this.cpfcnpj +
-            "?sistema=" +
-            this.sistema +
-            "&token=" +
-            this.token
-        )
-        .then(
-          response => {
-            this.warningmsg = undefined;
-            this.tipo = response.data.tipo;
-            this.numero = response.data.numero;
-            this.html = response.data.html;
-          },
-          error => {
-            this.warningmsg = undefined;
-            this.errormsg = error.data.errormsg;
-          }
-        );
+      this.$http.get("certidao/reimprimir/" + this.numero + "/" + this.cpfcnpj + "?sistema=" + this.sistema + "&token=" + this.token).then(
+        response => {
+          this.warningmsg = undefined;
+          this.tipo = response.data.tipo;
+          this.numero = response.data.numero;
+          this.html = response.data.html;
+        },
+        error => {
+          this.warningmsg = undefined;
+          this.errormsg = error.data.errormsg;
+        }
+      );
     },
 
     imprimir_old: function() {
@@ -253,10 +201,7 @@ export default {
               allowUnsafeSymbols: true,
               useNamedReferences: true
             }),
-            disposition:
-              disposition === "attachment"
-                ? "?disposition=attachment"
-                : "?disposition=inline"
+            disposition: disposition === "attachment" ? "?disposition=attachment" : "?disposition=inline"
           },
           {
             headers: {
@@ -267,8 +212,7 @@ export default {
         )
         .then(
           response => {
-            window.location =
-              process.env.VUE_APP_API_URL + "/imprimir/" + filename;
+            window.location = process.env.VUE_APP_API_URL + "/imprimir/" + filename;
           },
           error => {
             this.warningmsg = undefined;

@@ -1,10 +1,5 @@
 <template>
-  <transition
-    v-on:before-enter="beforeEnter"
-    v-on:enter="enter"
-    v-on:after-enter="afterEnter"
-    v-bind:css="false"
-  >
+  <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-bind:css="false">
     <div class="top-progress" :style="barStyle" v-if="show || ended">
       <div class="peg" :style="pegStyle"></div>
     </div>
@@ -122,11 +117,7 @@ export default {
         top: "0",
         left: "0",
         right: "0",
-        width: `${
-          this.ended
-            ? this.max
-            : this.min + (this.progress * (this.max - this.min)) / 100
-        }%`,
+        width: `${this.ended ? this.max : this.min + (this.progress * (this.max - this.min)) / 100}%`,
         height: `${this.height}px`,
         backgroundColor: this.progressColor,
         transition: `all ${this.speed}ms ${this.easing}`,
@@ -206,10 +197,7 @@ export default {
 
       let o;
       if (this.isStarted) {
-        o =
-          amount < this.progress
-            ? clamp(amount, 0, 100)
-            : clamp(amount, this.minimum, 100);
+        o = amount < this.progress ? clamp(amount, 0, 100) : clamp(amount, this.minimum, 100);
       } else {
         o = 0;
       }

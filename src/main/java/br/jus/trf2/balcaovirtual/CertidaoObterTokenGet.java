@@ -12,8 +12,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoObterTokenGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoObterTokenGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoObterTokenGet;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
@@ -21,7 +19,7 @@ import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 public class CertidaoObterTokenGet implements ICertidaoObterTokenGet {
 
 	@Override
-	public void run(CertidaoObterTokenGetRequest req, CertidaoObterTokenGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (!Utils.verifyCaptcha(req.captcha))
 			throw new PresentableUnloggedException("Token de reCaptcha inválido");
 		resp.token = jwt(req.numero, req.requisitante, req.cpfcnpj);

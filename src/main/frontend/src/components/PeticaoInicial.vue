@@ -2,10 +2,7 @@
   <div class="container-fluid content">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center mt-3 mb-3">
-          <span v-if="!editando">Confirmação de Recebimento de</span> Petição
-          Inicial
-        </h4>
+        <h4 class="text-center mt-3 mb-3"><span v-if="!editando">Confirmação de Recebimento de</span> Petição Inicial</h4>
       </div>
     </div>
 
@@ -19,9 +16,7 @@
 
     <div class="row" v-if="warningmsg">
       <div class="col col-sm-12">
-        <p class="alert alert-warning">
-          <strong>Atenção!</strong> {{ warningmsg }}
-        </p>
+        <p class="alert alert-warning"><strong>Atenção!</strong> {{ warningmsg }}</p>
       </div>
     </div>
 
@@ -37,9 +32,7 @@
           <p class="alert alert-success">
             <strong>Petição:</strong> {{ protocolo }}<br />
             <strong>Processo:</strong> {{ numeroFormatado }}<br />
-            <span v-show="unidade"
-              ><strong>Órgão:</strong> {{ unidade }}<br
-            /></span>
+            <span v-show="unidade"><strong>Órgão:</strong> {{ unidade }}<br /></span>
             <strong>Data de Entrada:</strong>
             <span v-html="dataDeProtocolo"></span>
           </p>
@@ -50,8 +43,7 @@
     <div class="row" v-if="sistemasCarregados &amp;&amp; sistemas.length == 0">
       <div class="col col-sm-12">
         <p class="alert alert-warning">
-          Login do usuário não permite peticionamento inicial em nenhum sistema
-          processual.
+          Login do usuário não permite peticionamento inicial em nenhum sistema processual.
         </p>
       </div>
     </div>
@@ -60,48 +52,30 @@
       <validation-observer v-slot="{ invalid }">
         <div class="row pb-4" v-show="arquivos.length == 0">
           <div class="col-md-12">
-            <vue-clip
-              ref="clip"
-              :options="vueclipOptions"
-              :on-added-file="addedFileProxy"
-              :on-complete="completeProxy"
-            >
+            <vue-clip ref="clip" :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
               <template slot="clip-uploader-action">
                 <div>
                   <div class="dz-message drop-box">
-                    Arraste os arquivos que compoem a petição inicial e solte
-                    eles nesta área, ou clique aqui para selecioná-los.<br />Use
-                    o nome dos PDFs para ordenar as peças, por exemplo:
-                    01-Termo.pdf, 02-Identidade.pdf, etc. <br />Cada PDF está
-                    limitado a 5MB.
+                    Arraste os arquivos que compoem a petição inicial e solte eles nesta área, ou clique aqui para selecioná-los.<br />Use o nome dos PDFs para ordenar as peças,
+                    por exemplo: 01-Termo.pdf, 02-Identidade.pdf, etc. <br />Cada PDF está limitado a 5MB.
                   </div>
                 </div>
               </template>
 
               <template slot="clip-uploader-body" slot-scope="props">
-                <div
-                  class="col-md-12 mt-3"
-                  v-if="hasErrorMessages(props.files)"
-                >
+                <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
                   <div class="alert alert-danger mb-0">
-                    <strong>Arquivos inválidos!</strong> Não foi possível
-                    aceitar os seguintes arquivos:
+                    <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:
                     <ul class="mb-0">
                       <template v-for="ifile in props.files">
-                        <li v-if="ifile.errorMessage">
-                          {{ ifile.name }} ({{ ifile.errorMessage }})
-                        </li>
+                        <li v-if="ifile.errorMessage">{{ ifile.name }} ({{ ifile.errorMessage }})</li>
                       </template>
                     </ul>
                   </div>
                 </div>
               </template>
             </vue-clip>
-            <div
-              v-if="arquivos.length == 0"
-              class="invalid-feedback"
-              style="display: block"
-            >
+            <div v-if="arquivos.length == 0" class="invalid-feedback" style="display: block">
               É necessário fornecer os PDFs para prosseguir
             </div>
           </div>
@@ -112,11 +86,7 @@
             <h5 class="mt-3 mb-2">Arquivos</h5>
           </div>
           <div v-if="editando" class="col-sm-6" style="height: 100%">
-            <button
-              type="button"
-              @click="adicionarArquivo()"
-              class="btn btn-info btn-sm mt-2 float-right"
-            >
+            <button type="button" @click="adicionarArquivo()" class="btn btn-info btn-sm mt-2 float-right">
               Adicionar Arquivo
             </button>
           </div>
@@ -165,34 +135,15 @@
 
                     <td>
                       <a @click="view(doc)">
-                        <a
-                          :href="'api/v1/arquivo-temporario/' + f.id"
-                          target="_blank"
-                          >{{ f.nome }}</a
-                        >
+                        <a :href="'api/v1/arquivo-temporario/' + f.id" target="_blank">{{ f.nome }}</a>
                       </a>
                     </td>
 
-                    <td
-                      class="status-td"
-                      :rowspan="f.protocolado ? f.rowspan : 1"
-                      v-show="f.protocolado ? !f.anexo : true"
-                    >
-                      <span
-                        v-show="f.file.progress &amp;&amp; f.file.progress < 100"
-                        >{{ f.file.progress.toFixed(1) }}%</span
-                      >
-                      <span
-                        :class="{ green: f.protocolado }"
-                        v-show="f.file.progress === 100 &amp;&amp; !f.errormsg"
-                        >{{ f.status }}</span
-                      >
-                      <span v-show="f.errormsg" :class="{ red: true }">{{
-                        f.errormsg
-                      }}</span>
-                      <span v-show="f.$error"
-                        >{{ f.$error }} {{ f.$errorParam }}</span
-                      >
+                    <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
+                      <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{ f.file.progress.toFixed(1) }}%</span>
+                      <span :class="{ green: f.protocolado }" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{ f.status }}</span>
+                      <span v-show="f.errormsg" :class="{ red: true }">{{ f.errormsg }}</span>
+                      <span v-show="f.$error">{{ f.$error }} {{ f.$errorParam }}</span>
                     </td>
 
                     <td v-if="editando" align="right">
@@ -204,11 +155,7 @@
                 </tbody>
               </table>
             </div>
-            <div
-              v-if="faltaTeorDaPeticao"
-              class="invalid-feedback"
-              style="display: block"
-            >
+            <div v-if="faltaTeorDaPeticao" class="invalid-feedback" style="display: block">
               É necessário informar o teor da petição
             </div>
           </div>
@@ -219,21 +166,10 @@
             <h5 class="mt-3 mb-2">Dados Básicos</h5>
           </div>
         </div>
-        <div
-          class="pt-3 pb-3 pl-3 pr-3"
-          style="background-color: rgb(233, 236, 239)"
-        >
+        <div class="pt-3 pb-3 pl-3 pr-3" style="background-color: rgb(233, 236, 239)">
           <div class="row">
             <div class="form-group col-md-4">
-              <my-select
-                name="sistema"
-                label="Sistema"
-                v-model="sistema"
-                :list="sistemas"
-                @change="selecionarSistema"
-                :edit="editando"
-                validate="required"
-              ></my-select>
+              <my-select name="sistema" label="Sistema" v-model="sistema" :list="sistemas" @change="selecionarSistema" :edit="editando" validate="required"></my-select>
             </div>
             <div class="form-group col-md-4">
               <my-select
@@ -294,89 +230,43 @@
                 :edit="editando"
                 placeholder="0,00"
                 mask="money"
-                :validate="
-                  valordacausaobrigatorio ? 'required|min:5|max:14' : ''
-                "
+                :validate="valordacausaobrigatorio ? 'required|min:5|max:14' : ''"
               ></my-input>
             </div>
 
             <div class="form-group col-md-6" v-if="ef">
-              <my-input
-                name="cda"
-                label="CDA"
-                v-model="cda"
-                :edit="editando"
-              ></my-input>
-              <small id="cdaHelp" class="form-text text-muted"
-                >Se houver mais de uma, separar com vírgulas.</small
-              >
+              <my-input name="cda" label="CDA" v-model="cda" :edit="editando"></my-input>
+              <small id="cdaHelp" class="form-text text-muted">Se houver mais de uma, separar com vírgulas.</small>
             </div>
 
             <div class="form-group col-md-6" v-if="ef">
-              <my-input
-                name="pa"
-                label="Processo Administrativo"
-                v-model="pa"
-                :edit="editando"
-              ></my-input>
-              <small id="paHelp" class="form-text text-muted"
-                >Se houver mais de um, separar com vírgulas.</small
-              >
+              <my-input name="pa" label="Processo Administrativo" v-model="pa" :edit="editando"></my-input>
+              <small id="paHelp" class="form-text text-muted">Se houver mais de um, separar com vírgulas.</small>
             </div>
 
             <div class="col col-md-3">
               <div class="form-check">
-                <input
-                  :disabled="!editando"
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="tutelaantecipada"
-                  id="checkTutelaAntecipada"
-                />
+                <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="tutelaantecipada" id="checkTutelaAntecipada" />
                 <label class="form-check-label" for="checkTutelaAntecipada">
                   Tutela Liminar/Antecipada
                 </label>
               </div>
             </div>
-            <div
-              class="form-check col-md-3"
-              v-show="sistema &amp;&amp; sistema.includes('apolo')"
-            >
+            <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
               <label class="form-check-label">
-                <input
-                  :disabled="!editando"
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="nivelsigilo"
-                />
+                <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="nivelsigilo" />
                 Segredo de Justiça
               </label>
             </div>
-            <div
-              class="form-check col-md-3"
-              v-show="sistema &amp;&amp; sistema.includes('apolo')"
-            >
+            <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
               <label class="form-check-label">
-                <input
-                  :disabled="!editando"
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="justicagratuita"
-                />
+                <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="justicagratuita" />
                 Justiça Gratuita
               </label>
             </div>
-            <div
-              class="form-check col-md-3"
-              v-show="sistema &amp;&amp; sistema.includes('apolo')"
-            >
+            <div class="form-check col-md-3" v-show="sistema &amp;&amp; sistema.includes('apolo')">
               <label class="form-check-label">
-                <input
-                  :disabled="!editando"
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="prioridadeidoso"
-                />
+                <input :disabled="!editando" type="checkbox" class="form-check-input" v-model="prioridadeidoso" />
                 Prioridade de Idoso
               </label>
             </div>
@@ -388,11 +278,7 @@
             <h5 class="mt-3 mb-2">Partes</h5>
           </div>
           <div v-if="editando" class="col col-auto ml-auto">
-            <button
-              type="button"
-              @click="adicionarParte()"
-              class="btn btn-info btn-sm mt-2"
-            >
+            <button type="button" @click="adicionarParte()" class="btn btn-info btn-sm mt-2">
               Adicionar Parte
             </button>
           </div>
@@ -400,10 +286,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
-              <table
-                class="table table-peticao table-full-width"
-                :disabled="!sistema"
-              >
+              <table class="table table-peticao table-full-width" :disabled="!sistema">
                 <thead class="thead-dark" @click="validar()">
                   <tr>
                     <th>Polo</th>
@@ -417,36 +300,18 @@
                   <tr v-for="(p, index) in partes">
                     <td v-if="!editando">{{ localizar(p.polo, polos) }}</td>
                     <td v-if="editando">
-                      <select
-                        class="form-control mr-sm-2"
-                        v-model="p.polo"
-                        @change="selecionarPolo(p, p.polo)"
-                      >
-                        <option disabled hidden selected value=""
-                          >[Selecionar]</option
-                        >
-                        <option v-for="polo in polos" :value="polo.id">{{
-                          poloNome(polo.nome)
-                        }}</option>
+                      <select class="form-control mr-sm-2" v-model="p.polo" @change="selecionarPolo(p, p.polo)">
+                        <option disabled hidden selected value="">[Selecionar]</option>
+                        <option v-for="polo in polos" :value="polo.id">{{ poloNome(polo.nome) }}</option>
                       </select>
                     </td>
                     <td v-if="!editando">
                       {{ localizar(p.tipopessoa, tipospessoa) }}
                     </td>
                     <td v-if="editando">
-                      <select
-                        class="form-control mr-sm-2"
-                        v-model="p.tipopessoa"
-                        @change="selecionarTipoPessoa(p, p.tipopessoa)"
-                      >
-                        <option disabled hidden selected value=""
-                          >[Selecionar]</option
-                        >
-                        <option
-                          v-for="tipopessoa in tipospessoa"
-                          :value="tipopessoa.id"
-                          >{{ tipopessoa.nome }}</option
-                        >
+                      <select class="form-control mr-sm-2" v-model="p.tipopessoa" @change="selecionarTipoPessoa(p, p.tipopessoa)">
+                        <option disabled hidden selected value="">[Selecionar]</option>
+                        <option v-for="tipopessoa in tipospessoa" :value="tipopessoa.id">{{ tipopessoa.nome }}</option>
                       </select>
                     </td>
 
@@ -503,14 +368,7 @@
 
                     <td v-if="!editando">{{ p.nome }}</td>
                     <td v-if="editando &amp;&amp; p.tipopessoa !== '3'">
-                      <my-input
-                        :disabled="!sistema"
-                        :name="'nome[' + index + ']'"
-                        v-model="p.nome"
-                        :edit="editando"
-                        placeholder="Nome Completo"
-                        validate="required"
-                      ></my-input>
+                      <my-input :disabled="!sistema" :name="'nome[' + index + ']'" v-model="p.nome" :edit="editando" placeholder="Nome Completo" validate="required"></my-input>
                     </td>
 
                     <td v-if="editando" align="right">
@@ -531,12 +389,7 @@
               type="button "
               @click="peticionar()"
               id="prosseguir"
-              :disabled="
-                arquivos.length == 0 ||
-                  faltaTeorDaPeticao ||
-                  !isAllValid() ||
-                  invalid
-              "
+              :disabled="arquivos.length == 0 || faltaTeorDaPeticao || !isAllValid() || invalid"
               class="btn btn-primary float-right d-print-none"
             >
               Protocolar
@@ -545,12 +398,7 @@
 
           <template v-if="!editando">
             <div class="col-sm-auto">
-              <button
-                type="button "
-                @click="limpar()"
-                id="voltar"
-                class="btn btn-secondary d-print-none"
-              >
+              <button type="button " @click="limpar()" id="voltar" class="btn btn-secondary d-print-none">
                 Enviar Outra Petição
               </button>
             </div>
@@ -563,12 +411,7 @@
               </div>
             </div>
             <div class="col-sm-auto ml-auto">
-              <button
-                type="button"
-                @click="imprimir()"
-                id="imprimir"
-                class="btn btn-info float-right ml-3"
-              >
+              <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info float-right ml-3">
                 Imprimir
               </button>
             </div>
@@ -760,8 +603,7 @@ export default {
     valordacausaobrigatorio: function() {
       if (!this.classes || !this.classe) return false;
       for (var i = 0; i < this.classes.length; i++) {
-        if (this.classe === this.classes[i].id)
-          return this.classes[i].valordacausaobrigatorio;
+        if (this.classe === this.classes[i].id) return this.classes[i].valordacausaobrigatorio;
       }
       return false;
     },
@@ -769,8 +611,7 @@ export default {
     faltaTeorDaPeticao: function() {
       if (this.arquivos.length === 0) return true;
       for (var i = 0; i < this.arquivos.length; i++) {
-        if (this.arquivos[i].tipo === 1 || this.arquivos[i].tipo === "1")
-          return false;
+        if (this.arquivos[i].tipo === 1 || this.arquivos[i].tipo === "1") return false;
       }
       return true;
     }
@@ -785,8 +626,7 @@ export default {
         response => {
           this[items].length = 0;
           this[item] = undefined;
-          for (var i = 0; i < response.data.list.length; i++)
-            this[items].push(response.data.list[i]);
+          for (var i = 0; i < response.data.list.length; i++) this[items].push(response.data.list[i]);
           // if (items === 'classes') {
           // for (i = 0; i < this.classes.length; i++) this.classes[i].nome = CnjClasseBL.nomeCompleto(this.classes[i].id)
           // }
@@ -821,13 +661,7 @@ export default {
     },
 
     carregarSistemas: function() {
-      this.carregar(
-        "config/sistemas",
-        "sistemas",
-        "sistema",
-        false,
-        () => (this.sistemasCarregados = true)
-      );
+      this.carregar("config/sistemas", "sistemas", "sistema", false, () => (this.sistemasCarregados = true));
     },
 
     selecionarSistema: function() {
@@ -842,20 +676,11 @@ export default {
     },
 
     carregarLocalidades: function() {
-      this.carregar(
-        "config/localidades?sistema=" + this.sistema,
-        "localidades",
-        "localidade"
-      );
+      this.carregar("config/localidades?sistema=" + this.sistema, "localidades", "localidade");
     },
 
     carregarTiposDePeca: function() {
-      this.carregar(
-        "config/tipos-documento-peticao-inicial?sistema=" + this.sistema,
-        "tipospeca",
-        "tipo",
-        false
-      );
+      this.carregar("config/tipos-documento-peticao-inicial?sistema=" + this.sistema, "tipospeca", "tipo", false);
     },
 
     selecionarLocalidade: function() {
@@ -867,14 +692,7 @@ export default {
     },
 
     carregarEspecialidades: function() {
-      this.carregar(
-        "config/localidade/" +
-          this.localidade +
-          "/especialidades?sistema=" +
-          this.sistema,
-        "especialidades",
-        "especialidade"
-      );
+      this.carregar("config/localidade/" + this.localidade + "/especialidades?sistema=" + this.sistema, "especialidades", "especialidade");
     },
 
     selecionarEspecialidade: function() {
@@ -884,16 +702,7 @@ export default {
     },
 
     carregarClasses: function() {
-      this.carregar(
-        "config/localidade/" +
-          this.localidade +
-          "/especialidade/" +
-          this.especialidade +
-          "/classes?sistema=" +
-          this.sistema,
-        "classes",
-        "classe"
-      );
+      this.carregar("config/localidade/" + this.localidade + "/especialidade/" + this.especialidade + "/classes?sistema=" + this.sistema, "classes", "classe");
     },
 
     selecionarClasse: function() {
@@ -904,14 +713,7 @@ export default {
 
     carregarAssuntos: function() {
       this.carregar(
-        "config/localidade/" +
-          this.localidade +
-          "/especialidade/" +
-          this.especialidade +
-          "/classe/" +
-          this.classe +
-          "/assuntos?sistema=" +
-          this.sistema,
+        "config/localidade/" + this.localidade + "/especialidade/" + this.especialidade + "/classe/" + this.classe + "/assuntos?sistema=" + this.sistema,
         "assuntos",
         "assunto"
       );
@@ -1006,9 +808,7 @@ export default {
         if (!a.tipo && b.tipo) return 1;
         if (a.tipo !== b.tipo) return a.tipo < b.tipo ? -1 : 1;
         if (a.nome !== b.nome) {
-          return a.nome.replace(".pdf", "") < b.nome.replace(".pdf", "")
-            ? -1
-            : 1;
+          return a.nome.replace(".pdf", "") < b.nome.replace(".pdf", "") ? -1 : 1;
         }
         return 0;
       });
@@ -1092,8 +892,7 @@ export default {
         if (a.polo !== b.polo) return a.polo < b.polo ? -1 : 1;
         if (a.tipopessoa && !b.tipopessoa) return -1;
         if (!a.tipopessoa && b.tipopessoa) return 1;
-        if (a.tipopessoa !== b.tipopessoa)
-          return a.tipopessoa < b.tipopessoa ? -1 : 1;
+        if (a.tipopessoa !== b.tipopessoa) return a.tipopessoa < b.tipopessoa ? -1 : 1;
         return 0;
       });
     },
@@ -1223,9 +1022,7 @@ export default {
           response => {
             this.successmsg = response.data.status;
             this.protocolo = response.data.protocolo;
-            this.dataDeProtocolo = UtilsBL.formatJSDDMMYYYYHHMM(
-              response.data.data
-            );
+            this.dataDeProtocolo = UtilsBL.formatJSDDMMYYYYHHMM(response.data.data);
             this.numero = response.data.numero;
             this.numeroFormatado = ProcessoBL.formatarProcesso(this.numero);
             this.unidade = response.data.unidade;

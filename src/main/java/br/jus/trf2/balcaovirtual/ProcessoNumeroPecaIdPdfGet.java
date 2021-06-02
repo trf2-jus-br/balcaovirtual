@@ -4,15 +4,13 @@ import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdPdfGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdPdfGetResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
 
 @AcessoPublicoEPrivado
 public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 
 	@Override
-	public void run(ProcessoNumeroPecaIdPdfGetRequest req, ProcessoNumeroPecaIdPdfGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		String usuario = null;
 		String origem;
 

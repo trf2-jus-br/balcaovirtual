@@ -13,32 +13,15 @@
         <div class="row mb-3 justify-content-center">
           <div class="form-groupx col-sm-auto">
             <label for="dataInicial">Data Inicial</label>
-            <input
-              id="dataInicial"
-              type="text"
-              class="form-control"
-              placeholder="DD/MM/AAAA"
-              v-model="dataInicial"
-            />
+            <input id="dataInicial" type="text" class="form-control" placeholder="DD/MM/AAAA" v-model="dataInicial" />
           </div>
           <div class="form-groupx col-sm-auto">
             <label for="dataFinal">Data Final</label>
-            <input
-              id="dataFinal"
-              type="text"
-              class="form-control"
-              placeholder="DD/MM/AAAA"
-              v-model="dataFinal"
-            />
+            <input id="dataFinal" type="text" class="form-control" placeholder="DD/MM/AAAA" v-model="dataFinal" />
           </div>
           <div class="form-groupx col-md-auto">
             <label for="abrangencia">Abrangência</label>
-            <select
-              id="abrangencia"
-              class="form-control"
-              v-model="doGrupo"
-              name="abrangencia"
-            >
+            <select id="abrangencia" class="form-control" v-model="doGrupo" name="abrangencia">
               <option :value="false">Do Usuário</option>
               <option :value="true">Do Grupo</option>
             </select>
@@ -47,41 +30,20 @@
             <label for="dataFinal" class="mb-0">Tipo de Confirmação</label>
             <div>
               <label class="form-check-label">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="porConfirmacao"
-                />
+                <input type="checkbox" class="form-check-input" v-model="porConfirmacao" />
                 Manual
               </label>
             </div>
             <div>
               <label class="form-check-label">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="porOmissao"
-                />
+                <input type="checkbox" class="form-check-input" v-model="porOmissao" />
                 Automática
               </label>
             </div>
           </div>
           <div class="col-sm-auto">
             <label for="pesquisar">&nbsp;</label>
-            <button
-              id="pesquisar"
-              class="btn btn-primary btn-block"
-              data-style="expand-left"
-              @click="
-                pesquisar(
-                  dataInicial,
-                  dataFinal,
-                  porConfirmacao,
-                  porOmissao,
-                  doGrupo
-                )
-              "
-            >
+            <button id="pesquisar" class="btn btn-primary btn-block" data-style="expand-left" @click="pesquisar(dataInicial, dataFinal, porConfirmacao, porOmissao, doGrupo)">
               Pesquisar
             </button>
           </div>
@@ -133,9 +95,7 @@
                   <th>
                     <a @click="sort('datalimiteintimacaoautomatica')">
                       Data Limite Int. Aut.
-                      <span
-                        v-show="orderByField == 'datalimiteintimacaoautomatica'"
-                      >
+                      <span v-show="orderByField == 'datalimiteintimacaoautomatica'">
                         <span v-show="!reverseSort">&#8679;</span>
                         <span v-show="reverseSort">&#8681;</span>
                       </span>
@@ -241,9 +201,7 @@
                     {{ r.multiplicadorprazo }}
                   </td>
                   <td>
-                    <span
-                      v-html="r.datalimiteintimacaoautomaticaFormatada"
-                    ></span>
+                    <span v-html="r.datalimiteintimacaoautomaticaFormatada"></span>
                   </td>
                   <td>{{ r.tipo }}</td>
                   <td>{{ r.eventointimacao }}</td>
@@ -265,11 +223,7 @@
                   <td v-if="false">{{ r.unidadetipo }}</td>
                   <td v-if="false">{{ r.localidade }}</td>
                   <td align="right">
-                    <button
-                      type="button"
-                      @click="exibirAviso(r)"
-                      class="btn btn-sm btn-success d-print-none"
-                    >
+                    <button type="button" @click="exibirAviso(r)" class="btn btn-sm btn-success d-print-none">
                       Ver
                     </button>
                   </td>
@@ -280,23 +234,13 @@
         </div>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button
-          type="button"
-          @click="imprimir()"
-          id="imprimir"
-          v-if="filtrados.length > 0"
-          class="btn btn-info float-right ml-3 d-print-none"
-        >
+        <button type="button" @click="imprimir()" id="imprimir" v-if="filtrados.length > 0" class="btn btn-info float-right ml-3 d-print-none">
           Imprimir
         </button>
       </div>
     </template>
 
-    <aviso-detalhe
-      v-if="aviso"
-      :aviso="aviso"
-      @voltar="aviso = undefined"
-    ></aviso-detalhe>
+    <aviso-detalhe v-if="aviso" :aviso="aviso" @voltar="aviso = undefined"></aviso-detalhe>
   </div>
 </template>
 
@@ -344,15 +288,9 @@ export default {
       a.sort((x, y) => {
         if (x[this.orderByField] !== y[this.orderByField]) {
           var r = 0;
-          if (
-            x[this.orderByField] === undefined &&
-            y[this.orderByField] !== undefined
-          ) {
+          if (x[this.orderByField] === undefined && y[this.orderByField] !== undefined) {
             r = -1;
-          } else if (
-            x[this.orderByField] !== undefined &&
-            y[this.orderByField] === undefined
-          ) {
+          } else if (x[this.orderByField] !== undefined && y[this.orderByField] === undefined) {
             r = 1;
           } else r = x[this.orderByField] < y[this.orderByField] ? -1 : 1;
           if (!this.reverseSort) r = -r;
@@ -388,10 +326,7 @@ export default {
               if (response.data.status[i].errormsg) {
                 if (this.errormsg === undefined) this.errormsg = "";
                 else this.errormsg += "; ";
-                this.errormsg +=
-                  response.data.status[i].system +
-                  ": " +
-                  response.data.status[i].errormsg;
+                this.errormsg += response.data.status[i].system + ": " + response.data.status[i].errormsg;
               }
             }
 
@@ -400,22 +335,11 @@ export default {
               for (i = 0; i < response.data.list.length; i++) {
                 var aviso = response.data.list[i];
                 aviso.errormsg = undefined;
-                aviso.processoFormatado = ProcessoBL.formatarProcesso(
-                  aviso.processo
-                );
-                aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
-                  aviso.dataaviso
-                );
-                aviso.dataconfirmacaoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
-                  aviso.dataconfirmacao
-                );
-                aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
-                  aviso.datalimiteintimacaoautomatica
-                );
-                aviso.datarecebimento = aviso.dataconfirmacaoFormatada.replace(
-                  "&nbsp;",
-                  " "
-                );
+                aviso.processoFormatado = ProcessoBL.formatarProcesso(aviso.processo);
+                aviso.dataavisoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataaviso);
+                aviso.dataconfirmacaoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.dataconfirmacao);
+                aviso.datalimiteintimacaoautomaticaFormatada = UtilsBL.formatJSDDMMYYYYHHMM(aviso.datalimiteintimacaoautomatica);
+                aviso.datarecebimento = aviso.dataconfirmacaoFormatada.replace("&nbsp;", " ");
                 aviso.assuntoNome = CnjAssuntoBL.nome(aviso.assunto);
                 aviso.teor = ProcessoBL.formatarTexto(aviso.teor);
                 this.avisos.push(aviso);
@@ -428,13 +352,7 @@ export default {
         );
     },
 
-    pesquisar: function(
-      dataInicial,
-      dataFinal,
-      porConfirmacao,
-      porOmissao,
-      doGrupo
-    ) {
+    pesquisar: function(dataInicial, dataFinal, porConfirmacao, porOmissao, doGrupo) {
       this.$router.push({
         name: "Lista de Avisos Confirmados",
         params: {

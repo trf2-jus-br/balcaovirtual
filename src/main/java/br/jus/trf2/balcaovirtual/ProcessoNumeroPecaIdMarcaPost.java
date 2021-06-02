@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdMarcaPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdMarcaPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPecaIdMarcaPostResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPecaIdMarcaPost;
 import br.jus.trf2.balcaovirtual.model.Estilo;
 import br.jus.trf2.balcaovirtual.model.Marca;
 import br.jus.trf2.balcaovirtual.model.Processo;
@@ -17,8 +15,7 @@ import br.jus.trf2.balcaovirtual.model.TipoMarcaItem;
 public class ProcessoNumeroPecaIdMarcaPost implements IProcessoNumeroPecaIdMarcaPost {
 
 	@Override
-	public void run(ProcessoNumeroPecaIdMarcaPostRequest req, ProcessoNumeroPecaIdMarcaPostResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 

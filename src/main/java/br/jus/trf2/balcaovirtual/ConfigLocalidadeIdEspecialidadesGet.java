@@ -6,26 +6,23 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadeIdEspecialidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Especialidade;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadeIdEspecialidadesGet;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ILocalidadeIdEspecialidadeGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IdNome;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeIdEspecialidadeGetResponse;
 
 public class ConfigLocalidadeIdEspecialidadesGet implements IConfigLocalidadeIdEspecialidadesGet {
 
 	@Override
-	public void run(ConfigLocalidadeIdEspecialidadesGetRequest req, ConfigLocalidadeIdEspecialidadesGetResponse resp)
-			throws Exception {
-		Future<SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse>> future = SwaggerCall.callAsync(
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
+		Future<SwaggerAsyncResponse<ILocalidadeIdEspecialidadeGet.Response>> future = SwaggerCall.callAsync(
 				"obter especialidades", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/localidade/" + req.id + "/especialidade", null,
-				LocalidadeIdEspecialidadeGetResponse.class);
-		SwaggerAsyncResponse<LocalidadeIdEspecialidadeGetResponse> sar = future.get();
+				ILocalidadeIdEspecialidadeGet.Response.class);
+		SwaggerAsyncResponse<ILocalidadeIdEspecialidadeGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		LocalidadeIdEspecialidadeGetResponse r = (LocalidadeIdEspecialidadeGetResponse) sar.getResp();
+		ILocalidadeIdEspecialidadeGet.Response r = (ILocalidadeIdEspecialidadeGet.Response) sar.getResp();
 
 		resp.list = new ArrayList<>();
 		for (IdNome idNome : r.list) {

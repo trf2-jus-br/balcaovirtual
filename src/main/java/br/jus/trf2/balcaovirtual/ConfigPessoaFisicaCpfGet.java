@@ -5,23 +5,21 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigPessoaFisicaCpfGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigPessoaFisicaCpfGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigPessoaFisicaCpfGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PessoaFisicaDocumentoGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IPessoaFisicaDocumentoGet;
 
 public class ConfigPessoaFisicaCpfGet implements IConfigPessoaFisicaCpfGet {
 
 	@Override
-	public void run(ConfigPessoaFisicaCpfGetRequest req, ConfigPessoaFisicaCpfGetResponse resp) throws Exception {
-		Future<SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse>> future = SwaggerCall.callAsync(
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
+		Future<SwaggerAsyncResponse<IPessoaFisicaDocumentoGet.Response>> future = SwaggerCall.callAsync(
 				"obter pessoa física", Utils.getApiPassword(req.sistema), "GET",
 				Utils.getApiUrl(req.sistema) + "/pessoa-fisica/" + req.cpf, null,
-				PessoaFisicaDocumentoGetResponse.class);
-		SwaggerAsyncResponse<PessoaFisicaDocumentoGetResponse> sar = future.get();
+				IPessoaFisicaDocumentoGet.Response.class);
+		SwaggerAsyncResponse<IPessoaFisicaDocumentoGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		PessoaFisicaDocumentoGetResponse r = (PessoaFisicaDocumentoGetResponse) sar.getResp();
+		IPessoaFisicaDocumentoGet.Response r = (IPessoaFisicaDocumentoGet.Response) sar.getResp();
 
 		if (r.list == null || r.list.size() == 0)
 			return;

@@ -12,15 +12,7 @@
       @ok="handleOk"
     >
       <form>
-        <my-input
-          label="Lembrete (opcional)"
-          id="lembrete"
-          name="lembrete"
-          v-model="lembrete"
-          aria-describedby="lembreteHelp"
-          autofocus
-          v-on:keyup.enter="$handleOk"
-        ></my-input>
+        <my-input label="Lembrete (opcional)" id="lembrete" name="lembrete" v-model="lembrete" aria-describedby="lembreteHelp" autofocus v-on:keyup.enter="$handleOk"></my-input>
       </form>
     </b-modal>
   </div>

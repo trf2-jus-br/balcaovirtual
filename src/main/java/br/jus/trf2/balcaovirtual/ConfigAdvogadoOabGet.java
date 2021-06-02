@@ -5,22 +5,20 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigAdvogadoOabGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigAdvogadoOabGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigAdvogadoOabGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.AdvogadoDocumentoGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IAdvogadoDocumentoGet;
 
 public class ConfigAdvogadoOabGet implements IConfigAdvogadoOabGet {
 
 	@Override
-	public void run(ConfigAdvogadoOabGetRequest req, ConfigAdvogadoOabGetResponse resp) throws Exception {
-		Future<SwaggerAsyncResponse<AdvogadoDocumentoGetResponse>> future = SwaggerCall.callAsync("obter advogado",
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
+		Future<SwaggerAsyncResponse<IAdvogadoDocumentoGet.Response>> future = SwaggerCall.callAsync("obter advogado",
 				Utils.getApiPassword(req.sistema), "GET", Utils.getApiUrl(req.sistema) + "/advogado/" + req.oab, null,
-				AdvogadoDocumentoGetResponse.class);
-		SwaggerAsyncResponse<AdvogadoDocumentoGetResponse> sar = future.get();
+				IAdvogadoDocumentoGet.Response.class);
+		SwaggerAsyncResponse<IAdvogadoDocumentoGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		AdvogadoDocumentoGetResponse r = (AdvogadoDocumentoGetResponse) sar.getResp();
+		IAdvogadoDocumentoGet.Response r = (IAdvogadoDocumentoGet.Response) sar.getResp();
 
 		if (r.list == null || r.list.size() == 0)
 			return;

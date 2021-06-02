@@ -42,46 +42,24 @@
                   <span v-html="p.data"></span>
                 </td>
                 <td style="text-align: center;">
-                  <a
-                    href=""
-                    @click.prevent="listar(p.data, true, false, false)"
-                    >{{ p.quantidadedousuarioporconfirmacao }}</a
-                  >
+                  <a href="" @click.prevent="listar(p.data, true, false, false)">{{ p.quantidadedousuarioporconfirmacao }}</a>
                 </td>
                 <td style="text-align: center;">
-                  <a
-                    href=""
-                    @click.prevent="listar(p.data, false, true, false)"
-                    >{{ p.quantidadedousuarioporomissao }}</a
-                  >
+                  <a href="" @click.prevent="listar(p.data, false, true, false)">{{ p.quantidadedousuarioporomissao }}</a>
                 </td>
                 <td style="text-align: center;">
-                  <a
-                    href=""
-                    @click.prevent="listar(p.data, true, false, true)"
-                    >{{ p.quantidadedogrupoporconfirmacao }}</a
-                  >
+                  <a href="" @click.prevent="listar(p.data, true, false, true)">{{ p.quantidadedogrupoporconfirmacao }}</a>
                 </td>
                 <td style="text-align: center;">
-                  <a
-                    href=""
-                    @click.prevent="listar(p.data, false, true, true)"
-                    >{{ p.quantidadedogrupoporomissao }}</a
-                  >
+                  <a href="" @click.prevent="listar(p.data, false, true, true)">{{ p.quantidadedogrupoporomissao }}</a>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div
-        class="col col-sm-12"
-        v-if="!errormsg &amp;&amp; quantidadePorData.length == 0"
-      >
-        <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma intimação/citação confirmada nos
-          últimos 7 dias.
-        </p>
+      <div class="col col-sm-12" v-if="!errormsg &amp;&amp; quantidadePorData.length == 0">
+        <p class="alert alert-warning"><strong>Atenção!</strong> Nenhuma intimação/citação confirmada nos últimos 7 dias.</p>
       </div>
     </div>
   </div>

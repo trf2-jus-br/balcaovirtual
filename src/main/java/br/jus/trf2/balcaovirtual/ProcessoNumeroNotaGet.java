@@ -6,17 +6,15 @@ import java.util.List;
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaGetResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaGet;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaGet implements IProcessoNumeroNotaGet {
 	@Override
-	public void run(ProcessoNumeroNotaGetRequest req, ProcessoNumeroNotaGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		if (u.usuarios == null)
 			throw new PresentableException("Usuário não possui identificador e unidade");

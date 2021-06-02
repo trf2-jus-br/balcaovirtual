@@ -32,28 +32,13 @@
               </datalist>
             </div>
             <div class="col col-md-4">
-              <label class="control-label" for="estilo" style="width: 100%"
-                >Modalidade</label
-              >
-              <b-form-select
-                v-model="estilo"
-                :options="estilosfiltrados"
-                class="mb-3"
-              >
-              </b-form-select>
+              <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>
+              <b-form-select v-model="estilo" :options="estilosfiltrados" class="mb-3"> </b-form-select>
             </div>
           </div>
           <div class="form-check">
-            <input
-              id="intervaloDePaginas"
-              class="mt-3 mb-3"
-              type="checkbox"
-              v-model="intervalo"
-              :disabled="pagmin === 0 || pagmax === 0"
-            />
-            <label class="form-check-label pl-0" for="intervaloDePaginas"
-              >Intervalo de Páginas</label
-            >
+            <input id="intervaloDePaginas" class="mt-3 mb-3" type="checkbox" v-model="intervalo" :disabled="pagmin === 0 || pagmax === 0" />
+            <label class="form-check-label pl-0" for="intervaloDePaginas">Intervalo de Páginas</label>
           </div>
           <div class="row" v-if="intervalo">
             <div class="col form-group">
@@ -79,30 +64,16 @@
               ></my-input>
             </div>
           </div>
-          <em
-            v-if="errormsg &amp;&amp; errormsg !== ''"
-            for="processos"
-            class="invalid"
-            >{{ errormsg }}</em
-          >
+          <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{ errormsg }}</em>
         </b-form>
         <div style="width: 100%" slot="modal-footer">
           <b-btn v-if="editando" variant="outline-danger" @click="remove">
             Remover
           </b-btn>
-          <b-btn
-            class="float-right ml-2"
-            variant="primary"
-            @click="$refs.processoPecaDetalhes.hide('ok')"
-            :disabled="invalid"
-          >
+          <b-btn class="float-right ml-2" variant="primary" @click="$refs.processoPecaDetalhes.hide('ok')" :disabled="invalid">
             Gravar
           </b-btn>
-          <b-btn
-            class="float-right"
-            variant="secondary"
-            @click="$refs.processoPecaDetalhes.hide('cancel')"
-          >
+          <b-btn class="float-right" variant="secondary" @click="$refs.processoPecaDetalhes.hide('cancel')">
             Cancelar
           </b-btn>
         </div>
@@ -116,14 +87,8 @@ export default {
   name: "processo-peca-detalhes",
   data() {
     return {
-      interno: this.$parent.$parent.jwt
-        ? this.$parent.$parent.jwt.isInterno(this.$parent.sistema)
-        : undefined,
-      ieunidade:
-        this.$parent.$parent.jwt &&
-        this.$parent.$parent.jwt.user[this.$parent.sistema]
-          ? this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade
-          : undefined,
+      interno: this.$parent.$parent.jwt ? this.$parent.$parent.jwt.isInterno(this.$parent.sistema) : undefined,
+      ieunidade: this.$parent.$parent.jwt && this.$parent.$parent.jwt.user[this.$parent.sistema] ? this.$parent.$parent.jwt.user[this.$parent.sistema].ieunidade : undefined,
       editando: false,
       texto: "",
       marcadores: [],
@@ -166,13 +131,7 @@ export default {
 
   computed: {
     estilosfiltrados: function() {
-      return this.estilos.filter(
-        i =>
-          i.interno === this.interno &&
-          (i.pessoal ||
-            (this.interno && this.ieunidade) ||
-            (!this.interno && i.ieentidade))
-      );
+      return this.estilos.filter(i => i.interno === this.interno && (i.pessoal || (this.interno && this.ieunidade) || (!this.interno && i.ieentidade)));
     }
   },
 
@@ -200,17 +159,11 @@ export default {
       } else {
         this.texto = undefined;
         this.editando = false;
-        this.estilo =
-          this.$parent.$parent.jwt.origin === "int"
-            ? this.ieunidade
-              ? "2"
-              : "1"
-            : "3";
+        this.estilo = this.$parent.$parent.jwt.origin === "int" ? (this.ieunidade ? "2" : "1") : "3";
       }
       if (this.paginicial === undefined) this.paginicial = this.pagmin;
       if (this.pagfinal === undefined) this.pagfinal = this.pagmax;
-      this.intervalo =
-        this.paginicial !== this.pagmin || this.pagfinal !== this.pagmax;
+      this.intervalo = this.paginicial !== this.pagmin || this.pagfinal !== this.pagmax;
       this.showModal = true;
       this.errormsg = undefined;
     },

@@ -10,17 +10,14 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoIntercorrenteContarGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteContarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.QuantidadePorData;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Contagem;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteContarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernamePeticaoIntercorrenteContarGet;
 
 public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteContarGet {
 
 	@Override
-	public void run(PeticaoIntercorrenteContarGetRequest req, PeticaoIntercorrenteContarGetResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
@@ -29,7 +26,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 					new SwaggerCallParameters(system + " - obter tipos de petição intercorrente",
 							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/peticao-intercorrente/contar?dias=7",
-							null, UsuarioUsernamePeticaoIntercorrenteContarGetResponse.class));
+							null, IUsuarioUsernamePeticaoIntercorrenteContarGet.Response.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
@@ -37,7 +34,7 @@ public class PeticaoIntercorrenteContarGet implements IPeticaoIntercorrenteConta
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernamePeticaoIntercorrenteContarGetResponse r = (UsuarioUsernamePeticaoIntercorrenteContarGetResponse) mcr.responses
+			IUsuarioUsernamePeticaoIntercorrenteContarGet.Response r = (IUsuarioUsernamePeticaoIntercorrenteContarGet.Response) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (Contagem i : r.list) {

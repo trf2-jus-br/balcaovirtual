@@ -8,12 +8,7 @@
 
     <div class="row mb-3 d-print-none">
       <div class="col-sm-auto ml-auto">
-        <button
-          type="button"
-          @click="criar()"
-          class="btn btn-primary ml-1"
-          title=""
-        >
+        <button type="button" @click="criar()" class="btn btn-primary ml-1" title="">
           Nova Etiqueta
         </button>
       </div>
@@ -21,9 +16,7 @@
 
     <div class="row" v-if="filtrados.length == 0">
       <div class="col col-sm-12">
-        <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma etiqueta na lista.
-        </p>
+        <p class="alert alert-warning"><strong>Atenção!</strong> Nenhuma etiqueta na lista.</p>
       </div>
     </div>
 
@@ -49,19 +42,13 @@
                 <td>{{ f.idestilo }}</td>
                 <td>
                   {{ f.quantidade }}
-                  <span v-if="f.errormsg" :class="{ red: true }"
-                    >Erro {{ f.errormsg }}
-                  </span>
+                  <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
                 </td>
                 <td align="right">
                   <a href="" @click.prevent="acrescentar(f)">
                     <span class="fa fa-plus icone-em-linha"></span>
                   </a>
-                  <a
-                    v-if="f.quantidade > 0"
-                    href=""
-                    @click.prevent="subtrair(f)"
-                  >
+                  <a v-if="f.quantidade > 0" href="" @click.prevent="subtrair(f)">
                     <span class="fa fa-minus icone-em-linha"></span>
                   </a>
                   <a v-if="f.quantidade > 0" href="" @click.prevent="editar(f)">
@@ -74,11 +61,7 @@
         </div>
       </div>
     </div>
-    <processo-multiplos
-      ref="processosMultiplos"
-      :show.sync="exibirProcessoMultiplos"
-      @ok="acrescentarProcessosNaLista"
-    ></processo-multiplos>
+    <processo-multiplos ref="processosMultiplos" :show.sync="exibirProcessoMultiplos" @ok="acrescentarProcessosNaLista"></processo-multiplos>
     <etiqueta ref="etiqueta" @ok="acrescentarProcessosNaLista"></etiqueta>
   </div>
 </template>

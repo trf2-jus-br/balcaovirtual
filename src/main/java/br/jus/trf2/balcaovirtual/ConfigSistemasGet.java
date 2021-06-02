@@ -2,16 +2,14 @@ package br.jus.trf2.balcaovirtual;
 
 import java.util.ArrayList;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigSistemasGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigSistemasGetResponse;
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigSistemasGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.SistemaInfo;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 
 public class ConfigSistemasGet implements IConfigSistemasGet {
 
 	@Override
-	public void run(ConfigSistemasGetRequest req, ConfigSistemasGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		resp.list = new ArrayList<>();

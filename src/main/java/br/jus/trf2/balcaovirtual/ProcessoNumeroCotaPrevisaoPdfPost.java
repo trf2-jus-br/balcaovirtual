@@ -3,16 +3,13 @@ package br.jus.trf2.balcaovirtual;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaPrevisaoPdfPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaPrevisaoPdfPostResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaPrevisaoPdfPost;
 
 public class ProcessoNumeroCotaPrevisaoPdfPost implements IProcessoNumeroCotaPrevisaoPdfPost {
 
 	@Override
-	public void run(ProcessoNumeroCotaPrevisaoPdfPostRequest req, ProcessoNumeroCotaPrevisaoPdfPostResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		resp.jwt = DownloadJwtFilenameGet.jwt(u.origem, u.usuario, u.nome, req.sistema, req.numero, null, null,
 				req.texto, req.cargo, req.empresa, req.unidade, null);

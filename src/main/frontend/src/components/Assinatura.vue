@@ -16,33 +16,15 @@
         <form>
           <div class="row">
             <div class="form-group col col-sm-6">
-              <my-input
-                label="Usuário"
-                id="username"
-                name="username"
-                v-model="username"
-                validate="required"
-                disabled="true"
-              ></my-input>
+              <my-input label="Usuário" id="username" name="username" v-model="username" validate="required" disabled="true"></my-input>
             </div>
             <div class="form-group col col-sm-6">
-              <my-input
-                type="password"
-                label="Senha"
-                id="password"
-                name="password"
-                v-model="password"
-                validate="required"
-              ></my-input>
+              <my-input type="password" label="Senha" id="password" name="password" v-model="password" validate="required"></my-input>
             </div>
             <div class="col col-sm-12">
               <small id="usernameHelp" class="form-text text-muted">
                 <strong>Atenção</strong>! Ao clicar em 'Assinar',
-                {{
-                  documentos && documentos.length > 1
-                    ? "serão assinados " + documentos.length + " documentos"
-                    : "será assinado 1 documento"
-                }}.</small
+                {{ documentos && documentos.length > 1 ? "serão assinados " + documentos.length + " documentos" : "será assinado 1 documento" }}.</small
               >
             </div>
           </div>
@@ -84,13 +66,7 @@ export default {
     resetModal: function() {},
 
     handleOk: function() {
-      Bus.$emit(
-        "assinarComSenha",
-        this.documentos,
-        this.username,
-        this.password,
-        this.cont
-      );
+      Bus.$emit("assinarComSenha", this.documentos, this.username, this.password, this.cont);
     }
   }
 };

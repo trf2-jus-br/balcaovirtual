@@ -1,15 +1,6 @@
 <template>
   <div>
-    <b-modal
-      id="progressModal"
-      v-model="showModal"
-      :title="title"
-      no-close-on-backdrop
-      ok-title="Cancelar"
-      ok-only
-      hide-header-close
-      no-close-on-esc
-    >
+    <b-modal id="progressModal" v-model="showModal" :title="title" no-close-on-backdrop ok-title="Cancelar" ok-only hide-header-close no-close-on-esc>
       <p>{{ progressbarCaption }}</p>
       <div class="progress">
         <div
@@ -92,8 +83,7 @@ export default {
     proximo: function() {
       this.callbackNext(this.i);
       this.progressbarWidth = 100 * (this.i / this.total);
-      this.progressbarCaption =
-        this.caption + " (" + (this.i + 1) + "/" + this.total + ")";
+      this.progressbarCaption = this.caption + " (" + (this.i + 1) + "/" + this.total + ")";
     }
   }
 };

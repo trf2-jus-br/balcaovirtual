@@ -10,15 +10,13 @@ import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IImprimirFilenameGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenameGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ImprimirFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
 @AcessoPublico
 public class ImprimirFilenameGet implements IImprimirFilenameGet {
 
 	@Override
-	public void run(ImprimirFilenameGetRequest req, ImprimirFilenameGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		CachedHtml ch = recuperarPdfEmCache(req.filename);
 		if (ch.pdf == null && ch.html != null)
 			ch.pdf = new Html2Pdf().converterJsoup(ch.html, false);

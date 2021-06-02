@@ -1,52 +1,20 @@
 <template>
   <div>
-    <b-modal
-      ref="etiqueta"
-      id="etiqueta"
-      title="Etiqueta"
-      cancel-title="Cancelar"
-      ok-title="Salvar Marcador"
-      hide-header-close
-      no-close-on-esc
-      @hide="save"
-    >
+    <b-modal ref="etiqueta" id="etiqueta" title="Etiqueta" cancel-title="Cancelar" ok-title="Salvar Marcador" hide-header-close no-close-on-esc @hide="save">
       <b-form>
         <div class="row">
           <div class="col col-md-2 form-group">
-            <my-input
-              label="Sigla"
-              name="sigla"
-              id="sigla"
-              v-model="sigla"
-              validate="required"
-            ></my-input>
+            <my-input label="Sigla" name="sigla" id="sigla" v-model="sigla" validate="required"></my-input>
           </div>
           <div class="col col-md-6 form-group">
-            <my-input
-              label="Nome"
-              name="nome"
-              id="nome"
-              v-model="nome"
-              class="form-control"
-              autofocus
-              validate="required"
-            ></my-input>
+            <my-input label="Nome" name="nome" id="nome" v-model="nome" class="form-control" autofocus validate="required"></my-input>
           </div>
           <div class="col col-md-4">
-            <label class="control-label" for="estilo" style="width: 100%"
-              >Modalidade</label
-            >
-            <b-form-select
-              v-model="estilo"
-              :options="estilosfiltrados"
-              class="mb-3"
-            >
-            </b-form-select>
+            <label class="control-label" for="estilo" style="width: 100%">Modalidade</label>
+            <b-form-select v-model="estilo" :options="estilosfiltrados" class="mb-3"> </b-form-select>
           </div>
           <div class="col col-md-12 form-group">
-            <label class="control-label" for="descricao" style="width: 100%"
-              >Descrição</label
-            >
+            <label class="control-label" for="descricao" style="width: 100%">Descrição</label>
             <b-form-input
               type="text"
               name="descricao"
@@ -56,17 +24,10 @@
               :class="{ 'is-invalid': errors.has('descricao') }"
               style="width: 100%"
             ></b-form-input>
-            <span
-              v-if="false"
-              v-show="errors.has('descricao')"
-              class="help is-danger"
-              >{{ errors.first("descricao") }}</span
-            >
+            <span v-if="false" v-show="errors.has('descricao')" class="help is-danger">{{ errors.first("descricao") }}</span>
           </div>
           <div class="col col-md-12 form-group">
-            <label class="control-label" for="processos" style="width: 100%"
-              >Processos</label
-            >
+            <label class="control-label" for="processos" style="width: 100%">Processos</label>
             <textarea
               type="text"
               name="processos"
@@ -76,38 +37,19 @@
               :class="{ 'is-invalid': errors.has('processos') }"
               style="width: 100%"
             ></textarea>
-            <span
-              v-if="false"
-              v-show="errors.has('processos')"
-              class="help is-danger"
-              >{{ errors.first("processos") }}</span
-            >
+            <span v-if="false" v-show="errors.has('processos')" class="help is-danger">{{ errors.first("processos") }}</span>
           </div>
         </div>
-        <em
-          v-if="errormsg &amp;&amp; errormsg !== ''"
-          for="processos"
-          class="invalid"
-          >{{ errormsg }}</em
-        >
+        <em v-if="errormsg &amp;&amp; errormsg !== ''" for="processos" class="invalid">{{ errormsg }}</em>
       </b-form>
       <div style="width: 100%" slot="modal-footer">
         <b-btn v-if="editando" variant="outline-danger" @click="remove">
           Remover
         </b-btn>
-        <b-btn
-          class="float-right ml-2"
-          variant="primary"
-          @click="$refs.etiqueta.hide(true)"
-          :disabled="errors.any()"
-        >
+        <b-btn class="float-right ml-2" variant="primary" @click="$refs.etiqueta.hide(true)" :disabled="errors.any()">
           Gravar
         </b-btn>
-        <b-btn
-          class="float-right"
-          variant="secondary"
-          @click="$refs.etiqueta.hide(false)"
-        >
+        <b-btn class="float-right" variant="secondary" @click="$refs.etiqueta.hide(false)">
           Cancelar
         </b-btn>
       </div>

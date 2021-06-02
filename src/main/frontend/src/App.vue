@@ -8,28 +8,14 @@
           <nav
             class="navbar navbar navbar-expand-lg navbar-light"
             :class="{
-              'navbar-dark bg-success':
-                test.properties['balcaovirtual.env'] === 'desenv',
-              'navbar-dark bg-secondary':
-                test.properties['balcaovirtual.env'] === 'homolo',
-              'navbar-dark bg-primary':
-                test.properties['balcaovirtual.env'] === 'prod'
+              'navbar-dark bg-success': test.properties['balcaovirtual.env'] === 'desenv',
+              'navbar-dark bg-secondary': test.properties['balcaovirtual.env'] === 'homolo',
+              'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod'
             }"
           >
             <a class="navbar-brand pt-0 pb-0" href="#">
-              <img
-                id="logo-header"
-                src="./assets/balcao-virtual-38px.png"
-                alt="Logo Balcão Virtual"
-                height="38"
-              />
-              <img
-                class="ml-2"
-                id="logo-header2"
-                src="./assets/trf2-38px-2.png"
-                alt="Logo TRF2"
-                height="38"
-              />
+              <img id="logo-header" src="./assets/balcao-virtual-38px.png" alt="Logo Balcão Virtual" height="38" />
+              <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38" />
             </a>
 
             <button
@@ -47,157 +33,50 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Consulta Simples' }"
-                    tag="a"
-                    exact
-                    >Consulta</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consulta Simples' }" tag="a" exact>Consulta</router-link>
                 </li>
-                <li
-                  v-if="test.properties['balcaovirtual.cert.systems']"
-                  class="nav-item"
-                >
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Consultar Certidão' }"
-                    tag="a"
-                    exact
-                    >Certidões</router-link
-                  >
+                <li v-if="test.properties['balcaovirtual.cert.systems']" class="nav-item">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consultar Certidão' }" tag="a" exact>Certidões</router-link>
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Lista de Processos' }"
-                    tag="a"
-                    exact
-                    >Processos</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Processos' }" tag="a" exact>Processos</router-link>
                 </li>
                 <li class="nav-item" v-if="false">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Lista de Etiquetas' }"
-                    tag="a"
-                    exact
-                    >Etiquetas</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Etiquetas' }" tag="a" exact>Etiquetas</router-link>
                 </li>
-                <li
-                  class="nav-item"
-                  v-if="peticaoInicialAtiva"
-                >
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Petição Inicial' }"
-                    tag="a"
-                    >Petição Inicial</router-link
-                  >
+                <li class="nav-item" v-if="peticaoInicialAtiva">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Inicial' }" tag="a">Petição Inicial</router-link>
                 </li>
-                <li
-                  class="nav-item"
-                  v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')"
-                >
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Petição Intercorrente' }"
-                    tag="a"
-                    >Petição Intercorrente</router-link
-                  >
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Intercorrente' }" tag="a">Petição Intercorrente</router-link>
                 </li>
-                <li
-                  class="nav-item"
-                  v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')"
-                >
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Lista de Avisos' }"
-                    tag="a"
+                <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Avisos' }" tag="a"
                     >Intimação/Citação<sup v-if="cAvisos &amp;&amp; cAvisos > 0"
-                      ><span
-                        class="badge badge-pill badge-danger active-opacity"
-                        >{{ cAvisos }}</span
-                      ></sup
-                    ><sup v-if="cAvisos === undefined" style="opacity: 0.5;"
-                      ><span class="badge badge-pill badge-light"
-                        >Aguarde...</span
-                      ></sup
-                    ></router-link
+                      ><span class="badge badge-pill badge-danger active-opacity">{{ cAvisos }}</span></sup
+                    ><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link
                   >
                 </li>
                 <li class="nav-item" v-if="mesaAtiva">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Mesa' }"
-                    tag="a"
-                    >Minutas</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Mesa' }" tag="a">Minutas</router-link>
                 </li>
                 <li class="nav-item" v-if="mesaAtiva">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Sugestões' }"
-                    tag="a"
-                    >Sugestões</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Sugestões' }" tag="a">Sugestões</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Sobre' }"
-                    tag="a"
-                    >Sobre</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Sobre' }" tag="a">Sobre</router-link>
                 </li>
               </ul>
               <ul class="navbar-nav navbar-right">
                 <li class="nav-item" v-if="!jwt">
-                  <router-link
-                    class="nav-link"
-                    active-class="active"
-                    :to="{ name: 'Login' }"
-                    tag="a"
-                    >Login</router-link
-                  >
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Login' }" tag="a">Login</router-link>
                 </li>
-                <li
-                  class="nav-item dropdown"
-                  v-if="jwt &amp;&amp; jwt.username"
-                >
-                  <a
-                    class="nav-link dropdown-toggle"
-                    href=""
-                    id="navbarDropdownMenuLink"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
+                <li class="nav-item dropdown" v-if="jwt &amp;&amp; jwt.username">
+                  <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span>{{ ident }}</span>
                   </a>
-                  <div
-                    class="dropdown-menu logout"
-                    aria-labelledby="navbarDropdownMenuLink"
-                  >
-                    <router-link
-                      class="dropdown-item"
-                      active-class="active"
-                      :to="{ name: 'Status' }"
-                      tag="a"
-                      exact
-                      >Status</router-link
-                    >
+                  <div class="dropdown-menu logout" aria-labelledby="navbarDropdownMenuLink">
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'Status' }" tag="a" exact>Status</router-link>
                     <a class="dropdown-item" @click="logout">Logout</a>
                   </div>
                 </li>
@@ -212,28 +91,14 @@
         <div v-if="updateAvailable" class="container mt-3">
           <p class="alert alert-warning">
             Uma nova versão está disponível, clique
-            <a
-              @click.prevent="atualizar"
-              href=""
-              style="text-decoration: underline; color:blue;"
-              >aqui</a
-            >
+            <a @click.prevent="atualizar" href="" style="text-decoration: underline; color:blue;">aqui</a>
             para atualizar.
           </p>
         </div>
-        <div
-          v-if="!updateAvailable && !notificacoesAtivas && jwt"
-          class="container mt-3"
-        >
+        <div v-if="!updateAvailable && !notificacoesAtivas && jwt" class="container mt-3">
           <p class="alert alert-warning">
-            Para receber atualizações de seus processos favoritos, por favor,
-            clique
-            <a
-              @click.prevent="habilitarNotificacoes"
-              href=""
-              style="text-decoration: underline; color:blue;"
-              >aqui</a
-            >
+            Para receber atualizações de seus processos favoritos, por favor, clique
+            <a @click.prevent="habilitarNotificacoes" href="" style="text-decoration: underline; color:blue;">aqui</a>
             e permita o envio de notificações.
           </p>
         </div>
@@ -250,14 +115,8 @@
         </transition>
         <div v-if="notificacoesBloqueadas && jwt" class="container mt-3">
           <p class="alert alert-warning">
-            Não estamos conseguindo enviar notificações para você. Por favor,
-            desbloqueie o recebimento de notificações e clique
-            <a
-              @click.prevent="atualizar"
-              href=""
-              style="text-decoration: underline; color:blue;"
-              >aqui</a
-            >
+            Não estamos conseguindo enviar notificações para você. Por favor, desbloqueie o recebimento de notificações e clique
+            <a @click.prevent="atualizar" href="" style="text-decoration: underline; color:blue;">aqui</a>
             para tentarmos novamente.
           </p>
         </div>
@@ -286,10 +145,7 @@ import router from "./router";
 export default {
   name: "app",
   mounted() {
-    UtilsBL.overrideProperties(
-      this.settings,
-      JSON.parse(localStorage.getItem("bv-settings")) || {}
-    );
+    UtilsBL.overrideProperties(this.settings, JSON.parse(localStorage.getItem("bv-settings")) || {});
     this.$router.beforeEach((to, from, next) => {
       this.transitionName = to.params.transitionName;
       next();
@@ -344,7 +200,6 @@ export default {
       router.push({ name: "Login" });
     });
 
-
     this.$on("updateLogged", token => {
       this.cAvisos = undefined;
       this.avisos = undefined;
@@ -363,16 +218,14 @@ export default {
           } else {
             // Carragar a lista de avisos pendentes
             this.$nextTick(function() {
-              this.$http
-                .get("aviso/listar", { block: false })
-                .then(
-                  response => {
-                    this.avisos = response.data;
-                    this.cAvisos = this.avisos.list.length;
-                    this.avisosMNI = undefined;
-                  },
-                  error => console.log("Erro carregando avisos", error)
-                );
+              this.$http.get("aviso/listar", { block: false }).then(
+                response => {
+                  this.avisos = response.data;
+                  this.cAvisos = this.avisos.list.length;
+                  this.avisosMNI = undefined;
+                },
+                error => console.log("Erro carregando avisos", error)
+              );
             });
           }
         }
@@ -437,9 +290,7 @@ export default {
                 if (i === a.length - 1) this.nomesSistemas += " e ";
                 else this.nomesSistemas += ", ";
               }
-              this.nomesSistemas += this.test.properties[
-                "balcaovirtual." + a[i] + ".name"
-              ];
+              this.nomesSistemas += this.test.properties["balcaovirtual." + a[i] + ".name"];
             }
           }
 
@@ -450,22 +301,14 @@ export default {
             for (i = 0; i < a.length; i++) {
               this.sistemasCertificadores.push(a[i]);
               if (i > 0) {
-                if (i === a.length - 1)
-                  this.nomesSistemasCertificadores += " e ";
+                if (i === a.length - 1) this.nomesSistemasCertificadores += " e ";
                 else this.nomesSistemasCertificadores += ", ";
               }
-              this.nomesSistemasCertificadores += this.test.properties[
-                "balcaovirtual." + a[i] + ".cert.name"
-              ];
+              this.nomesSistemasCertificadores += this.test.properties["balcaovirtual." + a[i] + ".cert.name"];
             }
           }
 
-          if (
-            this.test.properties["balcaovirtual.wootric.token"] &&
-            this.test.properties["balcaovirtual.wootric.token"] !==
-              "[undefined]" &&
-            this.jwt
-          ) {
+          if (this.test.properties["balcaovirtual.wootric.token"] && this.test.properties["balcaovirtual.wootric.token"] !== "[undefined]" && this.jwt) {
             // This loads the Wootric survey
             // window.wootric_survey_immediately = true
             window.wootricSettings = {
@@ -489,8 +332,7 @@ export default {
     }
 
     try {
-      if (localStorage.getItem("bv-notificacoes-ativas"))
-        this.notificacoesAtivas = true;
+      if (localStorage.getItem("bv-notificacoes-ativas")) this.notificacoesAtivas = true;
       this.registerMessagingServiceWorker();
     } catch (e) {
       console.log(e);
@@ -533,10 +375,7 @@ export default {
   },
   computed: {
     mesaAtiva: function() {
-      var f =
-        this.jwt &&
-        this.jwt.username &&
-        (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
+      var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
       return f;
     },
 
@@ -545,13 +384,7 @@ export default {
       for (var prop in this.jwt.user) {
         if (this.jwt.user.hasOwnProperty(prop)) {
           var u = this.jwt.user[prop];
-          if (
-            u.sistema &&
-            u.sistema.includes("eproc") &&
-            u.origin &&
-            u.origin == "ext"
-          )
-            return true;
+          if (u.sistema && u.sistema.includes("eproc") && u.origin && u.origin == "ext") return true;
         }
       }
       return false;
@@ -589,12 +422,7 @@ export default {
 
       this.$http
         .post(
-          "mesa/" +
-            "null" +
-            "/documento/" +
-            d.id +
-            "/assinar-com-senha?sistema=" +
-            d.sistema,
+          "mesa/" + "null" + "/documento/" + d.id + "/assinar-com-senha?sistema=" + d.sistema,
           {
             username: username,
             password: password
@@ -608,11 +436,7 @@ export default {
             d.descricaoDoStatus = "Assinada";
             d.checked = false;
             d.disabled = true;
-            UtilsBL.logEvento(
-              "assinatura em lote",
-              "assinado",
-              "assinado com senha"
-            );
+            UtilsBL.logEvento("assinatura em lote", "assinado", "assinado com senha");
             Bus.$emit("prgNext");
           },
           error => {
@@ -624,19 +448,7 @@ export default {
     },
 
     assinarComSenhaEmLote: function(documentos, username, password, cont) {
-      Bus.$emit(
-        "prgStart",
-        "Assinando Com Senha",
-        documentos.length,
-        i =>
-          this.assinarComSenha(
-            documentos[i],
-            username,
-            password,
-            documentos.length !== 1
-          ),
-        cont
-      );
+      Bus.$emit("prgStart", "Assinando Com Senha", documentos.length, i => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1), cont);
     },
 
     atualizar: function() {
@@ -652,23 +464,17 @@ export default {
 
     incluirToken: function(token) {
       this.notificacoesToken = token;
-      this.$http
-        .post("notificacao/incluir-token?token=" + encodeURIComponent(token))
-        .then(
-          response => {
-            if (response.status === 200 && response.data.status === "OK") {
-              Bus.$emit(
-                "message",
-                "Sucesso",
-                "Notificações ativas. Muito obrigado!"
-              );
-              UtilsBL.logEvento("notificacao", "notificacao-ativa");
-            }
-          },
-          error => {
-            Bus.$emit("message", "Erro", error.data.errormsg);
+      this.$http.post("notificacao/incluir-token?token=" + encodeURIComponent(token)).then(
+        response => {
+          if (response.status === 200 && response.data.status === "OK") {
+            Bus.$emit("message", "Sucesso", "Notificações ativas. Muito obrigado!");
+            UtilsBL.logEvento("notificacao", "notificacao-ativa");
           }
-        );
+        },
+        error => {
+          Bus.$emit("message", "Erro", error.data.errormsg);
+        }
+      );
     },
 
     registerMessagingServiceWorker: function() {
@@ -693,31 +499,18 @@ export default {
           console.log("Messaging new content is available; please refresh.");
         },
         offline() {
-          console.log(
-            "Messaging reports: No internet connection found. App is running in offline mode."
-          );
+          console.log("Messaging reports: No internet connection found. App is running in offline mode.");
         },
         error(error) {
-          console.error(
-            "Error during messaging service worker registration:",
-            error
-          );
+          console.error("Error during messaging service worker registration:", error);
         }
       });
     },
 
     inicializarNotificoes: function() {
-      if (
-        this.notificacoesAtivas &&
-        this.jwt &&
-        this.test &&
-        this.messagingServiceWorkerRegistration
-      ) {
+      if (this.notificacoesAtivas && this.jwt && this.test && this.messagingServiceWorkerRegistration) {
         if (!firebase.apps.length) {
-          initializeFirebase(
-            this.messagingServiceWorkerRegistration,
-            this.test.properties
-          );
+          initializeFirebase(this.messagingServiceWorkerRegistration, this.test.properties);
         } else if (this.notificacoesToken) {
           this.incluirToken(this.notificacoesToken);
         }
@@ -745,9 +538,7 @@ export default {
             Bus.$emit("update-available");
           },
           offline() {
-            console.log(
-              "No internet connection found. App is running in offline mode."
-            );
+            console.log("No internet connection found. App is running in offline mode.");
           },
           error(error) {
             console.error("Error during service worker registration:", error);

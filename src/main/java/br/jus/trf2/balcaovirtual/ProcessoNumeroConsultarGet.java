@@ -9,7 +9,6 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,16 +17,14 @@ import com.google.gson.JsonParser;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroConsultarGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroConsultarGetResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroConsultarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumeroConsultarGet;
 
 @AcessoPublicoEPrivado
 public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 
 	@Override
-	public void run(ProcessoNumeroConsultarGetRequest req, ProcessoNumeroConsultarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		String usuario = null;
 		String senha = null;
 		String origem = null;
@@ -71,14 +68,14 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 	}
 
 	private String enhanceEproc(String usuario, String sistema, String numero, String json) throws Exception {
-		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroConsultarGetResponse>> future = SwaggerCall.callAsync(
-				"obter tipos de petição intercorrente", Utils.getApiPassword(sistema), "GET",
-				Utils.getApiUrl(sistema) + "/usuario/" + usuario + "/processo/" + numero + "/consultar", null,
-				UsuarioUsernameProcessoNumeroConsultarGetResponse.class);
-		SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroConsultarGetResponse> sar = future.get();
+		Future<SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroConsultarGet.Response>> future = SwaggerCall
+				.callAsync("obter tipos de petição intercorrente", Utils.getApiPassword(sistema), "GET",
+						Utils.getApiUrl(sistema) + "/usuario/" + usuario + "/processo/" + numero + "/consultar", null,
+						IUsuarioUsernameProcessoNumeroConsultarGet.Response.class);
+		SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroConsultarGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		UsuarioUsernameProcessoNumeroConsultarGetResponse r = (UsuarioUsernameProcessoNumeroConsultarGetResponse) sar
+		IUsuarioUsernameProcessoNumeroConsultarGet.Response r = (IUsuarioUsernameProcessoNumeroConsultarGet.Response) sar
 				.getResp();
 
 		if (r.numero == null)

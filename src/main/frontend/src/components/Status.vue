@@ -14,32 +14,13 @@
 
     <div class="row" v-if="$parent.jwt">
       <div class="form-group col-md-4">
-        <my-input
-          :disabled="true"
-          name="nome"
-          label="Nome"
-          v-model="$parent.jwt.name"
-          :edit="true"
-        ></my-input>
+        <my-input :disabled="true" name="nome" label="Nome" v-model="$parent.jwt.name" :edit="true"></my-input>
       </div>
       <div class="form-group col-md-4">
-        <my-input
-          :disabled="true"
-          name="cpf"
-          v-model="$parent.jwt.cpf"
-          label="CPF"
-          :edit="true"
-          mask="999.999.999-99"
-        ></my-input>
+        <my-input :disabled="true" name="cpf" v-model="$parent.jwt.cpf" label="CPF" :edit="true" mask="999.999.999-99"></my-input>
       </div>
       <div class="form-group col-md-4">
-        <my-input
-          :disabled="true"
-          name="email"
-          v-model="$parent.jwt.email"
-          label="E-mail"
-          :edit="true"
-        ></my-input>
+        <my-input :disabled="true" name="email" v-model="$parent.jwt.email" label="E-mail" :edit="true"></my-input>
       </div>
     </div>
 
@@ -63,29 +44,19 @@
             <tbody>
               <tr v-for="u in $parent.jwt.user" :key="u.id">
                 <td>
-                  <span :title="'Sigla do Sistema: ' + u.sistema">{{
-                    $parent.test.properties[
-                      "balcaovirtual." + u.sistema + ".name"
-                    ]
-                  }}</span>
+                  <span :title="'Sigla do Sistema: ' + u.sistema">{{ $parent.test.properties["balcaovirtual." + u.sistema + ".name"] }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Usuário: ' + u.ieusu">{{
-                    u.origin === "int" ? "interno" : "externo"
-                  }}</span>
+                  <span :title="'ID Usuário: ' + u.ieusu">{{ u.origin === "int" ? "interno" : "externo" }}</span>
                 </td>
                 <td>
                   <span>{{ u.perfil }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Unidade: ' + u.ieunidade">{{
-                    u.unidade
-                  }}</span>
+                  <span :title="'ID Unidade: ' + u.ieunidade">{{ u.unidade }}</span>
                 </td>
                 <td>
-                  <span :title="'ID Entidade: ' + u.ieentidade">{{
-                    u.entidade
-                  }}</span>
+                  <span :title="'ID Entidade: ' + u.ieentidade">{{ u.entidade }}</span>
                 </td>
               </tr>
             </tbody>
@@ -114,9 +85,7 @@
             <tbody>
               <tr v-for="s in $parent.sistemas" :key="s.id">
                 <td>
-                  <span :title="'Identificador: ' + s">{{
-                    $parent.test.properties["balcaovirtual." + s + ".name"]
-                  }}</span>
+                  <span :title="'Identificador: ' + s">{{ $parent.test.properties["balcaovirtual." + s + ".name"] }}</span>
                 </td>
                 <td>
                   <span v-bind:class="classeDoTeste(apis, s)">
@@ -184,10 +153,8 @@ export default {
         var sistema = this.$parent.sistemas[i];
         var sistemaSlug = sistema.replace(/\./g, "-");
         for (var j = 0; j < dependencies.length; j++) {
-          if (dependencies[j].service === sistemaSlug + "-api")
-            this.$set(this.apis, sistema, dependencies[j]);
-          else if (dependencies[j].service === sistemaSlug + "-mni")
-            this.$set(this.mnis, sistema, dependencies[j]);
+          if (dependencies[j].service === sistemaSlug + "-api") this.$set(this.apis, sistema, dependencies[j]);
+          else if (dependencies[j].service === sistemaSlug + "-mni") this.$set(this.mnis, sistema, dependencies[j]);
         }
       }
     }

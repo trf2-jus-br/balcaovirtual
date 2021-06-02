@@ -1,16 +1,14 @@
 package br.jus.trf2.balcaovirtual;
 
+import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroSinaisGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Processo;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinaisGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroSinaisGetResponse;
-import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 
 public class ProcessoNumeroSinaisGet implements IProcessoNumeroSinaisGet {
 
 	@Override
-	public void run(ProcessoNumeroSinaisGetRequest req, ProcessoNumeroSinaisGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		try (Dao dao = new Dao()) {

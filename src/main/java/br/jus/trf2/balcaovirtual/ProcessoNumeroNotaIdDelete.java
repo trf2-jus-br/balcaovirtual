@@ -2,18 +2,16 @@ package br.jus.trf2.balcaovirtual;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdDelete;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdDeleteRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdDeleteResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdDelete;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaIdDelete implements IProcessoNumeroNotaIdDelete {
 
 	@Override
-	public void run(ProcessoNumeroNotaIdDeleteRequest req, ProcessoNumeroNotaIdDeleteResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 

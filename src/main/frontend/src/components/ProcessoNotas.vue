@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="d-print-none mt-3"
-    v-show="$parent.$parent.settings.mostrarNotas"
-    v-if="$parent.$parent.jwt"
-  >
+  <div class="d-print-none mt-3" v-show="$parent.$parent.settings.mostrarNotas" v-if="$parent.$parent.jwt">
     <div class="card-deck">
       <processo-nota
         v-show="temCodigoDeUnidade"
@@ -73,10 +69,7 @@ export default {
       this.$emit(this.notaUnidade || this.notaPessoal ? "ativar" : "desativar");
       this.$refs.notaUnidade.$refs.textarea.style.height = "5px";
       this.$refs.notaPessoal.$refs.textarea.style.height = "5px";
-      var h = Math.max(
-        this.$refs.notaUnidade.$refs.textarea.scrollHeight,
-        this.$refs.notaPessoal.$refs.textarea.scrollHeight
-      );
+      var h = Math.max(this.$refs.notaUnidade.$refs.textarea.scrollHeight, this.$refs.notaPessoal.$refs.textarea.scrollHeight);
       this.$refs.notaUnidade.$refs.textarea.style.height = h + "px";
       this.$refs.notaPessoal.$refs.textarea.style.height = h + "px";
     }

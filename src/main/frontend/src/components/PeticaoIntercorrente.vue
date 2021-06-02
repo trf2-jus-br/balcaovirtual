@@ -8,16 +8,11 @@
 
     <div class="row pb-4" v-if="editando &amp;&amp; !mostrarQuantidadePorData">
       <div class="col-md-12">
-        <vue-clip
-          :options="vueclipOptions"
-          :on-added-file="addedFileProxy"
-          :on-complete="completeProxy"
-        >
+        <vue-clip :options="vueclipOptions" :on-added-file="addedFileProxy" :on-complete="completeProxy">
           <template slot="clip-uploader-action">
             <div>
               <div class="dz-message drop-box">
-                Arraste suas petições intercorrentes e solte elas nesta área, ou
-                clique aqui para selecioná-las.
+                Arraste suas petições intercorrentes e solte elas nesta área, ou clique aqui para selecioná-las.
                 <br />Use arquivos PDF com tamanho máximo de 5MB.
               </div>
             </div>
@@ -26,12 +21,9 @@
           <template slot="clip-uploader-body" slot-scope="props">
             <div class="col-md-12 mt-3" v-if="hasErrorMessages(props.files)">
               <div class="alert alert-danger mb-0">
-                <strong>Arquivos inválidos!</strong> Não foi possível aceitar os
-                seguintes arquivos:
+                <strong>Arquivos inválidos!</strong> Não foi possível aceitar os seguintes arquivos:
                 <ul class="mb-0" v-if="ifile.errorMessage">
-                  <li v-for="ifile in props.files" :key="ifile.id">
-                    {{ ifile.name }} ({{ ifile.errorMessage }})
-                  </li>
+                  <li v-for="ifile in props.files" :key="ifile.id">{{ ifile.name }} ({{ ifile.errorMessage }})</li>
                 </ul>
               </div>
             </div>
@@ -40,10 +32,7 @@
       </div>
     </div>
 
-    <div
-      class="row"
-      v-if="arquivos.length > 0 &amp;&amp; !mostrarQuantidadePorData"
-    >
+    <div class="row" v-if="arquivos.length > 0 &amp;&amp; !mostrarQuantidadePorData">
       <div class="col-sm-12" style="padding-top: 1em;">
         <div class="table-responsive">
           <table class="table table-peticao">
@@ -96,23 +85,9 @@
                 </td>
 
                 <td v-show="!f.anexo" :rowspan="f.rowspan">
-                  <select
-                    style="min-width: 8em;"
-                    v-if="editando"
-                    class="form-control mr-sm-2"
-                    v-model="f.tipo"
-                    :disabled="f.protocolado"
-                    @change="selecionarTipo(f, f.tipo)"
-                  >
-                    <option
-                      v-for="tipo in f.tipos"
-                      :value="tipo.id"
-                      :key="tipo.id"
-                      >{{ tipo.descricao }}</option
-                    >
-                    <option disabled hidden selected value=""
-                      >[Selecionar]</option
-                    >
+                  <select style="min-width: 8em;" v-if="editando" class="form-control mr-sm-2" v-model="f.tipo" :disabled="f.protocolado" @change="selecionarTipo(f, f.tipo)">
+                    <option v-for="tipo in f.tipos" :value="tipo.id" :key="tipo.id">{{ tipo.descricao }}</option>
+                    <option disabled hidden selected value="">[Selecionar]</option>
                   </select>
                   <span v-if="!editando">{{ f.tipodescr }}</span>
                 </td>
@@ -126,36 +101,20 @@
                     :disabled="f.protocolado"
                     @change="selecionarSegredo(f, f.segredo)"
                   >
-                    <option disabled hidden selected value=""
-                      >[Selecionar]</option
-                    >
+                    <option disabled hidden selected value="">[Selecionar]</option>
                     <option :value="0">Sem Sigilo (Nível 0)</option>
-                    <option v-if="f.sigilo >= 1" :value="1"
-                      >Segredo de Justiça (Nível 1)</option
-                    >
-                    <option v-if="f.sigilo >= 2" :value="2"
-                      >Sigiloso (Interno Nível 2)</option
-                    >
-                    <option v-if="f.sigilo >= 3" :value="3"
-                      >Sigiloso (Interno Nível 3)</option
-                    >
-                    <option v-if="f.sigilo >= 4" :value="4"
-                      >Sigiloso (Interno Nível 4)</option
-                    >
-                    <option v-if="f.sigilo >= 5" :value="5"
-                      >Sigiloso (Interno Nível 5)</option
-                    >
+                    <option v-if="f.sigilo >= 1" :value="1">Segredo de Justiça (Nível 1)</option>
+                    <option v-if="f.sigilo >= 2" :value="2">Sigiloso (Interno Nível 2)</option>
+                    <option v-if="f.sigilo >= 3" :value="3">Sigiloso (Interno Nível 3)</option>
+                    <option v-if="f.sigilo >= 4" :value="4">Sigiloso (Interno Nível 4)</option>
+                    <option v-if="f.sigilo >= 5" :value="5">Sigiloso (Interno Nível 5)</option>
                   </select>
                   <span v-if="!editando">{{ f.segredo ? "Sim" : "Não" }}</span>
                 </td>
 
                 <td v-show="!f.anexo" :rowspan="f.rowspan">
                   <v-selectpage
-                    v-if="
-                      editando &&
-                        avisos[f.processo] !== undefined &&
-                        avisos[f.processo].length > 1
-                    "
+                    v-if="editando && avisos[f.processo] !== undefined && avisos[f.processo].length > 1"
                     :data="avisos[f.processo]"
                     v-model="f.encerraprazos"
                     key-field="idaviso"
@@ -167,83 +126,44 @@
                     placeholder="[Selecione]"
                   ></v-selectpage>
                   <select
-                    v-if="
-                      editando &&
-                        (avisos[f.processo] === undefined ||
-                          avisos[f.processo].length <= 1)
-                    "
+                    v-if="editando && (avisos[f.processo] === undefined || avisos[f.processo].length <= 1)"
                     style="min-width: 4em;"
                     class="form-control mr-sm-2"
                     v-model="f.encerraprazos"
                     :disabled="f.protocolado"
                     @change="selecionarEncerraPrazos(f, f.encerraprazos)"
                   >
-                    <option disabled hidden selected value=""
-                      >[Selecionar]</option
-                    >
+                    <option disabled hidden selected value="">[Selecionar]</option>
                     <option :value="false">Não</option>
                     <option v-if="avisos[f.processo]" :value="true">Sim</option>
                   </select>
-                  <span v-if="!editando">{{
-                    f.encerraprazos ? "Sim" : "Não"
-                  }}</span>
+                  <span v-if="!editando">{{ f.encerraprazos ? "Sim" : "Não" }}</span>
                 </td>
 
                 <td v-show="!f.anexo && mostrarColunaObs" :rowspan="f.rowspan">
                   <div v-if="editando && f.sistema && f.sistema.includes('.eproc')" class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      style="min-width: 6em;"
-                      placeholder=""
-                      maxlength="200"
-                      v-model="f.observacoes"
-                      :disabled="f.protocolado"
-                    />
+                    <input type="text" class="form-control" style="min-width: 6em;" placeholder="" maxlength="200" v-model="f.observacoes" :disabled="f.protocolado" />
                   </div>
                   <span v-if="!editando">
-                    {{f.observacoes}}
+                    {{ f.observacoes }}
                   </span>
                 </td>
 
                 <td>
                   <a @click="view(doc)">
-                    <a
-                      :href="$http.options.root + '/arquivo-temporario/' + f.id"
-                      target="_blank"
-                      >{{ f.nome }}
-                    </a>
+                    <a :href="$http.options.root + '/arquivo-temporario/' + f.id" target="_blank">{{ f.nome }} </a>
                   </a>
                 </td>
 
-                <td
-                  class="status-td"
-                  :rowspan="f.protocolado ? f.rowspan : 1"
-                  v-show="f.protocolado ? !f.anexo : true"
-                >
-                  <span
-                    v-show="f.file.progress &amp;&amp; f.file.progress < 100"
-                    >{{ f.file.progress.toFixed(1) }}%</span
-                  >
-                  <span
-                    :class="{ green: f.protocolado }"
-                    v-show="f.file.progress === 100 &amp;&amp; !f.errormsg"
-                    >{{ f.status }}</span
-                  >
-                  <span v-show="f.errormsg" :class="{ red: true }">{{
-                    f.errormsg
-                  }}</span>
-                  <span v-show="f.$error"
-                    >{{ f.$error }} {{ f.$errorParam }}</span
-                  >
+                <td class="status-td" :rowspan="f.protocolado ? f.rowspan : 1" v-show="f.protocolado ? !f.anexo : true">
+                  <span v-show="f.file.progress &amp;&amp; f.file.progress < 100">{{ f.file.progress.toFixed(1) }}%</span>
+                  <span :class="{ green: f.protocolado }" v-show="f.file.progress === 100 &amp;&amp; !f.errormsg">{{ f.status }}</span>
+                  <span v-show="f.errormsg" :class="{ red: true }">{{ f.errormsg }}</span>
+                  <span v-show="f.$error">{{ f.$error }} {{ f.$errorParam }}</span>
                 </td>
 
                 <td align="center" v-if="editando">
-                  <button
-                    type="button"
-                    @click="removerArquivo(f)"
-                    class="btn btn-sm btn-outline-danger"
-                  >
+                  <button type="button" @click="removerArquivo(f)" class="btn btn-sm btn-outline-danger">
                     &#x274C;
                   </button>
                 </td>
@@ -256,41 +176,17 @@
 
     <div class="row" v-if="!mostrarQuantidadePorData">
       <div class="col-sm-12">
-        <button
-          type="button"
-          @click="carregarProtocoladosRecentemente()"
-          id="protocoladosRecentemente"
-          class="btn btn-secondary d-print-none mr-3 mt-3"
-        >
+        <button type="button" @click="carregarProtocoladosRecentemente()" id="protocoladosRecentemente" class="btn btn-secondary d-print-none mr-3 mt-3">
           Consultar Protocolos
         </button>
-        <button
-          type="button"
-          @click="limpar()"
-          id="limpar"
-          v-if="!editando"
-          class="btn btn-secondary d-print-none mt-3"
-        >
+        <button type="button" @click="limpar()" id="limpar" v-if="!editando" class="btn btn-secondary d-print-none mt-3">
           Enviar Outras Petições
         </button>
-        <button
-          type="button"
-          @click="imprimirArquivosComErro()"
-          v-if="arquivosComErro.length > 0"
-          class="btn btn-info float-right ml-3 d-print-none mt-3"
-        >
+        <button type="button" @click="imprimirArquivosComErro()" v-if="arquivosComErro.length > 0" class="btn btn-info float-right ml-3 d-print-none mt-3">
           Imprimir Arquivos com Erro&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{
-            arquivosComErro.length
-          }}</span>
+          <span class="badge badge-pill badge-warning">{{ arquivosComErro.length }}</span>
         </button>
-        <button
-          type="button"
-          @click="imprimir()"
-          id="imprimir"
-          v-if="!editando"
-          class="btn btn-info float-right ml-3 d-print-none mt-3"
-        >
+        <button type="button" @click="imprimir()" id="imprimir" v-if="!editando" class="btn btn-info float-right ml-3 d-print-none mt-3">
           Imprimir
         </button>
         <button
@@ -302,18 +198,13 @@
           class="btn btn-primary float-right d-print-none mt-3"
         >
           Protocolar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{
-            arquivosAProtocolar
-          }}</span>
+          <span class="badge badge-pill badge-warning">{{ arquivosAProtocolar }}</span>
         </button>
       </div>
     </div>
 
     <!-- QUANTIDADE POR DATA -->
-    <div
-      class="row"
-      v-if="mostrarQuantidadePorData &amp;&amp; dataDeProtocolo === undefined"
-    >
+    <div class="row" v-if="mostrarQuantidadePorData &amp;&amp; dataDeProtocolo === undefined">
       <div class="col col-12" v-if="quantidadePorData.length > 0">
         <div class="protocolos-header">
           Petição(ões) Intercorrente(s) Protocolada(s) Recentemente
@@ -332,9 +223,7 @@
                   <span v-html="p.dataFormatada"></span>
                 </td>
                 <td style="text-align: right;">
-                  <a href="" @click.prevent="carregarResumo(p.data)">{{
-                    p.quantidade
-                  }}</a>
+                  <a href="" @click.prevent="carregarResumo(p.data)">{{ p.quantidade }}</a>
                 </td>
               </tr>
             </tbody>
@@ -342,18 +231,10 @@
         </div>
       </div>
       <div class="col col-sm-12" v-if="quantidadePorData.length == 0">
-        <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma petição intercorrente protocolada
-          nos últimos 7 dias.
-        </p>
+        <p class="alert alert-warning"><strong>Atenção!</strong> Nenhuma petição intercorrente protocolada nos últimos 7 dias.</p>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button
-          type="button"
-          @click="voltarParaEdicao()"
-          v-if="quantidadePorData !== undefined"
-          class="btn btn-success d-print-none"
-        >
+        <button type="button" @click="voltarParaEdicao()" v-if="quantidadePorData !== undefined" class="btn btn-success d-print-none">
           Voltar
         </button>
       </div>
@@ -401,11 +282,7 @@
                 </td>
                 <td>{{ r.protocolo }}</td>
                 <td>
-                  {{
-                    $parent.test.properties[
-                      "balcaovirtual." + r.sistema + ".name"
-                    ]
-                  }}
+                  {{ $parent.test.properties["balcaovirtual." + r.sistema + ".name"] }}
                 </td>
                 <td>{{ r.unidade }}</td>
               </tr>
@@ -414,29 +291,15 @@
         </div>
       </div>
       <div class="col-sm-12" style="padding-top: 1em;">
-        <button
-          type="button"
-          @click="voltarParaQuantidade()"
-          v-if="dataDeProtocolo !== undefined"
-          class="btn btn-success d-print-none"
-        >
+        <button type="button" @click="voltarParaQuantidade()" v-if="dataDeProtocolo !== undefined" class="btn btn-success d-print-none">
           Voltar
         </button>
-        <button
-          type="button"
-          @click="imprimir()"
-          id="imprimir"
-          v-if="resumoPorData.length > 0"
-          class="btn btn-info float-right ml-3 d-print-none"
-        >
+        <button type="button" @click="imprimir()" id="imprimir" v-if="resumoPorData.length > 0" class="btn btn-info float-right ml-3 d-print-none">
           Imprimir
         </button>
       </div>
     </div>
-    <processo-multiplos
-      ref="processosMultiplos"
-      @ok="multiplosProcessos"
-    ></processo-multiplos>
+    <processo-multiplos ref="processosMultiplos" @ok="multiplosProcessos"></processo-multiplos>
   </div>
 </template>
 
@@ -538,7 +401,7 @@ export default {
     mostrarColunaObs: function() {
       // var a = [];
       for (var i = 0; i < this.arquivos.length; i++) {
-        if (this.arquivos[i].sistema && this.arquivos[i].sistema.includes('.eproc')) return true;
+        if (this.arquivos[i].sistema && this.arquivos[i].sistema.includes(".eproc")) return true;
       }
       return false;
     }
@@ -550,8 +413,7 @@ export default {
         if (data.status[i].errormsg) {
           if (this.errormsg === undefined) this.errormsg = "";
           else this.errormsg += "; ";
-          this.errormsg +=
-            data.status[i].system + ": " + data.status[i].errormsg;
+          this.errormsg += data.status[i].system + ": " + data.status[i].errormsg;
         }
       }
 
@@ -570,8 +432,7 @@ export default {
         }
 
         const obj = aAvisos.reduce((accumulator, currentValue) => {
-          if (accumulator[currentValue.processoFormatado] === undefined)
-            accumulator[currentValue.processoFormatado] = [];
+          if (accumulator[currentValue.processoFormatado] === undefined) accumulator[currentValue.processoFormatado] = [];
           else console.log(currentValue.processoFormatado);
           accumulator[currentValue.processoFormatado].push(currentValue);
           return accumulator;
@@ -627,22 +488,18 @@ export default {
 
     carregarResumo: function(data) {
       this.dataDeProtocolo = UtilsBL.formatDDMMYYYY(data);
-      this.$http
-        .get("peticao-intercorrente/listar?data=" + data, { block: true })
-        .then(
-          response => {
-            this.resumoPorData = response.data.list;
-            for (var i = 0; i < this.resumoPorData.length; i++) {
-              var r = this.resumoPorData[i];
-              r.dataprotocoloFormatada = UtilsBL.formatJSDDMMYYYYHHMM(
-                r.dataprotocolo
-              );
-            }
-          },
-          error => {
-            Bus.$emit("message", "Erro", error.data.errormsg);
+      this.$http.get("peticao-intercorrente/listar?data=" + data, { block: true }).then(
+        response => {
+          this.resumoPorData = response.data.list;
+          for (var i = 0; i < this.resumoPorData.length; i++) {
+            var r = this.resumoPorData[i];
+            r.dataprotocoloFormatada = UtilsBL.formatJSDDMMYYYYHHMM(r.dataprotocolo);
           }
-        );
+        },
+        error => {
+          Bus.$emit("message", "Erro", error.data.errormsg);
+        }
+      );
     },
 
     voltarParaQuantidade: function() {
@@ -677,78 +534,53 @@ export default {
         a.status = "Validando...";
         a.validando = true;
         a.valido = false;
-        this.$http
-          .get(
-            "processo/" + ProcessoBL.somenteNumeros(a.processo) + "/validar",
-            { block: true }
-          )
-          .then(
-            response => {
-              a.validando = false;
-              if (
-                response.data.list &&
-                response.data.list.length > 0 &&
-                response.data.list[0].numero
-              ) {
-                var d = response.data.list[0];
-                a.sistema = d.sistema;
-                a.status =
-                  d.unidade +
-                  " - " +
-                  this.$parent.test.properties[
-                    "balcaovirtual." + d.sistema + ".name"
-                  ];
-                a.valido = true;
-                this.$http
-                  .get(
-                    "processo/" +
-                      ProcessoBL.somenteNumeros(a.processo) +
-                      "/peticao-intercorrente/validar?sistema=" +
-                      a.sistema,
-                    { block: true }
-                  )
-                  .then(
-                    response => {
-                      var d = response.data;
-                      a.tipos = d.tipos;
-                      a.identencerraprazos = d.identencerraprazos;
-                      a.sigilo = d.sigilo;
-                      a.parte = d.parte;
-                      var arr = this.avisos[a.processo];
-                      if (d.avisos && arr) {
-                        for (var i = 0; i < d.avisos.length; i++) {
-                          for (var j = 0; j < arr.length; j++) {
-                            if (arr[j].idaviso === d.avisos[i].id) {
-                              arr[j].evento = d.avisos[i].evento;
-                              arr[j].data = UtilsBL.formatJSDDMMYYYYHHMM(
-                                d.avisos[i].data
-                              );
-                            }
-                          }
+        this.$http.get("processo/" + ProcessoBL.somenteNumeros(a.processo) + "/validar", { block: true }).then(
+          response => {
+            a.validando = false;
+            if (response.data.list && response.data.list.length > 0 && response.data.list[0].numero) {
+              var d = response.data.list[0];
+              a.sistema = d.sistema;
+              a.status = d.unidade + " - " + this.$parent.test.properties["balcaovirtual." + d.sistema + ".name"];
+              a.valido = true;
+              this.$http.get("processo/" + ProcessoBL.somenteNumeros(a.processo) + "/peticao-intercorrente/validar?sistema=" + a.sistema, { block: true }).then(
+                response => {
+                  var d = response.data;
+                  a.tipos = d.tipos;
+                  a.identencerraprazos = d.identencerraprazos;
+                  a.sigilo = d.sigilo;
+                  a.parte = d.parte;
+                  var arr = this.avisos[a.processo];
+                  if (d.avisos && arr) {
+                    for (var i = 0; i < d.avisos.length; i++) {
+                      for (var j = 0; j < arr.length; j++) {
+                        if (arr[j].idaviso === d.avisos[i].id) {
+                          arr[j].evento = d.avisos[i].evento;
+                          arr[j].data = UtilsBL.formatJSDDMMYYYYHHMM(d.avisos[i].data);
                         }
                       }
-                      if (a.identencerraprazos === undefined)
-                        a.encerraprazos = false;
-                    },
-                    error => {
-                      a.validando = false;
-                      a.valido = false;
-                      a.errormsg = error.data.errormsg;
-                      a.status = undefined;
-                      a.sistema = undefined;
                     }
-                  );
-              } else {
-                a.status = undefined;
-                a.errormsg = "Processo não encontrado";
-              }
-            },
-            error => {
-              a.validando = false;
-              a.valido = false;
-              a.errormsg = error.data.errormsg;
+                  }
+                  if (a.identencerraprazos === undefined) a.encerraprazos = false;
+                },
+                error => {
+                  a.validando = false;
+                  a.valido = false;
+                  a.errormsg = error.data.errormsg;
+                  a.status = undefined;
+                  a.sistema = undefined;
+                }
+              );
+            } else {
+              a.status = undefined;
+              a.errormsg = "Processo não encontrado";
             }
-          );
+          },
+          error => {
+            a.validando = false;
+            a.valido = false;
+            a.errormsg = error.data.errormsg;
+          }
+        );
       }
     },
 
@@ -756,35 +588,25 @@ export default {
       var encerraprazos;
       console.log(this.avisos[item.arq.processo]);
       console.log(item.arq.encerraprazos);
-      if (item.arq.encerraprazos === true)
-        encerraprazos = this.avisos[item.arq.processo][0].idaviso;
+      if (item.arq.encerraprazos === true) encerraprazos = this.avisos[item.arq.processo][0].idaviso;
       else if (item.arq.encerraprazos) encerraprazos = item.arq.encerraprazos;
       Bus.$emit("prgCaption", "Enviando " + item.arq.processo);
       this.$http
-        .post(
-          "processo/" +
-            ProcessoBL.somenteNumeros(item.arq.processo) +
-            "/peticionar",
-          {
-            sistema: item.arq.sistema,
-            tipopeticao: item.arq.tipo,
-            nivelsigilo: item.arq.segredo,
-            encerraprazos: encerraprazos,
-            observacoes: item.arq.observacoes,
-            pdfs: item.pdfs
-          }
-        )
+        .post("processo/" + ProcessoBL.somenteNumeros(item.arq.processo) + "/peticionar", {
+          sistema: item.arq.sistema,
+          tipopeticao: item.arq.tipo,
+          nivelsigilo: item.arq.segredo,
+          encerraprazos: encerraprazos,
+          observacoes: item.arq.observacoes,
+          pdfs: item.pdfs
+        })
         .then(
           response => {
             for (var i = item.index; i <= item.indexFinal; i++) {
               this.arquivos[i].status = response.data.status;
               this.arquivos[i].protocolado = true;
             }
-            UtilsBL.logEvento(
-              "peticionamento",
-              "enviar",
-              "petição intercorrente"
-            );
+            UtilsBL.logEvento("peticionamento", "enviar", "petição intercorrente");
             Bus.$emit("prgNext");
           },
           error => {
@@ -913,9 +735,7 @@ export default {
 
     imprimirArquivosComErro: function() {
       var a = this.arquivosComErro;
-      Bus.$emit("prgStart", "Imprimindo Arquivos", a.length, i =>
-        this.imprimirArquivo(a[i], true)
-      );
+      Bus.$emit("prgStart", "Imprimindo Arquivos", a.length, i => this.imprimirArquivo(a[i], true));
     },
 
     limpar: function() {
@@ -936,16 +756,12 @@ export default {
       var arq = this.arquivoCorrente;
       var i;
       if (!arr || arr.length === 0) return;
-      arq.processo = ProcessoBL.formatarProcesso(
-        ProcessoBL.somenteNumeros(arr[0])
-      );
+      arq.processo = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arr[0]));
       for (i = 1; i < arr.length; i++) {
         var newArq = {
           file: arq.file,
           nome: arq.nome,
-          processo: ProcessoBL.formatarProcesso(
-            ProcessoBL.somenteNumeros(arr[i])
-          ),
+          processo: ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arr[i])),
           bloq: arq.bloq,
           perc: arq.perc,
           size: arq.size,
@@ -971,9 +787,7 @@ export default {
         this.organizarArquivos();
         return;
       }
-      arq.processo = ProcessoBL.formatarProcesso(
-        ProcessoBL.somenteNumeros(arq.processo)
-      );
+      arq.processo = ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(arq.processo));
       this.validarArquivo(arq);
       this.organizarArquivos();
     },
@@ -1014,8 +828,7 @@ export default {
     selecionarEncerraPrazos: function(arq, encerraprazos) {
       for (var i = 0; i < this.arquivos.length; i++) {
         var a = this.arquivos[i];
-        if (a !== arq && a.encerraprazos === undefined)
-          a.encerraprazos = encerraprazos;
+        if (a !== arq && a.encerraprazos === undefined) a.encerraprazos = encerraprazos;
       }
     },
 
@@ -1028,9 +841,7 @@ export default {
         // if (a.bloq !== b.bloq)
         // return a.bloq ? -1 : 1
         if (a.nome !== b.nome) {
-          return a.nome.replace(".pdf", "") < b.nome.replace(".pdf", "")
-            ? -1
-            : 1;
+          return a.nome.replace(".pdf", "") < b.nome.replace(".pdf", "") ? -1 : 1;
         }
         return 0;
       });

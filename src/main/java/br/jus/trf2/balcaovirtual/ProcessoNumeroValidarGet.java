@@ -20,23 +20,19 @@ import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
-import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
 import br.jus.trf2.balcaovirtual.util.AcessoPublicoEPrivado;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumerosGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
 
 @AcessoPublicoEPrivado
 public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 	@Override
-	public void run(ProcessoNumeroValidarGetRequest req, ProcessoNumeroValidarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (req.captcha != null) {
 			if (!Utils.verifyCaptcha(req.captcha))
 				throw new PresentableUnloggedException("Token de reCaptcha inválido");
@@ -62,16 +58,16 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 		validar(usuario, numeros, resp);
 	}
 
-	public static void validar(String usuario, String[] numeros, ProcessoNumeroValidarGetResponse resp)
+	public static void validar(String usuario, String[] numeros, IProcessoNumeroValidarGet.Response resp)
 			throws Exception, PresentableException {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
-			UsuarioUsernameProcessoNumerosGetRequest q = new UsuarioUsernameProcessoNumerosGetRequest();
+			IUsuarioUsernameProcessoNumerosGet.Request q = new IUsuarioUsernameProcessoNumerosGet.Request();
 			q.numeros = StringUtils.join(numeros, ",");
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
 							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + "/processo/" + q.numeros, null,
-							UsuarioUsernameProcessoNumerosGetResponse.class));
+							IUsuarioUsernameProcessoNumerosGet.Response.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
@@ -82,7 +78,7 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernameProcessoNumerosGetResponse rl = (UsuarioUsernameProcessoNumerosGetResponse) mcr.responses
+			IUsuarioUsernameProcessoNumerosGet.Response rl = (IUsuarioUsernameProcessoNumerosGet.Response) mcr.responses
 					.get(system);
 			if (rl.list == null || rl.list.size() == 0)
 				continue;

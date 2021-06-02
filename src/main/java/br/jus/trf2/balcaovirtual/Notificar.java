@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroValidarGetResponse;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroValidarGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoValido;
 
 public class Notificar implements Callable<String> {
@@ -42,7 +41,7 @@ public class Notificar implements Callable<String> {
 						"Obtendo data de última movimentação dos processos favoritos do usuário " + i + "/"
 								+ usuarios.size(),
 						i, usuarios.size(), 0L);
-				ProcessoNumeroValidarGetResponse resp = new ProcessoNumeroValidarGetResponse();
+				IProcessoNumeroValidarGet.Response resp = new IProcessoNumeroValidarGet.Response();
 				ProcessoNumeroValidarGet.validar(usuario,
 						processos.keySet().toArray(new String[processos.keySet().size()]), resp);
 
@@ -86,7 +85,8 @@ public class Notificar implements Callable<String> {
 			String icon = BalcaoVirtualServlet.INSTANCE.getProperty("base.url") + "/assets/icon-256x256.png";
 			int sucessos = NotificarFirebase.enviarNotificacao(dao, tokens, titulo, body, clickAction, icon);
 			// SwaggerUtils.log(Notificar.class)
-			// 		.info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações enviadas."));
+			// .info(sucessos + (sucessos == 1 ? " notificação enviada." : " notificações
+			// enviadas."));
 		}
 	}
 

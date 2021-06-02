@@ -6,15 +6,13 @@ import java.io.InputStream;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IRecursoArquivoGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.RecursoArquivoGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.RecursoArquivoGetResponse;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
 @AcessoPublico
 public class RecursoArquivoGet implements IRecursoArquivoGet {
 
 	@Override
-	public void run(RecursoArquivoGetRequest req, RecursoArquivoGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		switch (req.arquivo) {
 		case "mniwsdl.xml":
 		case "mniwsdl0.xml":

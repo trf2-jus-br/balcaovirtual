@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>br.jus.trf2.sistemaprocessual</groupId>
 			<artifactId>sistemaprocessual-api</artifactId>
-			<version>2.0.1-SNAPSHOT</version>
+			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->

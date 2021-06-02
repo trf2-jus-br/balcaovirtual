@@ -6,9 +6,7 @@
           <h2>Sugestões</h2>
         </div>
         <p>
-          Precisamos ouvir sugestões e críticas para que possamos evoluir. Para
-          enviá-las, basta preencher o formulário abaixo e clicar em "Enviar
-          mensagem".
+          Precisamos ouvir sugestões e críticas para que possamos evoluir. Para enviá-las, basta preencher o formulário abaixo e clicar em "Enviar mensagem".
         </p>
         <br />
         <validation-observer v-slot="{ invalid }">
@@ -16,26 +14,12 @@
             <div class="row">
               <div class="col-lg-6">
                 <div :class="{ 'form-group': true }">
-                  <my-input
-                    label="Nome"
-                    id="nome"
-                    name="nome"
-                    v-model="sugestao.nome"
-                    placeholder=""
-                    validate="required"
-                  ></my-input>
+                  <my-input label="Nome" id="nome" name="nome" v-model="sugestao.nome" placeholder="" validate="required"></my-input>
                 </div>
               </div>
               <div class="col-lg-6">
                 <div :class="{ 'form-group': true }">
-                  <my-input
-                    label="E-mail"
-                    id="email"
-                    name="email"
-                    v-model="sugestao.email"
-                    placeholder=""
-                    validate="required|email"
-                  ></my-input>
+                  <my-input label="E-mail" id="email" name="email" v-model="sugestao.email" placeholder="" validate="required|email"></my-input>
                 </div>
               </div>
             </div>
@@ -44,11 +28,7 @@
               <div class="col-lg-12">
                 <div :class="{ 'form-group': true }">
                   <label for="nome">Mensagem</label>
-                  <validation-provider
-                    rules="required"
-                    :immediate="true"
-                    v-slot="{ errors }"
-                  >
+                  <validation-provider rules="required" :immediate="true" v-slot="{ errors }">
                     <textarea
                       rows="4"
                       :class="{
@@ -69,11 +49,7 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-lg-12">
-                  <button
-                    class="btn btn-primary float-right"
-                    :disabled="invalid"
-                    @click.prevent="sugerir()"
-                  >
+                  <button class="btn btn-primary float-right" :disabled="invalid" @click.prevent="sugerir()">
                     Enviar mensagem
                   </button>
                 </div>
@@ -107,11 +83,7 @@ export default {
     sugerir: function() {
       this.$http.post("sugestao", this.sugestao).then(
         response => {
-          Bus.$emit(
-            "message",
-            "Sucesso",
-            "Sua mensagem foi enviada. Muito obrigado!"
-          );
+          Bus.$emit("message", "Sucesso", "Sua mensagem foi enviada. Muito obrigado!");
           this.sugestao.nome = undefined;
           this.sugestao.email = undefined;
           this.sugestao.mensagem = undefined;

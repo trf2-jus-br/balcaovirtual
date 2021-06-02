@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Notificacao;
+import br.jus.trf2.balcaovirtual.model.Padrao;
 import br.jus.trf2.balcaovirtual.model.Processo;
 import br.jus.trf2.balcaovirtual.model.Sinal;
 import br.jus.trf2.balcaovirtual.model.Sistema;
@@ -86,6 +87,12 @@ public class Dao implements Closeable {
 		if (r == null || r.size() == 0)
 			return null;
 		return r.get(0);
+	}
+
+	public List<Padrao> obtemPadroes(String usuario) {
+		List<Padrao> l = (List<Padrao>) em.createNamedQuery("Padrao.findPadroesDoUsuario")
+				.setParameter("usuario", usuario).getResultList();
+		return l;
 	}
 
 	public List<String> obtemUsuariosParaNotificar() {

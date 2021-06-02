@@ -4,18 +4,16 @@ import java.util.List;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaPostResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaPost;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaPost implements IProcessoNumeroNotaPost {
 
 	@Override
-	public void run(ProcessoNumeroNotaPostRequest req, ProcessoNumeroNotaPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 

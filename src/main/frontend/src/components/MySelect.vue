@@ -2,11 +2,7 @@
   <div>
     <label v-if="label" :for="name">{{ label }}</label>
     <div v-if="!edit">{{ nome }}</div>
-    <validation-provider
-      :rules="disabled ? '' : validate"
-      :immediate="immediate"
-      v-slot="{ errors }"
-    >
+    <validation-provider :rules="disabled ? '' : validate" :immediate="immediate" v-slot="{ errors }">
       <select
         v-if="edit"
         :id="name"
@@ -19,9 +15,7 @@
         :class="{ 'is-invalid': errors.length > 0 }"
         v-bind="$attrs"
       >
-        <option disabled selected hidden :value="undefined"
-          >[Selecionar]</option
-        >
+        <option disabled selected hidden :value="undefined">[Selecionar]</option>
         <option v-for="l in list" :value="l.id">{{ l.nome }}</option>
       </select>
       <div class="invalid-feedback">{{ errors[0] }}</div>

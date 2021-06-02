@@ -3,7 +3,6 @@ package br.jus.trf2.balcaovirtual;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,14 +29,12 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
-import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerUtils;
 import com.google.gson.ExclusionStrategy;
@@ -69,9 +66,9 @@ import br.jus.cnj.intercomunicacao_2_2.TipoRepresentanteProcessual;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222_Service;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroAvisoIdReceberPost;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ListStatus;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroAvisoIdReceberPostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumerosGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumerosGet;
 
 public class SoapMNI {
 	private static final DateTimeFormatter dtfMNI = DateTimeFormat.forPattern("yyyyMMddHHmmss");
@@ -160,7 +157,7 @@ public class SoapMNI {
 				.setExclusionStrategies(new ConsultaProcessualExclStrat()).create();
 		return gson.toJson(processo);
 	}
-	
+
 	static Map<String, ServicoIntercomunicacao222> map = new ConcurrentHashMap<>();
 
 	static ServicoIntercomunicacao222 getClient(String sistema) throws Exception {
@@ -194,18 +191,19 @@ public class SoapMNI {
 				if (outboundProperty.booleanValue()) {
 					try {
 						Node body = soapmc.getMessage().getSOAPBody().getFirstChild();
-						//SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
+						// SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
 						for (int i = 0; i < body.getChildNodes().getLength(); i++) {
 							if ("documento1".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
 								documento1.setElementQName(new QName("documento"));
 							}
-							if ("consultarAvisosPendentes".equals(body.getLocalName()) && "parametros".equals(body.getChildNodes().item(i).getNodeName())) {
+							if ("consultarAvisosPendentes".equals(body.getLocalName())
+									&& "parametros".equals(body.getChildNodes().item(i).getNodeName())) {
 								SOAPElement documento1 = (SOAPElement) body.getChildNodes().item(i);
 								documento1.setElementQName(new QName("outroParametro"));
 							}
 						}
-						//SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
+						// SwaggerUtils.log(this.getClass()).debug(getNodeString(body));
 					} catch (SOAPException e) {
 						SwaggerUtils.log(this.getClass()).error(e.getMessage());
 					}
@@ -265,14 +263,15 @@ public class SoapMNI {
 		Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
 		requestContext.put("javax.xml.ws.client.receiveTimeout", "3600000");
 		requestContext.put("javax.xml.ws.client.connectionTimeout", "5000");
-		
+
 		List<TipoParametro> outroParametro = new ArrayList<>();
 		TipoParametro todosPrazos = new TipoParametro();
 		todosPrazos.setNome("todosPrazos");
 		todosPrazos.setValor("true");
 		outroParametro.add(todosPrazos);
 		try {
-			client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, outroParametro, sucesso, mensagem, aviso);
+			client.consultarAvisosPendentes(null, idConsultante, senhaConsultante, null, outroParametro, sucesso,
+					mensagem, aviso);
 			if (!sucesso.value)
 				throw new Exception(mensagem.value);
 		} catch (Exception ex) {
@@ -360,7 +359,7 @@ public class SoapMNI {
 	}
 
 	public static void consultarTeorComunicacao(String idConsultante, String senhaConsultante, String numProc,
-			String idAviso, String sistema, ProcessoNumeroAvisoIdReceberPostResponse resp) throws Exception {
+			String idAviso, String sistema, IProcessoNumeroAvisoIdReceberPost.Response resp) throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -435,8 +434,8 @@ public class SoapMNI {
 	}
 
 	public static String enviarPeticaoIntercorrente(String idConsultante, String senhaConsultante, String sistema,
-			String numProc, String tpDoc, int nvlSigilo, String encerraPrazos, String observacoes, String nomePdfs, byte pdf[])
-			throws Exception {
+			String numProc, String tpDoc, int nvlSigilo, String encerraPrazos, String observacoes, String nomePdfs,
+			byte pdf[]) throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 		String email = (String) jwt.get("email");
 		String nome = (String) jwt.get("name");
@@ -461,14 +460,14 @@ public class SoapMNI {
 				Path path = Paths.get(dirFinal + "/" + nomePdf + ".pdf");
 				byte[] data = Files.readAllBytes(path);
 				doc.setConteudo(data);
-				
+
 				if (observacoes != null) {
 					TipoParametro obs = new TipoParametro();
 					obs.setNome("ObsDocumento");
 					obs.setValor(Texto.removeAcento(observacoes));
 					doc.getOutroParametro().add(obs);
 				}
-				
+
 				l.add(doc);
 			}
 		}
@@ -506,7 +505,7 @@ public class SoapMNI {
 			abrirPrazoAutomaticamente.setValor("true");
 			parametros.add(abrirPrazoAutomaticamente);
 		}
-		
+
 		client.entregarManifestacaoProcessual(idConsultante, senhaConsultante, numProc, null, l, dataEnvio, parametros,
 				sucesso, mensagem, protocoloRecebimento, dataOperacao, recibo, parametro);
 		if (!sucesso.value)
@@ -764,14 +763,14 @@ public class SoapMNI {
 
 		String unidade = null;
 		try {
-			Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumerosGetResponse>> future = SwaggerCall.callAsync(
+			Future<SwaggerAsyncResponse<IUsuarioUsernameProcessoNumerosGet.Response>> future = SwaggerCall.callAsync(
 					"validar depois de petição inicial", Utils.getApiPassword(sistema), "GET",
 					Utils.getApiUrl(sistema) + "/usuario/" + idManif + "/processo/" + numProc, null,
-					UsuarioUsernameProcessoNumerosGetResponse.class);
-			SwaggerAsyncResponse<UsuarioUsernameProcessoNumerosGetResponse> sar = future.get();
+					IUsuarioUsernameProcessoNumerosGet.Response.class);
+			SwaggerAsyncResponse<IUsuarioUsernameProcessoNumerosGet.Response> sar = future.get();
 			if (sar.getException() != null)
 				throw sar.getException();
-			UsuarioUsernameProcessoNumerosGetResponse r = (UsuarioUsernameProcessoNumerosGetResponse) sar.getResp();
+			IUsuarioUsernameProcessoNumerosGet.Response r = (IUsuarioUsernameProcessoNumerosGet.Response) sar.getResp();
 			unidade = r.list.get(0).unidade != null ? r.list.get(0).unidade.trim() : null;
 
 		} catch (Exception ex) {

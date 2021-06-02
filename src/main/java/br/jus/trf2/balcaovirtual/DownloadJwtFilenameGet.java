@@ -24,7 +24,6 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.PresentableException;
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
@@ -32,8 +31,6 @@ import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.DownloadJwtFilenameGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IDownloadJwtFilenameGet;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
@@ -41,7 +38,7 @@ import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 	@Override
-	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Map<String, Object> map = verify(req.jwt);
 		String username = (String) map.get("username");
 		String origin = (String) map.get("origin");

@@ -6,19 +6,15 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
-import com.crivano.swaggerservlet.SwaggerServlet;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroInformacoesAdicionaisGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroInformacoesAdicionaisGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroInformacoesAdicionaisGetResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet;
 
 public class ProcessoNumeroInformacoesAdicionaisGet implements IProcessoNumeroInformacoesAdicionaisGet {
 	@Override
-	public void run(ProcessoNumeroInformacoesAdicionaisGetRequest req,
-			ProcessoNumeroInformacoesAdicionaisGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (!req.sistema.contains(".eproc"))
 			return;
 
@@ -31,15 +27,15 @@ public class ProcessoNumeroInformacoesAdicionaisGet implements IProcessoNumeroIn
 				&& (u.email == null || !u.email.endsWith("@pgfn.gov.br")))
 			return;
 
-		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse>> future = SwaggerCall
+		Future<SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet.Response>> future = SwaggerCall
 				.callAsync("obter informacoes adicionais", Utils.getApiPassword(req.sistema), "GET",
 						Utils.getApiUrl(req.sistema) + "/usuario/" + u.usuario + "/processo/" + req.numero
 								+ "/informacoes-adicionais",
-						null, UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse.class);
-		SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse> sar = future.get();
+						null, IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet.Response.class);
+		SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse r = (UsuarioUsernameProcessoNumeroInformacoesAdicionaisGetResponse) sar
+		IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet.Response r = (IUsuarioUsernameProcessoNumeroInformacoesAdicionaisGet.Response) sar
 				.getResp();
 
 		resp.cdas = new ArrayList<>();

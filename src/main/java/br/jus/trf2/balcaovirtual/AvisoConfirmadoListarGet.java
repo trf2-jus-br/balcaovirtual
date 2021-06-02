@@ -10,15 +10,13 @@ import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoListarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoConfirmadoListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoConfirmadoListarGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisoConfirmadoListarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameAvisoConfirmadoListarGet;
 
 public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 
 	@Override
-	public void run(AvisoConfirmadoListarGetRequest req, AvisoConfirmadoListarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Map<String, Object> jwt = AutenticarPost.assertUsuarioAutorizado();
 
 		Date dtFim = Utils.parsearData(req.datafinal);
@@ -34,7 +32,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 									+ "/aviso-confirmado/listar?dataInicial=" + req.datainicial + "&dataFinal="
 									+ datafinal + "&confirmacao=" + req.confirmacao.toString() + "&omissao="
 									+ req.omissao.toString() + "&grupo=" + req.grupo.toString(),
-							null, UsuarioUsernameAvisoConfirmadoListarGetResponse.class));
+							null, IUsuarioUsernameAvisoConfirmadoListarGet.Response.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
@@ -44,7 +42,7 @@ public class AvisoConfirmadoListarGet implements IAvisoConfirmadoListarGet {
 		resp.status = new ArrayList<>();
 
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernameAvisoConfirmadoListarGetResponse r = (UsuarioUsernameAvisoConfirmadoListarGetResponse) mcr.responses
+			IUsuarioUsernameAvisoConfirmadoListarGet.Response r = (IUsuarioUsernameAvisoConfirmadoListarGet.Response) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (br.jus.trf2.sistemaprocessual.ISistemaProcessual.Aviso ra : r.list) {

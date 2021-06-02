@@ -6,24 +6,22 @@ import java.util.concurrent.Future;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadesGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigLocalidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigLocalidadesGet;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Localidade;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.ILocalidadeGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IdNome;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.LocalidadeGetResponse;
 
 public class ConfigLocalidadesGet implements IConfigLocalidadesGet {
 
 	@Override
-	public void run(ConfigLocalidadesGetRequest req, ConfigLocalidadesGetResponse resp) throws Exception {
-		Future<SwaggerAsyncResponse<LocalidadeGetResponse>> future = SwaggerCall.callAsync("obter localidades",
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
+		Future<SwaggerAsyncResponse<ILocalidadeGet.Response>> future = SwaggerCall.callAsync("obter localidades",
 				Utils.getApiPassword(req.sistema), "GET", Utils.getApiUrl(req.sistema) + "/localidade", null,
-				LocalidadeGetResponse.class);
-		SwaggerAsyncResponse<LocalidadeGetResponse> sar = future.get();
+				ILocalidadeGet.Response.class);
+		SwaggerAsyncResponse<ILocalidadeGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		LocalidadeGetResponse r = (LocalidadeGetResponse) sar.getResp();
+		ILocalidadeGet.Response r = (ILocalidadeGet.Response) sar.getResp();
 
 		resp.list = new ArrayList<>();
 		for (IdNome idNome : r.list) {

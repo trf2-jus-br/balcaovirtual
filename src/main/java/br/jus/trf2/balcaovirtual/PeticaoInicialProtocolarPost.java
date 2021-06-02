@@ -7,17 +7,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoInicialProtocolarPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoInicialProtocolarPostResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoInicialProtocolarPost;
 import br.jus.trf2.balcaovirtual.SoapMNI.PeticaoInicial;
 
 public class PeticaoInicialProtocolarPost implements IPeticaoInicialProtocolarPost {
 
 	@Override
-	public void run(PeticaoInicialProtocolarPostRequest req, PeticaoInicialProtocolarPostResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		Gson gson = new GsonBuilder().create();

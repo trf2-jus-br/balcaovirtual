@@ -9,19 +9,16 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoListarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.AvisoListarGetResponse;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoListarGet;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Aviso;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IAvisoListarGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisosGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameAvisosGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameAvisosGet;
 
 public class AvisoListarGet implements IAvisoListarGet {
 
 	@Override
-	public void run(AvisoListarGetRequest req, AvisoListarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		resp.list = new ArrayList<>();
@@ -34,12 +31,12 @@ public class AvisoListarGet implements IAvisoListarGet {
 			if (!u.usuarios.containsKey(system) || !"ext".equals(u.usuarios.get(system).origem))
 				continue;
 			if (system.contains(".eproc") && (req.mni == null || !req.mni)) {
-				UsuarioUsernameAvisosGetRequest q = new UsuarioUsernameAvisosGetRequest();
+				IUsuarioUsernameAvisosGet.Request q = new IUsuarioUsernameAvisosGet.Request();
 				q.username = u.usuario;
 				mapp.put(system,
 						new SwaggerCallParameters(system + " - listar avisos", Utils.getApiPassword(system), "GET",
 								Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/avisos", q,
-								UsuarioUsernameAvisosGetResponse.class));
+								IUsuarioUsernameAvisosGet.Response.class));
 
 			} else {
 				mniSystems.add(system);
@@ -60,7 +57,7 @@ public class AvisoListarGet implements IAvisoListarGet {
 		if (mapp.size() > 0) {
 			resp.status = Utils.getStatus(mcr);
 			for (String system : mcr.responses.keySet()) {
-				UsuarioUsernameAvisosGetResponse r = (UsuarioUsernameAvisosGetResponse) mcr.responses.get(system);
+				IUsuarioUsernameAvisosGet.Response r = (IUsuarioUsernameAvisosGet.Response) mcr.responses.get(system);
 				for (ISistemaProcessual.Aviso a : r.list) {
 					Aviso i = new Aviso();
 					i.idaviso = a.idAviso;

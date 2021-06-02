@@ -1,15 +1,6 @@
 <template>
   <div>
-    <b-modal
-      id="progressModal"
-      v-model="showModal"
-      :title="title"
-      no-close-on-backdrop
-      ok-title="Cancelar"
-      ok-only
-      hide-header-close
-      no-close-on-esc
-    >
+    <b-modal id="progressModal" v-model="showModal" :title="title" no-close-on-backdrop ok-title="Cancelar" ok-only hide-header-close no-close-on-esc>
       <p class="mb-1">{{ progressbarCaption }}</p>
       <div class="progress">
         <div
@@ -83,8 +74,7 @@ export default {
           }
         },
         error => {
-          this.errormsg =
-            error.data.errormsg || "Erro obtendo informações de status";
+          this.errormsg = error.data.errormsg || "Erro obtendo informações de status";
         }
       );
     }

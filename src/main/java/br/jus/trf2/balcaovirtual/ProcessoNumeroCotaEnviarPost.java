@@ -1,18 +1,13 @@
 package br.jus.trf2.balcaovirtual;
 
-import com.crivano.swaggerservlet.SwaggerServlet;
-
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaEnviarPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaEnviarPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroCotaEnviarPostResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroCotaEnviarPost;
 
 public class ProcessoNumeroCotaEnviarPost implements IProcessoNumeroCotaEnviarPost {
 
 	@Override
-	public void run(ProcessoNumeroCotaEnviarPostRequest req, ProcessoNumeroCotaEnviarPostResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 		byte[] pdf = ProcessoNumeroCotaPrevisaoPdfPost.criarPDF(u.nome, req.numero, req.texto, req.cargo, req.empresa,

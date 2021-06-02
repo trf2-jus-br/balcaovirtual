@@ -2,18 +2,16 @@ package br.jus.trf2.balcaovirtual;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdPut;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdPutRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroNotaIdPutResponse;
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.AutenticarPost.UsuarioDetalhe;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroNotaIdPut;
 import br.jus.trf2.balcaovirtual.model.Nota;
 import br.jus.trf2.balcaovirtual.model.Processo;
 
 public class ProcessoNumeroNotaIdPut implements IProcessoNumeroNotaIdPut {
 
 	@Override
-	public void run(ProcessoNumeroNotaIdPutRequest req, ProcessoNumeroNotaIdPutResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 		UsuarioDetalhe ud = u.usuarios.get(req.sistema.toLowerCase());
 

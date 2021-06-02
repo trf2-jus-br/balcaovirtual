@@ -11,31 +11,28 @@ import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigAvisoPeticaoIntercorrente;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigTipoPeticaoIntercorrente;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IProcessoNumeroPeticaoIntercorrenteValidarGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPeticaoIntercorrenteValidarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ProcessoNumeroPeticaoIntercorrenteValidarGetResponse;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.AvisoPeticaoIntercorrente;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.TipoPeticaoIntercorrente;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse;
 
 public class ProcessoNumeroPeticaoIntercorrenteValidarGet implements IProcessoNumeroPeticaoIntercorrenteValidarGet {
 
 	@Override
-	public void run(ProcessoNumeroPeticaoIntercorrenteValidarGetRequest req,
-			ProcessoNumeroPeticaoIntercorrenteValidarGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		if (u.usuarios.get(req.sistema) == null)
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 
-		Future<SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse>> future = SwaggerCall
+		Future<SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet.Response>> future = SwaggerCall
 				.callAsync("obter tipos de petição intercorrente", Utils.getApiPassword(req.sistema), "GET",
 						Utils.getApiUrl(req.sistema) + "/usuario/" + u.usuario + "/processo/" + req.numero
 								+ "/peticao-intercorrente/validar",
-						null, UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse.class);
-		SwaggerAsyncResponse<UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse> sar = future.get();
+						null, IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet.Response.class);
+		SwaggerAsyncResponse<IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse r = (UsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGetResponse) sar
+		IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet.Response r = (IUsuarioUsernameProcessoNumeroPeticaoIntercorrenteValidarGet.Response) sar
 				.getResp();
 
 		if (r.tipos != null && r.tipos.size() > 0) {

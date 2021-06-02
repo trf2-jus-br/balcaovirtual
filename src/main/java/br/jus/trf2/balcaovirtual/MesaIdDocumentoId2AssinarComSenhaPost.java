@@ -9,16 +9,12 @@ import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IMesaIdDocumentoId2AssinarComSenhaPost;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdDocumentoId2AssinarComSenhaPostRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.MesaIdDocumentoId2AssinarComSenhaPostResponse;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost;
 
 public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId2AssinarComSenhaPost {
 
 	@Override
-	public void run(MesaIdDocumentoId2AssinarComSenhaPostRequest req,
-			MesaIdDocumentoId2AssinarComSenhaPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (!req.sistema.contains(".eproc"))
 			throw new Exception("Operação disponível apenas para o Eproc");
 
@@ -35,16 +31,16 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 			throw new PresentableUnloggedException("Senha não confere");
 		}
 
-		UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest q = new UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostRequest();
-		Future<SwaggerAsyncResponse<UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse>> future = SwaggerCall
+		IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Request q = new IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Request();
+		Future<SwaggerAsyncResponse<IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response>> future = SwaggerCall
 				.callAsync(getContext(), Utils.getApiEprocPassword(req.sistema), "POST",
 						Utils.getApiEprocUrl(req.sistema) + "/usuario/" + u.usuario + "/mesa/null/documento/" + req.id2
 								+ "/assinar-com-senha",
-						q, UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse.class);
-		SwaggerAsyncResponse<UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse> sar = future.get();
+						q, IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response.class);
+		SwaggerAsyncResponse<IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse r = (UsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPostResponse) sar
+		IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response r = (IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response) sar
 				.getResp();
 
 		resp.status = r.status;

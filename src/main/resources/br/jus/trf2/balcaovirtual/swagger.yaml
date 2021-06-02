@@ -2,7 +2,7 @@
 
 info:
   version: "1.0.0"
-  title: Balcao Virtual
+  title: BalcaoVirtual
   description: Micro-serviço para interligar com sistemas processuais e seu repositório de dados
 
 basePath: /balcaovirtual/api/v1
@@ -21,6 +21,8 @@ tags:
     description: Certidões
   - name: mesa
     description: Mesa Virtual
+  - name: padrao
+    description: Minuta-Padrão
   - name: marca
     description: Marcadores Processuais
   - name: nota
@@ -1711,6 +1713,62 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /padrao:
+    get:
+      description: Obter documentos em mesa virtual
+      tags: [padrao]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/PadraoItem"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: Obter documentos em mesa virtual
+      tags: [padrao]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/html"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            properties:
+              padrao:
+                $ref: "#/definitions/PadraoItem"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /padrao/{id}:
+    delete:
+      description: Obter documentos em mesa virtual
+      tags: [padrao]
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /classe/{id}:
     get:
       description: Obter dados de uma classe pela id
@@ -2193,6 +2251,9 @@ definitions:
       datalimiteintimacaoautomatica:
         type: string
         format: date-time
+      datafinalprazo:
+        type: string
+        format: date-time
       assunto:
         type: string
       dataconfirmacao:
@@ -2356,10 +2417,50 @@ definitions:
         type: string
       conteudo:
         type: string
+      diferencas:
+        type: string
+      similaridade:
+        type: number
+      idPadrao:
+        type: string
       lembretes:
         type: array
         items:
           $ref: "#/definitions/Lembrete"
+
+  PadraoItem:
+    description: Mesa virtual
+    type: object
+    properties:
+      id:
+        type: string
+      sistema:
+        $ref: "#/definitions/Sistema"
+      dataDeInclusao:
+        type: string
+        format: date-time
+      numeroDoDocumento:
+        type: string
+      numeroDoProcesso:
+        type: string
+      autor:
+        type: string
+      reu:
+        type: string
+      descricao:
+        type: string
+      tipoDoDocumento:
+        type: string
+      identificadorDoUsuarioQueIncluiu:
+        type: string
+      nomeDoUsuarioQueIncluiu:
+        type: string
+      siglaDaUnidade:
+        type: string
+      conteudo:
+        type: string
+      titulo:
+        type: string
 
   Lembrete:
     description: Lembretes

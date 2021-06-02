@@ -1,13 +1,6 @@
 <template>
   <div>
-    <b-modal
-      id="messageBox"
-      v-model="showModal"
-      :title="title"
-      ok-only
-      ok-title="OK"
-      @hide="save"
-    >
+    <b-modal id="messageBox" v-model="showModal" :title="title" ok-only ok-title="OK" @hide="save">
       <p>{{ message }}</p>
     </b-modal>
   </div>

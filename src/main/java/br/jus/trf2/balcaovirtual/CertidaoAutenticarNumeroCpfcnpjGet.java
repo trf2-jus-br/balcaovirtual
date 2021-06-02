@@ -4,8 +4,6 @@ import com.crivano.swaggerservlet.PresentableException;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 
 import br.jus.trf2.balcaovirtual.CertidaoEmitirRequisitanteCpfcnpjPost.FetchResponse;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoAutenticarNumeroCpfcnpjGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.CertidaoAutenticarNumeroCpfcnpjGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ICertidaoAutenticarNumeroCpfcnpjGet;
 import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 
@@ -13,15 +11,13 @@ import br.jus.trf2.balcaovirtual.util.AcessoPublico;
 public class CertidaoAutenticarNumeroCpfcnpjGet implements ICertidaoAutenticarNumeroCpfcnpjGet {
 
 	@Override
-	public void run(CertidaoAutenticarNumeroCpfcnpjGetRequest req, CertidaoAutenticarNumeroCpfcnpjGetResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		if (!CertidaoObterTokenGet.isValidToken(req.token, req.numero, null, req.cpfcnpj))
 			throw new PresentableException("Token inválido");
 
 		FetchResponse r = CertidaoEmitirRequisitanteCpfcnpjPost.fetch(
-				Utils.getCertApiUrl(req.sistema) + "/bv_consul_cert_neg.asp",
-				Utils.getCertApiPassword(req.sistema), "POST",
-				"Botao=Consultar&NumProt=" + req.numero + "&NumDocPess=" + req.cpfcnpj);
+				Utils.getCertApiUrl(req.sistema) + "/bv_consul_cert_neg.asp", Utils.getCertApiPassword(req.sistema),
+				"POST", "Botao=Consultar&NumProt=" + req.numero + "&NumDocPess=" + req.cpfcnpj);
 
 		if (r.headerFields.containsKey(Utils.ERROR_MESSAGE))
 			throw new PresentableUnloggedException(r.headerFields.get(Utils.ERROR_MESSAGE).get(0));

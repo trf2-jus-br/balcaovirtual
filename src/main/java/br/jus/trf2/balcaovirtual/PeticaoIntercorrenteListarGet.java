@@ -10,29 +10,25 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IPeticaoIntercorrenteListarGet;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteListarGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.PeticaoIntercorrenteResumo;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernamePeticaoIntercorrenteListarGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.PeticaoIntercorrente;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteListarGetRequest;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.UsuarioUsernamePeticaoIntercorrenteListarGetResponse;
 
 public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteListarGet {
 
 	@Override
-	public void run(PeticaoIntercorrenteListarGetRequest req, PeticaoIntercorrenteListarGetResponse resp)
-			throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Usuario u = BalcaoVirtualServlet.getPrincipal();
 
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
-		UsuarioUsernamePeticaoIntercorrenteListarGetRequest q = new UsuarioUsernamePeticaoIntercorrenteListarGetRequest();
+		IUsuarioUsernamePeticaoIntercorrenteListarGet.Request q = new IUsuarioUsernamePeticaoIntercorrenteListarGet.Request();
 		q.data = req.data;
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter resumos de petições intercorrentes",
 							Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/peticao-intercorrente/listar", q,
-							UsuarioUsernamePeticaoIntercorrenteListarGetResponse.class));
+							IUsuarioUsernamePeticaoIntercorrenteListarGet.Response.class));
 
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
@@ -40,7 +36,7 @@ public class PeticaoIntercorrenteListarGet implements IPeticaoIntercorrenteLista
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			UsuarioUsernamePeticaoIntercorrenteListarGetResponse r = (UsuarioUsernamePeticaoIntercorrenteListarGetResponse) mcr.responses
+			IUsuarioUsernamePeticaoIntercorrenteListarGet.Response r = (IUsuarioUsernamePeticaoIntercorrenteListarGet.Response) mcr.responses
 					.get(system);
 			if (r.list != null)
 				for (PeticaoIntercorrente i : r.list) {

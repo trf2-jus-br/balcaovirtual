@@ -8,30 +8,28 @@ import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigEntidadesGetRequest;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.ConfigEntidadesGetResponse;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.Entidade;
 import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IConfigEntidadesGet;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.OrgaoPublicoListarGetResponse;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IAdvogadoDocumentoGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Pessoa;
 
 public class ConfigEntidadesGet implements IConfigEntidadesGet {
 
 	@Override
-	public void run(ConfigEntidadesGetRequest req, ConfigEntidadesGetResponse resp) throws Exception {
+	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - obter localidades", Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/orgao-publico/listar?tipodedocumento=cnpj", null,
-							OrgaoPublicoListarGetResponse.class));
+							IAdvogadoDocumentoGet.Response.class));
 		}
 		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaoVirtualServlet.TIMEOUT_MILLISECONDS);
 		resp.status = Utils.getStatus(mcr);
 
 		resp.list = new ArrayList<>();
 		for (String system : mcr.responses.keySet()) {
-			OrgaoPublicoListarGetResponse r = (OrgaoPublicoListarGetResponse) mcr.responses.get(system);
+			IAdvogadoDocumentoGet.Response r = (IAdvogadoDocumentoGet.Response) mcr.responses.get(system);
 			if (r.list != null)
 				for (Pessoa p : r.list) {
 					Entidade o = new Entidade();

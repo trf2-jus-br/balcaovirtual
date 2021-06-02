@@ -19,16 +19,8 @@
               <span class="fa fa-map-marker"></span>
             </div>
           </div>
-          <select
-            id="mesa"
-            class="form-control"
-            v-model="mesa"
-            @change="selecionarMesa"
-            name="mesa"
-          >
-            <option disabled selected hidden :value="undefined"
-              >[Selecionar]</option
-            >
+          <select id="mesa" class="form-control" v-model="mesa" @change="selecionarMesa" name="mesa">
+            <option disabled selected hidden :value="undefined">[Selecionar]</option>
             <option v-for="i in mesas" :value="i">{{ i.nome }}</option>
           </select>
         </div>
@@ -40,49 +32,27 @@
               <span class="fa fa-search"></span>
             </div>
           </div>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Filtrar"
-            v-model="filtro"
-            ng-model-options="{ debounce: 200 }"
-          />
+          <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }" />
         </div>
       </div>
-      <div
-        class="col-auto ml-auto mb-3"
-        v-if="(filtradosEMarcadosEAssinaveis || []).length"
-      >
-        <button
-          type="button"
-          @click="revisar()"
-          class="btn btn-success ml-1"
-          title=""
-        >
+      <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis || []).length">
+        <a type="button" href="#/padrao-lista" class="btn btn-light ml-1" title="">
+          Padrões
+        </a>
+        <button type="button" @click="revisar()" class="btn btn-success ml-1" title="">
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{
-            filtradosEMarcadosEAssinaveis.length
-          }}</span>
+          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
         </button>
-        <button
-          type="button"
-          @click="assinarComSenhaEmLote()"
-          class="btn btn-primary ml-1"
-          title=""
-        >
+        <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
           <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{
-            filtradosEMarcadosEAssinaveis.length
-          }}</span>
+          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
         </button>
       </div>
     </div>
 
     <div class="row" v-if="!carregando && filtrados.length == 0">
       <div class="col col-sm-12">
-        <p class="alert alert-warning">
-          <strong>Atenção!</strong> Nenhuma minuta encontrada.
-        </p>
+        <p class="alert alert-warning"><strong>Atenção!</strong> Nenhuma minuta encontrada.</p>
       </div>
     </div>
 
@@ -92,13 +62,7 @@
           <thead class="thead-dark">
             <tr>
               <th style="text-align: center">
-                <input
-                  type="checkbox"
-                  id="progress_checkall"
-                  name="progress_checkall"
-                  v-model="todos"
-                  @change="marcarTodos()"
-                />
+                <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()" />
               </th>
               <th>Documento</th>
               <th>Tipo</th>
@@ -115,11 +79,7 @@
           <tbody>
             <tr v-for="f in filtrados">
               <td class="td-middle" style="text-align: center">
-                <input
-                  type="checkbox"
-                  v-model="f.checked"
-                  :disabled="f.disabled"
-                />
+                <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
               </td>
               <td class="td-middle">
                 <router-link
@@ -132,9 +92,7 @@
               </td>
               <td class="td-middle">{{ f.tipoDoDocumento }}</td>
               <td class="td-middle">
-                <span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{
-                  f.identificadorDoUsuarioQueIncluiu
-                }}</span>
+                <span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{ f.identificadorDoUsuarioQueIncluiu }}</span>
               </td>
               <td class="td-middle">
                 <span class="unbreakable">
@@ -156,17 +114,11 @@
               </td>
               <td class="td-middle">{{ f.siglaDaUnidade }}</td>
               <td class="td-middle">
-                <span :title="'Identificador: ' + f.sistema">{{
-                  $parent.test.properties[
-                    "balcaovirtual." + f.sistema + ".name"
-                  ]
-                }}</span>
+                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
               </td>
               <td class="td-middle">
                 {{ f.descricaoDoStatus }}
-                <span v-if="f.errormsg" :class="{ red: true }"
-                  >Erro {{ f.errormsg }}
-                </span>
+                <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
               </td>
             </tr>
           </tbody>
@@ -292,20 +244,14 @@ export default {
         errormsg: undefined
       });
       if (item.numeroDoProcesso !== undefined) {
-        item.processoFormatado = ProcessoBL.formatarProcesso(
-          item.numeroDoProcesso
-        );
+        item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
       }
       if (item.dataDeInclusao !== undefined) {
-        item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
-          item.dataDeInclusao
-        );
+        item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.dataDeInclusao);
       }
       if (item.lembretes) {
         for (var i = 0; i < item.lembretes.length; i++) {
-          item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(
-            item.lembretes[i].dataDeInclusao
-          );
+          item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao);
         }
       }
       return item;
@@ -333,26 +279,19 @@ export default {
 
     chamarAssijus: function(list) {
       var json = JSON.stringify({ list: list });
-      this.$http
-        .post(
-          this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
-            "/api/v1/store",
-          { payload: json },
-          { block: true }
-        )
-        .then(
-          response => {
-            var callback = window.location.href + "";
-            console.log(callback);
-            window.location.href =
-              this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
-              "/?endpointautostart=true&endpointlistkey=" +
-              response.data.key +
-              "&endpointcallback=" +
-              encodeURI(callback).replace("#", "__hashsign__");
-          },
-          error => UtilsBL.errormsg(error, this)
-        );
+      this.$http.post(this.$parent.test.properties["balcaovirtual.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true }).then(
+        response => {
+          var callback = window.location.href + "";
+          console.log(callback);
+          window.location.href =
+            this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+            "/?endpointautostart=true&endpointlistkey=" +
+            response.data.key +
+            "&endpointcallback=" +
+            encodeURI(callback).replace("#", "__hashsign__");
+        },
+        error => UtilsBL.errormsg(error, this)
+      );
     },
 
     revisar: function() {
@@ -365,11 +304,7 @@ export default {
 
     assinarComSenhaEmLote: function() {
       var a = this.filtradosEMarcadosEAssinaveis;
-      Bus.$emit(
-        "iniciarAssinaturaComSenha",
-        a,
-        this.removerDocumentosDesabilitados
-      );
+      Bus.$emit("iniciarAssinaturaComSenha", a, this.removerDocumentosDesabilitados);
       // Bus.$emit('assinarComSenha', a)
     },
 
