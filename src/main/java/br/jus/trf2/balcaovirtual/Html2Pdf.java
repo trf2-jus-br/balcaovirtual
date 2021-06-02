@@ -30,7 +30,7 @@ public class Html2Pdf {
 		if (data.startsWith("<?xml "))
 			return data;
 
-		System.err.println("transformando HTML em XHTML");
+//		System.err.println("transformando HTML em XHTML");
 		Tidy tidy = new Tidy();
 		tidy.setXHTML(true);
 		tidy.setInputEncoding("UTF-8");
@@ -46,7 +46,7 @@ public class Html2Pdf {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(data.getBytes("UTF-8"));
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		tidy.parseDOM(inputStream, outputStream);
-		System.err.println("retornando XHTML");
+//		System.err.println("retornando XHTML");
 		String s = outputStream.toString("UTF-8");
 		s = s.replace(
 				" PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"",
@@ -88,21 +88,21 @@ public class Html2Pdf {
 	}
 
 	public byte[] converter(String sHtml, boolean apenasBody) throws Exception {
-		System.err.println("iniciando a conversão");
+//		System.err.println("iniciando a conversão");
 		String pagina = null;
 		if (apenasBody)
 			pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
-		System.err.println("resource carregado");
+//		System.err.println("resource carregado");
 		if (sHtml != null && pagina != null) {
 			String prefix = pagina.substring(0, pagina.indexOf("<body>"));
 			String sufix = pagina.substring(pagina.indexOf("</body>") + 7);
 
 			sHtml = cleanHtml(prefix + extraiBody(sHtml) + sufix);
-			System.err.println("HTML calculado");
+//			System.err.println("HTML calculado");
 		} else {
 			sHtml = cleanHtml(sHtml);
 		}
-		System.err.println(sHtml);
+//		System.err.println(sHtml);
 
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ITextRenderer renderer = new ITextRenderer();
@@ -115,21 +115,21 @@ public class Html2Pdf {
 			renderer.setDocumentFromString(sHtml);
 			renderer.layout();
 			renderer.createPDF(baos);
-			System.err.println("PDF gerado");
+//			System.err.println("PDF gerado");
 
 			return baos.toByteArray();
 		}
 	}
 
 	public byte[] converterJsoup(String sHtml, boolean apenasBody) throws Exception {
-		System.err.println("iniciando a conversão");
+//		System.err.println("iniciando a conversão");
 		String pagina = null;
 		sHtml = sHtml.replace("<u=\"\">", ">");
 		sHtml = sHtml.replace(" <u><b>", "><b>");
 
 		if (apenasBody)
 			pagina = Utils.convertStreamToString(this.getClass().getResourceAsStream("pagina.html"));
-		System.err.println("resource carregado");
+//		System.err.println("resource carregado");
 		if (sHtml != null && pagina != null) {
 			String prefix = pagina.substring(0, pagina.indexOf("<body>"));
 			String sufix = pagina.substring(pagina.indexOf("</body>") + 7);
@@ -137,11 +137,11 @@ public class Html2Pdf {
 			sHtml = prefix + extraiBody(sHtml) + sufix;
 			
 			sHtml = cleanHtmlJSoup(sHtml, false);
-			System.err.println("HTML calculado");
+//			System.err.println("HTML calculado");
 		} else {
 			sHtml = cleanHtml(sHtml);
 		}
-		System.err.println(sHtml);
+//		System.err.println(sHtml);
 
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ITextRenderer renderer = new ITextRenderer();
@@ -154,7 +154,7 @@ public class Html2Pdf {
 			renderer.setDocumentFromString(sHtml);
 			renderer.layout();
 			renderer.createPDF(baos);
-			System.err.println("PDF gerado");
+//			System.err.println("PDF gerado");
 
 			return baos.toByteArray();
 		}

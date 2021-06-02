@@ -205,7 +205,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 						xmlStreamReader.close();
 						if (fHtml) {
 							String html = new String(ab, fileEncoding);
-							System.out.println(html);
+//							System.out.println(html);
 							ab = new Html2Pdf().converter(html, false);
 							info = contentInfoUtil.findMimeTypeMatch("application/pdf");
 						}
@@ -216,7 +216,7 @@ public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 						if (html.toLowerCase().contains("charset=windows-1252")
 								|| html.toLowerCase().contains("iso-8859-1"))
 							html = new String(ab, StandardCharsets.ISO_8859_1);
-						System.out.println(html);
+//						System.out.println(html);
 						ab = new Html2Pdf().converter(html, false);
 						info = contentInfoUtil.findMimeTypeMatch("application/pdf");
 					}
