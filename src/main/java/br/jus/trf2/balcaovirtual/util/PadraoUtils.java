@@ -56,7 +56,7 @@ public class PadraoUtils {
 		}
 
 		public void calcularDiff() {
-			markdownDiff = com.crivano.jregexie.Utils.diff(padrao.markdown, markdown);
+			markdownDiff = com.crivano.jregexie.Utils.diffAndColapse(padrao.markdown, markdown);
 
 			// Converter diff para HTML
 			String html = Markdown.convertMarkdownToHtml(markdownDiff);

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from '../store'
 import ConsultaSimples from "@/components/ConsultaSimples";
 import Processo from "@/components/Processo";
 import ProcessoLista from "@/components/ProcessoLista";
@@ -23,7 +24,7 @@ import Padrao from "@/components/Padrao";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [{
       path: "/login",
       name: "Login",
@@ -160,5 +161,13 @@ export default new Router({
       x: 0,
       y: 0
     };
-  }
+  },
+
 });
+
+router.afterEach(() => {
+  if (store.state.errorMsg)
+    store.commit('setErrorMsg', undefined)
+})
+
+export default router

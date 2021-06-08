@@ -10,7 +10,7 @@
             :class="{
               'navbar-dark bg-success': test.properties['balcaovirtual.env'] === 'desenv',
               'navbar-dark bg-secondary': test.properties['balcaovirtual.env'] === 'homolo',
-              'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod'
+              'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod',
             }"
           >
             <a class="navbar-brand pt-0 pb-0" href="#">
@@ -33,28 +33,42 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consulta Simples' }" tag="a" exact>Consulta</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consulta Simples' }" tag="a" exact
+                    >Consulta</router-link
+                  >
                 </li>
                 <li v-if="test.properties['balcaovirtual.cert.systems']" class="nav-item">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consultar Certidão' }" tag="a" exact>Certidões</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Consultar Certidão' }" tag="a" exact
+                    >Certidões</router-link
+                  >
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Processos' }" tag="a" exact>Processos</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Processos' }" tag="a" exact
+                    >Processos</router-link
+                  >
                 </li>
                 <li class="nav-item" v-if="false">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Etiquetas' }" tag="a" exact>Etiquetas</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Etiquetas' }" tag="a" exact
+                    >Etiquetas</router-link
+                  >
                 </li>
                 <li class="nav-item" v-if="peticaoInicialAtiva">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Inicial' }" tag="a">Petição Inicial</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Inicial' }" tag="a"
+                    >Petição Inicial</router-link
+                  >
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Intercorrente' }" tag="a">Petição Intercorrente</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Petição Intercorrente' }" tag="a"
+                    >Petição Intercorrente</router-link
+                  >
                 </li>
                 <li class="nav-item" v-if="jwt &amp;&amp; jwt.username &amp;&amp; !(jwt.origin === 'int')">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Avisos' }" tag="a"
                     >Intimação/Citação<sup v-if="cAvisos &amp;&amp; cAvisos > 0"
                       ><span class="badge badge-pill badge-danger active-opacity">{{ cAvisos }}</span></sup
-                    ><sup v-if="cAvisos === undefined" style="opacity: 0.5;"><span class="badge badge-pill badge-light">Aguarde...</span></sup></router-link
+                    ><sup v-if="cAvisos === undefined" style="opacity: 0.5;"
+                      ><span class="badge badge-pill badge-light">Aguarde...</span></sup
+                    ></router-link
                   >
                 </li>
                 <li class="nav-item" v-if="mesaAtiva">
@@ -72,11 +86,21 @@
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Login' }" tag="a">Login</router-link>
                 </li>
                 <li class="nav-item dropdown" v-if="jwt &amp;&amp; jwt.username">
-                  <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href=""
+                    id="navbarDropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
                     <span>{{ ident }}</span>
                   </a>
                   <div class="dropdown-menu logout" aria-labelledby="navbarDropdownMenuLink">
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'Status' }" tag="a" exact>Status</router-link>
+                    <a v-if="mesaAtiva" class="dropdown-item" href="#/padrao-lista">
+                      Padrões de Minutas
+                    </a>
                     <a class="dropdown-item" @click="logout">Logout</a>
                   </div>
                 </li>
@@ -108,6 +132,13 @@
         <assinatura ref="assinatura" title="Assinatura"></assinatura>
 
         <top-progress ref="topProgress" :height="5" color="#000"></top-progress>
+
+        <div class="container-fluid content profile" v-if="$store.state.errorMsg">
+          <p class="alert alert-danger mt-3">
+            {{ $store.state.errorMsg }}
+          </p>
+        </div>
+
         <transition :name="transitionName" mode="out-in">
           <keep-alive include="mesa">
             <router-view :key="$route.fullPath"></router-view>
@@ -161,12 +192,12 @@ export default {
       console.log("update-available");
     });
 
-    Bus.$on("notification-permission-granted", token => {
+    Bus.$on("notification-permission-granted", (token) => {
       console.log("notification-permisson-granted", token);
       this.incluirToken(token);
     });
 
-    Bus.$on("notification-permission-denied", token => {
+    Bus.$on("notification-permission-denied", (token) => {
       console.log("notification-permisson-denied", token);
       this.notificacoesBloqueadas = true;
     });
@@ -200,7 +231,7 @@ export default {
       router.push({ name: "Login" });
     });
 
-    this.$on("updateLogged", token => {
+    this.$on("updateLogged", (token) => {
       this.cAvisos = undefined;
       this.avisos = undefined;
       this.avisosMNI = undefined;
@@ -219,12 +250,12 @@ export default {
             // Carragar a lista de avisos pendentes
             this.$nextTick(function() {
               this.$http.get("aviso/listar", { block: false }).then(
-                response => {
+                (response) => {
                   this.avisos = response.data;
                   this.cAvisos = this.avisos.list.length;
                   this.avisosMNI = undefined;
                 },
-                error => console.log("Erro carregando avisos", error)
+                (error) => console.log("Erro carregando avisos", error)
               );
             });
           }
@@ -244,7 +275,7 @@ export default {
       prg.start(title, total, callbackNext, callbackEnd);
     });
 
-    Bus.$on("prgCaption", caption => {
+    Bus.$on("prgCaption", (caption) => {
       prg.caption = caption;
     });
 
@@ -277,7 +308,7 @@ export default {
 
     this.$nextTick(function() {
       this.$http.get("test?skip=all").then(
-        response => {
+        (response) => {
           this.test = response.data;
 
           if (this.test.properties["balcaovirtual.systems"]) {
@@ -308,20 +339,24 @@ export default {
             }
           }
 
-          if (this.test.properties["balcaovirtual.wootric.token"] && this.test.properties["balcaovirtual.wootric.token"] !== "[undefined]" && this.jwt) {
+          if (
+            this.test.properties["balcaovirtual.wootric.token"] &&
+            this.test.properties["balcaovirtual.wootric.token"] !== "[undefined]" &&
+            this.jwt
+          ) {
             // This loads the Wootric survey
             // window.wootric_survey_immediately = true
             window.wootricSettings = {
               email: this.jwt.username,
               created_at: 1234567890,
-              account_token: this.test.properties["balcaovirtual.wootric.token"]
+              account_token: this.test.properties["balcaovirtual.wootric.token"],
             };
             window.wootric("run");
           }
 
           this.inicializarNotificoes();
         },
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
     });
 
@@ -355,7 +390,7 @@ export default {
         mostrarNotas: undefined,
         mostrarPartes: undefined,
         mostrarDadosComplementares: undefined,
-        mostrarProcessosRelacionados: undefined
+        mostrarProcessosRelacionados: undefined,
       },
       token: undefined,
       jwt: undefined,
@@ -370,7 +405,7 @@ export default {
       messagingServiceWorkerRegistration: undefined,
       nofificacoesInicializadas: false,
 
-      transitionName: "none"
+      transitionName: "none",
     };
   },
   computed: {
@@ -402,7 +437,7 @@ export default {
       if (a.length === 0) return this.jwt.username;
       if (a.length === 1) return this.jwt.username + " - " + a[0];
       return this.jwt.username + " - " + a[0] + "+" + (a.length - 1);
-    }
+    },
   },
   methods: {
     isTokenValid: function() {
@@ -425,7 +460,7 @@ export default {
           "mesa/" + "null" + "/documento/" + d.id + "/assinar-com-senha?sistema=" + d.sistema,
           {
             username: username,
-            password: password
+            password: password,
           },
           { block: !lote }
         )
@@ -439,7 +474,7 @@ export default {
             UtilsBL.logEvento("assinatura em lote", "assinado", "assinado com senha");
             Bus.$emit("prgNext");
           },
-          error => {
+          (error) => {
             if (lote) d.errormsg = error.data.errormsg;
             else Bus.$emit("message", "Erro", error.data.errormsg);
             Bus.$emit("prgNext");
@@ -448,7 +483,13 @@ export default {
     },
 
     assinarComSenhaEmLote: function(documentos, username, password, cont) {
-      Bus.$emit("prgStart", "Assinando Com Senha", documentos.length, i => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1), cont);
+      Bus.$emit(
+        "prgStart",
+        "Assinando Com Senha",
+        documentos.length,
+        (i) => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1),
+        cont
+      );
     },
 
     atualizar: function() {
@@ -465,13 +506,13 @@ export default {
     incluirToken: function(token) {
       this.notificacoesToken = token;
       this.$http.post("notificacao/incluir-token?token=" + encodeURIComponent(token)).then(
-        response => {
+        (response) => {
           if (response.status === 200 && response.data.status === "OK") {
             Bus.$emit("message", "Sucesso", "Notificações ativas. Muito obrigado!");
             UtilsBL.logEvento("notificacao", "notificacao-ativa");
           }
         },
-        error => {
+        (error) => {
           Bus.$emit("message", "Erro", error.data.errormsg);
         }
       );
@@ -503,7 +544,7 @@ export default {
         },
         error(error) {
           console.error("Error during messaging service worker registration:", error);
-        }
+        },
       });
     },
 
@@ -542,20 +583,20 @@ export default {
           },
           error(error) {
             console.error("Error during service worker registration:", error);
-          }
+          },
         });
       } catch (e) {
         console.log(e);
       }
-    }
+    },
   },
   components: {
     topProgress,
     progressModal: ProgressModal,
     progressModalAsync: ProgressModalAsync,
     assinatura: Assinatura,
-    messageBox: MessageBox
-  }
+    messageBox: MessageBox,
+  },
 };
 </script>
 

@@ -48,7 +48,6 @@
                   name: 'Documento',
                   params: {
                     numero: (anteriorDocumento || {}).id,
-                    documento: anteriorDocumento,
                     lista: this.lista,
                     transitionName: 'slide-right',
                   },
@@ -65,7 +64,6 @@
                   name: 'Documento',
                   params: {
                     numero: (proximoDocumento || {}).id,
-                    documento: proximoDocumento,
                     lista: this.lista,
                     transitionName: 'slide-left',
                   },
@@ -76,23 +74,48 @@
               >
             </div>
           </div>
-          <div class="card mb-3" v-if="diferencas">
-            <div class="card-body alert-success">
-              <p class="card-text" v-html="diferencas"></p>
+          <div v-if="diferencas && exibirDiferencas">
+            <div class="card mb-3">
+              <div
+                :class="{
+                  'card-body': true,
+                  'alert-success': documento.similaridade === 1.0,
+                  'alert-primary': documento.similaridade < 1.0,
+                }"
+              >
+                <p class="card-text" v-html="diferencas"></p>
+              </div>
             </div>
+            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade < 1.0">
+              Em relação ao <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>, palavas
+              incluídas aparecem em <span class="editNewInline">verde</span>, excluídas em <span class="editOldInline">vermelho</span> e
+              alteradas em <span class="replaceInline">roxo</span>.
+            </p>
+            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade === 1.0">
+              O fundo verde indica que o conteúdo do documento é exatamente igual ao
+              <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>.
+            </p>
           </div>
-          <div class="card mb-3" v-else>
+          <div class="card mb-3" v-show="!diferencas || !exibirDiferencas">
             <div class="card-body alert-warning">
               <p ref="conteudo" class="card-text" v-html="conteudo"></p>
             </div>
           </div>
+          <b-form-checkbox v-show="diferencas && documento.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
+            Exibir diferenças em relação ao padrão
+          </b-form-checkbox>
         </div>
         <div class="col col-lg-4">
           <div class="row no-gutters mt-2">
             <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade !== 1.0">
               <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none">
                 <span class="fa fa-plus"></span> Padrão
+              </button>
+            </div>
+            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade === 1.0">
+              <button @click.prevent="removerPadrao()" type="button" class="btn btn-light d-print-none">
+                <span class="fa fa-minus"></span> Padrão
               </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
@@ -171,19 +194,45 @@ import UtilsBL from "../bl/utils.js";
 import { Bus } from "../bl/bus.js";
 
 export default {
-  mounted() {},
+  name: "Documento",
+  mounted() {
+    if (!this.$store.state.documentos) this.$store.dispatch("carregarMesas");
+  },
   data() {
     return {
       numero: this.$route.params.numero,
-      documento: this.$route.params.documento,
-      conteudo: this.preprocess(this.$route.params.documento.conteudo),
-      diferencas: this.preprocess(this.$route.params.documento.diferencas),
-      lista: this.$route.params.lista,
       editando: false,
       errormsg: undefined,
     };
   },
   computed: {
+    exibirDiferencas: {
+      get() {
+        return this.$store.state.exibirDiferencas;
+      },
+      set(newValue) {
+        return this.$store.commit("setExibirDiferencas", newValue);
+      },
+    },
+
+    lista() {
+      return this.$route.params.lista ? this.$route.params.lista : this.$store.state.documentos;
+    },
+    documento() {
+      if (!this.$store.state.documentos) return;
+      for (var i = 0; i < this.$store.state.documentos.length; i++) {
+        if (this.$store.state.documentos[i].id === this.$route.params.numero) return this.$store.state.documentos[i];
+      }
+      return undefined;
+    },
+    conteudo() {
+      if (!this.documento) return;
+      return this.preprocess(this.documento.conteudo);
+    },
+    diferencas() {
+      if (!this.documento) return;
+      return this.preprocess(this.documento.diferencas);
+    },
     indice: function() {
       if (this.lista)
         for (var i = 0; i < this.lista.length; i++) {
@@ -192,10 +241,12 @@ export default {
       return 0;
     },
     proximoDocumento: function() {
+      if (!this.lista) return;
       if (this.indice >= this.lista.length - 1) return;
       return this.lista[this.indice + 1];
     },
     anteriorDocumento: function() {
+      if (!this.lista) return;
       if (this.indice === 0) return;
       return this.lista[this.indice - 1];
     },
@@ -203,7 +254,6 @@ export default {
   methods: {
     preprocess: function(s) {
       if (!s) return;
-      console.log(s);
       return s
         .replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"')
         .replace('contenteditable="true"', 'contentEditable="false" data-bv_edit="true"')
@@ -218,12 +268,11 @@ export default {
     },
 
     adicionarPadrao: function() {
-      var el = this.$refs["conteudo"].querySelector("section[data-bv_edit=true]");
-      this.buffer = el.innerHTML;
-      this.$http.post("padrao", { html: this.documento.conteudo }, { block: true }).then(
-        () => {},
-        (error) => UtilsBL.errormsg(error, this)
-      );
+      this.$store.dispatch("adicionarPadrao", this.documento.id);
+    },
+
+    removerPadrao: function() {
+      this.$store.dispatch("removerPadrao", this.documento.id);
     },
 
     editar: function() {
@@ -234,25 +283,12 @@ export default {
       this.editando = true;
     },
 
-    salvar: function() {
+    async salvar() {
       this.buffer = this.$refs["editarea"].innerHTML;
       this.$refs["conteudo"].querySelector("section[data-bv_edit=true]").innerHTML = this.buffer;
-      this.$http
-        .post(
-          "mesa/" + "null" + "/documento/" + this.documento.id + "/salvar?sistema=" + this.documento.sistema,
-          {
-            html: this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML),
-          },
-          { block: true }
-        )
-        .then(
-          (response) => {
-            this.editando = false;
-            this.documento.conteudo = this.$refs["conteudo"].innerHTML;
-            UtilsBL.logEvento("mesa", "salvar", "minuta");
-          },
-          (error) => UtilsBL.errormsg(error, this)
-        );
+      var html = this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML);
+      await this.$store.dispatch("salvarDocumento", { documento: this.documento, html: html });
+      this.editando = false;
     },
 
     exibirDevolver: function() {
@@ -296,7 +332,6 @@ export default {
           name: "Documento",
           params: {
             numero: this.proximoDocumento.id,
-            documento: this.proximoDocumento,
             lista: this.lista,
             transitionName: "slide-left",
           },
@@ -474,19 +509,16 @@ section[contenteditable="true"] {
   padding: 1em;
 }
 
+.replaceInline {
+  color: #6610f2;
+}
+
 .editOldInline {
   text-decoration: line-through;
-  color: rgb(155, 153, 153);
-  background-color: rgb(253, 203, 203);
-  padding-left: 0.3em;
-  padding-right: 0.3em;
+  color: #dc3545;
 }
 
 .editNewInline {
-  font-weight: bold;
-  color: white;
-  background-color: green;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
+  color: #28a745;
 }
 </style>

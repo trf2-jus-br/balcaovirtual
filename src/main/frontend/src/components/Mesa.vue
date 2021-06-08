@@ -11,6 +11,26 @@
       </div>
     </div>
 
+    <div class="alert alert-success d-print-none pb-0 pt-2" v-if="assinaveisEPadrao.length">
+      <div class="row align-items-center">
+        <div class="col mb-2">
+          <span class="mr-2" v-if="assinaveisEPadrao.length === 1"
+            ><strong>Encontramos 1 minuta exatamente igual ao padrão</strong>. Clique no botão verde para assiná-la.</span
+          >
+          <span class="mr-2" v-else
+            ><strong>Encontramos {{ assinaveisEPadrao.length }} minutas exatamente iguais aos padrões</strong>. Clique no botão verde para
+            assiná-las em lote.</span
+          >
+        </div>
+        <div class="col col-12 col-md-auto mb-2">
+          <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-success ml-1" title="">
+            <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
+            <span class="badge badge-pill badge-warning">{{ assinaveisEPadrao.length }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="row d-print-none">
       <div v-if="false" class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
@@ -36,10 +56,7 @@
         </div>
       </div>
       <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis || []).length">
-        <a type="button" href="#/padrao-lista" class="btn btn-light ml-1" title="">
-          Padrões
-        </a>
-        <button type="button" @click="revisar()" class="btn btn-success ml-1" title="">
+        <button type="button" @click="revisar()" class="btn btn-info ml-1" title="">
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
         </button>
@@ -74,7 +91,7 @@
               <th>Unidade</th>
               <th>Sistema/Órgão</th>
               <th>Situação</th>
-              <th>Padrão</th>
+              <th style="text-align: center" v-if="padraoAtivo">Padrão</th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +103,7 @@
                 <router-link
                   :to="{
                     name: 'Documento',
-                    params: { numero: f.id, documento: f, lista: filtrados },
+                    params: { numero: f.id, lista: filtrados },
                   }"
                   >{{ f.numeroDoDocumento }}</router-link
                 >
@@ -121,10 +138,13 @@
                 {{ f.descricaoDoStatus }}
                 <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
               </td>
-              <td class="td-middle text-right">
+              <td class="td-middle text-center" v-if="padraoAtivo">
+                <router-link v-if="f.similaridade === 1.0" :to="{ name: 'Padrao', params: { numero: f.idPadrao } }"
+                  ><span class="fa fa-check-circle text-success"></span
+                ></router-link>
                 <router-link
                   :to="{ name: 'Padrao', params: { numero: f.idPadrao } }"
-                  v-if="f.similaridade"
+                  v-if="f.similaridade && f.similaridade < 1.0"
                   v-html="(f.similaridade * 100).toFixed(0) + '%'"
                 ></router-link>
               </td>
@@ -149,9 +169,7 @@ export default {
 
     if (this.$route.params.manter) return;
 
-    setTimeout(() => {
-      this.carregarMesas();
-    });
+    this.$store.dispatch("carregarMesas");
   },
 
   data() {
@@ -159,7 +177,6 @@ export default {
       mesa: undefined,
       mesas: [],
       filtro: undefined,
-      lista: [],
       todos: true,
       errormsg: undefined,
       carregando: true,
@@ -167,6 +184,9 @@ export default {
   },
 
   computed: {
+    lista() {
+      return this.$store.state.documentos ? this.$store.state.documentos : [];
+    },
     filtrados: function() {
       var a = this.lista;
       a = UtilsBL.filtrarPorSubstring(a, this.filtro);
@@ -195,26 +215,19 @@ export default {
         return item.status === "4" || item.status === "2";
       });
     },
+
+    assinaveisEPadrao: function() {
+      return this.lista.filter(function(item) {
+        return (item.status === "4" || item.status === "2") && item.similaridade === 1.0 && item.idPadrao;
+      });
+    },
+
+    padraoAtivo() {
+      return this.lista && this.lista.filter((i) => i.idPadrao).length > 0;
+    },
   },
 
   methods: {
-    carregarMesas: function() {
-      this.$http.get("mesa", { block: true }).then(
-        (response) => {
-          var list = response.data.list;
-          for (var i = 0; i < list.length; i++) {
-            var m = list[i];
-            this.mesas.push({ id: m.id, nome: m.nome });
-          }
-          if (this.mesas.length > 0) {
-            this.mesa = this.mesas[0];
-            this.selecionarMesa();
-          }
-        },
-        (error) => UtilsBL.errormsg(error, this)
-      );
-    },
-
     selecionarMesa: function() {
       this.$http.get("mesa/" + this.mesa.id, { block: true }).then(
         (response) => {
@@ -308,7 +321,7 @@ export default {
       var a = this.filtradosEMarcadosEAssinaveis;
       this.$router.push({
         name: "Documento",
-        params: { numero: a[0].id, documento: a[0], lista: a },
+        params: { numero: a[0].id, lista: a },
       });
     },
 

@@ -111,7 +111,11 @@ public class MesaIdGet implements IMesaIdGet {
 		NormalizedStringSimilarity metric = new SorensenDice();
 		for (Minuta minuta : minutas) {
 			for (Minuta padrao : padroes) {
-				double coef = metric.similarity(minuta.markdownSimplificado, padrao.markdownSimplificado);
+				double coef = 0d;
+				if (minuta.markdown.equals(padrao.markdown))
+					coef = 1d;
+				else
+					coef = 0.99d * metric.similarity(minuta.markdownSimplificado, padrao.markdownSimplificado);
 
 				if (coef > 0.75d) {
 					if (minuta.similaridade == 0d || minuta.similaridade < coef) {
