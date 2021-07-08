@@ -240,6 +240,28 @@ public interface IBalcaoVirtual {
 		public List<Lembrete> lembretes = new ArrayList<>();
 	}
 
+	public static class Voto implements ISwaggerModel {
+		public String sistema;
+		public Date dataDeInclusao;
+		public String id;
+		public String numeroDoDocumento;
+		public String numeroDoProcesso;
+		public String autor;
+		public String reu;
+		public String descricao;
+		public String status;
+		public String descricaoDoStatus;
+		public String tipoDoDocumento;
+		public String identificadorDoUsuarioQueIncluiu;
+		public String nomeDoUsuarioQueIncluiu;
+		public String siglaDaUnidade;
+		public String conteudo;
+		public String diferencas;
+		public Double similaridade;
+		public String idPadrao;
+		public List<Lembrete> lembretes = new ArrayList<>();
+	}
+
 	public static class PadraoItem implements ISwaggerModel {
 		public String id;
 		public String sistema;
@@ -375,6 +397,44 @@ public interface IBalcaoVirtual {
 			public Double bytes;
 			public String errormsg;
 			public String stacktrace;
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
+	public interface IVotosGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public List<Voto> list = new ArrayList<>();
+			public List<ListStatus> status = new ArrayList<>();
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
+	public interface IVotosIdAcompanharPost extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+			public String sistema;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String status;
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
+	public interface IVotosIdPedirVistaPost extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+			public String sistema;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String status;
 		}
 
 		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;

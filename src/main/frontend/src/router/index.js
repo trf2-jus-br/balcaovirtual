@@ -1,26 +1,28 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from '../store'
-import ConsultaSimples from "@/components/ConsultaSimples";
-import Processo from "@/components/Processo";
-import ProcessoLista from "@/components/ProcessoLista";
-import PeticaoInicial from "@/components/PeticaoInicial";
-import PeticaoIntercorrente from "@/components/PeticaoIntercorrente";
-import ConsultaCertidao from "@/components/ConsultaCertidao";
-import Certidao from "@/components/Certidao";
-import AvisoLista from "@/components/AvisoLista";
-import AvisoConfirmadoRecentes from "@/components/AvisoConfirmadoRecentes";
-import AvisoConfirmadoLista from "@/components/AvisoConfirmadoLista";
-import EtiquetaLista from "@/components/EtiquetaLista";
-import Mesa from "@/components/Mesa";
-import Documento from "@/components/Documento";
-import Login from "@/components/Login";
-import Sugestoes from "@/components/Sugestoes";
-import Sobre from "@/components/Sobre";
-import Status from "@/components/Status";
+import ConsultaSimples from "@/views/ConsultaSimples";
+import Processo from "@/views/Processo";
+import ProcessoLista from "@/views/ProcessoLista";
+import PeticaoInicial from "@/views/PeticaoInicial";
+import PeticaoIntercorrente from "@/views/PeticaoIntercorrente";
+import ConsultaCertidao from "@/views/ConsultaCertidao";
+import Certidao from "@/views/Certidao";
+import AvisoLista from "@/views/AvisoLista";
+import AvisoConfirmadoRecentes from "@/views/AvisoConfirmadoRecentes";
+import AvisoConfirmadoLista from "@/views/AvisoConfirmadoLista";
+import EtiquetaLista from "@/views/EtiquetaLista";
+import Mesa from "@/views/Mesa";
+import Documento from "@/views/Documento";
+import Login from "@/views/Login";
+import Sugestoes from "@/views/Sugestoes";
+import Sobre from "@/views/Sobre";
+import Status from "@/views/Status";
 import ProcessoBL from "../bl/processo.js";
-import PadraoLista from "@/components/PadraoLista";
-import Padrao from "@/components/Padrao";
+import PadraoLista from "@/views/PadraoLista";
+import Padrao from "@/views/Padrao";
+import VotoLista from "@/views/VotoLista";
+import Voto from "@/views/Voto";
 
 Vue.use(Router);
 
@@ -125,6 +127,22 @@ const router = new Router({
         }
       }
     },
+    {
+      path: "/voto-lista",
+      name: "Lista de Votos",
+      component: VotoLista
+    },
+    {
+      path: "/voto/:numero",
+      name: "Voto",
+      component: Voto,
+      meta: {
+        title: route => {
+          return "Voto " + route.params.numero + "..";
+        }
+      }
+    },
+
     {
       path: "/aviso-confirmado-recentes",
       name: "Avisos Confirmados Recentemente",

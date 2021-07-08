@@ -307,7 +307,7 @@
 import AuthBL from "../bl/auth.js";
 import ProcessoBL from "../bl/processo.js";
 import UtilsBL from "../bl/utils.js";
-import ProcessoMultiplos from "./ProcessoMultiplos";
+import ProcessoMultiplos from "../modals/ProcessoMultiplos";
 import { Bus } from "../bl/bus.js";
 
 const reProc = /^(\d{7})-?(\d{2})\.?(\d{4})\.?(4)\.?(02)\.?(\d{4})\/?-?(\d{2})?$/;

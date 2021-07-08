@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid content profile" v-if="documento">
+  <div class="container-fluid content profile" v-if="voto">
     <div class="row mt-3" v-if="errormsg !== undefined">
       <div class="col col-sm-12">
         <p class="alert alert-danger">
@@ -10,44 +10,25 @@
 
     <div class="row mt-3 mb-3">
       <div class="col-md-12">
-        <h4 class="text-center mb-0" v-if="documento">{{ documento.tipoDoDocumento }} {{ documento.numeroDoDocumento }}</h4>
+        <h4 class="text-center mb-0" v-if="voto">{{ voto.tipoDoVoto }} {{ voto.numeroDoVoto }}</h4>
       </div>
     </div>
 
-    <div v-show="editando">
-      <div class="row no-gutters mt-2">
-        <div class="col col-auto mr-auto mb-3">
-          <button @click="cancelar()" type="button" id="download" class="btn btn-light d-print-none">
-            <span class="fa fa-arrow-left"></span> Cancelar
-          </button>
-        </div>
-        <div class="col col-auto mr-1 mb-3">
-          <button @click="salvar()" type="button" class="btn btn-primary d-print-none"><span class="fa fa-pencil"></span> Salvar</button>
-        </div>
-      </div>
-      <div class="row" v-if="editando">
-        <div class="col col-12">
-          <div ref="editarea" class="bveditor" contenteditable="true" v-html="buffer"></div>
-        </div>
-      </div>
-    </div>
-
-    <div v-show="!editando">
       <div class="row">
         <div class="col col-lg-8">
           <div class="row no-gutters mt-2">
             <div class="col col-auto mb-3">
-              <router-link :to="{ name: 'Mesa', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
+              <router-link :to="{ name: 'Lista de Votos', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
                 ><span class="fa fa-times"></span> Voltar</router-link
               >
             </div>
             <div class="col col-auto mb-3">
               <router-link
-                :disabled="!anteriorDocumento"
+                :disabled="!anteriorVoto"
                 :to="{
-                  name: 'Documento',
+                  name: 'Voto',
                   params: {
-                    numero: (anteriorDocumento || {}).id,
+                    numero: (anteriorVoto || {}).id,
                     lista: this.lista,
                     transitionName: 'slide-right',
                   },
@@ -59,11 +40,11 @@
             </div>
             <div class="col col-auto mb-3">
               <router-link
-                :disabled="!proximoDocumento"
+                :disabled="!proximoVoto"
                 :to="{
-                  name: 'Documento',
+                  name: 'Voto',
                   params: {
-                    numero: (proximoDocumento || {}).id,
+                    numero: (proximoVoto || {}).id,
                     lista: this.lista,
                     transitionName: 'slide-left',
                   },
@@ -79,21 +60,21 @@
               <div
                 :class="{
                   'card-body': true,
-                  'alert-success': documento.similaridade === 1.0,
-                  'alert-primary': documento.similaridade < 1.0,
+                  'alert-success': voto.similaridade === 1.0,
+                  'alert-primary': voto.similaridade < 1.0,
                 }"
               >
                 <p class="card-text" v-html="diferencas"></p>
               </div>
             </div>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade < 1.0">
-              Em relação ao <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>, palavas
+            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && voto.similaridade < 1.0">
+              Em relação ao <router-link :to="{ name: 'Padrao', params: { numero: voto.idPadrao } }">padrão</router-link>, palavas
               incluídas aparecem em <span class="editNewInline">verde</span>, excluídas em <span class="editOldInline">vermelho</span> e
               alteradas em <span class="replaceInline">roxo</span>.
             </p>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade === 1.0">
-              O fundo verde indica que o conteúdo do documento é exatamente igual ao
-              <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>.
+            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && voto.similaridade === 1.0">
+              O fundo verde indica que o conteúdo do voto é exatamente igual ao
+              <router-link :to="{ name: 'Padrao', params: { numero: voto.idPadrao } }">padrão</router-link>.
             </p>
           </div>
           <div class="card mb-3" v-show="!diferencas || !exibirDiferencas">
@@ -101,36 +82,21 @@
               <p ref="conteudo" class="card-text" v-html="conteudo"></p>
             </div>
           </div>
-          <b-form-checkbox v-show="diferencas && documento.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
+          <b-form-checkbox v-show="diferencas && voto.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
             Exibir diferenças em relação ao padrão
           </b-form-checkbox>
         </div>
         <div class="col col-lg-4">
           <div class="row no-gutters mt-2">
             <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade !== 1.0">
-              <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none">
-                <span class="fa fa-plus"></span> Padrão
+            <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
+              <button @click.prevent="acompanhar()" type="button" class="btn btn-primary d-print-none">
+                <span class="fa fa-check"></span> Acompanhar
               </button>
             </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade === 1.0">
-              <button @click.prevent="removerPadrao()" type="button" class="btn btn-light d-print-none">
-                <span class="fa fa-minus"></span> Padrão
-              </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none">
-                <span class="fa fa-comment"></span> Devolver
-              </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none">
-                <span class="fa fa-pencil"></span> Editar
-              </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
-              <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none">
-                <span class="fa fa-certificate"></span> Assinar
+            <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
+              <button @click.prevent="pedirVista()" type="button" class="btn btn-info d-print-none">
+                <span class="fa fa-eye"></span> Pedir Vista
               </button>
             </div>
           </div>
@@ -144,19 +110,19 @@
                 <router-link
                   :to="{
                     name: 'Processo',
-                    params: { numero: documento.numeroDoProcesso },
+                    params: { numero: voto.numeroDoProcesso },
                     query: { avisos: $parent.cAvisos },
                   }"
                   target="_blank"
-                  >{{ documento.processoFormatado }}</router-link
+                  >{{ voto.processoFormatado }}</router-link
                 >
                 <br />Cadastro:
-                <span v-html="documento.dataDeInclusaoFormatada"></span>
-                <br />Responsável: {{ documento.nomeDoUsuarioQueIncluiu }} <br />Status: {{ documento.descricaoDoStatus }}
+                <span v-html="voto.dataDeInclusaoFormatada"></span>
+                <br />Responsável: {{ voto.nomeDoUsuarioQueIncluiu }} <br />Status: {{ voto.descricaoDoStatus }}
               </p>
             </div>
           </div>
-          <div class="card" v-if="documento.lembretes">
+          <div class="card" v-if="voto.lembretes">
             <div class="card-header">
               Lembretes
             </div>
@@ -171,7 +137,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="lembrete in documento.lembretes" :key="lembrete.id">
+                    <tr v-for="lembrete in voto.lembretes" :key="lembrete.id">
                       <th scope="row">{{ lembrete.conteudo }}</th>
                       <td>{{ lembrete.identificadorDoUsuario }}</td>
                       <td>{{ lembrete.dataDeInclusaoFormatada }}</td>
@@ -183,20 +149,16 @@
           </div>
         </div>
       </div>
-    </div>
-    <documento-devolver ref="documentoDevolver" @ok="devolver"></documento-devolver>
   </div>
 </template>
 
 <script>
-import DocumentoDevolver from "./DocumentoDevolver";
-import UtilsBL from "../bl/utils.js";
 import { Bus } from "../bl/bus.js";
 
 export default {
-  name: "Documento",
+  name: "Voto",
   mounted() {
-    if (!this.$store.state.documentos) this.$store.dispatch("carregarMesas");
+    if (!this.$store.state.votos) this.$store.dispatch("carregarVotos");
   },
   data() {
     return {
@@ -216,40 +178,35 @@ export default {
     },
 
     lista() {
-      return this.$route.params.lista ? this.$route.params.lista : this.$store.state.documentos;
+      return this.$route.params.lista ? this.$route.params.lista : this.$store.state.votos;
     },
-    documento() {
-      if (!this.$store.state.documentos) return;
-      for (var i = 0; i < this.$store.state.documentos.length; i++) {
-        if (this.$store.state.documentos[i].id === this.$route.params.numero) return this.$store.state.documentos[i];
+    voto() {
+      if (!this.$store.state.votos) return;
+      for (var i = 0; i < this.$store.state.votos.length; i++) {
+        if (this.$store.state.votos[i].id === this.$route.params.numero) return this.$store.state.votos[i];
       }
       return undefined;
-    },
-    conteudo() {
-      if (!this.documento) return;
-      return this.preprocess(this.documento.conteudo);
-    },
-    diferencas() {
-      if (!this.documento) return;
-      return this.preprocess(this.documento.diferencas);
     },
     indice: function() {
       if (this.lista)
         for (var i = 0; i < this.lista.length; i++) {
-          if (this.documento === this.lista[i]) return i;
+          if (this.voto === this.lista[i]) return i;
         }
       return 0;
     },
-    proximoDocumento: function() {
+    proximoVoto: function() {
       if (!this.lista) return;
       if (this.indice >= this.lista.length - 1) return;
       return this.lista[this.indice + 1];
     },
-    anteriorDocumento: function() {
+    anteriorVoto: function() {
       if (!this.lista) return;
       if (this.indice === 0) return;
       return this.lista[this.indice - 1];
     },
+    conteudo() {
+      return this.preprocess(this.voto.conteudo);
+    }
   },
   methods: {
     preprocess: function(s) {
@@ -267,77 +224,28 @@ export default {
       this.$router.go(-1);
     },
 
-    adicionarPadrao: function() {
-      this.$store.dispatch("adicionarPadrao", this.documento.id);
-    },
-
-    removerPadrao: function() {
-      this.$store.dispatch("removerPadrao", this.documento.id);
-    },
-
-    editar: function() {
-      var el = this.$refs["conteudo"].querySelector("section[data-bv_edit=true]");
-      // el.setAttribute("contenteditable", "true")
-      this.buffer = el.innerHTML;
-      // this.buffer = this.documento.conteudo
-      this.editando = true;
-    },
-
-    async salvar() {
-      this.buffer = this.$refs["editarea"].innerHTML;
-      this.$refs["conteudo"].querySelector("section[data-bv_edit=true]").innerHTML = this.buffer;
-      var html = this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML);
-      await this.$store.dispatch("salvarDocumento", { documento: this.documento, html: html });
-      this.editando = false;
-    },
-
-    exibirDevolver: function() {
-      this.$refs.documentoDevolver.show();
-    },
-
-    devolver: function(lembrete) {
-      this.$http
-        .post(
-          "mesa/" + "null" + "/documento/" + this.documento.id + "/devolver?sistema=" + this.documento.sistema,
-          {
-            lembrete: lembrete,
-          },
-          { block: true }
-        )
-        .then(
-          (response) => {
-            UtilsBL.logEvento("mesa", "devolver", "minuta");
-            this.documento.status = 7;
-            this.documento.descricaoDoStatus = "Devolvida";
-            this.documento.checked = false;
-            this.documento.disabled = true;
-            this.exibeProximoDocumento();
-          },
-          (error) => UtilsBL.errormsg(error, this)
-        );
-    },
-
-    cancelar: function() {
-      this.editando = false;
-    },
-
-    assinarComSenha: function() {
-      Bus.$emit("iniciarAssinaturaComSenha", [this.documento], this.exibeProximoDocumento);
+    acompanhar: function() {
+      Bus.$emit("votar", [this.voto], this.exibeProximoVoto);
       // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
     },
 
-    exibeProximoDocumento: function() {
-      if (this.proximoDocumento) {
+    pedirVista: function() {
+      Bus.$emit("pedirVista", [this.voto], this.exibeProximoVoto);
+      // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
+    },
+
+    exibeProximoVoto: function() {
+      if (this.proximoVoto) {
         this.$router.push({
-          name: "Documento",
+          name: "Voto",
           params: {
-            numero: this.proximoDocumento.id,
+            numero: this.proximoVoto.id,
             lista: this.lista,
             transitionName: "slide-left",
           },
         });
       } else {
-        this.$router.push({ name: "Mesa", params: { manter: false } });
+        this.$router.push({ name: "Lista de Votos", params: { manter: false } });
       }
     },
 
@@ -347,7 +255,6 @@ export default {
   },
 
   components: {
-    DocumentoDevolver,
   },
 };
 </script>

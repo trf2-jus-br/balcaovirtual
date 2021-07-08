@@ -74,6 +74,9 @@
                 <li class="nav-item" v-if="mesaAtiva">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Mesa' }" tag="a">Minutas</router-link>
                 </li>
+                <li class="nav-item" v-if="votosAtiva">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Lista de Votos' }" tag="a">Votos</router-link>
+                </li>
                 <li class="nav-item" v-if="mesaAtiva">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Sugestões' }" tag="a">Sugestões</router-link>
                 </li>
@@ -164,10 +167,10 @@ import AuthBL from "./bl/auth.js";
 import UtilsBL from "./bl/utils.js";
 import topProgress from "./components/TopProgress";
 import { Bus } from "./bl/bus.js";
-import ProgressModal from "./components/ProgressModal";
-import ProgressModalAsync from "./components/ProgressModalAsync";
-import MessageBox from "./components/MessageBox";
-import Assinatura from "./components/Assinatura";
+import ProgressModal from "./modals/ProgressModal";
+import ProgressModalAsync from "./modals/ProgressModalAsync";
+import MessageBox from "./modals/MessageBox";
+import Assinatura from "./modals/Assinatura";
 import { initializeFirebase } from "./bl/push.js";
 import { register } from "register-service-worker";
 import firebase from "firebase/app";
@@ -302,6 +305,14 @@ export default {
       this.assinarComSenhaEmLote(documentos, username, password, cont);
     });
 
+    Bus.$on("votar", (documentos, username, password, cont) => {
+      this.votarEmLote(documentos, username, password, cont);
+    });
+
+    Bus.$on("pedirVista", (documentos, username, password, cont) => {
+      this.pedirVistaEmLote(documentos, username, password, cont);
+    });
+
     this.token = AuthBL.getIdToken();
     if (this.token && AuthBL.isTokenExpired(this.token)) this.token = undefined;
     this.$emit("updateLogged", this.token);
@@ -414,6 +425,11 @@ export default {
       return f;
     },
 
+    votosAtiva: function() {
+      var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
+      return f;
+    },
+
     peticaoInicialAtiva: function() {
       if (!this.jwt || !this.jwt.username) return false;
       for (var prop in this.jwt.user) {
@@ -488,6 +504,88 @@ export default {
         "Assinando Com Senha",
         documentos.length,
         (i) => this.assinarComSenha(documentos[i], username, password, documentos.length !== 1),
+        cont
+      );
+    },
+
+    votar: function(d, username, password, lote) {
+      this.errormsg = undefined;
+      Bus.$emit("prgCaption", "Votando " + d.numeroDoDocumento);
+
+      this.$http
+        .post(
+          "mesa/" + "null" + "/documento/" + d.id + "/votar?sistema=" + d.sistema,
+          {
+            username: username,
+            password: password,
+          },
+          { block: !lote }
+        )
+        .then(
+          () => {
+            d.errormsg = undefined;
+            d.status = 5;
+            d.descricaoDoStatus = "Votado";
+            d.checked = false;
+            d.disabled = true;
+            UtilsBL.logEvento("voto em lote", "votado", "votado");
+            Bus.$emit("prgNext");
+          },
+          (error) => {
+            if (lote) d.errormsg = error.data.errormsg;
+            else Bus.$emit("message", "Erro", error.data.errormsg);
+            Bus.$emit("prgNext");
+          }
+        );
+    },
+
+    votarEmLote: function(documentos, username, password, cont) {
+      Bus.$emit(
+        "prgStart",
+        "Votando",
+        documentos.length,
+        (i) => this.votar(documentos[i], username, password, documentos.length !== 1),
+        cont
+      );
+    },
+
+    pedirVista: function(d, username, password, lote) {
+      this.errormsg = undefined;
+      Bus.$emit("prgCaption", "Pedindo Vista " + d.numeroDoDocumento);
+
+      this.$http
+        .post(
+          "mesa/" + "null" + "/documento/" + d.id + "/pedir-vista?sistema=" + d.sistema,
+          {
+            username: username,
+            password: password,
+          },
+          { block: !lote }
+        )
+        .then(
+          () => {
+            d.errormsg = undefined;
+            d.status = 5;
+            d.descricaoDoStatus = "Vista";
+            d.checked = false;
+            d.disabled = true;
+            UtilsBL.logEvento("pedido de vista em lote", "vista", "vista");
+            Bus.$emit("prgNext");
+          },
+          (error) => {
+            if (lote) d.errormsg = error.data.errormsg;
+            else Bus.$emit("message", "Erro", error.data.errormsg);
+            Bus.$emit("prgNext");
+          }
+        );
+    },
+
+    pedirVistaEmLote: function(documentos, username, password, cont) {
+      Bus.$emit(
+        "prgStart",
+        "Pedindo Vista",
+        documentos.length,
+        (i) => this.pedirVista(documentos[i], username, password, documentos.length !== 1),
         cont
       );
     },

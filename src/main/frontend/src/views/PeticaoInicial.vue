@@ -429,8 +429,8 @@ import UtilsBL from "../bl/utils.js";
 import CnjClasseBL from "../bl/cnj-classe.js";
 import { Bus } from "../bl/bus.js";
 import AwesomeMask from "awesome-mask";
-import MySelect from "./MySelect";
-import MyInput from "./MyInput";
+import MySelect from "../components/MySelect";
+import MyInput from "../components/MyInput";
 
 const polos = [
   {

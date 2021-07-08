@@ -192,7 +192,7 @@
 <script>
 import ProcessoBL from "../bl/processo.js";
 import UtilsBL from "../bl/utils.js";
-import ProcessoMultiplos from "./ProcessoMultiplos";
+import ProcessoMultiplos from "../modals/ProcessoMultiplos";
 import { Bus } from "../bl/bus.js";
 
 /* global chrome */

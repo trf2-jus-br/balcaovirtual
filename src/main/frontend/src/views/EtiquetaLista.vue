@@ -68,8 +68,8 @@
 
 <script>
 import UtilsBL from "../bl/utils.js";
-import ProcessoMultiplos from "./ProcessoMultiplos";
-import Etiqueta from "./Etiqueta";
+import ProcessoMultiplos from "../modals/ProcessoMultiplos";
+import Etiqueta from "../modals/Etiqueta";
 // import { Bus } from '../bl/bus.js'
 
 export default {

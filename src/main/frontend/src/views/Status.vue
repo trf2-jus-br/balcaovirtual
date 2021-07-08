@@ -108,7 +108,7 @@
 
 <script>
 import UtilsBL from "../bl/utils.js";
-import MyInput from "./MyInput";
+import MyInput from "../components/MyInput";
 
 export default {
   name: "aviso-confirmado-recentes",

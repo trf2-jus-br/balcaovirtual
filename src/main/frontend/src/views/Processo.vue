@@ -625,10 +625,10 @@
 import TimelineBL from "../bl/timeline.js";
 import ProcessoBL from "../bl/processo.js";
 import UtilsBL from "../bl/utils.js";
-import Timeline from "./Timeline";
-import ProcessoPecaDetalhes from "./ProcessoPecaDetalhes";
-import ProcessoNotas from "./ProcessoNotas";
-import ProcessoCota from "./ProcessoCota";
+import Timeline from "../components/Timeline";
+import ProcessoPecaDetalhes from "../modals/ProcessoPecaDetalhes";
+import ProcessoNotas from "../components/ProcessoNotas";
+import ProcessoCota from "../modals/ProcessoCota";
 import CnjClasseBL from "../bl/cnj-classe.js";
 import CnjAssuntoBL from "../bl/cnj-assunto.js";
 import { Bus } from "../bl/bus.js";

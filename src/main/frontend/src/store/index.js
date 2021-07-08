@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import UtilsBL from '../bl/utils'
-import ProcessoBL from '../bl/processo'
+import DocumentoBL from '../bl/documento'
+import VotoBL from '../bl/voto'
 import VuexPersist from 'vuex-persist'
 
 const vuexPersist = new VuexPersist({
@@ -14,61 +15,15 @@ const vuexPersist = new VuexPersist({
 
 Vue.use(Vuex);
 
-const fixDocumento = function (item) {
-  UtilsBL.applyDefauts(item, {
-    rows: 1,
-    checked: true,
-    disabled: false,
-    dataDeInclusao: undefined,
-    dataDeInclusaoFormatada: undefined,
-    id: undefined,
-    numeroDoDocumento: undefined,
-    tipoDoDocumento: undefined,
-    numeroDoProcesso: undefined,
-    autor: undefined,
-    reu: undefined,
-    processoFormatado: undefined,
-    descricaoDoStatus: undefined,
-    identificadorDoUsuarioQueIncluiu: undefined,
-    nomeDoUsuarioQueIncluiu: undefined,
-    conteudo: undefined,
-    sistema: undefined,
-    lembretes: undefined,
-    errormsg: undefined,
-  });
-  if (item.numeroDoProcesso !== undefined) {
-    item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
-  }
-  if (item.dataDeInclusao !== undefined) {
-    item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.dataDeInclusao);
-  }
-  if (item.lembretes) {
-    for (var i = 0; i < item.lembretes.length; i++) {
-      item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao);
-    }
-  }
-  return item;
-}
-
-const findDocumentoIndice = function (state, id) {
-  if (!state.documentos) return;
-  for (var i = 0; i < state.documentos.length; i++) {
-    console.log(state.documentos[i].id + " - " + id)
-    if (state.documentos[i].id === id) return i;
-  }
-  return;
-}
-
-const findDocumento = function (state, id) {
-  return state.documentos[findDocumentoIndice(state, id)];
-}
-
 const store = new Vuex.Store({
   state: {
     mesa: undefined,
     mesas: undefined,
     documentos: undefined,
     exibirDiferencas: true,
+
+    votos: undefined,
+
     successMsg: undefined,
     errorMsg: undefined,
   },
@@ -83,11 +38,19 @@ const store = new Vuex.Store({
       state.documentos = val
     },
     updateDocumento(state, val) {
-      console.log("oi1")
-      var i = findDocumentoIndice(state, val.id)
+      var i = DocumentoBL.findIndice(state, val.id)
       if (i === undefined) throw "Documento não encontrado"
       Vue.set(state.documentos, i, val)
     },
+    setVotos(state, val) {
+      state.votos = val
+    },
+    updateVoto(state, val) {
+      var i = VotoBL.findIndice(state, val.id)
+      if (i === undefined) throw "Voto não encontrado"
+      Vue.set(state.votos, i, val)
+    },
+
     setExibirDiferencas(state, val) {
       state.exibirDiferencas = val
     },
@@ -153,7 +116,7 @@ const store = new Vuex.Store({
           var lista = [];
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
-            lista.push(fixDocumento(list[i]));
+            lista.push(DocumentoBL.fix(list[i]));
           }
           commit('setDocumentos', lista)
         },
@@ -165,7 +128,7 @@ const store = new Vuex.Store({
       state,
       dispatch
     }, id) {
-      var doc = findDocumento(state, id);
+      var doc = DocumentoBL.find(state, id);
       if (!doc) throw "Documento não encontrado";
       await Vue.http.post("padrao", {
         html: doc.conteudo
@@ -191,7 +154,7 @@ const store = new Vuex.Store({
       state,
       dispatch
     }, id) {
-      var doc = findDocumento(state, id);
+      var doc = DocumentoBL.find(state, id);
       if (!doc) throw "Documento não encontrado";
       await Vue.http.delete("padrao/" + doc.idPadrao, {
         block: true
@@ -231,6 +194,70 @@ const store = new Vuex.Store({
           (error) => commit("setError", error)
         );
     },
+
+    async carregarVotos({
+      commit,
+      state
+    }) {
+      await Vue.http.get("mesa/" + state.mesa.id, {
+        block: true
+      }).then(
+        (response) => {
+          var lista = [];
+          var list = response.data.list;
+          for (var i = 0; i < list.length; i++) {
+            lista.push(VotoBL.fix(list[i]));
+          }
+          commit('setVotos', lista)
+        },
+        (error) => commit("setError", error)
+      );
+    },
+
+    async acompanhar({
+      commit,
+      state,
+      dispatch
+    }, val) {
+      await Vue.http
+        .post(
+          "mesa/" + "null" + "/documento/" + val.documento.id + "/salvar?sistema=" + val.documento.sistema, {
+            html: val.html,
+          }, {
+            block: true
+          }
+        )
+        .then(
+          (response) => {
+            dispatch('carregarVotos')
+            UtilsBL.logEvento("voto", "acompanhar", "acompanhar");
+          },
+          (error) => commit("setError", error)
+        );
+    },
+
+    async pedirVista({
+      commit,
+      state,
+      dispatch
+    }, val) {
+      await Vue.http
+        .post(
+          "mesa/" + "null" + "/documento/" + val.documento.id + "/salvar?sistema=" + val.documento.sistema, {
+            html: val.html,
+          }, {
+            block: true
+          }
+        )
+        .then(
+          (response) => {
+            dispatch('carregarVotos')
+            UtilsBL.logEvento("voto", "pedirVista", "pedirVista");
+          },
+          (error) => commit("setError", error)
+        );
+    },
+
 
   },
   modules: {},

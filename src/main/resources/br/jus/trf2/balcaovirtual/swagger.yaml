@@ -29,6 +29,8 @@ tags:
     description: Anotações Processuais
   - name: sinal
     description: Sinalizações Processuais
+  - name: voto
+    description: Voto em Sessão de Julgamento
   - name: config
     description: Configurações
   - name: utils
@@ -544,6 +546,73 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
+            
+  /votos:
+    get:
+      description: Listar os votos nas sessões de julgamento
+      tags: [voto]
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/Voto"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
+  /votos/{id}/acompanhar:
+    post:
+      description: Acompanhar voto em sessão de julgamento
+      tags: [voto]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /votos/{id}/pedir-vista:
+    post:
+      description: Pedir vista de voto/processo em sessão de julgamento
+      tags: [voto]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+            
   /config/entidades:
     get:
       description: Diversos parâmetros para petição inicial
@@ -2417,6 +2486,52 @@ definitions:
         
   MesaDocumento:
     description: Mesa virtual
+    type: object
+    properties:
+      sistema:
+        $ref: "#/definitions/Sistema"
+      dataDeInclusao:
+        type: string
+        format: date-time
+      id:
+        type: string
+      numeroDoDocumento:
+        type: string
+      numeroDoProcesso:
+        type: string
+      autor:
+        type: string
+      reu:
+        type: string
+      descricao:
+        type: string
+      status:
+        type: string
+      descricaoDoStatus:
+        type: string
+      tipoDoDocumento:
+        type: string
+      identificadorDoUsuarioQueIncluiu:
+        type: string
+      nomeDoUsuarioQueIncluiu:
+        type: string
+      siglaDaUnidade:
+        type: string
+      conteudo:
+        type: string
+      diferencas:
+        type: string
+      similaridade:
+        type: number
+      idPadrao:
+        type: string
+      lembretes:
+        type: array
+        items:
+          $ref: "#/definitions/Lembrete"
+
+  Voto:
+    description: Voto em Sessão de Julgamento
     type: object
     properties:
       sistema:
