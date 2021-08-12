@@ -305,12 +305,16 @@ export default {
       this.assinarComSenhaEmLote(documentos, username, password, cont);
     });
 
-    Bus.$on("votar", (documentos, username, password, cont) => {
-      this.votarEmLote(documentos, username, password, cont);
+    Bus.$on("acompanhar", (documentos, cont) => {
+      this.acompanharEmLote(documentos, cont);
     });
 
-    Bus.$on("pedirVista", (documentos, username, password, cont) => {
-      this.pedirVistaEmLote(documentos, username, password, cont);
+    Bus.$on("divergir", (documentos, cont) => {
+      this.divergirEmLote(documentos, cont);
+    });
+
+    Bus.$on("pedirVista", (documentos, cont) => {
+      this.pedirVistaEmLote(documentos, cont);
     });
 
     this.token = AuthBL.getIdToken();
@@ -393,7 +397,6 @@ export default {
       nomesSistemas: undefined,
       sistemas: undefined,
       sistemasCertificadores: undefined,
-      errormsg: undefined,
       settings: {
         timeline: undefined,
         timelineIncompatible: undefined,
@@ -468,7 +471,6 @@ export default {
     },
 
     assinarComSenha: function(d, username, password, lote) {
-      this.errormsg = undefined;
       Bus.$emit("prgCaption", "Assinando " + d.numeroDoDocumento);
 
       this.$http
@@ -508,84 +510,68 @@ export default {
       );
     },
 
-    votar: function(d, username, password, lote) {
-      this.errormsg = undefined;
-      Bus.$emit("prgCaption", "Votando " + d.numeroDoDocumento);
+    acompanhar: async function(d, lote) {
+      Bus.$emit("prgCaption", "Acompanhando o Relator" + d.numeroDoDocumento);
 
-      this.$http
-        .post(
-          "mesa/" + "null" + "/documento/" + d.id + "/votar?sistema=" + d.sistema,
-          {
-            username: username,
-            password: password,
-          },
-          { block: !lote }
-        )
-        .then(
-          () => {
-            d.errormsg = undefined;
-            d.status = 5;
-            d.descricaoDoStatus = "Votado";
-            d.checked = false;
-            d.disabled = true;
-            UtilsBL.logEvento("voto em lote", "votado", "votado");
-            Bus.$emit("prgNext");
-          },
-          (error) => {
-            if (lote) d.errormsg = error.data.errormsg;
-            else Bus.$emit("message", "Erro", error.data.errormsg);
-            Bus.$emit("prgNext");
-          }
-        );
+      await this.$store.dispatch("acompanhar", { documento: d });
+      if (!this.$store.state.errorMsg) {
+        d.checked = false;
+        d.disabled = true;
+      }
+
+      Bus.$emit("prgNext");
     },
 
-    votarEmLote: function(documentos, username, password, cont) {
+    acompanharEmLote: function(documentos, cont) {
       Bus.$emit(
         "prgStart",
-        "Votando",
+        "Acompanhando",
         documentos.length,
-        (i) => this.votar(documentos[i], username, password, documentos.length !== 1),
+        (i) => this.acompanhar(documentos[i], documentos.length !== 1),
         cont
       );
     },
 
-    pedirVista: function(d, username, password, lote) {
-      this.errormsg = undefined;
-      Bus.$emit("prgCaption", "Pedindo Vista " + d.numeroDoDocumento);
+    divergir: async function(d, lote) {
+      Bus.$emit("prgCaption", "Divergindo do Relator " + d.numeroDoDocumento);
 
-      this.$http
-        .post(
-          "mesa/" + "null" + "/documento/" + d.id + "/pedir-vista?sistema=" + d.sistema,
-          {
-            username: username,
-            password: password,
-          },
-          { block: !lote }
-        )
-        .then(
-          () => {
-            d.errormsg = undefined;
-            d.status = 5;
-            d.descricaoDoStatus = "Vista";
-            d.checked = false;
-            d.disabled = true;
-            UtilsBL.logEvento("pedido de vista em lote", "vista", "vista");
-            Bus.$emit("prgNext");
-          },
-          (error) => {
-            if (lote) d.errormsg = error.data.errormsg;
-            else Bus.$emit("message", "Erro", error.data.errormsg);
-            Bus.$emit("prgNext");
-          }
-        );
+      await this.$store.dispatch("divergir", { documento: d });
+      if (!this.$store.state.errorMsg) {
+        d.checked = false;
+        d.disabled = true;
+      }
+
+      Bus.$emit("prgNext");
     },
 
-    pedirVistaEmLote: function(documentos, username, password, cont) {
+    divergirEmLote: function(documentos, cont) {
+      Bus.$emit(
+        "prgStart",
+        "Divergindo",
+        documentos.length,
+        (i) => this.divergir(documentos[i], documentos.length !== 1),
+        cont
+      );
+    },
+
+    pedirVista: async function(d, lote) {
+      Bus.$emit("prgCaption", "Pedindo Vista " + d.numeroDoDocumento);
+
+      await this.$store.dispatch("pedirVista", { documento: d });
+      if (!this.$store.state.errorMsg) {
+        d.checked = false;
+        d.disabled = true;
+      }
+
+      Bus.$emit("prgNext");
+    },
+
+    pedirVistaEmLote: function(documentos, cont) {
       Bus.$emit(
         "prgStart",
         "Pedindo Vista",
         documentos.length,
-        (i) => this.pedirVista(documentos[i], username, password, documentos.length !== 1),
+        (i) => this.pedirVista(documentos[i], documentos.length !== 1),
         cont
       );
     },

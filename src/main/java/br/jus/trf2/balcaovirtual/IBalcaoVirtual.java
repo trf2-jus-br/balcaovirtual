@@ -246,20 +246,23 @@ public interface IBalcaoVirtual {
 		public String id;
 		public String numeroDoDocumento;
 		public String numeroDoProcesso;
+		public String relator;
 		public String autor;
 		public String reu;
 		public String descricao;
 		public String status;
-		public String descricaoDoStatus;
-		public String tipoDoDocumento;
-		public String identificadorDoUsuarioQueIncluiu;
-		public String nomeDoUsuarioQueIncluiu;
 		public String siglaDaUnidade;
 		public String conteudo;
-		public String diferencas;
-		public Double similaridade;
-		public String idPadrao;
-		public List<Lembrete> lembretes = new ArrayList<>();
+		public String acompanhamentos;
+		public String divergencias;
+		public String pedidosDeVista;
+		public List<VotoProferido> votosProferidos = new ArrayList<>();
+	}
+
+	public static class VotoProferido implements ISwaggerModel {
+		public Date dataDeInclusao;
+		public String magistrado;
+		public String voto;
 	}
 
 	public static class PadraoItem implements ISwaggerModel {
@@ -415,6 +418,19 @@ public interface IBalcaoVirtual {
 	}
 
 	public interface IVotosIdAcompanharPost extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+			public String sistema;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String status;
+		}
+
+		public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception;
+	}
+
+	public interface IVotosIdDivergirPost extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String id;
 			public String sistema;

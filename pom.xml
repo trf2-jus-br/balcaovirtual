@@ -18,9 +18,22 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.crivano</groupId>
+			<artifactId>swaggerservlet</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>br.jus.trf2.sistemaprocessual</groupId>
 			<artifactId>sistemaprocessual-api</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
+
+			<exclusions>
+				<exclusion>
+					<groupId>com.crivano</groupId>
+					<artifactId>swaggerservlet</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->

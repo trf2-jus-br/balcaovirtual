@@ -90,6 +90,10 @@ public class Utils {
 		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.eproc.url");
 	}
 
+	public static String getApiEprocVotosUrl(String system) {
+		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.eproc.votos.url");
+	}
+
 	public static String getApiEprocPassword(String system) {
 		return BalcaoVirtualServlet.INSTANCE.getProperty(system + ".api.eproc.password");
 	}

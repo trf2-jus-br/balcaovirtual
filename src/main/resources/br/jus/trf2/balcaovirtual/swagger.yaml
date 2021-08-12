@@ -592,6 +592,26 @@ paths:
           schema:
             $ref: "#/definitions/Error"
             
+  /votos/{id}/divergir:
+    post:
+      description: Divergir voto em sessão de julgamento
+      tags: [voto]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/sistemaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
   /votos/{id}/pedir-vista:
     post:
       description: Pedir vista de voto/processo em sessão de julgamento
@@ -2545,6 +2565,8 @@ definitions:
         type: string
       numeroDoProcesso:
         type: string
+      relator:
+        type: string
       autor:
         type: string
       reu:
@@ -2553,28 +2575,32 @@ definitions:
         type: string
       status:
         type: string
-      descricaoDoStatus:
-        type: string
-      tipoDoDocumento:
-        type: string
-      identificadorDoUsuarioQueIncluiu:
-        type: string
-      nomeDoUsuarioQueIncluiu:
-        type: string
       siglaDaUnidade:
         type: string
       conteudo:
         type: string
-      diferencas:
+      acompanhamentos:
         type: string
-      similaridade:
-        type: number
-      idPadrao:
+      divergencias:
         type: string
-      lembretes:
+      pedidosDeVista:
+        type: string
+      votosProferidos:
         type: array
         items:
-          $ref: "#/definitions/Lembrete"
+          $ref: "#/definitions/VotoProferido"
+
+  VotoProferido:
+    description: Voto Proferido
+    type: object
+    properties:
+      dataDeInclusao:
+        type: string
+        format: date-time
+      magistrado:
+        type: string
+      voto:
+        type: string
 
   PadraoItem:
     description: Mesa virtual

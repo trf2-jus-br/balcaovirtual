@@ -10,7 +10,15 @@
           <form role="form">
             <div class="form-group">
               <label for="username">Usuário</label>
-              <input type="text" class="form-control" v-model="user.username" id="username" placeholder="Username" autocorrect="off" autocapitalize="none" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="user.username"
+                id="username"
+                placeholder="Username"
+                autocorrect="off"
+                autocapitalize="none"
+              />
             </div>
             <div class="form-group">
               <label for="password">Senha</label>
@@ -39,21 +47,22 @@ export default {
   data() {
     return {
       errormsg: undefined,
-      user: {}
+      user: {},
     };
   },
   methods: {
     login: function() {
       this.$http.post("autenticar", this.user, { block: true }).then(
-        response => {
+        (response) => {
           this.$parent.$emit("updateLogged", response.data.id_token);
-          if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: "Mesa" });
+          if (this.$parent.jwt.isDesembargador()) this.$router.push({ name: "Lista de Votos" });
+          else if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: "Mesa" });
           else this.$router.push({ name: "Consulta Simples" });
         },
-        error => UtilsBL.errormsg(error, this)
+        (error) => UtilsBL.errormsg(error, this)
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

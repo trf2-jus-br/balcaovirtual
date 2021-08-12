@@ -123,6 +123,7 @@ public class BalcaoVirtualServlet extends SwaggerServlet {
 			addPrivateProperty(s.toLowerCase() + ".api.password", null);
 			if (s.toLowerCase().contains(".eproc")) {
 				addRestrictedProperty(s.toLowerCase() + ".api.eproc.url");
+				addRestrictedProperty(s.toLowerCase() + ".api.eproc.votos.url", null);
 				addPrivateProperty(s.toLowerCase() + ".api.eproc.password", null);
 			}
 			addRestrictedProperty(s.toLowerCase() + ".mni.url");

@@ -87,7 +87,7 @@ import com.sun.mail.util.*;
  * this class and add support for non-standard SMTP commands. The
  * {@link #issueCommand} and {@link #sendCommand} methods can be used to send
  * simple SMTP commands. Other methods such as the {@link #mailFrom} and
- * {@link #data} methods can be overridden to insert new commands before or
+ * {@link #dataDeInclusao} methods can be overridden to insert new commands before or
  * after the corresponding SMTP commands. For example, a subclass could do this
  * to send the XACT command before sending the DATA command:
  * 

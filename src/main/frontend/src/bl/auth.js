@@ -67,6 +67,12 @@ export default {
       }
       return false;
     };
+    decoded.isDesembargador = () => {
+      for (var sistema in decoded.user) {
+        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" && decoded.user[sistema].unidade.startsWith("GAB")) return true;
+      }
+      return false;
+    };
     return decoded;
   },
 

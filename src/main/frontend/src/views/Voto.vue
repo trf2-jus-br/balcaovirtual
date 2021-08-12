@@ -14,141 +14,143 @@
       </div>
     </div>
 
-      <div class="row">
-        <div class="col col-lg-8">
-          <div class="row no-gutters mt-2">
-            <div class="col col-auto mb-3">
-              <router-link :to="{ name: 'Lista de Votos', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
-                ><span class="fa fa-times"></span> Voltar</router-link
-              >
-            </div>
-            <div class="col col-auto mb-3">
-              <router-link
-                :disabled="!anteriorVoto"
-                :to="{
-                  name: 'Voto',
-                  params: {
-                    numero: (anteriorVoto || {}).id,
-                    lista: this.lista,
-                    transitionName: 'slide-right',
-                  },
-                }"
-                tag="button"
-                class="btn btn-light d-print-none"
-                ><span class="fa fa-arrow-left"></span> Anterior</router-link
-              >
-            </div>
-            <div class="col col-auto mb-3">
-              <router-link
-                :disabled="!proximoVoto"
-                :to="{
-                  name: 'Voto',
-                  params: {
-                    numero: (proximoVoto || {}).id,
-                    lista: this.lista,
-                    transitionName: 'slide-left',
-                  },
-                }"
-                tag="button"
-                class="btn btn-light d-print-none"
-                ><span class="fa fa-arrow-right"></span> Próximo</router-link
-              >
-            </div>
+    <div class="row">
+      <div class="col col-lg-8">
+        <div class="row no-gutters mt-2">
+          <div class="col col-auto mb-3">
+            <router-link :to="{ name: 'Lista de Votos', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
+              ><span class="fa fa-list"></span> Ver a Lista</router-link
+            >
           </div>
-          <div v-if="diferencas && exibirDiferencas">
-            <div class="card mb-3">
-              <div
-                :class="{
-                  'card-body': true,
-                  'alert-success': voto.similaridade === 1.0,
-                  'alert-primary': voto.similaridade < 1.0,
-                }"
-              >
-                <p class="card-text" v-html="diferencas"></p>
-              </div>
-            </div>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && voto.similaridade < 1.0">
-              Em relação ao <router-link :to="{ name: 'Padrao', params: { numero: voto.idPadrao } }">padrão</router-link>, palavas
-              incluídas aparecem em <span class="editNewInline">verde</span>, excluídas em <span class="editOldInline">vermelho</span> e
-              alteradas em <span class="replaceInline">roxo</span>.
-            </p>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && voto.similaridade === 1.0">
-              O fundo verde indica que o conteúdo do voto é exatamente igual ao
-              <router-link :to="{ name: 'Padrao', params: { numero: voto.idPadrao } }">padrão</router-link>.
-            </p>
+          <div class="col col-auto mb-3">
+            <router-link
+              :disabled="!anteriorVoto"
+              :to="{
+                name: 'Voto',
+                params: {
+                  numero: (anteriorVoto || {}).id,
+                  lista: this.lista,
+                  transitionName: 'slide-right',
+                },
+              }"
+              tag="button"
+              class="btn btn-light d-print-none"
+              ><span class="fa fa-arrow-left"></span> Anterior</router-link
+            >
           </div>
-          <div class="card mb-3" v-show="!diferencas || !exibirDiferencas">
-            <div class="card-body alert-warning">
-              <p ref="conteudo" class="card-text" v-html="conteudo"></p>
-            </div>
+          <div class="col col-auto mb-3">
+            <router-link
+              :disabled="!proximoVoto"
+              :to="{
+                name: 'Voto',
+                params: {
+                  numero: (proximoVoto || {}).id,
+                  lista: this.lista,
+                  transitionName: 'slide-left',
+                },
+              }"
+              tag="button"
+              class="btn btn-light d-print-none"
+              ><span class="fa fa-arrow-right"></span> Próximo</router-link
+            >
           </div>
-          <b-form-checkbox v-show="diferencas && voto.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
-            Exibir diferenças em relação ao padrão
-          </b-form-checkbox>
         </div>
-        <div class="col col-lg-4">
-          <div class="row no-gutters mt-2">
-            <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
-            <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
-              <button @click.prevent="acompanhar()" type="button" class="btn btn-primary d-print-none">
-                <span class="fa fa-check"></span> Acompanhar
-              </button>
-            </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
-              <button @click.prevent="pedirVista()" type="button" class="btn btn-info d-print-none">
-                <span class="fa fa-eye"></span> Pedir Vista
-              </button>
-            </div>
+        <div class="card mb-3">
+          <div class="card-body alert-primary">
+            <p class="card-text" v-html="conteudo"></p>
           </div>
-          <div class="card mb-3">
-            <div class="card-header">
-              Detalhes
-            </div>
-            <div class="card-body">
-              <p class="card-text">
-                Processo:
-                <router-link
-                  :to="{
-                    name: 'Processo',
-                    params: { numero: voto.numeroDoProcesso },
-                    query: { avisos: $parent.cAvisos },
-                  }"
-                  target="_blank"
-                  >{{ voto.processoFormatado }}</router-link
-                >
-                <br />Cadastro:
-                <span v-html="voto.dataDeInclusaoFormatada"></span>
-                <br />Responsável: {{ voto.nomeDoUsuarioQueIncluiu }} <br />Status: {{ voto.descricaoDoStatus }}
-              </p>
-            </div>
+        </div>
+      </div>
+      <div class="col col-lg-4">
+        <div class="row no-gutters mt-2">
+          <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
+          <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
+            <button @click.prevent="acompanhar()" type="button" class="btn btn-primary d-print-none">
+              <span class="fa fa-thumbs-o-up"></span> Acompanhar
+            </button>
           </div>
-          <div class="card" v-if="voto.lembretes">
-            <div class="card-header">
-              Lembretes
-            </div>
-            <div class="card-body p-0">
-              <div class="card-text">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Texto</th>
-                      <th scope="col">Responsável</th>
-                      <th scope="col">Data</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="lembrete in voto.lembretes" :key="lembrete.id">
-                      <th scope="row">{{ lembrete.conteudo }}</th>
-                      <td>{{ lembrete.identificadorDoUsuario }}</td>
-                      <td>{{ lembrete.dataDeInclusaoFormatada }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
+            <button @click.prevent="divergir()" type="button" class="btn btn-primary d-print-none">
+              <span class="fa fa-thumbs-o-down"></span> Divergir
+            </button>
+          </div>
+          <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
+            <button @click.prevent="pedirVista()" type="button" class="btn btn-info d-print-none">
+              <span class="fa fa-eye"></span> Pedir Vista
+            </button>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            Detalhes
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              Processo:
+              <router-link
+                :to="{
+                  name: 'Processo',
+                  params: { numero: voto.numeroDoProcesso },
+                  query: { avisos: $parent.cAvisos },
+                }"
+                target="_blank"
+                >{{ voto.processoFormatado }}</router-link
+              >
+              <br />Cadastro:
+              <span v-html="voto.dataDeInclusaoFormatada"></span>
+            </p>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            Votos Proferidos
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-striped table-sm mb-0">
+              <thead class="">
+                <tr>
+                  <th>Data</th>
+                  <th>Magistrado</th>
+                  <th>Voto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="v in voto.votosProferidos" :key="v.magistrado">
+                  <td>{{ v.dataDeInclusaoFormatada }}</td>
+                  <td>{{ v.magistrado }}</td>
+                  <td>{{ v.voto }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card" v-if="voto.lembretes">
+          <div class="card-header">
+            Lembretes
+          </div>
+          <div class="card-body p-0">
+            <div class="card-text">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Texto</th>
+                    <th scope="col">Responsável</th>
+                    <th scope="col">Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="lembrete in voto.lembretes" :key="lembrete.id">
+                    <th scope="row">{{ lembrete.conteudo }}</th>
+                    <td>{{ lembrete.identificadorDoUsuario }}</td>
+                    <td>{{ lembrete.dataDeInclusaoFormatada }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -206,12 +208,16 @@ export default {
     },
     conteudo() {
       return this.preprocess(this.voto.conteudo);
-    }
+    },
   },
   methods: {
     preprocess: function(s) {
       if (!s) return;
+      if (s.includes("<body>")) s = s.substring(s.indexOf("<body>") + 6);
+      if (s.includes("</body>")) s = s.substring(0, s.indexOf("</body>"));
       return s
+        .replaceAll("\\t", " ")
+        .replaceAll("\\n", " ")
         .replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"')
         .replace('contenteditable="true"', 'contentEditable="false" data-bv_edit="true"')
         .replace(/&#x2013;/g, "-");
@@ -225,16 +231,19 @@ export default {
     },
 
     acompanhar: function() {
-      Bus.$emit("votar", [this.voto], this.exibeProximoVoto);
-      // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
+      Bus.$emit("acompanhar", [this.voto], this.exibeProximoVoto);
+    },
+
+    divergir: function() {
+      Bus.$emit("divergir", [this.voto], this.exibeProximoVoto);
     },
 
     pedirVista: function() {
       Bus.$emit("pedirVista", [this.voto], this.exibeProximoVoto);
-      // Bus.$emit('assinarComSenha', [this.doc], () => this.$router.go(-1))
     },
 
     exibeProximoVoto: function() {
+      if (this.$store.state.errorMsg) return;
       if (this.proximoVoto) {
         this.$router.push({
           name: "Voto",
@@ -254,8 +263,7 @@ export default {
     },
   },
 
-  components: {
-  },
+  components: {},
 };
 </script>
 <style>

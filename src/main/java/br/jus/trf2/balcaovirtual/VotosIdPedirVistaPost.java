@@ -7,11 +7,10 @@ import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
 
 import br.jus.trf2.balcaovirtual.AutenticarPost.Usuario;
-import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IVotosIdAcompanharPost;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameMesaIdDocumentoId2SalvarPost;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameVotosIdAcompanharPost;
+import br.jus.trf2.balcaovirtual.IBalcaoVirtual.IVotosIdPedirVistaPost;
+import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameVotosIdPedirVistaPost;
 
-public class VotosIdAcompanharPost implements IVotosIdAcompanharPost {
+public class VotosIdPedirVistaPost implements IVotosIdPedirVistaPost {
 
 	@Override
 	public void run(Request req, Response resp, BalcaoVirtualContext ctx) throws Exception {
@@ -22,16 +21,16 @@ public class VotosIdAcompanharPost implements IVotosIdAcompanharPost {
 		if (u.usuarios.get(req.sistema) == null)
 			throw new PresentableUnloggedException("Login inválido para " + Utils.getName(req.sistema));
 
-		IUsuarioUsernameMesaIdDocumentoId2SalvarPost.Request q = new IUsuarioUsernameMesaIdDocumentoId2SalvarPost.Request();
+		IUsuarioUsernameVotosIdPedirVistaPost.Request q = new IUsuarioUsernameVotosIdPedirVistaPost.Request();
 
-		Future<SwaggerAsyncResponse<IUsuarioUsernameVotosIdAcompanharPost.Response>> future = SwaggerCall.callAsync(
+		Future<SwaggerAsyncResponse<IUsuarioUsernameVotosIdPedirVistaPost.Response>> future = SwaggerCall.callAsync(
 				getContext(), Utils.getApiEprocPassword(req.sistema), "POST", Utils.getApiEprocVotosUrl(req.sistema)
-						+ "/acompanha_relator?sigla=" + u.usuario + "&id_sessao_item=" + req.id,
-				q, IUsuarioUsernameVotosIdAcompanharPost.Response.class);
-		SwaggerAsyncResponse<IUsuarioUsernameVotosIdAcompanharPost.Response> sar = future.get();
+						+ "/pedir_vista?sigla=" + u.usuario + "&id_sessao_item=" + req.id,
+				q, IUsuarioUsernameVotosIdPedirVistaPost.Response.class);
+		SwaggerAsyncResponse<IUsuarioUsernameVotosIdPedirVistaPost.Response> sar = future.get();
 		if (sar.getException() != null)
 			throw sar.getException();
-		IUsuarioUsernameVotosIdAcompanharPost.Response r = (IUsuarioUsernameVotosIdAcompanharPost.Response) sar
+		IUsuarioUsernameVotosIdPedirVistaPost.Response r = (IUsuarioUsernameVotosIdPedirVistaPost.Response) sar
 				.getResp();
 
 		resp.status = r.status;
@@ -39,7 +38,7 @@ public class VotosIdAcompanharPost implements IVotosIdAcompanharPost {
 
 	@Override
 	public String getContext() {
-		return "acompanhar voto";
+		return "divergir de voto";
 	}
 
 }

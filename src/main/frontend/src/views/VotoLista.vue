@@ -40,8 +40,12 @@
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="votarEmLote()" class="btn btn-primary ml-1" title="">
-          <span class="fa fa-check"></span> Acompanhar&nbsp;&nbsp;
+        <button type="button" @click="acompanharEmLote()" class="btn btn-primary ml-1" title="">
+          <span class="fa fa-thumbs-o-up"></span> Acompanhar&nbsp;&nbsp;
+          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
+        </button>
+        <button type="button" @click="divergirEmLote()" class="btn btn-primary ml-1" title="">
+          <span class="fa fa-thumbs-o-down"></span> Divergir&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
         <button type="button" @click="pedirVistaEmLote()" class="btn btn-info ml-1" title="">
@@ -66,7 +70,6 @@
                 <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()" />
               </th>
               <th>Voto</th>
-              <th>Tipo</th>
               <th>Relator</th>
               <th>Processo</th>
               <th>Autor</th>
@@ -74,7 +77,8 @@
               <th>Data</th>
               <th>Unidade</th>
               <th>Sistema/Órgão</th>
-              <th>Acompa&shy;nhantes</th>
+              <th class="text-center">Placar</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -91,9 +95,8 @@
                   >{{ f.numeroDoDocumento }}</router-link
                 >
               </td>
-              <td class="td-middle text-center"><span v-if="f.tipoDoDocumento == 'Despacho/Decisão'" class="fa fa-thumbs-o-up text-success"></span><span v-else class="fa fa-thumbs-o-down text-danger"></span></td>
               <td class="td-middle">
-                <span :title="'Nome: ' + f.nomeDoUsuarioQueIncluiu">{{ f.identificadorDoUsuarioQueIncluiu }}</span>
+                <span :title="'Nome: ' + f.relator">{{ f.relator }}</span>
               </td>
               <td class="td-middle">
                 <span class="unbreakable">
@@ -117,6 +120,11 @@
               <td class="td-middle">
                 <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
               </td>
+              <td class="td-middle text-center">
+                <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
+                  >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
+                >
+              </td>
               <td class="td-middle">
                 {{ f.descricaoDoStatus }}
                 <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
@@ -124,6 +132,26 @@
             </tr>
           </tbody>
         </table>
+
+        <template v-for="f in filtrados">
+          <b-popover v-if="f.votosProferidos" :target="'placar' + f.id" triggers="hover" placement="left" :key="f.id">
+            <template #title>Votos e Pedidos de Vista</template>
+            <table class="table table-striped table-sm">
+              <thead class="">
+                <tr>
+                  <th>Magistrado</th>
+                  <th>Voto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="v in f.votosProferidos" :key="v.magistrado">
+                  <td>{{v.magistrado}}</td>
+                  <td>{{v.voto}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </b-popover>
+        </template>
       </div>
     </div>
   </div>
@@ -134,6 +162,7 @@ import UtilsBL from "../bl/utils.js";
 import { Bus } from "../bl/bus.js";
 
 export default {
+  name: "Votos",
   components: {},
 
   mounted() {
@@ -185,7 +214,7 @@ export default {
 
     filtradosEMarcadosEVotaveis: function() {
       return this.filtradosEMarcados.filter(function(item) {
-        return item.status === "4" || item.status === "2";
+        return true;
       });
     },
     sessoes() {
@@ -203,21 +232,68 @@ export default {
     },
 
     revisar: function() {
-      var a = this.filtradosEMarcadosEAssinaveis;
+      var a = this.filtradosEMarcadosEVotaveis;
       this.$router.push({
         name: "Voto",
         params: { numero: a[0].id, lista: a },
       });
     },
 
-    votarEmLote: function() {
-      var a = this.filtradosEMarcadosEAssinaveis;
-      Bus.$emit("votar", a, this.removerDocumentosDesabilitados);
+    acompanharEmLote: function() {
+      var a = this.filtradosEMarcadosEVotaveis;
+      if (a.length > 1)
+        this.$bvModal
+          .msgBoxConfirm("Tem certeza que deseja acompanhar o relator em " + a.length + " votos?", {
+            title: "Acompanhar o Relator",
+            size: "sm",
+            okVariant: "warning",
+            okTitle: "Prosseguir",
+            cancelTitle: "Cancelar",
+            centered: true,
+          })
+          .then((value) => {
+            if (value) Bus.$emit("acompanhar", a, this.removerDocumentosDesabilitados);
+          })
+          .catch((err) => {});
+      else Bus.$emit("acompanhar", a, this.removerDocumentosDesabilitados);
+    },
+
+    divergirEmLote: function() {
+      var a = this.filtradosEMarcadosEVotaveis;
+      if (a.length > 1)
+        this.$bvModal
+          .msgBoxConfirm("Tem certeza que deseja acompanhar a divergência em " + a.length + " votos?", {
+            title: "Acompanhar a Divergência",
+            size: "sm",
+            okVariant: "warning",
+            okTitle: "Prosseguir",
+            cancelTitle: "Cancelar",
+            centered: true,
+          })
+          .then((value) => {
+            if (value) Bus.$emit("divergir", a, this.removerDocumentosDesabilitados);
+          })
+          .catch((err) => {});
+      else Bus.$emit("divergir", a, this.removerDocumentosDesabilitados);
     },
 
     pedirVistaEmLote: function() {
-      var a = this.filtradosEMarcadosEAssinaveis;
-      Bus.$emit("pedirVista", a, this.removerDocumentosDesabilitados);
+      var a = this.filtradosEMarcadosEVotaveis;
+      if (a.length > 1)
+        this.$bvModal
+          .msgBoxConfirm("Tem certeza que deseja pedir vista em " + a.length + " votos?", {
+            title: "Pedir Vista",
+            size: "sm",
+            okVariant: "warning",
+            okTitle: "Prosseguir",
+            cancelTitle: "Cancelar",
+            centered: true,
+          })
+          .then((value) => {
+            if (value) Bus.$emit("pedirVista", a, this.removerDocumentosDesabilitados);
+          })
+          .catch((err) => {});
+      else Bus.$emit("pedirVista", a, this.removerDocumentosDesabilitados);
     },
 
     removerDocumentosDesabilitados: function() {
@@ -225,7 +301,7 @@ export default {
       var a = this.lista.filter(function(item) {
         return !item.disabled;
       });
-      this.$set(this, "lista", a);
+      this.$store.commit("setVotos", a);
       console.log(this.lista);
     },
   },

@@ -22,6 +22,7 @@ export default {
       conteudo: undefined,
       sistema: undefined,
       lembretes: undefined,
+      votosProferidos: undefined,
       errormsg: undefined,
     });
     if (item.numeroDoProcesso !== undefined) {
@@ -30,9 +31,14 @@ export default {
     if (item.dataDeInclusao !== undefined) {
       item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.dataDeInclusao);
     }
+    if (item.votosProferidos) {
+      for (var i = 0; i < item.votosProferidos.length; i++) {
+        item.votosProferidos[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.votosProferidos[i].dataDeInclusao);
+      }
+    }
     if (item.lembretes) {
-      for (var i = 0; i < item.lembretes.length; i++) {
-        item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao);
+      for (var j = 0; i < item.lembretes.length; i++) {
+        item.lembretes[j].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[j].dataDeInclusao);
       }
     }
     return item;

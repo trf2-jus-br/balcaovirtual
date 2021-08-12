@@ -199,7 +199,7 @@ const store = new Vuex.Store({
       commit,
       state
     }) {
-      await Vue.http.get("mesa/" + state.mesa.id, {
+      await Vue.http.get("votos", {
         block: true
       }).then(
         (response) => {
@@ -221,16 +221,34 @@ const store = new Vuex.Store({
     }, val) {
       await Vue.http
         .post(
-          "mesa/" + "null" + "/documento/" + val.documento.id + "/salvar?sistema=" + val.documento.sistema, {
-            html: val.html,
-          }, {
+          "votos/" + val.documento.id + "/acompanhar?sistema=" + val.documento.sistema, {}, {
             block: true
           }
         )
         .then(
           (response) => {
-            dispatch('carregarVotos')
             UtilsBL.logEvento("voto", "acompanhar", "acompanhar");
+            commit("clearMsg");
+          },
+          (error) => commit("setError", error)
+        );
+    },
+
+    async divergir({
+      commit,
+      state,
+      dispatch
+    }, val) {
+      await Vue.http
+        .post(
+          "votos/" + val.documento.id + "/divergir?sistema=" + val.documento.sistema, {}, {
+            block: true
+          }
+        )
+        .then(
+          (response) => {
+            UtilsBL.logEvento("voto", "divergir", "divergir");
+            commit("clearMsg");
           },
           (error) => commit("setError", error)
         );
@@ -243,7 +261,7 @@ const store = new Vuex.Store({
     }, val) {
       await Vue.http
         .post(
-          "mesa/" + "null" + "/documento/" + val.documento.id + "/salvar?sistema=" + val.documento.sistema, {
+          "votos/" + val.documento.id + "/pedir-vista?sistema=" + val.documento.sistema, {
             html: val.html,
           }, {
             block: true
@@ -251,8 +269,8 @@ const store = new Vuex.Store({
         )
         .then(
           (response) => {
-            dispatch('carregarVotos')
             UtilsBL.logEvento("voto", "pedirVista", "pedirVista");
+            commit("clearMsg");
           },
           (error) => commit("setError", error)
         );

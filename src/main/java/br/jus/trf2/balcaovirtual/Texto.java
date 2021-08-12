@@ -27,8 +27,7 @@ public class Texto {
 	/**
 	 * Remove os acentos da string e coloca os caracteres em letras minúsculas
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcentoHTMLMinusculas(String acentuado) {
@@ -40,8 +39,7 @@ public class Texto {
 	/**
 	 * Remove os acentos da string e coloca os caracteres em letras maiúsculas
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcentoMaiusculas(String acentuado) {
@@ -49,12 +47,11 @@ public class Texto {
 			return null;
 		return removeAcento(acentuado.toUpperCase());
 	}
-	
+
 	/**
 	 * Remove os acentos da string
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcento(String acentuado) {
@@ -79,8 +76,7 @@ public class Texto {
 	/**
 	 * Remove os acentos da string
 	 * 
-	 * @param acentuado
-	 *            - String acentuada
+	 * @param acentuado - String acentuada
 	 * @return String sem acentos
 	 */
 	public static String removeAcentoHTML(String acentuado) {
@@ -100,7 +96,7 @@ public class Texto {
 		temp = temp.replaceAll("&otilde;", "o");
 		return temp;
 	}
-	
+
 	public String iniciais(String s) {
 		final StringBuilder sb = new StringBuilder(10);
 		boolean f = true;
@@ -155,22 +151,28 @@ public class Texto {
 		return s;
 	}
 
+	public static String abreviarNome(String s) {
+		if (s == null)
+			return null;
+		String a[] = s.trim().split(" ");
+		return a[0] + " " + a[a.length - 1];
+	}
+
 	public static String primeiraMaiuscula(String string) {
 		String stringAux1 = string.substring(0, 1);
 		String stringAux2 = string.substring(1).toLowerCase();
 		return stringAux1 + stringAux2;
 	}
-	
-	public static String extrai(final String sSource, final String sBegin,
-			final String sEnd) throws UnsupportedEncodingException {
+
+	public static String extrai(final String sSource, final String sBegin, final String sEnd)
+			throws UnsupportedEncodingException {
 		final Integer iBegin = sSource.indexOf(sBegin);
 		final Integer iEnd = sSource.indexOf(sEnd);
 
 		if (iBegin == -1 || iEnd == -1)
 			return null;
 
-		final String sResult = sSource
-				.substring(iBegin + sBegin.length(), iEnd);
+		final String sResult = sSource.substring(iBegin + sBegin.length(), iEnd);
 		return sResult;
 	}
 
@@ -194,8 +196,7 @@ public class Texto {
 		return String.valueOf(caracteres);
 	}
 
-	public static String slugify(String string, boolean lowercase,
-			boolean underscore) {
+	public static String slugify(String string, boolean lowercase, boolean underscore) {
 		if (string == null)
 			return null;
 		string = string.trim();
@@ -213,19 +214,19 @@ public class Texto {
 
 		return (lowercase ? string.toLowerCase() : string);
 	}
-	
-	//Edson: esta rotina não cobre todos os casos. Foi feita inicialmente
-	//para pluralizar apenas nomes de espécies documentais
-	public static String pluralizar(String s){
+
+	// Edson: esta rotina não cobre todos os casos. Foi feita inicialmente
+	// para pluralizar apenas nomes de espécies documentais
+	public static String pluralizar(String s) {
 		StringBuilder pluralFinal = new StringBuilder();
 		List<String> stopList = Arrays.asList("de", "do", "da");
 		boolean atingiuStopList = false;
-		
-		for (String palavra : s.trim().split("\\s")){
+
+		for (String palavra : s.trim().split("\\s")) {
 			String palavraPlural = palavra;
 			if (stopList.contains(palavraPlural))
 				atingiuStopList = true;
-			if (!atingiuStopList){
+			if (!atingiuStopList) {
 				palavraPlural = palavraPlural.replaceAll("m$", "ns").replaceAll("M$", "NS");
 				palavraPlural = palavraPlural.replaceAll("ão$", "ões").replaceAll("ÃO$", "ÕES");
 				palavraPlural = palavraPlural.replaceAll("r$", "es").replaceAll("R$", "RES");
@@ -234,21 +235,21 @@ public class Texto {
 				palavraPlural = palavraPlural.replaceAll("e$", "es").replaceAll("E$", "ES");
 				palavraPlural = palavraPlural.replaceAll("o$", "os").replaceAll("O$", "OS");
 			}
-			pluralFinal.append((pluralFinal.length() > 0 ? " " : "") + palavraPlural); 
+			pluralFinal.append((pluralFinal.length() > 0 ? " " : "") + palavraPlural);
 		}
 		return pluralFinal.toString();
 	}
-	
+
 	public static String semQuebraDeLinha(String string) {
 		return string.replaceAll("[\\r\\n]+", " ");
 	}
-	
+
 	public static String maximoCaracteres(String string, int max) {
 		return string.length() > max ? (string.substring(0, max) + "...") : string;
 	}
-	
+
 	public static String maximoCaracteres(String string, int max, int limit) {
 		return string.length() > limit ? (string.substring(0, max) + "...") : string;
 	}
-	
+
 }
