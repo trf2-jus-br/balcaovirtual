@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import UtilsBL from '../bl/utils'
-import ProcessoBL from '../bl/processo'
+import DocumentoBL from "../bl/documento.js";
 import VuexPersist from 'vuex-persist'
 
 const vuexPersist = new VuexPersist({
@@ -14,46 +14,9 @@ const vuexPersist = new VuexPersist({
 
 Vue.use(Vuex);
 
-const fixDocumento = function (item) {
-  UtilsBL.applyDefauts(item, {
-    rows: 1,
-    checked: true,
-    disabled: false,
-    dataDeInclusao: undefined,
-    dataDeInclusaoFormatada: undefined,
-    id: undefined,
-    numeroDoDocumento: undefined,
-    tipoDoDocumento: undefined,
-    numeroDoProcesso: undefined,
-    autor: undefined,
-    reu: undefined,
-    processoFormatado: undefined,
-    descricaoDoStatus: undefined,
-    identificadorDoUsuarioQueIncluiu: undefined,
-    nomeDoUsuarioQueIncluiu: undefined,
-    conteudo: undefined,
-    sistema: undefined,
-    lembretes: undefined,
-    errormsg: undefined,
-  });
-  if (item.numeroDoProcesso !== undefined) {
-    item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
-  }
-  if (item.dataDeInclusao !== undefined) {
-    item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.dataDeInclusao);
-  }
-  if (item.lembretes) {
-    for (var i = 0; i < item.lembretes.length; i++) {
-      item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao);
-    }
-  }
-  return item;
-}
-
 const findDocumentoIndice = function (state, id) {
   if (!state.documentos) return;
   for (var i = 0; i < state.documentos.length; i++) {
-    console.log(state.documentos[i].id + " - " + id)
     if (state.documentos[i].id === id) return i;
   }
   return;
@@ -83,7 +46,6 @@ const store = new Vuex.Store({
       state.documentos = val
     },
     updateDocumento(state, val) {
-      console.log("oi1")
       var i = findDocumentoIndice(state, val.id)
       if (i === undefined) throw "Documento não encontrado"
       Vue.set(state.documentos, i, val)
@@ -150,10 +112,11 @@ const store = new Vuex.Store({
         block: true
       }).then(
         (response) => {
-          var lista = [];
+          var lista = state.documentos || [];
+            lista.length = 0;
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
-            lista.push(fixDocumento(list[i]));
+            lista.push(DocumentoBL.fix(list[i]));
           }
           commit('setDocumentos', lista)
         },
@@ -180,6 +143,10 @@ const store = new Vuex.Store({
           newDoc.idPadrao = response.data.padrao.id;
           newDoc.diferencas = newDoc.conteudo;
           commit('updateDocumento', newDoc)
+          // doc.similaridade = 1.0;
+          // doc.idPadrao = response.data.padrao.id;
+          // doc.diferencas = doc.conteudo;
+          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)
@@ -204,6 +171,10 @@ const store = new Vuex.Store({
           newDoc.idPadrao = undefined;
           newDoc.diferencas = undefined;
           commit('updateDocumento', newDoc)
+          // doc.similaridade = undefined;
+          // doc.idPadrao = undefined;
+          // doc.diferencas = undefined;
+          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)

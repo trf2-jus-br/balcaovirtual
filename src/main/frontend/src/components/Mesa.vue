@@ -75,7 +75,54 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm table-responsive">
+        <!-- CARDS -->
+        <div v-if="false">
+          <div
+            :class="{
+              card: true,
+              'mt-5': true,
+              'alert-warning': !f.similaridade,
+              'alert-success': f.similaridade === 1.0,
+              'alert-primary': f.similaridade < 1.0,
+            }"
+            v-for="f in filtrados"
+            :key="f.id"
+          >
+            <div class="card-header">
+              <input type="checkbox" v-model="f.checked" :disabled="f.disabled" class="mr-2" />
+              {{ f.tipoDoDocumento }}
+              <router-link
+                :to="{
+                  name: 'Documento',
+                  params: { numero: f.id, lista: filtrados },
+                }"
+                >{{ f.numeroDoDocumento }}</router-link
+              >
+              -
+              <router-link
+                :to="{
+                  name: 'Processo',
+                  params: { numero: f.numeroDoProcesso },
+                  query: { avisos: $parent.cAvisos },
+                }"
+                target="_blank"
+                >{{ f.processoFormatado }}</router-link
+              >
+            </div>
+            <div class="card-body">
+              <p class="card-text" v-html="f.conteudoPreprocessado"></p>
+            </div>
+            <div class="card-footer">
+              <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-primary ml-1" title="">
+                <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
+                <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABELA -->
+        <table class="table table-striped table-sm table-responsive" v-if="true">
           <thead class="thead-dark">
             <tr>
               <th style="text-align: center">
@@ -95,7 +142,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="f in filtrados">
+            <tr v-for="f in filtrados" :key="f.id">
               <td class="td-middle" style="text-align: center">
                 <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
               </td>
@@ -164,12 +211,11 @@ import { Bus } from "../bl/bus.js";
 export default {
   components: {},
 
-  mounted() {
+  async mounted() {
     this.errormsg = undefined;
-
     if (this.$route.params.manter) return;
-
-    this.$store.dispatch("carregarMesas");
+    await this.$store.dispatch("carregarMesas");
+    if (this.filtradosEMarcadosEAssinaveis.length && this.$route.params.revisar) this.revisar();
   },
 
   data() {
