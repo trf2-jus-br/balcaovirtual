@@ -25,8 +25,8 @@
           </select>
         </div>
       </div>
-      <div class="col-sm-auto ml-1 mb-3">
-        <div class="input-group">
+      <div class="col-sm-auto ml-1">
+        <div class="input-group mb-3">
           <div class="input-group-prepend">
             <div class="input-group-text" id="btnGroupAddon">
               <span class="fa fa-search"></span>
@@ -35,20 +35,20 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }" />
         </div>
       </div>
-      <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEVotaveis || []).length">
-        <button v-if="false" type="button" @click="revisar()" class="btn btn-info ml-1" title="">
+      <div class="col-auto ml-auto" v-if="(filtradosEMarcadosEVotaveis || []).length">
+        <button v-if="false" type="button" @click="revisar()" class="btn btn-info ml-1 mb-3" title="">
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="acompanharEmLote()" class="btn btn-primary ml-1" title="">
+        <button type="button" @click="acompanharEmLote()" class="btn btn-primary ml-1 mb-3" title="">
           <span class="fa fa-thumbs-o-up"></span> Acompanhar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="divergirEmLote()" class="btn btn-primary ml-1" title="">
+        <button type="button" @click="divergirEmLote()" class="btn btn-primary ml-1 mb-3" title="">
           <span class="fa fa-thumbs-o-down"></span> Divergir&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="pedirVistaEmLote()" class="btn btn-info ml-1" title="">
+        <button type="button" @click="pedirVistaEmLote()" class="btn btn-info ml-1 mb-3" title="">
           <span class="fa fa-eye"></span> Pedir Vista&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
@@ -63,75 +63,77 @@
 
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
-        <table class="table table-striped table-sm table-responsive">
-          <thead class="thead-dark">
-            <tr>
-              <th style="text-align: center">
-                <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()" />
-              </th>
-              <th>Voto</th>
-              <th>Relator</th>
-              <th>Processo</th>
-              <th>Autor</th>
-              <th>Réu</th>
-              <th>Data</th>
-              <th>Unidade</th>
-              <th>Sistema/Órgão</th>
-              <th class="text-center">Placar</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="f in filtrados" :key="f.id">
-              <td class="td-middle" style="text-align: center">
-                <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
-              </td>
-              <td class="td-middle">
-                <router-link
-                  :to="{
-                    name: 'Voto',
-                    params: { numero: f.id, lista: filtrados },
-                  }"
-                  >{{ f.numeroDoDocumento }}</router-link
-                >
-              </td>
-              <td class="td-middle">
-                <span :title="'Nome: ' + f.relator">{{ f.relator }}</span>
-              </td>
-              <td class="td-middle">
-                <span class="unbreakable">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+              <tr>
+                <th style="text-align: center">
+                  <input type="checkbox" id="progress_checkall" name="progress_checkall" v-model="todos" @change="marcarTodos()" />
+                </th>
+                <th>Voto</th>
+                <th>Relator</th>
+                <th>Processo</th>
+                <th>Autor</th>
+                <th>Réu</th>
+                <th>Data</th>
+                <th>Unidade</th>
+                <th>Sistema/Órgão</th>
+                <th class="text-center">Placar</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="f in filtrados" :key="f.id">
+                <td class="td-middle" style="text-align: center">
+                  <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
+                </td>
+                <td class="td-middle">
                   <router-link
                     :to="{
-                      name: 'Processo',
-                      params: { numero: f.numeroDoProcesso },
-                      query: { avisos: $parent.cAvisos },
+                      name: 'Voto',
+                      params: { numero: f.id, lista: filtrados },
                     }"
-                    target="_blank"
-                    >{{ f.processoFormatado }}</router-link
+                    >{{ f.numeroDoDocumento }}</router-link
                   >
-                </span>
-              </td>
-              <td class="td-middle">{{ f.autor }}</td>
-              <td class="td-middle">{{ f.reu }}</td>
-              <td class="td-middle">
-                {{ f.dataDeInclusaoFormatada }}
-              </td>
-              <td class="td-middle">{{ f.siglaDaUnidade }}</td>
-              <td class="td-middle">
-                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
-              </td>
-              <td class="td-middle text-center">
-                <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
-                  >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
-                >
-              </td>
-              <td class="td-middle">
-                {{ f.descricaoDoStatus }}
-                <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="td-middle">
+                  <span :title="'Nome: ' + f.relator">{{ f.relator }}</span>
+                </td>
+                <td class="td-middle">
+                  <span class="unbreakable">
+                    <router-link
+                      :to="{
+                        name: 'Processo',
+                        params: { numero: f.numeroDoProcesso },
+                        query: { avisos: $parent.cAvisos },
+                      }"
+                      target="_blank"
+                      >{{ f.processoFormatado }}</router-link
+                    >
+                  </span>
+                </td>
+                <td class="td-middle">{{ f.autor }}</td>
+                <td class="td-middle">{{ f.reu }}</td>
+                <td class="td-middle">
+                  {{ f.dataDeInclusaoFormatada }}
+                </td>
+                <td class="td-middle">{{ f.siglaDaUnidade }}</td>
+                <td class="td-middle">
+                  <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
+                </td>
+                <td class="td-middle text-center">
+                  <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
+                    >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
+                  >
+                </td>
+                <td class="td-middle">
+                  {{ f.descricaoDoStatus }}
+                  <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <template v-for="f in filtrados">
           <b-popover v-if="f.votosProferidos" :target="'placar' + f.id" triggers="hover" placement="left" :key="f.id">
@@ -145,8 +147,8 @@
               </thead>
               <tbody>
                 <tr v-for="v in f.votosProferidos" :key="v.magistrado">
-                  <td>{{v.magistrado}}</td>
-                  <td>{{v.voto}}</td>
+                  <td>{{ v.magistrado }}</td>
+                  <td>{{ v.voto }}</td>
                 </tr>
               </tbody>
             </table>

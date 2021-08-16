@@ -20,4 +20,5 @@ hs_err_pid*
 #compiled frontend
 /src/main/webapp/index.html
 /src/main/webapp/static/
+/src/main/webapp/precache-manifest*.js
 package-lock.json

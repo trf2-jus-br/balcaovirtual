@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3 mb-3 d-none d-lg-block">
       <div class="col-md-12">
         <h4 class="text-center mb-0" v-if="documento">{{ documento.tipoDoDocumento }} {{ documento.numeroDoDocumento }}</h4>
       </div>
@@ -34,103 +34,101 @@
 
     <div v-show="!editando">
       <div class="row">
-        <div class="col col-lg-8">
-          <div class="row no-gutters mt-2">
+        <div class="col col-12 col-lg-8 mt-3 mt-lg-2">
+          <div class="row no-gutters">
             <div class="col col-auto mb-3">
-              <router-link :to="{ name: 'Mesa', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
-                ><span class="fa fa-times"></span> Voltar</router-link
+              <router-link :to="{ name: 'Mesa', params: { manter: true } }" tag="button" class="btn btn-light d-print-none"
+                ><span class="fa fa-list"></span><span class="d-none d-lg-inline"> Lista</span> {{ progresso }}</router-link
               >
             </div>
-            <div class="col col-auto mb-3">
+            <div class="col col-auto ml-auto mb-3">
               <router-link
                 :disabled="!anteriorDocumento"
-                :to="{
-                  name: 'Documento',
-                  params: {
-                    numero: (anteriorDocumento || {}).id,
-                    lista: this.lista,
-                    transitionName: 'slide-right',
-                  },
-                }"
+                :to="
+                  anteriorDocumento
+                    ? {
+                        name: 'Documento',
+                        params: {
+                          numero: anteriorDocumento.id,
+                          lista: this.lista,
+                          transitionName: 'slide-right',
+                        },
+                      }
+                    : {}
+                "
                 tag="button"
                 class="btn btn-light d-print-none"
-                ><span class="fa fa-arrow-left"></span> Anterior</router-link
+                ><span class="fa fa-arrow-left"></span><span class="d-none d-lg-inline"> Anterior</span></router-link
               >
             </div>
-            <div class="col col-auto mb-3">
+            <div class="col col-auto mb-3 ml-1">
               <router-link
                 :disabled="!proximoDocumento"
-                :to="{
-                  name: 'Documento',
-                  params: {
-                    numero: (proximoDocumento || {}).id,
-                    lista: this.lista,
-                    transitionName: 'slide-left',
-                  },
-                }"
+                :to="
+                  proximoDocumento
+                    ? {
+                        name: 'Documento',
+                        params: {
+                          numero: (proximoDocumento || { id: '' }).id,
+                          lista: this.lista,
+                          transitionName: 'slide-left',
+                        },
+                      }
+                    : {}
+                "
                 tag="button"
                 class="btn btn-light d-print-none"
-                ><span class="fa fa-arrow-right"></span> Próximo</router-link
+                ><span class="fa fa-arrow-right"></span><span class="d-none d-lg-inline"> Próximo</span></router-link
               >
             </div>
           </div>
-          <div v-if="diferencas && exibirDiferencas">
-            <div class="card mb-3">
-              <div
-                :class="{
-                  'card-body': true,
-                  'alert-success': documento.similaridade === 1.0,
-                  'alert-primary': documento.similaridade < 1.0,
-                }"
-              >
-                <p class="card-text" v-html="diferencas"></p>
-              </div>
-            </div>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade < 1.0">
-              Em relação ao <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>, palavas
-              incluídas aparecem em <span class="editNewInline">verde</span>, excluídas em <span class="editOldInline">vermelho</span> e
-              alteradas em <span class="replaceInline">roxo</span>.
-            </p>
-            <p class="text-muted" style="font-size: 80%;" v-if="diferencas && documento.similaridade === 1.0">
-              O fundo verde indica que o conteúdo do documento é exatamente igual ao
-              <router-link :to="{ name: 'Padrao', params: { numero: documento.idPadrao } }">padrão</router-link>.
-            </p>
-          </div>
-          <div class="card mb-3" v-show="!diferencas || !exibirDiferencas">
-            <div class="card-body alert-warning">
-              <p ref="conteudo" class="card-text" v-html="conteudo"></p>
+
+          <div class="card mb-0">
+            <div
+              :class="{
+                'card-body': true,
+                'alert-warning': !diferencas,
+                'alert-success': documento.similaridade === 1.0,
+                'alert-primary': documento.similaridade < 1.0,
+              }"
+            >
+              <p class="card-text" v-html="diferencas && exibirDiferencas && documento.similaridade !== 1.0 ? diferencas : conteudo"></p>
             </div>
           </div>
-          <b-form-checkbox v-show="diferencas && documento.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
-            Exibir diferenças em relação ao padrão
-          </b-form-checkbox>
+          <legenda-diferencas :diferencas="diferencas" :exibirDiferencas="exibirDiferencas" :documento="documento" />
+
+          <div class="d-none d-lg-block mt-2 mt-lg-3">
+            <b-form-checkbox v-show="diferencas && documento.similaridade < 1.0" v-model="exibirDiferencas" name="check-button" switch>
+              Exibir diferenças em relação ao padrão
+            </b-form-checkbox>
+          </div>
         </div>
-        <div class="col col-lg-4">
-          <div class="row no-gutters mt-2">
-            <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
+
+        <div class="col col-12 col-lg-4 mt-3 mt-lg-2">
+          <div class="row no-gutters">
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade !== 1.0">
               <button @click.prevent="adicionarPadrao()" type="button" class="btn btn-light d-print-none">
-                <span class="fa fa-plus"></span> Padrão
+                <span class="fa fa-plus"></span><span class="d-none d-lg-inline"> Padrão</span>
               </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled && documento.similaridade === 1.0">
               <button @click.prevent="removerPadrao()" type="button" class="btn btn-light d-print-none">
-                <span class="fa fa-minus"></span> Padrão
+                <span class="fa fa-minus"></span><span class="d-none d-lg-inline"> Padrão</span>
               </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
               <button @click.prevent="exibirDevolver()" type="button" class="btn btn-info d-print-none">
-                <span class="fa fa-comment"></span> Devolver
+                <span class="fa fa-comment"></span><span class="d-none d-lg-inline"> Devolver</span>
               </button>
             </div>
             <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
               <button @click.prevent="editar()" type="button" class="btn btn-primary d-print-none">
-                <span class="fa fa-pencil"></span> Editar
+                <span class="fa fa-pencil"></span><span class="d-none d-lg-inline"> Editar</span>
               </button>
             </div>
-            <div class="col col-auto ml-1 mb-3" v-if="!documento.disabled">
+            <div class="col col-auto ml-1 mb-3 ml-auto" v-if="!documento.disabled">
               <button @click.prevent="assinarComSenha()" type="button" class="btn btn-success d-print-none">
-                <span class="fa fa-certificate"></span> Assinar
+                <span class="fa fa-certificate"></span><span class="d-inline d-lg-inline"> Assinar</span>
               </button>
             </div>
           </div>
@@ -139,6 +137,7 @@
               Detalhes
             </div>
             <div class="card-body">
+              <p class="d-inline d-lg-none">{{ documento.tipoDoDocumento }}: {{ documento.numeroDoDocumento }}</p>
               <p class="card-text">
                 Processo:
                 <router-link
@@ -156,7 +155,7 @@
               </p>
             </div>
           </div>
-          <div class="card" v-if="documento.lembretes">
+          <div class="card" v-if="documento.lembretes && documento.lembretes.length">
             <div class="card-header">
               Lembretes
             </div>
@@ -181,6 +180,15 @@
               </div>
             </div>
           </div>
+          <b-form-checkbox
+            class="d-inline d-lg-none mt-2 mt-lg-3"
+            v-show="diferencas && documento.similaridade < 1.0"
+            v-model="exibirDiferencas"
+            name="check-button"
+            switch
+          >
+            Exibir diferenças em relação ao padrão
+          </b-form-checkbox>
         </div>
       </div>
     </div>
@@ -190,7 +198,9 @@
 
 <script>
 import DocumentoDevolver from "../modals/DocumentoDevolver";
+import LegendaDiferencas from "../components/LegendaDiferencas";
 import UtilsBL from "../bl/utils.js";
+import DocumentoBL from "../bl/documento.js";
 import { Bus } from "../bl/bus.js";
 
 export default {
@@ -227,11 +237,11 @@ export default {
     },
     conteudo() {
       if (!this.documento) return;
-      return this.preprocess(this.documento.conteudo);
+      return DocumentoBL.preprocess(this.documento.conteudo);
     },
     diferencas() {
       if (!this.documento) return;
-      return this.preprocess(this.documento.diferencas);
+      return DocumentoBL.preprocess(this.documento.diferencas);
     },
     indice: function() {
       if (this.lista)
@@ -250,19 +260,13 @@ export default {
       if (this.indice === 0) return;
       return this.lista[this.indice - 1];
     },
+    progresso: function() {
+      if (this.indice === undefined) return;
+      if (!this.lista || this.lista.length === 0) return;
+      return this.indice + 1 + "/" + this.lista.length;
+    },
   },
   methods: {
-    preprocess: function(s) {
-      if (!s) return;
-      return s
-        .replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"')
-        .replace('contenteditable="true"', 'contentEditable="false" data-bv_edit="true"')
-        .replace(/&#x2013;/g, "-");
-    },
-    posprocess: function(s) {
-      if (!s) return;
-      return s.replace('contentEditable="false" data-bv_edit="true"', 'contentEditable="true"');
-    },
     voltar: function() {
       this.$router.go(-1);
     },
@@ -286,7 +290,7 @@ export default {
     async salvar() {
       this.buffer = this.$refs["editarea"].innerHTML;
       this.$refs["conteudo"].querySelector("section[data-bv_edit=true]").innerHTML = this.buffer;
-      var html = this.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML);
+      var html = DocumentoBL.posprocess(this.$refs["conteudo"].querySelector("article").outerHTML);
       await this.$store.dispatch("salvarDocumento", { documento: this.documento, html: html });
       this.editando = false;
     },
@@ -348,10 +352,28 @@ export default {
 
   components: {
     DocumentoDevolver,
+    LegendaDiferencas,
   },
 };
 </script>
 <style>
+.ende LegendaDiferencasreco,
+.timbre_brasao,
+.timbre_poder,
+.timbre_instancia,
+.timbre_secao_judiciaria,
+.timbre_orgao,
+.notas,
+[data-nome="endereco"],
+[data-nome="notas"],
+.rodape_esquerda,
+.rodape_direita,
+hr {
+  display: none;
+}
+.parte {
+  margin-bottom: 0;
+}
 .paragrafoPadrao {
   font-size: 13pt;
   text-indent: 0.98in;

@@ -1,8 +1,8 @@
-import UtilsBL from '../bl/utils'
+import UtilsBL from "../bl/utils.js";
 import ProcessoBL from '../bl/processo'
 
 export default {
-  fix(item) {
+  fix: function (item) {
     UtilsBL.applyDefauts(item, {
       rows: 1,
       checked: true,
@@ -20,10 +20,13 @@ export default {
       identificadorDoUsuarioQueIncluiu: undefined,
       nomeDoUsuarioQueIncluiu: undefined,
       conteudo: undefined,
+      // conteudoPreprocessado: undefined,
+      diferencas: undefined,
+      // diferencasPreprocessadas: undefined,
       sistema: undefined,
       lembretes: undefined,
       errormsg: undefined,
-    });
+    })
     if (item.numeroDoProcesso !== undefined) {
       item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
     }
@@ -35,6 +38,10 @@ export default {
         item.lembretes[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[i].dataDeInclusao);
       }
     }
+    // if (item.conteudo)
+    //     item.conteudoPreprocessado = this.preprocessParaExibir(this.preprocess(item.conteudo))
+    // if (item.diferencas)
+    //     item.diferencasPreprocessadas = this.preprocessParaExibir(this.preprocess(item.diferencas))
     return item;
   },
 
@@ -49,5 +56,27 @@ export default {
 
   find(state, id) {
     return state.votos[this.findIndice(state, id)];
-  }
-};
+  },
+
+  preprocess: function (s) {
+    if (!s) return;
+    return s
+      .replace('contentEditable="true"', 'contentEditable="false" data-bv_edit="true"')
+      .replace('contenteditable="true"', 'contentEditable="false" data-bv_edit="true"')
+      .replace(/&#x2013;/g, "-");
+  },
+
+  preprocessParaExibir: function (s) {
+    if (!s) return;
+    if (s.includes('<p>&#xA0;</p>')) {
+      s = s.replace('<p>&#xA0;</p>', '');
+    }
+    return s;
+  },
+
+  posprocess: function (s) {
+    if (!s) return;
+    return s.replace('contentEditable="false" data-bv_edit="true"', 'contentEditable="true"');
+  },
+
+}

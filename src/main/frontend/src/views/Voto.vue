@@ -10,7 +10,7 @@
 
     <div class="row mt-3 mb-3">
       <div class="col-md-12">
-        <h4 class="text-center mb-0" v-if="voto">{{ voto.tipoDoVoto }} {{ voto.numeroDoVoto }}</h4>
+        <h4 class="text-center mb-0" v-if="voto">{{ voto.tipoDoDocumento ? voto.tipoDoDocumento : 'Voto' }} {{ voto.numeroDoDocumento }}</h4>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
         <div class="row no-gutters mt-2">
           <div class="col col-auto mb-3">
             <router-link :to="{ name: 'Lista de Votos', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
-              ><span class="fa fa-list"></span> Ver a Lista</router-link
+              ><span class="fa fa-list"></span> Lista  {{ progresso }}</router-link
             >
           </div>
           <div class="col col-auto mb-3">
@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="card mb-3">
-          <div class="card-body alert-primary">
+          <div class="card-body alert-warning">
             <p class="card-text" v-html="conteudo"></p>
           </div>
         </div>
@@ -98,12 +98,16 @@
               >
               <br />Cadastro:
               <span v-html="voto.dataDeInclusaoFormatada"></span>
+              <br />Relator: {{voto.relator}}
             </p>
           </div>
         </div>
         <div class="card mb-3">
           <div class="card-header">
             Votos Proferidos
+
+             <span class="float-right" v-if="voto.acompanhamentos != '0' || voto.divergencias != '0'">
+                  {{ voto.acompanhamentos }} x {{ voto.divergencias }}</span>
           </div>
           <div class="card-body p-0">
             <table class="table table-striped table-sm mb-0">
@@ -208,6 +212,11 @@ export default {
     },
     conteudo() {
       return this.preprocess(this.voto.conteudo);
+    },
+    progresso: function() {
+      if (this.indice === undefined) return;
+      if (!this.lista || this.lista.length === 0) return;
+      return this.indice + 1 + "/" + this.lista.length;
     },
   },
   methods: {

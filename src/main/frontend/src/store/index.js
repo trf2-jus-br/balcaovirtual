@@ -113,7 +113,8 @@ const store = new Vuex.Store({
         block: true
       }).then(
         (response) => {
-          var lista = [];
+          var lista = state.documentos || [];
+          lista.length = 0;
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
             lista.push(DocumentoBL.fix(list[i]));
@@ -143,6 +144,10 @@ const store = new Vuex.Store({
           newDoc.idPadrao = response.data.padrao.id;
           newDoc.diferencas = newDoc.conteudo;
           commit('updateDocumento', newDoc)
+          // doc.similaridade = 1.0;
+          // doc.idPadrao = response.data.padrao.id;
+          // doc.diferencas = doc.conteudo;
+          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)
@@ -167,6 +172,10 @@ const store = new Vuex.Store({
           newDoc.idPadrao = undefined;
           newDoc.diferencas = undefined;
           commit('updateDocumento', newDoc)
+          // doc.similaridade = undefined;
+          // doc.idPadrao = undefined;
+          // doc.diferencas = undefined;
+          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)
