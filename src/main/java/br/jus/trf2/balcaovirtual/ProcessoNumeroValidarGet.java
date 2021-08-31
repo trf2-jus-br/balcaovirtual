@@ -56,6 +56,8 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
 		validar(usuario, numeros, resp);
+		if (resp.list != null && resp.list.size() == 1 && resp.token != null && !resp.list.get(0).numero.equals(req.numero))
+			resp.token = jwt(resp.list.get(0).numero);
 	}
 
 	public static void validar(String usuario, String[] numeros, IProcessoNumeroValidarGet.Response resp)
