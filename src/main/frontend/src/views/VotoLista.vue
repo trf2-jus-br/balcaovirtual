@@ -64,6 +64,92 @@
     <div class="row" v-if="filtrados.length > 0">
       <div class="col-sm-12">
         <div class="table-responsive">
+          <table class="table table-sm table-borderless">
+            <tbody>
+              <template v-for="f in filtrados">
+                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo1'" class="table-group">
+                  <th colspan="6" class="pt-3 pb-0 pl-0">
+                    <h4 class="mb-1">{{ f.grupo }}</h4>
+                  </th>
+                </tr>
+                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo2'" class="table-head">
+                  <th style="text-align: center">
+                    <input
+                      type="checkbox"
+                      id="progress_checkall"
+                      name="progress_checkall"
+                      v-model="todos[f.grupo]"
+                      @change="marcarTodos(f.grupo)"
+                    />
+                  </th>
+                  <th>Voto</th>
+                  <th>Relator</th>
+                  <th>Processo</th>
+                  <th>Autor</th>
+                  <th>Réu</th>
+                  <th>Data</th>
+                  <th>Unidade</th>
+                  <th>Sistema/Órgão</th>
+                  <th class="text-center">Placar</th>
+                  <th></th>
+                </tr>
+                <tr v-bind:class="{ odd: f.odd }" :key="f.sigla + ':titulo'">
+                  <td class="td-middle" style="text-align: center">
+                    <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
+                  </td>
+                  <td class="td-middle">
+                    <router-link
+                      :to="{
+                        name: 'Voto',
+                        params: { numero: f.id, lista: filtrados },
+                      }"
+                      >{{ f.numeroDoDocumento }}</router-link
+                    >
+                  </td>
+                  <td class="td-middle">
+                    <span :title="'Nome: ' + f.relator">{{ f.relator }}</span>
+                  </td>
+                  <td class="td-middle">
+                    <span class="unbreakable">
+                      <router-link
+                        :to="{
+                          name: 'Processo',
+                          params: { numero: f.numeroDoProcesso },
+                          query: { avisos: $parent.cAvisos },
+                        }"
+                        target="_blank"
+                        >{{ f.processoFormatado }}</router-link
+                      >
+                    </span>
+                  </td>
+                  <td class="td-middle">{{ f.autor }}</td>
+                  <td class="td-middle">{{ f.reu }}</td>
+                  <td class="td-middle">
+                    {{ f.dataDeInclusaoFormatada }}
+                  </td>
+                  <td class="td-middle">{{ f.siglaDaUnidade }}</td>
+                  <td class="td-middle">
+                    <span :title="'Identificador: ' + f.sistema">{{
+                      $parent.test.properties["balcaovirtual." + f.sistema + ".name"]
+                    }}</span>
+                  </td>
+                  <td class="td-middle text-center">
+                    <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
+                      >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
+                    >
+                  </td>
+                  <td class="td-middle">
+                    {{ f.descricaoDoStatus }}
+                    <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
+                  </td>
+                </tr>
+                <tr v-if="f.grupoEspacar" :key="f.sigla + ':grupo3'" class="table-group">
+                  <th colspan="6" class="pb-2 pb-0 pl-0"></th>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+
           <table class="table table-striped table-sm">
             <thead class="thead-dark">
               <tr>
@@ -195,6 +281,8 @@ export default {
       var a = this.lista;
       a = UtilsBL.filtrarPorSubstring(a, this.filtro);
       var procnum, procline;
+      var grupo;
+
       for (var i = 0; i < a.length; i++) {
         if (procnum !== a[i].numeroDoProcesso) {
           procnum = a[i].numeroDoProcesso;
@@ -205,6 +293,17 @@ export default {
           a[i].rows = 0;
         }
       }
+
+      var odd = false;
+      for (i = 0; i < a.length; i++) {
+        a[i].grupoExibir = a[i].grupo !== grupo;
+        grupo = a[i].grupo;
+        if (a[i].grupoExibir) odd = false;
+        if (a[i].grupoExibir && i > 0) a[i - 1].grupoEspacar = true;
+        if (a[i].rows) odd = !odd;
+        a[i].odd = odd;
+      }
+
       return a;
     },
 

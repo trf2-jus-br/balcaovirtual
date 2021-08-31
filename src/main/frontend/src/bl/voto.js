@@ -24,6 +24,10 @@ export default {
       lembretes: undefined,
       votosProferidos: undefined,
       errormsg: undefined,
+      odd: undefined,
+      grupo: undefined,
+      grupoExibir: undefined,
+      grupoEspacar: undefined,
     });
     if (item.numeroDoProcesso !== undefined) {
       item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
@@ -31,6 +35,8 @@ export default {
     if (item.dataDeInclusao !== undefined) {
       item.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.dataDeInclusao);
     }
+    if (item.dataDeInclusaoFormatada && item.siglaDaUnidade)
+      item.grupo = item.dataDeInclusaoFormatada + " - " + item.siglaDaUnidade
     if (item.votosProferidos) {
       for (var i = 0; i < item.votosProferidos.length; i++) {
         item.votosProferidos[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.votosProferidos[i].dataDeInclusao);
