@@ -5,7 +5,7 @@ export default {
   fix(item) {
     UtilsBL.applyDefauts(item, {
       rows: 1,
-      checked: true,
+      checked: false,
       disabled: false,
       dataDeInclusao: undefined,
       dataDeInclusaoFormatada: undefined,
@@ -28,6 +28,8 @@ export default {
       grupo: undefined,
       grupoExibir: undefined,
       grupoEspacar: undefined,
+      statusCodigo: undefined,
+      statusVoto: undefined
     });
     if (item.numeroDoProcesso !== undefined) {
       item.processoFormatado = ProcessoBL.formatarProcesso(item.numeroDoProcesso);
@@ -39,7 +41,12 @@ export default {
       item.grupo = item.dataDeInclusaoFormatada + " - " + item.siglaDaUnidade
     if (item.votosProferidos) {
       for (var i = 0; i < item.votosProferidos.length; i++) {
-        item.votosProferidos[i].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.votosProferidos[i].dataDeInclusao);
+        const v = item.votosProferidos[i]
+        v.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(v.dataDeInclusao);
+        if (v.proprio) {
+          item.statusCodigo = v.codigoTipo
+          item.statusVoto = v.voto
+        }
       }
     }
     if (item.lembretes) {

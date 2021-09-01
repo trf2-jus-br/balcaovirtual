@@ -72,25 +72,17 @@
                     <h4 class="mb-1">{{ f.grupo }}</h4>
                   </th>
                 </tr>
-                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo2'" class="table-head">
+                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo2'" class="table-head thead-dark">
                   <th style="text-align: center">
-                    <input
-                      type="checkbox"
-                      id="progress_checkall"
-                      name="progress_checkall"
-                      v-model="todos[f.grupo]"
-                      @change="marcarTodos(f.grupo)"
-                    />
+                    <input v-model="todos[f.grupo]" type="checkbox" name="progress_checkall" @change="marcarTodos(f.grupo)" />
                   </th>
-                  <th>Voto</th>
+                  <th>Item</th>
+                  <th>Status</th>
+                  <th class="text-center">Placar</th>
                   <th>Relator</th>
                   <th>Processo</th>
                   <th>Autor</th>
                   <th>Réu</th>
-                  <th>Data</th>
-                  <th>Unidade</th>
-                  <th>Sistema/Órgão</th>
-                  <th class="text-center">Placar</th>
                   <th></th>
                 </tr>
                 <tr v-bind:class="{ odd: f.odd }" :key="f.sigla + ':titulo'">
@@ -103,7 +95,17 @@
                         name: 'Voto',
                         params: { numero: f.id, lista: filtrados },
                       }"
-                      >{{ f.numeroDoDocumento }}</router-link
+                      >{{ f.sequencia }}</router-link
+                    >
+                  </td>
+                  <td class="td-middle text-center">
+                    <span v-if="f.statusCodigo === '9'" class="fa fa-thumbs-o-up text-success"></span>
+                    <span v-if="f.statusCodigo === '10'" class="fa fa-thumbs-o-down text-danger"></span>
+                    <span v-if="f.statusCodigo === '5'" class="fa fa-eye text-warning"></span>
+                  </td>
+                  <td class="td-middle text-center">
+                    <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
+                      >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
                     >
                   </td>
                   <td class="td-middle">
@@ -125,20 +127,6 @@
                   <td class="td-middle">{{ f.autor }}</td>
                   <td class="td-middle">{{ f.reu }}</td>
                   <td class="td-middle">
-                    {{ f.dataDeInclusaoFormatada }}
-                  </td>
-                  <td class="td-middle">{{ f.siglaDaUnidade }}</td>
-                  <td class="td-middle">
-                    <span :title="'Identificador: ' + f.sistema">{{
-                      $parent.test.properties["balcaovirtual." + f.sistema + ".name"]
-                    }}</span>
-                  </td>
-                  <td class="td-middle text-center">
-                    <a class="text-primary" :id="'placar' + f.id" v-if="f.acompanhamentos != '0' || f.divergencias != '0'"
-                      >{{ f.acompanhamentos }} x {{ f.divergencias }}</a
-                    >
-                  </td>
-                  <td class="td-middle">
                     {{ f.descricaoDoStatus }}
                     <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
                   </td>
@@ -150,7 +138,7 @@
             </tbody>
           </table>
 
-          <table class="table table-striped table-sm">
+          <table v-if="false" class="table table-striped table-sm">
             <thead class="thead-dark">
               <tr>
                 <th style="text-align: center">
@@ -267,7 +255,7 @@ export default {
       votos: [],
       sessao: undefined,
       filtro: undefined,
-      todos: true,
+      todos: {},
       errormsg: undefined,
       carregando: true,
     };
@@ -324,11 +312,11 @@ export default {
   },
 
   methods: {
-    marcarTodos: function() {
-      var docs = this.filtrados;
-      for (var i = 0; i < docs.length; i++) {
-        var doc = docs[i];
-        if (!doc.disabled) doc.checked = this.todos;
+    marcarTodos(grupo) {
+      const docs = this.filtrados
+      for (let i = 0; i < docs.length; i++) {
+        const doc = docs[i]
+        if (doc.grupo === grupo) doc.checked = this.todos[grupo]
       }
     },
 
