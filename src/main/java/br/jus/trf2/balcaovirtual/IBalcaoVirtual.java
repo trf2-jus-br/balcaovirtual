@@ -252,6 +252,7 @@ public interface IBalcaoVirtual {
 		public String descricao;
 		public String status;
 		public String siglaDaUnidade;
+		public String sequencia;
 		public String conteudo;
 		public String acompanhamentos;
 		public String divergencias;
@@ -263,6 +264,8 @@ public interface IBalcaoVirtual {
 		public Date dataDeInclusao;
 		public String magistrado;
 		public String voto;
+		public Boolean proprio;
+		public String codigoTipo;
 	}
 
 	public static class PadraoItem implements ISwaggerModel {

@@ -65,6 +65,7 @@ public class VotosGet implements IVotosGet {
 				i.siglaDaUnidade = a.siglaDaUnidade;
 				i.conteudo = a.conteudo;
 				i.sistema = system;
+				i.sequencia = a.sequencia;
 
 				if (a.voto != null) {
 					int va = 0, vd = 0, vp = 0;
@@ -74,6 +75,8 @@ public class VotosGet implements IVotosGet {
 						v.dataDeInclusao = Utils.parsearDataHoraMinutoSegundo(j.dataDeInclusao);
 						v.magistrado = Texto.abreviarNome(Texto.maiusculasEMinusculas(j.magistrado));
 						v.voto = j.voto;
+						v.codigoTipo = j.codigoTipo;
+						v.proprio = j.proprio;
 						i.votosProferidos.add(v);
 
 						if (v.voto == null)
@@ -86,11 +89,11 @@ public class VotosGet implements IVotosGet {
 							vp++;
 					}
 //					if (va > 0)
-						i.acompanhamentos = Integer.toString(va);
+					i.acompanhamentos = Integer.toString(va);
 //					if (vd > 0)
-						i.divergencias = Integer.toString(vd);
+					i.divergencias = Integer.toString(vd);
 //					if (vp > 0)
-						i.pedidosDeVista = Integer.toString(vp);
+					i.pedidosDeVista = Integer.toString(vp);
 				}
 
 				resp.list.add(i);

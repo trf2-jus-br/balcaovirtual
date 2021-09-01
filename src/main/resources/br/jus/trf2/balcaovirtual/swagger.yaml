@@ -2554,12 +2554,14 @@ definitions:
     description: Voto em Sessão de Julgamento
     type: object
     properties:
-      sistema:
-        $ref: "#/definitions/Sistema"
+      id:
+        type: string
       dataDeInclusao:
         type: string
         format: date-time
-      id:
+      siglaDaUnidade:
+        type: string
+      sequencia:
         type: string
       numeroDoDocumento:
         type: string
@@ -2575,8 +2577,6 @@ definitions:
         type: string
       status:
         type: string
-      siglaDaUnidade:
-        type: string
       conteudo:
         type: string
       acompanhamentos:
@@ -2585,6 +2585,8 @@ definitions:
         type: string
       pedidosDeVista:
         type: string
+      sistema:
+        $ref: "#/definitions/Sistema"
       votosProferidos:
         type: array
         items:
@@ -2601,6 +2603,10 @@ definitions:
         type: string
       voto:
         type: string
+      codigoTipo:
+        type: string
+      proprio:
+        type: boolean
 
   PadraoItem:
     description: Mesa virtual
