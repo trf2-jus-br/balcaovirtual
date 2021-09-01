@@ -227,6 +227,7 @@ export default {
     });
 
     Bus.$on("unauthorized", () => {
+      console.log("Não autorizado, redirecionando para o login");
       this.jwt = undefined;
       router.push({ name: "Login" });
     });

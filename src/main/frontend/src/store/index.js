@@ -30,10 +30,29 @@ const store = new Vuex.Store({
   state: {
     mesa: undefined,
     mesas: undefined,
+    mesaFiltro: undefined,
     documentos: undefined,
     exibirDiferencas: true,
     successMsg: undefined,
     errorMsg: undefined,
+  },
+  getters: {
+    documentosFiltrados: state => {
+      var a = state.documentos;
+      a = UtilsBL.filtrarPorSubstring(a, state.mesaFiltro);
+      var procnum, procline;
+      for (var i = 0; i < a.length; i++) {
+        if (procnum !== a[i].numeroDoProcesso) {
+          procnum = a[i].numeroDoProcesso;
+          procline = i;
+          a[i].rows = 1;
+        } else {
+          a[procline].rows++;
+          a[i].rows = 0;
+        }
+      }
+      return a;
+    }
   },
   mutations: {
     setMesas(state, val) {
@@ -42,12 +61,26 @@ const store = new Vuex.Store({
     setMesa(state, val) {
       state.mesa = val
     },
+    setMesaFiltro(state, val) {
+      state.mesaFiltro = val
+    },
     setDocumentos(state, val) {
       state.documentos = val
     },
     updateDocumento(state, val) {
       var i = findDocumentoIndice(state, val.id)
       if (i === undefined) throw "Documento não encontrado"
+
+      // Se fosse necessário atualizar o registro sem substituir o objeto
+      //
+      // const old = state.documentos[i]
+      // Object.assign(old, val)
+      // for (var key in old) {
+      //   if (old.hasOwnProperty(key) && !val.hasOwnProperty(key)) {
+      //     old[key] = undefined;
+      //   }
+      // }
+
       Vue.set(state.documentos, i, val)
     },
     setExibirDiferencas(state, val) {
@@ -113,7 +146,7 @@ const store = new Vuex.Store({
       }).then(
         (response) => {
           var lista = state.documentos || [];
-            lista.length = 0;
+          lista.length = 0;
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
             lista.push(DocumentoBL.fix(list[i]));
@@ -143,10 +176,6 @@ const store = new Vuex.Store({
           newDoc.idPadrao = response.data.padrao.id;
           newDoc.diferencas = newDoc.conteudo;
           commit('updateDocumento', newDoc)
-          // doc.similaridade = 1.0;
-          // doc.idPadrao = response.data.padrao.id;
-          // doc.diferencas = doc.conteudo;
-          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)
@@ -171,10 +200,6 @@ const store = new Vuex.Store({
           newDoc.idPadrao = undefined;
           newDoc.diferencas = undefined;
           commit('updateDocumento', newDoc)
-          // doc.similaridade = undefined;
-          // doc.idPadrao = undefined;
-          // doc.diferencas = undefined;
-          // commit('updateDocumento', doc)
           dispatch('carregarMesa')
         },
         (error) => commit("setError", error)
