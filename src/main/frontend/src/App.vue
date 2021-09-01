@@ -226,7 +226,7 @@ export default {
       }
     });
 
-    Bus.$on("unathorized", () => {
+    Bus.$on("unauthorized", () => {
       this.jwt = undefined;
       router.push({ name: "Login" });
     });
