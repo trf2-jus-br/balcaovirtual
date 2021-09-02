@@ -14,7 +14,7 @@
             }"
           >
             <a class="navbar-brand pt-0 pb-0" href="#">
-              <img id="logo-header" src="./assets/balcao-virtual-38px.png" alt="Logo Balcão Virtual" height="38" />
+              <img id="logo-header" src="./assets/balcaojus-38px.png" alt="Logo Balcão Virtual" height="38" />
               <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38" />
             </a>
 
