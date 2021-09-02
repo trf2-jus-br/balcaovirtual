@@ -1,4 +1,4 @@
-# balcaovirtual-frontend
+# balcaojus-frontend
 
 ## Project setup
 ```

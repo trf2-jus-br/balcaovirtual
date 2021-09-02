@@ -16,6 +16,6 @@
     "trailingComma": "es5",
     "useTabs": false,
     "vueIndentScriptAndStyle": false,
-    "filepath": "/Users/nato/Repositories/balcaovirtual/src/main/frontend/src/components/Padrao.vue",
+    "filepath": "/Users/nato/Repositories/balcaojus/src/main/frontend/src/components/Padrao.vue",
     "parser": "vue"
   }

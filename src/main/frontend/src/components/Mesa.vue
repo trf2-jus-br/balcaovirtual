@@ -179,7 +179,7 @@
               </td>
               <td class="td-middle">{{ f.siglaDaUnidade }}</td>
               <td class="td-middle">
-                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
+                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaojus." + f.sistema + ".name"] }}</span>
               </td>
               <td class="td-middle">
                 {{ f.descricaoDoStatus }}
@@ -341,13 +341,13 @@ export default {
     chamarAssijus: function(list) {
       var json = JSON.stringify({ list: list });
       this.$http
-        .post(this.$parent.test.properties["balcaovirtual.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true })
+        .post(this.$parent.test.properties["balcaojus.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true })
         .then(
           (response) => {
             var callback = window.location.href + "";
             console.log(callback);
             window.location.href =
-              this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+              this.$parent.test.properties["balcaojus.assijus.endpoint"] +
               "/?endpointautostart=true&endpointlistkey=" +
               response.data.key +
               "&endpointcallback=" +

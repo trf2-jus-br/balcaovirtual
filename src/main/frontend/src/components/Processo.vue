@@ -24,7 +24,7 @@
               <span v-if="proc.dadosBasicos.outroParametro.indEletronico == 'S'">
                 Digital&nbsp;
               </span>
-              <span v-if="sistema" v-html="$parent.test.properties['balcaovirtual.' + sistema + '.name']"></span>
+              <span v-if="sistema" v-html="$parent.test.properties['balcaojus.' + sistema + '.name']"></span>
               <span v-if="proc &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico &amp;&amp; proc.dadosBasicos.outroParametro.indEletronico != 'S'"> Físico</span>
               {{ proc.dadosBasicos.numero }}
               <a v-if="this.favorito !== undefined && !this.favorito" href="" @click.prevent="favoritar(true)">
@@ -84,7 +84,7 @@
           </div>
           <div
             class="col col-auto ml-1 mb-3"
-            v-if="marcasativas && ($parent.test.properties['balcaovirtual.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; ($parent.jwt.company === 'pgfn.gov.br' || $parent.jwt.company === 'dpu.gov.br')))"
+            v-if="marcasativas && ($parent.test.properties['balcaojus.env'] !== 'prod' || (perfil === 'procurador' &amp;&amp; $parent.jwt &amp;&amp; ($parent.jwt.company === 'pgfn.gov.br' || $parent.jwt.company === 'dpu.gov.br')))"
           >
             <button type="button" @click="cotar()" id="cotar" class="btn btn-info d-print-none">
               <span class="fa fa-comment"></span>
@@ -600,7 +600,7 @@
                 realizada em:
                 <span v-html="proc.dadosBasicos.outroParametro.dataConsulta ? proc.dadosBasicos.outroParametro.dataConsulta : dataValidacao"></span>
                 -
-                {{ $parent.test.properties["balcaovirtual." + sistema + ".name"] }}.
+                {{ $parent.test.properties["balcaojus." + sistema + ".name"] }}.
               </p>
             </div>
           </div>

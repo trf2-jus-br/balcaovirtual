@@ -39,6 +39,8 @@ const store = new Vuex.Store({
   getters: {
     documentosFiltrados: state => {
       var a = state.documentos;
+      if (!a) return []
+      if (!state.mesaFiltro) return a
       a = UtilsBL.filtrarPorSubstring(a, state.mesaFiltro);
       var procnum, procline;
       for (var i = 0; i < a.length; i++) {

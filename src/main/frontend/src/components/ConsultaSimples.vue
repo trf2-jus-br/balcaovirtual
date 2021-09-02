@@ -193,7 +193,7 @@ export default {
 
   computed: {
     sitekey: function() {
-      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties["balcaovirtual.recaptcha.site.key"];
+      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties["balcaojus.recaptcha.site.key"];
       return "waiting...";
     }
   },

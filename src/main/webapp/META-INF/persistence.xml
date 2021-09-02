@@ -5,19 +5,19 @@
 
 	<persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<non-jta-data-source>java:/jboss/datasources/BalcaoVirtualDS</non-jta-data-source>
+		<non-jta-data-source>java:/jboss/datasources/BalcaojusDS</non-jta-data-source>
 
-		<class>br.jus.trf2.balcaovirtual.model.CnjClasse</class>
-		<class>br.jus.trf2.balcaovirtual.model.Estilo</class>
-		<class>br.jus.trf2.balcaovirtual.model.Marca</class>
-		<class>br.jus.trf2.balcaovirtual.model.Nota</class>
-		<class>br.jus.trf2.balcaovirtual.model.Sistema</class>
-		<class>br.jus.trf2.balcaovirtual.model.Processo</class>
-		<class>br.jus.trf2.balcaovirtual.model.Sinal</class>
-		<class>br.jus.trf2.balcaovirtual.model.TipoMarca</class>
-		<class>br.jus.trf2.balcaovirtual.model.TipoMarcaItem</class>
-		<class>br.jus.trf2.balcaovirtual.model.Notificacao</class>
-		<class>br.jus.trf2.balcaovirtual.model.Padrao</class>
+		<class>br.jus.trf2.balcaojus.model.CnjClasse</class>
+		<class>br.jus.trf2.balcaojus.model.Estilo</class>
+		<class>br.jus.trf2.balcaojus.model.Marca</class>
+		<class>br.jus.trf2.balcaojus.model.Nota</class>
+		<class>br.jus.trf2.balcaojus.model.Sistema</class>
+		<class>br.jus.trf2.balcaojus.model.Processo</class>
+		<class>br.jus.trf2.balcaojus.model.Sinal</class>
+		<class>br.jus.trf2.balcaojus.model.TipoMarca</class>
+		<class>br.jus.trf2.balcaojus.model.TipoMarcaItem</class>
+		<class>br.jus.trf2.balcaojus.model.Notificacao</class>
+		<class>br.jus.trf2.balcaojus.model.Padrao</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

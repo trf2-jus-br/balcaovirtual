@@ -8,9 +8,9 @@
           <nav
             class="navbar navbar navbar-expand-lg navbar-light"
             :class="{
-              'navbar-dark bg-success': test.properties['balcaovirtual.env'] === 'desenv',
-              'navbar-dark bg-secondary': test.properties['balcaovirtual.env'] === 'homolo',
-              'navbar-dark bg-primary': test.properties['balcaovirtual.env'] === 'prod',
+              'navbar-dark bg-success': test.properties['balcaojus.env'] === 'desenv',
+              'navbar-dark bg-secondary': test.properties['balcaojus.env'] === 'homolo',
+              'navbar-dark bg-primary': test.properties['balcaojus.env'] === 'prod',
             }"
           >
             <a class="navbar-brand pt-0 pb-0" href="#">
@@ -37,7 +37,7 @@
                     >Consulta</router-link
                   >
                 </li>
-                <li v-if="test.properties['balcaovirtual.cert.systems']" class="nav-item">
+                <li v-if="test.properties['balcaojus.cert.systems']" class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Consultar Certidão' }" tag="a" exact
                     >Certidões</router-link
                   >
@@ -312,9 +312,9 @@ export default {
         (response) => {
           this.test = response.data;
 
-          if (this.test.properties["balcaovirtual.systems"]) {
+          if (this.test.properties["balcaojus.systems"]) {
             this.nomesSistemas = "";
-            var a = this.test.properties["balcaovirtual.systems"].split(",");
+            var a = this.test.properties["balcaojus.systems"].split(",");
             this.sistemas = [];
             for (var i = 0; i < a.length; i++) {
               this.sistemas.push(a[i]);
@@ -322,13 +322,13 @@ export default {
                 if (i === a.length - 1) this.nomesSistemas += " e ";
                 else this.nomesSistemas += ", ";
               }
-              this.nomesSistemas += this.test.properties["balcaovirtual." + a[i] + ".name"];
+              this.nomesSistemas += this.test.properties["balcaojus." + a[i] + ".name"];
             }
           }
 
-          if (this.test.properties["balcaovirtual.cert.systems"]) {
+          if (this.test.properties["balcaojus.cert.systems"]) {
             this.nomesSistemasCertificadores = "";
-            a = this.test.properties["balcaovirtual.cert.systems"].split(",");
+            a = this.test.properties["balcaojus.cert.systems"].split(",");
             this.sistemasCertificadores = [];
             for (i = 0; i < a.length; i++) {
               this.sistemasCertificadores.push(a[i]);
@@ -336,13 +336,13 @@ export default {
                 if (i === a.length - 1) this.nomesSistemasCertificadores += " e ";
                 else this.nomesSistemasCertificadores += ", ";
               }
-              this.nomesSistemasCertificadores += this.test.properties["balcaovirtual." + a[i] + ".cert.name"];
+              this.nomesSistemasCertificadores += this.test.properties["balcaojus." + a[i] + ".cert.name"];
             }
           }
 
           if (
-            this.test.properties["balcaovirtual.wootric.token"] &&
-            this.test.properties["balcaovirtual.wootric.token"] !== "[undefined]" &&
+            this.test.properties["balcaojus.wootric.token"] &&
+            this.test.properties["balcaojus.wootric.token"] !== "[undefined]" &&
             this.jwt
           ) {
             // This loads the Wootric survey
@@ -350,7 +350,7 @@ export default {
             window.wootricSettings = {
               email: this.jwt.username,
               created_at: 1234567890,
-              account_token: this.test.properties["balcaovirtual.wootric.token"],
+              account_token: this.test.properties["balcaojus.wootric.token"],
             };
             window.wootric("run");
           }
@@ -432,7 +432,7 @@ export default {
       var a = [];
       for (var prop in this.jwt.user) {
         if (this.jwt.user.hasOwnProperty(prop)) {
-          a.push(this.test.properties["balcaovirtual." + prop + ".name"]);
+          a.push(this.test.properties["balcaojus." + prop + ".name"]);
         }
       }
       if (a.length === 0) return this.jwt.username;
@@ -562,7 +562,7 @@ export default {
     registerServiceWorker: function() {
       try {
         register("./service-worker.js", {
-          registrationOptions: { scope: "/balcaovirtual/" },
+          registrationOptions: { scope: "/balcaojus/" },
           ready() {
             console.log("Service worker is active.");
           },
