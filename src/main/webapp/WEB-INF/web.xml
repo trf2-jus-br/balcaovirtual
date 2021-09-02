@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
 	<filter>
 		<filter-name>CacheControlFilterNoCache</filter-name>
-		<filter-class>br.jus.trf2.balcaovirtual.CacheControlFilterNoCache</filter-class>
+		<filter-class>br.jus.trf2.balcaojus.CacheControlFilterNoCache</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>CacheControlFilterNoCache</filter-name>
@@ -18,7 +18,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<filter>
 		<filter-name>CacheControlFilterCache</filter-name>
-		<filter-class>br.jus.trf2.balcaovirtual.CacheControlFilterCache</filter-class>
+		<filter-class>br.jus.trf2.balcaojus.CacheControlFilterCache</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>CacheControlFilterCache</filter-name>
@@ -26,19 +26,19 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</filter-mapping>
 
 	<servlet>
-		<servlet-name>BalcaoVirtualServlet</servlet-name>
-		<servlet-class>br.jus.trf2.balcaovirtual.BalcaoVirtualServlet</servlet-class>
+		<servlet-name>BalcaojusServlet</servlet-name>
+		<servlet-class>br.jus.trf2.balcaojus.BalcaojusServlet</servlet-class>
 		<load-on-startup>1</load-on-startup> 
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>BalcaoVirtualServlet</servlet-name>
+		<servlet-name>BalcaojusServlet</servlet-name>
 		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>UploadServlet</servlet-name>
-		<servlet-class>br.jus.trf2.balcaovirtual.UploadServlet</servlet-class>
+		<servlet-class>br.jus.trf2.balcaojus.UploadServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

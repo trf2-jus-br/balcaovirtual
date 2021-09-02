@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   outputDir: path.resolve(__dirname, "../webapp"),
   assetsDir: "static",
-  publicPath: process.env.NODE_ENV === "production" ? "/balcaovirtual/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/balcaojus/" : "/",
   lintOnSave: true,
   runtimeCompiler: true,
   pwa: {
@@ -15,7 +15,7 @@ module.exports = {
     assetsVersion: "",
     manifestOptions: {
       short_name: "Balcão Virtual",
-      start_url: "/balcaovirtual/index.html",
+      start_url: "/balcaojus/index.html",
       description: "Interface para acesso aos sistemas processuais.",
       background_color: "#212529",
       "theme-color": "#212529"

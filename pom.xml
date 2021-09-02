@@ -4,10 +4,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
-	<artifactId>balcaovirtual</artifactId>
-	<version>2.3.1</version>
+	<artifactId>balcaojus</artifactId>
+	<version>3.0.0</version>
 	<packaging>war</packaging>
-	<name>Balcão Virtual Maven Webapp</name>
+	<name>Balcãojus Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -167,7 +167,7 @@
 	</properties>
 
 	<build>
-		<finalName>balcaovirtual</finalName>
+		<finalName>balcaojus</finalName>
 		<plugins>
 			<plugin>
 				<groupId>com.github.eirslett</groupId>

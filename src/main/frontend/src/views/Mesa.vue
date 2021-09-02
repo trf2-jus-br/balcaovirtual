@@ -23,7 +23,7 @@
           >
         </div>
         <div class="col col-12 col-md-auto mb-2">
-          <button type="button" @click="assinarComSenhaEmLote()" class="btn btn-success ml-1" title="">
+          <button type="button" @click="assinarPadroesExatosComSenhaEmLote()" class="btn btn-success ml-1" title="">
             <span class="fa fa-certificate"></span> Assinar&nbsp;&nbsp;
             <span class="badge badge-pill badge-warning">{{ assinaveisEPadrao.length }}</span>
           </button>
@@ -94,7 +94,7 @@
               <router-link
                 :to="{
                   name: 'Documento',
-                  params: { numero: f.id, lista: filtrados },
+                  params: { numero: f.id },
                 }"
                 >{{ f.numeroDoDocumento }}</router-link
               >
@@ -150,7 +150,7 @@
                 <router-link
                   :to="{
                     name: 'Documento',
-                    params: { numero: f.id, lista: filtrados },
+                    params: { numero: f.id },
                   }"
                   >{{ f.numeroDoDocumento }}</router-link
                 >
@@ -179,7 +179,7 @@
               </td>
               <td class="td-middle">{{ f.siglaDaUnidade }}</td>
               <td class="td-middle">
-                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaovirtual." + f.sistema + ".name"] }}</span>
+                <span :title="'Identificador: ' + f.sistema">{{ $parent.test.properties["balcaojus." + f.sistema + ".name"] }}</span>
               </td>
               <td class="td-middle">
                 {{ f.descricaoDoStatus }}
@@ -222,7 +222,6 @@ export default {
     return {
       mesa: undefined,
       mesas: [],
-      filtro: undefined,
       todos: true,
       errormsg: undefined,
       carregando: true,
@@ -230,24 +229,19 @@ export default {
   },
 
   computed: {
+    filtro: {
+      get() {
+        return this.$store.state.mesaFiltro;
+      },
+      set(value) {
+        this.$store.commit("setMesaFiltro", value);
+      },
+    },
     lista() {
       return this.$store.state.documentos ? this.$store.state.documentos : [];
     },
-    filtrados: function() {
-      var a = this.lista;
-      a = UtilsBL.filtrarPorSubstring(a, this.filtro);
-      var procnum, procline;
-      for (var i = 0; i < a.length; i++) {
-        if (procnum !== a[i].numeroDoProcesso) {
-          procnum = a[i].numeroDoProcesso;
-          procline = i;
-          a[i].rows = 1;
-        } else {
-          a[procline].rows++;
-          a[i].rows = 0;
-        }
-      }
-      return a;
+    filtrados() {
+      return this.$store.getters.documentosFiltrados;
     },
 
     filtradosEMarcados: function() {
@@ -347,13 +341,13 @@ export default {
     chamarAssijus: function(list) {
       var json = JSON.stringify({ list: list });
       this.$http
-        .post(this.$parent.test.properties["balcaovirtual.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true })
+        .post(this.$parent.test.properties["balcaojus.assijus.endpoint"] + "/api/v1/store", { payload: json }, { block: true })
         .then(
           (response) => {
             var callback = window.location.href + "";
             console.log(callback);
             window.location.href =
-              this.$parent.test.properties["balcaovirtual.assijus.endpoint"] +
+              this.$parent.test.properties["balcaojus.assijus.endpoint"] +
               "/?endpointautostart=true&endpointlistkey=" +
               response.data.key +
               "&endpointcallback=" +
@@ -367,7 +361,7 @@ export default {
       var a = this.filtradosEMarcadosEAssinaveis;
       this.$router.push({
         name: "Documento",
-        params: { numero: a[0].id, lista: a },
+        params: { numero: a[0].id },
       });
     },
 
@@ -375,6 +369,11 @@ export default {
       var a = this.filtradosEMarcadosEAssinaveis;
       Bus.$emit("iniciarAssinaturaComSenha", a, this.removerDocumentosDesabilitados);
       // Bus.$emit('assinarComSenha', a)
+    },
+
+    assinarPadroesExatosComSenhaEmLote: function() {
+      var a = this.assinaveisEPadrao;
+      Bus.$emit("iniciarAssinaturaComSenha", a, this.removerDocumentosDesabilitados);
     },
 
     removerDocumentosDesabilitados: function() {

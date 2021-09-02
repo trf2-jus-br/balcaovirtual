@@ -149,7 +149,7 @@ export default {
 
   computed: {
     sitekey: function() {
-      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties["balcaovirtual.recaptcha.site.key"];
+      if (this.$parent.test && this.$parent.test.properties) return this.$parent.test.properties["balcaojus.recaptcha.site.key"];
       return "undefined";
     },
     sistemas: function() {
@@ -158,7 +158,7 @@ export default {
       for (var i = 0; i < this.$parent.sistemasCertificadores.length; i++) {
         a.push({
           id: this.$parent.sistemasCertificadores[i],
-          nome: this.$parent.test.properties["balcaovirtual." + this.$parent.sistemasCertificadores[i] + ".cert.name"]
+          nome: this.$parent.test.properties["balcaojus." + this.$parent.sistemasCertificadores[i] + ".cert.name"]
         });
       }
       return a;

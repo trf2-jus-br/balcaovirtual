@@ -6,13 +6,13 @@ export function initializeFirebase(registration, properties) {
   if (!firebase.messaging.isSupported()) return;
   console.log("firebase messaging supported");
   const firebaseConfig = {
-    apiKey: properties["balcaovirtual.firebase.api.key"],
-    authDomain: properties["balcaovirtual.firebase.auth.domain"],
-    databaseURL: properties["balcaovirtual.firebase.database.url"],
-    projectId: properties["balcaovirtual.firebase.project.id"],
-    storageBucket: properties["balcaovirtual.firebase.storage.bucket"],
-    messagingSenderId: properties["balcaovirtual.firebase.messaging.sender.id"],
-    appId: properties["balcaovirtual.firebase.app.id"]
+    apiKey: properties["balcaojus.firebase.api.key"],
+    authDomain: properties["balcaojus.firebase.auth.domain"],
+    databaseURL: properties["balcaojus.firebase.database.url"],
+    projectId: properties["balcaojus.firebase.project.id"],
+    storageBucket: properties["balcaojus.firebase.storage.bucket"],
+    messagingSenderId: properties["balcaojus.firebase.messaging.sender.id"],
+    appId: properties["balcaojus.firebase.app.id"]
   };
 
   firebase.initializeApp(firebaseConfig);

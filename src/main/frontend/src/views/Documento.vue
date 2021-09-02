@@ -50,7 +50,6 @@
                         name: 'Documento',
                         params: {
                           numero: anteriorDocumento.id,
-                          lista: this.lista,
                           transitionName: 'slide-right',
                         },
                       }
@@ -70,7 +69,6 @@
                         name: 'Documento',
                         params: {
                           numero: (proximoDocumento || { id: '' }).id,
-                          lista: this.lista,
                           transitionName: 'slide-left',
                         },
                       }
@@ -224,9 +222,8 @@ export default {
         return this.$store.commit("setExibirDiferencas", newValue);
       },
     },
-
     lista() {
-      return this.$route.params.lista ? this.$route.params.lista : this.$store.state.documentos;
+      return this.$store.getters.documentosFiltrados;
     },
     documento() {
       if (!this.$store.state.documentos) return;
@@ -336,7 +333,6 @@ export default {
           name: "Documento",
           params: {
             numero: this.proximoDocumento.id,
-            lista: this.lista,
             transitionName: "slide-left",
           },
         });

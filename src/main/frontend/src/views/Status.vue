@@ -44,7 +44,7 @@
             <tbody>
               <tr v-for="u in $parent.jwt.user" :key="u.id">
                 <td>
-                  <span :title="'Sigla do Sistema: ' + u.sistema">{{ $parent.test.properties["balcaovirtual." + u.sistema + ".name"] }}</span>
+                  <span :title="'Sigla do Sistema: ' + u.sistema">{{ $parent.test.properties["balcaojus." + u.sistema + ".name"] }}</span>
                 </td>
                 <td>
                   <span :title="'ID Usuário: ' + u.ieusu">{{ u.origin === "int" ? "interno" : "externo" }}</span>
@@ -85,7 +85,7 @@
             <tbody>
               <tr v-for="s in $parent.sistemas" :key="s.id">
                 <td>
-                  <span :title="'Identificador: ' + s">{{ $parent.test.properties["balcaovirtual." + s + ".name"] }}</span>
+                  <span :title="'Identificador: ' + s">{{ $parent.test.properties["balcaojus." + s + ".name"] }}</span>
                 </td>
                 <td>
                   <span v-bind:class="classeDoTeste(apis, s)">

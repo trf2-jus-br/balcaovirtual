@@ -282,7 +282,7 @@
                 </td>
                 <td>{{ r.protocolo }}</td>
                 <td>
-                  {{ $parent.test.properties["balcaovirtual." + r.sistema + ".name"] }}
+                  {{ $parent.test.properties["balcaojus." + r.sistema + ".name"] }}
                 </td>
                 <td>{{ r.unidade }}</td>
               </tr>
@@ -540,7 +540,7 @@ export default {
             if (response.data.list && response.data.list.length > 0 && response.data.list[0].numero) {
               var d = response.data.list[0];
               a.sistema = d.sistema;
-              a.status = d.unidade + " - " + this.$parent.test.properties["balcaovirtual." + d.sistema + ".name"];
+              a.status = d.unidade + " - " + this.$parent.test.properties["balcaojus." + d.sistema + ".name"];
               a.valido = true;
               this.$http.get("processo/" + ProcessoBL.somenteNumeros(a.processo) + "/peticao-intercorrente/validar?sistema=" + a.sistema, { block: true }).then(
                 response => {

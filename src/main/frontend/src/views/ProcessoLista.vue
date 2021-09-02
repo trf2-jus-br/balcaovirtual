@@ -129,7 +129,7 @@
                   ></span>
                 </td>
                 <td>
-                  <span :title="'Sigla do Sistema: ' + p.sistema">{{ $parent.test.properties["balcaovirtual." + p.sistema + ".name"] }}</span>
+                  <span :title="'Sigla do Sistema: ' + p.sistema">{{ $parent.test.properties["balcaojus." + p.sistema + ".name"] }}</span>
                 </td>
                 <td>{{ p.unidade }}</td>
                 <td>{{ p.digitalFormatado }}</td>

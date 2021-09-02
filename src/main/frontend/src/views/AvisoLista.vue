@@ -35,7 +35,7 @@
             <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }" />
           </div>
         </div>
-        <div v-if="filtradosEMarcados.length || (exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod')" class="col-sm-2 ml-sm-auto">
+        <div v-if="filtradosEMarcados.length || (exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaojus.env'] !== 'prod')" class="col-sm-2 ml-sm-auto">
           <div class="btn-group btn-block" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Avançado
@@ -43,7 +43,7 @@
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <router-link
                 class="dropdown-item"
-                v-if="exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaovirtual.env'] !== 'prod'"
+                v-if="exibirConsultarConfirmados &amp;&amp; $parent.test.properties['balcaojus.env'] !== 'prod'"
                 :to="{ name: 'Avisos Confirmados Recentemente' }"
                 tag="a"
                 exact
@@ -252,7 +252,7 @@
                   </td>
                   <td v-if="exibirAssunto">{{ r.assuntoNome }}</td>
                   <td>
-                    <span :title="'Identificador: ' + r.sistema">{{ $parent.test.properties["balcaovirtual." + r.sistema + ".name"] }}</span>
+                    <span :title="'Identificador: ' + r.sistema">{{ $parent.test.properties["balcaojus." + r.sistema + ".name"] }}</span>
                   </td>
                   <td v-if="!r.sistema.includes('.apolo')" :title="r.unidadenome">
                     {{ r.unidade }}
