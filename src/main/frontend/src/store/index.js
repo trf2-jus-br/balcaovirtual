@@ -24,6 +24,8 @@ const store = new Vuex.Store({
     exibirDiferencas: true,
 
     votos: undefined,
+    votosFiltro: undefined,
+    votosSessao: undefined,
 
     successMsg: undefined,
     errorMsg: undefined,
@@ -44,6 +46,36 @@ const store = new Vuex.Store({
           a[procline].rows++;
           a[i].rows = 0;
         }
+      }
+      return a;
+    },
+    votosFiltrados: state => {
+      var a = state.votos;
+      if (!a) return []
+      if (state.votosSessao)
+        a = a.filter(i => i.grupo === state.votosSessao)
+      if (state.votosFiltro)
+        a = UtilsBL.filtrarPorSubstring(a, state.votosFiltro);
+      var procnum, procline;
+      var grupo;
+      for (var i = 0; i < a.length; i++) {
+        if (procnum !== a[i].numeroDoProcesso) {
+          procnum = a[i].numeroDoProcesso;
+          procline = i;
+          a[i].rows = 1;
+        } else {
+          a[procline].rows++;
+          a[i].rows = 0;
+        }
+      }
+      var odd = false;
+      for (i = 0; i < a.length; i++) {
+        a[i].grupoExibir = a[i].grupo !== grupo;
+        grupo = a[i].grupo;
+        if (a[i].grupoExibir) odd = false;
+        if (a[i].grupoExibir && i > 0) a[i - 1].grupoEspacar = true;
+        if (a[i].rows) odd = !odd;
+        a[i].odd = odd;
       }
       return a;
     }
@@ -79,6 +111,12 @@ const store = new Vuex.Store({
     },
     setVotos(state, val) {
       state.votos = val
+    },
+    setVotosFiltro(state, val) {
+      state.votosFiltro = val
+    },
+    setVotosSessao(state, val) {
+      state.votosSessao = val
     },
     updateVoto(state, val) {
       var i = VotoBL.findIndice(state, val.id)
@@ -243,8 +281,11 @@ const store = new Vuex.Store({
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
             lista.push(VotoBL.fix(list[i]));
+            if (list[0].grupo === list[i].grupo && !list[i].statusCodigo) list[i].checked = true
           }
           commit('setVotos', lista)
+          if (lista.length && state.votosSessao === undefined)
+            commit('setVotosSessao', lista[0].grupo)
         },
         (error) => commit("setError", error)
       );

@@ -12,16 +12,16 @@
     </div>
 
     <div class="row d-print-none">
-      <div v-if="false" class="col-sm-auto ml-1 mb-3">
+      <div class="col-sm-auto ml-1 mb-3">
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text" id="btnGroupAddon">
-              <span class="fa fa-map-marker"></span>
+              <span class="fa fa-calendar"></span>
             </div>
           </div>
-          <select id="sessao" class="form-control" v-model="sessao" @change="selecionarSessao" name="sessao">
-            <option disabled selected hidden :value="undefined">[Selecionar]</option>
-            <option v-for="i in sessoes" :key="i" :value="i">{{ i.nome }}</option>
+          <select id="sessao" class="form-control" v-model="sessao" name="sessao">
+            <option selected :value="undefined">[Todas]</option>
+            <option v-for="i in sessoes" :key="i" :value="i">{{ i }}</option>
           </select>
         </div>
       </div>
@@ -67,12 +67,12 @@
           <table class="table table-sm table-borderless">
             <tbody>
               <template v-for="f in filtrados">
-                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo1'" class="table-group">
-                  <th colspan="6" class="pt-3 pb-0 pl-0">
+                <tr v-if="f.grupoExibir" :key="f.id + ':grupo1'" class="table-group">
+                  <th colspan="8" class="pt-3 pb-0 pl-0">
                     <h4 class="mb-1">{{ f.grupo }}</h4>
                   </th>
                 </tr>
-                <tr v-if="f.grupoExibir" :key="f.sigla + ':grupo2'" class="table-head thead-dark">
+                <tr v-if="f.grupoExibir" :key="f.id + ':grupo2'" class="table-head thead-dark">
                   <th style="text-align: center">
                     <input v-model="todos[f.grupo]" type="checkbox" name="progress_checkall" @change="marcarTodos(f.grupo)" />
                   </th>
@@ -85,7 +85,7 @@
                   <th>Réu</th>
                   <th></th>
                 </tr>
-                <tr v-bind:class="{ odd: f.odd }" :key="f.sigla + ':titulo'">
+                <tr v-bind:class="{ odd: f.odd }" :key="f.id + ':titulo'">
                   <td class="td-middle" style="text-align: center">
                     <input type="checkbox" v-model="f.checked" :disabled="f.disabled" />
                   </td>
@@ -131,7 +131,7 @@
                     <span v-if="f.errormsg" :class="{ red: true }">Erro {{ f.errormsg }} </span>
                   </td>
                 </tr>
-                <tr v-if="f.grupoEspacar" :key="f.sigla + ':grupo3'" class="table-group">
+                <tr v-if="f.grupoEspacar" :key="f.id + ':grupo3'" class="table-group">
                   <th colspan="6" class="pb-2 pb-0 pl-0"></th>
                 </tr>
               </template>
@@ -234,27 +234,27 @@
 </template>
 
 <script>
-import UtilsBL from "../bl/utils.js";
 import { Bus } from "../bl/bus.js";
 
 export default {
   name: "Votos",
   components: {},
 
-  mounted() {
+  async mounted() {
     this.errormsg = undefined;
 
     if (this.$route.params.manter) return;
 
-    this.$store.dispatch("carregarVotos");
+    await this.$store.dispatch("carregarVotos");
+    if (this.sessao) {
+      this.$set(this.todos, this.sessao, true);
+    }
   },
 
   data() {
     return {
       voto: undefined,
       votos: [],
-      sessao: undefined,
-      filtro: undefined,
       todos: {},
       errormsg: undefined,
       carregando: true,
@@ -262,37 +262,38 @@ export default {
   },
 
   computed: {
+    filtro: {
+      get() {
+        return this.$store.state.votosFiltro;
+      },
+      set(value) {
+        this.$store.commit("setVotosFiltro", value);
+      },
+    },
+    sessao: {
+      get() {
+        return this.$store.state.votosSessao;
+      },
+      set(value) {
+        this.$store.commit("setVotosSessao", value);
+      },
+    },
     lista() {
       return this.$store.state.votos ? this.$store.state.votos : [];
     },
-    filtrados: function() {
-      var a = this.lista;
-      a = UtilsBL.filtrarPorSubstring(a, this.filtro);
-      var procnum, procline;
-      var grupo;
-
-      for (var i = 0; i < a.length; i++) {
-        if (procnum !== a[i].numeroDoProcesso) {
-          procnum = a[i].numeroDoProcesso;
-          procline = i;
-          a[i].rows = 1;
-        } else {
-          a[procline].rows++;
-          a[i].rows = 0;
-        }
-      }
-
-      var odd = false;
-      for (i = 0; i < a.length; i++) {
-        a[i].grupoExibir = a[i].grupo !== grupo;
-        grupo = a[i].grupo;
-        if (a[i].grupoExibir) odd = false;
-        if (a[i].grupoExibir && i > 0) a[i - 1].grupoEspacar = true;
-        if (a[i].rows) odd = !odd;
-        a[i].odd = odd;
-      }
-
+    sessoes() {
+      if (!this.lista) return [];
+      const a = [];
+      let last = undefined;
+      this.lista.forEach((i) => {
+        if (i.grupo === last) return;
+        last = i.grupo;
+        a.push(last);
+      });
       return a;
+    },
+    filtrados: function() {
+      return this.$store.getters.votosFiltrados;
     },
 
     filtradosEMarcados: function() {
@@ -306,17 +307,14 @@ export default {
         return true;
       });
     },
-    sessoes() {
-      return [];
-    },
   },
 
   methods: {
     marcarTodos(grupo) {
-      const docs = this.filtrados
+      const docs = this.filtrados;
       for (let i = 0; i < docs.length; i++) {
-        const doc = docs[i]
-        if (doc.grupo === grupo) doc.checked = this.todos[grupo]
+        const doc = docs[i];
+        if (doc.grupo === grupo) doc.checked = this.todos[grupo] && !doc.statusCodigo;
       }
     },
 

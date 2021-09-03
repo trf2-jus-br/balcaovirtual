@@ -135,7 +135,10 @@ public class Texto {
 					sb.append(ch.toLowerCase());
 			} else {
 				sb.append(ch);
-				f = true;
+				if ("0123456789".contains(ch))
+					f = false;
+				else
+					f = true;
 			}
 		}
 

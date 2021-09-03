@@ -59,7 +59,7 @@ public class VotosGet implements IVotosGet {
 //				i.tipoDoDocumento = Texto.maiusculasEMinusculas(a.tipoDoDocumento);
 //				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
 //				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
-				i.siglaDaUnidade = a.siglaDaUnidade;
+				i.siglaDaUnidade = Texto.maiusculasEMinusculas(a.siglaDaUnidade);
 				i.conteudo = a.conteudo;
 				i.sistema = system;
 				i.sequencia = a.sequencia;
