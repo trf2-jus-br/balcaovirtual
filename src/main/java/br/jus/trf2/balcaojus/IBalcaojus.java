@@ -241,9 +241,10 @@ public interface IBalcaojus {
 	}
 
 	public static class Voto implements ISwaggerModel {
-		public String sistema;
-		public Date dataDeInclusao;
 		public String id;
+		public Date dataDeInclusao;
+		public String siglaDaUnidade;
+		public String sequencia;
 		public String numeroDoDocumento;
 		public String numeroDoProcesso;
 		public String relator;
@@ -251,12 +252,11 @@ public interface IBalcaojus {
 		public String reu;
 		public String descricao;
 		public String status;
-		public String siglaDaUnidade;
-		public String sequencia;
 		public String conteudo;
 		public String acompanhamentos;
 		public String divergencias;
 		public String pedidosDeVista;
+		public String sistema;
 		public List<VotoProferido> votosProferidos = new ArrayList<>();
 	}
 
@@ -264,8 +264,8 @@ public interface IBalcaojus {
 		public Date dataDeInclusao;
 		public String magistrado;
 		public String voto;
-		public Boolean proprio;
 		public String codigoTipo;
+		public Boolean proprio;
 	}
 
 	public static class PadraoItem implements ISwaggerModel {
@@ -428,6 +428,7 @@ public interface IBalcaojus {
 
 		public static class Response implements ISwaggerResponse {
 			public String status;
+			public Voto voto;
 		}
 
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
@@ -441,6 +442,7 @@ public interface IBalcaojus {
 
 		public static class Response implements ISwaggerResponse {
 			public String status;
+			public Voto voto;
 		}
 
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
@@ -454,6 +456,7 @@ public interface IBalcaojus {
 
 		public static class Response implements ISwaggerResponse {
 			public String status;
+			public Voto voto;
 		}
 
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;

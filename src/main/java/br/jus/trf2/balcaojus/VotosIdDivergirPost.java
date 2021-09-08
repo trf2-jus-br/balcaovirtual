@@ -33,6 +33,7 @@ public class VotosIdDivergirPost implements IVotosIdDivergirPost {
 		IUsuarioUsernameVotosIdDivergirPost.Response r = (IUsuarioUsernameVotosIdDivergirPost.Response) sar.getResp();
 
 		resp.status = r.status;
+		resp.voto = VotosGet.buildVoto(req.sistema, r.voto);
 	}
 
 	@Override

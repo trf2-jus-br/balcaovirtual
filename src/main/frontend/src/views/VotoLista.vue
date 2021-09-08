@@ -339,10 +339,10 @@ export default {
             centered: true,
           })
           .then((value) => {
-            if (value) Bus.$emit("acompanhar", a, this.removerDocumentosDesabilitados);
+            if (value) Bus.$emit("acompanhar", a);
           })
           .catch((err) => {});
-      else Bus.$emit("acompanhar", a, this.removerDocumentosDesabilitados);
+      else Bus.$emit("acompanhar", a);
     },
 
     divergirEmLote: function() {
@@ -358,10 +358,10 @@ export default {
             centered: true,
           })
           .then((value) => {
-            if (value) Bus.$emit("divergir", a, this.removerDocumentosDesabilitados);
+            if (value) Bus.$emit("divergir", a);
           })
           .catch((err) => {});
-      else Bus.$emit("divergir", a, this.removerDocumentosDesabilitados);
+      else Bus.$emit("divergir", a);
     },
 
     pedirVistaEmLote: function() {
@@ -377,19 +377,10 @@ export default {
             centered: true,
           })
           .then((value) => {
-            if (value) Bus.$emit("pedirVista", a, this.removerDocumentosDesabilitados);
+            if (value) Bus.$emit("pedirVista", a);
           })
           .catch((err) => {});
-      else Bus.$emit("pedirVista", a, this.removerDocumentosDesabilitados);
-    },
-
-    removerDocumentosDesabilitados: function() {
-      console.log(this.lista);
-      var a = this.lista.filter(function(item) {
-        return !item.disabled;
-      });
-      this.$store.commit("setVotos", a);
-      console.log(this.lista);
+      else Bus.$emit("pedirVista", a);
     },
   },
 };

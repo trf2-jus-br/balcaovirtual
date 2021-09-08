@@ -121,7 +121,9 @@ const store = new Vuex.Store({
     updateVoto(state, val) {
       var i = VotoBL.findIndice(state, val.id)
       if (i === undefined) throw "Voto não encontrado"
-      Vue.set(state.votos, i, val)
+      // state.votos[i] = VotoBL.fix(val)
+      const voto = VotoBL.fix(val)
+      Vue.set(state.votos, i, voto)
     },
 
     setExibirDiferencas(state, val) {
@@ -304,6 +306,7 @@ const store = new Vuex.Store({
         )
         .then(
           (response) => {
+            commit("updateVoto", response.data.voto)
             UtilsBL.logEvento("voto", "acompanhar", "acompanhar");
             commit("clearMsg");
           },
@@ -324,6 +327,7 @@ const store = new Vuex.Store({
         )
         .then(
           (response) => {
+            commit("updateVoto", response.data.voto)
             UtilsBL.logEvento("voto", "divergir", "divergir");
             commit("clearMsg");
           },
@@ -346,6 +350,7 @@ const store = new Vuex.Store({
         )
         .then(
           (response) => {
+            commit("updateVoto", response.data.voto)
             UtilsBL.logEvento("voto", "pedirVista", "pedirVista");
             commit("clearMsg");
           },

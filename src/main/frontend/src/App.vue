@@ -517,7 +517,6 @@ export default {
       await this.$store.dispatch("acompanhar", { documento: d });
       if (!this.$store.state.errorMsg) {
         d.checked = false;
-        d.disabled = true;
       }
 
       Bus.$emit("prgNext");
@@ -539,7 +538,6 @@ export default {
       await this.$store.dispatch("divergir", { documento: d });
       if (!this.$store.state.errorMsg) {
         d.checked = false;
-        d.disabled = true;
       }
 
       Bus.$emit("prgNext");
@@ -561,7 +559,6 @@ export default {
       await this.$store.dispatch("pedirVista", { documento: d });
       if (!this.$store.state.errorMsg) {
         d.checked = false;
-        d.disabled = true;
       }
 
       Bus.$emit("prgNext");

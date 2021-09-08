@@ -18,12 +18,21 @@ import Vue from "vue";
 import VueResource from "vue-resource";
 import VueAnalytics from "vue-analytics";
 import VueClip from "vue-clip";
-import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
+import {
+  ValidationProvider,
+  ValidationObserver,
+  extend
+} from "vee-validate";
 import ptBR from "vee-validate/dist/locale/pt_BR";
-import BootstrapVue, { ModalPlugin, TooltipPlugin } from "bootstrap-vue";
+import BootstrapVue, {
+  ModalPlugin,
+  TooltipPlugin
+} from "bootstrap-vue";
 import App from "./App";
 import router from "./router";
-import { Bus } from "./bl/bus.js";
+import {
+  Bus
+} from "./bl/bus.js";
 import ValidacaoBL from "./bl/validacao.js";
 import vSelect from "vue-select";
 import AwesomeMask from "awesome-mask";
@@ -37,7 +46,7 @@ Vue.config.productionTip = false;
 
 extend("email", {
   message: field => "Email inválido.",
-  validate: function(value) {
+  validate: function (value) {
     // eslint-disable-next-line
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(value));
@@ -46,7 +55,7 @@ extend("email", {
 
 extend("required", {
   message: field => "Campo obrigatório.",
-  validate: function(s) {
+  validate: function (s) {
     return !!s;
   },
   computesRequired: true
@@ -84,7 +93,10 @@ ptBR.messages.oab = field => "OAB " + field + " inválido";
 
 Vue.use(VueResource);
 Vue.use(VueClip);
-Vue.use(VueAnalytics, { id: "UA-100085353-2", router });
+Vue.use(VueAnalytics, {
+  id: "UA-100085353-2",
+  router
+});
 // Vue.use(VeeValidate)
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
@@ -92,10 +104,17 @@ Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
 Vue.use(TooltipPlugin);
 Vue.use(VueTheMask);
-Vue.use(vSelectPage, { language: "pt_br", pagination: false });
+Vue.use(vSelectPage, {
+  language: "pt_br",
+  pagination: false
+});
 
-Vue.component("my-select", MySelect, { inheritAttrs: false });
-Vue.component("my-input", MyInput, { inheritAttrs: false });
+Vue.component("my-select", MySelect, {
+  inheritAttrs: false
+});
+Vue.component("my-input", MyInput, {
+  inheritAttrs: false
+});
 // Vue.directive('themask', mask)
 Vue.directive("awemask", AwesomeMask);
 
@@ -110,11 +129,11 @@ Vue.http.options.credentials = true;
 /* eslint-disable no-new */
 new Vue({
   mounted() {
-    Vue.http.interceptors.push(function(request, next) {
+    Vue.http.interceptors.push(function (request, next) {
       if (request.block) Bus.$emit("block", request.blockmin, request.blockmax);
 
       // continue to next interceptor
-      next(function(response) {
+      next(function (response) {
         if (request.block) Bus.$emit("release");
         if (response.status === 401) Bus.$emit("unauthorized");
       });

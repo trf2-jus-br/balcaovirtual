@@ -35,6 +35,7 @@ public class VotosIdAcompanharPost implements IVotosIdAcompanharPost {
 				.getResp();
 
 		resp.status = r.status;
+		resp.voto = VotosGet.buildVoto(req.sistema, r.voto);
 	}
 
 	@Override

@@ -60,7 +60,6 @@ export default {
   findIndice(state, id) {
     if (!state.votos) return;
     for (var i = 0; i < state.votos.length; i++) {
-      console.log(state.votos[i].id + " - " + id)
       if (state.votos[i].id === id) return i;
     }
     return;

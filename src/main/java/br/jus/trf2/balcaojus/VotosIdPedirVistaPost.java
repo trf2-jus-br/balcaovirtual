@@ -34,6 +34,7 @@ public class VotosIdPedirVistaPost implements IVotosIdPedirVistaPost {
 				.getResp();
 
 		resp.status = r.status;
+		resp.voto = VotosGet.buildVoto(req.sistema, r.voto);
 	}
 
 	@Override

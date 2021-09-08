@@ -196,7 +196,7 @@ export default {
     indice: function() {
       if (this.lista)
         for (var i = 0; i < this.lista.length; i++) {
-          if (this.voto === this.lista[i]) return i;
+          if (this.voto.id === this.lista[i].id) return i;
         }
       return 0;
     },
