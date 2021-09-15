@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'" class="row no-gutters mt-2">
+        <div v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVO'" class="row no-gutters mt-2">
           <div class="col col-auto ml-auto mb-3">
             <button type="button" @click="imprimir()" id="imprimir" class="btn btn-info d-print-none">
               <span class="fa fa-print"></span>
@@ -53,13 +53,13 @@
           </div>
         </div>
 
-        <div class="row" v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVA'">
+        <div class="row" v-if="tipo == 'NEGATIVO' || tipo == 'POSITIVO'">
           <div class="col col-sm-12">
             <p
               :class="{
                 alert: true,
                 'alert-success': tipo == 'NEGATIVO',
-                'alert-danger': tipo == 'POSITIVA'
+                'alert-danger': tipo == 'POSITIVO'
               }"
               role="alert"
               v-html="html"
