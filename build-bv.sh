@@ -7,10 +7,10 @@ cd ../eproc-api
 mvn clean install -U
 cd ../apolo-api
 mvn clean install -U
-cd ../balcaovirtual
+cd ../balcaojus
 mvn clean install -U
 
-mv ../balcaovirtual/target/balcaovirtual.war TRF2-SR-2017_NATO-TMP
+mv ../balcaojus/target/balcaovirtual.war TRF2-SR-2017_NATO-TMP
 cp ../eproc-api/target/eproc-api.war TRF2-SR-2017_NATO-TMP/eproc-api-sjrj.war
 cp ../eproc-api/target/eproc-api.war TRF2-SR-2017_NATO-TMP/eproc-api-sjes.war
 cp ../eproc-api/target/eproc-api.war TRF2-SR-2017_NATO-TMP/eproc-api-trf2.war
