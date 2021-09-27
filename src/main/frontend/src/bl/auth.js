@@ -3,11 +3,11 @@ import decode from "jwt-decode";
 const ID_TOKEN_KEY = "bv-jwt";
 
 export default {
-  logout: function() {
+  logout: function () {
     this.clearIdToken();
   },
 
-  getCookie: function(cname) {
+  getCookie: function (cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(";");
@@ -23,23 +23,23 @@ export default {
     return "";
   },
 
-  getIdToken: function() {
+  getIdToken: function () {
     return this.getCookie(ID_TOKEN_KEY);
   },
 
-  clearIdToken: function() {
+  clearIdToken: function () {
     document.cookie = ID_TOKEN_KEY + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   },
 
   // Get and store id_token in local storage
-  setIdToken: function(idToken) {},
+  setIdToken: function (idToken) {},
 
-  isLoggedIn: function() {
+  isLoggedIn: function () {
     const idToken = this.getIdToken();
     return !!idToken && !this.isTokenExpired(idToken);
   },
 
-  decodeToken: function(encodedToken) {
+  decodeToken: function (encodedToken) {
     var decoded = decode(encodedToken);
     if (decoded && decoded.users) {
       var a = decoded.users.split(";");
@@ -69,14 +69,14 @@ export default {
     };
     decoded.isDesembargador = () => {
       for (var sistema in decoded.user) {
-        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" && decoded.user[sistema].unidade.startsWith("GAB")) return true;
+        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" && (decoded.user[sistema].unidade.startsWith("GAB") || decoded.user[sistema].unidade.startsWith("SUB"))) return true;
       }
       return false;
     };
     return decoded;
   },
 
-  getTokenExpirationDate: function(encodedToken) {
+  getTokenExpirationDate: function (encodedToken) {
     const token = decode(encodedToken);
     if (!token.exp) {
       return null;
@@ -88,7 +88,7 @@ export default {
     return date;
   },
 
-  isTokenExpired: function(token) {
+  isTokenExpired: function (token) {
     const expirationDate = this.getTokenExpirationDate(token);
     return expirationDate < new Date();
   }

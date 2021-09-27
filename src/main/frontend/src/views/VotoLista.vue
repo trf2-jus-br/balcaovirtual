@@ -38,19 +38,19 @@
       <div class="col-auto ml-auto" v-if="(filtradosEMarcadosEVotaveis || []).length">
         <button v-if="false" type="button" @click="revisar()" class="btn btn-info ml-1 mb-3" title="">
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
+          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="acompanharEmLote()" class="btn btn-primary ml-1 mb-3" title="">
-          <span class="fa fa-thumbs-o-up"></span> Acompanhar&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
+        <button type="button" @click="acompanharEmLote()" class="btn btn-success ml-1 mb-3" title="">
+          <span class="fa fa-thumbs-o-up"></span> Acompanhar o Relator&nbsp;&nbsp;
+          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="divergirEmLote()" class="btn btn-primary ml-1 mb-3" title="">
-          <span class="fa fa-thumbs-o-down"></span> Divergir&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
+        <button type="button" @click="divergirEmLote()" class="btn btn-danger ml-1 mb-3" title="">
+          <span class="fa fa-thumbs-o-down"></span> Acompanhar a Divergência&nbsp;&nbsp;
+          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
-        <button type="button" @click="pedirVistaEmLote()" class="btn btn-info ml-1 mb-3" title="">
+        <button type="button" @click="pedirVistaEmLote()" class="btn btn-warning ml-1 mb-3" title="">
           <span class="fa fa-eye"></span> Pedir Vista&nbsp;&nbsp;
-          <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEVotaveis.length }}</span>
+          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
       </div>
     </div>
@@ -246,8 +246,10 @@ export default {
     if (this.$route.params.manter) return;
 
     await this.$store.dispatch("carregarVotos");
-    if (this.sessao) {
-      this.$set(this.todos, this.sessao, true);
+    if (this.lista) {
+      this.lista.forEach((i) => {
+        if (i.checked && !this.todos[i.grupo]) this.$set(this.todos, i.grupo, true);
+      });
     }
   },
 

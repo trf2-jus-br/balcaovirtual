@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from '../store'
+import Home from "@/views/Home";
 import ConsultaSimples from "@/views/ConsultaSimples";
 import Processo from "@/views/Processo";
 import ProcessoLista from "@/views/ProcessoLista";
@@ -33,9 +34,14 @@ const router = new Router({
       component: Login
     },
     {
-      path: "/",
+      path: "/consultar",
       name: "Consulta Simples",
       component: ConsultaSimples
+    },
+    {
+      path: "/",
+      name: "Home",
+      component: Home
     },
     {
       path: "/consultar/:numero",

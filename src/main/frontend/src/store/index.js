@@ -283,7 +283,7 @@ const store = new Vuex.Store({
           var list = response.data.list;
           for (var i = 0; i < list.length; i++) {
             lista.push(VotoBL.fix(list[i]));
-            if (list[0].grupo === list[i].grupo && !list[i].statusCodigo) list[i].checked = true
+            if (!list[i].statusCodigo) list[i].checked = true
           }
           commit('setVotos', lista)
           if (lista.length && state.votosSessao === undefined)

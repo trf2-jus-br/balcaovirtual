@@ -55,9 +55,7 @@ export default {
       this.$http.post("autenticar", this.user, { block: true }).then(
         (response) => {
           this.$parent.$emit("updateLogged", response.data.id_token);
-          if (this.$parent.jwt.isDesembargador()) this.$router.push({ name: "Lista de Votos" });
-          else if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: "Mesa", params: {revisar: true }});
-          else this.$router.push({ name: "Consulta Simples" });
+          this.$router.push({ name: "Home" });
         },
         (error) => UtilsBL.errormsg(error, this)
       );

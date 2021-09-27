@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid content profile" v-if="voto">
     <div class="row mt-3" v-if="errormsg !== undefined">
-      <div class="col col-sm-12">
+      <div class="col col-12">
         <p class="alert alert-danger">
           {{ errormsg }}
         </p>
@@ -9,20 +9,27 @@
     </div>
 
     <div class="row mt-3 mb-3">
-      <div class="col-md-12">
-        <h4 class="text-center mb-0" v-if="voto">{{ voto.tipoDoDocumento ? voto.tipoDoDocumento : 'Voto' }} {{ voto.numeroDoDocumento }}</h4>
+      <div class="col col-12">
+        <h4 class="text-center mb-0" v-if="voto">
+          {{ voto.tipoDoDocumento ? voto.tipoDoDocumento : "Voto" }} {{ voto.numeroDoDocumento }}
+        </h4>
       </div>
     </div>
 
     <div class="row">
-      <div class="col col-lg-8">
+      <div class="col col-12 col-lg-8">
         <div class="row no-gutters mt-2">
           <div class="col col-auto mb-3">
-            <router-link :to="{ name: 'Lista de Votos', params: { manter: false } }" tag="button" class="btn btn-light d-print-none"
-              ><span class="fa fa-list"></span> Lista  {{ progresso }}</router-link
+            <router-link
+              :to="{ name: 'Lista de Votos', params: { manter: false } }"
+              tag="button"
+              class="btn btn-light d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para retornar para a lista de votos.'"
+              title="Lista"
+              ><span class="fa fa-list"></span> Lista {{ progresso }}</router-link
             >
           </div>
-          <div class="col col-auto mb-3">
+          <div class="col col-auto mb-3 ml-1">
             <router-link
               :disabled="!anteriorVoto"
               :to="{
@@ -35,10 +42,12 @@
               }"
               tag="button"
               class="btn btn-light d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para navegar para o voto anterior.'"
+              title="Anterior"
               ><span class="fa fa-arrow-left"></span> Anterior</router-link
             >
           </div>
-          <div class="col col-auto mb-3">
+          <div class="col col-auto mb-3 ml-1">
             <router-link
               :disabled="!proximoVoto"
               :to="{
@@ -51,6 +60,8 @@
               }"
               tag="button"
               class="btn btn-light d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para navegar para o próximo voto.'"
+              title="Próximo"
               ><span class="fa fa-arrow-right"></span> Próximo</router-link
             >
           </div>
@@ -61,22 +72,40 @@
           </div>
         </div>
       </div>
-      <div class="col col-lg-4">
+      <div class="col col-12 col-lg-4">
         <div class="row no-gutters mt-2">
           <div class="col col-auto ml-auto mb-3 d-none d-lg-block"></div>
           <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
-            <button @click.prevent="acompanhar()" type="button" class="btn btn-primary d-print-none">
-              <span class="fa fa-thumbs-o-up"></span> Acompanhar
+            <button
+              @click.prevent="acompanhar()"
+              type="button"
+              class="btn btn-success d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para indicar que deseja acompanhar o relator.'"
+              title="Acompanhar o Relator"
+            >
+              <span class="fa fa-thumbs-o-up"></span>
             </button>
           </div>
           <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
-            <button @click.prevent="divergir()" type="button" class="btn btn-primary d-print-none">
-              <span class="fa fa-thumbs-o-down"></span> Divergir
+            <button
+              @click.prevent="divergir()"
+              type="button"
+              class="btn btn-danger d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para indicar que deseja acompanhar a divergência.'"
+              title="Acompanhar a Divergência"
+            >
+              <span class="fa fa-thumbs-o-down"></span>
             </button>
           </div>
           <div class="col col-auto ml-1 mb-3" v-if="!voto.disabled">
-            <button @click.prevent="pedirVista()" type="button" class="btn btn-info d-print-none">
-              <span class="fa fa-eye"></span> Pedir Vista
+            <button
+              @click.prevent="pedirVista()"
+              type="button"
+              class="btn btn-warning d-print-none"
+              v-b-popover.hover.top="'Utilize esse botão para indicar que deseja pedir vista.'"
+              title="Pedir Vista"
+            >
+              <span class="fa fa-eye"></span>
             </button>
           </div>
         </div>
@@ -98,16 +127,16 @@
               >
               <br />Cadastro:
               <span v-html="voto.dataDeInclusaoFormatada"></span>
-              <br />Relator: {{voto.relator}}
+              <br />Relator: {{ voto.relator }}
             </p>
           </div>
         </div>
         <div class="card mb-3">
           <div class="card-header">
             Votos Proferidos
-
-             <span class="float-right" v-if="voto.acompanhamentos != '0' || voto.divergencias != '0'">
-                  {{ voto.acompanhamentos }} x {{ voto.divergencias }}</span>
+            <span class="float-right" v-if="voto.acompanhamentos != '0' || voto.divergencias != '0'">
+              {{ voto.acompanhamentos }} x {{ voto.divergencias }}</span
+            >
           </div>
           <div class="card-body p-0">
             <table class="table table-striped table-sm mb-0">

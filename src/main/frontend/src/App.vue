@@ -13,7 +13,7 @@
               'navbar-dark bg-primary': test.properties['balcaojus.env'] === 'prod',
             }"
           >
-            <a class="navbar-brand pt-0 pb-0" href="#">
+            <a class="navbar-brand pt-0 pb-0" href="#/">
               <img id="logo-header" src="./assets/balcaojus-38px.png" alt="Logo Balcão Virtual" height="38" />
               <img class="ml-2" id="logo-header2" src="./assets/trf2-38px-2.png" alt="Logo TRF2" height="38" />
             </a>
@@ -70,6 +70,9 @@
                       ><span class="badge badge-pill badge-light">Aguarde...</span></sup
                     ></router-link
                   >
+                </li>
+                <li class="nav-item">
+                  <a href="http://audiencias.jfrj.jus.br/Login.aspx" class="nav-link">Audiências</a>
                 </li>
                 <li class="nav-item" v-if="mesaAtiva">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Mesa' }" tag="a">Minutas</router-link>
@@ -468,7 +471,7 @@ export default {
       AuthBL.logout();
       this.jwt = undefined;
       this.$emit("updateLogged", undefined);
-      this.$router.push({ name: "Consulta Simples" });
+      this.$router.push({ name: "Home" });
     },
 
     assinarComSenha: function(d, username, password, lote) {
@@ -523,13 +526,7 @@ export default {
     },
 
     acompanharEmLote: function(documentos, cont) {
-      Bus.$emit(
-        "prgStart",
-        "Acompanhando",
-        documentos.length,
-        (i) => this.acompanhar(documentos[i], documentos.length !== 1),
-        cont
-      );
+      Bus.$emit("prgStart", "Acompanhando", documentos.length, (i) => this.acompanhar(documentos[i], documentos.length !== 1), cont);
     },
 
     divergir: async function(d, lote) {
@@ -544,13 +541,7 @@ export default {
     },
 
     divergirEmLote: function(documentos, cont) {
-      Bus.$emit(
-        "prgStart",
-        "Divergindo",
-        documentos.length,
-        (i) => this.divergir(documentos[i], documentos.length !== 1),
-        cont
-      );
+      Bus.$emit("prgStart", "Divergindo", documentos.length, (i) => this.divergir(documentos[i], documentos.length !== 1), cont);
     },
 
     pedirVista: async function(d, lote) {
@@ -565,13 +556,7 @@ export default {
     },
 
     pedirVistaEmLote: function(documentos, cont) {
-      Bus.$emit(
-        "prgStart",
-        "Pedindo Vista",
-        documentos.length,
-        (i) => this.pedirVista(documentos[i], documentos.length !== 1),
-        cont
-      );
+      Bus.$emit("prgStart", "Pedindo Vista", documentos.length, (i) => this.pedirVista(documentos[i], documentos.length !== 1), cont);
     },
 
     atualizar: function() {
