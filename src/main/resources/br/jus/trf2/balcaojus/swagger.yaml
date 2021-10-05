@@ -35,6 +35,8 @@ tags:
     description: Configurações
   - name: utils
     description: Utilitários
+  - name: auth
+    description: Autenticação
 
 
 ################################################################################
@@ -69,6 +71,12 @@ parameters:
     name: password
     in: formData
     description: Senha do usuário
+    type: string
+    required: true
+  newpassword:
+    name: newpassword
+    in: formData
+    description: Nova Senha do usuário
     type: string
     required: true
   sistema:
@@ -491,11 +499,36 @@ paths:
   /autenticar:
     post:
       consumes: ["application/x-www-form-urlencoded"]
-      tags: [utils]
+      tags: [auth]
       parameters:
         - $ref: "#/parameters/username"
         - $ref: "#/parameters/password"
       description: Autenticar usuário
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              id_token:
+                type: string
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+  /trocar-senha:
+    post:
+      consumes: ["application/x-www-form-urlencoded"]
+      tags: [auth]
+      parameters:
+        - $ref: "#/parameters/username"
+        - $ref: "#/parameters/password"
+        - $ref: "#/parameters/newpassword"
+      description: Substituir a senha do usuário
       responses:
         200:
           description: Successful response

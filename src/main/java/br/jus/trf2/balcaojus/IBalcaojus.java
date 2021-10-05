@@ -391,6 +391,21 @@ public interface IBalcaojus {
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
 	}
 
+	public interface ITrocarSenhaPost extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String username;
+			public String password;
+			public String newpassword;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String id_token;
+			public List<ListStatus> status = new ArrayList<>();
+		}
+
+		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
+	}
+
 	public interface IStatusChaveGet extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String chave;

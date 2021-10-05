@@ -86,6 +86,23 @@ extend("cert", {
   validate: ValidacaoBL.validarCertidao
 });
 
+extend("password", {
+  message: field => "Senha deve ter 8 caracteres, maiúscula, minúscula, dígito e caractere especial ($#@&)",
+  validate: function (value) {
+    // eslint-disable-next-line
+    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$&@#])[0-9a-zA-Z$&@#]{8,}$/
+    return re.test(String(value));
+  },
+});
+
+extend("confirmed", {
+  message: field => "Repetição da senha deve ser igual a nova senha",
+  validate: (value, [otherValue]) => {
+    return value === otherValue;
+  },
+  hasTarget: true
+});
+
 ptBR.messages.cpf = field => "CPF " + field + " inválido";
 ptBR.messages.cnpj = field => "CNPJ " + field + " inválido";
 ptBR.messages.oab = field => "OAB " + field + " inválido";

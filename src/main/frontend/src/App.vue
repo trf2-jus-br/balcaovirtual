@@ -104,6 +104,7 @@
                   </a>
                   <div class="dropdown-menu logout" aria-labelledby="navbarDropdownMenuLink">
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'Status' }" tag="a" exact>Status</router-link>
+                    <router-link v-if="trocarSenhaAtiva" class="dropdown-item" active-class="active" :to="{ name: 'Trocar Senha' }" tag="a" exact>Trocar Senha</router-link>
                     <a v-if="mesaAtiva" class="dropdown-item" href="#/padrao-lista">
                       Padrões de Minutas
                     </a>
@@ -233,6 +234,8 @@ export default {
     });
 
     Bus.$on("unauthorized", () => {
+      console.log(this.$route)
+      if (this.$route.name === "Trocar Senha") return
       console.log("Não autorizado, redirecionando para o login");
       this.jwt = undefined;
       router.push({ name: "Login" });
@@ -444,6 +447,17 @@ export default {
         if (this.jwt.user.hasOwnProperty(prop)) {
           var u = this.jwt.user[prop];
           if (u.sistema && u.sistema.includes("eproc") && u.origin && u.origin == "ext") return true;
+        }
+      }
+      return false;
+    },
+
+    trocarSenhaAtiva: function() {
+      if (!this.jwt || !this.jwt.username) return false;
+      for (var prop in this.jwt.user) {
+        if (this.jwt.user.hasOwnProperty(prop)) {
+          var u = this.jwt.user[prop];
+          if (u.sistema && u.sistema.includes("apolo")) return true;
         }
       }
       return false;

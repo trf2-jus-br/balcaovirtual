@@ -16,6 +16,7 @@ import EtiquetaLista from "@/views/EtiquetaLista";
 import Mesa from "@/views/Mesa";
 import Documento from "@/views/Documento";
 import Login from "@/views/Login";
+import TrocarSenha from "@/views/TrocarSenha";
 import Sugestoes from "@/views/Sugestoes";
 import Sobre from "@/views/Sobre";
 import Status from "@/views/Status";
@@ -32,6 +33,10 @@ const router = new Router({
       path: "/login",
       name: "Login",
       component: Login
+    }, {
+      path: "/trocar-senha",
+      name: "Trocar Senha",
+      component: TrocarSenha
     },
     {
       path: "/consultar",
