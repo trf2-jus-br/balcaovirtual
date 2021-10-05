@@ -434,6 +434,7 @@ export default {
 
     votosAtiva: function() {
       var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
+      f = f && this.test.properties['balcaojus.env'] !== 'prod';
       return f;
     },
 
