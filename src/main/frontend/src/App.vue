@@ -234,7 +234,6 @@ export default {
     });
 
     Bus.$on("unauthorized", () => {
-      console.log(this.$route)
       if (this.$route.name === "Trocar Senha") return
       console.log("Não autorizado, redirecionando para o login");
       this.jwt = undefined;
