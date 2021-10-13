@@ -70,6 +70,7 @@ public class VotosGet implements IVotosGet {
 		i.conteudo = a.conteudo;
 		i.sistema = system;
 		i.sequencia = a.sequencia;
+		i.tipoDeInclusao = a.tipoDeInclusao;
 
 		if (a.voto != null) {
 			int va = 0, vd = 0, vp = 0;

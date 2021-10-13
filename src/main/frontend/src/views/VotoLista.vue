@@ -77,6 +77,7 @@
                     <input v-model="todos[f.grupo]" type="checkbox" name="progress_checkall" @change="marcarTodos(f.grupo)" />
                   </th>
                   <th>Item</th>
+                  <th>Tipo</th>
                   <th>Status</th>
                   <th class="text-center">Placar</th>
                   <th>Relator</th>
@@ -97,6 +98,9 @@
                       }"
                       >{{ f.sequencia }}</router-link
                     >
+                  </td>
+                  <td class="td-middle">
+                    {{ f.tipoDeInclusao }}
                   </td>
                   <td class="td-middle text-center">
                     <span v-if="f.statusCodigo === '9'" class="fa fa-thumbs-o-up text-success"></span>

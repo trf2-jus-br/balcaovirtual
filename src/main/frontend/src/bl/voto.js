@@ -10,6 +10,7 @@ export default {
       dataDeInclusao: undefined,
       dataDeInclusaoFormatada: undefined,
       id: undefined,
+      tipoDeInclusao: undefined,
       numeroDoDocumento: undefined,
       tipoDoDocumento: undefined,
       numeroDoProcesso: undefined,

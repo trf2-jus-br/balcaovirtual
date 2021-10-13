@@ -245,6 +245,7 @@ public interface IBalcaojus {
 		public Date dataDeInclusao;
 		public String siglaDaUnidade;
 		public String sequencia;
+		public String tipoDeInclusao;
 		public String numeroDoDocumento;
 		public String numeroDoProcesso;
 		public String relator;
