@@ -34,7 +34,7 @@ public class VotosGet implements IVotosGet {
 			IUsuarioUsernameVotosGet.Request q = new IUsuarioUsernameVotosGet.Request();
 			q.username = u.usuario;
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - listar votos", Utils.getApiPassword(system), "GET",
+					new SwaggerCallParameters(system + " - listar votos", Utils.getApiEprocPassword(system), "GET",
 							Utils.getApiEprocVotosUrl(system) + "/sessao_julgamento?sigla=" + u.usuario, q,
 							IUsuarioUsernameVotosGet.Response.class));
 		}
