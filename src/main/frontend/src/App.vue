@@ -529,7 +529,7 @@ export default {
     },
 
     acompanhar: async function(d, lote) {
-      Bus.$emit("prgCaption", "Acompanhando o Relator" + d.numeroDoDocumento);
+      Bus.$emit("prgCaption", "Acompanhando o Relator " + (d.numeroDoDocumento!== undefined ? d.numeroDoDocumento : ""));
 
       await this.$store.dispatch("acompanhar", { documento: d });
       if (!this.$store.state.errorMsg) {
