@@ -72,7 +72,7 @@
                   >
                 </li>
                 <li class="nav-item">
-                  <a href="http://audiencias.jfrj.jus.br/Login.aspx" class="nav-link">Audiências</a>
+                  <a href="http://audiencias.jfrj.jus.br/Login.aspx" target="_blank" class="nav-link">Audiências</a>
                 </li>
                 <li class="nav-item" v-if="mesaAtiva">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Mesa' }" tag="a">Minutas</router-link>
