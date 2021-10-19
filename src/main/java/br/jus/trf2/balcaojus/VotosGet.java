@@ -71,7 +71,22 @@ public class VotosGet implements IVotosGet {
 		i.sistema = system;
 		i.sequencia = a.sequencia;
 		i.tipoDeInclusao = a.tipoDeInclusao;
+		
 
+		if (a.destaque !=null) {
+			i.destaques = new ArrayList<>();
+			for (ISistemaProcessual.DestaqueItem d:a.destaque) {
+				IBalcaojus.Destaque v = new IBalcaojus.Destaque();
+				v.dataDeInclusao = Utils.parsearDataHoraMinutoSegundo(d.dataDeInclusao);
+				v.magistrado = Texto.abreviarNome(Texto.maiusculasEMinusculas(d.magistrado));
+				v.voto = d.voto;
+				v.codigoTipo = d.codigoTipo;
+				v.conteudo = d.conteudo;
+				i.destaques.add(v);
+				
+			}
+		}
+		
 		if (a.voto != null) {
 			int va = 0, vd = 0, vp = 0;
 			i.votosProferidos = new ArrayList<>();

@@ -23,6 +23,7 @@ export default {
       conteudo: undefined,
       sistema: undefined,
       lembretes: undefined,
+      destaques:undefined,
       votosProferidos: undefined,
       errormsg: undefined,
       odd: undefined,
@@ -40,6 +41,7 @@ export default {
     }
     if (item.dataDeInclusaoFormatada && item.siglaDaUnidade)
       item.grupo = item.dataDeInclusaoFormatada + " - " + item.siglaDaUnidade
+
     if (item.votosProferidos) {
       for (var i = 0; i < item.votosProferidos.length; i++) {
         const v = item.votosProferidos[i]
@@ -50,8 +52,16 @@ export default {
         }
       }
     }
+
+    if (item.destaques) {
+      for (var k = 0; k < item.destaques.length; k++) {
+        item.destaques[k].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.destaques[k]);
+        
+      }
+    }
+
     if (item.lembretes) {
-      for (var j = 0; i < item.lembretes.length; i++) {
+      for (var j = 0; j < item.lembretes.length; j++) {
         item.lembretes[j].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.lembretes[j].dataDeInclusao);
       }
     }

@@ -259,6 +259,7 @@ public interface IBalcaojus {
 		public String pedidosDeVista;
 		public String sistema;
 		public List<VotoProferido> votosProferidos = new ArrayList<>();
+		public List<Destaque> destaques = new ArrayList<>();
 	}
 
 	public static class VotoProferido implements ISwaggerModel {
@@ -267,6 +268,15 @@ public interface IBalcaojus {
 		public String voto;
 		public String codigoTipo;
 		public Boolean proprio;
+	}
+	
+	public static class Destaque implements ISwaggerModel{
+		public Date dataDeInclusao;
+		public String magistrado;
+		public String voto;
+		public String codigoTipo;
+		public String conteudo;
+		
 	}
 
 	public static class PadraoItem implements ISwaggerModel {

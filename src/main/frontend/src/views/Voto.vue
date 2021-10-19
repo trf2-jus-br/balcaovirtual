@@ -66,11 +66,34 @@
             >
           </div>
         </div>
+
         <div class="card mb-3">
           <div class="card-body alert-warning">
             <p class="card-text" v-html="conteudo"></p>
           </div>
         </div>
+
+     
+
+        <template v-for="(destaque, index) in voto.destaques">
+        <div class="text-center mb-0" :key="index">
+        <h4 class="text-center mb-0" >
+             Divergência  
+          </h4>   
+      </div>
+
+        <div class="card mb-3" :key="index">
+          <div class="card-body alert-danger">
+            <p class="card-text" v-html="preprocess(destaque.conteudo)"></p>
+          </div>
+        </div>
+        <div class="text-right mb-0" :key="index">
+        <span class="text-right"> 
+           Magistrado: {{ destaque.magistrado }}  
+        </span>   
+     </div>
+        </template>  
+
       </div>
       <div class="col col-12 col-lg-4">
         <div class="row no-gutters mt-2">
@@ -93,6 +116,7 @@
               class="btn btn-danger d-print-none"
               v-b-popover.hover.top="'Utilize esse botão para indicar que deseja acompanhar a divergência.'"
               title="Acompanhar a Divergência"
+              :disabled="!temDivergencia"
             >
               <span class="fa fa-thumbs-o-down"></span>
             </button>
@@ -242,10 +266,15 @@ export default {
     conteudo() {
       return this.preprocess(this.voto.conteudo);
     },
+    
     progresso: function() {
       if (this.indice === undefined) return;
       if (!this.lista || this.lista.length === 0) return;
       return this.indice + 1 + "/" + this.lista.length;
+    },
+     temDivergencia: function() {
+      if (this.voto.divergencias > 0 ) return true;
+      return false; 
     },
   },
   methods: {
