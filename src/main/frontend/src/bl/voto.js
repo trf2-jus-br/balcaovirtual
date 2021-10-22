@@ -55,7 +55,8 @@ export default {
 
     if (item.destaques) {
       for (var k = 0; k < item.destaques.length; k++) {
-        item.destaques[k].dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(item.destaques[k]);
+        const v = item.destaques[k]
+        v.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(v.dataDeInclusao);
         
       }
     }
