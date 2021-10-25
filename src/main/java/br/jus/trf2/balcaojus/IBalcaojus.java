@@ -242,6 +242,7 @@ public interface IBalcaojus {
 
 	public static class Voto implements ISwaggerModel {
 		public String id;
+		public String idMinuta;
 		public Date dataDeInclusao;
 		public String siglaDaUnidade;
 		public String sequencia;
@@ -253,13 +254,13 @@ public interface IBalcaojus {
 		public String reu;
 		public String descricao;
 		public String status;
-		public String conteudo;
+//		public String conteudo;
 		public String acompanhamentos;
 		public String divergencias;
 		public String pedidosDeVista;
 		public String sistema;
-		public List<VotoProferido> votosProferidos = new ArrayList<>();
 		public List<Destaque> destaques = new ArrayList<>();
+		public List<VotoProferido> votosProferidos = new ArrayList<>();
 	}
 
 	public static class VotoProferido implements ISwaggerModel {
@@ -269,14 +270,13 @@ public interface IBalcaojus {
 		public String codigoTipo;
 		public Boolean proprio;
 	}
-	
-	public static class Destaque implements ISwaggerModel{
+
+	public static class Destaque implements ISwaggerModel {
 		public Date dataDeInclusao;
 		public String magistrado;
-		public String voto;
-		public String codigoTipo;
 		public String conteudo;
-		
+		public String codigoTipo;
+		public String voto;
 	}
 
 	public static class PadraoItem implements ISwaggerModel {
@@ -446,20 +446,6 @@ public interface IBalcaojus {
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
 	}
 
-	public interface IVotosIdConsultarMinutaGet extends ISwaggerMethod {
-		public static class Request implements ISwaggerRequest {
-			public String idMinuta;
-	
-		}
-
-		public static class Response implements ISwaggerResponse {
-			public String status;
-			public Voto minuta;
-		}
-
-		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
-	}
-	
 	public interface IVotosIdAcompanharPost extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String id;
@@ -497,6 +483,21 @@ public interface IBalcaojus {
 		public static class Response implements ISwaggerResponse {
 			public String status;
 			public Voto voto;
+		}
+
+		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
+	}
+
+	public interface IVotosIdConsultarMinutaGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String id;
+			public String sistema;
+			public String idminuta;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String status;
+			public String html;
 		}
 
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
@@ -671,7 +672,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1048,7 +1048,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1107,7 +1106,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1164,7 +1162,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1232,7 +1229,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1543,7 +1539,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1691,3 +1686,4 @@ public interface IBalcaojus {
 	}
 
 }
+

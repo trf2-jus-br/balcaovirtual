@@ -271,6 +271,12 @@ parameters:
     description: Órgao
     required: true
     type: string
+  idminutaquery:
+    name: idminuta
+    in: query
+    description: Id da minuta
+    required: true
+    type: string
   idclasse:
     name: idclasse
     in: formData
@@ -666,6 +672,29 @@ paths:
                 type: string
               voto:
                 $ref: "#/definitions/Voto"  
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /votos/{id}/consultar-minuta:
+    get:
+      description: Pedir vista de voto/processo em sessão de julgamento
+      tags: [voto]
+      parameters:
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/sistemaquery"
+        - $ref: "#/parameters/idminutaquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              html:
+                type: string
         500:
           description: Error ocurred
           schema:
@@ -2595,12 +2624,16 @@ definitions:
     properties:
       id:
         type: string
+      idMinuta:
+        type: string        
       dataDeInclusao:
         type: string
         format: date-time
       siglaDaUnidade:
         type: string
       sequencia:
+        type: string
+      tipoDeInclusao:
         type: string
       numeroDoDocumento:
         type: string
@@ -2616,8 +2649,6 @@ definitions:
         type: string
       status:
         type: string
-      conteudo:
-        type: string
       acompanhamentos:
         type: string
       divergencias:
@@ -2626,6 +2657,10 @@ definitions:
         type: string
       sistema:
         $ref: "#/definitions/Sistema"
+      destaques:
+        type: array
+        items:
+          $ref: "#/definitions/Destaque"
       votosProferidos:
         type: array
         items:
@@ -2646,6 +2681,22 @@ definitions:
         type: string
       proprio:
         type: boolean
+
+  Destaque:
+    description: Informações sobre o destaque
+    type: object
+    properties:
+      dataDeInclusao:
+        type: string
+        format: date-time
+      magistrado:
+        type: string
+      conteudo:
+        type: string
+      codigoTipo:
+        type: string
+      voto:
+        type: string
 
   PadraoItem:
     description: Mesa virtual

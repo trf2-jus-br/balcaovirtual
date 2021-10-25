@@ -20,7 +20,7 @@ export default {
       descricaoDoStatus: undefined,
       identificadorDoUsuarioQueIncluiu: undefined,
       nomeDoUsuarioQueIncluiu: undefined,
-      conteudo: undefined,
+      htmlMinuta: undefined,
       sistema: undefined,
       lembretes: undefined,
       destaques:undefined,
@@ -57,7 +57,6 @@ export default {
       for (var k = 0; k < item.destaques.length; k++) {
         const v = item.destaques[k]
         v.dataDeInclusaoFormatada = UtilsBL.formatJSDDMMYYYY(v.dataDeInclusao);
-        
       }
     }
 

@@ -67,15 +67,14 @@ public class VotosGet implements IVotosGet {
 //				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
 //				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
 		i.siglaDaUnidade = Texto.maiusculasEMinusculas(a.siglaDaUnidade);
-		i.conteudo = a.conteudo;
 		i.sistema = system;
 		i.sequencia = a.sequencia;
 		i.tipoDeInclusao = a.tipoDeInclusao;
-		
+		i.idMinuta = a.idMinuta;
 
-		if (a.destaque !=null) {
+		if (a.destaque != null) {
 			i.destaques = new ArrayList<>();
-			for (ISistemaProcessual.DestaqueItem d:a.destaque) {
+			for (ISistemaProcessual.DestaqueItem d : a.destaque) {
 				IBalcaojus.Destaque v = new IBalcaojus.Destaque();
 				v.dataDeInclusao = Utils.parsearDataHoraMinutoSegundo(d.dataDeInclusao);
 				v.magistrado = Texto.abreviarNome(Texto.maiusculasEMinusculas(d.magistrado));
@@ -83,10 +82,9 @@ public class VotosGet implements IVotosGet {
 				v.codigoTipo = d.codigoTipo;
 				v.conteudo = d.conteudo;
 				i.destaques.add(v);
-				
 			}
 		}
-		
+
 		if (a.voto != null) {
 			int va = 0, vd = 0, vp = 0;
 			i.votosProferidos = new ArrayList<>();

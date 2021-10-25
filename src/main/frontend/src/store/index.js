@@ -112,6 +112,11 @@ const store = new Vuex.Store({
     setVotos(state, val) {
       state.votos = val
     },
+    setMinutaDeVoto(state, val) {
+      var i = VotoBL.findIndice(state, val.id)
+      if (i === undefined) throw "Voto não encontrado"
+      state.votos[i].htmlMinuta = val.html;
+    },
     setVotosFiltro(state, val) {
       state.votosFiltro = val
     },
@@ -288,6 +293,25 @@ const store = new Vuex.Store({
           commit('setVotos', lista)
           if (lista.length && state.votosSessao === undefined)
             commit('setVotosSessao', lista[0].grupo)
+        },
+        (error) => commit("setError", error)
+      );
+    },
+
+    async carregarMinutaDeVoto({
+      commit,
+      state
+    }, val) {
+      if (val.htmlMinuta !== undefined) return;
+      console.log(`votos/${val.id}/consultar-minuta?idminuta=${val.idMinuta}&sistema=${val.sistema}`)
+      await Vue.http.get(`votos/${val.id}/consultar-minuta?idminuta=${val.idMinuta}&sistema=${val.sistema}`, {
+        block: true
+      }).then(
+        (response) => {
+          commit('setMinutaDeVoto', {
+            id: val.id,
+            html: response.data.html
+          })
         },
         (error) => commit("setError", error)
       );

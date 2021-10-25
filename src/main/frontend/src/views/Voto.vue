@@ -67,33 +67,21 @@
           </div>
         </div>
 
-        <div class="card mb-3">
+        <div v-if="conteudo" class="card mb-3">
           <div class="card-body alert-warning">
             <p class="card-text" v-html="conteudo"></p>
           </div>
         </div>
 
-     
-
-        <template v-for="(destaque, index) in voto.destaques">
-        <div class="text-center mb-0" :key="index">
-        <h4 class="text-center mb-0" >
-             Divergência  
-          </h4>   
-      </div>
-
-        <div class="card mb-3" :key="index">
-          <div class="card-body alert-danger">
+        <div v-for="(destaque, index) in voto.destaques" :key="index" class="card mb-3">
+          <div class="card-header red">
+            {{ destaque.voto }}
+          </div>
+          <div class="card-body">
             <p class="card-text" v-html="preprocess(destaque.conteudo)"></p>
           </div>
+          <div class="card-footer text-right">Magistrado: {{ destaque.magistrado }}</div>
         </div>
-        <div class="text-right mb-0" :key="index">
-        <span class="text-right"> 
-           Magistrado: {{ destaque.magistrado }}  
-        </span>   
-     </div>
-        </template>  
-
       </div>
       <div class="col col-12 col-lg-4">
         <div class="row no-gutters mt-2">
@@ -217,11 +205,13 @@ import { Bus } from "../bl/bus.js";
 export default {
   name: "Voto",
   mounted() {
+    console.log("mounted");
     if (!this.$store.state.votos) this.$store.dispatch("carregarVotos");
   },
   data() {
     return {
       numero: this.$route.params.numero,
+      htmlMinuta: undefined,
       editando: false,
       errormsg: undefined,
     };
@@ -242,7 +232,13 @@ export default {
     voto() {
       if (!this.$store.state.votos) return;
       for (var i = 0; i < this.$store.state.votos.length; i++) {
-        if (this.$store.state.votos[i].id === this.$route.params.numero) return this.$store.state.votos[i];
+        if (this.$store.state.votos[i].id === this.$route.params.numero) {
+          this.$nextTick(function() {
+            console.log("nextTick")
+            this.updateMinuta();
+          });
+          return this.$store.state.votos[i];
+        }
       }
       return undefined;
     },
@@ -264,20 +260,24 @@ export default {
       return this.lista[this.indice - 1];
     },
     conteudo() {
-      return this.preprocess(this.voto.conteudo);
+      return this.preprocess(this.voto.htmlMinuta);
     },
-    
+
     progresso: function() {
       if (this.indice === undefined) return;
       if (!this.lista || this.lista.length === 0) return;
       return this.indice + 1 + "/" + this.lista.length;
     },
-     temDivergencia: function() {
-      if (this.voto.divergencias > 0 ) return true;
-      return false; 
+    temDivergencia: function() {
+      if (this.voto.divergencias > 0) return true;
+      return false;
     },
   },
   methods: {
+    updateMinuta() {
+      if (this.voto === undefined || this.voto.idMinuta === undefined) return;
+      this.$store.dispatch("carregarMinutaDeVoto", this.voto);
+    },
     preprocess: function(s) {
       if (!s) return;
       if (s.includes("<body>")) s = s.substring(s.indexOf("<body>") + 6);
