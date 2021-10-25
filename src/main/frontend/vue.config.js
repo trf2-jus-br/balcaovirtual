@@ -14,7 +14,7 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: "black",
     assetsVersion: "",
     manifestOptions: {
-      short_name: "Balcão Virtual",
+      short_name: "Balcãojus",
       start_url: "/balcaojus/index.html",
       description: "Interface para acesso aos sistemas processuais.",
       background_color: "#212529",

@@ -269,7 +269,12 @@ export default {
       return this.indice + 1 + "/" + this.lista.length;
     },
     temDivergencia: function() {
-      if (this.voto.divergencias > 0) return true;
+      if (this.voto.destaques.length > 0 ) {
+        for (var k = 0; k < this.voto.destaques.length; k++) {
+          if (this.voto.destaques[k].voto == 'Divergência')
+            return true;
+        }
+    }
       return false;
     },
   },

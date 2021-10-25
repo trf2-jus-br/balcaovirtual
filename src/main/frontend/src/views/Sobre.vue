@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-md-12 sobre">
         <div class="headline pb-1">
-          <h2>Balcão Virtual</h2>
+          <h2>Balcãojus</h2>
         </div>
 
         <p>
-          O Balcão Virtual é um aplicativo que se vale do estado da arte em tecnologia para propiciar a melhor experiência de uso possível ao consultar processos judiciais e
+          O Balcãojus é um aplicativo que se vale do estado da arte em tecnologia para propiciar a melhor experiência de uso possível ao consultar processos judiciais e
           realizar outras operações correlatas.
         </p>
 
@@ -28,7 +28,7 @@
         </ul>
 
         <p>
-          Atenção, o Balcão Virtual mantém o usuário autenticado por 18h após o
+          Atenção, o Balcãojus mantém o usuário autenticado por 18h após o
           <i>login</i>. Fechar o navegador não causa automaticamente um <i>logout</i>. Para forçar a desconexão do usuário, é necessário clicar na opção "Logout" do menu principal.
         </p>
 
@@ -83,11 +83,11 @@
         <ol>
           <li>
             <div class="pergunta">
-              Posso consultar processos do Apolo e do eproc pelo sistema do Balcão Virtual?
+              Posso consultar processos do Apolo e do eproc pelo sistema do Balcãojus?
             </div>
             <div class="resposta">
               <p>
-                Sim. A consulta às peças públicas e não-públicas dos processos de ambos os sistemas processuais pode ser realizada efetuando o login no sistema do Balcão Virtual
+                Sim. A consulta às peças públicas e não-públicas dos processos de ambos os sistemas processuais pode ser realizada efetuando o login no sistema do Balcãojus
                 com o seu usuário e senha de cada sistema processual.
               </p>
               <p>
@@ -104,8 +104,8 @@
             <div class="resposta">
               <p>
                 Após efetuar o login no sistema, clique na seta que aparece ao lado do nome do seu login e selecione a opção “Status”. Na opção
-                <b>“Identificação do Usuário nos Sistemas”</b> ele mostrará os sistemas processuais e órgãos que o seu usuário e senha acessaram com sucesso. Como o Balcão Virtual
-                está conectado a até seis (06) sistemas processuais, Apolo (TRF2/SJRJ/SJES) e eproc (TRF2/SJRJ/SJES), o Balcão Virtual mostrará nessa parte todos os sistemas
+                <b>“Identificação do Usuário nos Sistemas”</b> ele mostrará os sistemas processuais e órgãos que o seu usuário e senha acessaram com sucesso. Como o Balcãojus
+                está conectado a até seis (06) sistemas processuais, Apolo (TRF2/SJRJ/SJES) e eproc (TRF2/SJRJ/SJES), o Balcãojus mostrará nessa parte todos os sistemas
                 processuais que o seu usuário e senha fornecidos no login conseguiu autenticar com sucesso.
               </p>
             </div>
@@ -162,7 +162,7 @@
             </div>
             <div class="resposta">
               <p>
-                Neste caso, sempre que existir apenas uma ocorrência da fase o sistema do Balcão Virtual não mostrará a quantidade e significa que existe apenas uma ocorrência.
+                Neste caso, sempre que existir apenas uma ocorrência da fase o sistema do Balcãojus não mostrará a quantidade e significa que existe apenas uma ocorrência.
                 Quando a cor do círculo estiver “laranja”, significa que este é o último movimento mais recente do processo.
               </p>
             </div>
@@ -198,7 +198,7 @@
             </div>
             <div class="resposta">
               <p>
-                Este é um recurso muito interessante existente no sistema do Balcão Virtual e muito útil. Esse recurso está disponível apenas para os usuários que acessam o sistema
+                Este é um recurso muito interessante existente no sistema do Balcãojus e muito útil. Esse recurso está disponível apenas para os usuários que acessam o sistema
                 com o seu login do Apolo ou eproc.
               </p>
               <p>
@@ -227,7 +227,7 @@
             </div>
             <div class="resposta">
               <p>
-                Sim. No sistema do Balcão Virtual, após consultar um processo, clique no botão “PDF Completo” para o sistema baixar as peças e gerar um único arquivo PDF para
+                Sim. No sistema do Balcãojus, após consultar um processo, clique no botão “PDF Completo” para o sistema baixar as peças e gerar um único arquivo PDF para
                 download.
               </p>
               <p>
@@ -238,12 +238,12 @@
 
           <li>
             <div class="pergunta">
-              Eu posso guardar no sistema do Balcão Virtual os números dos processos que mais acesso para não ter que informar novamente o número na hora de fazer uma nova consulta
+              Eu posso guardar no sistema do Balcãojus os números dos processos que mais acesso para não ter que informar novamente o número na hora de fazer uma nova consulta
               processual?
             </div>
             <div class="resposta">
               <p>
-                Sim. Claro! Sempre que você acessar o Balcão Virtual com o seu login (usuário e senha), após consultar o processo, existe um ícone de uma “estrela” ao lado do
+                Sim. Claro! Sempre que você acessar o Balcãojus com o seu login (usuário e senha), após consultar o processo, existe um ícone de uma “estrela” ao lado do
                 número do processo. Clicando neste ícone você pode incluir o número do processo na área de “Favoritos” do sistema.
               </p>
               <p>
@@ -266,7 +266,7 @@
 
           <li>
             <div class="pergunta">
-              Eu posso ver todos os processos que acessei recentemente com o meu login de acesso ao sistema do Balcão Virtual?
+              Eu posso ver todos os processos que acessei recentemente com o meu login de acesso ao sistema do Balcãojus?
             </div>
             <div class="resposta">
               <p>
@@ -287,15 +287,15 @@
                 Não. Primeiro verifique se você acesso o sistema com o seu login e senha do respectivo sistema processual (Apolo ou eproc).
               </p>
               <p>
-                As peças públicas e não públicas somente estão disponíveis na consulta do processo para usuários que acessaram o sistema do Balcão Virtual através da opção de
+                As peças públicas e não públicas somente estão disponíveis na consulta do processo para usuários que acessaram o sistema do Balcãojus através da opção de
                 “Login”.
               </p>
               <p>
-                É possível acessar as informações públicas do processo pela tela principal do sistema do Balcão Virtual sem informar o seu login de acesso. Neste caso, somente as
+                É possível acessar as informações públicas do processo pela tela principal do sistema do Balcãojus sem informar o seu login de acesso. Neste caso, somente as
                 peças públicas (Despachos, Decisões, Sentenças, Certidões e Atos Ordinatórios) estarão disponíveis para acesso.
               </p>
               <p>
-                Desta forma, recomendamos sempre acessar o sistema do Balcão Virtual com o seu login e senha usados nos sistemas processuais do Apolo ou eproc.
+                Desta forma, recomendamos sempre acessar o sistema do Balcãojus com o seu login e senha usados nos sistemas processuais do Apolo ou eproc.
               </p>
               <p>
                 Atenção! Mesmo acessando o sistema com o seu login, algumas peças poderão não estar visíveis. Isto pode ocorrer por estarem com sigilo indicado pela Vara do
@@ -306,7 +306,7 @@
 
           <li>
             <div class="pergunta">
-              Consultei um processo e apesar de informar o número correto o sistema do Balcão Virtual informou “Processo não encontrado”
+              Consultei um processo e apesar de informar o número correto o sistema do Balcãojus informou “Processo não encontrado”
             </div>
             <div class="resposta">
               <p>
@@ -325,7 +325,7 @@
 
           <li>
             <div class="pergunta">
-              Como faço para enviar uma petição intercorrente para um processo do eproc ou Apolo pelo Balcão Virtual?
+              Como faço para enviar uma petição intercorrente para um processo do eproc ou Apolo pelo Balcãojus?
             </div>
             <div class="resposta">
               <p>
@@ -352,7 +352,7 @@
 
           <li>
             <div class="pergunta">
-              Posso enviar petições iniciais pelo Balcão Virtual?
+              Posso enviar petições iniciais pelo Balcãojus?
             </div>
             <div class="resposta">
               <p>
@@ -364,11 +364,11 @@
         </ol>
 
         <div class="headline pb-1 pt-3">
-          <h2>Sobre o Balcão Virtual</h2>
+          <h2>Sobre o Balcãojus</h2>
         </div>
 
         <p>
-          O Balcão Virtual foi desenvolvido em 2017 pela Coordenadoria de Inovação (CINOVA), parte da Secretaria de Tecnologia da Informação do Tribunal Regional Federal da 2ª
+          O Balcãojus foi desenvolvido em 2017 pela Coordenadoria de Inovação (CINOVA), parte da Secretaria de Tecnologia da Informação do Tribunal Regional Federal da 2ª
           Região, com a colaboração do Procurador Regional Substituto da Procuradoria Regional da Fazenda Nacional na 2ª Região, Dr. João Henrique Chauffaille Grognet.
         </p>
         <p>

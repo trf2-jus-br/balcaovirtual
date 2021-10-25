@@ -409,7 +409,7 @@ public class SoapMNI {
 		if (email != null) {
 			email = "renato.crivano@gmail.com";
 			try {
-				String assunto = "Balcão Virtual: Confirmação de " + resp.tipo;
+				String assunto = "Balcãojus: Confirmação de " + resp.tipo;
 				String conteudo = "Prezado(a) " + nome + ",\n\nAcusamos a confirmação de " + resp.tipo.toLowerCase()
 						+ " conforme dados abaixo:" + "\n\nProcesso Número: " + numProcFormated.replace("/", "")
 						+ "\nData/Hora de Término do Prazo: " + dt.toString(dtfBR) + "\nSigilo: "
@@ -521,7 +521,7 @@ public class SoapMNI {
 						+ "\n\nProcesso Número: " + numProcFormated + "\nProtocolo: " + protocoloRecebimento.value
 						+ "\nData/Hora do Protocolo: " + dt.toString(dtfBR)
 						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
-				Correio.enviar(email, "Balcão Virtual: Protocolo de Petição Intercorrente", conteudo,
+				Correio.enviar(email, "Balcãojus: Protocolo de Petição Intercorrente", conteudo,
 						numProcFormated + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
 						recibo.value);
 				sent = true;
@@ -788,7 +788,7 @@ public class SoapMNI {
 						+ "\n\nProcesso Autuado Número: " + numProcFormatado + "\nProtocolo: "
 						+ protocoloRecebimento.value + "\nData/Hora do Protocolo: " + dataProtocoloFormatada
 						+ "\n\nAtenciosamente,\n\nTribunal Regional Federal da 2a Região";
-				Correio.enviar(email, "Balcão Virtual: Protocolo de Petição Inicial", conteudo,
+				Correio.enviar(email, "Balcãojus: Protocolo de Petição Inicial", conteudo,
 						numProcFormatado + "-protocolo-" + protocoloRecebimento.value + ".pdf", "application/pdf",
 						recibo.value);
 				sent = true;

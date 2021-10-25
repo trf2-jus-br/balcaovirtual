@@ -119,7 +119,7 @@ public class ProcessoCompleto implements Callable<String> {
 					// lightyellow;\">";
 					html += "<p align=\"center\"><b>";
 					html += i == 0 ? "CAPA DO PROCESSO" : "PÁGINA DE SEPARAÇÃO";
-					html += "</b><br/><i>(Gerada automaticamente pelo Balcão Virtual.)</i><br/><br/><br/><br/><br/></p>";
+					html += "</b><br/><i>(Gerada automaticamente pelo Balcãojus.)</i><br/><br/><br/><br/><br/></p>";
 					if (i == 0)
 						html += "<h1 style=\"text-align: center;\">Processo N&ordm; "
 								+ Utils.formatarNumeroProcesso(numProc) + "</h1>";

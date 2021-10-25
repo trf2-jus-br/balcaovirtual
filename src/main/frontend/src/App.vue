@@ -190,7 +190,7 @@ export default {
       if (to.meta && to.meta.title) {
         document.title = to.meta.title(to);
       } else {
-        document.title = "Balcão Virtual - " + to.name;
+        document.title = "Balcãojus - " + to.name;
       }
     });
 

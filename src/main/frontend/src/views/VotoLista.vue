@@ -316,9 +316,13 @@ export default {
 
     filtradosEMarcadosEVotaveisEDivergiveis: function() {
       return this.filtradosEMarcadosEVotaveis.filter(function(item) {
-        if (item.divergencias > 0)
-          return true;
-        return false;
+        if (item.destaques.length > 0 ) {
+        for (var k = 0; k < item.destaques.length; k++) {
+          if (item.destaques[k].voto == 'Divergência')
+            return true;
+        }
+      }
+      return false;
       });
     },
   },

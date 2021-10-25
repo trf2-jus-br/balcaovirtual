@@ -66,7 +66,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h4 class="mt-3 mb-3">Sistemas Conectados ao Balcão Virtual</h4>
+        <h4 class="mt-3 mb-3">Sistemas Conectados ao Balcãojus</h4>
       </div>
     </div>
 
