@@ -446,6 +446,20 @@ public interface IBalcaojus {
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
 	}
 
+	public interface IVotosIdConsultarMinutaGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String idMinuta;
+	
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public String status;
+			public Voto minuta;
+		}
+
+		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
+	}
+	
 	public interface IVotosIdAcompanharPost extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String id;
