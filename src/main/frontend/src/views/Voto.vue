@@ -274,7 +274,7 @@ export default {
           if (this.voto.destaques[k].voto == 'Divergência')
             return true;
         }
-    }
+      }
       return false;
     },
   },
