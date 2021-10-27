@@ -13,7 +13,7 @@ export default {
       console.log("home mounted");
       if (!this.$parent.jwt) {
         this.$router.push({ name: "Login" });
-      } else if (this.$parent.jwt.isDesembargador() && this.$parent.test.properties['balcaojus.env'] !== 'prod') {
+      } else if ((this.$parent.jwt.isDesembargador() && this.$parent.test.properties['balcaojus.env'] !== 'prod' )|| (this.$parent.jwt.isDrReis() && this.$parent.test.properties['balcaojus.env'] === 'prod')) {
         this.$router.push({ name: "Lista de Votos" });
       } else if (this.$parent.jwt.isMagistrado()) this.$router.push({ name: "Mesa", params: { revisar: true } });
       else this.$router.push({ name: "Consulta Simples" });

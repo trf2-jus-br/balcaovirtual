@@ -84,7 +84,7 @@
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Sugestões' }" tag="a">Sugestões</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" active-class="active" :to="{ name: 'Sobre' }" tag="a">Sobre</router-link>
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Ajuda' }" tag="a">Ajuda</router-link>
                 </li>
               </ul>
               <ul class="navbar-nav navbar-right">
@@ -437,6 +437,7 @@ export default {
     votosAtiva: function() {
       var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
       f = f && this.test.properties['balcaojus.env'] !== 'prod';
+      f = f || (this.jwt && this.jwt.username && this.jwt.username === "t25038" && this.test.properties['balcaojus.env'] === 'prod')
       return f;
     },
 
@@ -883,6 +884,15 @@ div.sobre p {
 }
 
 div.sobre ol li {
+  font-size: 120%;
+  padding-bottom: 12pt;
+}
+
+div.ajuda p {
+  font-size: 120%;
+}
+
+div.ajuda ol li {
   font-size: 120%;
   padding-bottom: 12pt;
 }
