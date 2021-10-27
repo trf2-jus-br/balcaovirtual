@@ -174,12 +174,6 @@ const router = new Router({
       name: "Status",
       component: Status
     },
-    /*{
-      path: "/sobre",
-      name: "Sobre",
-      component: Sobre
-    },
-    */
     {
       path: "/ajuda",
       name: "Ajuda",

@@ -1,7 +1,7 @@
 <template>
   <div class="container content pt-5">
     <div class="row">
-      <div class="col-md-12 sobre">
+      <div class="col-md-12 ajuda">
         <div class="headline pb-1">
           <h2>Balcãojus</h2>
         </div>
