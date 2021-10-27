@@ -18,7 +18,7 @@ import Documento from "@/views/Documento";
 import Login from "@/views/Login";
 import TrocarSenha from "@/views/TrocarSenha";
 import Sugestoes from "@/views/Sugestoes";
-import Sobre from "@/views/Sobre";
+import Ajuda from "@/views/Ajuda";
 import Status from "@/views/Status";
 import ProcessoBL from "../bl/processo.js";
 import PadraoLista from "@/views/PadraoLista";
@@ -174,10 +174,16 @@ const router = new Router({
       name: "Status",
       component: Status
     },
-    {
+    /*{
       path: "/sobre",
       name: "Sobre",
       component: Sobre
+    },
+    */
+    {
+      path: "/ajuda",
+      name: "Ajuda",
+      component: Ajuda
     },
     {
       path: "*",
