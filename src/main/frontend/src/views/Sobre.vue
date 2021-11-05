@@ -15,7 +15,7 @@
         <div class="headline pb-1 pt-3">
           <h2>Últimas atualizações</h2>
         </div>
-        <p>Versão 3.0.11. Lançada em 04 de Novembro de 2021.</p>
+        <p>Versão 3.0.12. Lançada em 05 de Novembro de 2021.</p>
         <ul>
           <li>Inclusão do link "Audiências" para o sistema que permite acessar as gravações de audiência do sistema Apolo;</li>
           <li>Alteração de senha para usuários do sistema Apolo;</li>
