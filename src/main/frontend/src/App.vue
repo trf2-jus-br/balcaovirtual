@@ -86,6 +86,9 @@
                 <li class="nav-item">
                   <router-link class="nav-link" active-class="active" :to="{ name: 'Ajuda' }" tag="a">Ajuda</router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" active-class="active" :to="{ name: 'Sobre' }" tag="a">Sobre</router-link>
+                </li>
               </ul>
               <ul class="navbar-nav navbar-right">
                 <li class="nav-item" v-if="!jwt">

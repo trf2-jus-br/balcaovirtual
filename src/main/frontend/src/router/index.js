@@ -19,6 +19,7 @@ import Login from "@/views/Login";
 import TrocarSenha from "@/views/TrocarSenha";
 import Sugestoes from "@/views/Sugestoes";
 import Ajuda from "@/views/Ajuda";
+import Sobre from "@/views/Sobre";
 import Status from "@/views/Status";
 import ProcessoBL from "../bl/processo.js";
 import PadraoLista from "@/views/PadraoLista";
@@ -178,6 +179,11 @@ const router = new Router({
       path: "/ajuda",
       name: "Ajuda",
       component: Ajuda
+    },
+    {
+      path: "/sobre",
+      name: "Sobre",
+      component: Sobre
     },
     {
       path: "*",

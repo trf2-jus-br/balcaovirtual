@@ -2,6 +2,46 @@
   <div class="container content pt-5">
     <div class="row">
       <div class="col-md-12 sobre">
+
+        <div class="headline pb-1">
+          <h2>Balcãojus</h2>
+        </div>
+
+        <p>
+          O Balcãojus é um aplicativo que se vale do estado da arte em tecnologia para propiciar a melhor experiência de uso possível ao consultar processos judiciais e
+          realizar outras operações correlatas.
+        </p>
+
+        <div class="headline pb-1 pt-3">
+          <h2>Últimas atualizações</h2>
+        </div>
+        <p>Versão 3.0.11. Lançada em 04 de Novembro de 2021.</p>
+        <ul>
+          <li>Inclusão do link "Audiências" para o sistema que permite acessar as gravações de audiência do sistema Apolo;</li>
+          <li>Alteração de senha para usuários do sistema Apolo;</li>
+        </ul>
+
+        <div class="headline pb-1 pt-3">
+          <h2>Principais funcionalidades</h2>
+        </div>
+        
+        <ul>
+          <li>Consulta processual;</li>
+          <li>Peticionamento inicial;</li>
+          <li>Peticionamento intercorrente em lote;</li>
+          <li>Recebimento de intimações e citações;</li>
+          <li>Diagrama dos principais eventos ocorridos no processo;</li>
+          <li>Lista de processos recentes e favoritos;</li>
+          <li>Marcações em peças processuais;</li>
+          <li>Anotações relacionadas ao processo, pessoais ou da unidade;</li>
+          <li>Inclusão de cotas;</li>
+          <li>Download do PDF completo;</li>
+          <li>Impressão em lote;</li>
+          <li>Visualização, edição e assinatura digital de minutas.</li>
+        </ul>
+
+        
+        <!--
         <div class="headline pb-1">
           <h2>Balcãojus</h2>
         </div>
@@ -395,6 +435,7 @@
             Giovanni Souza e André Luís Silva - desenvolvimento do webservice de integração com o Apolo
           </li>
         </ul>
+        -->
       </div>
     </div>
   </div>

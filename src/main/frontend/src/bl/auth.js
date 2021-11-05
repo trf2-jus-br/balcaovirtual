@@ -67,12 +67,21 @@ export default {
       }
       return false;
     };
+    
     decoded.isDesembargador = () => {
       for (var sistema in decoded.user) {
         if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" && (decoded.user[sistema].unidade.startsWith("GAB") || decoded.user[sistema].unidade.startsWith("SUB"))) return true;
       }
       return false;
     };
+
+    decoded.isDrReis = () => {
+        if (decoded.username === "t25038") 
+          return true; 
+      
+      return false;
+    };
+
     return decoded;
   },
 

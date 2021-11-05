@@ -2,31 +2,11 @@
   <div class="container content pt-5">
     <div class="row">
       <div class="col-md-12 ajuda">
-        <div class="headline pb-1">
-          <h2>Balcãojus</h2>
+
+
+        <div class="headline pb-1 pt-3">
+          <h2>Segurança</h2>
         </div>
-
-        <p>
-          O Balcãojus é um aplicativo que se vale do estado da arte em tecnologia para propiciar a melhor experiência de uso possível ao consultar processos judiciais e
-          realizar outras operações correlatas.
-        </p>
-
-        <p>As principais funcionalidades são:</p>
-        <ul>
-          <li>Consulta processual;</li>
-          <li>Peticionamento inicial;</li>
-          <li>Peticionamento intercorrente em lote;</li>
-          <li>Recebimento de intimações e citações;</li>
-          <li>Diagrama dos principais eventos ocorridos no processo;</li>
-          <li>Lista de processos recentes e favoritos;</li>
-          <li>Marcações em peças processuais;</li>
-          <li>Anotações relacionadas ao processo, pessoais ou da unidade;</li>
-          <li>Inclusão de cotas;</li>
-          <li>Download do PDF completo;</li>
-          <li>Impressão em lote;</li>
-          <li>Visualização, edição e assinatura digital de minutas.</li>
-        </ul>
-
         <p>
           Atenção, o Balcãojus mantém o usuário autenticado por 18h após o
           <i>login</i>. Fechar o navegador não causa automaticamente um <i>logout</i>. Para forçar a desconexão do usuário, é necessário clicar na opção "Logout" do menu principal.
