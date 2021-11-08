@@ -4,9 +4,13 @@ import static org.mockito.Mockito.verify;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.Cookie;
 
+import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
@@ -58,15 +62,31 @@ public class TrocarSenhaPost implements ITrocarSenhaPost {
 
 		}
 
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, BalcaojusServlet.TIMEOUT_MILLISECONDS);
+		
+		
+		/* Chama a troca de senha separadamente para evitar o bloqueio na sincronização das senhas*/
+		SwaggerMultipleCallResult mcr = new SwaggerMultipleCallResult();
+		Map<String, SwaggerCallParameters> mapAux = new HashMap<>();
+		SwaggerMultipleCallResult mcrAux;
+		for (String system : mapp.keySet()) {
+			SwaggerCallParameters scp = mapp.get(system);
+			mapAux.put(system,scp);
+			mcrAux = SwaggerCall.callMultiple(mapAux, BalcaojusServlet.TIMEOUT_MILLISECONDS);
+			mcr.responses.putAll(mcrAux.responses);
+			mcr.status.addAll(mcrAux.status);
+			
+			mapAux.remove(system);
+			
+		}	
 		resp.status = Utils.getStatus(mcr);
-
-		// Chama o método de autenticação novamente com a nova senha para obter o token
+		
+		//faz a autenticação com a nova senha para obter o token
 		AutenticarPost auth2 = new AutenticarPost();
 		AutenticarPost.Request authReq2 = new AutenticarPost.Request();
 		AutenticarPost.Response authResp2 = new AutenticarPost.Response();
 		authReq2.username = req.username;
 		authReq2.password = req.newpassword;
+		
 		auth2.run(authReq2, authResp2, ctx);
 		
 		resp.id_token = authResp2.id_token;
