@@ -1,28 +1,16 @@
 package br.jus.trf2.balcaojus;
 
-import static org.mockito.Mockito.verify;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
 
-import javax.servlet.http.Cookie;
-
-import com.crivano.swaggerservlet.ISwaggerResponse;
-import com.crivano.swaggerservlet.SwaggerAsyncResponse;
-import com.crivano.swaggerservlet.SwaggerAuthorizationException;
 import com.crivano.swaggerservlet.SwaggerCall;
 import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaojus.AutenticarPost.Usuario;
 import br.jus.trf2.balcaojus.IBalcaojus.ITrocarSenhaPost;
 import br.jus.trf2.balcaojus.IBalcaojus.ListStatus;
 import br.jus.trf2.balcaojus.util.AcessoPublico;
-import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameTrocarSenhaPost;
 
 @AcessoPublico
@@ -60,10 +48,7 @@ public class TrocarSenhaPost implements ITrocarSenhaPost {
 							urlsys + "/usuario/" + req.username + "/trocar-senha", q,
 							IUsuarioUsernameTrocarSenhaPost.Response.class));
 
-		}
-
-		
-		
+		}	
 		/* Chama a troca de senha separadamente para evitar o bloqueio na sincronização das senhas*/
 		SwaggerMultipleCallResult mcr = new SwaggerMultipleCallResult();
 		Map<String, SwaggerCallParameters> mapAux = new HashMap<>();
@@ -78,17 +63,15 @@ public class TrocarSenhaPost implements ITrocarSenhaPost {
 			mapAux.remove(system);
 			
 		}	
-		resp.status = Utils.getStatus(mcr);
-		
 		//faz a autenticação com a nova senha para obter o token
 		AutenticarPost auth2 = new AutenticarPost();
 		AutenticarPost.Request authReq2 = new AutenticarPost.Request();
 		AutenticarPost.Response authResp2 = new AutenticarPost.Response();
 		authReq2.username = req.username;
 		authReq2.password = req.newpassword;
-		
 		auth2.run(authReq2, authResp2, ctx);
 		
+		resp.status = Utils.getStatus(mcr);
 		resp.id_token = authResp2.id_token;
 
 	}
