@@ -254,7 +254,6 @@ public interface IBalcaojus {
 		public String reu;
 		public String descricao;
 		public String status;
-//		public String conteudo;
 		public String acompanhamentos;
 		public String divergencias;
 		public String pedidosDeVista;
@@ -645,6 +644,40 @@ public interface IBalcaojus {
 	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String numero;
+			public String captcha;
+			public String token;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public List<ProcessoValido> list = new ArrayList<>();
+			public Date datavalidacao;
+			public String token;
+			public List<ListStatus> status = new ArrayList<>();
+		}
+
+		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
+	}
+
+	public interface IProcessoDocumentoConsultarDocumentoGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String documento;
+			public String captcha;
+			public String token;
+		}
+
+		public static class Response implements ISwaggerResponse {
+			public List<ProcessoValido> list = new ArrayList<>();
+			public Date datavalidacao;
+			public String token;
+			public List<ListStatus> status = new ArrayList<>();
+		}
+
+		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
+	}
+
+	public interface IProcessoNomeparteConsultarNomeGet extends ISwaggerMethod {
+		public static class Request implements ISwaggerRequest {
+			public String nomeparte;
 			public String captcha;
 			public String token;
 		}

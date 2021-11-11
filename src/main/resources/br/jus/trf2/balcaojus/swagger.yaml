@@ -1,4 +1,4 @@
-﻿swagger: '2.0'
+swagger: '2.0'
 
 info:
   version: "1.0.0"
@@ -475,6 +475,18 @@ parameters:
     description: Lembrete a ser usado na devolução de minuta
     type: string
     required: true
+  documento:
+    name: documento
+    in: path
+    description: Número do cpf ou cnpj da parte só algarismos
+    required: true
+    type: string
+  nomeparte:
+    name: nomeparte
+    in: path
+    description: Nome da pessoa parte do processo
+    required: true
+    type: string  
 
 
 ################################################################################
@@ -963,6 +975,68 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
+            
+  /processo/{documento}/consultar-documento:
+    get:
+      description: Consultar processos pelo cpf ou cnpj da parte
+      tags: [consulta]
+      parameters:
+        - $ref: "#/parameters/documento"
+        - $ref: "#/parameters/captchaquery"
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/ProcessoValido"
+              datavalidacao:
+                $ref: "#/definitions/DataValidacao"
+              token:
+                $ref: "#/definitions/Token"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"          
+  
+  /processo/{nomeparte}/consultar-nome:
+    get:
+      description: Consultar processos pelo nome da parte
+      tags: [consulta]
+      parameters:
+        - $ref: "#/parameters/nomeparte"
+        - $ref: "#/parameters/captchaquery"
+        - $ref: "#/parameters/tokenquery"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: "#/definitions/ProcessoValido"
+              datavalidacao:
+                $ref: "#/definitions/DataValidacao"
+              token:
+                $ref: "#/definitions/Token"
+              status:
+                type: array
+                items:
+                  $ref: "#/definitions/ListStatus"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"          
             
   /processo/{numero}/consultar:
     get:
