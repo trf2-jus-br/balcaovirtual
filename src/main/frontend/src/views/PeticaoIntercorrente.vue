@@ -534,7 +534,7 @@ export default {
         a.status = "Validando...";
         a.validando = true;
         a.valido = false;
-        this.$http.get("processo/" + ProcessoBL.somenteNumeros(a.processo) + "/validar", { block: true }).then(
+        this.$http.get("processo/validar?numero=" + ProcessoBL.somenteNumeros(a.processo), { block: true }).then(
           response => {
             a.validando = false;
             if (response.data.list && response.data.list.length > 0 && response.data.list[0].numero) {

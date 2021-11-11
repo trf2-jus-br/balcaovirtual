@@ -14,7 +14,7 @@ public class ProcessoNumeroPecaIdPdfGet implements IProcessoNumeroPecaIdPdfGet {
 		String usuario = null;
 		String origem;
 
-		if (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero)) {
+		if (ProcessoValidarGet.isValidToken(req.token, req.numero)) {
 			origem = "pub";
 		} else {
 			Usuario u = BalcaojusServlet.getPrincipal();

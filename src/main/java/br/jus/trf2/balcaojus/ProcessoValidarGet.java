@@ -1,6 +1,7 @@
 package br.jus.trf2.balcaojus;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
@@ -22,14 +23,14 @@ import com.crivano.swaggerservlet.SwaggerCallParameters;
 import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaojus.AutenticarPost.Usuario;
-import br.jus.trf2.balcaojus.IBalcaojus.IProcessoNumeroValidarGet;
+import br.jus.trf2.balcaojus.IBalcaojus.IProcessoValidarGet;
 import br.jus.trf2.balcaojus.IBalcaojus.ProcessoValido;
 import br.jus.trf2.balcaojus.util.AcessoPublicoEPrivado;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumerosGet;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 
 @AcessoPublicoEPrivado
-public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
+public class ProcessoValidarGet implements IProcessoValidarGet {
 
 	@Override
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
@@ -50,25 +51,39 @@ public class ProcessoNumeroValidarGet implements IProcessoNumeroValidarGet {
 			usuario = BalcaojusServlet.INSTANCE.getProperty("public.username");
 		}
 
-		String[] numeros = req.numero.split(",");
-		if (numeros.length > 100)
+		String[] numeros = (req.numero != null && req.numero.trim() != "") ? req.numero.split(",") : null;
+		if (numeros != null && numeros.length > 100)
 			throw new PresentableException(
 					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
-		validar(usuario, numeros, resp);
-		if (resp.list != null && resp.list.size() == 1 && resp.token != null && !resp.list.get(0).numero.equals(req.numero))
+		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento, resp);
+		if (resp.list != null && resp.list.size() == 1 && resp.token != null
+				&& !resp.list.get(0).numero.equals(req.numero))
 			resp.token = jwt(resp.list.get(0).numero);
 	}
 
-	public static void validar(String usuario, String[] numeros, IProcessoNumeroValidarGet.Response resp)
+	public static void validar(String usuario, String[] numeros, IProcessoValidarGet.Response resp)
 			throws Exception, PresentableException {
+		validar(usuario, numeros, null, null, null, resp);
+	}
+
+	public static void validar(String usuario, String[] numeros, String nome, String tipoDeDocumento, String documento,
+			IProcessoValidarGet.Response resp) throws Exception, PresentableException {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		for (String system : Utils.getSystems()) {
 			IUsuarioUsernameProcessoNumerosGet.Request q = new IUsuarioUsernameProcessoNumerosGet.Request();
 			q.numeros = StringUtils.join(numeros, ",");
+			String url;
+			if (documento != null)
+				url = "/processo/consultar?documento=" + URLEncoder.encode(documento, "UTF-8").replace("+", "%20");
+			else if (nome != null)
+				url = "/processo/consultar?nomeparte=" + URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
+			else
+				url = "/processo/" + q.numeros;
+			url = url.replace("_", "%20");
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
-							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + "/processo/" + q.numeros, null,
+							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + url, null,
 							IUsuarioUsernameProcessoNumerosGet.Response.class));
 
 		}

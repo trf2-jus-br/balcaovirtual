@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 
 import com.crivano.swaggerservlet.SwaggerUtils;
 
-import br.jus.trf2.balcaojus.IBalcaojus.IProcessoNumeroValidarGet;
+import br.jus.trf2.balcaojus.IBalcaojus.IProcessoValidarGet;
 import br.jus.trf2.balcaojus.IBalcaojus.ProcessoValido;
 
 public class Notificar implements Callable<String> {
@@ -41,9 +41,9 @@ public class Notificar implements Callable<String> {
 						"Obtendo data de última movimentação dos processos favoritos do usuário " + i + "/"
 								+ usuarios.size(),
 						i, usuarios.size(), 0L);
-				IProcessoNumeroValidarGet.Response resp = new IProcessoNumeroValidarGet.Response();
-				ProcessoNumeroValidarGet.validar(usuario,
-						processos.keySet().toArray(new String[processos.keySet().size()]), resp);
+				IProcessoValidarGet.Response resp = new IProcessoValidarGet.Response();
+				ProcessoValidarGet.validar(usuario, processos.keySet().toArray(new String[processos.keySet().size()]),
+						resp);
 
 				this.status = Status.update(NOTIFICACAO_STATUS,
 						"Obtendo tokens de notificação do usuário " + i + "/" + usuarios.size(), i, usuarios.size(),

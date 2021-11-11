@@ -697,7 +697,7 @@ export default {
   methods: {
     validar: function(cont) {
       Bus.$emit("block", 20, 30);
-      this.$http.get("processo/" + this.numero + "/validar" + (this.token ? "?token=" + this.token : "")).then(
+      this.$http.get("processo/validar?numero=" + this.numero + (this.token ? "&token=" + this.token : "")).then(
         response => {
           if (response.data.list && response.data.list.length > 0) this.aplicarValidar(response.data, cont);
           Bus.$emit("release");

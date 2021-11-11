@@ -30,7 +30,7 @@ public class ProcessoNumeroPdfGet implements IProcessoNumeroPdfGet {
 		} catch (Exception ex) {
 		}
 
-		if (usuario == null && (ProcessoNumeroValidarGet.isValidToken(req.token, req.numero) || u != null)) {
+		if (usuario == null && (ProcessoValidarGet.isValidToken(req.token, req.numero) || u != null)) {
 			usuario = BalcaojusServlet.INSTANCE.getProperty("public.username");
 			senha = BalcaojusServlet.INSTANCE.getProperty("public.password");
 			origem = "pub";

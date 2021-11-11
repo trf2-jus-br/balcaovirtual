@@ -409,6 +409,18 @@ parameters:
     description: nome da parte
     required: false
     type: string
+  tipodedocumentoquery:
+    name: tipodedocumento
+    in: query
+    description: tipo de documento
+    required: false
+    type: string
+  documentoquery:
+    name: documento
+    in: query
+    description: número do documento
+    required: false
+    type: string
   paramsquery:
     name: params
     in: query
@@ -945,12 +957,15 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /processo/{numero}/validar:
+  /processo/validar:
     get:
       description: Validar o número do processo
       tags: [consulta]
       parameters:
         - $ref: "#/parameters/numero"
+        - $ref: "#/parameters/tipodedocumentoquery"
+        - $ref: "#/parameters/nomequery"
+        - $ref: "#/parameters/documentoquery"
         - $ref: "#/parameters/captchaquery"
         - $ref: "#/parameters/tokenquery"
       responses:
@@ -975,68 +990,6 @@ paths:
           description: Error ocurred
           schema:
             $ref: "#/definitions/Error"
-            
-  /processo/{documento}/consultar-documento:
-    get:
-      description: Consultar processos pelo cpf ou cnpj da parte
-      tags: [consulta]
-      parameters:
-        - $ref: "#/parameters/documento"
-        - $ref: "#/parameters/captchaquery"
-        - $ref: "#/parameters/tokenquery"
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: object
-            properties:
-              list:
-                type: array
-                items:
-                  $ref: "#/definitions/ProcessoValido"
-              datavalidacao:
-                $ref: "#/definitions/DataValidacao"
-              token:
-                $ref: "#/definitions/Token"
-              status:
-                type: array
-                items:
-                  $ref: "#/definitions/ListStatus"
-        500:
-          description: Error ocurred
-          schema:
-            $ref: "#/definitions/Error"          
-  
-  /processo/{nomeparte}/consultar-nome:
-    get:
-      description: Consultar processos pelo nome da parte
-      tags: [consulta]
-      parameters:
-        - $ref: "#/parameters/nomeparte"
-        - $ref: "#/parameters/captchaquery"
-        - $ref: "#/parameters/tokenquery"
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: object
-            properties:
-              list:
-                type: array
-                items:
-                  $ref: "#/definitions/ProcessoValido"
-              datavalidacao:
-                $ref: "#/definitions/DataValidacao"
-              token:
-                $ref: "#/definitions/Token"
-              status:
-                type: array
-                items:
-                  $ref: "#/definitions/ListStatus"
-        500:
-          description: Error ocurred
-          schema:
-            $ref: "#/definitions/Error"          
             
   /processo/{numero}/consultar:
     get:

@@ -641,43 +641,12 @@ public interface IBalcaojus {
 		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
 	}
 
-	public interface IProcessoNumeroValidarGet extends ISwaggerMethod {
+	public interface IProcessoValidarGet extends ISwaggerMethod {
 		public static class Request implements ISwaggerRequest {
 			public String numero;
-			public String captcha;
-			public String token;
-		}
-
-		public static class Response implements ISwaggerResponse {
-			public List<ProcessoValido> list = new ArrayList<>();
-			public Date datavalidacao;
-			public String token;
-			public List<ListStatus> status = new ArrayList<>();
-		}
-
-		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
-	}
-
-	public interface IProcessoDocumentoConsultarDocumentoGet extends ISwaggerMethod {
-		public static class Request implements ISwaggerRequest {
+			public String tipodedocumento;
+			public String nome;
 			public String documento;
-			public String captcha;
-			public String token;
-		}
-
-		public static class Response implements ISwaggerResponse {
-			public List<ProcessoValido> list = new ArrayList<>();
-			public Date datavalidacao;
-			public String token;
-			public List<ListStatus> status = new ArrayList<>();
-		}
-
-		public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception;
-	}
-
-	public interface IProcessoNomeparteConsultarNomeGet extends ISwaggerMethod {
-		public static class Request implements ISwaggerRequest {
-			public String nomeparte;
 			public String captcha;
 			public String token;
 		}
@@ -705,6 +674,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1081,6 +1051,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1139,6 +1110,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1195,6 +1167,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1262,6 +1235,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1572,6 +1546,7 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
+
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1719,4 +1694,3 @@ public interface IBalcaojus {
 	}
 
 }
-

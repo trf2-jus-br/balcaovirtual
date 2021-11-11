@@ -356,7 +356,7 @@ export default {
         b.push(numeros.join(","));
       }
       UtilsBL.quietBatch(b, (processos, cont) => {
-        this.$http.get("processo/" + processos + "/validar").then(
+        this.$http.get("processo/validar?numero=" + processos).then(
           response => {
             // Prepara um outro mapa com a lista resultante
             var map2 = {};
