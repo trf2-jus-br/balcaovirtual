@@ -83,7 +83,7 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			q.numeros = StringUtils.join(numeros, ",");
 			String url;
 			if (documento != null)
-				url = "/processo/consultar?documento=" + URLEncoder.encode(documento, "UTF-8").replace("+", "%20");
+				url = "/processo/consultar?documento=" + URLEncoder.encode(documento.replaceAll("[^0-9]", ""), "UTF-8").replace("+", "%20");
 			else if (nome != null)
 				url = "/processo/consultar?nomeparte="
 						+ URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
