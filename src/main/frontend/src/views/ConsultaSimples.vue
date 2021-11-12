@@ -70,11 +70,11 @@
             </div>
             <div class="form-group col col-md-6">
               <label for="numero">Número do Processo</label>
-              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" />
+              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined" />
             </div>
             <div class="form-group col col-md-6">
               <label for="cpfcnpj">CPF/CNPJ da Parte</label>
-              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" />
+              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined" />
             </div>
             <div v-if="false" class="form-group col col-md-4">
               <label for="oab">Registro da OAB do Representante</label>
@@ -84,7 +84,7 @@
           <div class="row">
             <div class="form-group col col-md-12">
               <label for="parte">Nome Completo da Parte</label>
-              <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" />
+              <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" @input="cpfcnpj = undefined; numero = undefined" />
             </div>
             <div v-if="false" class="form-group col col-md-6">
               <label for="procurador">Nome do Procurador</label>
@@ -154,7 +154,7 @@
                 v-if="!$parent.jwt"
                 :sitekey="sitekey"
                 :validate="captchaValidate"
-                :callback="consultar"
+                :callback="consultarProcessosComToken"
                 class="btn btn-warning float-right"
                 type="button"
                 id="consultar"
@@ -197,7 +197,7 @@
                             :to="{
                               name: 'Processo',
                               params: { numero: p.numero },
-                              query: { avisos: $parent.cAvisos },
+                              query: { avisos: $parent.cAvisos, token: token },
                             }"
                             target="_blank"
                             >{{ p.numeroFormatado }}</router-link
@@ -270,6 +270,7 @@ export default {
       oab: undefined,
       inquerito: undefined,
       processos: undefined,
+      token: undefined,
     };
   },
 
@@ -300,6 +301,7 @@ export default {
       this.mostrarProcesso(this.numero, recaptchaToken);
     },
     mostrarProcesso: function(numero, recaptchaToken, token) {
+      this.token = undefined;
       var n = ProcessoBL.somenteNumeros(this.numero);
       if (n === "") return;
       this.$http
@@ -333,6 +335,12 @@ export default {
           }
         );
     },
+
+    consultarProcessosComToken: function(recaptchaToken) {
+      this.recaptchaLoading = false;
+      this.consultarProcessos(recaptchaToken);
+    },
+
     consultarProcessos: function(recaptchaToken, token) {
       var n = ProcessoBL.somenteNumeros(this.numero);
       var params;
@@ -342,6 +350,7 @@ export default {
       if (!params) return;
       this.errormsg = undefined;
       this.processos = undefined;
+      this.token = undefined;
       this.$http
         .get("processo/validar?" + params + (recaptchaToken ? "&captcha=" + recaptchaToken : "") + (token ? "&token=" + token : ""), {
           block: true,
@@ -380,6 +389,7 @@ export default {
                 var processo = response.data.list[i];
                 this.processos.push(this.fixProcesso(processo));
               }
+              this.token = response.data.token;
             }
           },
           (error) => {

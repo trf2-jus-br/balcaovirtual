@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,10 +35,11 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 
 	@Override
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
+		boolean fPorCaptcha = false;
 		if (req.captcha != null) {
 			if (!Utils.verifyCaptcha(req.captcha))
 				throw new PresentableUnloggedException("Token de reCaptcha inválido");
-			resp.token = jwt(req.numero);
+			fPorCaptcha = true;
 		} else if (isValidToken(req.token, req.numero)) {
 			resp.token = req.token;
 		} else
@@ -57,9 +59,15 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
 		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento, resp);
-		if (resp.list != null && resp.list.size() == 1 && resp.token != null
-				&& !resp.list.get(0).numero.equals(req.numero))
-			resp.token = jwt(resp.list.get(0).numero);
+		if (fPorCaptcha && resp.list != null && resp.list.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (ProcessoValido p : resp.list) {
+				if (sb.length() > 0)
+					sb.append(",");
+				sb.append(p.numero);
+			}
+			resp.token = jwt(sb.toString());
+		}
 	}
 
 	public static void validar(String usuario, String[] numeros, IProcessoValidarGet.Response resp)
@@ -77,7 +85,8 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			if (documento != null)
 				url = "/processo/consultar?documento=" + URLEncoder.encode(documento, "UTF-8").replace("+", "%20");
 			else if (nome != null)
-				url = "/processo/consultar?nomeparte=" + URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
+				url = "/processo/consultar?nomeparte="
+						+ URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
 			else
 				url = "/processo/" + q.numeros;
 			url = url.replace("_", "%20");
@@ -173,7 +182,8 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 		} catch (Exception ex) {
 			throw new PresentableUnloggedException("Token de consulta pública inválido inválido", ex);
 		}
-		if (!m.get("proc").equals(processo))
+		String[] numeros = ((String) m.get("proc")).split(",");
+		if (!Arrays.asList(numeros).contains(processo))
 			throw new PresentableUnloggedException("Token de consulta pública com número de processo inválido");
 		return true;
 	}
