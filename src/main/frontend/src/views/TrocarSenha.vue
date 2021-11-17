@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col col-sm-12 col-md-6">
         <div class="jumbotron d-block mx-auto">
-          <h2 class="text-center pb-3">Troca de Senha</h2>
+          <h2 class="text-center pb-3">Troca de Senha Apolo Web</h2>
           <p v-if="errormsg" class="alert alert-danger" role="alert">
             {{ errormsg }}
           </p>
