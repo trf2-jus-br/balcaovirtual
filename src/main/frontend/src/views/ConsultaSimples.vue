@@ -182,11 +182,11 @@
                       <th>Processo</th>
                       <th>Autor</th>
                       <th>Réu</th>
-                      <th>Último Movimento</th>
-                      <th>Sistema/Órgão</th>
-                      <th>Unidade</th>
-                      <th>Suporte</th>
-                      <th>Acesso</th>
+                      <th v-if="$parent.jwt">Último Movimento</th>
+                      <th v-if="$parent.jwt">Sistema/Órgão</th>
+                      <th v-if="$parent.jwt"> Unidade</th>
+                      <th v-if="$parent.jwt"> Suporte</th>
+                      <th v-if="$parent.jwt">Acesso</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -206,7 +206,7 @@
                       </td>
                       <td>{{ p.autor }}</td>
                       <td>{{ p.reu }}</td>
-                      <td>
+                      <td v-if="$parent.jwt">
                         <span
                           :class="{
                             destaque: p.recente === undefined || (p.dataultimomovimento !== undefined && p.recente < p.dataultimomovimento),
@@ -214,14 +214,15 @@
                           v-html="p.dataultimomovimentoFormatada"
                         ></span>
                       </td>
-                      <td>
+                      <td v-if="$parent.jwt">
                         <span :title="'Sigla do Sistema: ' + p.sistema">{{
                           $parent.test.properties["balcaojus." + p.sistema + ".name"]
                         }}</span>
                       </td>
-                      <td>{{ p.unidade }}</td>
-                      <td>{{ p.digitalFormatado }}</td>
-                      <td>{{ p.acesso }}</td>
+                      <td v-if="$parent.jwt">{{ p.unidade }}</td>
+                      <td v-if="$parent.jwt">{{ p.digitalFormatado }}</td>
+                      <td v-if="$parent.jwt">{{ p.acesso }}</td>
+                      
                     </tr>
                   </tbody>
                 </table>
@@ -433,6 +434,7 @@ export default {
         inbox: undefined,
         favorito: undefined,
         recente: undefined,
+        validado:true,
       });
       if (p.dataultimomovimento !== undefined) {
         p.dataultimomovimentoFormatada = UtilsBL.formatJSDDMMYYYYHHMM(p.dataultimomovimento);
