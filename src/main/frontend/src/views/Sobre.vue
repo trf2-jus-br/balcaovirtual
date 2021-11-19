@@ -15,6 +15,10 @@
         <div class="headline pb-1 pt-3">
           <h2>Últimas atualizações</h2>
         </div>
+        <p>Versão 3.0.15. Lançada em 19 de Novembro de 2021.</p>
+        <ul>
+          <li>Consulta Pública por CPF/CNPJ e nome completo da parte;</li>
+        </ul>
         <p>Versão 3.0.12. Lançada em 05 de Novembro de 2021.</p>
         <ul>
           <li>Inclusão do link "Audiências" para o sistema que permite acessar as gravações de audiência do sistema Apolo;</li>
