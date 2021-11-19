@@ -306,6 +306,10 @@ export default {
     if (s === undefined) return;
     return s.replace(/\D/g, "");
   },
+  somenteNumerosOuVirgulas: function(s) {
+    if (s === undefined) return;
+    return s.replace(/[^0-9,]/g, "");
+  },
   formatarProcesso: function(filename) {
     var m = regexFormatarProcesso.exec(filename);
     if (!m) return;

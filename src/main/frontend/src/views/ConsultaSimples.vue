@@ -65,11 +65,11 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 100 processos por sistema/órgão.
+                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 100 processos por sistema/órgão, consultar por número de processo caso o resultado não seja o esperado.
               </div>
             </div>
             <div class="form-group col col-md-6">
-              <label for="numero">Número do Processo</label>
+              <label for="numero">Número do Processo (<b>Até 100 números separados por vírgula ","</b>)</label>
               <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined" />
             </div>
             <div class="form-group col col-md-6">
@@ -83,7 +83,7 @@
           </div>
           <div class="row">
             <div class="form-group col col-md-12">
-              <label for="parte">Nome Completo da Parte</label>
+              <label for="parte"><b>Nome Completo</b> da Parte</label>
               <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" @input="cpfcnpj = undefined; numero = undefined" />
             </div>
             <div v-if="false" class="form-group col col-md-6">
@@ -303,7 +303,7 @@ export default {
     },
     mostrarProcesso: function(numero, recaptchaToken, token) {
       this.token = undefined;
-      var n = ProcessoBL.somenteNumeros(this.numero);
+      var n = ProcessoBL.somenteNumerosOuVirgulas(this.numero);
       if (n === "") return;
       this.$http
         .get("processo/validar?numero=" + n + (recaptchaToken ? "&captcha=" + recaptchaToken : "") + (token ? "&token=" + token : ""), {
@@ -343,7 +343,7 @@ export default {
     },
 
     consultarProcessos: function(recaptchaToken, token) {
-      var n = ProcessoBL.somenteNumeros(this.numero);
+      var n = ProcessoBL.somenteNumerosOuVirgulas(this.numero);
       var params;
       if (this.numero && this.numero.trim() !== "") params = "numero=" + n;
       else if (this.cpfcnpj && this.cpfcnpj.trim() !== "") params = "documento=" + this.cpfcnpj.trim();
