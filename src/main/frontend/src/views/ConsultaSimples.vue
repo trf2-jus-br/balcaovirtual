@@ -195,9 +195,9 @@
                         <span class=" unbreakable">
                           <router-link
                             :to="{
-                              name: 'Processo',
-                              params: { numero: p.numero },
-                              query: { avisos: $parent.cAvisos, token: token },
+                              name: 'Consultar Processo',
+                              params: { numero: p.numero},
+                              query: {sistema:p.sistema, avisos: $parent.cAvisos, token: token },
                             }"
                             target="_blank"
                             >{{ p.numeroFormatado }}</router-link

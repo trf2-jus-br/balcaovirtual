@@ -65,6 +65,16 @@ const router = new Router({
       }
     },
     {
+      path: "/processo/:numero/consultar",
+      name: "Consultar Processo",
+      component: Processo,
+      meta: {
+        title: route => {
+          return "Processo " + ProcessoBL.formatarProcesso(ProcessoBL.somenteNumeros(route.params.numero)) + "..";
+        }
+      }
+    },
+    {
       path: "/processo-lista",
       name: "Lista de Processos",
       component: ProcessoLista
