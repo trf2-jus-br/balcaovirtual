@@ -65,7 +65,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar".
+                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 100 processos por sistema/órgão.
               </div>
             </div>
             <div class="form-group col col-md-6">
@@ -183,7 +183,7 @@
                       <th>Autor</th>
                       <th>Réu</th>
                       <th v-if="$parent.jwt">Último Movimento</th>
-                      <th v-if="$parent.jwt">Sistema/Órgão</th>
+                      <th>Sistema/Órgão</th>
                       <th v-if="$parent.jwt"> Unidade</th>
                       <th v-if="$parent.jwt"> Suporte</th>
                       <th v-if="$parent.jwt">Acesso</th>
@@ -214,7 +214,7 @@
                           v-html="p.dataultimomovimentoFormatada"
                         ></span>
                       </td>
-                      <td v-if="$parent.jwt">
+                      <td>
                         <span :title="'Sigla do Sistema: ' + p.sistema">{{
                           $parent.test.properties["balcaojus." + p.sistema + ".name"]
                         }}</span>
