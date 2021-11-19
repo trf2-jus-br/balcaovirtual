@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,29 +79,48 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 	public static void validar(String usuario, String[] numeros, String nome, String tipoDeDocumento, String documento,
 			IProcessoValidarGet.Response resp) throws Exception, PresentableException {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
-		for (String system : Utils.getSystems()) {
+		int timeout;
+		String url;
+		String context;
+		
+		
+		if (documento != null)
+		{
+			url = "/processo/consultar?documento=" + URLEncoder.encode(documento.replaceAll("[^0-9]", ""), "UTF-8").replace("+", "%20");
+			context = " - consulta processo por cpf/cnpj da parte";
+			timeout = 30000;
+		}
+		else if (nome != null)
+		{
+			url = "/processo/consultar?nomeparte="
+					+ URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
+			context = " - consulta processo por nome da parte";
+			timeout = 30000;
+		}
+		else {
 			IUsuarioUsernameProcessoNumerosGet.Request q = new IUsuarioUsernameProcessoNumerosGet.Request();
 			q.numeros = StringUtils.join(numeros, ",");
-			String url;
-			if (documento != null)
-				url = "/processo/consultar?documento=" + URLEncoder.encode(documento.replaceAll("[^0-9]", ""), "UTF-8").replace("+", "%20");
-			else if (nome != null)
-				url = "/processo/consultar?nomeparte="
-						+ URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
-			else
-				url = "/processo/" + q.numeros;
-			url = url.replace("_", "%20");
+			url = "/processo/" + q.numeros;
+			context = " - validar número de processo";
+			timeout = 15000;
+		}
+		
+		url = url.replace("_", "%20");
+		
+		for (String system : Utils.getSystems()) {
 			mapp.put(system,
-					new SwaggerCallParameters(system + " - validar número de processo", Utils.getApiPassword(system),
+					new SwaggerCallParameters(system + context, Utils.getApiPassword(system),
 							"GET", Utils.getApiUrl(system) + "/usuario/" + usuario + url, null,
 							IUsuarioUsernameProcessoNumerosGet.Response.class));
-
 		}
-		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, 15000);
+		
+		
+		SwaggerMultipleCallResult mcr = SwaggerCall.callMultiple(mapp, timeout);
 		resp.status = Utils.getStatus(mcr);
-		resp.list = new ArrayList<>();
+		//resp.list = new ArrayList<>();
 
-		Set<String> numerosRecebidos = new HashSet<>();
+		Map<String, ProcessoValido> processosRecebidos = new HashMap<>();
+		ProcessoValido proc;
 
 		// TODO: Falta lógica para escolher o mais importante dos resultados.
 		for (String system : mcr.responses.keySet()) {
@@ -111,11 +131,24 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			for (Processo r : rl.list) {
 				if (r.numero == null || r.perdecompetencia)
 					continue;
-				if (numerosRecebidos.contains(r.numero))
-					throw new PresentableException(
+				if (processosRecebidos.containsKey(r.numero))
+				{
+					//considera o processo no Eproc ao decidir competência
+					proc = processosRecebidos.get(r.numero);  
+					if (proc.sistema.contains("apolo") && system.contains("eproc")) {
+						processosRecebidos.remove(r.numero);
+					}
+					else
+						if (proc.sistema.contains("eproc") && system.contains("apolo"))
+						continue;
+					
+					else
+						throw new PresentableException(
 							"Não foi possível identificar qual sistema tem competência para o processo: " + r.numero,
 							mcr.status);
-				numerosRecebidos.add(r.numero);
+				}
+							
+				
 				ProcessoValido pv = new ProcessoValido();
 				pv.numero = r.numero;
 				pv.sistema = system;
@@ -134,9 +167,10 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 					pv.dataultimomovimento = Utils.parsearDataHoraMinuto(r.dataultimomovimento);
 				pv.autor = Texto.maiusculasEMinusculas(r.autor);
 				pv.reu = Texto.maiusculasEMinusculas(r.reu);
-				resp.list.add(pv);
+				processosRecebidos.put(pv.numero,pv);
 			}
 		}
+		resp.list.addAll(processosRecebidos.values());
 		resp.datavalidacao = new Date();
 	}
 
