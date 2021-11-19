@@ -81,12 +81,19 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		int timeout;
 		String url;
+		String docvalido;
 		String context;
 		
 		
 		if (documento != null)
-		{
-			url = "/processo/consultar?documento=" + URLEncoder.encode(documento.replaceAll("[^0-9]", ""), "UTF-8").replace("+", "%20");
+			
+		{  
+			docvalido = documento.replaceAll("[^0-9]", "");
+			if (docvalido.isEmpty())
+				throw new PresentableException(
+						"Termo de busca inválido !! " + documento);
+			
+			url = "/processo/consultar?documento=" + URLEncoder.encode(docvalido, "UTF-8").replace("+", "%20");
 			context = " - consulta processo por cpf/cnpj da parte";
 			timeout = 30000;
 		}
