@@ -83,7 +83,7 @@
           </div>
           <div class="row">
             <div class="form-group col col-md-12">
-              <label for="parte"><b>Nome Completo</b> da Parte</label>
+              <label for="parte"><b>Nome Exato</b> da Parte</label>
               <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" @input="cpfcnpj = undefined; numero = undefined" />
             </div>
             <div v-if="false" class="form-group col col-md-6">
