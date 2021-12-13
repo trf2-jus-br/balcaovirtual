@@ -39,7 +39,7 @@ public class VotosIdPedirVistaPost implements IVotosIdPedirVistaPost {
 
 	@Override
 	public String getContext() {
-		return "divergir de voto";
+		return "pedir vista de voto";
 	}
 
 }
