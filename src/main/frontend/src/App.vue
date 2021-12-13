@@ -437,10 +437,16 @@ export default {
       return f;
     },
 
-    votosAtiva: function() {
-      var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
+
+ 
+    votosAtiva: function() {  
+     var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
       f = f && this.test.properties['balcaojus.env'] !== 'prod';
-      f = f || (this.jwt && this.jwt.username && this.jwt.username === "t25038" && this.test.properties['balcaojus.env'] === 'prod')
+      f = f || (this.jwt && this.jwt.username &&
+                this.test.properties['balcaojus.votos.usuarios'] && 
+                this.test.properties['balcaojus.votos.usuarios'].includes(this.jwt.username.toUpperCase())
+                &&
+                this.test.properties['balcaojus.env'] === 'prod')
       return f;
     },
 

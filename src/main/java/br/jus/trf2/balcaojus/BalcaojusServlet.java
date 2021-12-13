@@ -151,6 +151,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 		addRestrictedProperty("smtp.porta", "25");
 		addRestrictedProperty("smtp.destinatario", null);
 		addRestrictedProperty("smtp.assunto", "Balcãojus: Sugestão");
+		addPublicProperty("votos.usuarios", null);
 
 		class HttpGetDependency extends TestableDependency {
 			String testsite;

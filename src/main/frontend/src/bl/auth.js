@@ -74,14 +74,7 @@ export default {
       }
       return false;
     };
-
-    decoded.isDrReis = () => {
-        if (decoded.username === "t25038") 
-          return true; 
-      
-      return false;
-    };
-
+    
     return decoded;
   },
 
