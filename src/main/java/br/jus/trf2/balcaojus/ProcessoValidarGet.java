@@ -59,7 +59,7 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			throw new PresentableException(
 					"Não é permitido validar mais de 100 números de processos em uma única operação");
 
-		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento, resp);
+		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento,req.oab, resp);
 		if (fPorCaptcha && resp.list != null && resp.list.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (ProcessoValido p : resp.list) {
@@ -73,10 +73,10 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 
 	public static void validar(String usuario, String[] numeros, IProcessoValidarGet.Response resp)
 			throws Exception, PresentableException {
-		validar(usuario, numeros, null, null, null, resp);
+		validar(usuario, numeros, null, null, null,null, resp);
 	}
 
-	public static void validar(String usuario, String[] numeros, String nome, String tipoDeDocumento, String documento,
+	public static void validar(String usuario, String[] numeros, String nome, String tipoDeDocumento, String documento,String oab, 
 			IProcessoValidarGet.Response resp) throws Exception, PresentableException {
 		Map<String, SwaggerCallParameters> mapp = new HashMap<>();
 		int timeout;
@@ -102,6 +102,13 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			url = "/processo/consultar?nomeparte="
 					+ URLEncoder.encode(nome.toUpperCase(), "UTF-8").replace("+", "%20");
 			context = " - consulta processo por nome da parte";
+			timeout = 30000;
+		}
+		else if (oab != null)
+		{
+			url = "/processo/consultar?oab="
+					+ URLEncoder.encode(oab.toUpperCase(), "UTF-8").replace("+", "%20");
+			context = " - consulta processo por oab";
 			timeout = 30000;
 		}
 		else {

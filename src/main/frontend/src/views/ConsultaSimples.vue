@@ -70,15 +70,15 @@
             </div>
             <div class="form-group col col-md-6">
               <label for="numero">Número do Processo (<b>Até 100 números separados por vírgula ","</b>)</label>
-              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined" />
+              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined; oab = undefined" />
             </div>
             <div class="form-group col col-md-6">
               <label for="cpfcnpj">CPF/CNPJ da Parte</label>
-              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined" />
+              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined, oab = undefined" />
             </div>
-            <div v-if="false" class="form-group col col-md-4">
+            <div  class="form-group col col-md-4">
               <label for="oab">Registro da OAB do Representante</label>
-              <input type="text" class="form-control" id="oab" placeholder="" v-model="oab" />
+              <input type="text" class="form-control" id="oab" placeholder="" v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
             </div>
           </div>
           <div class="row">
@@ -291,7 +291,9 @@ export default {
       return (
         (this.numero && this.numero.trim() !== "") ||
         (this.cpfcnpj && this.cpfcnpj.trim() !== "") ||
-        (this.parte && this.parte.trim() !== "")
+        (this.parte && this.parte.trim() !== "") ||
+        (this.oab && this.oab.trim() !== "")
+
       );
     },
   },
@@ -348,6 +350,7 @@ export default {
       if (this.numero && this.numero.trim() !== "") params = "numero=" + n;
       else if (this.cpfcnpj && this.cpfcnpj.trim() !== "") params = "documento=" + this.cpfcnpj.trim();
       else if (this.parte && this.parte.trim() !== "") params = "nome=" + this.parte.trim();
+      else if (this.oab && this.oab.trim() !== "") params = "oab=" + this.oab.trim();
       if (!params) return;
       this.errormsg = undefined;
       this.processos = undefined;

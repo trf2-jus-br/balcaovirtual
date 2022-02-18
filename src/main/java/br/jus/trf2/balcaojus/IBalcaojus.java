@@ -647,6 +647,7 @@ public interface IBalcaojus {
 			public String tipodedocumento;
 			public String nome;
 			public String documento;
+			public String oab;
 			public String captcha;
 			public String token;
 		}
