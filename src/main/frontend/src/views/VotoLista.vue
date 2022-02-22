@@ -46,7 +46,7 @@
         </button>
         <button type="button" @click="divergirEmLote()" class="btn btn-danger ml-1 mb-3" title="">
           <span class="fa fa-thumbs-o-down"></span> Acompanhar a Divergência&nbsp;&nbsp;
-          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveisEDivergiveis.length }}</span>
+          <span class="badge badge-pill badge-dark">{{ filtradosEMarcadosEVotaveis.length }}</span>
         </button>
         <button type="button" @click="pedirVistaEmLote()" class="btn btn-warning ml-1 mb-3" title="">
           <span class="fa fa-eye"></span> Pedir Vista&nbsp;&nbsp;
@@ -364,7 +364,7 @@ export default {
     },
 
     divergirEmLote: function() {
-      var a = this.filtradosEMarcadosEVotaveisEDivergiveis;
+      var a = this.filtradosEMarcadosEVotaveis;
       if (a.length > 1)
         this.$bvModal
           .msgBoxConfirm("Tem certeza que deseja acompanhar a divergência em " + a.length + " votos?", {
