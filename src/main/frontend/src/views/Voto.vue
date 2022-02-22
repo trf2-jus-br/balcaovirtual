@@ -103,8 +103,7 @@
               type="button"
               class="btn btn-danger d-print-none"
               v-b-popover.hover.top="'Utilize esse botão para indicar que deseja acompanhar a divergência.'"
-              title="Acompanhar a Divergência"
-              :disabled="!temDivergencia"
+              title="Acompanhar a Divergência" 
             >
               <span class="fa fa-thumbs-o-down"></span>
             </button>
