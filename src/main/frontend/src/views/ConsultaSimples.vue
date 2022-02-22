@@ -70,15 +70,15 @@
             </div>
             <div class="form-group col col-md-6">
               <label for="numero">Número do Processo (<b>Até 100 números separados por vírgula ","</b>)</label>
-              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined; oab = undefined" />
+              <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined; oab = undefined; oabmsg = false" />
             </div>
             <div class="form-group col col-md-6">
               <label for="cpfcnpj">CPF/CNPJ da Parte</label>
-              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined, oab = undefined" />
+              <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined; oab = undefined; oabmsg = false" />
             </div>
             <div  class="form-group col col-md-4">
               <label for="oab">Registro da OAB do Representante</label>
-              <input type="text" class="form-control" id="oab" placeholder=""  @focus="oabmsg = true" @blur="oabmsg = false"  v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
+              <input type="text" class="form-control" id="oab" placeholder=""  @focus="oabmsg = true"  v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
             </div>
 
             <div v-if="oabmsg"  class="alert alert-info alert-dismissible fade show" role="alert">
@@ -90,7 +90,7 @@
           <div class="row">
             <div class="form-group col col-md-12">
               <label for="parte"><b>Nome Exato</b> da Parte</label>
-              <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" @input="cpfcnpj = undefined; numero = undefined" />
+              <input type="text" class="form-control" id="parte" placeholder="" v-model="parte" @input="cpfcnpj = undefined; numero = undefined; oab = undefined; oabmsg = false" />
             </div>
             <div v-if="false" class="form-group col col-md-6">
               <label for="procurador">Nome do Procurador</label>
