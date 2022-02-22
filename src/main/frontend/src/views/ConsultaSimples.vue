@@ -78,8 +78,14 @@
             </div>
             <div  class="form-group col col-md-4">
               <label for="oab">Registro da OAB do Representante</label>
-              <input type="text" class="form-control" id="oab" placeholder="" v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
+              <input type="text" class="form-control" id="oab" placeholder=""  @focus="oabmsg = true" @blur="oabmsg = false"  v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
             </div>
+
+            <div v-if="oabmsg"  class="alert alert-info alert-dismissible fade show" role="alert">
+                
+                <b>Consulta por OAB</b>:<br>
+                UF + 6 dígitos (Ex. RJ123456); <br>Números com menos algarismos, preencher com zeros à esquerda (Ex: RJ000123).
+              </div>
           </div>
           <div class="row">
             <div class="form-group col col-md-12">
@@ -272,6 +278,7 @@ export default {
       inquerito: undefined,
       processos: undefined,
       token: undefined,
+      oabmsg: false,
     };
   },
 
