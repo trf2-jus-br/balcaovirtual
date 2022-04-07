@@ -158,7 +158,7 @@ export default {
       for (var i = 0; i < this.$parent.sistemasCertificadores.length; i++) {
         a.push({
           id: this.$parent.sistemasCertificadores[i],
-          nome: this.$parent.test.properties["balcaojus." + this.$parent.sistemasCertificadores[i] + ".cert.name"]
+          nome: this.$parent.test.properties["balcaojus." + this.$parent.sistemasCertificadores[i] + ".cert.fullname"]
         });
       }
       return a;

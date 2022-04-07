@@ -134,6 +134,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 		if (getProperty("cert.systems") != null) {
 			for (String s : getProperty("cert.systems").split(",")) {
 				addPublicProperty(s.toLowerCase() + ".cert.name");
+				addPublicProperty(s.toLowerCase() + ".cert.fullname");
 				addRestrictedProperty(s.toLowerCase() + ".cert.api.url");
 				addPrivateProperty(s.toLowerCase() + ".cert.api.password");
 			}
@@ -255,6 +256,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 			for (String s : getProperty("cert.systems").split(",")) {
 				String systemSlug = s.replace(".", "-");
 				addPublicProperty(s.toLowerCase() + ".cert.name");
+				addPublicProperty(s.toLowerCase() + ".cert.fullname");
 				addRestrictedProperty(s.toLowerCase() + ".cert.api.url");
 				addPrivateProperty(s.toLowerCase() + ".cert.api.password");
 				addDependency(new HttpGetDependency(s, systemSlug + "-cert-api",
