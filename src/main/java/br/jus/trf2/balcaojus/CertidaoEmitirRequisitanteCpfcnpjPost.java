@@ -30,11 +30,11 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 		if (r.headerFields.containsKey(Utils.ERROR_MESSAGE))
 			throw new PresentableUnloggedException(r.headerFields.get(Utils.ERROR_MESSAGE).get(0));
 
-		resp.html = r.html;
+		//resp.html = r.html;
 
 		if (r.headerFields.containsKey(Utils.RESULT_KIND)) {
 			resp.tipo = r.headerFields.get(Utils.RESULT_KIND).get(0);
-			resp.html = Utils.obterHtml(resp.html, resp.tipo);
+			resp.html = Utils.obterHtml(r.html, resp.tipo);
 		}
 
 		if (r.headerFields.containsKey(Utils.CERT_NUMBER))
@@ -48,6 +48,18 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 
 		if (r.headerFields.containsKey(Utils.POST_PARAMS))
 			resp.params = r.headerFields.get(Utils.POST_PARAMS).get(0);
+		
+		if (!r.headerFields.containsKey(Utils.RESULT_KIND) && resp.html == null) {
+			resp.tipo ="REQUERER";
+			resp.numero = req.cpfcnpj;
+			resp.nome = "Nome não disponível";
+			resp.html = "Essa certidão não pôde ser emitida de forma automática.\r\n"
+					+ "Isto ocorre porque pode haver algum processo vinculado ao requerente,\r\n"
+					+ "caso de homonímia, ou outro caso que exija análise para emissão.\r\n"
+					+ "Basta clicar no botão abaixo para solicitar o processamento desse pedido\r\n"
+					+ "para impressão através de nosso site no prazo de 05 dias úteis.";
+			}
+			
 
 	}
 
