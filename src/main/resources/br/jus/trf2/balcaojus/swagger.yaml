@@ -421,6 +421,12 @@ parameters:
     description: número do documento
     required: false
     type: string
+  oabquery:
+    name: oab
+    in: query
+    description: número da oab
+    required: false
+    type: string  
   paramsquery:
     name: params
     in: query
@@ -966,6 +972,7 @@ paths:
         - $ref: "#/parameters/tipodedocumentoquery"
         - $ref: "#/parameters/nomequery"
         - $ref: "#/parameters/documentoquery"
+        - $ref: "#/parameters/oabquery"
         - $ref: "#/parameters/captchaquery"
         - $ref: "#/parameters/tokenquery"
       responses:
@@ -2681,6 +2688,8 @@ definitions:
       divergencias:
         type: string
       pedidosDeVista:
+        type: string
+      orgaoJuizo:
         type: string
       sistema:
         $ref: "#/definitions/Sistema"
