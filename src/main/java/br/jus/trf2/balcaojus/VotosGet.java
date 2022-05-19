@@ -71,6 +71,7 @@ public class VotosGet implements IVotosGet {
 		i.sequencia = a.sequencia;
 		i.tipoDeInclusao = a.tipoDeInclusao;
 		i.idMinuta = a.idMinuta;
+		i.orgaoJuizo = a.orgaoJuizo;
 
 		if (a.destaque != null) {
 			i.destaques = new ArrayList<>();

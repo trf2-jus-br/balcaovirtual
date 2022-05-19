@@ -81,6 +81,7 @@
                   <th>Status</th>
                   <th class="text-center">Placar</th>
                   <th>Relator</th>
+                  <th>Gabinete</th>
                   <th>Processo</th>
                   <th>Autor</th>
                   <th>Réu</th>
@@ -115,6 +116,7 @@
                   <td class="td-middle">
                     <span :title="'Nome: ' + f.relator">{{ f.relator }}</span>
                   </td>
+                  <td class="td-middle">{{ f.orgaoJuizo }}</td>
                   <td class="td-middle">
                     <span class="unbreakable">
                       <router-link

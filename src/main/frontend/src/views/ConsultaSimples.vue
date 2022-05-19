@@ -77,7 +77,7 @@
               <input type="text" class="form-control" id="cpfcnpj" placeholder="" v-model="cpfcnpj" @input="numero = undefined; parte = undefined; oab = undefined; oabmsg = false" />
             </div>
             <div  class="form-group col col-md-4">
-              <label for="oab">Registro da OAB do Representante</label>
+              <label for="oab">Nº da OAB do Representante</label>
               <input type="text" class="form-control" id="oab" placeholder=""  @focus="oabmsg = true"  v-model="oab" @input="numero = undefined; parte = undefined, cpfcnpj = undefined" />
             </div>
 

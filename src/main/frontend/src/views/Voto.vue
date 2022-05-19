@@ -139,6 +139,7 @@
               <br />Cadastro:
               <span v-html="voto.dataDeInclusaoFormatada"></span>
               <br />Relator: {{ voto.relator }}
+              <br />Gabinete: {{ voto.orgaoJuizo }}
             </p>
           </div>
         </div>

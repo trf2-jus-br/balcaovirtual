@@ -257,6 +257,7 @@ public interface IBalcaojus {
 		public String acompanhamentos;
 		public String divergencias;
 		public String pedidosDeVista;
+		public String orgaoJuizo;
 		public String sistema;
 		public List<Destaque> destaques = new ArrayList<>();
 		public List<VotoProferido> votosProferidos = new ArrayList<>();
@@ -675,7 +676,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1052,7 +1052,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1111,7 +1110,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1168,7 +1166,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1236,7 +1233,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
@@ -1547,7 +1543,6 @@ public interface IBalcaojus {
 			public Long contentlength;
 			public InputStream inputstream;
 			public Map<String, List<String>> headerFields;
-
 			public String getContenttype() {
 				return contenttype;
 			}
