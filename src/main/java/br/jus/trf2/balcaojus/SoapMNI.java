@@ -241,12 +241,14 @@ public class SoapMNI {
 		if (!sucesso.value)
 			throw new Exception(mensagem.value);
 
+		/*
 		if (sistema.contains(".apolo") && Utils.isConsultaPublica(idConsultante)
 				&& processo.value.getDocumento().get(0).getNivelSigilo() > 0)
 			throw new PresentableUnloggedException(
 					"Documento sigiloso (nível " + processo.value.getDocumento().get(0).getNivelSigilo()
-							+ ") não pode ser visulizado em consulta pública");
-
+							+ ") não pode ser visualizado em consulta pública");
+		 */
+		
 		return processo.value.getDocumento().get(0).getConteudo();
 	}
 
