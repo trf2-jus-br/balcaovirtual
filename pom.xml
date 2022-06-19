@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaojus</artifactId>
-	<version>3.0.23</version>
+	<version>3.0.24</version>
 	<packaging>war</packaging>
 	<name>Balcãojus Maven Webapp</name>
 	<url>http://maven.apache.org</url>
