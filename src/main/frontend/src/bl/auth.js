@@ -69,10 +69,18 @@ export default {
     };
     
     decoded.isDesembargador = () => {
+      var result = false;
       for (var sistema in decoded.user) {
-        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" && (decoded.user[sistema].unidade.startsWith("GAB") || decoded.user[sistema].unidade.startsWith("SUB"))) return true;
+        if (decoded.user.hasOwnProperty(sistema) && decoded.user[sistema].perfil === "magistrado" 
+        && (decoded.user[sistema].unidade.startsWith("GAB") || decoded.user[sistema].unidade.startsWith("SUB")))
+        {
+          result = true;
+          break;
+        } 
+          
       }
-      return false;
+
+      return result;
     };
     
     return decoded;

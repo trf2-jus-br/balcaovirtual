@@ -440,14 +440,16 @@ export default {
 
  
     votosAtiva: function() {  
-     var f = this.jwt && this.jwt.username && (this.jwt.origin === "int" || this.jwt.origin === "int/ext");
-      f = f && this.test.properties['balcaojus.env'] !== 'prod';
-      f = f || (this.jwt && this.jwt.username &&
-                this.test.properties['balcaojus.votos.usuarios'] && 
-                this.test.properties['balcaojus.votos.usuarios'].includes(this.jwt.username.toUpperCase())
-                &&
-                this.test.properties['balcaojus.env'] === 'prod')
-      return f;
+     if (!this.jwt || !this.jwt.username) 
+        return false;
+      for (var prop in this.jwt.user) {
+        if (this.jwt.user.hasOwnProperty(prop)) {
+          var u = this.jwt.user[prop];
+          if (u.sistema && u.sistema.includes("br.jus.trf2.eproc") && 
+              u.perfil && u.perfil == "magistrado" && (u.unidade.startsWith("SUB") || u.unidade.startsWith("GAB") )) return true;
+        }
+      }
+      return false;
     },
 
     peticaoInicialAtiva: function() {
