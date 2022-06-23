@@ -15,6 +15,10 @@
         <div class="headline pb-1 pt-3">
           <h2>Últimas atualizações</h2>
         </div>
+        <p>Versão 3.0.24. Lançada em 19 de Junho de 2022.</p>
+        <ul>
+          <li>Disponibilização do módulo de votos para magistrados;</li>
+        </ul>
         <p>Versão 3.0.15. Lançada em 19 de Novembro de 2021.</p>
         <ul>
           <li>Consulta Pública por CPF/CNPJ e nome completo da parte;</li>
@@ -42,6 +46,7 @@
           <li>Download do PDF completo;</li>
           <li>Impressão em lote;</li>
           <li>Visualização, edição e assinatura digital de minutas.</li>
+          <li>Lançamento de votos em itens de sessão de julgamento.</li>
         </ul>
 
         
