@@ -65,11 +65,11 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 100 processos por sistema/órgão, consultar por número de processo caso o resultado não seja o esperado.
+                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 5 processos por sistema/órgão, consultar por número de processo caso o resultado não seja o esperado.
               </div>
             </div>
             <div class="form-group col col-md-6">
-              <label for="numero">Número do Processo (<b>Até 100 números separados por vírgula ","</b>)</label>
+              <label for="numero">Número do Processo (<b>Até 5 números separados por vírgula ","</b>)</label>
               <input type="text" class="form-control" id="numero" placeholder="" v-model="numero" @input="cpfcnpj = undefined; parte = undefined; oab = undefined; oabmsg = false" />
             </div>
             <div class="form-group col col-md-6">

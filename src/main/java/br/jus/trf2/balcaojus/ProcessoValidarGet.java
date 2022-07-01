@@ -55,9 +55,9 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 		}
 
 		String[] numeros = (req.numero != null && req.numero.trim() != "") ? req.numero.split(",") : null;
-		if (numeros != null && numeros.length > 100)
+		if (numeros != null && numeros.length > 5)
 			throw new PresentableException(
-					"Não é permitido validar mais de 100 números de processos em uma única operação");
+					"Não é permitido validar mais de 5 números de processos em uma única operação");
 
 		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento,req.oab, resp);
 		if (fPorCaptcha && resp.list != null && resp.list.size() > 0) {
