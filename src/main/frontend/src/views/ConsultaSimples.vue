@@ -65,7 +65,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 5 processos por sistema/órgão, consultar por número de processo caso o resultado não seja o esperado.
+                <strong>Atenção!</strong> Preencha <u>apenas um dos campos</u> abaixo e clique em "Pesquisar". Partes com muitos processos retornarão até 5 processos por sistema/órgão,processos baixados não serão retornados, consultar por número de processo caso o resultado não seja o esperado.
               </div>
             </div>
             <div class="form-group col col-md-6">
