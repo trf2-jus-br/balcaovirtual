@@ -26,6 +26,7 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaojus.AutenticarPost.Usuario;
 import br.jus.trf2.balcaojus.IBalcaojus.IProcessoValidarGet;
+import br.jus.trf2.balcaojus.IBalcaojus.ListStatus;
 import br.jus.trf2.balcaojus.IBalcaojus.ProcessoValido;
 import br.jus.trf2.balcaojus.util.AcessoPublicoEPrivado;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumerosGet;
@@ -34,9 +35,13 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 @AcessoPublicoEPrivado
 public class ProcessoValidarGet implements IProcessoValidarGet {
 
+	public static final int LIMITE_PROC = Integer.valueOf(Utils.getLimiteConsultaProcessual());
+	
+
 	@Override
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
 		boolean fPorCaptcha = false;
+		String[] numerosLimitados = null;
 		if (req.captcha != null) {
 			if (!Utils.verifyCaptcha(req.captcha))
 				throw new PresentableUnloggedException("Token de reCaptcha inválido");
@@ -55,11 +60,16 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 		}
 
 		String[] numeros = (req.numero != null && req.numero.trim() != "") ? req.numero.split(",") : null;
-		if (numeros != null && numeros.length > 5)
-			throw new PresentableException(
-					"Não é permitido validar mais de 5 números de processos em uma única operação");
-
-		validar(usuario, numeros, req.nome, req.tipodedocumento, req.documento,req.oab, resp);
+		
+		
+		if (numeros != null && numeros.length > LIMITE_PROC)
+				numerosLimitados = limitarNumeros(numeros,LIMITE_PROC);
+									
+		validar(usuario,numerosLimitados!=null?numerosLimitados:numeros, req.nome, req.tipodedocumento, req.documento,req.oab, resp);
+		
+		if (numerosLimitados != null)
+			adicionarNumerosNaoValidados(numeros,LIMITE_PROC,resp);
+		
 		if (fPorCaptcha && resp.list != null && resp.list.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (ProcessoValido p : resp.list) {
@@ -68,6 +78,26 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 				sb.append(p.numero);
 			}
 			resp.token = jwt(sb.toString());
+		}
+	}
+	
+	public static String[] limitarNumeros(String [] numeros, int limit) {
+		int max = numeros.length > limit? limit :numeros.length;
+		String [] numerosLimitados = new String[max];
+		for (int i = 0; i<max; i++)
+			numerosLimitados[i] = numeros[i];
+		
+		return numerosLimitados;
+	}
+	
+	private static void adicionarNumerosNaoValidados(String[] numeros, int maxNumeros, IProcessoValidarGet.Response resp) {
+		ProcessoValido procNaoValidado = null;
+		if (resp != null)
+		for (int i=maxNumeros; i<numeros.length;i++) {
+			procNaoValidado = new ProcessoValido();
+			procNaoValidado.numero = numeros[i];
+			resp.list.add(procNaoValidado);
+			
 		}
 	}
 
@@ -235,5 +265,7 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			throw new PresentableUnloggedException("Token de consulta pública com número de processo inválido");
 		return true;
 	}
+	
+
 
 }

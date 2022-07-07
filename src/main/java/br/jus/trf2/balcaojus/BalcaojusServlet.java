@@ -73,6 +73,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 
 		addPrivateProperty("jwt.secret");
 		addPrivateProperty("api.secret");
+		addPrivateProperty("limite.consulta.processo");
 
 		addPublicProperty("jwt.issuer", "bv");
 		addPublicProperty("cookie.name", "bv-jwt");

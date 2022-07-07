@@ -165,7 +165,11 @@ public class Utils {
 	public static String getAssijusSystemExpedientes() {
 		return BalcaojusServlet.INSTANCE.getProperty("assijus.system.expedientes");
 	}
-
+		
+	public static String getLimiteConsultaProcessual() {
+		return BalcaojusServlet.INSTANCE.getProperty("limite.consulta.processo");
+	}
+	
 	/**
 	 * Remove os acentos da string
 	 * 
