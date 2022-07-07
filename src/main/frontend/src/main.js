@@ -90,7 +90,7 @@ extend("password", {
   message: field => "A senha deve ter no mínimo 8 caracteres, entre maiúsculas, minúsculas, números e caracteres especiais ($#@&)",
   validate: function (value) {
     // eslint-disable-next-line
-    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$&@#])[0-9a-zA-Z$&@#]{8,}$/
+    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W|_])[0-9a-zA-Z\W|_]{8,}$/
     return re.test(String(value));
   },
 });
