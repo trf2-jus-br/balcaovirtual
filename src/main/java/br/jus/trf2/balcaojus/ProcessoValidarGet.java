@@ -5,14 +5,10 @@ import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
@@ -26,7 +22,6 @@ import com.crivano.swaggerservlet.SwaggerMultipleCallResult;
 
 import br.jus.trf2.balcaojus.AutenticarPost.Usuario;
 import br.jus.trf2.balcaojus.IBalcaojus.IProcessoValidarGet;
-import br.jus.trf2.balcaojus.IBalcaojus.ListStatus;
 import br.jus.trf2.balcaojus.IBalcaojus.ProcessoValido;
 import br.jus.trf2.balcaojus.util.AcessoPublicoEPrivado;
 import br.jus.trf2.sistemaprocessual.ISistemaProcessual.IUsuarioUsernameProcessoNumerosGet;
@@ -35,13 +30,12 @@ import br.jus.trf2.sistemaprocessual.ISistemaProcessual.Processo;
 @AcessoPublicoEPrivado
 public class ProcessoValidarGet implements IProcessoValidarGet {
 
-	public static final int LIMITE_PROC = Integer.valueOf(Utils.getLimiteConsultaProcessual());
-	
 
 	@Override
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
 		boolean fPorCaptcha = false;
 		String[] numerosLimitados = null;
+		int limiteConsultaProcessual =0;
 		if (req.captcha != null) {
 			if (!Utils.verifyCaptcha(req.captcha))
 				throw new PresentableUnloggedException("Token de reCaptcha inválido");
@@ -61,14 +55,25 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 
 		String[] numeros = (req.numero != null && req.numero.trim() != "") ? req.numero.split(",") : null;
 		
+		if (numeros != null)
+		{
+		try{
+			limiteConsultaProcessual = Integer.parseInt(Utils.getLimiteConsultaProcessual());
+	        }
+	        catch (Exception ex){
+	        	throw new PresentableUnloggedException("Erro ao acessar balcaojus.limite.consulta.processo", ex);
+	        }
+		 if (numeros.length > limiteConsultaProcessual)
+			 numerosLimitados = limitarNumeros(numeros,limiteConsultaProcessual);
+			 
+		}
 		
-		if (numeros != null && numeros.length > LIMITE_PROC)
-				numerosLimitados = limitarNumeros(numeros,LIMITE_PROC);
+	
 									
 		validar(usuario,numerosLimitados!=null?numerosLimitados:numeros, req.nome, req.tipodedocumento, req.documento,req.oab, resp);
 		
 		if (numerosLimitados != null)
-			adicionarNumerosNaoValidados(numeros,LIMITE_PROC,resp);
+			adicionarNumerosNaoValidados(numeros,numerosLimitados.length,resp);
 		
 		if (fPorCaptcha && resp.list != null && resp.list.size() > 0) {
 			StringBuilder sb = new StringBuilder();
@@ -90,10 +95,10 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 		return numerosLimitados;
 	}
 	
-	private static void adicionarNumerosNaoValidados(String[] numeros, int maxNumeros, IProcessoValidarGet.Response resp) {
+	private static void adicionarNumerosNaoValidados(String[] numeros, int inicio, IProcessoValidarGet.Response resp) {
 		ProcessoValido procNaoValidado = null;
 		if (resp != null)
-		for (int i=maxNumeros; i<numeros.length;i++) {
+		for (int i=inicio; i<numeros.length;i++) {
 			procNaoValidado = new ProcessoValido();
 			procNaoValidado.numero = numeros[i];
 			resp.list.add(procNaoValidado);

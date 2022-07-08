@@ -330,6 +330,10 @@ export default {
         else if (p.segredodejusticadesistema) p.acesso = "Segredo de Sistema";
         else p.acesso = "Público";
       }
+      if (p.sistema ==""){
+        p.errormsg == "Limite de validação de processo atingido"
+
+      }
       return p;
     },
 
@@ -370,6 +374,8 @@ export default {
                 UtilsBL.overrideProperties(processo, map2[l2[i]]);
                 processo.validado = true;
                 this.fixProcesso(processo);
+                if (!processo.sistema)
+                  processo.errormsg = "Limite atingido. Processo não validado";
               } else {
                 processo.checked = false;
                 processo.disabled = true;
