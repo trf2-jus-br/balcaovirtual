@@ -1,5 +1,6 @@
 package br.jus.trf2.balcaojus;
 
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -20,9 +22,12 @@ import java.util.concurrent.Future;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.auth0.jwt.JWTVerifyException;
 import com.crivano.swaggerservlet.PresentableException;
+import com.crivano.swaggerservlet.Swagger;
 import com.crivano.swaggerservlet.SwaggerContext;
 import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerUtils;
@@ -54,6 +59,32 @@ public class BalcaojusServlet extends SwaggerServlet {
 	static BalcaojusServlet INSTANCE = null;
 	public static ExecutorService executor = null;
 
+	
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+		boolean rotaPermitida = false;
+		String requestMethod = req.getMethod();
+		String requestPathInfo = req.getPathInfo();
+		
+		rotaPermitida = (rotaPermitida || requestPathInfo.endsWith("/swagger.yaml"));
+		rotaPermitida = (rotaPermitida || requestPathInfo.endsWith("/swagger-ui"));
+		rotaPermitida = (rotaPermitida || requestPathInfo.contains("/swagger-ui/"));
+		rotaPermitida = (rotaPermitida || requestPathInfo.equals("/test"));
+		try {
+			if (!rotaPermitida)
+				prepare(requestMethod, requestPathInfo);
+		} catch (Exception e) {
+			if (e.getMessage().contains("unknown path"))
+			{
+				response.sendError(404);
+				return;
+			}
+
+		}
+		
+		super.doGet(req,response);
+	}
+	
 	@Override
 	public void initialize(ServletConfig config) throws ServletException {
 		INSTANCE = this;
