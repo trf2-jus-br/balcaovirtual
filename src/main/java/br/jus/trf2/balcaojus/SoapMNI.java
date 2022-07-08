@@ -145,7 +145,7 @@ public class SoapMNI {
 		client.consultarProcesso(idConsultante, senhaConsultante, numProc, null, movimentos, cabecalho, documentos,
 				null, sucesso, mensagem, processo);
 		if (!sucesso.value)
-			throw new Exception(mensagem.value);
+			throw new PresentableUnloggedException(mensagem.value);
 
 		if (Utils.isConsultaPublica(idConsultante) && processo.value.getDadosBasicos() != null
 				&& processo.value.getDadosBasicos().getNivelSigilo() > 0)
