@@ -40,6 +40,7 @@ import br.jus.trf2.balcaojus.util.AcessoInvalidoException;
 import br.jus.trf2.balcaojus.util.AcessoProibidoException;
 import br.jus.trf2.balcaojus.util.AcessoPublico;
 import br.jus.trf2.balcaojus.util.AcessoPublicoEPrivado;
+import br.jus.trf2.balcaojus.util.PresentablePartialLoggedException;
 import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
 import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.redis.request.RedisRateLimiterFactory;
@@ -62,6 +63,11 @@ public class BalcaojusServlet extends SwaggerServlet {
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+		this.checkUrl(req,response);
+		super.doGet(req,response);
+	}
+	
+	private void checkUrl(HttpServletRequest req, HttpServletResponse response ) throws IOException  {
 		boolean rotaPermitida = false;
 		String requestMethod = req.getMethod();
 		String requestPathInfo = req.getPathInfo();
@@ -74,6 +80,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 			if (!rotaPermitida)
 				prepare(requestMethod, requestPathInfo);
 		} catch (Exception e) {
+			
 			if (e.getMessage().contains("unknown path"))
 			{
 				response.sendError(404);
@@ -82,9 +89,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 
 		}
 		
-		super.doGet(req,response);
 	}
-	
 	@Override
 	public void initialize(ServletConfig config) throws ServletException {
 		INSTANCE = this;
@@ -381,6 +386,8 @@ public class BalcaojusServlet extends SwaggerServlet {
 	private final static ThreadLocal<Usuario> principal = new ThreadLocal<>();
 
     private void assertRateLimit(String username) throws Exception {
+    	
+    	
         if (getProperty("redis.password") == null || getProperty("rate.limit.duration.in.seconds") == null
                 || getProperty("rate.limit.max.requests") == null)
             return;
@@ -396,10 +403,10 @@ public class BalcaojusServlet extends SwaggerServlet {
 
         boolean overLimit = requestRateLimiter.overLimitWhenIncremented("bv-rate-" + username.toLowerCase());
         if (overLimit)
-            throw new PresentableException("Acima do limite de " + getProperty("rate.limit.max.requests") + " requisições a cada " + getProperty("rate.limit.duration.in.seconds") + " segundos");
+            throw new PresentablePartialLoggedException("Acima do limite de " + getProperty("rate.limit.max.requests") + " requisições a cada " + getProperty("rate.limit.duration.in.seconds") + " segundos",null,true,false);
 
+    
     }
-	
 	@Override
 	public void invoke(SwaggerContext context) throws Exception {
 		try {
