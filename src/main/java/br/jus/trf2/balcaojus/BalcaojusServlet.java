@@ -11,6 +11,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -36,6 +37,7 @@ import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 import br.jus.cnj.servico_intercomunicacao_2_2.ServicoIntercomunicacao222;
 import br.jus.trf2.balcaojus.AutenticarPost.Usuario;
+import br.jus.trf2.balcaojus.AutenticarPost.UsuarioDetalhe;
 import br.jus.trf2.balcaojus.util.AcessoInvalidoException;
 import br.jus.trf2.balcaojus.util.AcessoProibidoException;
 import br.jus.trf2.balcaojus.util.AcessoPublico;
@@ -385,8 +387,13 @@ public class BalcaojusServlet extends SwaggerServlet {
 
 	private final static ThreadLocal<Usuario> principal = new ThreadLocal<>();
 
-    private void assertRateLimit(String username) throws Exception {
+    private void assertRateLimit(String username,Map<String, UsuarioDetalhe> usuarios) throws Exception {
     	
+    	
+    	for (UsuarioDetalhe ud: usuarios.values()) {
+    		if (ud.perfil.contentEquals("magistrado"))
+    		 return;
+    	}
     	
         if (getProperty("redis.password") == null || getProperty("rate.limit.duration.in.seconds") == null
                 || getProperty("rate.limit.max.requests") == null)
@@ -418,7 +425,8 @@ public class BalcaojusServlet extends SwaggerServlet {
 						throw e;
 				}
 				if (principal.get() != null) {
-                    assertRateLimit(principal.get().usuario);
+					Usuario usu = principal.get();
+                    assertRateLimit(usu.usuario,usu.usuarios);
                     Map<String, Object> decodedToken = AutenticarPost.assertUsuarioAutorizado();
 					final long now = System.currentTimeMillis() / 1000L;
 					if ((Integer) decodedToken.get("exp") < now + JWT_AUTH_COOKIE_TIME_TO_RENEW_IN_S) {
