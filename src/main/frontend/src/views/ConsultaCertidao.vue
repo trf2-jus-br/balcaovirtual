@@ -4,22 +4,32 @@
     <div class="row">
       <div class="col-md-12">
         <h4 class="text-center mt-3 mb-3">Certidões</h4>
+            
       </div>
+      
     </div>
 
     <div class="row justify-content-center d-print-none">
+      <p class="text-center">Conforme portaria TRF2-RSP-2022/00085, a partir de 12/09/2022 as certidões devem ser emitidas pelo novo sistema <a v-if="$parent.test.properties['balcaojus.env'] == 'prod'" href="https://certidoes.trf2.jus.br" target="_blank">certidoes.trf2.jus.br</a><a v-if="$parent.test.properties['balcaojus.env'] !== 'prod'" href="https://certidoesh.trf2.jus.br" target="_blank">certidoesh.trf2.jus.br</a>.
+      </p>
+      <div class="col-md-12">
+        <p class="text-center">Validação de certidões emitidas até 11/09/2012.</p>
+        </div>
       <div class="col-sm-auto mb-3">
         <div class="btn-group">
           <label
+          v-if="false"
             class="btn"
             :class="{
               'active btn-primary': pasta === 'emitir',
               'btn-outline-primary': pasta !== 'emitir'
             }"
           >
-            <input v-show="false" type="radio" v-model="pasta" value="emitir" autocomplete="off" />
+            <input v-show="false" type="radio" v-model="pasta" value="emitir" autocomplete="off" />    
             <span class="fa fa-plus"></span> Emitir
+            
           </label>
+          
           <label
             class="btn btn-outline-primary"
             :class="{
@@ -130,7 +140,7 @@ export default {
 
   data() {
     return {
-      pasta: "emitir",
+      pasta: "autenticar",
       sistema: undefined,
       recaptchaLoading: false,
       errormsg: undefined,
