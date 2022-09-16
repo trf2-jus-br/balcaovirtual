@@ -13,7 +13,7 @@
       <p class="text-center">Conforme portaria TRF2-RSP-2022/00085, a partir de 12/09/2022 as certidões devem ser emitidas pelo novo sistema <a v-if="$parent.test.properties['balcaojus.env'] == 'prod'" href="https://certidoes.trf2.jus.br" target="_blank">certidoes.trf2.jus.br</a><a v-if="$parent.test.properties['balcaojus.env'] !== 'prod'" href="https://certidoesh.trf2.jus.br" target="_blank">certidoesh.trf2.jus.br</a>.
       </p>
       <div class="col-md-12">
-        <p class="text-center">Validação de certidões emitidas até 11/09/2012.</p>
+        <h5 class="text-center mt-3 mb-3">Validação de certidões emitidas até 11/09/2022.</h5>
         </div>
       <div class="col-sm-auto mb-3">
         <div class="btn-group">
