@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -242,8 +243,8 @@ public class Utils {
 		DateTime dt = DateTime.parse(s, dtfBRHHMMSS);
 		return dt.toDate();
 	}
-
-	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy");
+    //Força time zone de Brasília(-3) pra caso o servidor retorne timezone errado
+	private static final DateTimeFormatter dtfBR = DateTimeFormat.forPattern("dd/MM/yyyy").withZone(DateTimeZone.forOffsetHours(-3));
 
 	public static String formatarData(Date d) {
 		DateTime dt = new DateTime(d.getTime());
@@ -256,6 +257,7 @@ public class Utils {
 			return null;
 		DateTime dt = DateTime.parse(s, dtfBR);
 		return dt.toDate();
+		
 	}
 
 	private static final DateTimeFormatter dtfJPHHMMSS = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");

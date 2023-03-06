@@ -22,7 +22,7 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
 		if (!CertidaoObterTokenGet.isValidToken(req.token, null, req.requisitante, req.cpfcnpj))
 			throw new PresentableException("Token inválido");
-
+/*
 		FetchResponse r = fetch(Utils.getCertApiUrl(req.sistema) + "/bv_emissao_cert.asp",
 				Utils.getCertApiPassword(req.sistema), "POST",
 				"Botao=Emitir&CPFReq=" + req.requisitante + "&NumDocPess=" + req.cpfcnpj);
@@ -59,8 +59,8 @@ public class CertidaoEmitirRequisitanteCpfcnpjPost implements ICertidaoEmitirReq
 					+ "Basta clicar no botão abaixo para solicitar o processamento desse pedido\r\n"
 					+ "para impressão através de nosso site no prazo de 05 dias úteis.";
 			}
-			
-
+			*/
+		throw new PresentableException("Emissão de certidão indisponível ! Atualize para a nova versão !!");
 	}
 
 	@Override
