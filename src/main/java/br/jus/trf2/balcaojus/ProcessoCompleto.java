@@ -16,6 +16,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.auth0.jwt.internal.org.apache.commons.lang3.StringUtils;
 import com.crivano.swaggerservlet.PresentableException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
@@ -40,7 +41,7 @@ public class ProcessoCompleto implements Callable<String> {
 		this.username = username;
 		this.password = password;
 		this.sistema = sistema;
-		this.numProc = numProc;
+		this.numProc = StringUtils.leftPad(numProc, 20, "0");
 	}
 
 	@Override

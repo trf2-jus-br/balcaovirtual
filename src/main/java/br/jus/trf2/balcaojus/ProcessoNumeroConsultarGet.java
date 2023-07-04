@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import com.auth0.jwt.internal.org.apache.commons.lang3.StringUtils;
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerAsyncResponse;
 import com.crivano.swaggerservlet.SwaggerCall;
@@ -28,6 +29,7 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		String usuario = null;
 		String senha = null;
 		String origem = null;
+		String numProcesso =null;
 
 		Usuario u = null;
 		try {
@@ -53,7 +55,8 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 
 		usuario = Utils.preprocessarId(usuario, senha, req.sistema, origem);
 		senha = Utils.preprocessarSenha(usuario, senha, req.sistema, origem);
-		String json = SoapMNI.consultarProcesso(usuario, senha, req.sistema, req.numero, true, true, true);
+		numProcesso = StringUtils.leftPad(req.numero, 20, "0");
+		String json = SoapMNI.consultarProcesso(usuario, senha, req.sistema, numProcesso, true, true, true);
 
 		if (req.sistema.contains(".eproc"))
 			json = enhanceEproc(usuario, req.sistema, req.numero, json);
