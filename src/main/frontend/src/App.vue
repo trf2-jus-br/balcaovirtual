@@ -442,13 +442,15 @@ export default {
     votosAtiva: function() {  
      if (!this.jwt || !this.jwt.username) 
         return false;
-      for (var prop in this.jwt.user) {
+    if (this.jwt.isDesembargador())
+        return true;  
+     /* for (var prop in this.jwt.user) {
         if (this.jwt.user.hasOwnProperty(prop)) {
           var u = this.jwt.user[prop];
           if (u.sistema && u.sistema.includes("br.jus.trf2.eproc") && 
               u.perfil && u.perfil == "magistrado" && (u.unidade.startsWith("SUB") || u.unidade.startsWith("GAB") )) return true;
         }
-      }
+      }*/
       return false;
     },
 
