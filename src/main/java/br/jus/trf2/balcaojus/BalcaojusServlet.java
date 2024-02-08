@@ -119,6 +119,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 		addPublicProperty("cookie.expire.seconds", Long.toString(20 * 60L)); // Expira em 20min
 		addPublicProperty("cookie.renew.seconds", Long.toString(15 * 60L)); // Renova 15min antes de expirar
 
+		addPrivateProperty("username.unrestriction");
 		addRestrictedProperty("username.restriction", null);
 
 		addRestrictedProperty("datasource.url", null);
@@ -389,11 +390,17 @@ public class BalcaojusServlet extends SwaggerServlet {
 
     private void assertRateLimit(String username,Map<String, UsuarioDetalhe> usuarios) throws Exception {
     	
+    	if (getProperty("username.unrestriction") != null && 
+    			getProperty("username.unrestriction").toLowerCase().contains(username.toLowerCase()) ) {
+    		return;
+    	}
     	
     	for (UsuarioDetalhe ud: usuarios.values()) {
     		if (ud.perfil.contentEquals("magistrado"))
     		 return;
     	}
+    	
+    	
     	
         if (getProperty("redis.password") == null || getProperty("rate.limit.duration.in.seconds") == null
                 || getProperty("rate.limit.max.requests") == null)
