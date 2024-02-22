@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaojus</artifactId>
-	<version>3.0.38</version>
+	<version>3.0.39</version>
       <packaging>war</packaging>
 	<name>Balcãojus Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -188,7 +188,7 @@
 					<workingDirectory>src/main/frontend</workingDirectory>
 				</configuration>
 
-				<executions>
+				<!--<executions>
 
 					<execution>
 						<id>install node and npm</id>
@@ -196,8 +196,8 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) 
-								versions -->
+							 See https://nodejs.org/en/download/ for latest node and npm (lts) 
+								versions 
 							<nodeVersion>v10.16.3</nodeVersion>
 							<npmVersion>6.9.0</npmVersion>
 						</configuration>
@@ -208,7 +208,7 @@
 						<goals>
 							<goal>npm</goal>
 						</goals>
-						<!-- Optional configuration which provides for running any npm command -->
+						 Optional configuration which provides for running any npm command 
 						<configuration>
 							<arguments>install</arguments>
 						</configuration>
@@ -224,7 +224,7 @@
 						</configuration>
 					</execution>
 
-				</executions>
+				</executions>-->
 			</plugin>
 
 			<plugin>
