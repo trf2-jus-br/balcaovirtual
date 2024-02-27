@@ -46,7 +46,7 @@ public class MesaIdGet implements IMesaIdGet {
 		}
 
 		SwaggerMultipleCallResult mcr = null;
-		mcr = SwaggerCall.callMultiple(mapp, 15000);
+		mcr = SwaggerCall.callMultiple(mapp, 180000);
 		resp.status = Utils.getStatus(mcr);
 		for (String system : mcr.responses.keySet()) {
 			IUsuarioUsernameLocalIdMesaId2DocumentosGet.Response r = (IUsuarioUsernameLocalIdMesaId2DocumentosGet.Response) mcr.responses

@@ -4,6 +4,7 @@
       <div class="col-md-12">
         <h4 class="text-center mt-3 mb-3">Minutas para Conferir e Assinar</h4>
       </div>
+       
       <div class="col col-sm-12" v-if="errormsg">
         <p class="alert alert-danger">
           {{ errormsg }}
@@ -55,7 +56,9 @@
           <input type="text" class="form-control" placeholder="Filtrar" v-model="filtro" ng-model-options="{ debounce: 200 }" />
         </div>
       </div>
+    <div class="col-auto ml-auto mb-3" v-if="carregando && filtrados.length == 100"><p class="alert alert-warning"><strong>Listagem limitada a 100 registros, após assinatura atualizar a tela.</strong></p> </div>
       <div class="col-auto ml-auto mb-3" v-if="(filtradosEMarcadosEAssinaveis || []).length">
+      
         <button type="button" @click="revisar()" class="btn btn-info ml-1" title="">
           <span class="fa fa-eye"></span> Revisar&nbsp;&nbsp;
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
@@ -65,6 +68,7 @@
           <span class="badge badge-pill badge-warning">{{ filtradosEMarcadosEAssinaveis.length }}</span>
         </button>
       </div>
+      
     </div>
 
     <div class="row" v-if="!carregando && filtrados.length == 0">
