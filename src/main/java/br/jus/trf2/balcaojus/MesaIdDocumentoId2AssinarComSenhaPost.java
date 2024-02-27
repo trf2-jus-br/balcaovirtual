@@ -30,7 +30,8 @@ public class MesaIdDocumentoId2AssinarComSenhaPost implements IMesaIdDocumentoId
 			Thread.sleep(2000 + r.nextInt(2000));
 			throw new PresentableUnloggedException("Senha não confere");
 		}
-
+		//apaga senha para não aparecer no log
+		req.password=""; 
 		IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Request q = new IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Request();
 		Future<SwaggerAsyncResponse<IUsuarioUsernameMesaIdDocumentoId2AssinarComSenhaPost.Response>> future = SwaggerCall
 				.callAsync(getContext(), Utils.getApiEprocPassword(req.sistema), "POST",
