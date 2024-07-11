@@ -108,6 +108,7 @@ public class BalcaojusServlet extends SwaggerServlet {
 		addPrivateProperty("recaptcha.secret.key");
 		addRestrictedProperty("public.username");
 		addPrivateProperty("public.password");
+		addPrivateProperty("public.consulta.sin_ativo");
 
 		addPrivateProperty("jwt.secret");
 		addPrivateProperty("api.secret");
