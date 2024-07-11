@@ -50,7 +50,11 @@ public class ProcessoValidarGet implements IProcessoValidarGet {
 			Usuario u = AutenticarPost.assertUsuario();
 			usuario = u.usuario;
 		} catch (Exception e) {
-			usuario = BalcaojusServlet.INSTANCE.getProperty("public.username");
+			if (BalcaojusServlet.INSTANCE.getProperty("public.consulta.sin_ativo").equals("S"))
+				usuario = BalcaojusServlet.INSTANCE.getProperty("public.username");
+			else
+				throw new PresentableUnloggedException("Consulta pública desativada, efetue login para realizar a consulta processual");
+				
 		}
 
 		String[] numeros = (req.numero != null && req.numero.trim() != "") ? req.numero.split(",") : null;

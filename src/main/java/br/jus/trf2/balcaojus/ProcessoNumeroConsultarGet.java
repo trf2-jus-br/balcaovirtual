@@ -43,7 +43,8 @@ public class ProcessoNumeroConsultarGet implements IProcessoNumeroConsultarGet {
 		} catch (Exception ex) {
 		}
 
-		if (usuario == null && (ProcessoValidarGet.isValidToken(req.token, req.numero) || u != null)) {
+		if (usuario == null && (ProcessoValidarGet.isValidToken(req.token, req.numero) || u != null)
+				&& BalcaojusServlet.INSTANCE.getProperty("public.consulta.sin_ativo").equals("S")) {
 			usuario = BalcaojusServlet.INSTANCE.getProperty("public.username");
 			senha = BalcaojusServlet.INSTANCE.getProperty("public.password");
 			origem = "pub";
