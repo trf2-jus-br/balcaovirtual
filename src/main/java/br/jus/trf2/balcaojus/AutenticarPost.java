@@ -36,7 +36,7 @@ public class AutenticarPost implements IAutenticarPost {
 	public void run(Request req, Response resp, BalcaojusContext ctx) throws Exception {
 		String usuariosRestritos = Utils.getUsuariosRestritos();
 		if (usuariosRestritos != null) {
-			if (!ArrayUtils.contains(usuariosRestritos.split(","), req.username))
+			if (ArrayUtils.contains(usuariosRestritos.split(","), req.username))
 				throw new PresentableUnloggedException("Usuário não autorizado.");
 		}
 
