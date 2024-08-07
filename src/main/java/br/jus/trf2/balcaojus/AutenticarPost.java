@@ -1,6 +1,7 @@
 package br.jus.trf2.balcaojus;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -102,8 +103,14 @@ public class AutenticarPost implements IAutenticarPost {
 
 		Cookie cookie = buildCookie(jwt);
 		SwaggerServlet.getHttpServletResponse().addCookie(cookie);
-
-		Usuario.setSenha(req.username, req.password);
+		try {
+			Usuario.setSenha(req.username, req.password);
+		}
+		catch (Exception e) {
+			req.password = null;
+			throw e;	
+		}
+	
 	}
 
 	public static class UsuarioDetalhe {
