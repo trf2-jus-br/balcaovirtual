@@ -39,6 +39,7 @@ public class MesaIdGet implements IMesaIdGet {
 
 			IUsuarioUsernameLocalIdMesaId2DocumentosGet.Request q = new IUsuarioUsernameLocalIdMesaId2DocumentosGet.Request();
 			q.username = u.usuario;
+			q.ambiente = BalcaojusServlet.INSTANCE.getProperty("env"); 
 			mapp.put(system,
 					new SwaggerCallParameters(system + " - listar minutas", Utils.getApiPassword(system), "GET",
 							Utils.getApiUrl(system) + "/usuario/" + u.usuario + "/local/null/mesa/null/documentos", q,
@@ -66,7 +67,8 @@ public class MesaIdGet implements IMesaIdGet {
 				i.identificadorDoUsuarioQueIncluiu = a.identificadorDoUsuarioQueIncluiu;
 				i.nomeDoUsuarioQueIncluiu = a.nomeDoUsuarioQueIncluiu;
 				i.siglaDaUnidade = a.siglaDaUnidade;
-				i.conteudo = a.conteudo;
+				if ("prod".equals(BalcaojusServlet.INSTANCE.getProperty("env")))
+						i.conteudo = a.conteudo;
 				i.sistema = system;
 				if (a.lembretes != null) {
 					i.lembretes = new ArrayList<>();
