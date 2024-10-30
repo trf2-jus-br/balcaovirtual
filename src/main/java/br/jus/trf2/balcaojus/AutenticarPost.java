@@ -95,7 +95,7 @@ public class AutenticarPost implements IAutenticarPost {
 
 		if (usuarios == null)
 			throw new SwaggerAuthorizationException("Credenciais rejeitadas. Base" + (systems.length == 1 ? "" : "s")
-					+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() + ".",
+					+ " acessada" + (systems.length == 1 ? "" : "s") + ": " + Utils.getSystemsNames() +" - '"+ mcr.status.get(0).errormsg + "' .",
 					mcr.status);
 		String jwt = jwt(origem, req.username, cpf, nome, email, usuarios);
 		verify(jwt);
