@@ -40,7 +40,7 @@ public class VotosGet implements IVotosGet {
 		}
 
 		SwaggerMultipleCallResult mcr = null;
-		mcr = SwaggerCall.callMultiple(mapp, 15000);
+		mcr = SwaggerCall.callMultiple(mapp, 25000);
 		resp.status = Utils.getStatus(mcr);
 		for (String system : mcr.responses.keySet()) {
 			IUsuarioUsernameVotosGet.Response r = (IUsuarioUsernameVotosGet.Response) mcr.responses.get(system);
