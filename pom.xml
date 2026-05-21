@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2</groupId>
 	<artifactId>balcaojus</artifactId>
-	<version>3.0.49</version>
+	<version>3.0.50</version>
       <packaging>war</packaging>
 	<name>Balcãojus Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -59,9 +59,9 @@
 
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.47</version>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<version>9.4.0</version>
 		</dependency>
 
 
